@@ -9,7 +9,7 @@
 * @Copyright: Copyright XY | The Findables Company
 */
 
-import { IHashProvider } from '../types/hash-provider.interface';
+import { IHashProvider } from '../types/hash-provider';
 import crypto from 'crypto';
 import { XYOBase } from './xyo-base.abstract-class';
 
