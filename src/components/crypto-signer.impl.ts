@@ -4,46 +4,48 @@
  * @Email:  developer@xyfindables.com
  * @Filename: crypto-signer.impl.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 17th August 2018 1:59:32 pm
+ * @Last modified time: Friday, 17th August 2018 3:39:08 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { ICryptoSigner } from '../types/crypto-signer';
 import { XYOBase } from './xyo-base.abstract-class';
+import NodeRSA from 'node-rsa';
 
 export class CryptoSigner extends XYOBase implements ICryptoSigner {
+  private readonly key: NodeRSA;
 
-  constructor(privateKey?: Buffer | undefined) {
+  constructor () {
     super();
-    return this;
+    this.key = new NodeRSA({ b: 512 });
   }
 
   public getPublicKey(): Buffer {
-    throw new Error('Method not implemented.');
+    return this.key.exportKey('components-public').n;
   }
 
   public sign(data: Buffer): Promise<Buffer> {
-    throw new Error('Method not implemented.');
+    return Promise.resolve(this.key.sign(data));
   }
 
-  public verify(data: Buffer, signature: Buffer, publicKey: Buffer): Promise<boolean> {
-    throw new Error('Method not implemented.');
+  public async verify(data: Buffer, signature: Buffer): Promise<boolean> {
+    return Promise.resolve(this.key.verify(data, signature));
   }
 
   public encrypt(data: Buffer): Promise<Buffer> {
-    throw new Error('Method not implemented.');
+    return Promise.resolve(this.key.encrypt(data));
   }
 
   public decrypt(data: Buffer): Promise<Buffer> {
-    throw new Error('Method not implemented.');
+    return Promise.resolve(this.key.decrypt(data));
   }
 
   public getMajor(): number {
-    throw new Error('Method not implemented.');
+    return 0x99;
   }
 
   public getMinor(): number {
-    throw new Error('Method not implemented.');
+    return 0x01;
   }
 }
