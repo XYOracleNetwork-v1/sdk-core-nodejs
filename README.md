@@ -1,3 +1,33 @@
 # sdk-core-nodejs
 
 Core functionality for the XYO nodejs projects
+
+## Getting started
+
+### Install dependencies
+
+```sh
+  npm install
+```
+
+### Run tests
+
+Run all tests:
+
+```sh
+  npm test
+```
+
+Run a set of tests in a particular file:
+
+i.e. Where the test file is `test/integration/lib.spec.ts`
+
+```sh
+  NODE_ENV=test && node ./node_modules/jest/bin/jest test/integration/lib.spec.ts
+```
+
+## Developer Guide
+
+Developers should conform to git flow workflow. Additionally, we should try to make sure
+every commit builds. Commit messages should be meaningful serve as a meta history for the
+repository. Please squash meaningless commits before submitting a pull-request.
