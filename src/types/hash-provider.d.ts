@@ -1,4 +1,4 @@
-import { IXYOBase } from "xyo-base.interface";
+import { IXYOBase } from "./xyo-base";
 
 /*
  * @Author: XY | The Findables Company <ryanxyo>
@@ -6,7 +6,7 @@ import { IXYOBase } from "xyo-base.interface";
  * @Email:  developer@xyfindables.com
  * @Filename: hash-provider.interface.d.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 17th August 2018 10:53:14 am
+ * @Last modified time: Friday, 17th August 2018 2:00:49 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
