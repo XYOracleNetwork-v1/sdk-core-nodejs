@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base.abstract-class.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 17th August 2018 2:01:05 pm
+ * @Last modified time: Friday, 17th August 2018 4:40:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,7 +17,7 @@ export abstract class XYOBase implements IXYOBase {
   public abstract getMinor(): number;
 
   public getCode(): number {
-    return (4 * this.getMajor()) + this.getMinor(); // 4 -> 2^2 -> bit-shift two to the left
+    return (this.getMajor() << 2) + this.getMinor(); // tslint:disable-line:no-bitwise
   }
 
   public getCanonicalName(): string {
