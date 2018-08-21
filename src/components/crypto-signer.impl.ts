@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: crypto-signer.impl.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 17th August 2018 3:39:08 pm
+ * @Last modified time: Tuesday, 21st August 2018 8:45:25 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,7 +18,7 @@ export class CryptoSigner extends XYOBase implements ICryptoSigner {
 
   constructor () {
     super();
-    this.key = new NodeRSA({ b: 512 });
+    this.key = new NodeRSA({ b: 2048 });
   }
 
   public getPublicKey(): Buffer {
