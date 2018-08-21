@@ -1,10 +1,11 @@
+
 /*
  * @Author: XY | The Findables Company <ryanxyo>
  * @Date:   Tuesday, 21st August 2018 1:49:36 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-type.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 21st August 2018 1:53:14 pm
+ * @Last modified time: Tuesday, 21st August 2018 3:36:37 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */

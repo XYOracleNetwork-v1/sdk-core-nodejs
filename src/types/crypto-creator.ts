@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: crypto-creator.interface.d.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 17th August 2018 2:00:58 pm
+ * @Last modified time: Tuesday, 21st August 2018 3:36:31 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
