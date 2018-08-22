@@ -3,7 +3,9 @@
     "Findables",
     "IXYO",
     "Truthy",
+    "rssi",
     "ryanxyo",
     "xyfindables"
-  ]
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

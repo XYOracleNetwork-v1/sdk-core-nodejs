@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 21st August 2018 2:16:06 pm
+ * @Last modified time: Wednesday, 22nd August 2018 1:07:11 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -39,8 +39,8 @@ export abstract class XYOObjectCreator extends XYOType {
 
   private static creators: {[major: string]: {[minor: string]: XYOObjectCreator}} = {};
 
-  public abstract defaultSize: number;
-  public abstract sizeOfSize: number;
+  public abstract defaultSize: number | null;
+  public abstract sizeOfSize: number | null;
   public abstract createFromPacked(params: Buffer): XYOObject;
 
   public enable() {

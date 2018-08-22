@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 21st August 2018 1:23:59 pm
+ * @Last modified time: Wednesday, 22nd August 2018 10:20:19 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,7 @@
 export abstract class XYOObject {
   public abstract data: Buffer;
   public abstract sizeIdentifierSize: number | null;
-  public abstract id: number;
+  public abstract id: Buffer;
 
   get typed() {
     return this.makeTyped();
@@ -37,15 +37,12 @@ export abstract class XYOObject {
   }
 
   private makeTyped() {
-    const idBuffer = new Buffer(2);
-    idBuffer.writeUInt16BE(this.id, 0);
-
     const encodedSizeBuffer = this.encodedSize;
     const dataBuffer = this.data;
-    const typedBufferSize = idBuffer.length + encodedSizeBuffer.length + dataBuffer.length;
+    const typedBufferSize = this.id.length + encodedSizeBuffer.length + dataBuffer.length;
 
     const typedBuffer = Buffer.concat([
-      idBuffer,
+      this.id,
       encodedSizeBuffer,
       dataBuffer
     ], typedBufferSize);
