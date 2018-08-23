@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-creator.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 21st August 2018 2:53:25 pm
+ * @Last modified time: Wednesday, 22nd August 2018 2:01:58 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,7 +19,7 @@ describe(`XYOObjectCreator`, () => {
     const dummy = new DummyXYOObject(
       Buffer.from([0x13, 0x37]),
       null,
-      Buffer.from([0x23, 0x03]).readUInt16BE(0)
+      Buffer.from([0x23, 0x03])
     );
 
     const other = XYOObjectCreator.create(dummy.typed);
@@ -42,7 +42,7 @@ class TestObjectCreator extends XYOObjectCreator {
     return new DummyXYOObject(
       b,
       null,
-      data.readUInt16BE(0)
+      Buffer.from([data[0], data[1]])
     );
   }
 }
@@ -52,7 +52,7 @@ class DummyXYOObject extends XYOObject {
   constructor(
     public readonly data: Buffer,
     public readonly sizeIdentifierSize: number,
-    public readonly id: number) {
+    public readonly id: Buffer) {
     super();
   }
 

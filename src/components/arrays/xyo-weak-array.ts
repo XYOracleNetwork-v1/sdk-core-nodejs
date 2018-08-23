@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-weak-array.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 22nd August 2018 11:34:54 am
+ * @Last modified time: Wednesday, 22nd August 2018 2:00:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -42,6 +42,11 @@ class XYOWeakArrayObjectCreator extends XYOObjectCreator {
 
 // tslint:disable-next-line:max-classes-per-file
 export class XYOWeakArray extends XYOArrayBase {
+
+  public static enable () {
+    XYOWeakArray.creator.enable();
+  }
+
   private static creator = new XYOWeakArrayObjectCreator();
 
   get arraySize () {

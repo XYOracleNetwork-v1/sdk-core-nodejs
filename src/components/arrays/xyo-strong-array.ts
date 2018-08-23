@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-strong-array.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 22nd August 2018 11:42:55 am
+ * @Last modified time: Wednesday, 22nd August 2018 2:42:11 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -42,6 +42,11 @@ class XYOStrongArrayObjectCreator extends XYOObjectCreator {
 
 // tslint:disable-next-line:max-classes-per-file
 export class XYOStrongArray extends XYOArrayBase {
+
+  public static enable () {
+    XYOStrongArray.creator.enable();
+  }
+
   private static creator = new XYOStrongArrayObjectCreator();
 
   constructor(private readonly major: number, private readonly minor: number) {
@@ -55,8 +60,7 @@ export class XYOStrongArray extends XYOArrayBase {
   }
 
   get typedId () {
-    // TODO
-    return null;
+    return Buffer.from([this.major, this.minor]);
   }
 
   get id () {

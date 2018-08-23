@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 21st August 2018 1:37:59 pm
+ * @Last modified time: Wednesday, 22nd August 2018 2:02:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -16,7 +16,7 @@ describe(`XYOObject`, () => {
     const data = new Buffer(8);
     data.writeUInt32BE(Math.pow(2, 16), 0);
     data.writeUInt32BE(Math.pow(2, 16), 4);
-    const example = new ExampleXYOObject(data, 4, 0x3311);
+    const example = new ExampleXYOObject(data, 4, Buffer.from([0x33, 0X11]));
 
     const typed = example.typed;
     const untyped = example.unTyped;
@@ -34,7 +34,7 @@ class ExampleXYOObject extends XYOObject {
   constructor(
     public readonly data: Buffer,
     public readonly sizeIdentifierSize: number,
-    public readonly id: number) {
+    public readonly id: Buffer) {
     super();
   }
 }
