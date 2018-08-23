@@ -4,13 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: http.network.impl.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 20th August 2018 3:01:39 pm
+ * @Last modified time: Tuesday, 21st August 2018 3:39:59 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { INetwork, IReceiver, IListenerConnection } from '../types/network';
 import http from 'http';
+import { IHashProvider } from '../types/hash-provider';
 
 export class HttpNetwork implements INetwork {
 

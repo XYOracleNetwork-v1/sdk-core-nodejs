@@ -3,7 +3,10 @@
     "Findables",
     "IXYO",
     "Truthy",
+    "deserialize",
+    "rssi",
     "ryanxyo",
     "xyfindables"
-  ]
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
