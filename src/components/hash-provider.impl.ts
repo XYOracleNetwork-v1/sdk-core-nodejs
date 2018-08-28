@@ -12,6 +12,7 @@
 import { IHashProvider } from '../types/hash-provider';
 import crypto from 'crypto';
 import { XyoBase } from './xyo-base.abstract-class';
+import { XyoResult } from './xyo-result';
 
 export class HashProvider extends XyoBase implements IHashProvider {
 
@@ -35,8 +36,8 @@ export class HashProvider extends XyoBase implements IHashProvider {
     }) as Promise<Buffer>;
   }
 
-  public async verifyHash(data: Buffer, hash: Uint8Array): Promise<boolean> {
+  public async verifyHash(data: Buffer, hash: Uint8Array): Promise<XyoResult<boolean>> {
     const actualHash = await this.hash(data);
-    return actualHash === hash;
+    return XyoResult.withResult(actualHash.equals(hash));
   }
 }

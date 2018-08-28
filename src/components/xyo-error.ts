@@ -4,14 +4,15 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-error.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 9:56:47 am
+ * @Last modified time: Tuesday, 28th August 2018 10:39:24 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 enum XyoErrorType {
   ERR_CRITICAL = 1,
-  ERR_INVALID_PARAMETERS = 2
+  ERR_INVALID_PARAMETERS = 2,
+  ERR_CREATOR_MAPPING = 3
 }
 export class XyoError implements Error {
 

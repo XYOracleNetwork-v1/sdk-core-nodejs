@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 9:18:53 am
+ * @Last modified time: Tuesday, 28th August 2018 10:38:57 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,6 +12,7 @@
 import { XyoObject } from '../xyo-object';
 import { XyoObjectCreator } from '../xyo-object-creator';
 import { XyoResult } from '../xyo-result';
+import { XyoError } from '../xyo-error';
 
 export abstract class XyoHash extends XyoObject {
   public abstract hash: Buffer;
@@ -20,13 +21,16 @@ export abstract class XyoHash extends XyoObject {
     return this.hash;
   }
 
-  public verifyHash(data: Buffer): boolean {
+  public async verifyHash(data: Buffer): Promise<XyoResult<boolean>> {
     const hashCreator = XyoObjectCreator.getCreator(this.id[0], this.id[1]) as XyoHashCreator;
     if (!hashCreator) {
-      throw new Error(`Could not create an XyoHashCreator for Major: ${this.id[0]} and minor ${this.id[1]}`);
+      return XyoResult.withError(new XyoError(
+        `Could not create an XyoHashCreator for Major: ${this.id[0]} and minor ${this.id[1]}`,
+        XyoError.errorType.ERR_CREATOR_MAPPING
+      ));
     }
 
-    return hashCreator.hash(data).equals(this.hash);
+    return XyoResult.withResult(hashCreator.hash(data).equals(this.hash));
   }
 }
 
