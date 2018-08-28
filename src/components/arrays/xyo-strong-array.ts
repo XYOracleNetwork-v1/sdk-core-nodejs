@@ -4,17 +4,17 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-strong-array.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 22nd August 2018 2:42:11 pm
+ * @Last modified time: Tuesday, 28th August 2018 8:48:43 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XYOArrayBase } from './xyo-array-base';
-import { XYOObjectCreator } from '../xyo-object-creator';
-import { XYOArrayUnpacker } from './xyo-array-unpacker';
-import { XYOObject } from '../xyo-object';
+import { XyoArrayBase } from './xyo-array-base';
+import { XyoObjectCreator } from '../xyo-object-creator';
+import { XyoArrayUnpacker } from './xyo-array-unpacker';
+import { XyoObject } from '../xyo-object';
 
-class XYOStrongArrayObjectCreator extends XYOObjectCreator {
+class XyoStrongArrayObjectCreator extends XyoObjectCreator {
 
   get major () {
     return 0x01;
@@ -32,22 +32,22 @@ class XYOStrongArrayObjectCreator extends XYOObjectCreator {
     return 4;
   }
 
-  public createFromPacked(byteArray: Buffer): XYOObject {
-    const unpackedArray = new XYOArrayUnpacker(byteArray, true, 4, 4);
-    const unpackedArrayObject = new XYOStrongArray(unpackedArray.majorType!, unpackedArray.minorType!);
+  public createFromPacked(byteArray: Buffer): XyoObject {
+    const unpackedArray = new XyoArrayUnpacker(byteArray, true, 4, 4);
+    const unpackedArrayObject = new XyoStrongArray(unpackedArray.majorType!, unpackedArray.minorType!);
     unpackedArrayObject.array = unpackedArray.array;
     return unpackedArrayObject;
   }
 }
 
 // tslint:disable-next-line:max-classes-per-file
-export class XYOStrongArray extends XYOArrayBase {
+export class XyoStrongArray extends XyoArrayBase {
 
   public static enable () {
-    XYOStrongArray.creator.enable();
+    XyoStrongArray.creator.enable();
   }
 
-  private static creator = new XYOStrongArrayObjectCreator();
+  private static creator = new XyoStrongArrayObjectCreator();
 
   constructor(private readonly major: number, private readonly minor: number) {
     super();
@@ -68,10 +68,10 @@ export class XYOStrongArray extends XYOArrayBase {
   }
 
   get sizeIdentifierSize () {
-    return XYOStrongArray.creator.sizeOfSize;
+    return XyoStrongArray.creator.sizeOfSize;
   }
 
-  public addElement(element: XYOObject, index?: number) {
+  public addElement(element: XyoObject, index?: number) {
     if (element.id[0] === this.major && element.id[1] === this.minor) {
       return super.addElement(element, index);
     }

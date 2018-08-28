@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base.abstract-class.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 21st August 2018 3:38:10 pm
+ * @Last modified time: Tuesday, 28th August 2018 8:54:48 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXYOBase } from '../types/xyo-base';
+import { IXyoBase } from '../types/xyo-base';
 
-export abstract class XYOBase implements IXYOBase {
+export abstract class XyoBase implements IXyoBase {
 
   public abstract getMajor(): number;
   public abstract getMinor(): number;

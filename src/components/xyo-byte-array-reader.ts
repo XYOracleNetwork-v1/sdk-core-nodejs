@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-byte-array-reader.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 22nd August 2018 12:38:52 pm
+ * @Last modified time: Tuesday, 28th August 2018 8:53:39 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-export class XYOByteArrayReader {
+export class XyoByteArrayReader {
   constructor(private readonly bytes: Buffer) {}
 
   public read(offset: number, size: number): Buffer {

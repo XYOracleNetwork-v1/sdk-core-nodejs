@@ -4,16 +4,16 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-unpacker.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 22nd August 2018 11:15:26 am
+ * @Last modified time: Tuesday, 28th August 2018 8:49:07 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XYOObjectCreator } from '../xyo-object-creator';
-import { XYOObject } from '../xyo-object';
-import { XYOByteArraySetter } from '../xyo-byte-array-setter';
+import { XyoObjectCreator } from '../xyo-object-creator';
+import { XyoObject } from '../xyo-object';
+import { XyoByteArraySetter } from '../xyo-byte-array-setter';
 
-export class XYOArrayUnpacker {
+export class XyoArrayUnpacker {
   public majorType: number | null = null;
   public minorType: number | null = null;
 
@@ -40,7 +40,7 @@ export class XYOArrayUnpacker {
   }
 
   private readCurrentSize (major: number, minor: number): number | null {
-    const creator = XYOObjectCreator.getCreator(major, minor);
+    const creator = XyoObjectCreator.getCreator(major, minor);
     if (!creator) {
       return null;
     }
@@ -54,7 +54,7 @@ export class XYOArrayUnpacker {
   }
 
   private unpack() {
-    const items: XYOObject[] = [];
+    const items: XyoObject[] = [];
     let arrayType = new Buffer(0);
 
     if (this.typed) {
@@ -78,12 +78,12 @@ export class XYOArrayUnpacker {
         }
 
         this.currentPosition += sizeOfElement;
-        const merger = new XYOByteArraySetter(3);
+        const merger = new XyoByteArraySetter(3);
         merger.add(Buffer.from([arrayType[0]]), 0);
         merger.add(Buffer.from([arrayType[1]]), 1);
         merger.add(field, 2);
 
-        items.push(XYOObjectCreator.create(merger.merge())!);
+        items.push(XyoObjectCreator.create(merger.merge())!);
       }
     }
 

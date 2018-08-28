@@ -11,9 +11,9 @@
 
 import { IHashProvider } from '../types/hash-provider';
 import crypto from 'crypto';
-import { XYOBase } from './xyo-base.abstract-class';
+import { XyoBase } from './xyo-base.abstract-class';
 
-export class HashProvider extends XYOBase implements IHashProvider {
+export class HashProvider extends XyoBase implements IHashProvider {
 
   public getMajor(): number {
     return 0x55;

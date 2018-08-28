@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: hash-provider.interface.d.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 21st August 2018 3:37:29 pm
+ * @Last modified time: Tuesday, 28th August 2018 8:54:50 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXYOBase } from './xyo-base';
+import { IXyoBase } from './xyo-base';
 
-export interface IHashProvider extends IXYOBase {
+export interface IHashProvider extends IXyoBase {
   hash(data: Buffer): Promise<Buffer>;
   verifyHash(data: Buffer, hash: Buffer): Promise<boolean>;
 }

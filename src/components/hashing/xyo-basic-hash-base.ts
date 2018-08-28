@@ -4,16 +4,16 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-basic-hash-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 23rd August 2018 10:33:29 am
+ * @Last modified time: Tuesday, 28th August 2018 8:53:40 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XYOHash, XYOHashCreator } from './xyo-hash';
+import { XyoHash, XyoHashCreator } from './xyo-hash';
 import crypto from 'crypto';
-import { XYOByteArrayReader } from '../xyo-byte-array-reader';
+import { XyoByteArrayReader } from '../xyo-byte-array-reader';
 
-export abstract class XYOBasicHashBase extends XYOHash {
+export abstract class XyoBasicHashBase extends XyoHash {
 
   private readonly mHash: Buffer;
 
@@ -32,7 +32,7 @@ export abstract class XYOBasicHashBase extends XYOHash {
 }
 
 // tslint:disable-next-line:max-classes-per-file
-export class XYOBasicHashBaseCreator extends XYOHashCreator {
+export class XyoBasicHashBaseCreator extends XyoHashCreator {
 
   constructor(
     public readonly standardDigestKey: string,
@@ -46,8 +46,8 @@ export class XYOBasicHashBaseCreator extends XYOHashCreator {
     return null;
   }
 
-  public createHash(data: Buffer): XYOHash {
-    return new XYOBasicHashBaseImpl(
+  public createHash(data: Buffer): XyoHash {
+    return new XyoBasicHashBaseImpl(
       this.hash(data),
       Buffer.from([this.major, this.minor])
     );
@@ -59,14 +59,14 @@ export class XYOBasicHashBaseCreator extends XYOHashCreator {
     return hasher.digest();
   }
 
-  public createFromPacked(byteArray: Buffer): XYOHash {
-    const hash = new XYOByteArrayReader(byteArray).read(2, byteArray.length - 2);
-    return new XYOBasicHashBaseImpl(hash, Buffer.from([byteArray[0], byteArray[1]]));
+  public createFromPacked(byteArray: Buffer): XyoHash {
+    const hash = new XyoByteArrayReader(byteArray).read(2, byteArray.length - 2);
+    return new XyoBasicHashBaseImpl(hash, Buffer.from([byteArray[0], byteArray[1]]));
   }
 }
 
 // tslint:disable-next-line:max-classes-per-file
-class XYOBasicHashBaseImpl extends XYOBasicHashBase {
+class XyoBasicHashBaseImpl extends XyoBasicHashBase {
   constructor(pastHash: Buffer, public readonly id: Buffer) {
     super(pastHash);
   }

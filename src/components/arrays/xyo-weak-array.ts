@@ -4,17 +4,17 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-weak-array.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 22nd August 2018 2:00:16 pm
+ * @Last modified time: Tuesday, 28th August 2018 8:52:22 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XYOArrayBase } from './xyo-array-base';
-import { XYOObjectCreator } from '../xyo-object-creator';
-import { XYOObject } from '../xyo-object';
-import { XYOArrayUnpacker } from './xyo-array-unpacker';
+import { XyoArrayBase } from './xyo-array-base';
+import { XyoObjectCreator } from '../xyo-object-creator';
+import { XyoObject } from '../xyo-object';
+import { XyoArrayUnpacker } from './xyo-array-unpacker';
 
-class XYOWeakArrayObjectCreator extends XYOObjectCreator {
+class XyoWeakArrayObjectCreator extends XyoObjectCreator {
 
   get major () {
     return 0x01;
@@ -32,22 +32,22 @@ class XYOWeakArrayObjectCreator extends XYOObjectCreator {
     return 4;
   }
 
-  public createFromPacked(byteArray: Buffer): XYOObject {
-    const unpackedArray = new XYOArrayUnpacker(byteArray, false, 4, 4);
-    const unpackedArrayObject = new XYOWeakArray();
+  public createFromPacked(byteArray: Buffer): XyoObject {
+    const unpackedArray = new XyoArrayUnpacker(byteArray, false, 4, 4);
+    const unpackedArrayObject = new XyoWeakArray();
     unpackedArrayObject.array = unpackedArray.array;
     return unpackedArrayObject;
   }
 }
 
 // tslint:disable-next-line:max-classes-per-file
-export class XYOWeakArray extends XYOArrayBase {
+export class XyoWeakArray extends XyoArrayBase {
 
   public static enable () {
-    XYOWeakArray.creator.enable();
+    XyoWeakArray.creator.enable();
   }
 
-  private static creator = new XYOWeakArrayObjectCreator();
+  private static creator = new XyoWeakArrayObjectCreator();
 
   get arraySize () {
     const buffer = new Buffer(4);
@@ -60,10 +60,10 @@ export class XYOWeakArray extends XYOArrayBase {
   }
 
   get id () {
-    return Buffer.from([XYOWeakArray.creator.major, XYOWeakArray.creator.minor]);
+    return Buffer.from([XyoWeakArray.creator.major, XyoWeakArray.creator.minor]);
   }
 
   get sizeIdentifierSize () {
-    return XYOWeakArray.creator.sizeOfSize;
+    return XyoWeakArray.creator.sizeOfSize;
   }
 }

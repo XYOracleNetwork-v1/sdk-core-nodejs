@@ -5,11 +5,11 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-type.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 21st August 2018 3:36:37 pm
+ * @Last modified time: Tuesday, 28th August 2018 8:51:30 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
-export abstract class XYOType {
+export abstract class XyoType {
   public abstract major: number; // 1 Byte max
   public abstract minor: number; // 1 Byte max
 

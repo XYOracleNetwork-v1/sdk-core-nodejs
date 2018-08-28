@@ -4,21 +4,21 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-weak-array.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 22nd August 2018 2:49:13 pm
+ * @Last modified time: Tuesday, 28th August 2018 9:02:30 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { loadAllTypes } from '../test-utils';
-import { XYOWeakArray } from '../../src/components/arrays/xyo-weak-array';
-import { XYORssi } from '../../src/components/heuristics/numbers/signed/xyo-rssi';
+import { XyoWeakArray } from '../../src/components/arrays/xyo-weak-array';
+import { XyoRssi } from '../../src/components/heuristics/numbers/signed/xyo-rssi';
 
-describe(`XYOWeakArray`, () => {
+describe(`XyoWeakArray`, () => {
   beforeAll(() => {
     loadAllTypes();
   });
 
-  it(`serialize and deserialize XYOStrongArray type`, () => {
+  it(`serialize and deserialize XyoStrongArray type`, () => {
     const expected = Buffer.from([
       0x00, 0x00, 0x00, 0x11, // 17 elements total
       0x00, 0x00, 0x00, 0x03, // 3 elements total
@@ -30,10 +30,10 @@ describe(`XYOWeakArray`, () => {
       0x02 // with value 2
     ]);
 
-    const rssiArray = new XYOWeakArray();
-    rssiArray.addElement(new XYORssi(0));
-    rssiArray.addElement(new XYORssi(1));
-    rssiArray.addElement(new XYORssi(2));
+    const rssiArray = new XyoWeakArray();
+    rssiArray.addElement(new XyoRssi(0));
+    rssiArray.addElement(new XyoRssi(1));
+    rssiArray.addElement(new XyoRssi(2));
 
     const untypedRssi = rssiArray.unTyped;
 

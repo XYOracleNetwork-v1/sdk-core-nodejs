@@ -4,33 +4,33 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-number-signed.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 22nd August 2018 1:21:52 pm
+ * @Last modified time: Tuesday, 28th August 2018 8:54:22 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XYOObject } from '../../../xyo-object';
-import { XYONumberType } from '../xyo-number-type';
+import { XyoObject } from '../../../xyo-object';
+import { XyoNumberType } from '../xyo-number-type';
 
-export abstract class XYONumberSigned extends XYOObject {
-  public abstract readonly size: XYONumberType;
+export abstract class XyoNumberSigned extends XyoObject {
+  public abstract readonly size: XyoNumberType;
   public abstract readonly number: number;
 
   get data() {
     let buf: Buffer;
 
     switch (this.size) {
-      case XYONumberType.BYTE:
+      case XyoNumberType.BYTE:
         return Buffer.from([this.number]);
-      case XYONumberType.SHORT:
+      case XyoNumberType.SHORT:
         buf = new Buffer(2);
         buf.writeInt16BE(this.number, 0);
         return buf;
-      case XYONumberType.INT:
+      case XyoNumberType.INT:
         buf = new Buffer(4);
         buf.writeInt32BE(this.number, 0);
         return buf;
-      case XYONumberType.LONG:
+      case XyoNumberType.LONG:
         // Lets have this be use-case driven. As soon as there
         // is a use-case we can implement support for it. As it
         // is now, support for byte operations is difficult with

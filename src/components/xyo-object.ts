@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 22nd August 2018 10:20:19 am
+ * @Last modified time: Tuesday, 28th August 2018 8:48:49 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-export abstract class XYOObject {
+export abstract class XyoObject {
   public abstract data: Buffer;
   public abstract sizeIdentifierSize: number | null;
   public abstract id: Buffer;

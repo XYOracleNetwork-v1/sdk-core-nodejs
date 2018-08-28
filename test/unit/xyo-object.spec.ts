@@ -4,19 +4,19 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 22nd August 2018 2:02:48 pm
+ * @Last modified time: Tuesday, 28th August 2018 9:01:41 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XYOObject } from '../../src/components/xyo-object';
+import { XyoObject } from '../../src/components/xyo-object';
 
-describe(`XYOObject`, () => {
+describe(`XyoObject`, () => {
   it(`Should serialize correctly`, () => {
     const data = new Buffer(8);
     data.writeUInt32BE(Math.pow(2, 16), 0);
     data.writeUInt32BE(Math.pow(2, 16), 4);
-    const example = new ExampleXYOObject(data, 4, Buffer.from([0x33, 0X11]));
+    const example = new ExampleXyoObject(data, 4, Buffer.from([0x33, 0X11]));
 
     const typed = example.typed;
     const untyped = example.unTyped;
@@ -29,7 +29,7 @@ describe(`XYOObject`, () => {
   });
 });
 
-class ExampleXYOObject extends XYOObject {
+class ExampleXyoObject extends XyoObject {
 
   constructor(
     public readonly data: Buffer,

@@ -4,15 +4,15 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 23rd August 2018 9:37:09 am
+ * @Last modified time: Tuesday, 28th August 2018 8:59:57 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XYOObject } from '../xyo-object';
-import { XYOObjectCreator } from '../xyo-object-creator';
+import { XyoObject } from '../xyo-object';
+import { XyoObjectCreator } from '../xyo-object-creator';
 
-export abstract class XYOHash extends XYOObject {
+export abstract class XyoHash extends XyoObject {
   public abstract hash: Buffer;
 
   get data () {
@@ -20,9 +20,9 @@ export abstract class XYOHash extends XYOObject {
   }
 
   public verifyHash(data: Buffer): boolean {
-    const hashCreator = XYOObjectCreator.getCreator(this.id[0], this.id[1]) as XYOHashCreator;
+    const hashCreator = XyoObjectCreator.getCreator(this.id[0], this.id[1]) as XyoHashCreator;
     if (!hashCreator) {
-      throw new Error(`Could not create an XYOHashCreator for Major: ${this.id[0]} and minor ${this.id[1]}`);
+      throw new Error(`Could not create an XyoHashCreator for Major: ${this.id[0]} and minor ${this.id[1]}`);
     }
 
     return hashCreator.hash(data).equals(this.hash);
@@ -30,11 +30,11 @@ export abstract class XYOHash extends XYOObject {
 }
 
 // tslint:disable-next-line:max-classes-per-file
-export abstract class XYOHashCreator extends XYOObjectCreator {
+export abstract class XyoHashCreator extends XyoObjectCreator {
   get major () {
     return 0x04;
   }
 
   public abstract hash(data: Buffer): Buffer;
-  public abstract createHash(data: Buffer): XYOHash;
+  public abstract createHash(data: Buffer): XyoHash;
 }

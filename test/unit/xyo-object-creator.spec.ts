@@ -4,42 +4,42 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-creator.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 22nd August 2018 2:01:58 pm
+ * @Last modified time: Tuesday, 28th August 2018 9:01:21 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XYOObjectCreator } from '../../src/components/xyo-object-creator';
-import { XYOObject } from '../../src/components/xyo-object';
+import { XyoObjectCreator } from '../../src/components/xyo-object-creator';
+import { XyoObject } from '../../src/components/xyo-object';
 
-describe(`XYOObjectCreator`, () => {
-  it(`Should register XYOObjectCreator subclass`, () => {
+describe(`XyoObjectCreator`, () => {
+  it(`Should register XyoObjectCreator subclass`, () => {
     const testCreatorFixed = new TestObjectCreator();
     testCreatorFixed.enable();
-    const dummy = new DummyXYOObject(
+    const dummy = new DummyXyoObject(
       Buffer.from([0x13, 0x37]),
       null,
       Buffer.from([0x23, 0x03])
     );
 
-    const other = XYOObjectCreator.create(dummy.typed);
+    const other = XyoObjectCreator.create(dummy.typed);
     expect(other.data.equals(dummy.data)).toEqual(true);
     expect(other.id).toEqual(dummy.id);
   });
 });
 
-class TestObjectCreator extends XYOObjectCreator {
+class TestObjectCreator extends XyoObjectCreator {
   public defaultSize: number = 2;
   public sizeOfSize: number = null;
 
   public major: number = 0x23;
   public minor: number = 0x03;
 
-  public createFromPacked(data: Buffer): XYOObject {
+  public createFromPacked(data: Buffer): XyoObject {
     const b = new Buffer(2);
     b[0] = data[2];
     b[1] = data[3];
-    return new DummyXYOObject(
+    return new DummyXyoObject(
       b,
       null,
       Buffer.from([data[0], data[1]])
@@ -48,7 +48,7 @@ class TestObjectCreator extends XYOObjectCreator {
 }
 
 // tslint:disable-next-line:max-classes-per-file
-class DummyXYOObject extends XYOObject {
+class DummyXyoObject extends XyoObject {
   constructor(
     public readonly data: Buffer,
     public readonly sizeIdentifierSize: number,

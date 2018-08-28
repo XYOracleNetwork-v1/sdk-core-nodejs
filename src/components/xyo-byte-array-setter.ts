@@ -4,17 +4,17 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-byte-array-setter.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 22nd August 2018 9:24:56 am
+ * @Last modified time: Tuesday, 28th August 2018 8:49:08 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-export class XYOByteArraySetter {
+export class XyoByteArraySetter {
   private static readonly defaultValue: Buffer = new Buffer(0);
   private byteArrays: Buffer[];
 
   constructor(private readonly numberOfByteArrays: number) {
-    this.byteArrays = [XYOByteArraySetter.defaultValue];
+    this.byteArrays = [XyoByteArraySetter.defaultValue];
   }
 
   public add(item: Buffer, index: number) {
@@ -22,7 +22,7 @@ export class XYOByteArraySetter {
   }
 
   public remove(index: number) {
-    this.byteArrays[index] = XYOByteArraySetter.defaultValue;
+    this.byteArrays[index] = XyoByteArraySetter.defaultValue;
   }
 
   public getByteArrays(): Buffer[] {
@@ -34,6 +34,6 @@ export class XYOByteArraySetter {
   }
 
   public clear() {
-    this.byteArrays = [XYOByteArraySetter.defaultValue];
+    this.byteArrays = [XyoByteArraySetter.defaultValue];
   }
 }

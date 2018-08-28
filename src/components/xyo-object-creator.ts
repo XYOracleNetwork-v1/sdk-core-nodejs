@@ -4,26 +4,26 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 22nd August 2018 1:07:11 pm
+ * @Last modified time: Tuesday, 28th August 2018 8:59:14 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XYOType } from './xyo-type';
-import { XYOObject } from './xyo-object';
+import { XyoType } from './xyo-type';
+import { XyoObject } from './xyo-object';
 
-export abstract class XYOObjectCreator extends XYOType {
+export abstract class XyoObjectCreator extends XyoType {
 
-  public static create(data: Buffer): XYOObject | null {
+  public static create(data: Buffer): XyoObject | null {
     const major = data.readUInt8(0);
     const minor = data.readUInt8(1);
-    const creator = XYOObjectCreator.getCreator(major, minor);
+    const creator = XyoObjectCreator.getCreator(major, minor);
 
     return (creator && creator.createFromPacked(data)) || null;
   }
 
-  public static getCreator(major: number, minor: number): XYOObjectCreator | null {
-    const minorsMap = XYOObjectCreator.creators[String(major)];
+  public static getCreator(major: number, minor: number): XyoObjectCreator | null {
+    const minorsMap = XyoObjectCreator.creators[String(major)];
     if (!minorsMap) {
       return null;
     }
@@ -31,19 +31,19 @@ export abstract class XYOObjectCreator extends XYOType {
     return minorsMap[String(minor)] || null;
   }
 
-  public static registerCreator(major: number, minor: number, creator: XYOObjectCreator) {
-    const minorMap = XYOObjectCreator.creators[String(major)] || {};
+  public static registerCreator(major: number, minor: number, creator: XyoObjectCreator) {
+    const minorMap = XyoObjectCreator.creators[String(major)] || {};
     minorMap[String(minor)] = creator;
-    XYOObjectCreator.creators[String(major)] = minorMap;
+    XyoObjectCreator.creators[String(major)] = minorMap;
   }
 
-  private static creators: {[major: string]: {[minor: string]: XYOObjectCreator}} = {};
+  private static creators: {[major: string]: {[minor: string]: XyoObjectCreator}} = {};
 
   public abstract defaultSize: number | null;
   public abstract sizeOfSize: number | null;
-  public abstract createFromPacked(params: Buffer): XYOObject;
+  public abstract createFromPacked(params: Buffer): XyoObject;
 
   public enable() {
-    XYOObjectCreator.registerCreator(this.major, this.minor, this);
+    XyoObjectCreator.registerCreator(this.major, this.minor, this);
   }
 }

@@ -4,17 +4,17 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rssi.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 22nd August 2018 1:56:34 pm
+ * @Last modified time: Tuesday, 28th August 2018 8:54:32 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XYONumberSigned } from './xyo-number-signed';
-import { XYONumberType } from '../xyo-number-type';
-import { XYOObjectCreator } from '../../../xyo-object-creator';
-import { XYOObject } from '../../../xyo-object';
+import { XyoNumberSigned } from './xyo-number-signed';
+import { XyoNumberType } from '../xyo-number-type';
+import { XyoObjectCreator } from '../../../xyo-object-creator';
+import { XyoObject } from '../../../xyo-object';
 
-class XYORssiObjectCreator extends XYOObjectCreator {
+class XyoRssiObjectCreator extends XyoObjectCreator {
 
   get major () {
     return 0x02;
@@ -32,22 +32,22 @@ class XYORssiObjectCreator extends XYOObjectCreator {
     return null;
   }
 
-  public createFromPacked(byteArray: Buffer): XYOObject {
+  public createFromPacked(byteArray: Buffer): XyoObject {
     if (byteArray.length !== 3) {
       throw new Error(`Can not unpacked a byte-array`);
     }
 
-    return new XYORssi(byteArray.readInt8(2));
+    return new XyoRssi(byteArray.readInt8(2));
   }
 }
 
 // tslint:disable-next-line:max-classes-per-file
-export class XYORssi extends XYONumberSigned {
+export class XyoRssi extends XyoNumberSigned {
   public static enable() {
-    XYORssi.creator.enable();
+    XyoRssi.creator.enable();
   }
 
-  private static creator = new XYORssiObjectCreator();
+  private static creator = new XyoRssiObjectCreator();
 
   constructor (private readonly rssi: number) {
     super();
@@ -58,11 +58,11 @@ export class XYORssi extends XYONumberSigned {
   }
 
   get size () {
-    return XYONumberType.BYTE;
+    return XyoNumberType.BYTE;
   }
 
   get id () {
-    return Buffer.from([XYORssi.creator.major, XYORssi.creator.minor]);
+    return Buffer.from([XyoRssi.creator.major, XyoRssi.creator.minor]);
   }
 
   get sizeIdentifierSize () {
