@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-basic-hash-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 9:43:42 am
+ * @Last modified time: Tuesday, 28th August 2018 9:55:12 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,7 +13,7 @@ import { XyoHash, XyoHashCreator } from './xyo-hash';
 import crypto from 'crypto';
 import { XyoByteArrayReader } from '../xyo-byte-array-reader';
 import { XyoResult } from '../xyo-result';
-import { XyoError, XyoErrorType } from '../xyo-error';
+import { XyoError } from '../xyo-error';
 
 export abstract class XyoBasicHashBase extends XyoHash {
 
@@ -58,7 +58,7 @@ export class XyoBasicHashBaseCreator extends XyoHashCreator {
       return XyoResult.withResult(hash);
     } catch (e) {
       return XyoResult.withError<XyoBasicHashBaseImpl>(
-        new XyoError(e.message, XyoErrorType.ERR_CRITICAL, e)
+        new XyoError(e.message, XyoError.errorType.ERR_CRITICAL, e)
       );
     }
   }

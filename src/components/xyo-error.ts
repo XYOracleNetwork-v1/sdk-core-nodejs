@@ -4,11 +4,18 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-error.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 9:49:03 am
+ * @Last modified time: Tuesday, 28th August 2018 9:56:47 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
+
+enum XyoErrorType {
+  ERR_CRITICAL = 1,
+  ERR_INVALID_PARAMETERS = 2
+}
 export class XyoError implements Error {
+
+  public static readonly errorType = XyoErrorType;
 
   public readonly isXyoError: boolean = true;
   public readonly stack: string | undefined;
@@ -21,9 +28,4 @@ export class XyoError implements Error {
   ) {
     this.stack = (fromOtherError && fromOtherError.stack) || new Error().stack;
   }
-}
-
-export enum XyoErrorType {
-  ERR_CRITICAL = 1,
-  ERR_INVALID_PARAMETERS = 2
 }

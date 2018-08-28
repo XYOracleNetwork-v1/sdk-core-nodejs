@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-result.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 9:39:01 am
+ * @Last modified time: Tuesday, 28th August 2018 9:55:41 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoError, XyoErrorType } from './xyo-error';
+import { XyoError } from './xyo-error';
 
 export class XyoResult <T> {
 
@@ -28,7 +28,7 @@ export class XyoResult <T> {
     if (result && error) {
       throw new XyoError(
         `Invalid state: result and error may not both be defined`,
-        XyoErrorType.ERR_INVALID_PARAMETERS
+        XyoError.errorType.ERR_INVALID_PARAMETERS
       );
     }
   }
