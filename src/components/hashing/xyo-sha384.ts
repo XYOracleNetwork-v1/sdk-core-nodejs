@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: sha384.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 11:23:27 am
+ * @Last modified time: Tuesday, 28th August 2018 3:01:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,6 +14,9 @@ import {
   XyoBasicHashBaseCreator
 } from './xyo-basic-hash-base';
 
+/**
+ * Encapsulates Sha384 Hashing algorithm
+ */
 export class XyoSha384 extends XyoBasicHashBase {
   public static enable () {
     XyoSha384.creator.enable();

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: sha256.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 11:22:41 am
+ * @Last modified time: Tuesday, 28th August 2018 3:01:30 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,6 +14,9 @@ import {
   XyoBasicHashBaseCreator
 } from './xyo-basic-hash-base';
 
+/**
+ * Encapsulates Sha256 Hashing algorithm
+ */
 export class XyoSha256 extends XyoBasicHashBase {
 
   public static enable () {

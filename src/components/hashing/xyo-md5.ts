@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: md5.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 11:19:12 am
+ * @Last modified time: Tuesday, 28th August 2018 3:00:35 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,6 +14,9 @@ import {
   XyoBasicHashBaseCreator
 } from './xyo-basic-hash-base';
 
+/**
+ * Encapsulates Md5 Hashing algorithm
+ */
 export class XyoMd5 extends XyoBasicHashBase {
 
   public static enable () {
