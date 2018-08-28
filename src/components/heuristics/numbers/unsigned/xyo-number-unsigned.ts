@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-number-unsigned.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 3:20:39 pm
+ * @Last modified time: Tuesday, 28th August 2018 3:22:42 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -26,6 +26,7 @@ export abstract class XyoNumberUnsigned extends XyoObject {
   /**
    * Returns the byte-representation of the underlying number
    */
+
   get data () {
     let buf: Buffer;
 

@@ -4,14 +4,11 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base.d.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 8:54:46 am
+ * @Last modified time: Tuesday, 28th August 2018 3:26:00 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 export interface IXyoBase {
-  getMajor(): number;
-  getMinor(): number;
-  getCode(): number;
   getCanonicalName(): string;
 }
