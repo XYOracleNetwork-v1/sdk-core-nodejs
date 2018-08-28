@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash-creator.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 9:00:18 am
+ * @Last modified time: Tuesday, 28th August 2018 9:48:07 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,16 +18,17 @@ describe(`XyoHashCreator`, () => {
     loadAllTypes();
   });
 
-  it(`Should be able create and verify an arbitrary hash`, () => {
+  it(`Should be able create and verify an arbitrary hash`, async () => {
     const dataToHash = Buffer.from([0x13, 0x37]);
 
     const hashCreator = XyoObjectCreator.getCreator(0x04, 0x0b) as XyoHashCreator;
+
     if (!hashCreator) {
       throw new Error(`HashCreator is null, expected to receive a hash-creator instance`);
     }
 
-    const hash = hashCreator.createHash(dataToHash);
-    const verify = hash.verifyHash(dataToHash);
+    const hash = await hashCreator.createHash(dataToHash);
+    const verify = hash.result.verifyHash(dataToHash);
     expect(verify).toBe(true);
   });
 });

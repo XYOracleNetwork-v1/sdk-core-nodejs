@@ -4,13 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 8:59:57 am
+ * @Last modified time: Tuesday, 28th August 2018 9:18:53 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../xyo-object';
 import { XyoObjectCreator } from '../xyo-object-creator';
+import { XyoResult } from '../xyo-result';
 
 export abstract class XyoHash extends XyoObject {
   public abstract hash: Buffer;
@@ -36,5 +37,5 @@ export abstract class XyoHashCreator extends XyoObjectCreator {
   }
 
   public abstract hash(data: Buffer): Buffer;
-  public abstract createHash(data: Buffer): XyoHash;
+  public abstract createHash(data: Buffer): Promise<XyoResult<XyoHash>>;
 }
