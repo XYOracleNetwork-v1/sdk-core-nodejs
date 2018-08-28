@@ -4,18 +4,18 @@
  * @Email:  developer@xyfindables.com
  * @Filename: test-utils.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 9:58:23 am
+ * @Last modified time: Tuesday, 28th August 2018 11:14:07 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoRssi } from '../components/heuristics/numbers/signed/xyo-rssi';
-import { Md5 } from '../components/hashing/md5';
-import { Sha1 } from '../components/hashing/sha1';
-import { Sha224 } from '../components/hashing/sha224';
-import { Sha256 } from '../components/hashing/sha256';
-import { Sha384 } from '../components/hashing/sha384';
-import { Sha512 } from '../components/hashing/sha512';
+import { XyoMd5 } from '../components/hashing/xyo-md5';
+import { XyoSha1 } from '../components/hashing/xyo-sha1';
+import { XyoSha224 } from '../components/hashing/xyo-sha224';
+import { XyoSha256 } from '../components/hashing/xyo-sha256';
+import { XyoSha384 } from '../components/hashing/xyo-sha384';
+import { XyoSha512 } from '../components/hashing/xyo-sha512';
 import { XyoStrongArray } from '../components/arrays/xyo-strong-array';
 import { XyoWeakArray } from '../components/arrays/xyo-weak-array';
 
@@ -24,10 +24,10 @@ export function loadAllTypes() {
   XyoStrongArray.enable();
   XyoWeakArray.enable();
 
-  Md5.enable();
-  Sha1.enable();
-  Sha224.enable();
-  Sha256.enable();
-  Sha384.enable();
-  Sha512.enable();
+  XyoMd5.enable();
+  XyoSha1.enable();
+  XyoSha224.enable();
+  XyoSha256.enable();
+  XyoSha384.enable();
+  XyoSha512.enable();
 }

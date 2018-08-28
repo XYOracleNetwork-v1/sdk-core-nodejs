@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rssi.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 8:54:32 am
+ * @Last modified time: Tuesday, 28th August 2018 11:19:45 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -43,8 +43,17 @@ class XyoRssiObjectCreator extends XyoObjectCreator {
 
 // tslint:disable-next-line:max-classes-per-file
 export class XyoRssi extends XyoNumberSigned {
+
   public static enable() {
     XyoRssi.creator.enable();
+  }
+
+  public static major () {
+    return XyoRssi.creator.major;
+  }
+
+  public static minor () {
+    return XyoRssi.creator.minor;
   }
 
   private static creator = new XyoRssiObjectCreator();

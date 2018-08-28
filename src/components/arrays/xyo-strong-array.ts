@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-strong-array.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 8:48:43 am
+ * @Last modified time: Tuesday, 28th August 2018 11:20:11 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -45,6 +45,14 @@ export class XyoStrongArray extends XyoArrayBase {
 
   public static enable () {
     XyoStrongArray.creator.enable();
+  }
+
+  public static major () {
+    return XyoStrongArray.creator.major;
+  }
+
+  public static minor () {
+    return XyoStrongArray.creator.minor;
   }
 
   private static creator = new XyoStrongArrayObjectCreator();

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: sha224.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 8:50:01 am
+ * @Last modified time: Tuesday, 28th August 2018 11:21:51 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,14 +14,23 @@ import {
   XyoBasicHashBaseCreator
 } from './xyo-basic-hash-base';
 
-export class Sha224 extends XyoBasicHashBase {
+export class XyoSha224 extends XyoBasicHashBase {
+
   public static enable () {
-    Sha224.creator.enable();
+    XyoSha224.creator.enable();
+  }
+
+  public static major () {
+    return XyoSha224.creator.major;
+  }
+
+  public static minor () {
+    return XyoSha224.creator.minor;
   }
 
   private static creator = new XyoBasicHashBaseCreator('sha224', 20, 0x0a);
 
   get id () {
-    return Buffer.from([Sha224.creator.major, Sha224.creator.minor]);
+    return Buffer.from([XyoSha224.creator.major, XyoSha224.creator.minor]);
   }
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-weak-array.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 8:52:22 am
+ * @Last modified time: Tuesday, 28th August 2018 11:20:46 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -45,6 +45,14 @@ export class XyoWeakArray extends XyoArrayBase {
 
   public static enable () {
     XyoWeakArray.creator.enable();
+  }
+
+  public static major () {
+    return XyoWeakArray.creator.major;
+  }
+
+  public static minor () {
+    return XyoWeakArray.creator.minor;
   }
 
   private static creator = new XyoWeakArrayObjectCreator();
