@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash-creator.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 9:48:07 am
+ * @Last modified time: Tuesday, 28th August 2018 9:59:52 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { loadAllTypes } from '../test-utils';
-import { XyoObjectCreator } from '../../src/components/xyo-object-creator';
-import { XyoHashCreator } from '../../src/components/hashing/xyo-hash';
+import { XyoObjectCreator } from '../../components/xyo-object-creator';
+import { XyoHashCreator } from '../../components/hashing/xyo-hash';
 
 describe(`XyoHashCreator`, () => {
   beforeAll(() => {
@@ -28,7 +28,7 @@ describe(`XyoHashCreator`, () => {
     }
 
     const hash = await hashCreator.createHash(dataToHash);
-    const verify = hash.result.verifyHash(dataToHash);
+    const verify = hash.result!.verifyHash(dataToHash);
     expect(verify).toBe(true);
   });
 });

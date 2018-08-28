@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-weak-array.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 9:02:30 am
+ * @Last modified time: Tuesday, 28th August 2018 9:58:34 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { loadAllTypes } from '../test-utils';
-import { XyoWeakArray } from '../../src/components/arrays/xyo-weak-array';
-import { XyoRssi } from '../../src/components/heuristics/numbers/signed/xyo-rssi';
+import { XyoWeakArray } from '../../components/arrays/xyo-weak-array';
+import { XyoRssi } from '../../components/heuristics/numbers/signed/xyo-rssi';
 
 describe(`XyoWeakArray`, () => {
   beforeAll(() => {

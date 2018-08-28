@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: lib.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 17th August 2018 9:58:10 am
+ * @Last modified time: Tuesday, 28th August 2018 9:58:23 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { HashProvider } from '../../src';
+import { HashProvider } from '../..';
 
 describe(`Library Exports`, () => {
   it(`Should export a HashProvider that implements the IHashProvider interface`, () => {

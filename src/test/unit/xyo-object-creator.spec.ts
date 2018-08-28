@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-creator.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 9:01:21 am
+ * @Last modified time: Tuesday, 28th August 2018 10:01:00 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoObjectCreator } from '../../src/components/xyo-object-creator';
-import { XyoObject } from '../../src/components/xyo-object';
+import { XyoObjectCreator } from '../../components/xyo-object-creator';
+import { XyoObject } from '../../components/xyo-object';
 
 describe(`XyoObjectCreator`, () => {
   it(`Should register XyoObjectCreator subclass`, () => {
@@ -23,14 +23,14 @@ describe(`XyoObjectCreator`, () => {
     );
 
     const other = XyoObjectCreator.create(dummy.typed);
-    expect(other.data.equals(dummy.data)).toEqual(true);
-    expect(other.id).toEqual(dummy.id);
+    expect(other!.data.equals(dummy.data)).toEqual(true);
+    expect(other!.id).toEqual(dummy.id);
   });
 });
 
 class TestObjectCreator extends XyoObjectCreator {
   public defaultSize: number = 2;
-  public sizeOfSize: number = null;
+  public sizeOfSize: number | null = null;
 
   public major: number = 0x23;
   public minor: number = 0x03;
@@ -51,7 +51,7 @@ class TestObjectCreator extends XyoObjectCreator {
 class DummyXyoObject extends XyoObject {
   constructor(
     public readonly data: Buffer,
-    public readonly sizeIdentifierSize: number,
+    public readonly sizeIdentifierSize: number | null,
     public readonly id: Buffer) {
     super();
   }

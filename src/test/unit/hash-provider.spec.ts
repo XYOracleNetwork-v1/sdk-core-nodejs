@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: hash-p
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 17th August 2018 11:26:51 am
+ * @Last modified time: Tuesday, 28th August 2018 9:59:29 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
-import { HashProvider } from '../../src/components/hash-provider.impl';
+import { HashProvider } from '../../components/hash-provider.impl';
 
-const knownHashValues = {
+const knownHashValues: {[s: string]: Buffer} = {
   password: new Buffer([
     0x5E, 0x88, 0x48, 0x98, 0xDA, 0x28, 0x04, 0x71,
     0x51, 0xD0, 0xE5, 0x6F, 0x8D, 0xC6, 0x29, 0x27,

@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: in-memory-storage-provider.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 17th August 2018 4:56:55 pm
+ * @Last modified time: Tuesday, 28th August 2018 9:58:20 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { InMemoryStorageProvider } from '../../src/components/in-memory.storage-provider.impl';
+import { InMemoryStorageProvider } from '../../components/in-memory.storage-provider.impl';
 
 describe('Storage', () => {
   it(`Should manage memory`, async () => {

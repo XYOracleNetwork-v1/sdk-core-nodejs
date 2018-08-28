@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: crypto-signer.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 17th August 2018 3:47:45 pm
+ * @Last modified time: Tuesday, 28th August 2018 9:58:22 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { CryptoSigner } from '../../src/components/crypto-signer.impl';
+import { CryptoSigner } from '../../components/crypto-signer.impl';
 
 describe(`CryptoSigner`, () => {
   it(`Should sign and verify data`, async () => {

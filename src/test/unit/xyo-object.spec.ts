@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 9:01:41 am
+ * @Last modified time: Tuesday, 28th August 2018 9:58:30 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoObject } from '../../src/components/xyo-object';
+import { XyoObject } from '../../components/xyo-object';
 
 describe(`XyoObject`, () => {
   it(`Should serialize correctly`, () => {
