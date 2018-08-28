@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-number-signed.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 8:54:22 am
+ * @Last modified time: Tuesday, 28th August 2018 3:20:46 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,10 +12,20 @@
 import { XyoObject } from '../../../xyo-object';
 import { XyoNumberType } from '../xyo-number-type';
 
+/**
+ * Abstract class to wrap signed numeric data-types in the Xyo Major/Minor
+ */
 export abstract class XyoNumberSigned extends XyoObject {
+
+  /** Abstract classes should return the XyoNumberType corresponding to their type */
   public abstract readonly size: XyoNumberType;
+
+  /** The underlying number value */
   public abstract readonly number: number;
 
+  /**
+   * Returns the byte-representation of the underlying number
+   */
   get data() {
     let buf: Buffer;
 

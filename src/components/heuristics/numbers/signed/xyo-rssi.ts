@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rssi.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 11:19:45 am
+ * @Last modified time: Tuesday, 28th August 2018 3:18:26 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,6 +14,9 @@ import { XyoNumberType } from '../xyo-number-type';
 import { XyoObjectCreator } from '../../../xyo-object-creator';
 import { XyoObject } from '../../../xyo-object';
 
+/**
+ * The corresponding Creator class for XyoRssi
+ */
 class XyoRssiObjectCreator extends XyoObjectCreator {
 
   get major () {
@@ -41,6 +44,12 @@ class XyoRssiObjectCreator extends XyoObjectCreator {
   }
 }
 
+/**
+ * An XyoRssi class represents the  "Received signal strength indication"
+ *
+ * An Rssi value in the Xyo system is a signed number with 8 bits (1 byte) of resolution.
+ */
+
 // tslint:disable-next-line:max-classes-per-file
 export class XyoRssi extends XyoNumberSigned {
 
@@ -58,21 +67,42 @@ export class XyoRssi extends XyoNumberSigned {
 
   private static creator = new XyoRssiObjectCreator();
 
+  /**
+   * Creates a new instance of an XyoRssi
+   *
+   * @param rssi The distance to represent
+   */
+
   constructor (private readonly rssi: number) {
     super();
   }
+
+  /**
+   * Returns the underlying numeric value of the rssi data-point
+   */
 
   get number () {
     return this.rssi;
   }
 
+  /**
+   * Returns the `XyoNumberType` corresponding the size of the rssi
+   */
   get size () {
     return XyoNumberType.BYTE;
   }
 
+  /**
+   * Returns the id in accordance with the Major/Minor Xyo protocol
+   */
+
   get id () {
     return Buffer.from([XyoRssi.creator.major, XyoRssi.creator.minor]);
   }
+
+  /**
+   * Since size is known and is not dynamic, this will return `null`
+   */
 
   get sizeIdentifierSize () {
     return null;
