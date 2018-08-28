@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-strong-array.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 1:34:01 pm
+ * @Last modified time: Tuesday, 28th August 2018 1:42:03 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -119,7 +119,8 @@ export class XyoStrongArray extends XyoArrayBase {
   }
 
   /**
-   * Returns the number of bytes needed to represent the size element. Either 2, 4 or 8
+   * Returns the number of bytes needed to represent the
+   * size element. Either 2, 4 or 8
    */
 
   get sizeIdentifierSize () {
