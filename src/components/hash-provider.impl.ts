@@ -14,15 +14,18 @@ import crypto from 'crypto';
 import { XyoBase } from './xyo-base.abstract-class';
 import { XyoResult } from './xyo-result';
 
+/**
+ * A `HashProvider` is meant to abstract the consumer from hash
+ * configuration and implementation details.
+ */
 export class HashProvider extends XyoBase implements IHashProvider {
 
-  public getMajor(): number {
-    return 0x55;
-  }
-
-  public getMinor(): number {
-    return 0x01;
-  }
+  /**
+   * Creates a hash of the data provided returns the response as a byte-representation
+   *
+   * @param data The data to hash
+   * @returns The resulting hash
+   */
 
   public async hash(data: Buffer): Promise<Buffer> {
     const hash = crypto.createHash(`sha256`);
@@ -35,6 +38,13 @@ export class HashProvider extends XyoBase implements IHashProvider {
       hash.end();
     }) as Promise<Buffer>;
   }
+
+  /**
+   * Given data and a hash, this will verify that hash corresponds to the data passed in
+   * @param data The source data
+   * @param hash A hash to to test
+   * @returns Will return true (wrapped in an `XyoResult`) if the hash corresponds to the source data, false otherwise
+   */
 
   public async verifyHash(data: Buffer, hash: Uint8Array): Promise<XyoResult<boolean>> {
     const actualHash = await this.hash(data);
