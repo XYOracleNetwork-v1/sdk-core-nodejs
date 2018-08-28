@@ -4,31 +4,21 @@
  * @Email:  developer@xyfindables.com
  * @Filename: crypto-signer.impl.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 3:34:29 pm
+ * @Last modified time: Tuesday, 28th August 2018 4:22:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { ICryptoSigner } from '../types/crypto-signer';
-import { XyoBase } from './xyo-base.abstract-class';
 import NodeRSA from 'node-rsa';
 
 /**
  * This CryptoSigner implements the `ICryptoSigner` using RSA-2048
  */
-export class CryptoSigner extends XyoBase implements ICryptoSigner {
+export class CryptoSigner implements ICryptoSigner {
 
   /** Leverage NodeRSA for RSA services */
-  private readonly key: NodeRSA;
-
-  /**
-   * Creates a new instance of a CryptoSigner
-   */
-
-  constructor () {
-    super();
-    this.key = new NodeRSA({ b: 2048 });
-  }
+  private readonly key: NodeRSA = new NodeRSA({ b: 2048 });
 
   /**
    * Returns a byte-representation of the public-key

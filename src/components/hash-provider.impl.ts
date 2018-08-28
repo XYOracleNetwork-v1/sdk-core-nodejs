@@ -11,14 +11,13 @@
 
 import { IHashProvider } from '../types/hash-provider';
 import crypto from 'crypto';
-import { XyoBase } from './xyo-base.abstract-class';
 import { XyoResult } from './xyo-result';
 
 /**
  * A `HashProvider` is meant to abstract the consumer from hash
  * configuration and implementation details.
  */
-export class HashProvider extends XyoBase implements IHashProvider {
+export class HashProvider implements IHashProvider {
 
   /**
    * Creates a hash of the data provided returns the response as a byte-representation

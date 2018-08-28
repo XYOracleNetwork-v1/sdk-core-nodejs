@@ -4,14 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: crypto-creator.interface.d.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 8:54:49 am
+ * @Last modified time: Tuesday, 28th August 2018 4:21:41 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoBase } from './xyo-base';
 import { ICryptoSigner } from './crypto-signer';
 
-export interface ICryptoCreator extends IXyoBase {
+export interface ICryptoCreator {
   getSigner(privateKey?: Buffer): ICryptoSigner;
 }

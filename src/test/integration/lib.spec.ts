@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: lib.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 3:52:40 pm
+ * @Last modified time: Tuesday, 28th August 2018 4:20:31 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,7 +14,6 @@ import { HashProvider } from '../..';
 describe(`Library Exports`, () => {
   it(`Should export a HashProvider that implements the IHashProvider interface`, () => {
     const hashProvider = new HashProvider();
-    expect(hashProvider.getCanonicalName).toBeTruthy();
     expect(hashProvider.hash).toBeTruthy();
     expect(hashProvider.verifyHash).toBeTruthy();
   });
