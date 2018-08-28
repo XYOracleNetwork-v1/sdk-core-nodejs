@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 10:38:57 am
+ * @Last modified time: Tuesday, 28th August 2018 2:59:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,12 +14,28 @@ import { XyoObjectCreator } from '../xyo-object-creator';
 import { XyoResult } from '../xyo-result';
 import { XyoError } from '../xyo-error';
 
+/**
+ * Wraps a XyoHash value. Additionally, adds a `verifyHash`
+ * instance method that can be used to verify the hash value matches
+ * against a set of data
+ */
 export abstract class XyoHash extends XyoObject {
+  /** The previously hashed value, represented as a byte-stream */
   public abstract hash: Buffer;
+
+  /**
+   * Returns the byte-representation of the underlying hash value
+   */
 
   get data () {
     return this.hash;
   }
+
+  /**
+   * Verifies that a hash matches to a source data.
+   *
+   * @param data The source data to compare to
+   */
 
   public async verifyHash(data: Buffer): Promise<XyoResult<boolean>> {
     const hashCreator = XyoObjectCreator.getCreator(this.id[0], this.id[1]) as XyoHashCreator;
@@ -34,12 +50,34 @@ export abstract class XyoHash extends XyoObject {
   }
 }
 
+/**
+ * The corresponding Creator class for `XyoHash`
+ */
 // tslint:disable-next-line:max-classes-per-file
 export abstract class XyoHashCreator extends XyoObjectCreator {
+
+  /**
+   * All hashes will be of the major value `0x04`
+   */
+
   get major () {
     return 0x04;
   }
 
+  /**
+   * Subclasses should implement this class-method.
+   * Should apply a hashing transform to the data and return the transform result as buffer.
+   *
+   * @param data The data to hash
+   */
+
   public abstract hash(data: Buffer): Buffer;
+
+  /**
+   * Subclasses should implement this class-method.
+   * Creates an XyoHash from the data provided
+   *
+   * @param data The data to hash
+   */
   public abstract createHash(data: Buffer): Promise<XyoResult<XyoHash>>;
 }
