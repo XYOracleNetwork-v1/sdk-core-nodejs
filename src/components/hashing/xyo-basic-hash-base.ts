@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-basic-hash-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:29:02 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:37:26 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -67,7 +67,7 @@ export class XyoBasicHashBaseCreator extends XyoHashCreator {
 
   constructor(
     public readonly standardDigestKey: string,
-    public readonly defaultSize: number,
+    public readonly rawDefaultSize: number,
     public readonly minor: number
   ) {
     super();
@@ -79,6 +79,10 @@ export class XyoBasicHashBaseCreator extends XyoHashCreator {
 
   get sizeOfBytesToGetSize () {
     return null;
+  }
+
+  get defaultSize () {
+    return XyoResult.withValue(this.rawDefaultSize);
   }
 
   /**

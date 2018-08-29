@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:26:59 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:34:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -66,14 +66,14 @@ export abstract class XyoObjectCreator extends XyoType {
   /** A mapping of creators by their major/minor values */
   private static creators: {[major: string]: {[minor: string]: XyoObjectCreator}} = {};
 
-  /** The default size of the type that is to be created. If it is a dynamic size, null should be returned */
-  public abstract defaultSize: number | null;
-
   /**
    * For dynamically sized types, this value functions as a size pointer,
    * corresponding to amount bytes needed to represent the size of the type
    */
   public abstract sizeOfBytesToGetSize: number | null;
+
+  /** The default size of the type that is to be created. If it is a dynamic size, null should be returned */
+  public abstract defaultSize: XyoResult<number | null>;
 
   /**
    * A creator's primary function is to take packed binary data and return a hydrated
