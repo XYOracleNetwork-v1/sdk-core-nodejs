@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rssi.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 3:18:26 pm
+ * @Last modified time: Wednesday, 29th August 2018 3:20:38 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,6 +13,7 @@ import { XyoNumberSigned } from './xyo-number-signed';
 import { XyoNumberType } from '../xyo-number-type';
 import { XyoObjectCreator } from '../../../xyo-object-creator';
 import { XyoObject } from '../../../xyo-object';
+import { XyoResult } from '../../../xyo-result';
 
 /**
  * The corresponding Creator class for XyoRssi
@@ -105,6 +106,6 @@ export class XyoRssi extends XyoNumberSigned {
    */
 
   get sizeIdentifierSize () {
-    return null;
+    return XyoResult.withResult(null);
   }
 }

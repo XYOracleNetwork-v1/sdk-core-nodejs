@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-result.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 9:55:41 am
+ * @Last modified time: Wednesday, 29th August 2018 3:20:31 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -31,10 +31,6 @@ export class XyoResult <T> {
         XyoError.errorType.ERR_INVALID_PARAMETERS
       );
     }
-  }
-
-  public hasResult(): boolean {
-    return this.result !== undefined;
   }
 
   public hasError(): boolean {

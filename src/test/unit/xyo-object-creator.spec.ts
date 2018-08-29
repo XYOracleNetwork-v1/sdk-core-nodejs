@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-creator.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 2:49:04 pm
+ * @Last modified time: Wednesday, 29th August 2018 3:22:12 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -52,9 +52,13 @@ class TestObjectCreator extends XyoObjectCreator {
 class DummyXyoObject extends XyoObject {
   constructor(
     public readonly rawData: Buffer,
-    public readonly sizeIdentifierSize: number | null,
+    public readonly sizeIdentifierSizeRaw: number | null,
     public readonly id: Buffer) {
     super();
+  }
+
+  get sizeIdentifierSize() {
+    return XyoResult.withResult(this.sizeIdentifierSizeRaw);
   }
 
   get data () {

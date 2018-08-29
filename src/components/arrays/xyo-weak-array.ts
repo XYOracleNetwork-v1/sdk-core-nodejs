@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-weak-array.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 1:41:46 pm
+ * @Last modified time: Wednesday, 29th August 2018 3:19:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,6 +13,7 @@ import { XyoArrayBase } from './xyo-array-base';
 import { XyoObjectCreator } from '../xyo-object-creator';
 import { XyoObject } from '../xyo-object';
 import { XyoArrayUnpacker } from './xyo-array-unpacker';
+import { XyoResult } from '../xyo-result';
 
 /**
  * The corresponding creator for XyoWeakArray
@@ -116,6 +117,6 @@ export class XyoWeakArray extends XyoArrayBase {
    */
 
   get sizeIdentifierSize () {
-    return XyoWeakArray.creator.sizeOfSize;
+    return XyoResult.withResult(XyoWeakArray.creator.sizeOfSize);
   }
 }
