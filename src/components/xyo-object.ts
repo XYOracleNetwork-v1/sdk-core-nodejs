@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 3:47:43 pm
+ * @Last modified time: Wednesday, 29th August 2018 3:56:59 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -34,16 +34,16 @@ export abstract class XyoObject {
 
   get encodedSize() {
     if (this.sizeIdentifierSize.result === null) {
-      return new Buffer(0);
+      return XyoResult.withResult(new Buffer(0));
     }
 
     const buffer = new Buffer(this.sizeIdentifierSize.result || 0);
     buffer.writeUInt32BE(this.totalSize + (this.sizeIdentifierSize.result || 0), 0);
-    return buffer;
+    return XyoResult.withResult(buffer);
   }
 
   private makeTyped() {
-    const encodedSizeBuffer = this.encodedSize;
+    const encodedSizeBuffer = this.encodedSize.result!;
     const dataBuffer = this.data.result || new Buffer(0);
 
     const typedBufferSize = this.id.result!.length + encodedSizeBuffer.length + dataBuffer.length;
@@ -54,11 +54,11 @@ export abstract class XyoObject {
       dataBuffer
     ], typedBufferSize);
 
-    return typedBuffer;
+    return XyoResult.withResult(typedBuffer);
   }
 
   private makeUntyped() {
-    const encodedSizeBuffer = this.encodedSize;
+    const encodedSizeBuffer = this.encodedSize.result!;
     const dataBuffer = this.data.result || new Buffer(0);
     const typedBufferSize = encodedSizeBuffer.length + dataBuffer.length;
 
@@ -67,6 +67,6 @@ export abstract class XyoObject {
       dataBuffer
     ], typedBufferSize);
 
-    return unTypedBuffer;
+    return XyoResult.withResult(unTypedBuffer);
   }
 }
