@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: hash-p
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 10:47:40 am
+ * @Last modified time: Wednesday, 29th August 2018 3:59:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -28,7 +28,7 @@ describe(`HashProvider`, () => {
         const passwordHash = await hashProvider.hash(Buffer.from(key));
         expect(passwordHash).toEqual(knownHash);
         const result = await hashProvider.verifyHash(Buffer.from(key), passwordHash);
-        expect(result.result).toBe(true);
+        expect(result.value).toBe(true);
         return;
       })
     );
@@ -37,6 +37,6 @@ describe(`HashProvider`, () => {
   it(`Should return false when two hashes do not match`, async () => {
     const hashProvider = new HashProvider();
     const verifies = await hashProvider.verifyHash(Buffer.from('hello world'), Buffer.from('wrong hash'));
-    expect(verifies.result).toEqual(false);
+    expect(verifies.value).toEqual(false);
   });
 });

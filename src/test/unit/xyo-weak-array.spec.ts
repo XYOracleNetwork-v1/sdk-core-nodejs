@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-weak-array.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 3:54:45 pm
+ * @Last modified time: Wednesday, 29th August 2018 3:59:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -35,7 +35,7 @@ describe(`XyoWeakArray`, () => {
     rssiArray.addElement(new XyoRssi(1));
     rssiArray.addElement(new XyoRssi(2));
 
-    const untypedRssi = rssiArray.unTyped.result!;
+    const untypedRssi = rssiArray.unTyped.value!;
 
     expect(expected.equals(untypedRssi)).toBe(true);
   });

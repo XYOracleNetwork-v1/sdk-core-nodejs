@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash-creator.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 10:40:11 am
+ * @Last modified time: Wednesday, 29th August 2018 3:59:41 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -28,7 +28,7 @@ describe(`XyoHashCreator`, () => {
     }
 
     const hash = await hashCreator.createHash(dataToHash);
-    const verify = await hash.result!.verifyHash(dataToHash);
-    expect(verify.result).toBe(true);
+    const verify = await hash.value!.verifyHash(dataToHash);
+    expect(verify.value).toBe(true);
   });
 });

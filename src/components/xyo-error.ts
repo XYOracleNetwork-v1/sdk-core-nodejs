@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-error.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 4:50:31 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:03:12 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -16,7 +16,8 @@
 enum XyoErrorType {
   ERR_CRITICAL = 1,
   ERR_INVALID_PARAMETERS = 2,
-  ERR_CREATOR_MAPPING = 3
+  ERR_CREATOR_MAPPING = 3,
+  ERR_INVALID_RESULT_ACCESS = 4
 }
 
 /**

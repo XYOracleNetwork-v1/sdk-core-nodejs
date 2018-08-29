@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-result.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 3:20:31 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:05:04 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -22,15 +22,27 @@ export class XyoResult <T> {
   }
 
   private constructor(
-    public readonly result: T | undefined,
+    private readonly data: T | undefined,
     public readonly error?: XyoError | undefined
   ) {
-    if (result && error) {
+    if (data && error) {
       throw new XyoError(
         `Invalid state: result and error may not both be defined`,
         XyoError.errorType.ERR_INVALID_PARAMETERS
       );
     }
+  }
+
+  get value () {
+    if (this.error) {
+      throw new XyoError(
+        `XyoResult value was accessed before checking if there was an error.
+        Original Error message: ${this.error.message}`,
+        XyoError.errorType.ERR_INVALID_RESULT_ACCESS
+      );
+    }
+
+    return this.data;
   }
 
   public hasError(): boolean {

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 3:53:24 pm
+ * @Last modified time: Wednesday, 29th August 2018 3:59:38 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -133,7 +133,7 @@ export abstract class XyoArrayBase extends XyoObject {
     const merger = new XyoByteArraySetter();
     merger.add(this.arraySize, 0);
     this.array.forEach((element, index) => {
-      merger.add(element.typed.result!, index + 1);
+      merger.add(element.typed.value!, index + 1);
     });
 
     return merger.merge();
@@ -149,7 +149,7 @@ export abstract class XyoArrayBase extends XyoObject {
     merger.add(this.arraySize, 1);
 
     this.array.forEach((element, index) => {
-      merger.add(element.unTyped.result!, index + 2);
+      merger.add(element.unTyped.value!, index + 2);
     });
 
     return merger.merge();
