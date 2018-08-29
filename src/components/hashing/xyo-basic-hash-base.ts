@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-basic-hash-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 3:46:05 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:15:39 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -77,7 +77,7 @@ export class XyoBasicHashBaseCreator extends XyoHashCreator {
    * Returns null because it already known and is not dynamic
    */
 
-  get sizeOfSize () {
+  get sizeOfBytesToGetSize () {
     return null;
   }
 

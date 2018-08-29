@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 5:00:04 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:15:35 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -72,7 +72,7 @@ export abstract class XyoObjectCreator extends XyoType {
    * For dynamically sized types, this value functions as a size pointer,
    * corresponding to amount bytes needed to represent the size of the type
    */
-  public abstract sizeOfSize: number | null;
+  public abstract sizeOfBytesToGetSize: number | null;
 
   /**
    * A creator's primary function is to take packed binary data and return a hydrated

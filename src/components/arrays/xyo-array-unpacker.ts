@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-unpacker.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 3:53:12 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:15:36 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -73,7 +73,7 @@ export class XyoArrayUnpacker {
       return null;
     }
 
-    const sizeOfSizeElement = creator.sizeOfSize;
+    const sizeOfSizeElement = creator.sizeOfBytesToGetSize;
     if (sizeOfSizeElement === null) {
       return creator.defaultSize;
     }

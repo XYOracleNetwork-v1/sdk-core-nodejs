@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rssi.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 3:35:41 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:15:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,7 +32,7 @@ class XyoRssiObjectCreator extends XyoObjectCreator {
     return 1;
   }
 
-  get sizeOfSize () {
+  get sizeOfBytesToGetSize () {
     return null;
   }
 
