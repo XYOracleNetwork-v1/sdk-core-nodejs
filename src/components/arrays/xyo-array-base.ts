@@ -4,13 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 4:39:02 pm
+ * @Last modified time: Wednesday, 29th August 2018 2:34:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../xyo-object';
 import { XyoByteArraySetter } from '../xyo-byte-array-setter';
+import { XyoResult } from '../xyo-result';
 
 /**
  * A base class for Array types to extend from.
@@ -40,7 +41,7 @@ export abstract class XyoArrayBase extends XyoObject {
    */
 
   get data() {
-    return this.makeArray();
+    return XyoResult.withResult(this.makeArray());
   }
 
   /**

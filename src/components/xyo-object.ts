@@ -4,13 +4,15 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 8:48:49 am
+ * @Last modified time: Wednesday, 29th August 2018 2:45:42 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
+import { XyoResult } from './xyo-result';
+import { XyoError } from './xyo-error';
 export abstract class XyoObject {
-  public abstract data: Buffer;
+  public abstract data: XyoResult<Buffer>;
   public abstract sizeIdentifierSize: number | null;
   public abstract id: Buffer;
 
@@ -23,7 +25,11 @@ export abstract class XyoObject {
   }
 
   get totalSize() {
-    return this.data.length;
+    if (this.data.result) {
+      return this.data.result.length;
+    }
+
+    return 0;
   }
 
   get encodedSize() {
@@ -38,7 +44,8 @@ export abstract class XyoObject {
 
   private makeTyped() {
     const encodedSizeBuffer = this.encodedSize;
-    const dataBuffer = this.data;
+    const dataBuffer = this.data.result || new Buffer(0);
+
     const typedBufferSize = this.id.length + encodedSizeBuffer.length + dataBuffer.length;
 
     const typedBuffer = Buffer.concat([
@@ -52,7 +59,7 @@ export abstract class XyoObject {
 
   private makeUntyped() {
     const encodedSizeBuffer = this.encodedSize;
-    const dataBuffer = this.data;
+    const dataBuffer = this.data.result || new Buffer(0);
     const typedBufferSize = encodedSizeBuffer.length + dataBuffer.length;
 
     const unTypedBuffer = Buffer.concat([

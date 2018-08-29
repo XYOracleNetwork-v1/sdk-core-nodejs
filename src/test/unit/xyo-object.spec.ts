@@ -4,12 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 9:58:30 am
+ * @Last modified time: Wednesday, 29th August 2018 2:49:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../../components/xyo-object';
+import { XyoResult } from '../../components/xyo-result';
 
 describe(`XyoObject`, () => {
   it(`Should serialize correctly`, () => {
@@ -32,9 +33,13 @@ describe(`XyoObject`, () => {
 class ExampleXyoObject extends XyoObject {
 
   constructor(
-    public readonly data: Buffer,
+    public readonly rawData: Buffer,
     public readonly sizeIdentifierSize: number,
     public readonly id: Buffer) {
     super();
+  }
+
+  get data() {
+    return XyoResult.withResult(this.rawData);
   }
 }

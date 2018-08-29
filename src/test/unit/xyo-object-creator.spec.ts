@@ -4,13 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-creator.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 10:01:00 am
+ * @Last modified time: Wednesday, 29th August 2018 2:49:04 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObjectCreator } from '../../components/xyo-object-creator';
 import { XyoObject } from '../../components/xyo-object';
+import { XyoResult } from '../../components/xyo-result';
 
 describe(`XyoObjectCreator`, () => {
   it(`Should register XyoObjectCreator subclass`, () => {
@@ -23,7 +24,7 @@ describe(`XyoObjectCreator`, () => {
     );
 
     const other = XyoObjectCreator.create(dummy.typed);
-    expect(other!.data.equals(dummy.data)).toEqual(true);
+    expect(other!.data.result!.equals(dummy.data.result!)).toEqual(true);
     expect(other!.id).toEqual(dummy.id);
   });
 });
@@ -50,10 +51,14 @@ class TestObjectCreator extends XyoObjectCreator {
 // tslint:disable-next-line:max-classes-per-file
 class DummyXyoObject extends XyoObject {
   constructor(
-    public readonly data: Buffer,
+    public readonly rawData: Buffer,
     public readonly sizeIdentifierSize: number | null,
     public readonly id: Buffer) {
     super();
+  }
+
+  get data () {
+    return XyoResult.withResult(this.rawData);
   }
 
 }
