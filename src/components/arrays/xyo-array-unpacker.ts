@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-unpacker.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:35:38 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:51:24 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,6 +12,7 @@
 import { XyoObjectCreator } from '../xyo-object-creator';
 import { XyoObject } from '../xyo-object';
 import { XyoByteArraySetter } from '../xyo-byte-array-setter';
+import { XyoError } from '../xyo-error';
 
 /**
  * Unpacks Array value in accordance with the Major/Minor protocol
@@ -70,12 +71,12 @@ export class XyoArrayUnpacker {
   private readCurrentSize (major: number, minor: number): number | null {
     const creator = XyoObjectCreator.getCreator(major, minor);
     if (!creator) {
-      return null;
+      throw new Error(`Could not find Creator ${major} ${minor}`); // TODO
     }
 
     const sizeOfSizeElement = creator.sizeOfBytesToGetSize;
     if (sizeOfSizeElement === null) {
-      return creator.defaultSize.value!;
+      return creator.readSize(new Buffer(0)).value!; // TODO Fix this
     }
 
     return this.getSize(this.sizeOfElementSize);

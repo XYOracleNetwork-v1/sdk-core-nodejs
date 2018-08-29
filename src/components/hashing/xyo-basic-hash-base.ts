@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-basic-hash-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:37:26 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:54:30 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -81,7 +81,7 @@ export class XyoBasicHashBaseCreator extends XyoHashCreator {
     return null;
   }
 
-  get defaultSize () {
+  public readSize (buffer: Buffer) {
     return XyoResult.withValue(this.rawDefaultSize);
   }
 

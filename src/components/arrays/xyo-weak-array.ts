@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-weak-array.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:36:40 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:48:36 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -28,12 +28,12 @@ class XyoWeakArrayObjectCreator extends XyoObjectCreator {
     return 0x03;
   }
 
-  get defaultSize () {
-    return XyoResult.withValue(null);
-  }
-
   get sizeOfBytesToGetSize () {
     return 4;
+  }
+
+  public readSize (buffer: Buffer) {
+    return XyoResult.withValue(null); // TODO
   }
 
   public createFromPacked(byteArray: Buffer) {

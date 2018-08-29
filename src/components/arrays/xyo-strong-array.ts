@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-strong-array.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:36:10 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:48:35 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -28,12 +28,12 @@ class XyoStrongArrayObjectCreator extends XyoObjectCreator {
     return 0x02;
   }
 
-  get defaultSize () {
-    return XyoResult.withValue(null);
-  }
-
   get sizeOfBytesToGetSize () {
     return 4;
+  }
+
+  public readSize (buffer: Buffer) {
+    return XyoResult.withValue(null); // TODO
   }
 
   public createFromPacked(byteArray: Buffer) {
