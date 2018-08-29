@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-strong-array.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 3:19:22 pm
+ * @Last modified time: Wednesday, 29th August 2018 3:36:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -116,7 +116,7 @@ export class XyoStrongArray extends XyoArrayBase {
    */
 
   get id () {
-    return Buffer.from([this.major, this.minor]);
+    return XyoResult.withResult(Buffer.from([this.major, this.minor]));
   }
 
   /**
@@ -130,7 +130,7 @@ export class XyoStrongArray extends XyoArrayBase {
 
   // Override addElement to make sure its the right type before adding it to the collection
   public addElement(element: XyoObject, index?: number) {
-    if (element.id[0] === this.major && element.id[1] === this.minor) {
+    if (element.id.result![0] === this.major && element.id.result![1] === this.minor) {
       return super.addElement(element, index);
     }
 

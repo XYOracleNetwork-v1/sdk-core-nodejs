@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-basic-hash-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 3:19:41 pm
+ * @Last modified time: Wednesday, 29th August 2018 3:46:05 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -142,7 +142,11 @@ class XyoBasicHashBaseImpl extends XyoBasicHashBase {
    * @param id The id corresponding to the concatenation of the major minor type.
    */
 
-  constructor(pastHash: Buffer, public readonly id: Buffer) {
+  constructor(pastHash: Buffer, private readonly rawId: Buffer) {
     super(pastHash);
+  }
+
+  get id () {
+    return XyoResult.withResult(this.rawId);
   }
 }

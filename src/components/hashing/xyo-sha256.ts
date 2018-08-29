@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: sha256.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 3:01:30 pm
+ * @Last modified time: Wednesday, 29th August 2018 3:34:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,6 +13,7 @@ import {
   XyoBasicHashBase,
   XyoBasicHashBaseCreator
 } from './xyo-basic-hash-base';
+import { XyoResult } from '../xyo-result';
 
 /**
  * Encapsulates Sha256 Hashing algorithm
@@ -34,6 +35,6 @@ export class XyoSha256 extends XyoBasicHashBase {
   private static creator = new XyoBasicHashBaseCreator('sha256', 32, 0x0b);
 
   get id () {
-    return Buffer.from([XyoSha256.creator.major, XyoSha256.creator.minor]);
+    return XyoResult.withResult(Buffer.from([XyoSha256.creator.major, XyoSha256.creator.minor]));
   }
 }

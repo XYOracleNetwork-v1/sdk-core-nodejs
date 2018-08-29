@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-weak-array.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 3:19:33 pm
+ * @Last modified time: Wednesday, 29th August 2018 3:33:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -108,7 +108,7 @@ export class XyoWeakArray extends XyoArrayBase {
    */
 
   get id () {
-    return Buffer.from([XyoWeakArray.creator.major, XyoWeakArray.creator.minor]);
+    return XyoResult.withResult(Buffer.from([XyoWeakArray.creator.major, XyoWeakArray.creator.minor]));
   }
 
   /**
