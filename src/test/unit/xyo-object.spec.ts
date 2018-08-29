@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 3:59:43 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:29:14 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -40,14 +40,14 @@ class ExampleXyoObject extends XyoObject {
   }
 
   get sizeIdentifierSize () {
-    return XyoResult.withResult(this.rawSizeIdentifierSize);
+    return XyoResult.withValue(this.rawSizeIdentifierSize);
   }
 
   get data() {
-    return XyoResult.withResult(this.rawData);
+    return XyoResult.withValue(this.rawData);
   }
 
   get id () {
-    return XyoResult.withResult(this.rawId);
+    return XyoResult.withValue(this.rawId);
   }
 }

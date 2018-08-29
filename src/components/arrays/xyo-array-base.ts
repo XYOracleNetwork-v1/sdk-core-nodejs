@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 3:59:38 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:28:59 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -41,7 +41,7 @@ export abstract class XyoArrayBase extends XyoObject {
    */
 
   get data() {
-    return XyoResult.withResult(this.makeArray());
+    return XyoResult.withValue(this.makeArray());
   }
 
   /**

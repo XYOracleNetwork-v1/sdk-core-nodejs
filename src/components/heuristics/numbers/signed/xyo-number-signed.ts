@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-number-signed.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 3:11:57 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:29:09 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -57,6 +57,6 @@ export abstract class XyoNumberSigned extends XyoObject {
         break;
     }
 
-    return XyoResult.withResult(buf);
+    return XyoResult.withValue(buf);
   }
 }

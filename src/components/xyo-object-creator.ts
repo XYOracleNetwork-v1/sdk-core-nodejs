@@ -4,13 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:15:35 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:26:59 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoType } from './xyo-type';
 import { XyoObject } from './xyo-object';
+import { XyoResult } from './xyo-result';
 
 /**
  * Abstract `XyoObjectCreator`. Provides factory-like services
@@ -30,7 +31,7 @@ export abstract class XyoObjectCreator extends XyoType {
     const minor = data.readUInt8(1);
     const creator = XyoObjectCreator.getCreator(major, minor);
 
-    return (creator && creator.createFromPacked(data)) || null;
+    return (creator && creator.createFromPacked(data).value) || null;
   }
 
   /**
@@ -80,7 +81,7 @@ export abstract class XyoObjectCreator extends XyoType {
    * @param params The packed binary data
    * @returns Should return an `XyoObject` if the data can be unpacked
    */
-  public abstract createFromPacked(params: Buffer): XyoObject;
+  public abstract createFromPacked(params: Buffer): XyoResult<XyoObject>;
 
   /**
    * Registers the creator for the major and minor values

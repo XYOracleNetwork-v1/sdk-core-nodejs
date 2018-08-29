@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: md5.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 3:34:08 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:29:04 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -35,6 +35,6 @@ export class XyoMd5 extends XyoBasicHashBase {
   private static creator = new XyoBasicHashBaseCreator('md5', 16, 0x10);
 
   get id () {
-    return XyoResult.withResult(Buffer.from([XyoMd5.creator.major, XyoMd5.creator.minor]));
+    return XyoResult.withValue(Buffer.from([XyoMd5.creator.major, XyoMd5.creator.minor]));
   }
 }

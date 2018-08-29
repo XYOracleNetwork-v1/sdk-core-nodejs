@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-creator.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:15:41 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:29:13 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -36,15 +36,15 @@ class TestObjectCreator extends XyoObjectCreator {
   public major: number = 0x23;
   public minor: number = 0x03;
 
-  public createFromPacked(data: Buffer): XyoObject {
+  public createFromPacked(data: Buffer) {
     const b = new Buffer(2);
     b[0] = data[2];
     b[1] = data[3];
-    return new DummyXyoObject(
+    return XyoResult.withValue(new DummyXyoObject(
       b,
       null,
       Buffer.from([data[0], data[1]])
-    );
+    ));
   }
 }
 
@@ -58,15 +58,15 @@ class DummyXyoObject extends XyoObject {
   }
 
   get sizeIdentifierSize() {
-    return XyoResult.withResult(this.sizeIdentifierSizeRaw);
+    return XyoResult.withValue(this.sizeIdentifierSizeRaw);
   }
 
   get data () {
-    return XyoResult.withResult(this.rawData);
+    return XyoResult.withValue(this.rawData);
   }
 
   get id () {
-    return XyoResult.withResult(this.rawId);
+    return XyoResult.withValue(this.rawId);
   }
 
 }

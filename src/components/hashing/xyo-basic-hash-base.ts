@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-basic-hash-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:15:39 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:29:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -47,7 +47,7 @@ export abstract class XyoBasicHashBase extends XyoHash {
    */
 
   get sizeIdentifierSize () {
-    return XyoResult.withResult(null);
+    return XyoResult.withValue(null);
   }
 }
 
@@ -97,7 +97,7 @@ export class XyoBasicHashBaseCreator extends XyoHashCreator {
         Buffer.from([this.major, this.minor])
       );
 
-      return XyoResult.withResult(hash);
+      return XyoResult.withValue(hash);
     } catch (e) {
       return XyoResult.withError<XyoBasicHashBaseImpl>(
         new XyoError(e.message, XyoError.errorType.ERR_CRITICAL, e)
@@ -123,9 +123,9 @@ export class XyoBasicHashBaseCreator extends XyoHashCreator {
    * @param byteArray The packed byte-array
    */
 
-  public createFromPacked(byteArray: Buffer): XyoHash {
+  public createFromPacked(byteArray: Buffer) {
     const hash = Buffer.from(byteArray, 2, byteArray.length - 2);
-    return new XyoBasicHashBaseImpl(hash, Buffer.from([byteArray[0], byteArray[1]]));
+    return XyoResult.withValue(new XyoBasicHashBaseImpl(hash, Buffer.from([byteArray[0], byteArray[1]])));
   }
 }
 
@@ -147,6 +147,6 @@ class XyoBasicHashBaseImpl extends XyoBasicHashBase {
   }
 
   get id () {
-    return XyoResult.withResult(this.rawId);
+    return XyoResult.withValue(this.rawId);
   }
 }

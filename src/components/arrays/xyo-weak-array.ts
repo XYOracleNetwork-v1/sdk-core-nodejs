@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-weak-array.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:15:38 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:29:00 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -36,11 +36,11 @@ class XyoWeakArrayObjectCreator extends XyoObjectCreator {
     return 4;
   }
 
-  public createFromPacked(byteArray: Buffer): XyoObject {
+  public createFromPacked(byteArray: Buffer) {
     const unpackedArray = new XyoArrayUnpacker(byteArray, false, 4, 4);
     const unpackedArrayObject = new XyoWeakArray();
     unpackedArrayObject.array = unpackedArray.array;
-    return unpackedArrayObject;
+    return XyoResult.withValue(unpackedArrayObject);
   }
 }
 /**
@@ -108,7 +108,7 @@ export class XyoWeakArray extends XyoArrayBase {
    */
 
   get id () {
-    return XyoResult.withResult(Buffer.from([XyoWeakArray.creator.major, XyoWeakArray.creator.minor]));
+    return XyoResult.withValue(Buffer.from([XyoWeakArray.creator.major, XyoWeakArray.creator.minor]));
   }
 
   /**
@@ -117,6 +117,6 @@ export class XyoWeakArray extends XyoArrayBase {
    */
 
   get sizeIdentifierSize () {
-    return XyoResult.withResult(XyoWeakArray.creator.sizeOfBytesToGetSize);
+    return XyoResult.withValue(XyoWeakArray.creator.sizeOfBytesToGetSize);
   }
 }

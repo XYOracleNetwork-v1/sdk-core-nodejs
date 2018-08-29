@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 3:59:40 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:29:03 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -28,7 +28,7 @@ export abstract class XyoHash extends XyoObject {
    */
 
   get data () {
-    return XyoResult.withResult(this.hash);
+    return XyoResult.withValue(this.hash);
   }
 
   /**
@@ -46,7 +46,7 @@ export abstract class XyoHash extends XyoObject {
       ));
     }
 
-    return XyoResult.withResult(hashCreator.hash(data).equals(this.hash));
+    return XyoResult.withValue(hashCreator.hash(data).equals(this.hash));
   }
 }
 

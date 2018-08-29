@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-result.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:05:04 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:31:39 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,24 +13,27 @@ import { XyoError } from './xyo-error';
 
 export class XyoResult <T> {
 
-  public static withResult<R>(result: R): XyoResult<R> {
-    return new XyoResult<R>(result);
+  public static withValue<V>(value: V): XyoResult<V> {
+    return new XyoResult<V>(value);
   }
 
   public static withError<R>(error: XyoError): XyoResult<R> {
     return new XyoResult<R>(undefined, error);
   }
 
+  private readonly mValue: T | undefined;
   private constructor(
-    private readonly data: T | undefined,
+    value: T | undefined,
     public readonly error?: XyoError | undefined
   ) {
-    if (data && error) {
+    if (value && error) {
       throw new XyoError(
         `Invalid state: result and error may not both be defined`,
         XyoError.errorType.ERR_INVALID_PARAMETERS
       );
     }
+
+    this.mValue = value;
   }
 
   get value () {
@@ -42,7 +45,7 @@ export class XyoResult <T> {
       );
     }
 
-    return this.data;
+    return this.mValue;
   }
 
   public hasError(): boolean {

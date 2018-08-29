@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: sha384.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 3:35:13 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:29:07 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -34,6 +34,6 @@ export class XyoSha384 extends XyoBasicHashBase {
   private static creator = new XyoBasicHashBaseCreator('sha384', 48, 0x0c);
 
   get id () {
-    return XyoResult.withResult(Buffer.from([XyoSha384.creator.major, XyoSha384.creator.minor]));
+    return XyoResult.withValue(Buffer.from([XyoSha384.creator.major, XyoSha384.creator.minor]));
   }
 }

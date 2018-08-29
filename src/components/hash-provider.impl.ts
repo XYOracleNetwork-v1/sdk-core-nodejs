@@ -47,6 +47,6 @@ export class HashProvider implements IHashProvider {
 
   public async verifyHash(data: Buffer, hash: Uint8Array): Promise<XyoResult<boolean>> {
     const actualHash = await this.hash(data);
-    return XyoResult.withResult(actualHash.equals(hash));
+    return XyoResult.withValue(actualHash.equals(hash));
   }
 }

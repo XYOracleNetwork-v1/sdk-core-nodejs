@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rssi.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:15:40 pm
+ * @Last modified time: Wednesday, 29th August 2018 4:29:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -36,12 +36,12 @@ class XyoRssiObjectCreator extends XyoObjectCreator {
     return null;
   }
 
-  public createFromPacked(byteArray: Buffer): XyoObject {
+  public createFromPacked(byteArray: Buffer) {
     if (byteArray.length !== 3) {
       throw new Error(`Can not unpacked a byte-array`);
     }
 
-    return new XyoRssi(byteArray.readInt8(2));
+    return XyoResult.withValue(new XyoRssi(byteArray.readInt8(2)));
   }
 }
 
@@ -98,7 +98,7 @@ export class XyoRssi extends XyoNumberSigned {
    */
 
   get id () {
-    return XyoResult.withResult(Buffer.from([XyoRssi.creator.major, XyoRssi.creator.minor]));
+    return XyoResult.withValue(Buffer.from([XyoRssi.creator.major, XyoRssi.creator.minor]));
   }
 
   /**
@@ -106,6 +106,6 @@ export class XyoRssi extends XyoNumberSigned {
    */
 
   get sizeIdentifierSize () {
-    return XyoResult.withResult(null);
+    return XyoResult.withValue(null);
   }
 }
