@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:28:59 pm
+ * @Last modified time: Wednesday, 29th August 2018 5:24:03 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -22,11 +22,8 @@ export abstract class XyoArrayBase extends XyoObject {
   /** In Major/Minor scheme, if array is strong (homogenous) array it should specify this value */
   public abstract typedId: Buffer | null;
 
-  /** The total number of elements in the array, output in bytes */
-  public abstract arraySize: Buffer;
-
   /** The underlying array collection that is being wrapped */
-  public array: XyoObject[] = [];
+  public abstract array: XyoObject[];
 
   /**
    * Returns the total number of element in the array
@@ -76,45 +73,6 @@ export abstract class XyoArrayBase extends XyoObject {
   }
 
   /**
-   * Removes an element from the underlying collection if it exists
-   * @param element The element to remove
-   * @returns Returns true if the element was removed, false otherwise
-   */
-
-  public removeElement(element: XyoObject): boolean {
-    const indexOfElementToRemove = this.array.indexOf(element);
-    if (indexOfElementToRemove !== -1) {
-      return this.removeElementAtIndex(indexOfElementToRemove);
-    }
-
-    return false;
-  }
-
-  /**
-   * Attempts to remove an element at a specified index
-   *
-   * @param index The index of the element to remove
-   * @returns Returns true if the element was removed, false otherwise
-   */
-
-  public removeElementAtIndex(index: number): boolean {
-    if (index >= 0 && index < this.array.length) {
-      this.array.splice(index, 1);
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * Empties the underlying collection
-   */
-
-  public removeAll() {
-    this.array = [];
-  }
-
-  /**
    * @returns the binary representation of the array
    */
   private makeArray(): Buffer {
@@ -131,9 +89,8 @@ export abstract class XyoArrayBase extends XyoObject {
 
   private mergeTypedArray() {
     const merger = new XyoByteArraySetter();
-    merger.add(this.arraySize, 0);
     this.array.forEach((element, index) => {
-      merger.add(element.typed.value!, index + 1);
+      merger.add(element.typed.value!, index);
     });
 
     return merger.merge();
@@ -146,10 +103,9 @@ export abstract class XyoArrayBase extends XyoObject {
   private mergeUntypedArray() {
     const merger = new XyoByteArraySetter();
     merger.add(this.typedId!, 0);
-    merger.add(this.arraySize, 1);
 
     this.array.forEach((element, index) => {
-      merger.add(element.unTyped.value!, index + 2);
+      merger.add(element.unTyped.value!, index + 1);
     });
 
     return merger.merge();
