@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 5:24:03 pm
+ * @Last modified time: Thursday, 30th August 2018 12:12:59 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,11 +12,20 @@
 import { XyoObject } from '../xyo-object';
 import { XyoByteArraySetter } from '../xyo-byte-array-setter';
 import { XyoResult } from '../xyo-result';
+import { XyoObjectCreator } from '../xyo-object-creator';
+
+export abstract class XyoArrayCreator extends XyoObjectCreator {
+  get major () {
+    return 0x01;
+  }
+}
 
 /**
  * A base class for Array types to extend from.
  * Wraps an array-like interface with a class wrapper
  */
+
+// tslint:disable-next-line:max-classes-per-file
 export abstract class XyoArrayBase extends XyoObject {
 
   /** In Major/Minor scheme, if array is strong (homogenous) array it should specify this value */

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-unpacker.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:51:24 pm
+ * @Last modified time: Thursday, 30th August 2018 10:35:38 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -34,14 +34,12 @@ export class XyoArrayUnpacker {
    * @param data The data to unpack
    * @param typed True if the data is typed, false otherwise
    * @param sizeOfSize The size of the size element
-   * @param sizeOfElementSize The size of the element if typed
    */
 
   constructor (
     private readonly data: Buffer,
     private readonly typed: boolean,
-    private readonly sizeOfSize: number,
-    private readonly sizeOfElementSize: number
+    private readonly sizeOfSize: number
   ) {
     this.currentPosition = 2; // set to 2 to account for offset of major and minor bytes
   }
@@ -78,8 +76,8 @@ export class XyoArrayUnpacker {
     if (sizeOfSizeElement === null) {
       return creator.readSize(new Buffer(0)).value!; // TODO Fix this
     }
-
-    return this.getSize(this.sizeOfElementSize);
+    // TODO
+    return null;
   }
 
   /**
