@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-multi-type-array-byte.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 30th August 2018 12:39:16 pm
+ * @Last modified time: Thursday, 30th August 2018 1:28:47 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -22,7 +22,7 @@ class XyoMultiTypeArrayByteCreator extends XyoArrayCreator {
   }
 
   get sizeOfBytesToGetSize () {
-    return 1;
+    return XyoResult.withValue(1);
   }
 
   public readSize(buffer: Buffer) {
@@ -65,8 +65,6 @@ export class XyoMultiTypeArrayByte extends XyoMultiTypeArrayBase {
   }
 
   get sizeIdentifierSize () {
-    return XyoResult.withValue(
-      XyoMultiTypeArrayByte.creator.sizeOfBytesToGetSize
-    );
+    return XyoMultiTypeArrayByte.creator.sizeOfBytesToGetSize;
   }
 }

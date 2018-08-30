@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-single-type-array-short.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 30th August 2018 12:27:18 pm
+ * @Last modified time: Thursday, 30th August 2018 1:31:03 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,7 +18,7 @@ import { XyoArrayUnpacker } from '../xyo-array-unpacker';
 class XyoSingleTypeArrayShortCreator extends XyoArrayCreator {
 
   get sizeOfBytesToGetSize () {
-    return 2;
+    return XyoResult.withValue(2);
   }
 
   get minor () {
@@ -74,7 +74,7 @@ export class XyoSingleTypeArrayShort extends XyoSingleTypeArrayBase {
   }
 
   get sizeIdentifierSize() {
-    return XyoResult.withValue(XyoSingleTypeArrayShort.creator.sizeOfBytesToGetSize);
+    return XyoSingleTypeArrayShort.creator.sizeOfBytesToGetSize;
   }
 
   get typedId () {

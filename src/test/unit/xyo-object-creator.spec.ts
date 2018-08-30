@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-creator.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:55:14 pm
+ * @Last modified time: Thursday, 30th August 2018 1:32:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -30,7 +30,7 @@ describe(`XyoObjectCreator`, () => {
 });
 
 class TestObjectCreator extends XyoObjectCreator {
-  public sizeOfBytesToGetSize: number | null = null;
+  public sizeOfBytesToGetSize = XyoResult.withValue(null);
 
   public major: number = 0x23;
   public minor: number = 0x03;

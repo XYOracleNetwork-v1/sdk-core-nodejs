@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signature-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 30th August 2018 1:22:18 pm
+ * @Last modified time: Thursday, 30th August 2018 1:30:03 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -26,7 +26,7 @@ class XyoSignatureSetCreator extends XyoArrayCreator {
   }
 
   get sizeOfBytesToGetSize () {
-    return 2;
+    return XyoResult.withValue(2);
   }
 
   public readSize(buffer: Buffer) {
@@ -69,8 +69,6 @@ export class XyoSignatureSet extends XyoMultiTypeArrayBase {
   }
 
   get sizeIdentifierSize () {
-    return XyoResult.withValue(
-      XyoSignatureSet.creator.sizeOfBytesToGetSize
-    );
+    return XyoSignatureSet.creator.sizeOfBytesToGetSize;
   }
 }
