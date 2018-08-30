@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-multi-type-array-int.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 30th August 2018 1:29:10 pm
+ * @Last modified time: Thursday, 30th August 2018 3:19:21 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -49,6 +49,10 @@ export class XyoMultiTypeArrayInt extends XyoMultiTypeArrayBase {
 
   public static minor () {
     return XyoMultiTypeArrayInt.creator.minor;
+  }
+
+  public static createFromPacked (buffer: Buffer) {
+    return XyoMultiTypeArrayInt.creator.createFromPacked(buffer);
   }
 
   private static creator = new XyoMultiTypeArrayIntCreator();
