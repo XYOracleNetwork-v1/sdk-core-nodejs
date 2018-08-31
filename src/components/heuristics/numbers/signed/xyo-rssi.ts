@@ -4,17 +4,21 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rssi.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 22nd August 2018 1:56:34 pm
+ * @Last modified time: Friday, 31st August 2018 3:22:36 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XYONumberSigned } from './xyo-number-signed';
-import { XYONumberType } from '../xyo-number-type';
-import { XYOObjectCreator } from '../../../xyo-object-creator';
-import { XYOObject } from '../../../xyo-object';
+import { XyoNumberSigned } from './xyo-number-signed';
+import { XyoNumberType } from '../xyo-number-type';
+import { XyoObjectCreator } from '../../../xyo-object-creator';
+import { XyoObject } from '../../../xyo-object';
+import { XyoResult } from '../../../xyo-result';
 
-class XYORssiObjectCreator extends XYOObjectCreator {
+/**
+ * The corresponding Creator class for XyoRssi
+ */
+class XyoRssiObjectCreator extends XyoObjectCreator {
 
   get major () {
     return 0x02;
@@ -24,48 +28,72 @@ class XYORssiObjectCreator extends XYOObjectCreator {
     return 0x03;
   }
 
-  get defaultSize () {
-    return 1;
+  get sizeOfBytesToGetSize () {
+    return XyoResult.withValue(null);
   }
 
-  get sizeOfSize () {
-    return null;
+  public readSize (buffer: Buffer) {
+    return XyoResult.withValue(1);
   }
 
-  public createFromPacked(byteArray: Buffer): XYOObject {
+  public createFromPacked(byteArray: Buffer) {
     if (byteArray.length !== 3) {
       throw new Error(`Can not unpacked a byte-array`);
     }
 
-    return new XYORssi(byteArray.readInt8(2));
+    return XyoResult.withValue(new XyoRssi(byteArray.readInt8(2)));
   }
 }
 
-// tslint:disable-next-line:max-classes-per-file
-export class XYORssi extends XYONumberSigned {
-  public static enable() {
-    XYORssi.creator.enable();
-  }
+/**
+ * An XyoRssi class represents the  "Received signal strength indication"
+ *
+ * An Rssi value in the Xyo system is a signed number with 8 bits (1 byte) of resolution.
+ */
 
-  private static creator = new XYORssiObjectCreator();
+// tslint:disable-next-line:max-classes-per-file
+export class XyoRssi extends XyoNumberSigned {
+
+  public static creator = new XyoRssiObjectCreator();
+
+  /**
+   * Creates a new instance of an XyoRssi
+   *
+   * @param rssi The distance to represent
+   */
 
   constructor (private readonly rssi: number) {
     super();
   }
 
+  /**
+   * Returns the underlying numeric value of the rssi data-point
+   */
+
   get number () {
     return this.rssi;
   }
 
+  /**
+   * Returns the `XyoNumberType` corresponding the size of the rssi
+   */
   get size () {
-    return XYONumberType.BYTE;
+    return XyoNumberType.BYTE;
   }
+
+  /**
+   * Returns the id in accordance with the Major/Minor Xyo protocol
+   */
 
   get id () {
-    return Buffer.from([XYORssi.creator.major, XYORssi.creator.minor]);
+    return XyoRssi.creator.id;
   }
 
+  /**
+   * Since size is known and is not dynamic, this will return `null`
+   */
+
   get sizeIdentifierSize () {
-    return null;
+    return XyoResult.withValue(null);
   }
 }

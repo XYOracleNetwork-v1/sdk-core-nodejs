@@ -4,16 +4,29 @@
  * @Email:  developer@xyfindables.com
  * @Filename: http.network.impl.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 21st August 2018 3:39:59 pm
+ * @Last modified time: Tuesday, 28th August 2018 3:57:43 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { INetwork, IReceiver, IListenerConnection } from '../types/network';
 import http from 'http';
-import { IHashProvider } from '../types/hash-provider';
+
+/**
+ * An `HttpNetwork` is an http implementation of INetwork.
+ * It provides the hooks for `Receiver` and `Listener` consumer via
+ * traditional http client & server constructs
+ */
 
 export class HttpNetwork implements INetwork {
+
+  /**
+   * Will register a receiver to listen at the id specified. In this case, the
+   * id should correspond to a URL.
+   *
+   * @param id An ip address with a host and  port, such as `127.0.0.1:8080`
+   * @param receiver The receiver that will handle incoming messages.
+   */
 
   public registerReceiver(id: string, receiver: IReceiver): boolean {
     const server = http.createServer((req: http.IncomingMessage, res: http.ServerResponse) => {
@@ -36,6 +49,14 @@ export class HttpNetwork implements INetwork {
 
     return true;
   }
+
+  /**
+   * Requests a connection from the network to a given id, in this case, id should
+   * correspond to a URL.
+   * @param id An ip address with a host and port value i.e. 127.0.0.1:8080
+   * @returns Will returns an IListenerConnection that can be used to send messages
+   *          to the receivers specified by the `id` parameter
+   */
 
   public async requestConnection(id: string): Promise<IListenerConnection | null> {
     return {

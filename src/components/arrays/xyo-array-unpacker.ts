@@ -4,33 +4,54 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-unpacker.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 22nd August 2018 11:15:26 am
+ * @Last modified time: Friday, 31st August 2018 3:48:25 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XYOObjectCreator } from '../xyo-object-creator';
-import { XYOObject } from '../xyo-object';
-import { XYOByteArraySetter } from '../xyo-byte-array-setter';
+import { XyoObjectCreator } from '../xyo-object-creator';
+import { XyoObject } from '../xyo-object';
 
-export class XYOArrayUnpacker {
+/**
+ * Unpacks Array value in accordance with the Major/Minor protocol
+ */
+export class XyoArrayUnpacker {
+
+  /** The major type of the value */
   public majorType: number | null = null;
+
+  /** The minor type of the value */
   public minorType: number | null = null;
 
+  /** Keeps track on the current position index when unpacking a buffer */
   private currentPosition: number;
+
+  /**
+   * Creates a new instance of an XyoArrayUnpacker
+   *
+   * @param data The data to unpack
+   * @param typed True if the data is typed, false otherwise
+   * @param sizeOfSize The size of the size element
+   */
 
   constructor (
     private readonly data: Buffer,
     private readonly typed: boolean,
-    private readonly sizeOfSize: number,
-    private readonly sizeOfElementSize: number
+    private readonly sizeOfSize: number
   ) {
-    this.currentPosition = 2;
+    this.currentPosition = 2; // set to 2 to account for offset of major and minor bytes
   }
 
+  /**
+   * Returns a collection of elements
+   */
   get array () {
     return this.unpack();
   }
+
+  /**
+   * Returns the byte representation of the major and minor for the underlying buffer
+   */
 
   private getMajorMinor () {
     const major = this.data[this.currentPosition];
@@ -39,22 +60,29 @@ export class XYOArrayUnpacker {
     return Buffer.from([major, minor]);
   }
 
+  /**
+   * returns The number of bytes the element corresponding to the major and minor element
+   */
+
   private readCurrentSize (major: number, minor: number): number | null {
-    const creator = XYOObjectCreator.getCreator(major, minor);
-    if (!creator) {
-      return null;
+    const creator = XyoObjectCreator.getCreator(major, minor);
+    if (creator.hasError()) {
+      throw new Error(`Could not find Creator ${major} ${minor}`);
     }
 
-    const sizeOfSizeElement = creator.sizeOfSize;
+    const sizeOfSizeElement = creator.value!.sizeOfBytesToGetSize;
     if (sizeOfSizeElement === null) {
-      return creator.defaultSize;
+      return creator.value!.readSize(new Buffer(0)).value!;
     }
-
-    return this.getSize(this.sizeOfElementSize);
+    // TODO
+    return null;
   }
 
+  /**
+   * A helper function to convert a Buffer into a collection.
+   */
   private unpack() {
-    const items: XYOObject[] = [];
+    const items: XyoObject[] = [];
     let arrayType = new Buffer(0);
 
     if (this.typed) {
@@ -78,17 +106,23 @@ export class XYOArrayUnpacker {
         }
 
         this.currentPosition += sizeOfElement;
-        const merger = new XYOByteArraySetter(3);
-        merger.add(Buffer.from([arrayType[0]]), 0);
-        merger.add(Buffer.from([arrayType[1]]), 1);
-        merger.add(field, 2);
 
-        items.push(XYOObjectCreator.create(merger.merge())!);
+        const merged = Buffer.concat([
+          Buffer.from([arrayType[0]]),
+          Buffer.from([arrayType[1]]),
+          field
+        ]);
+
+        items.push(XyoObjectCreator.create(merged).value!);
       }
     }
 
     return items;
   }
+
+  /**
+   * A helper function to dynamically read the size of a dynamically sized element
+   */
 
   private getSize(sizeSize: number): number {
     const buffer = new Buffer(sizeSize);
