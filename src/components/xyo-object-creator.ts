@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 1:45:32 pm
+ * @Last modified time: Friday, 31st August 2018 1:59:13 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,9 +32,11 @@ export abstract class XyoObjectCreator extends XyoType {
     const minor = data.readUInt8(1);
     const creator = XyoObjectCreator.getCreator(major, minor);
 
-    if (creator) {
-      return XyoResult.withValue(creator.createFromPacked(data).value!);
+    if (creator.hasError()) {
+      return XyoResult.withError(creator.error!);
     }
+
+    return XyoResult.withValue(creator.value!.createFromPacked(data).value!);
 
     return XyoResult.withError(
       new XyoError(`Could not creat from Buffer ${this.name}`, XyoError.errorType.ERR_CREATOR_MAPPING)
@@ -48,13 +50,15 @@ export abstract class XyoObjectCreator extends XyoType {
    * @returns Will return the creator if it has been registered. Otherwise it will return `null`
    */
 
-  public static getCreator(major: number, minor: number): XyoObjectCreator | null {
+  public static getCreator(major: number, minor: number): XyoResult<XyoObjectCreator> {
     const minorsMap = XyoObjectCreator.creators[String(major)];
-    if (!minorsMap) {
-      return null;
+    if (!minorsMap || !minorsMap[String(minor)]) {
+      return XyoResult.withError(
+        new XyoError(`Could not find creator ${major} ${minor}`, XyoError.errorType.ERR_CREATOR_MAPPING)
+      );
     }
 
-    return minorsMap[String(minor)] || null;
+    return XyoResult.withValue(minorsMap[String(minor)]);
   }
 
   /**

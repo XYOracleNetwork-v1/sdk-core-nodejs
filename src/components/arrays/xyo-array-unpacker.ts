@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-unpacker.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 1:46:02 pm
+ * @Last modified time: Friday, 31st August 2018 1:55:32 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -68,13 +68,13 @@ export class XyoArrayUnpacker {
 
   private readCurrentSize (major: number, minor: number): number | null {
     const creator = XyoObjectCreator.getCreator(major, minor);
-    if (!creator) {
-      throw new Error(`Could not find Creator ${major} ${minor}`); // TODO
+    if (creator.hasError()) {
+      throw new Error(`Could not find Creator ${major} ${minor}`);
     }
 
-    const sizeOfSizeElement = creator.sizeOfBytesToGetSize;
+    const sizeOfSizeElement = creator.value!.sizeOfBytesToGetSize;
     if (sizeOfSizeElement === null) {
-      return creator.readSize(new Buffer(0)).value!; // TODO Fix this
+      return creator.value!.readSize(new Buffer(0)).value!;
     }
     // TODO
     return null;

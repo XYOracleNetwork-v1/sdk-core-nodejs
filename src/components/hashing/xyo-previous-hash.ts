@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-previous-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 1:46:15 pm
+ * @Last modified time: Friday, 31st August 2018 1:58:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -30,16 +30,16 @@ export class XyoPreviousHashObjectCreator extends XyoObjectCreator {
 
   public readSize(buffer: Buffer) {
     const hashCreator = XyoObjectCreator.getCreator(buffer[0], buffer[1]);
-    if (hashCreator === null) { // TODO revisit once getCreator is wrapped in XyoResult
-      throw new Error();
+    if (hashCreator.hasError()) {
+      return XyoResult.withError(hashCreator.error!) as XyoResult<number>;
     }
 
-    const sizeToRead = hashCreator.sizeOfBytesToGetSize;
+    const sizeToRead = hashCreator.value!.sizeOfBytesToGetSize;
     if (sizeToRead.hasError()) {
       return XyoResult.withError(sizeToRead.error!) as XyoResult<number>;
     }
 
-    return hashCreator.readSize(Buffer.from(buffer, 2, sizeToRead.value!));
+    return hashCreator.value!.readSize(Buffer.from(buffer, 2, sizeToRead.value!));
   }
 
   public createFromPacked(buffer: Buffer) {
