@@ -44,5 +44,4 @@ export abstract class XyoSigningObject {
   public abstract publicKey: XyoResult<XyoObject>;
 
   public abstract signData(buffer: Buffer): Promise<XyoResult<XyoObject>>;
-
 }
