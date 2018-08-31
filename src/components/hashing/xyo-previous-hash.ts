@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-previous-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 10:53:56 am
+ * @Last modified time: Friday, 31st August 2018 1:46:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -44,26 +44,14 @@ export class XyoPreviousHashObjectCreator extends XyoObjectCreator {
 
   public createFromPacked(buffer: Buffer) {
     const hashCreated = XyoObjectCreator.create(buffer); // TODO revisit once create is wrapped in XyoResult
-    return XyoResult.withValue(hashCreated as XyoHash);
+    return XyoResult.withValue(hashCreated.value as XyoHash);
   }
 }
 
 // tslint:disable-next-line:max-classes-per-file
 export class XyoPreviousHash extends XyoObject {
 
-  public static enable() {
-    return XyoPreviousHash.creator.enable();
-  }
-
-  public static major() {
-    return XyoPreviousHash.creator.major;
-  }
-
-  public static minor() {
-    return XyoPreviousHash.creator.minor;
-  }
-
-  private static creator = new XyoPreviousHashObjectCreator();
+  public static creator = new XyoPreviousHashObjectCreator();
 
   constructor (private readonly hash: XyoHash) {
     super();
@@ -75,8 +63,8 @@ export class XyoPreviousHash extends XyoObject {
 
   get id () {
     return XyoResult.withValue(Buffer.from([
-      XyoPreviousHash.major,
-      XyoPreviousHash.minor
+      XyoPreviousHash.creator.major,
+      XyoPreviousHash.creator.minor
     ]));
   }
 

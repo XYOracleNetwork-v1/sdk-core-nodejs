@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signature-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 30th August 2018 1:30:03 pm
+ * @Last modified time: Friday, 31st August 2018 1:33:12 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -43,19 +43,7 @@ class XyoSignatureSetCreator extends XyoArrayCreator {
 // tslint:disable-next-line:max-classes-per-file
 export class XyoSignatureSet extends XyoMultiTypeArrayBase {
 
-  public static enable () {
-    XyoSignatureSet.enable();
-  }
-
-  public static major () {
-    return XyoSignatureSet.creator.major;
-  }
-
-  public static minor () {
-    return XyoSignatureSet.creator.minor;
-  }
-
-  private static creator = new XyoSignatureSetCreator();
+  public static creator = new XyoSignatureSetCreator();
 
   constructor (public readonly array: XyoObject[]) {
     super();

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-unpacker.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 30th August 2018 10:35:38 am
+ * @Last modified time: Friday, 31st August 2018 1:46:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -113,7 +113,7 @@ export class XyoArrayUnpacker {
         merger.add(Buffer.from([arrayType[1]]), 1);
         merger.add(field, 2);
 
-        items.push(XyoObjectCreator.create(merger.merge())!);
+        items.push(XyoObjectCreator.create(merger.merge()).value!);
       }
     }
 

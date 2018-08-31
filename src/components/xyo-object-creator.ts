@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 30th August 2018 1:27:12 pm
+ * @Last modified time: Friday, 31st August 2018 1:45:32 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,6 +12,7 @@
 import { XyoType } from './xyo-type';
 import { XyoObject } from './xyo-object';
 import { XyoResult } from './xyo-result';
+import { XyoError } from './xyo-error';
 
 /**
  * Abstract `XyoObjectCreator`. Provides factory-like services
@@ -26,12 +27,18 @@ export abstract class XyoObjectCreator extends XyoType {
    * @param data A packed byte-stream following the Xyo Major/Minor Protocol
    */
 
-  public static create(data: Buffer): XyoObject | null {
+  public static create(data: Buffer): XyoResult<XyoObject | null> {
     const major = data.readUInt8(0);
     const minor = data.readUInt8(1);
     const creator = XyoObjectCreator.getCreator(major, minor);
 
-    return (creator && creator.createFromPacked(data).value) || null;
+    if (creator) {
+      return XyoResult.withValue(creator.createFromPacked(data).value!);
+    }
+
+    return XyoResult.withError(
+      new XyoError(`Could not creat from Buffer ${this.name}`, XyoError.errorType.ERR_CREATOR_MAPPING)
+    );
   }
 
   /**

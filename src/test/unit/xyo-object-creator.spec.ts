@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-creator.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 30th August 2018 1:32:02 pm
+ * @Last modified time: Friday, 31st August 2018 1:46:34 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -23,7 +23,7 @@ describe(`XyoObjectCreator`, () => {
       Buffer.from([0x23, 0x03])
     );
 
-    const other = XyoObjectCreator.create(dummy.typed.value!);
+    const other = XyoObjectCreator.create(dummy.typed.value!).value;
     expect(other!.data.value!.equals(dummy.data.value!)).toEqual(true);
     expect(other!.id).toEqual(dummy.id);
   });

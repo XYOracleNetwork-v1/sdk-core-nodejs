@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-multi-type-array-int.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 30th August 2018 3:19:21 pm
+ * @Last modified time: Friday, 31st August 2018 1:32:59 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -39,23 +39,11 @@ class XyoMultiTypeArrayIntCreator extends XyoArrayCreator {
 // tslint:disable-next-line:max-classes-per-file
 export class XyoMultiTypeArrayInt extends XyoMultiTypeArrayBase {
 
-  public static enable () {
-    XyoMultiTypeArrayInt.enable();
-  }
-
-  public static major () {
-    return XyoMultiTypeArrayInt.creator.major;
-  }
-
-  public static minor () {
-    return XyoMultiTypeArrayInt.creator.minor;
-  }
+  public static creator = new XyoMultiTypeArrayIntCreator();
 
   public static createFromPacked (buffer: Buffer) {
     return XyoMultiTypeArrayInt.creator.createFromPacked(buffer);
   }
-
-  private static creator = new XyoMultiTypeArrayIntCreator();
 
   constructor (public readonly array: XyoObject[]) {
     super();

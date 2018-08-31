@@ -41,19 +41,7 @@ class XyoRsaPublicKeyCreator extends XyoObjectCreator {
 // tslint:disable-next-line:max-classes-per-file
 export class XyoRsaPublicKey extends XyoObject {
 
-  public static enable() {
-    return XyoRsaPublicKey.creator.enable();
-  }
-
-  public static major() {
-    return XyoRsaPublicKey.creator.major;
-  }
-
-  public static minor() {
-    return XyoRsaPublicKey.creator.minor;
-  }
-
-  private static creator = new XyoRsaPublicKeyCreator();
+  public static creator = new XyoRsaPublicKeyCreator();
 
   constructor(public readonly modulus: Buffer) {
     super();
@@ -73,8 +61,8 @@ export class XyoRsaPublicKey extends XyoObject {
 
   get id () {
     return XyoResult.withValue(Buffer.from([
-      XyoRsaPublicKey.major,
-      XyoRsaPublicKey.minor
+      XyoRsaPublicKey.creator.major,
+      XyoRsaPublicKey.creator.minor
     ]));
   }
 }

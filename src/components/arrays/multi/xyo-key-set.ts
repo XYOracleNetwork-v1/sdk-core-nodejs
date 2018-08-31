@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-key-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 30th August 2018 1:28:13 pm
+ * @Last modified time: Friday, 31st August 2018 1:32:46 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -43,19 +43,7 @@ class XyoKeySetCreator extends XyoArrayCreator {
 // tslint:disable-next-line:max-classes-per-file
 export class XyoKeySet extends XyoMultiTypeArrayBase {
 
-  public static enable () {
-    XyoKeySet.enable();
-  }
-
-  public static major () {
-    return XyoKeySet.creator.major;
-  }
-
-  public static minor () {
-    return XyoKeySet.creator.minor;
-  }
-
-  private static creator = new XyoKeySetCreator();
+  public static creator = new XyoKeySetCreator();
 
   constructor (public readonly array: XyoObject[]) {
     super();

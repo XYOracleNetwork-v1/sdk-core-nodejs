@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: test-utils.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 5:29:41 pm
+ * @Last modified time: Friday, 31st August 2018 1:40:09 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,11 +18,11 @@ import { XyoSha384 } from '../components/hashing/xyo-sha384';
 import { XyoSha512 } from '../components/hashing/xyo-sha512';
 
 export function loadAllTypes() {
-  XyoRssi.enable();
-  XyoMd5.enable();
-  XyoSha1.enable();
-  XyoSha224.enable();
-  XyoSha256.enable();
-  XyoSha384.enable();
-  XyoSha512.enable();
+  XyoRssi.creator.enable();
+  XyoMd5.creator.enable();
+  XyoSha1.creator.enable();
+  XyoSha224.creator.enable();
+  XyoSha256.creator.enable();
+  XyoSha384.creator.enable();
+  XyoSha512.creator.enable();
 }

@@ -47,19 +47,7 @@ class XyoPayloadObjectCreator extends XyoObjectCreator {
 // tslint:disable-next-line:max-classes-per-file
 export class XyoPayload extends XyoObject {
 
-  public static enable() {
-    return XyoPayload.creator.enable();
-  }
-
-  public static major() {
-    return XyoPayload.creator.major;
-  }
-
-  public static minor() {
-    return XyoPayload.creator.minor;
-  }
-
-  private static creator = new XyoPayloadObjectCreator();
+  public static creator = new XyoPayloadObjectCreator();
 
   constructor(
     public readonly signedPayload: XyoMultiTypeArrayInt,
@@ -74,8 +62,8 @@ export class XyoPayload extends XyoObject {
 
   get id () {
     return XyoResult.withValue(Buffer.from([
-      XyoPayload.major,
-      XyoPayload.minor,
+      XyoPayload.creator.major,
+      XyoPayload.creator.minor,
     ]));
   }
 

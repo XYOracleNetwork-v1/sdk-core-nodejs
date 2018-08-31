@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-multi-type-array-short.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 30th August 2018 1:29:33 pm
+ * @Last modified time: Friday, 31st August 2018 1:33:05 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -39,19 +39,7 @@ class XyoMultiTypeArrayShortCreator extends XyoArrayCreator {
 // tslint:disable-next-line:max-classes-per-file
 export class XyoMultiTypeArrayShort extends XyoMultiTypeArrayBase {
 
-  public static enable () {
-    XyoMultiTypeArrayShort.enable();
-  }
-
-  public static major () {
-    return XyoMultiTypeArrayShort.creator.major;
-  }
-
-  public static minor () {
-    return XyoMultiTypeArrayShort.creator.minor;
-  }
-
-  private static creator = new XyoMultiTypeArrayShortCreator();
+  public static creator = new XyoMultiTypeArrayShortCreator();
 
   constructor (public readonly array: XyoObject[]) {
     super();
