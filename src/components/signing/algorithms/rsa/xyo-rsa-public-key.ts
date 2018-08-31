@@ -60,9 +60,6 @@ export class XyoRsaPublicKey extends XyoObject {
   }
 
   get id () {
-    return XyoResult.withValue(Buffer.from([
-      XyoRsaPublicKey.creator.major,
-      XyoRsaPublicKey.creator.minor
-    ]));
+    return XyoRsaPublicKey.creator.id;
   }
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-previous-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 1:58:10 pm
+ * @Last modified time: Friday, 31st August 2018 3:02:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -62,10 +62,7 @@ export class XyoPreviousHash extends XyoObject {
   }
 
   get id () {
-    return XyoResult.withValue(Buffer.from([
-      XyoPreviousHash.creator.major,
-      XyoPreviousHash.creator.minor
-    ]));
+    return XyoPreviousHash.creator.id;
   }
 
   get sizeIdentifierSize () {

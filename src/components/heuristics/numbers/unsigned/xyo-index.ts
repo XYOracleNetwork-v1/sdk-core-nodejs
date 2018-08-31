@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 1:39:00 pm
+ * @Last modified time: Friday, 31st August 2018 3:23:03 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -55,9 +55,6 @@ export class XyoIndex extends XyoNumberUnsigned {
   }
 
   get id () {
-    return XyoResult.withValue(Buffer.from([
-      XyoIndex.creator.major,
-      XyoIndex.creator.minor
-    ]));
+    return XyoIndex.creator.id;
   }
 }

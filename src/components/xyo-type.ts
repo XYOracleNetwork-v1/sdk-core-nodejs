@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-type.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:29:13 pm
+ * @Last modified time: Friday, 31st August 2018 3:24:20 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,9 +14,6 @@ export abstract class XyoType {
   public abstract minor: number; // 1 Byte max
 
   get id() {
-    const buffer = new Buffer(2);
-    buffer.writeUInt8(this.major, 0);
-    buffer.writeUInt8(this.minor, 1);
-    return XyoResult.withValue(buffer);
+    return XyoResult.withValue(Buffer.from([this.major, this.minor]));
   }
 }

@@ -4,13 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 30th August 2018 12:12:59 pm
+ * @Last modified time: Friday, 31st August 2018 3:46:43 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../xyo-object';
-import { XyoByteArraySetter } from '../xyo-byte-array-setter';
 import { XyoResult } from '../xyo-result';
 import { XyoObjectCreator } from '../xyo-object-creator';
 
@@ -97,12 +96,9 @@ export abstract class XyoArrayBase extends XyoObject {
    */
 
   private mergeTypedArray() {
-    const merger = new XyoByteArraySetter();
-    this.array.forEach((element, index) => {
-      merger.add(element.typed.value!, index);
-    });
-
-    return merger.merge();
+    return Buffer.concat(
+      this.array.map(element => element.typed.value!)
+    );
   }
 
   /**
@@ -110,13 +106,9 @@ export abstract class XyoArrayBase extends XyoObject {
    */
 
   private mergeUntypedArray() {
-    const merger = new XyoByteArraySetter();
-    merger.add(this.typedId!, 0);
-
-    this.array.forEach((element, index) => {
-      merger.add(element.unTyped.value!, index + 1);
-    });
-
-    return merger.merge();
+    return Buffer.concat([
+      this.typedId!,
+      ...this.array.map(element => element.unTyped.value!)
+    ]);
   }
 }

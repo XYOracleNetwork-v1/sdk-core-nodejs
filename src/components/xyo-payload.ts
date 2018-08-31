@@ -13,7 +13,6 @@ import { XyoObject } from './xyo-object';
 import { XyoMultiTypeArrayInt } from './arrays/multi/xyo-multi-type-array-int';
 import { XyoObjectCreator } from './xyo-object-creator';
 import { XyoResult } from './xyo-result';
-import { XyoByteArraySetter } from './xyo-byte-array-setter';
 
 class XyoPayloadObjectCreator extends XyoObjectCreator {
 
@@ -61,10 +60,7 @@ export class XyoPayload extends XyoObject {
   }
 
   get id () {
-    return XyoResult.withValue(Buffer.from([
-      XyoPayload.creator.major,
-      XyoPayload.creator.minor,
-    ]));
+    return XyoPayload.creator.id;
   }
 
   get sizeIdentifierSize () {
@@ -80,10 +76,12 @@ export class XyoPayload extends XyoObject {
         (signedPayloadUntyped.error || unsignedPayloadUntyped.error)!
       ) as XyoResult<Buffer>;
     }
-    const merger = new XyoByteArraySetter();
-    merger.add(signedPayloadUntyped.value!, 0);
-    merger.add(unsignedPayloadUntyped.value!, 1);
 
-    return XyoResult.withValue(merger.merge());
+    return XyoResult.withValue(
+      Buffer.concat([
+        signedPayloadUntyped.value!,
+        unsignedPayloadUntyped.value!
+      ])
+    );
   }
 }

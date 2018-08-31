@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-key-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 1:32:46 pm
+ * @Last modified time: Friday, 31st August 2018 2:58:12 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -50,10 +50,7 @@ export class XyoKeySet extends XyoMultiTypeArrayBase {
   }
 
   get id () {
-    return XyoResult.withValue(Buffer.from([
-      XyoKeySet.creator.major,
-      XyoKeySet.creator.minor
-    ]));
+    return XyoKeySet.creator.id;
   }
 
   get sizeIdentifierSize () {

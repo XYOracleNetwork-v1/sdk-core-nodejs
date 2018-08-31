@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: sha1.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 1:33:54 pm
+ * @Last modified time: Friday, 31st August 2018 3:02:46 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -23,6 +23,6 @@ export class XyoSha1 extends XyoBasicHashBase {
   public static creator = new XyoBasicHashBaseCreator('sha1', 20, 0x02);
 
   get id () {
-    return XyoResult.withValue(Buffer.from([XyoSha1.creator.major, XyoSha1.creator.minor]));
+    return XyoSha1.creator.id;
   }
 }

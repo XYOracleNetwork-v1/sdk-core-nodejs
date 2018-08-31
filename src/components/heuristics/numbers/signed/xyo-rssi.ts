@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rssi.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 1:34:24 pm
+ * @Last modified time: Friday, 31st August 2018 3:22:36 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -86,7 +86,7 @@ export class XyoRssi extends XyoNumberSigned {
    */
 
   get id () {
-    return XyoResult.withValue(Buffer.from([XyoRssi.creator.major, XyoRssi.creator.minor]));
+    return XyoRssi.creator.id;
   }
 
   /**

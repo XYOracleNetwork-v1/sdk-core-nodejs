@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-single-type-array-int.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 1:33:28 pm
+ * @Last modified time: Friday, 31st August 2018 3:00:57 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -47,7 +47,7 @@ export class XyoSingleTypeArrayInt extends XyoSingleTypeArrayBase {
   public static creator = new XyoSingleTypeArrayIntCreator();
 
   get id () {
-    return XyoResult.withValue(Buffer.from([XyoSingleTypeArrayInt.creator.major, XyoSingleTypeArrayInt.creator.minor]));
+    return XyoSingleTypeArrayInt.creator.id;
   }
 
   constructor(

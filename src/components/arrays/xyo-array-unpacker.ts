@@ -4,15 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-unpacker.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 1:55:32 pm
+ * @Last modified time: Friday, 31st August 2018 3:48:25 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObjectCreator } from '../xyo-object-creator';
 import { XyoObject } from '../xyo-object';
-import { XyoByteArraySetter } from '../xyo-byte-array-setter';
-import { XyoError } from '../xyo-error';
 
 /**
  * Unpacks Array value in accordance with the Major/Minor protocol
@@ -108,12 +106,14 @@ export class XyoArrayUnpacker {
         }
 
         this.currentPosition += sizeOfElement;
-        const merger = new XyoByteArraySetter();
-        merger.add(Buffer.from([arrayType[0]]), 0);
-        merger.add(Buffer.from([arrayType[1]]), 1);
-        merger.add(field, 2);
 
-        items.push(XyoObjectCreator.create(merger.merge()).value!);
+        const merged = Buffer.concat([
+          Buffer.from([arrayType[0]]),
+          Buffer.from([arrayType[1]]),
+          field
+        ]);
+
+        items.push(XyoObjectCreator.create(merged).value!);
       }
     }
 
