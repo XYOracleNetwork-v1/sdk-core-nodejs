@@ -4,27 +4,52 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-result.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:31:39 pm
+ * @Last modified time: Thursday, 6th September 2018 10:24:49 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoError } from './xyo-error';
+const logger = console;
 
 export class XyoResult <T> {
 
-  public static withValue<V>(value: V): XyoResult<V> {
-    return new XyoResult<V>(value);
+  public static defaultStrictValue = true;
+
+  public static withValue<V>(value: V, isStrict?: boolean | undefined): XyoResult<V> {
+    return new XyoResult<V>(
+      value,
+      undefined,
+      typeof isStrict === 'boolean' ? isStrict : XyoResult.defaultStrictValue
+    );
   }
 
-  public static withError<R>(error: XyoError): XyoResult<R> {
-    return new XyoResult<R>(undefined, error);
+  public static withError<R>(error: XyoError, isStrict?: boolean | undefined): XyoResult<R> {
+    logger.error(`
+      Error: ${error.name}
+      Message: ${error.message}
+      Code: ${error.code}
+      isXyoError: ${error.isXyoError}
+
+      Stack: ${error.stack}
+
+    `);
+
+    return new XyoResult<R>(
+      undefined,
+      error,
+      typeof isStrict === 'boolean' ? isStrict : XyoResult.defaultStrictValue
+    );
   }
 
   private readonly mValue: T | undefined;
+  private readonly mError: XyoError | undefined;
+  private hasCheckedError: boolean = false;
+
   private constructor(
     value: T | undefined,
-    public readonly error?: XyoError | undefined
+    error: XyoError | undefined,
+    public readonly isStrict: boolean
   ) {
     if (value && error) {
       throw new XyoError(
@@ -34,13 +59,18 @@ export class XyoResult <T> {
     }
 
     this.mValue = value;
+    this.mError = error;
   }
 
   get value () {
-    if (this.error) {
+    if (!this.hasCheckedError && this.isStrict) {
+      logger.warn(`Checking XyoResult.value before checking error ${new Error().stack}`);
+    }
+
+    if (this.mError) {
       throw new XyoError(
         `XyoResult value was accessed before checking if there was an error.
-        Original Error message: ${this.error.message}`,
+        Original Error message: ${this.mError.message}`,
         XyoError.errorType.ERR_INVALID_RESULT_ACCESS
       );
     }
@@ -48,7 +78,23 @@ export class XyoResult <T> {
     return this.mValue;
   }
 
+  get error () {
+    if (!this.hasCheckedError && this.isStrict) {
+      logger.warn(`Checking XyoResult.error before checking error ${new Error().stack}`);
+    }
+
+    if (!this.mError) {
+      throw new XyoError(
+        `XyoResult error was accessed before checking if there was an error.`,
+        XyoError.errorType.ERR_INVALID_RESULT_ACCESS
+      );
+    }
+
+    return this.mError;
+  }
+
   public hasError(): boolean {
-    return this.error !== undefined;
+    this.hasCheckedError = true;
+    return this.mError !== undefined;
   }
 }

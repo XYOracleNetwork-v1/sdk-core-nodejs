@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-uncompressed-ec-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 10:28:38 am
+ * @Last modified time: Tuesday, 4th September 2018 5:55:29 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -33,8 +33,8 @@ export class XyoUncompressedEcPublicKeyCreator extends XyoObjectCreator {
 
   public createFromPacked(buffer: Buffer) {
     return XyoResult.withValue(new XyoUncompressedEcPublicKey(
-      Buffer.from(buffer, 0, 32),
-      Buffer.from(buffer, 32, 32),
+      buffer.slice(0, 32),
+      buffer.slice(32, 64),
       Buffer.from([this.major, this.minor])
     ));
   }
@@ -75,6 +75,6 @@ export class XyoUncompressedEcPublicKey extends XyoObject {
       return point;
     }
 
-    return Buffer.from(point, 1, 32);
+    return point.slice(1, 33);
   }
 }

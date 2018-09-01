@@ -33,7 +33,7 @@ class XyoRsaPublicKeyCreator extends XyoObjectCreator {
 
   public createFromPacked(buffer: Buffer) {
     const modulusSize = buffer.readUInt16BE(0) - 2;
-    const mod = Buffer.from(buffer, 0, modulusSize);
+    const mod = buffer.slice(2, 2 + modulusSize);
     return XyoResult.withValue(new XyoRsaPublicKey(mod));
   }
 }
@@ -52,7 +52,7 @@ export class XyoRsaPublicKey extends XyoObject {
   }
 
   get sizeIdentifierSize () {
-    return XyoResult.withValue(null);
+    return XyoRsaPublicKey.creator.sizeOfBytesToGetSize;
   }
 
   get publicExponent() {

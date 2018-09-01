@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 30th August 2018 4:59:06 pm
+ * @Last modified time: Thursday, 6th September 2018 9:29:31 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,10 +32,8 @@ export class XyoRsaSignatureCreator extends XyoObjectCreator {
   }
 
   public createFromPacked(buffer: Buffer) {
-    const size = buffer.readUInt16BE(0);
-
     return XyoResult.withValue(new XyoRsaSignature(
-      Buffer.from(buffer, 2, size - 2),
+      buffer.slice(2),
       Buffer.from([this.major, this.minor])
     ));
   }

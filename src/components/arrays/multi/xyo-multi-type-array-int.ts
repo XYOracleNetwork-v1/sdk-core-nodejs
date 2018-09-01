@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-multi-type-array-int.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 2:59:24 pm
+ * @Last modified time: Wednesday, 5th September 2018 9:33:48 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -31,7 +31,12 @@ class XyoMultiTypeArrayIntCreator extends XyoArrayCreator {
 
   public createFromPacked(buffer: Buffer) {
     const unpackedArray = new XyoArrayUnpacker(buffer, false, 4);
-    const unpackedArrayObject = new XyoMultiTypeArrayInt(unpackedArray.array);
+    const arrayResult = unpackedArray.array;
+    if (arrayResult.hasError()) {
+      return XyoResult.withError(arrayResult.error!) as XyoResult<XyoMultiTypeArrayInt>;
+    }
+
+    const unpackedArrayObject = new XyoMultiTypeArrayInt(arrayResult.value!);
     return XyoResult.withValue(unpackedArrayObject);
   }
 }

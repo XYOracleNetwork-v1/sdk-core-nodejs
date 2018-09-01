@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 9:51:43 am
+ * @Last modified time: Tuesday, 4th September 2018 5:54:29 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -36,7 +36,7 @@ export class XyoEcdsaSignatureCreator extends XyoObjectCreator {
 
     return XyoResult.withValue(
       new XyoEcdsaSignature(
-        Buffer.from(buffer, 1, size - 1),
+        buffer.slice(1),
         Buffer.from([this.major, this.minor])
       )
     );

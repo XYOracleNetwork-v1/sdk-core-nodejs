@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 3:23:03 pm
+ * @Last modified time: Wednesday, 5th September 2018 5:50:20 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -21,7 +21,7 @@ class XyoIndexCreator extends XyoObjectCreator {
   }
 
   get minor () {
-    return 0x04;
+    return 0x05;
   }
 
   get sizeOfBytesToGetSize () {
