@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:29:12 pm
+ * @Last modified time: Tuesday, 4th September 2018 2:00:49 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -38,7 +38,19 @@ export abstract class XyoObject {
     }
 
     const buffer = new Buffer(this.sizeIdentifierSize.value || 0);
-    buffer.writeUInt32BE(this.totalSize + (this.sizeIdentifierSize.value || 0), 0);
+
+    switch (this.sizeIdentifierSize.value!) {
+      case 1:
+        buffer.writeUInt8(this.totalSize + (this.sizeIdentifierSize.value || 0), 0);
+        break;
+      case 2:
+        buffer.writeUInt16BE(this.totalSize + (this.sizeIdentifierSize.value || 0), 0);
+        break;
+      case 4:
+        buffer.writeUInt32BE(this.totalSize + (this.sizeIdentifierSize.value || 0), 0);
+        break;
+    }
+
     return XyoResult.withValue(buffer);
   }
 

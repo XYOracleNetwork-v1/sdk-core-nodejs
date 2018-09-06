@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-single-type-array-byte.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 3:00:30 pm
+ * @Last modified time: Wednesday, 5th September 2018 9:35:15 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -31,10 +31,15 @@ class XyoSingleTypeArrayByteCreator extends XyoArrayCreator {
 
   public createFromPacked(buffer: Buffer) {
     const unpackedArray = new XyoArrayUnpacker(buffer, true, 1);
+    const arrayResult = unpackedArray.array;
+    if (arrayResult.hasError()) {
+      return XyoResult.withError(arrayResult.error!) as XyoResult<XyoSingleTypeArrayByte>;
+    }
+
     const unpackedArrayObject = new XyoSingleTypeArrayByte(
       unpackedArray.majorType!,
       unpackedArray.majorType!,
-      unpackedArray.array
+      arrayResult.value!
     );
 
     return XyoResult.withValue(unpackedArrayObject);

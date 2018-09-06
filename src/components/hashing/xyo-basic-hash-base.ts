@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-basic-hash-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 30th August 2018 1:31:22 pm
+ * @Last modified time: Tuesday, 4th September 2018 5:53:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -128,7 +128,7 @@ export class XyoBasicHashBaseCreator extends XyoHashCreator {
    */
 
   public createFromPacked(byteArray: Buffer) {
-    const hash = Buffer.from(byteArray, 2, byteArray.length - 2);
+    const hash = byteArray.slice(2);
     return XyoResult.withValue(new XyoBasicHashBaseImpl(hash, Buffer.from([byteArray[0], byteArray[1]])));
   }
 }

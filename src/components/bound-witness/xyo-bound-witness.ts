@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 3:43:02 pm
+ * @Last modified time: Wednesday, 5th September 2018 5:18:21 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,6 +18,7 @@ import { XyoResult } from '../xyo-result';
 import { XyoSingleTypeArrayShort } from '../arrays/single/xyo-single-type-array-short';
 import { XyoSingleTypeArrayInt } from '../arrays/single/xyo-single-type-array-int';
 import { XyoError } from '../xyo-error';
+import { XyoSigner } from '../signing/xyo-signer';
 
 export class XyoBoundWitnessObjectCreator extends XyoObjectCreator {
 
@@ -56,13 +57,16 @@ export class XyoBoundWitnessObjectCreator extends XyoObjectCreator {
     shortArrayReadSize: number,
     intArrayReadSize: number
   ): XyoResult<XyoObject> {
-    const keySetArraySize = XyoSingleTypeArrayShort.creator.readSize(Buffer.from(buffer, 4, shortArrayReadSize));
+    const keySetArraySize = XyoSingleTypeArrayShort.creator.readSize(
+      buffer.slice(4, 4 + shortArrayReadSize)
+    );
+
     if (keySetArraySize.hasError()) {
       return XyoResult.withError(keySetArraySize.error!);
     }
 
     const keySetArraySizeValue = keySetArraySize.value!;
-    const keySets = this.getKeySetsArray(Buffer.from(buffer, 4, keySetArraySizeValue));
+    const keySets = this.getKeySetsArray(buffer.slice(4, 4 + keySetArraySizeValue));
 
     if (keySets.hasError()) {
       return XyoResult.withError(keySets.error!);
@@ -71,7 +75,7 @@ export class XyoBoundWitnessObjectCreator extends XyoObjectCreator {
     const keySetsValue = keySets.value!;
 
     const payloadArraySize = XyoSingleTypeArrayInt.creator.readSize(
-      Buffer.from(buffer, keySetArraySizeValue + 4, intArrayReadSize)
+      buffer.slice(keySetArraySizeValue + 4, keySetArraySizeValue + 4 + intArrayReadSize)
     );
 
     if (payloadArraySize.hasError()) {
@@ -80,11 +84,17 @@ export class XyoBoundWitnessObjectCreator extends XyoObjectCreator {
 
     const payloadArraySizeValue = payloadArraySize.value!;
 
-    const payloads = this.getPayloadsArray(Buffer.from(buffer, keySetArraySizeValue + 4, payloadArraySizeValue));
+    const payloads = this.getPayloadsArray(
+      buffer.slice(keySetArraySizeValue + 4, keySetArraySizeValue + 4 + payloadArraySizeValue)
+    );
+
     const payloadsValue = payloads.value!;
 
     const signatureArraySize = XyoSingleTypeArrayShort.creator.readSize(
-      Buffer.from(buffer, keySetArraySizeValue + payloadArraySizeValue + 4, shortArrayReadSize)
+      buffer.slice(
+        keySetArraySizeValue + payloadArraySizeValue + 4,
+        keySetArraySizeValue + payloadArraySizeValue + 4 + shortArrayReadSize
+      )
     );
 
     if (signatureArraySize.hasError()) {
@@ -93,7 +103,10 @@ export class XyoBoundWitnessObjectCreator extends XyoObjectCreator {
 
     const signatureArraySizeValue = signatureArraySize.value!;
     const signatures = this.getSignatureArray(
-      Buffer.from(buffer, keySetArraySizeValue + payloadArraySizeValue + 4, signatureArraySizeValue)
+      buffer.slice(
+        keySetArraySizeValue + payloadArraySizeValue + 4,
+        keySetArraySizeValue + payloadArraySizeValue + 4 + signatureArraySizeValue
+      )
     );
 
     const signaturesValue = signatures.value!;
@@ -106,7 +119,7 @@ export class XyoBoundWitnessObjectCreator extends XyoObjectCreator {
     payloads: XyoPayload[],
     signatures: XyoSignatureSet[]
   ) {
-    return XyoResult.withValue(new XyoBoundWitness(keysets, payloads, signatures));
+    return XyoResult.withValue(new XyoBoundWitnessData(keysets, payloads, signatures));
   }
 
   private getSignatureArray(bytes: Buffer): XyoResult<XyoSignatureSet[]> {
@@ -153,16 +166,12 @@ export class XyoBoundWitnessObjectCreator extends XyoObjectCreator {
 }
 
 // tslint:disable-next-line:max-classes-per-file
-export class XyoBoundWitness extends XyoObject {
-  private static creator = new XyoBoundWitnessObjectCreator();
+export abstract class XyoBoundWitness extends XyoObject {
+  public static creator = new XyoBoundWitnessObjectCreator();
 
-  constructor(
-    public readonly publicKeys: XyoKeySet[],
-    public readonly payloads: XyoPayload[],
-    public readonly signatures: XyoSignatureSet[]
-  ) {
-    super();
-  }
+  public abstract publicKeys: XyoKeySet[];
+  public abstract payloads: XyoPayload[];
+  public abstract signatures: XyoSignatureSet[];
 
   get id () {
     return XyoBoundWitness.creator.id;
@@ -176,31 +185,59 @@ export class XyoBoundWitness extends XyoObject {
     return XyoBoundWitness.creator.sizeOfBytesToGetSize;
   }
 
-  private makeBoundWitness(): XyoResult<Buffer> {
-    const makePublicKeysUntyped = this.makePublicKeys().unTyped;
-    const makeSignaturesUntyped = this.makeSignatures().unTyped;
-    const makePayloadsUntyped = this.makePayloads().unTyped;
+  protected async signCurrent(signer: XyoSigner) {
+    const dataToSign = this.getSigningData();
+    if (dataToSign.hasError()) {
+      return XyoResult.withError(new XyoError(`Could not sign value`, XyoError.errorType.ERR_CRITICAL));
+    }
 
+    return signer.signData(dataToSign.value!);
+  }
+
+  private getSigningData (): XyoResult<Buffer> {
+    const collection: Buffer[] = [];
+    const makePublicKeysUntyped = this.makePublicKeys().unTyped;
     if (makePublicKeysUntyped.hasError()) {
       return XyoResult.withError(makePublicKeysUntyped.error!);
     }
 
-    if (makeSignaturesUntyped.hasError()) {
-      return XyoResult.withError(makeSignaturesUntyped.error!);
+    collection.push(makePublicKeysUntyped.value!);
+    for (const payload of this.payloads) {
+      if (!payload) {
+        return XyoResult.withError(new XyoError(`Payload can't be null`, XyoError.errorType.ERR_CREATOR_MAPPING));
+      }
+
+      collection.push(payload.signedPayload.unTyped.value!);
+    }
+
+    return XyoResult.withValue(Buffer.concat(collection));
+  }
+
+  private makeBoundWitness(): XyoResult<Buffer> {
+    const makePublicKeysUntyped = this.makePublicKeys().unTyped;
+    const makePayloadsUntyped = this.makePayloads().unTyped;
+    const makeSignaturesUntyped = this.makeSignatures().unTyped;
+
+    if (makePublicKeysUntyped.hasError()) {
+      return XyoResult.withError(makePublicKeysUntyped.error!);
     }
 
     if (makePayloadsUntyped.hasError()) {
       return XyoResult.withError(makePayloadsUntyped.error!);
     }
 
+    if (makeSignaturesUntyped.hasError()) {
+      return XyoResult.withError(makeSignaturesUntyped.error!);
+    }
+
     const makePublicKeysUntypedValue = makePublicKeysUntyped.value!;
-    const makeSignaturesUntypedValue = makeSignaturesUntyped.value!;
     const makePayloadsUntypedValue = makePayloadsUntyped.value!;
+    const makeSignaturesUntypedValue = makeSignaturesUntyped.value!;
 
     return XyoResult.withValue(Buffer.concat([
       makePublicKeysUntypedValue,
+      makePayloadsUntypedValue,
       makeSignaturesUntypedValue,
-      makePayloadsUntypedValue
     ]));
   }
 
@@ -226,5 +263,16 @@ export class XyoBoundWitness extends XyoObject {
       XyoPayload.creator.minor,
       this.payloads
     );
+  }
+}
+
+// tslint:disable-next-line:max-classes-per-file
+class XyoBoundWitnessData extends XyoBoundWitness {
+  constructor(
+    public readonly publicKeys: XyoKeySet[],
+    public readonly payloads: XyoPayload[],
+    public readonly signatures: XyoSignatureSet[]
+  ) {
+    super();
   }
 }

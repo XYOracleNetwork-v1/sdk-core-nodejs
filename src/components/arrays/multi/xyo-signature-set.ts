@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signature-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 3:00:17 pm
+ * @Last modified time: Wednesday, 5th September 2018 9:34:39 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -35,7 +35,11 @@ class XyoSignatureSetCreator extends XyoArrayCreator {
 
   public createFromPacked(buffer: Buffer) {
     const unpackedArray = new XyoArrayUnpacker(buffer, false, 2);
-    const unpackedArrayObject = new XyoSignatureSet(unpackedArray.array);
+    const arrayResult = unpackedArray.array;
+    if (arrayResult.hasError()) {
+      return XyoResult.withError(arrayResult.error!) as XyoResult<XyoSignatureSet>;
+    }
+    const unpackedArrayObject = new XyoSignatureSet(arrayResult.value!);
     return XyoResult.withValue(unpackedArrayObject);
   }
 }

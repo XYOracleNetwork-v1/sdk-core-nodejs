@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-multi-type-array-byte.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 2:58:47 pm
+ * @Last modified time: Wednesday, 5th September 2018 9:32:52 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -31,7 +31,11 @@ class XyoMultiTypeArrayByteCreator extends XyoArrayCreator {
 
   public createFromPacked(buffer: Buffer) {
     const unpackedArray = new XyoArrayUnpacker(buffer, false, 1);
-    const unpackedArrayObject = new XyoMultiTypeArrayByte(unpackedArray.array);
+    const arrayResult = unpackedArray.array;
+    if (arrayResult.hasError()) {
+      return XyoResult.withError(arrayResult.error!) as XyoResult<XyoMultiTypeArrayByte>;
+    }
+    const unpackedArrayObject = new XyoMultiTypeArrayByte(arrayResult.value!);
     return XyoResult.withValue(unpackedArrayObject);
   }
 }

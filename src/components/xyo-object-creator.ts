@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 1:59:13 pm
+ * @Last modified time: Wednesday, 5th September 2018 5:46:04 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -36,7 +36,8 @@ export abstract class XyoObjectCreator extends XyoType {
       return XyoResult.withError(creator.error!);
     }
 
-    return XyoResult.withValue(creator.value!.createFromPacked(data).value!);
+    const trimmed = data.slice(2);
+    return XyoResult.withValue(creator.value!.createFromPacked(trimmed).value!);
 
     return XyoResult.withError(
       new XyoError(`Could not creat from Buffer ${this.name}`, XyoError.errorType.ERR_CREATOR_MAPPING)
@@ -70,6 +71,10 @@ export abstract class XyoObjectCreator extends XyoType {
 
   public static registerCreator(major: number, minor: number, creator: XyoObjectCreator) {
     const minorMap = XyoObjectCreator.creators[String(major)] || {};
+    if (minorMap[String(minor)] !== undefined && minorMap[String(minor)] !== creator) {
+      throw new Error(`Multiple creators registered for ${major} and ${minor}`);
+    }
+
     minorMap[String(minor)] = creator;
     XyoObjectCreator.creators[String(major)] = minorMap;
   }

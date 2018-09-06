@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-key-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 2:58:12 pm
+ * @Last modified time: Wednesday, 5th September 2018 9:32:24 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -35,7 +35,12 @@ class XyoKeySetCreator extends XyoArrayCreator {
 
   public createFromPacked(buffer: Buffer) {
     const unpackedArray = new XyoArrayUnpacker(buffer, false, 2);
-    const unpackedArrayObject = new XyoKeySet(unpackedArray.array);
+    const arrayResult = unpackedArray.array;
+    if (arrayResult.hasError()) {
+      return XyoResult.withError(arrayResult.error!) as XyoResult<XyoKeySet>;
+    }
+
+    const unpackedArrayObject = new XyoKeySet(arrayResult.value!);
     return XyoResult.withValue(unpackedArrayObject);
   }
 }

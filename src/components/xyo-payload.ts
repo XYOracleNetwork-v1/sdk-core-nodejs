@@ -35,8 +35,8 @@ class XyoPayloadObjectCreator extends XyoObjectCreator {
   public createFromPacked(buffer: Buffer) {
     const signedPayloadSize = buffer.readUInt32BE(4);
     const unsignedPayloadSize = buffer.readUInt32BE(4 + signedPayloadSize);
-    const signedPayload = Buffer.from(buffer, 4, signedPayloadSize);
-    const unsignedPayload = Buffer.from(buffer, 4 + signedPayloadSize, unsignedPayloadSize);
+    const signedPayload = buffer.slice(4, 4 + signedPayloadSize);
+    const unsignedPayload = buffer.slice(4 + signedPayloadSize, 4 + signedPayloadSize + unsignedPayloadSize);
     const signedPayloadCreated = XyoMultiTypeArrayInt.createFromPacked(signedPayload);
     const unsignedPayloadCreated = XyoMultiTypeArrayInt.createFromPacked(unsignedPayload);
     return XyoResult.withValue(new XyoPayload(signedPayloadCreated.value!, unsignedPayloadCreated.value!));

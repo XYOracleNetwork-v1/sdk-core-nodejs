@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:29:14 pm
+ * @Last modified time: Tuesday, 4th September 2018 5:58:37 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -24,7 +24,7 @@ describe(`XyoObject`, () => {
 
     expect(typed.value!.length - 2).toEqual(untyped.value!.length);
 
-    const subTyped = Buffer.from(typed.value!, 2, untyped.value!.length);
+    const subTyped = typed.value!.slice(2, 2 + untyped.value!.length);
 
     expect(subTyped.equals(untyped.value!));
   });
