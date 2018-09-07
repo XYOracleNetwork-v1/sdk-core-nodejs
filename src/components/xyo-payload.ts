@@ -10,78 +10,59 @@
  */
 
 import { XyoObject } from './xyo-object';
-import { XyoMultiTypeArrayInt } from './arrays/multi/xyo-multi-type-array-int';
-import { XyoObjectCreator } from './xyo-object-creator';
-import { XyoResult } from './xyo-result';
+import { getBufferHash } from '../utils/xyo-buffer-utils';
+import { XyoArray } from './arrays/xyo-array';
 
-class XyoPayloadObjectCreator extends XyoObjectCreator {
+/**
+ * An XyoPayload is meant to represent the meaningful data
+ * in a bound witness interaction. It is broke into two important
+ * subsets, the `signedPayload` and the `unsignedPayload`.
+ * The signedPayload contains key/value pairs that the signature
+ * will take into consideration. The unsigned payload contains key/values
+ * that do not have to be signed. This is useful for sharing data with
+ * another node as part of a bound-witness, but that doesn't have to
+ * be persisted in the origin chain.
+ *
+ * @major: 0x02
+ * @minor: 0x04
+ */
 
-  get major () {
-    return 0x02;
-  }
-
-  get minor () {
-    return 0x04;
-  }
-
-  get sizeOfBytesToGetSize() {
-    return XyoResult.withValue(4);
-  }
-
-  public readSize(buffer: Buffer) {
-    return XyoResult.withValue(buffer.readUInt32BE(0));
-  }
-
-  public createFromPacked(buffer: Buffer) {
-    const signedPayloadSize = buffer.readUInt32BE(4);
-    const unsignedPayloadSize = buffer.readUInt32BE(4 + signedPayloadSize);
-    const signedPayload = buffer.slice(4, 4 + signedPayloadSize);
-    const unsignedPayload = buffer.slice(4 + signedPayloadSize, 4 + signedPayloadSize + unsignedPayloadSize);
-    const signedPayloadCreated = XyoMultiTypeArrayInt.createFromPacked(signedPayload);
-    const unsignedPayloadCreated = XyoMultiTypeArrayInt.createFromPacked(unsignedPayload);
-    return XyoResult.withValue(new XyoPayload(signedPayloadCreated.value!, unsignedPayloadCreated.value!));
-  }
-}
-
-// tslint:disable-next-line:max-classes-per-file
 export class XyoPayload extends XyoObject {
 
-  public static creator = new XyoPayloadObjectCreator();
+  /**
+   * Creates a new Instance of an XyoPayload
+   *
+   * @param signedPayload The part of the payload that will be signed
+   * @param unsignedPayload The part of the payload that will be unsigned
+   */
 
-  constructor(
-    public readonly signedPayload: XyoMultiTypeArrayInt,
-    public readonly unsignedPayload: XyoMultiTypeArrayInt
-  ) {
-    super();
+  constructor(public readonly signedPayload: XyoArray, public readonly unsignedPayload: XyoArray) {
+    super(0x02, 0x04);
   }
 
-  get data () {
-    return this.makeEncoded();
+  /**
+   * Returns a map where the keys are hash values and values are the values that hash to their
+   * corresponding type id. This only takes into account the elements in the signed payload
+   */
+
+  get signedPayloadMapping () {
+    return this.getMappingOfElements(this.signedPayload.array);
   }
 
-  get id () {
-    return XyoPayload.creator.id;
-  }
+  /**
+   * A helper function that iterates through an array of
+   * XyoObjects an creates map where the keys are hashes of the type id values
+   * and the elements are the element themselves
+   */
 
-  get sizeIdentifierSize () {
-    return XyoResult.withValue(4);
-  }
+  private getMappingOfElements (objects: XyoObject[]): {[s: string]: XyoObject} {
+    const mapping: {[s: string]: XyoObject} = {};
 
-  private makeEncoded() {
-    const signedPayloadUntyped = this.signedPayload.unTyped;
-    const unsignedPayloadUntyped = this.unsignedPayload.unTyped;
+    objects.forEach((element) => {
+      const bufferHash = getBufferHash(element.id);
+      mapping[String(bufferHash)] = element;
+    });
 
-    if (signedPayloadUntyped.hasError() || unsignedPayloadUntyped.hasError()) {
-      return XyoResult.withError(
-        (signedPayloadUntyped.error || unsignedPayloadUntyped.error)!
-      ) as XyoResult<Buffer>;
-    }
-
-    return XyoResult.withValue(
-      Buffer.concat([
-        signedPayloadUntyped.value!,
-        unsignedPayloadUntyped.value!
-      ])
-    );
+    return mapping;
   }
 }

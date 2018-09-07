@@ -9,10 +9,13 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoSigningObject } from '../../xyo-signing-object';
+import { XyoSigner } from '../../xyo-signer';
 
-// TODO Come back to this
-export abstract class XyoGeneralRsa extends XyoSigningObject {
+/**
+ * A base class for all RSA crypto signers
+ */
+
+export abstract class XyoGeneralRsa extends XyoSigner {
 
   constructor (public readonly keySize: number) {
     super();

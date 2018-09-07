@@ -1,12 +1,21 @@
 {
   "cSpell.words": [
+    "Deserializer",
+    "Deserializers",
     "Findables",
     "IXyo",
     "Truthy",
+    "blockchain",
+    "cryptographically",
+    "deserialization",
     "deserialize",
+    "deserialized",
+    "deserializing",
     "hasher",
     "rssi",
     "ryanxyo",
+    "secp",
+    "serializers",
     "xyfindables"
   ],
   "typescript.tsdk": "node_modules/typescript/lib"

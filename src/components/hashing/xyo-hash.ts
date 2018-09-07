@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 31st August 2018 1:56:00 pm
+ * @Last modified time: Monday, 17th September 2018 11:26:40 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../xyo-object';
-import { XyoObjectCreator } from '../xyo-object-creator';
-import { XyoResult } from '../xyo-result';
+import { XyoPacker } from '../../xyo-packer/xyo-packer';
+import { XyoHashToHashProviderMap } from './xyo-hash-to-hash-provider-map';
 import { XyoError } from '../xyo-error';
 
 /**
@@ -19,16 +19,22 @@ import { XyoError } from '../xyo-error';
  * instance method that can be used to verify the hash value matches
  * against a set of data
  */
-export abstract class XyoHash extends XyoObject {
-  /** The previously hashed value, represented as a byte-stream */
-  public abstract hash: Buffer;
+export class XyoHash extends XyoObject {
 
   /**
-   * Returns the byte-representation of the underlying hash value
+   * Creates new instance of XyoBasicHashBase and initializes it with
+   * the hash that has already been calculated `pastHash`
+   *
+   * @param pastHash An already calculated hash value
    */
 
-  get data () {
-    return XyoResult.withValue(this.hash);
+  constructor(
+    private readonly hashToHashProviderMap: XyoHashToHashProviderMap,
+    public readonly hash: Buffer,
+    public readonly major: number,
+    public readonly minor: number
+  ) {
+    super(major, minor);
   }
 
   /**
@@ -37,48 +43,13 @@ export abstract class XyoHash extends XyoObject {
    * @param data The source data to compare to
    */
 
-  public async verifyHash(data: Buffer): Promise<XyoResult<boolean>> {
-    const hashCreator = XyoObjectCreator.getCreator(this.id.value![0], this.id.value![1]).value as XyoHashCreator;
-
-    if (!hashCreator) {
-      return XyoResult.withError(new XyoError(
-        `Could not create an XyoHashCreator for Major: ${this.id.value![0]} and minor ${this.id.value![1]}`,
-        XyoError.errorType.ERR_CREATOR_MAPPING
-      ));
+  public async verifyHash(data: Buffer): Promise<boolean> {
+    const hashProvider = this.hashToHashProviderMap.getProvider(this.id[0], this.id[1]);
+    if (!hashProvider) {
+      throw new XyoError(`Failed to locate hash provider`, XyoError.errorType.ERR_CRITICAL);
     }
 
-    return XyoResult.withValue(hashCreator.hash(data).equals(this.hash));
+    const xyoHash = await hashProvider.createHash(data);
+    return xyoHash.hash.equals(this.hash);
   }
-}
-
-/**
- * The corresponding Creator class for `XyoHash`
- */
-// tslint:disable-next-line:max-classes-per-file
-export abstract class XyoHashCreator extends XyoObjectCreator {
-
-  /**
-   * All hashes will be of the major value `0x04`
-   */
-
-  get major () {
-    return 0x04;
-  }
-
-  /**
-   * Subclasses should implement this class-method.
-   * Should apply a hashing transform to the data and return the transform result as buffer.
-   *
-   * @param data The data to hash
-   */
-
-  public abstract hash(data: Buffer): Buffer;
-
-  /**
-   * Subclasses should implement this class-method.
-   * Creates an XyoHash from the data provided
-   *
-   * @param data The data to hash
-   */
-  public abstract createHash(data: Buffer): Promise<XyoResult<XyoHash>>;
 }

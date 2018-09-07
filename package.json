@@ -1,8 +1,9 @@
 {
-  "name": "sdk-core-nodejs",
+  "name": "xyo-sdk-core",
   "version": "0.1.0",
   "description": "A core library of nodejs tools to power the nodejs implementation of the XYO network",
-  "main": "index.js",
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
   "scripts": {
     "test": "export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose --detectOpenHandles",
     "build": "npm run build-ts && npm run tslint",
@@ -28,6 +29,7 @@
   },
   "homepage": "https://github.com/XYOracleNetwork/sdk-core-nodejs#readme",
   "dependencies": {
+    "elliptic": "^6.4.1",
     "node-rsa": "^1.0.1"
   },
   "devDependencies": {
