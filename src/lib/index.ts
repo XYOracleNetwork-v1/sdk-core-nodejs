@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 11:10:36 am
+ * @Last modified time: Tuesday, 18th September 2018 2:10:43 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -52,7 +52,6 @@ export * from '../components/heuristics/numbers/xyo-rssi';
 
 export * from '../components/signing/xyo-next-public-key';
 export * from '../components/signing/xyo-signature';
-export * from '../components/signing/xyo-signer';
 export * from '../components/signing/algorithms/ecc/xyo-ec-secp-256k';
 export * from '../components/signing/algorithms/ecc/xyo-ecdsa-signature';
 export * from '../components/signing/algorithms/ecc/xyo-uncompressed-ec-public-key';
@@ -97,9 +96,14 @@ export * from '../xyo-node/origin-chain/xyo-origin-block';
 export * from '../xyo-node/origin-chain/xyo-origin-chain-navigator';
 export * from '../xyo-node/origin-chain/xyo-origin-chain-state-manager';
 
+/* ************************** Signing ************************** */
+export * from '../signing/xyo-signer';
+export * from '../signing/xyo-rsa-sha256-signer';
+export * from '../signing/xyo-rsa-sha256-signer-provider';
+
 /* ************************** Xyo Packer ************************** */
 export * from '../xyo-packer/xyo-array-unpacker';
-export * from '../xyo-packer/xyo-default-packer';
+export * from '../xyo-packer/xyo-default-packer-provider';
 export * from '../xyo-packer/xyo-packer';
 export * from '../xyo-packer/xyo-serializer';
 

@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 1:16:51 pm
+ * @Last modified time: Tuesday, 18th September 2018 1:59:20 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoObject } from '../xyo-object';
+import { XyoObject } from '../components/xyo-object';
 
 /**
  * An XyoSigner provides crypto functionality to be used

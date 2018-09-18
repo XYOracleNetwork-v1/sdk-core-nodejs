@@ -4,16 +4,16 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ec-secp-256k.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 1:16:39 pm
+ * @Last modified time: Tuesday, 18th September 2018 2:01:06 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoSigner } from '../../xyo-signer';
 import { ec as EC } from 'elliptic';
 import { XyoUncompressedEcPublicKey } from './xyo-uncompressed-ec-public-key';
 import { XyoObject } from '../../../xyo-object';
 import { XyoEcdsaSignature } from './xyo-ecdsa-signature';
+import { XyoSigner } from '../../../../signing/xyo-signer';
 
 const ec = new EC('secp256k1');
 
@@ -21,6 +21,7 @@ const ec = new EC('secp256k1');
  * A Signer adhering to the XyoSigner crypto protocols that implements
  * the `sec256k` crypto protocols
  */
+
 export class XyoEcSecp256k extends XyoSigner {
 
   /**

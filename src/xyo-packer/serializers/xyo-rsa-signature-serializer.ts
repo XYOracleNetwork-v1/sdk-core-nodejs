@@ -4,17 +4,29 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-signature-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:56:53 pm
+ * @Last modified time: Tuesday, 18th September 2018 2:05:19 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoRsaSignature } from '../../components/signing/algorithms/rsa/xyo-rsa-signature';
 import { XYOSerializer } from '../xyo-serializer';
+import { XyoSignature } from '../../components/signing/xyo-signature';
+import { XyoObject } from '../../components/xyo-object';
+import { XyoSignerProvider } from '../../signing/xyo-signer-provider';
 
-export class XyoRsaSignatureCreator extends XYOSerializer<XyoRsaSignature> {
+export class XyoRsaSignatureSerializer extends XYOSerializer<XyoRsaSignature> {
 
-  constructor(private readonly minor: number) {
+  constructor(
+    private readonly minor: number,
+    private readonly xyoRsaSignerProvider: XyoSignerProvider,
+    private readonly xyoRSASignatureClass: {
+      new (
+        signature: Buffer,
+        verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
+      ): XyoRsaSignature
+    }
+  ) {
     super();
   }
 
@@ -27,9 +39,9 @@ export class XyoRsaSignatureCreator extends XYOSerializer<XyoRsaSignature> {
   }
 
   public deserialize(buffer: Buffer) {
-    return new XyoRsaSignature(
+    return new this.xyoRSASignatureClass(
       buffer.slice(2),
-      Buffer.from([this.description.major, this.description.minor])
+      this.xyoRsaSignerProvider.verifySign
     );
   }
 

@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoSigner } from '../../xyo-signer';
+import { XyoSigner } from '../../../../signing/xyo-signer';
 
 /**
  * A base class for all RSA crypto signers

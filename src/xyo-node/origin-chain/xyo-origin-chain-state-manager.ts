@@ -4,17 +4,17 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-state-manager.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 2:47:31 pm
+ * @Last modified time: Tuesday, 18th September 2018 2:03:32 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoSigner } from '../../components/signing/xyo-signer';
 import { XyoHash } from '../../components/hashing/xyo-hash';
 import { XyoObject } from '../../components/xyo-object';
 import { XyoNextPublicKey } from '../../components/signing/xyo-next-public-key';
 import { XyoPreviousHash } from '../../components/hashing/xyo-previous-hash';
 import { XyoIndex } from '../../components/heuristics/numbers/xyo-index';
+import { XyoSigner } from '../../signing/xyo-signer';
 
 /**
  * Encapsulates the values that go into an origin-chain managements

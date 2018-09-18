@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:58:25 pm
+ * @Last modified time: Tuesday, 18th September 2018 2:00:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,13 +13,13 @@ import { XyoObject } from '../xyo-object';
 import { XyoPayload } from '../xyo-payload';
 import { XyoSignatureSet } from '../arrays/xyo-signature-set';
 import { XyoError } from '../xyo-error';
-import { XyoSigner } from '../signing/xyo-signer';
 import { XyoHash } from '../hashing/xyo-hash';
 import { XyoKeySet } from '../arrays/xyo-key-set';
 import { XyoHashProvider } from '../../hash-provider/xyo-hash-provider';
 import { XyoPacker } from '../../xyo-packer/xyo-packer';
 import { XyoSingleTypeArrayShort } from '../arrays/xyo-single-type-array-short';
 import { XyoSingleTypeArrayInt } from '../arrays/xyo-single-type-array-int';
+import { XyoSigner } from '../../signing/xyo-signer';
 
 /**
  * An XyoBoundWitness is one of the core pieces in the XYO protocol.

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 5:10:17 pm
+ * @Last modified time: Tuesday, 18th September 2018 2:04:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,11 +14,11 @@ import { XyoPayload } from '../components/xyo-payload';
 import { CatalogueItem } from '../network/xyo-catalogue-item';
 import { XyoNetworkPipe } from '../network/xyo-network';
 import { XyoBoundWitnessTransfer } from '../components/bound-witness/xyo-bound-witness-transfer';
-import { XyoSigner } from '../components/signing/xyo-signer';
 import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
 import { XYO_TCP_CATALOGUE_LENGTH_IN_BYTES, XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES } from '../network/tcp-network/xyo-tcp-network-constants';
 import { XyoError } from '../components/xyo-error';
 import { XyoPacker } from '../xyo-packer/xyo-packer';
+import { XyoSigner } from '../signing/xyo-signer';
 
 const logger = console;
 

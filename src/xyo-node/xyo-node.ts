@@ -4,14 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-archivist.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 5:10:18 pm
+ * @Last modified time: Tuesday, 18th September 2018 2:03:43 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoNetworkProviderInterface, XyoNetworkProcedureCatalogue } from '../network/xyo-network';
 import { CatalogueItem } from '../network/xyo-catalogue-item';
-import { XyoSigner } from '../components/signing/xyo-signer';
 import { XyoBoundWitnessInteraction } from './xyo-bound-witness-interaction';
 import { XyoOriginChainNavigator } from './origin-chain/xyo-origin-chain-navigator';
 import { XyoOriginChainStateManager } from './origin-chain/xyo-origin-chain-state-manager';
@@ -23,6 +22,7 @@ import { XyoHashProvider } from '../hash-provider/xyo-hash-provider';
 import { XyoPacker } from '../xyo-packer/xyo-packer';
 import { XyoSingleTypeArrayInt } from '../components/arrays/xyo-single-type-array-int';
 import { XyoMultiTypeArrayInt } from '../components/arrays/xyo-multi-type-array-int';
+import { XyoSigner } from '../signing/xyo-signer';
 
 const logger = console;
 
