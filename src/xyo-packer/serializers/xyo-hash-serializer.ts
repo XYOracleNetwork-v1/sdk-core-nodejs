@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:56:47 pm
+ * @Last modified time: Tuesday, 18th September 2018 10:39:49 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoHash } from '../../components/hashing/xyo-hash';
 import { XYOSerializer } from '../xyo-serializer';
-import { XyoHashToHashProviderMap } from '../../components/hashing/xyo-hash-to-hash-provider-map';
+import { XyoHashProvider } from '../../lib';
 
 /**
  * The corresponding Creator class for `XyoHash`
@@ -22,7 +22,8 @@ export class XyoHashSerializer extends XYOSerializer<XyoHash> {
   constructor(
     private readonly minor: number,
     private readonly staticSize: number,
-    private readonly hashToHashProviderMap: XyoHashToHashProviderMap
+    private readonly hashProvider: XyoHashProvider | undefined,
+    private readonly xyoHashClass: { new(hashProvider: XyoHashProvider | undefined, hash: Buffer): XyoHash}
   ) {
     super();
   }
@@ -36,8 +37,7 @@ export class XyoHashSerializer extends XYOSerializer<XyoHash> {
   }
 
   public deserialize(buffer: Buffer) {
-    const hash = buffer.slice(2);
-    return new XyoHash(this.hashToHashProviderMap, hash, buffer[0], buffer[1]);
+    return new this.xyoHashClass(this.hashProvider, buffer.slice(2));
   }
 
   public serialize(publicKey: XyoHash) {

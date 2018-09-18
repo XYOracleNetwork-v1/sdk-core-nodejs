@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 5:10:19 pm
+ * @Last modified time: Tuesday, 18th September 2018 11:10:36 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -31,8 +31,14 @@ export * from '../components/bound-witness/xyo-zig-zag-bound-witness';
 /* ************************** Hashing Components ************************** */
 
 export * from '../components/hashing/xyo-hash';
-export * from '../components/hashing/xyo-hash-to-hash-provider-map';
 export * from '../components/hashing/xyo-previous-hash';
+
+export * from '../components/hashing/xyo-md2-hash';
+export * from '../components/hashing/xyo-md5-hash';
+export * from '../components/hashing/xyo-sha1-hash';
+export * from '../components/hashing/xyo-sha224-hash';
+export * from '../components/hashing/xyo-sha256-hash';
+export * from '../components/hashing/xyo-sha512-hash';
 
 /* ************************** Heuristic Components ************************** */
 
@@ -61,6 +67,12 @@ export * from '../components/xyo-payload';
 
 /* ************************** Hash Provider ************************** */
 export * from '../hash-provider/xyo-hash-provider';
+export * from '../hash-provider/xyo-native-base-hash-provider';
+export * from '../hash-provider/xyo-md5-hash-provider';
+export * from '../hash-provider/xyo-sha1-hash-provider';
+export * from '../hash-provider/xyo-sha224-hash-provider';
+export * from '../hash-provider/xyo-sha256-hash-provider';
+export * from '../hash-provider/xyo-sha512-hash-provider';
 
 /* ************************** Network ************************** */
 export * from '../network/xyo-catalogue-item';

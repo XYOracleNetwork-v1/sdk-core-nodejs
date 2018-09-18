@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:54:54 pm
+ * @Last modified time: Tuesday, 18th September 2018 11:02:13 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -33,7 +33,6 @@ import { XyoNextPublicKey } from '../components/signing/xyo-next-public-key';
 import { XyoPayload } from '../components/xyo-payload';
 import { XyoBoundWitnessTransfer } from '../components/bound-witness/xyo-bound-witness-transfer';
 import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
-import { XyoHashToHashProviderMap } from '../components/hashing/xyo-hash-to-hash-provider-map';
 import { XyoSingleTypeArrayByte } from '../components/arrays/xyo-single-type-array-byte';
 import { XyoSingleTypeArrayShort } from '../components/arrays/xyo-single-type-array-short';
 import { XyoSingleTypeArrayInt } from '../components/arrays/xyo-single-type-array-int';
@@ -41,6 +40,17 @@ import { XyoMultiTypeArrayByte } from '../components/arrays/xyo-multi-type-array
 import { XyoMultiTypeArrayShort } from '../components/arrays/xyo-multi-type-array-short';
 import { XyoMultiTypeArrayInt } from '../components/arrays/xyo-multi-type-array-int';
 import { XyoPayloadSerializer } from './serializers/xyo-payload-serializer';
+import { XyoMd5Hash } from '../components/hashing/xyo-md5-hash';
+import { XyoMd2Hash } from '../components/hashing/xyo-md2-hash';
+import { XyoSha1Hash } from '../components/hashing/xyo-sha1-hash';
+import { XyoSha224Hash } from '../components/hashing/xyo-sha224-hash';
+import { XyoSha256Hash } from '../components/hashing/xyo-sha256-hash';
+import { XyoSha512Hash } from '../components/hashing/xyo-sha512-hash';
+import { XyoMd5HashProvider } from '../hash-provider/xyo-md5-hash-provider';
+import { XyoSha1HashProvider } from '../hash-provider/xyo-sha1-hash-provider';
+import { XyoSha224HashProvider } from '../hash-provider/xyo-sha224-hash-provider';
+import { XyoSha256HashProvider } from '../hash-provider/xyo-sha256-hash-provider';
+import { XyoSha512HashProvider } from '../hash-provider/xyo-sha512-hash-provider';
 
 /**
  * A class for configuring the packing, serialization, and deserialization
@@ -48,8 +58,6 @@ import { XyoPayloadSerializer } from './serializers/xyo-payload-serializer';
  */
 
 export class XyoDefaultPacker {
-
-  constructor (private readonly hashToHashProviderMap: XyoHashToHashProviderMap) {}
 
   public getXyoPacker() {
     const packer = new XyoPacker();
@@ -71,11 +79,35 @@ export class XyoDefaultPacker {
     packer.registerSerializerDeserializer(XyoMultiTypeArrayInt.name, new XyoArraySerializer(0x01, 0x06, 4, false));
     packer.registerSerializerDeserializer(XyoBoundWitnessTransfer.name, new XyoBoundWitnessTransferSerializer());
     packer.registerSerializerDeserializer(XyoBoundWitness.name, new XyoBoundWitnessSerializer());
-    packer.registerSerializerDeserializer('XyoMd5', new XyoHashSerializer(0x10, 16, this.hashToHashProviderMap));
-    packer.registerSerializerDeserializer('XyoSha1', new XyoHashSerializer(0x02, 20, this.hashToHashProviderMap));
-    packer.registerSerializerDeserializer('XyoSha224', new XyoHashSerializer(0x0a, 20, this.hashToHashProviderMap));
-    packer.registerSerializerDeserializer('XyoSha256', new XyoHashSerializer(0x05, 32, this.hashToHashProviderMap));
-    packer.registerSerializerDeserializer('XyoSha384', new XyoHashSerializer(0x0C, 48, this.hashToHashProviderMap));
-    packer.registerSerializerDeserializer('XyoSha512', new XyoHashSerializer(0x0D, 64, this.hashToHashProviderMap));
+
+    packer.registerSerializerDeserializer(
+      XyoMd2Hash.name,
+      new XyoHashSerializer(0x01, 16, undefined, XyoMd2Hash)
+    );
+
+    packer.registerSerializerDeserializer(
+      XyoMd5Hash.name,
+      new XyoHashSerializer(0x02, 16, new XyoMd5HashProvider(), XyoMd5Hash)
+    );
+
+    packer.registerSerializerDeserializer(
+      XyoSha1Hash.name,
+      new XyoHashSerializer(0x03, 20, new XyoSha1HashProvider(), XyoSha1Hash)
+    );
+
+    packer.registerSerializerDeserializer(
+      XyoSha224Hash.name,
+      new XyoHashSerializer(0x04, 28, new XyoSha224HashProvider(), XyoSha224Hash)
+    );
+
+    packer.registerSerializerDeserializer(
+      XyoSha256Hash.name,
+      new XyoHashSerializer(0x05, 32, new XyoSha256HashProvider(), XyoSha256Hash)
+    );
+
+    packer.registerSerializerDeserializer(
+      XyoSha512Hash.name,
+      new XyoHashSerializer(0x06, 64, new XyoSha512HashProvider(), XyoSha512Hash)
+    );
   }
 }
