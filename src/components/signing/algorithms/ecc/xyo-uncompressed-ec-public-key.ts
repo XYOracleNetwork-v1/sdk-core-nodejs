@@ -4,77 +4,48 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-uncompressed-ec-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 4th September 2018 5:55:29 pm
+ * @Last modified time: Monday, 17th September 2018 1:01:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../../../xyo-object';
-import { XyoResult } from '../../../xyo-result';
-import { XyoObjectCreator } from '../../../xyo-object-creator';
 
-export class XyoUncompressedEcPublicKeyCreator extends XyoObjectCreator {
+/**
+ * Sharing public keys is an integral part of the Xyo protocol
+ * This particular class is for representing an uncompressed version
+ * Ec public key
+ */
 
-  constructor(public readonly minor: number) {
-    super();
-  }
-
-  get major() {
-    return 0x04;
-  }
-
-  get sizeOfBytesToGetSize() {
-    return XyoResult.withValue(0);
-  }
-
-  public readSize(buffer: Buffer) {
-    return XyoResult.withValue(64);
-  }
-
-  public createFromPacked(buffer: Buffer) {
-    return XyoResult.withValue(new XyoUncompressedEcPublicKey(
-      buffer.slice(0, 32),
-      buffer.slice(32, 64),
-      Buffer.from([this.major, this.minor])
-    ));
-  }
-}
-
-// tslint:disable-next-line:max-classes-per-file
 export class XyoUncompressedEcPublicKey extends XyoObject {
 
-  constructor(
-    public readonly x: Buffer,
-    public readonly y: Buffer,
-    public readonly rawId: Buffer
-  ) {
-    super();
+  /**
+   * Creates a new instance of a XyoUncompressedEcPublicKey
+   * @param x The x point on the curve in binary representation
+   * @param y The y point on the curve in binary representation
+   * @param rawId The rawId corresponding to particular type of EC public key this is.
+   */
+
+  constructor(public readonly x: Buffer, public readonly y: Buffer, public readonly rawId: Buffer) {
+    super(rawId[0], rawId[1]);
   }
 
-  get data () {
-    return XyoResult.withValue(this.getEncoded());
+  public get32ByteEcPoint(point: Buffer) {
+    if (point.length === 32) {
+      return point;
+    }
+
+    return point.slice(1, 33);
   }
 
-  get sizeIdentifierSize () {
-    return XyoResult.withValue(null);
-  }
-
-  get id () {
-    return XyoResult.withValue(this.rawId);
-  }
+  /**
+   * Returns the binary encoded public key
+   */
 
   public getEncoded() {
     return Buffer.concat([
       this.get32ByteEcPoint(this.x),
       this.get32ByteEcPoint(this.y)
     ]);
-  }
-
-  private get32ByteEcPoint(point: Buffer) {
-    if (point.length === 32) {
-      return point;
-    }
-
-    return point.slice(1, 33);
   }
 }

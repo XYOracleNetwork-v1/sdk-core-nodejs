@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-number-types.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 28th August 2018 3:04:42 pm
+ * @Last modified time: Friday, 14th September 2018 11:37:12 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,9 +14,9 @@
  */
 
 export enum XyoNumberType {
-  BYTE,   // 8 bits    (1 byte)
-  SHORT,  // 16 bits   (2 bytes)
-  INT,    // 32 bits   (4 bytes)
-  LONG,   // 64 bits   (8 bytes)
-  FLOAT   // 32 bit    (1 byte)  floating point
+  BYTE = 1,   // 8 bits    (1 byte)
+  SHORT = 2,  // 16 bits   (2 bytes)
+  INT = 4,    // 32 bits   (4 bytes)
+  LONG = 8,   // 64 bits   (8 bytes)
+  FLOAT = 4  // 32 bit    (1 byte)  floating point
 }

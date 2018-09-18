@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: tslint.json
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 17th August 2018 9:51:13 am
+ * @Last modified time: Thursday, 6th September 2018 1:58:38 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,6 +19,8 @@
     "align": false,
     "max-line-length": [true, {"limit": 120, "ignore-pattern": "^import |^export {(.*?)}"}],
     "object-literal-sort-keys": false,
-    "no-implicit-dependencies": [true, "dev"]
+    "no-implicit-dependencies": [true, "dev"],
+    "interface-name":false,
+    "no-bitwise": false
   }
 }

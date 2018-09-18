@@ -4,68 +4,29 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-previous-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 6th September 2018 10:13:05 am
+ * @Last modified time: Monday, 17th September 2018 12:43:39 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../xyo-object';
 import { XyoHash } from './xyo-hash';
-import { XyoObjectCreator } from '../xyo-object-creator';
-import { XyoResult } from '../xyo-result';
 
-export class XyoPreviousHashObjectCreator extends XyoObjectCreator {
+/**
+ * The previous-hash concept is a very important part of the preserving
+ * the origin chain the in XYO protocol. Given a previous-hash value one
+ * can trace back the ordering of origin-blocks.
+ */
 
-  get major () {
-    return 0x02;
-  }
-
-  get minor () {
-    return 0x06;
-  }
-
-  get sizeOfBytesToGetSize () {
-    return XyoResult.withValue(8);
-  }
-
-  public readSize(buffer: Buffer) {
-    const hashCreator = XyoObjectCreator.getCreator(buffer[0], buffer[1]);
-    if (hashCreator.hasError()) {
-      return XyoResult.withError(hashCreator.error!) as XyoResult<number>;
-    }
-
-    const sizeToRead = hashCreator.value!.sizeOfBytesToGetSize;
-    if (sizeToRead.hasError()) {
-      return XyoResult.withError(sizeToRead.error!) as XyoResult<number>;
-    }
-
-    return hashCreator.value!.readSize(buffer.slice(2, 2 + sizeToRead.value!));
-  }
-
-  public createFromPacked(buffer: Buffer) {
-    const hashCreated = XyoObjectCreator.create(buffer);
-    return XyoResult.withValue(hashCreated.value as XyoHash);
-  }
-}
-
-// tslint:disable-next-line:max-classes-per-file
 export class XyoPreviousHash extends XyoObject {
 
-  public static creator = new XyoPreviousHashObjectCreator();
+  /**
+   * Creates a new instance of a `XyoPreviousHash`
+   *
+   * @param hash The previous hash in the origin chain
+   */
 
-  constructor (private readonly hash: XyoHash) {
-    super();
-  }
-
-  get data() {
-    return this.hash.typed;
-  }
-
-  get id () {
-    return XyoPreviousHash.creator.id;
-  }
-
-  get sizeIdentifierSize () {
-    return XyoResult.withValue(null);
+  constructor (public readonly hash: XyoHash) {
+    super(0x02, 0x06);
   }
 }

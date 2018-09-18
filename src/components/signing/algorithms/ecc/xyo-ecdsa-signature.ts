@@ -4,68 +4,34 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 4th September 2018 5:54:29 pm
+ * @Last modified time: Monday, 17th September 2018 12:57:52 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoSignature } from '../../xyo-signature';
-import { XyoResult } from '../../../xyo-result';
-import { XyoObjectCreator } from '../../../xyo-object-creator';
 
-export class XyoEcdsaSignatureCreator extends XyoObjectCreator {
-
-  constructor(public readonly minor: number) {
-    super();
-  }
-
-  get major () {
-    return 0x05;
-  }
-
-  get sizeOfBytesToGetSize() {
-    return XyoResult.withValue(1);
-  }
-
-  public readSize(buffer: Buffer) {
-    return XyoResult.withValue(buffer.readUInt8(0));
-  }
-
-  public createFromPacked(buffer: Buffer) {
-    const size = buffer.readUInt8(0);
-
-    return XyoResult.withValue(
-      new XyoEcdsaSignature(
-        buffer.slice(1),
-        Buffer.from([this.major, this.minor])
-      )
-    );
-  }
-}
-
-// tslint:disable-next-line:max-classes-per-file
+/**
+ * A pojo for Ecdsa Signatures
+ */
 export class XyoEcdsaSignature extends XyoSignature {
 
-  constructor(
-    private readonly signature: Buffer,
-    private readonly rawId: Buffer
-  ) {
-    super();
+  /**
+   * Creates new instance of a `XyoEcdsaSignature`
+   *
+   * @param signature The raw signature
+   * @param rawId
+   */
+
+  constructor(public readonly signature: Buffer, rawId: Buffer) {
+    super(rawId[0], rawId[1]);
   }
 
-  get data() {
-    return XyoResult.withValue(this.signature);
-  }
-
-  get sizeIdentifierSize () {
-    return XyoResult.withValue(1);
-  }
+  /**
+   * Returns the binary representation of the signature
+   */
 
   get encodedSignature () {
     return this.signature;
-  }
-
-  get id () {
-    return XyoResult.withValue(this.rawId);
   }
 }

@@ -10,56 +10,31 @@
  */
 
 import { XyoObject } from '../../../xyo-object';
-import { XyoResult } from '../../../xyo-result';
-import { XyoObjectCreator } from '../../../xyo-object-creator';
 
-class XyoRsaPublicKeyCreator extends XyoObjectCreator {
+/**
+ * An RSA public key
+ *
+ * @major: 0x04
+ * @minor: 0x03
+ */
 
-  get major () {
-    return 0x04;
-  }
-
-  get minor () {
-    return 0x03;
-  }
-
-  get sizeOfBytesToGetSize() {
-    return XyoResult.withValue(2);
-  }
-
-  public readSize(buffer: Buffer) {
-    return XyoResult.withValue(buffer.readUInt16BE(0));
-  }
-
-  public createFromPacked(buffer: Buffer) {
-    const modulusSize = buffer.readUInt16BE(0) - 2;
-    const mod = buffer.slice(2, 2 + modulusSize);
-    return XyoResult.withValue(new XyoRsaPublicKey(mod));
-  }
-}
-
-// tslint:disable-next-line:max-classes-per-file
 export class XyoRsaPublicKey extends XyoObject {
 
-  public static creator = new XyoRsaPublicKeyCreator();
+  /**
+   * Creates a new instance of a XyoRsaPublicKey
+   * @param modulus The modulus in an RSA crypto keypair
+   */
 
   constructor(public readonly modulus: Buffer) {
-    super();
+    super(0x04, 0x03);
   }
 
-  get data () {
-    return XyoResult.withValue(this.modulus);
-  }
-
-  get sizeIdentifierSize () {
-    return XyoRsaPublicKey.creator.sizeOfBytesToGetSize;
-  }
+  /**
+   * The public exponent in the RSA crypto algorithm. Returns
+   * the conventional (2 ^ 16) + (2^0) value used in many RSA configurations.
+   */
 
   get publicExponent() {
     return Buffer.from([0x01, 0x00, 0x01]);
-  }
-
-  get id () {
-    return XyoRsaPublicKey.creator.id;
   }
 }

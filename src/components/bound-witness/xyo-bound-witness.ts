@@ -4,275 +4,160 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 5th September 2018 5:18:21 pm
+ * @Last modified time: Monday, 17th September 2018 4:58:25 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../xyo-object';
-import { XyoKeySet } from '../arrays/multi/xyo-key-set';
 import { XyoPayload } from '../xyo-payload';
-import { XyoSignatureSet } from '../arrays/multi/xyo-signature-set';
-import { XyoObjectCreator } from '../xyo-object-creator';
-import { XyoResult } from '../xyo-result';
-import { XyoSingleTypeArrayShort } from '../arrays/single/xyo-single-type-array-short';
-import { XyoSingleTypeArrayInt } from '../arrays/single/xyo-single-type-array-int';
+import { XyoSignatureSet } from '../arrays/xyo-signature-set';
 import { XyoError } from '../xyo-error';
 import { XyoSigner } from '../signing/xyo-signer';
+import { XyoHash } from '../hashing/xyo-hash';
+import { XyoKeySet } from '../arrays/xyo-key-set';
+import { XyoHashProvider } from '../../hash-provider/xyo-hash-provider';
+import { XyoPacker } from '../../xyo-packer/xyo-packer';
+import { XyoSingleTypeArrayShort } from '../arrays/xyo-single-type-array-short';
+import { XyoSingleTypeArrayInt } from '../arrays/xyo-single-type-array-int';
 
-export class XyoBoundWitnessObjectCreator extends XyoObjectCreator {
+/**
+ * An XyoBoundWitness is one of the core pieces in the XYO protocol.
+ * It cryptographically proves that two (or more) parties interacted.
+ * Additionally other metadata can go into Bound Witness suggesting that
+ * both parties agree to a version of reality constituted by set of attributes.
+ *
+ * The bound-witness protocol is tightly coupled with the xyo-packing scheme.
+ *
+ * @major 0x02
+ * @minor 0x01
+ */
 
-  get major () {
-    return 0x02;
-  }
-
-  get minor () {
-    return 0x01;
-  }
-
-  get sizeOfBytesToGetSize () {
-    return XyoResult.withValue(4);
-  }
-
-  public readSize(buffer: Buffer): XyoResult<number | null> {
-    return XyoResult.withValue(buffer.readUInt32BE(0));
-  }
-
-  public createFromPacked(buffer: Buffer) {
-    const shortArraySizeReadSize = XyoSingleTypeArrayShort.creator.sizeOfBytesToGetSize;
-    if (shortArraySizeReadSize.hasError()) {
-      return XyoResult.withError(shortArraySizeReadSize.error!) as XyoResult<XyoObject>;
-    }
-
-    const intArrayReadSize = XyoSingleTypeArrayInt.creator.sizeOfBytesToGetSize;
-    if (intArrayReadSize.hasError()) {
-      return XyoResult.withError(intArrayReadSize.error!) as XyoResult<XyoObject>;
-    }
-
-    return this.unpackIntoEncodedArrays(buffer, shortArraySizeReadSize.value!, intArrayReadSize.value!);
-  }
-
-  private unpackIntoEncodedArrays(
-    buffer: Buffer,
-    shortArrayReadSize: number,
-    intArrayReadSize: number
-  ): XyoResult<XyoObject> {
-    const keySetArraySize = XyoSingleTypeArrayShort.creator.readSize(
-      buffer.slice(4, 4 + shortArrayReadSize)
-    );
-
-    if (keySetArraySize.hasError()) {
-      return XyoResult.withError(keySetArraySize.error!);
-    }
-
-    const keySetArraySizeValue = keySetArraySize.value!;
-    const keySets = this.getKeySetsArray(buffer.slice(4, 4 + keySetArraySizeValue));
-
-    if (keySets.hasError()) {
-      return XyoResult.withError(keySets.error!);
-    }
-
-    const keySetsValue = keySets.value!;
-
-    const payloadArraySize = XyoSingleTypeArrayInt.creator.readSize(
-      buffer.slice(keySetArraySizeValue + 4, keySetArraySizeValue + 4 + intArrayReadSize)
-    );
-
-    if (payloadArraySize.hasError()) {
-      return XyoResult.withError(payloadArraySize.error!);
-    }
-
-    const payloadArraySizeValue = payloadArraySize.value!;
-
-    const payloads = this.getPayloadsArray(
-      buffer.slice(keySetArraySizeValue + 4, keySetArraySizeValue + 4 + payloadArraySizeValue)
-    );
-
-    const payloadsValue = payloads.value!;
-
-    const signatureArraySize = XyoSingleTypeArrayShort.creator.readSize(
-      buffer.slice(
-        keySetArraySizeValue + payloadArraySizeValue + 4,
-        keySetArraySizeValue + payloadArraySizeValue + 4 + shortArrayReadSize
-      )
-    );
-
-    if (signatureArraySize.hasError()) {
-      return XyoResult.withError(signatureArraySize.error!);
-    }
-
-    const signatureArraySizeValue = signatureArraySize.value!;
-    const signatures = this.getSignatureArray(
-      buffer.slice(
-        keySetArraySizeValue + payloadArraySizeValue + 4,
-        keySetArraySizeValue + payloadArraySizeValue + 4 + signatureArraySizeValue
-      )
-    );
-
-    const signaturesValue = signatures.value!;
-
-    return this.unpackFromArrays(keySetsValue, payloadsValue, signaturesValue);
-  }
-
-  private unpackFromArrays(
-    keysets: XyoKeySet[],
-    payloads: XyoPayload[],
-    signatures: XyoSignatureSet[]
-  ) {
-    return XyoResult.withValue(new XyoBoundWitnessData(keysets, payloads, signatures));
-  }
-
-  private getSignatureArray(bytes: Buffer): XyoResult<XyoSignatureSet[]> {
-    const signatureArray = XyoSingleTypeArrayShort.creator.createFromPacked(bytes);
-    const signatureArrayValue = signatureArray.value as XyoSingleTypeArrayShort;
-
-    if (signatureArrayValue !== null && !signatureArray.hasError()) {
-      return XyoResult.withValue(signatureArrayValue.array as XyoSignatureSet[]);
-    }
-
-    return XyoResult.withError(
-      signatureArray.error ||
-      new XyoError('Unknown read signature arrays Error', XyoError.errorType.ERR_CREATOR_MAPPING)
-    );
-  }
-
-  private getPayloadsArray(bytes: Buffer): XyoResult<XyoPayload[]> {
-    const payloadArray = XyoSingleTypeArrayInt.creator.createFromPacked(bytes);
-    const payloadArrayValue = payloadArray.value as XyoSingleTypeArrayInt;
-
-    if (payloadArrayValue !== null && !payloadArray.hasError()) {
-      return XyoResult.withValue(payloadArrayValue.array as XyoPayload[]);
-    }
-
-    return XyoResult.withError(
-      payloadArray.error ||
-      new XyoError('Unknown read payloads Error', XyoError.errorType.ERR_CREATOR_MAPPING)
-    );
-  }
-
-  private getKeySetsArray(buffer: Buffer): XyoResult<XyoKeySet[]> {
-    const keySetArray = XyoSingleTypeArrayShort.creator.createFromPacked(buffer);
-    const keySetArrayValue = keySetArray.value as XyoSingleTypeArrayShort;
-
-    if (keySetArrayValue !== null && !keySetArray.hasError()) {
-      return XyoResult.withValue(keySetArrayValue.array as XyoKeySet[]);
-    }
-
-    return XyoResult.withError(
-      keySetArray.error ||
-      new XyoError('Unknown read keySets Error', XyoError.errorType.ERR_CREATOR_MAPPING)
-    );
-  }
-}
-
-// tslint:disable-next-line:max-classes-per-file
 export abstract class XyoBoundWitness extends XyoObject {
-  public static creator = new XyoBoundWitnessObjectCreator();
 
+  /** The public keys that are part of the bound-witness */
   public abstract publicKeys: XyoKeySet[];
+
+  /** The payloads, broken into signed and unsigned that is part of the bound witness */
   public abstract payloads: XyoPayload[];
+
+  /** The signatures from the parties involved that are part of the bound witness */
   public abstract signatures: XyoSignatureSet[];
 
-  get id () {
-    return XyoBoundWitness.creator.id;
+  /**
+   * Creates a new instance of an XyoBoundWitness
+   *
+   * @param xyoPacker A packer for serializing/deserializing values.
+   */
+
+  constructor (private readonly xyoPacker: XyoPacker) {
+    super(0x02, 0x01);
   }
 
-  get data () {
-    return this.makeBoundWitness();
+  /**
+   * Gets a hash of the data that is to be signed
+   *
+   * @param hashProvider A hash provider to be used for calculating the hash
+   */
+
+  public async getHash (hashProvider: XyoHashProvider): Promise<XyoHash> {
+    const dataToHashValue = this.getSigningData();
+    return hashProvider.createHash(dataToHashValue);
   }
 
-  get sizeIdentifierSize () {
-    return XyoBoundWitness.creator.sizeOfBytesToGetSize;
+  /**
+   * Gets the untyped packed representation of current public keys of the bound-witness
+   *
+   * The public keys are represented as a `XyoSingleTypeArrayShort` with a major and minor
+   * values of `0x01` and `0x02` respectively
+   */
+
+  public makePublicKeysUntyped(): Buffer {
+    const { major, minor } = this.getPublicKeysMajorMinor();
+    const publicKeys = new XyoSingleTypeArrayShort(major, minor, this.publicKeys);
+
+    return this.xyoPacker.serialize(publicKeys, major, minor, false);
   }
+
+  /**
+   * Gets the untyped packed representation of current signatures of the bound-witness
+   *
+   * The signatures are represented as a `XyoSingleTypeArrayShort` with a major and minor
+   * values of `0x02` and `0x03` respectively
+   */
+
+  public makeSignaturesUntyped(): Buffer {
+    const { major, minor } =  this.getSignaturesMajorMinor();
+    const signatures = new XyoSingleTypeArrayShort(major, minor, this.signatures);
+    return this.xyoPacker.serialize(signatures, major, minor, false);
+  }
+
+  /**
+   * Gets the untyped packed representation of current payloads of the bound-witness
+   *
+   * The signatures are represented as a `XyoSingleTypeArrayInt` with a major and minor
+   * values of `0x02` and `0x04` respectively
+   */
+
+  public makePayloadsUntyped(): Buffer {
+    const { major, minor } =  this.getPayloadsMajorMinor();
+
+    const payloads = new XyoSingleTypeArrayInt(major, minor, this.payloads);
+    return this.xyoPacker.serialize(payloads, major, minor, false);
+  }
+
+  /**
+   * Calculates a signature based on the current state of the bound-witness
+   * @param signer A signer object used to get the signature
+   */
 
   protected async signCurrent(signer: XyoSigner) {
-    const dataToSign = this.getSigningData();
-    if (dataToSign.hasError()) {
-      return XyoResult.withError(new XyoError(`Could not sign value`, XyoError.errorType.ERR_CRITICAL));
-    }
-
-    return signer.signData(dataToSign.value!);
+    return signer.signData(this.getSigningData());
   }
 
-  private getSigningData (): XyoResult<Buffer> {
-    const collection: Buffer[] = [];
-    const makePublicKeysUntyped = this.makePublicKeys().unTyped;
-    if (makePublicKeysUntyped.hasError()) {
-      return XyoResult.withError(makePublicKeysUntyped.error!);
-    }
+  /**
+   * Packs the relevant signing data into Buffer. This includes public keys and
+   * the signed portion of the payload
+   */
 
-    collection.push(makePublicKeysUntyped.value!);
+  private getSigningData (): Buffer {
+    const collection: Buffer[] = [];
+    const publicKeysUntyped = this.makePublicKeysUntyped();
+    collection.push(publicKeysUntyped);
+
+    const payloadsMajorMinor = this.getPayloadsMajorMinor();
     for (const payload of this.payloads) {
       if (!payload) {
-        return XyoResult.withError(new XyoError(`Payload can't be null`, XyoError.errorType.ERR_CREATOR_MAPPING));
+        throw new XyoError(`Payload can't be null`, XyoError.errorType.ERR_CREATOR_MAPPING);
       }
-
-      collection.push(payload.signedPayload.unTyped.value!);
+      const payloadData = payload.signedPayload;
+      collection.push(this.xyoPacker.serialize(payloadData, payloadsMajorMinor.major, payloadsMajorMinor.minor, false));
     }
 
-    return XyoResult.withValue(Buffer.concat(collection));
+    return Buffer.concat(collection);
   }
 
-  private makeBoundWitness(): XyoResult<Buffer> {
-    const makePublicKeysUntyped = this.makePublicKeys().unTyped;
-    const makePayloadsUntyped = this.makePayloads().unTyped;
-    const makeSignaturesUntyped = this.makeSignatures().unTyped;
+  /**
+   * A helper function get the major and minor values for public keys
+   */
 
-    if (makePublicKeysUntyped.hasError()) {
-      return XyoResult.withError(makePublicKeysUntyped.error!);
-    }
-
-    if (makePayloadsUntyped.hasError()) {
-      return XyoResult.withError(makePayloadsUntyped.error!);
-    }
-
-    if (makeSignaturesUntyped.hasError()) {
-      return XyoResult.withError(makeSignaturesUntyped.error!);
-    }
-
-    const makePublicKeysUntypedValue = makePublicKeysUntyped.value!;
-    const makePayloadsUntypedValue = makePayloadsUntyped.value!;
-    const makeSignaturesUntypedValue = makeSignaturesUntyped.value!;
-
-    return XyoResult.withValue(Buffer.concat([
-      makePublicKeysUntypedValue,
-      makePayloadsUntypedValue,
-      makeSignaturesUntypedValue,
-    ]));
+  private getPublicKeysMajorMinor() {
+    return this.xyoPacker.getMajorMinor(XyoSingleTypeArrayShort.name);
   }
 
-  private makePublicKeys(): XyoSingleTypeArrayShort {
-    return new XyoSingleTypeArrayShort(
-      XyoKeySet.creator.major,
-      XyoKeySet.creator.minor,
-      this.publicKeys
-    );
+  /**
+   * A helper function get the major and minor values for signatures
+   */
+
+  private getSignaturesMajorMinor() {
+    return this.xyoPacker.getMajorMinor(XyoSignatureSet.name);
   }
 
-  private makeSignatures(): XyoSingleTypeArrayShort {
-    return new XyoSingleTypeArrayShort(
-      XyoSignatureSet.creator.major,
-      XyoSignatureSet.creator.minor,
-      this.signatures
-    );
-  }
+  /**
+   * A helper function get the major and minor values for payloads
+   */
 
-  private makePayloads(): XyoSingleTypeArrayInt {
-    return new XyoSingleTypeArrayInt(
-      XyoPayload.creator.major,
-      XyoPayload.creator.minor,
-      this.payloads
-    );
-  }
-}
-
-// tslint:disable-next-line:max-classes-per-file
-class XyoBoundWitnessData extends XyoBoundWitness {
-  constructor(
-    public readonly publicKeys: XyoKeySet[],
-    public readonly payloads: XyoPayload[],
-    public readonly signatures: XyoSignatureSet[]
-  ) {
-    super();
+  private getPayloadsMajorMinor() {
+    return this.xyoPacker.getMajorMinor(XyoPayload.name);
   }
 }
