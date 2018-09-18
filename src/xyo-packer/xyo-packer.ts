@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:56:55 pm
+ * @Last modified time: Tuesday, 18th September 2018 3:20:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -75,24 +75,18 @@ export class XyoPacker {
         // Get index and assert the index is in range of the underlying data collection
         const index = this.serializerDeserializerMajorMinorIndex[major][minor];
         if (index < this.serializerDeserializersCollection.length) {
-
           // Attempt to serialize
-          try {
-            const serializer = this.serializerDeserializersCollection[index];
-            const serialized = serializer.serialize(object, this);
-            if (typed === undefined) {
-              return serialized;
-            }
-
-            if (typed) {
-              return this.makeTyped(serialized, serializer);
-            }
-
-            return this.makeUntyped(serialized, serializer);
-          } catch (err) {
-            logger.error(`There was an attempting to deserialize an object with major ${major}, minor ${minor}`);
-            throw err;
+          const serializer = this.serializerDeserializersCollection[index];
+          const serialized = serializer.serialize(object, this);
+          if (typed === undefined) {
+            return serialized;
           }
+
+          if (typed) {
+            return this.makeTyped(serialized, serializer);
+          }
+
+          return this.makeUntyped(serialized, serializer);
         }
       }
     }

@@ -30,9 +30,8 @@ export class XyoSignatureSetSerializer extends XYOSerializer<XyoSignatureSet> {
   }
 
   public serialize(signatureSet: XyoSignatureSet, xyoPacker: XyoPacker) {
-    const { major, minor } = xyoPacker.getMajorMinor(XyoSignatureSet.name);
     return Buffer.concat(
-      signatureSet.array.map(element => xyoPacker.serialize(element, major, minor, true))
+      signatureSet.array.map(element => xyoPacker.serialize(element, element.major, element.minor, true))
     );
   }
 }

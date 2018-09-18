@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 2:10:34 pm
+ * @Last modified time: Tuesday, 18th September 2018 3:10:29 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -74,9 +74,11 @@ export class XyoDefaultPackerProvider {
     packer.registerSerializerDeserializer(XyoRsaPublicKey.name, new XyoRsaPublicKeySerializer());
     packer.registerSerializerDeserializer(XyoNextPublicKey.name, new XyoNextPublicKeySerializer());
     packer.registerSerializerDeserializer(XyoPayload.name, new XyoPayloadSerializer());
+
     packer.registerSerializerDeserializer(XyoSingleTypeArrayByte.name, new XyoArraySerializer(0x01, 0x01, 1, true));
-    packer.registerSerializerDeserializer(XyoSingleTypeArrayShort.name, new XyoArraySerializer(0x01, 0x02, 1, true));
-    packer.registerSerializerDeserializer(XyoSingleTypeArrayInt.name, new XyoArraySerializer(0x01, 0x03, 1, true));
+    packer.registerSerializerDeserializer(XyoSingleTypeArrayShort.name, new XyoArraySerializer(0x01, 0x02, 2, true));
+    packer.registerSerializerDeserializer(XyoSingleTypeArrayInt.name, new XyoArraySerializer(0x01, 0x03, 4, true));
+
     packer.registerSerializerDeserializer(XyoMultiTypeArrayByte.name, new XyoArraySerializer(0x01, 0x04, 1, false));
     packer.registerSerializerDeserializer(XyoMultiTypeArrayShort.name, new XyoArraySerializer(0x01, 0x05, 2, false));
     packer.registerSerializerDeserializer(XyoMultiTypeArrayInt.name, new XyoArraySerializer(0x01, 0x06, 4, false));

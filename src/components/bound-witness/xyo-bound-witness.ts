@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 2:00:40 pm
+ * @Last modified time: Tuesday, 18th September 2018 3:40:39 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -76,7 +76,7 @@ export abstract class XyoBoundWitness extends XyoObject {
     const { major, minor } = this.getPublicKeysMajorMinor();
     const publicKeys = new XyoSingleTypeArrayShort(major, minor, this.publicKeys);
 
-    return this.xyoPacker.serialize(publicKeys, major, minor, false);
+    return this.xyoPacker.serialize(publicKeys, publicKeys.major, publicKeys.minor, false);
   }
 
   /**
@@ -89,7 +89,7 @@ export abstract class XyoBoundWitness extends XyoObject {
   public makeSignaturesUntyped(): Buffer {
     const { major, minor } =  this.getSignaturesMajorMinor();
     const signatures = new XyoSingleTypeArrayShort(major, minor, this.signatures);
-    return this.xyoPacker.serialize(signatures, major, minor, false);
+    return this.xyoPacker.serialize(signatures, signatures.major, signatures.minor, false);
   }
 
   /**
@@ -103,7 +103,7 @@ export abstract class XyoBoundWitness extends XyoObject {
     const { major, minor } =  this.getPayloadsMajorMinor();
 
     const payloads = new XyoSingleTypeArrayInt(major, minor, this.payloads);
-    return this.xyoPacker.serialize(payloads, major, minor, false);
+    return this.xyoPacker.serialize(payloads, payloads.major, payloads.minor, false);
   }
 
   /**
@@ -125,13 +125,12 @@ export abstract class XyoBoundWitness extends XyoObject {
     const publicKeysUntyped = this.makePublicKeysUntyped();
     collection.push(publicKeysUntyped);
 
-    const payloadsMajorMinor = this.getPayloadsMajorMinor();
     for (const payload of this.payloads) {
       if (!payload) {
         throw new XyoError(`Payload can't be null`, XyoError.errorType.ERR_CREATOR_MAPPING);
       }
       const payloadData = payload.signedPayload;
-      collection.push(this.xyoPacker.serialize(payloadData, payloadsMajorMinor.major, payloadsMajorMinor.minor, false));
+      collection.push(this.xyoPacker.serialize(payloadData, payloadData.major, payloadData.minor, false));
     }
 
     return Buffer.concat(collection);
@@ -142,7 +141,7 @@ export abstract class XyoBoundWitness extends XyoObject {
    */
 
   private getPublicKeysMajorMinor() {
-    return this.xyoPacker.getMajorMinor(XyoSingleTypeArrayShort.name);
+    return this.xyoPacker.getMajorMinor(XyoKeySet.name);
   }
 
   /**

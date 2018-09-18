@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-archivist.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 2:03:43 pm
+ * @Last modified time: Tuesday, 18th September 2018 5:29:46 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -68,7 +68,7 @@ export class XyoNode {
     private readonly storageProvider: XYOStorageProvider,
     private readonly hashingProvider: XyoHashProvider,
   ) {
-    this.originBlocks = new  XyoOriginChainNavigator(this.xyoPacker, this.storageProvider, this.hashingProvider);
+    this.originBlocks = new XyoOriginChainNavigator(this.xyoPacker, this.storageProvider, this.hashingProvider);
   }
 
   /**
@@ -158,6 +158,7 @@ export class XyoNode {
 
   private async handleBoundWitnessSuccess(boundWitness: XyoBoundWitness): Promise<void> {
     const hashValue = await boundWitness.getHash(this.hashingProvider);
+    logger.info(hashValue.hash.toString('hex'));
     this.originState.newOriginBlock(hashValue);
     await this.originBlocks.addBoundWitness(boundWitness);
 

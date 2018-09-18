@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 2:10:43 pm
+ * @Last modified time: Tuesday, 18th September 2018 2:36:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -77,6 +77,7 @@ export * from '../hash-provider/xyo-sha512-hash-provider';
 export * from '../network/xyo-catalogue-item';
 export * from '../network/xyo-network';
 export * from '../network/tcp-network/xyo-server-tcp-network';
+export * from '../network/tcp-network/xyo-tcp-network-constants';
 
 /* ************************** Storage ************************** */
 export * from '../storage/xyo-storage-provider';
