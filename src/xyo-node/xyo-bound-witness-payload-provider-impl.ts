@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-payload-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 2:16:45 pm
+ * @Last modified time: Wednesday, 19th September 2018 3:18:09 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../components/xyo-object';
-import { XyoOriginChainStateManager } from '../origin-chain/xyo-origin-chain-state-manager';
+import { XyoOriginChainStateInMemoryRepository } from '../origin-chain/xyo-origin-chain-state-in-memory-repository';
 import { XyoPayload } from '../components/xyo-payload';
 import { XyoMultiTypeArrayInt } from '../components/arrays/xyo-multi-type-array-int';
 import { XyoBoundWitnessPayloadProvider } from './xyo-node-types';
@@ -25,14 +25,14 @@ export class XyoBoundWitnessPayloadProviderImpl implements XyoBoundWitnessPayloa
    * inside a bound witness
    */
 
-  public async getPayload(originState: XyoOriginChainStateManager): Promise<XyoPayload> {
+  public async getPayload(originState: XyoOriginChainStateInMemoryRepository): Promise<XyoPayload> {
     const heuristics = await this.getHeuristics();
     const unsignedPayloads: XyoObject[] = ([] as XyoObject[]).concat(heuristics);
     const signedPayloads: XyoObject[] = [];
 
-    const previousHash = originState.previousHash;
-    const index = originState.index;
-    const nextPublicKey = originState.nextPublicKey;
+    const previousHash = await originState.getPreviousHash();
+    const index = await originState.getIndex();
+    const nextPublicKey = await originState.getNextPublicKey();
 
     if (previousHash) {
       signedPayloads.push(previousHash);

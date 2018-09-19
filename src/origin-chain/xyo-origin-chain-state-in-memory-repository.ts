@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-state-manager.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 2:15:36 pm
+ * @Last modified time: Wednesday, 19th September 2018 3:17:09 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,14 +15,15 @@ import { XyoNextPublicKey } from '../components/signing/xyo-next-public-key';
 import { XyoPreviousHash } from '../components/hashing/xyo-previous-hash';
 import { XyoIndex } from '../components/heuristics/numbers/xyo-index';
 import { XyoSigner } from '../signing/xyo-signer';
+import { XyoOriginChainStateRepository } from './xyo-origin-chain-types';
 
 /**
  * Encapsulates the values that go into an origin-chain managements
  */
-export class XyoOriginChainStateManager {
+export class XyoOriginChainStateInMemoryRepository implements XyoOriginChainStateRepository {
 
   /** A next public key value that is only set of if the xyo-node wishes to roll their current key */
-  public nextPublicKey: XyoNextPublicKey | undefined = undefined;
+  private nextPublicKey: XyoNextPublicKey | undefined = undefined;
 
   /** A list of signers to use for signing blocks */
   private readonly currentSigners: XyoSigner[] = [];
@@ -53,7 +54,7 @@ export class XyoOriginChainStateManager {
    * The index, or number of the blocks in the origin chain
    */
 
-  get index () {
+  private get index () {
     return new XyoIndex(this.count + this.indexOffset);
   }
 
@@ -61,7 +62,7 @@ export class XyoOriginChainStateManager {
    * Gets the previous hash value for the origin chain
    */
 
-  get previousHash (): XyoPreviousHash | undefined {
+  private get previousHash (): XyoPreviousHash | undefined {
     const latestHashValue = this.latestHash;
     if (latestHashValue) {
       return new XyoPreviousHash(latestHashValue);
@@ -70,11 +71,27 @@ export class XyoOriginChainStateManager {
     return undefined;
   }
 
+  public async getIndex(): Promise<XyoIndex> {
+    return this.index;
+  }
+
+  public async getPreviousHash(): Promise<XyoPreviousHash | undefined> {
+    return this.previousHash;
+  }
+
+  public async getNextPublicKey(): Promise<XyoNextPublicKey | undefined> {
+    return this.nextPublicKey;
+  }
+
+  public async updateOriginChainState(hash: XyoHash): Promise<void> {
+    this.newOriginBlock(hash);
+  }
+
   /**
    * A list of signers that will be used in signing bound witnesses
    */
 
-  public getSigners(): XyoSigner[] {
+  public async getSigners() {
     return this.currentSigners;
   }
 
@@ -82,7 +99,7 @@ export class XyoOriginChainStateManager {
    * Adds a signer to be used in the next bound-witness interaction
    */
 
-  public addSigner(signer: XyoSigner) {
+  public async addSigner(signer: XyoSigner) {
     const publicKey = signer.publicKey;
     this.nextPublicKey = new XyoNextPublicKey(publicKey);
     this.waitingSigners.push(signer);
@@ -95,7 +112,7 @@ export class XyoOriginChainStateManager {
    * in the future
    */
 
-  public removeOldestSigner() {
+  public async removeOldestSigner() {
     if (this.currentSigners.length > 0) {
       this.currentSigners.splice(0, 1);
     }
@@ -105,7 +122,7 @@ export class XyoOriginChainStateManager {
    * Sets the state so that the chain is ready for a new origin block
    */
 
-  public newOriginBlock(hash: XyoHash) {
+  private newOriginBlock(hash: XyoHash) {
     this.nextPublicKey = undefined;
     this.allHashes.push(hash);
     this.latestHash = hash;
