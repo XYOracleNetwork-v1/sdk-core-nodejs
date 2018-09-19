@@ -4,13 +4,18 @@
  * @Email:  developer@xyfindables.com
  * @Filename: zig-zag-bound-witness.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 3:07:39 pm
+ * @Last modified time: Wednesday, 19th September 2018 1:36:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoZigZagBoundWitness } from '../../components/bound-witness/xyo-zig-zag-bound-witness';
-import { XyoDefaultPackerProvider, XyoRSASha256SignerProvider, XyoPayload, XyoMultiTypeArrayInt, XyoRssi, XyoBoundWitness } from '../../lib';
+import { XyoDefaultPackerProvider } from '../../xyo-packer/xyo-default-packer-provider';
+import { XyoBoundWitness } from '../../components/bound-witness/xyo-bound-witness';
+import { XyoRSASha256SignerProvider } from '../../signing/xyo-rsa-sha256-signer-provider';
+import { XyoPayload } from '../../components/xyo-payload';
+import { XyoMultiTypeArrayInt } from '../../components/arrays/xyo-multi-type-array-int';
+import { XyoRssi } from '../../components/heuristics/numbers/xyo-rssi';
 
 describe(`ZigZagBoundWitness`, () => {
 

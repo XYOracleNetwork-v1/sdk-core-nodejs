@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 3:55:51 pm
+ * @Last modified time: Wednesday, 19th September 2018 1:00:14 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -66,6 +66,7 @@ export class XyoBoundWitnessInteraction {
         if (!disconnected) {
           /** Do step 1 of the bound witness */
           const boundWitnessTransfer1 = await boundWitness.incomingData(undefined, false);
+          logger.info(1, this.xyoPacker.serialize(boundWitness, boundWitness.major, boundWitness.minor, true));
 
           /** Serialize the transfer value */
           const bytes = this.xyoPacker.serialize(
@@ -98,6 +99,7 @@ export class XyoBoundWitnessInteraction {
 
             /** Add transfer to bound witness */
             const transfer = await boundWitness.incomingData(transferObj, false);
+            logger.info(2, this.xyoPacker.serialize(boundWitness, boundWitness.major, boundWitness.minor, true));
 
             if (!disconnected) {
               /** serialize the bound witness transfer */

@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 10:39:49 am
+ * @Last modified time: Wednesday, 19th September 2018 1:36:37 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoHash } from '../../components/hashing/xyo-hash';
 import { XYOSerializer } from '../xyo-serializer';
-import { XyoHashProvider } from '../../lib';
+import { XyoHashProvider } from '../../hash-provider/xyo-hash-provider';
 
 /**
  * The corresponding Creator class for `XyoHash`

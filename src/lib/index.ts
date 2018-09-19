@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 2:36:50 pm
+ * @Last modified time: Wednesday, 19th September 2018 11:00:06 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -96,6 +96,13 @@ export * from '../xyo-node/xyo-bound-witness-interaction';
 export * from '../xyo-node/origin-chain/xyo-origin-block';
 export * from '../xyo-node/origin-chain/xyo-origin-chain-navigator';
 export * from '../xyo-node/origin-chain/xyo-origin-chain-state-manager';
+export * from '../xyo-node/bound-witness-origin-chain-extractor';
+export * from '../xyo-node/xyo-bound-witness-handler-provider-impl';
+export * from '../xyo-node/xyo-bound-witness-payload-provider-impl';
+export * from '../xyo-node/xyo-node-types';
+export * from '../xyo-node/xyo-peer-connection-handler-impl';
+export * from '../xyo-node/xyo-peer-connection-provider-impl';
+export * from '../xyo-node/xyo-peer-connection-provider-factory';
 
 /* ************************** Signing ************************** */
 export * from '../signing/xyo-signer';

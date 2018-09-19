@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-single-type-array-byte-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:56:44 pm
+ * @Last modified time: Wednesday, 19th September 2018 1:48:45 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -41,14 +41,18 @@ export class XyoArraySerializer extends XYOSerializer<XyoArray> {
       this.sizeOfBytesToGetSize
     );
 
-    return new XyoArray(
+    const array = unpackedArray.array;
+
+    const newArray = new XyoArray(
       unpackedArray.majorType || undefined,
       unpackedArray.minorType || undefined,
       this.major,
       this.minor,
       this.sizeOfBytesToGetSize,
-      unpackedArray.array
+      array
     );
+
+    return newArray;
   }
 
   public serialize(xyoArray: XyoArray, xyoPacker: XyoPacker) {

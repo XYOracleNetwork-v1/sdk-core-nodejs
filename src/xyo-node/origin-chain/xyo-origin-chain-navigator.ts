@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: origin-chain-manager.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 5:09:51 pm
+ * @Last modified time: Wednesday, 19th September 2018 12:49:46 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -26,14 +26,15 @@ export class XyoOriginChainNavigator {
    * Creates an instance of a XyoOriginChainNavigator
    *
    * @param xyoPacker a packer for serializing / deserializing values
-   * @param storageProvider A storage provider for storage management
+   * @param originBlocksStorageProvider A storage provider for storage management
    * @param hashingProvider A hashing provider for providing basic hash functionality
    *                        used in blockchain like ways
    */
 
   constructor(
     private readonly xyoPacker: XyoPacker,
-    private readonly storageProvider: XYOStorageProvider,
+    private readonly originBlocksStorageProvider: XYOStorageProvider,
+    private readonly originBlockNextHashStorageProvider: XYOStorageProvider,
     private readonly hashingProvider: XyoHashProvider,
   ) {}
 
@@ -44,7 +45,7 @@ export class XyoOriginChainNavigator {
    */
 
   public removeOriginBlock(originBlockHash: Buffer) {
-    return this.storageProvider.delete(originBlockHash);
+    return this.originBlocksStorageProvider.delete(originBlockHash);
   }
 
   /**
@@ -53,14 +54,14 @@ export class XyoOriginChainNavigator {
    */
 
   public containsOriginBlock (originBlockHash: Buffer) {
-    return this.storageProvider.containsKey(originBlockHash);
+    return this.originBlocksStorageProvider.containsKey(originBlockHash);
   }
 
   /**
    * Returns a list of all of origin blocks in the system
    */
   public getAllOriginBlockHashes() {
-    return this.storageProvider.getAllKeys();
+    return this.originBlocksStorageProvider.getAllKeys();
   }
 
   /**
@@ -69,20 +70,18 @@ export class XyoOriginChainNavigator {
    */
 
   public async addBoundWitness(originBlock: XyoBoundWitness): Promise<XyoError | undefined> {
-    const blockDataValue = this.xyoPacker.serialize(originBlock, originBlock.id[0], originBlock.id[1], false);
+    const blockDataValue = this.xyoPacker.serialize(originBlock, originBlock.major, originBlock.minor, false);
     const blockHash = await originBlock.getHash(this.hashingProvider);
-    const blockHashValue = this.xyoPacker.serialize(blockHash, blockHash.id[0], blockHash.id[1], true);
+    const blockHashValue = this.xyoPacker.serialize(blockHash, blockHash.major, blockHash.minor, true);
 
-    const previousHashesValue = await new XyoOriginBlock(this.xyoPacker, originBlock).findPreviousBlocks();
-    const promises = previousHashesValue.map((hash) => {
+    const previousHashes = await new XyoOriginBlock(this.xyoPacker, originBlock).findPreviousBlocks();
+    const promises = previousHashes.map((hash) => {
       if (!hash) {
         return;
       }
 
-      const mergedHashed = Buffer.concat([Buffer.from([0xFF]), hash]);
-
-      return this.storageProvider.write(
-        mergedHashed,
+      return this.originBlockNextHashStorageProvider.write(
+        hash,
         blockHashValue,
         XyoStorageProviderPriority.PRIORITY_MED,
         true,
@@ -92,7 +91,7 @@ export class XyoOriginChainNavigator {
 
     await Promise.all(promises);
 
-    return this.storageProvider.write(
+    return this.originBlocksStorageProvider.write(
       blockHashValue,
       blockDataValue,
       XyoStorageProviderPriority.PRIORITY_MED,

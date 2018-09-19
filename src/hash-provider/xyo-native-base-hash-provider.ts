@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-hash-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 11:06:48 am
+ * @Last modified time: Wednesday, 19th September 2018 1:35:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,7 @@
 import { XyoHashProvider } from './xyo-hash-provider';
 import { XyoHash } from '../components/hashing/xyo-hash';
 import crypto from 'crypto';
-import { XyoError } from '../lib';
+import { XyoError } from '../components/xyo-error';
 
 /**
  * A hash provider that wraps and utilizes the natives nodejs hash functionality

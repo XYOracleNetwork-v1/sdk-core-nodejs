@@ -4,13 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 10:37:57 am
+ * @Last modified time: Wednesday, 19th September 2018 1:35:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../xyo-object';
-import { XyoHashProvider, XyoError } from '../../lib';
+import { XyoHashProvider } from '../../hash-provider/xyo-hash-provider';
+import { XyoError } from '../xyo-error';
 
 /**
  * Wraps a XyoHash value. Additionally, adds a `verifyHash`
