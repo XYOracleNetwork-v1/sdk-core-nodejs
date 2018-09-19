@@ -4,23 +4,24 @@
  * @Email:  developer@xyfindables.com
  * @Filename: origin-chain-manager.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 12:49:46 pm
+ * @Last modified time: Wednesday, 19th September 2018 2:56:06 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XYOStorageProvider, XyoStorageProviderPriority } from '../../storage/xyo-storage-provider';
-import { XyoBoundWitness } from '../../components/bound-witness/xyo-bound-witness';
-import { XyoError } from '../../components/xyo-error';
+import { XYOStorageProvider, XyoStorageProviderPriority } from '../storage/xyo-storage-provider';
+import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
 import { XyoOriginBlock } from './xyo-origin-block';
-import { XyoHashProvider } from '../../hash-provider/xyo-hash-provider';
-import { XyoPacker } from '../../xyo-packer/xyo-packer';
+import { XyoHashProvider } from '../hash-provider/xyo-hash-provider';
+import { XyoPacker } from '../xyo-packer/xyo-packer';
+import { XyoOriginBlockRepository } from './xyo-origin-chain-types';
+import { XyoHash } from '../components/hashing/xyo-hash';
 
 /**
  * An XyoOriginChainNavigator exposes an api for managing
  * an origin chain
  */
-export class XyoOriginChainNavigator {
+export class XyoOriginBlockLocalStorageRepository implements XyoOriginBlockRepository {
 
   /**
    * Creates an instance of a XyoOriginChainNavigator
@@ -44,7 +45,7 @@ export class XyoOriginChainNavigator {
    * @param originBlockHash The hash of the origin block to remove
    */
 
-  public removeOriginBlock(originBlockHash: Buffer) {
+  public async removeOriginBlock(originBlockHash: Buffer) {
     return this.originBlocksStorageProvider.delete(originBlockHash);
   }
 
@@ -53,14 +54,14 @@ export class XyoOriginChainNavigator {
    * @param originBlockHash The hash of the block to query
    */
 
-  public containsOriginBlock (originBlockHash: Buffer) {
+  public async containsOriginBlock (originBlockHash: Buffer) {
     return this.originBlocksStorageProvider.containsKey(originBlockHash);
   }
 
   /**
    * Returns a list of all of origin blocks in the system
    */
-  public getAllOriginBlockHashes() {
+  public async getAllOriginBlockHashes() {
     return this.originBlocksStorageProvider.getAllKeys();
   }
 
@@ -69,9 +70,8 @@ export class XyoOriginChainNavigator {
    * any indexes that need to be updated
    */
 
-  public async addBoundWitness(originBlock: XyoBoundWitness): Promise<XyoError | undefined> {
+  public async addOriginBlock(blockHash: XyoHash, originBlock: XyoBoundWitness): Promise<void> {
     const blockDataValue = this.xyoPacker.serialize(originBlock, originBlock.major, originBlock.minor, false);
-    const blockHash = await originBlock.getHash(this.hashingProvider);
     const blockHashValue = this.xyoPacker.serialize(blockHash, blockHash.major, blockHash.minor, true);
 
     const previousHashes = await new XyoOriginBlock(this.xyoPacker, originBlock).findPreviousBlocks();
@@ -91,7 +91,7 @@ export class XyoOriginChainNavigator {
 
     await Promise.all(promises);
 
-    return this.originBlocksStorageProvider.write(
+    await this.originBlocksStorageProvider.write(
       blockHashValue,
       blockDataValue,
       XyoStorageProviderPriority.PRIORITY_MED,

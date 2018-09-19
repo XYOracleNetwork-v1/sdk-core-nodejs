@@ -4,15 +4,15 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-block.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 5:09:23 pm
+ * @Last modified time: Wednesday, 19th September 2018 2:15:20 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBoundWitness } from '../../components/bound-witness/xyo-bound-witness';
-import { getBufferHash } from '../../utils/xyo-buffer-utils';
-import { XyoPreviousHash } from '../../components/hashing/xyo-previous-hash';
-import { XyoPacker } from '../../xyo-packer/xyo-packer';
+import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
+import { getBufferHash } from '../utils/xyo-buffer-utils';
+import { XyoPreviousHash } from '../components/hashing/xyo-previous-hash';
+import { XyoPacker } from '../xyo-packer/xyo-packer';
 
 /**
  * An XyoOriginBlock represents a single block in an origin chain belonging to a

@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-payload-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 10:57:44 am
+ * @Last modified time: Wednesday, 19th September 2018 2:16:45 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../components/xyo-object';
-import { XyoOriginChainStateManager } from './origin-chain/xyo-origin-chain-state-manager';
+import { XyoOriginChainStateManager } from '../origin-chain/xyo-origin-chain-state-manager';
 import { XyoPayload } from '../components/xyo-payload';
 import { XyoMultiTypeArrayInt } from '../components/arrays/xyo-multi-type-array-int';
 import { XyoBoundWitnessPayloadProvider } from './xyo-node-types';

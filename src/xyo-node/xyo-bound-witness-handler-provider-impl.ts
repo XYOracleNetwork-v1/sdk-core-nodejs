@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 10:57:48 am
+ * @Last modified time: Wednesday, 19th September 2018 2:57:49 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,10 +15,10 @@ import { XyoNetworkPipe } from '../network/xyo-network';
 import { XyoBoundWitnessInteraction } from './xyo-bound-witness-interaction';
 import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
 import { XyoHashProvider } from '../hash-provider/xyo-hash-provider';
-import { XyoOriginChainStateManager } from './origin-chain/xyo-origin-chain-state-manager';
-import { XyoOriginChainNavigator } from './origin-chain/xyo-origin-chain-navigator';
+import { XyoOriginChainStateManager } from '../origin-chain/xyo-origin-chain-state-manager';
 import { extractNestedBoundWitnesses } from './bound-witness-origin-chain-extractor';
 import { XyoBoundWitnessHandlerProvider, XyoBoundWitnessPayloadProvider } from './xyo-node-types';
+import { XyoOriginBlockRepository } from '../origin-chain/xyo-origin-chain-types';
 
 export class XyoBoundWitnessHandlerProviderImpl implements XyoBoundWitnessHandlerProvider {
 
@@ -27,7 +27,7 @@ export class XyoBoundWitnessHandlerProviderImpl implements XyoBoundWitnessHandle
     private readonly signers: XyoSigner[],
     private readonly hashingProvider: XyoHashProvider,
     private readonly originState: XyoOriginChainStateManager,
-    private readonly originChainNavigator: XyoOriginChainNavigator,
+    private readonly originChainNavigator: XyoOriginBlockRepository,
     private readonly boundWitnessPayloadProvider: XyoBoundWitnessPayloadProvider
   ) {}
 
@@ -53,11 +53,12 @@ export class XyoBoundWitnessHandlerProviderImpl implements XyoBoundWitnessHandle
   private async handleBoundWitnessSuccess(boundWitness: XyoBoundWitness): Promise<void> {
     const hashValue = await boundWitness.getHash(this.hashingProvider);
     this.originState.newOriginBlock(hashValue);
-    await this.originChainNavigator.addBoundWitness(boundWitness);
+    await this.originChainNavigator.addOriginBlock(hashValue, boundWitness);
     const nestedBoundWitnesses = extractNestedBoundWitnesses(boundWitness, this.xyoPacker);
 
-    await Promise.all(nestedBoundWitnesses.map((nestedBoundWitness) => {
-      return this.originChainNavigator.addBoundWitness(nestedBoundWitness);
+    await Promise.all(nestedBoundWitnesses.map(async (nestedBoundWitness) => {
+      const nestedHashValue = await nestedBoundWitness.getHash(this.hashingProvider);
+      return this.originChainNavigator.addOriginBlock(nestedHashValue, nestedBoundWitness);
     }));
 
     return;
