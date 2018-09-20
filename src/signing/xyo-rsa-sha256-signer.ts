@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha256-signer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 4:42:31 pm
+ * @Last modified time: Thursday, 20th September 2018 9:39:48 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,9 +20,12 @@ import { XyoSigner } from './xyo-signer';
  * encapsulates a crypto keypair. However it delegates all the
  * public interface methods to services that actually provide the
  * crypto functionality.
+ *
+ * @major: 0x06
+ * @major: 0x06
  */
 
-export class XyoRSASha256Signer implements XyoSigner {
+export class XyoRSASha256Signer extends XyoObject implements XyoSigner {
 
   /**
    * Creates a new instance of XyoRSASha256Signer
@@ -37,7 +40,9 @@ export class XyoRSASha256Signer implements XyoSigner {
     private readonly getModulus: () => Buffer,
     private readonly verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
     private readonly getPrivateKey: () => any
-  ) {}
+  ) {
+    super(0x06, 0x06);
+  }
 
   /**
    * Signs a piece of data

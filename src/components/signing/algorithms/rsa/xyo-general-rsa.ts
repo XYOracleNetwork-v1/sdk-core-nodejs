@@ -17,7 +17,7 @@ import { XyoSigner } from '../../../../signing/xyo-signer';
 
 export abstract class XyoGeneralRsa extends XyoSigner {
 
-  constructor (public readonly keySize: number) {
-    super();
+  constructor (public readonly keySize: number, major: number, minor: number) {
+    super(major, minor);
   }
 }

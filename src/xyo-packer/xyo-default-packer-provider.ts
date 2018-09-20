@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 1:36:48 pm
+ * @Last modified time: Thursday, 20th September 2018 2:03:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -54,6 +54,11 @@ import { XyoSha512HashProvider } from '../hash-provider/xyo-sha512-hash-provider
 import { XyoRSASha256Signature } from '../components/signing/algorithms/rsa/xyo-rsa-sha256-signature';
 import { XyoRSASha256SignerProvider } from '../signing/xyo-rsa-sha256-signer-provider';
 import { XyoRsaSignatureSerializer } from './serializers/xyo-rsa-signature-serializer';
+import { XyoRsaSha256SignerSerializer } from './serializers/xyo-rsa-sha256-signer-serializer';
+import { XyoRSASha256Signer } from '../signing/xyo-rsa-sha256-signer';
+import { XyoEcSecp256kSignerSerializer } from './serializers/xyo-ec-secp-256k-serializer';
+import { XyoEcSecp256kSignerProvider } from '../signing/xyo-ec-secp-256k-signer-provider';
+import { XyoEcdsaSignatureSerializer } from '../lib';
 
 /**
  * A class for configuring the packing, serialization, and deserialization
@@ -64,6 +69,9 @@ export class XyoDefaultPackerProvider {
 
   public getXyoPacker() {
     const packer = new XyoPacker();
+
+    const sha256HashProvider = new XyoSha256HashProvider();
+    const sha1HashProvider = new XyoSha1HashProvider();
 
     packer.registerSerializerDeserializer(XyoKeySet.name, new XyoKeySetSerializer());
     packer.registerSerializerDeserializer(XyoSignatureSet.name, new XyoSignatureSetSerializer());
@@ -97,7 +105,7 @@ export class XyoDefaultPackerProvider {
 
     packer.registerSerializerDeserializer(
       XyoSha1Hash.name,
-      new XyoHashSerializer(0x03, 20, new XyoSha1HashProvider(), XyoSha1Hash)
+      new XyoHashSerializer(0x03, 20, sha1HashProvider, XyoSha1Hash)
     );
 
     packer.registerSerializerDeserializer(
@@ -107,7 +115,7 @@ export class XyoDefaultPackerProvider {
 
     packer.registerSerializerDeserializer(
       XyoSha256Hash.name,
-      new XyoHashSerializer(0x05, 32, new XyoSha256HashProvider(), XyoSha256Hash)
+      new XyoHashSerializer(0x05, 32, sha256HashProvider, XyoSha256Hash)
     );
 
     packer.registerSerializerDeserializer(
@@ -120,6 +128,32 @@ export class XyoDefaultPackerProvider {
     packer.registerSerializerDeserializer(XyoRSASha256Signature.name,
       new XyoRsaSignatureSerializer(0x08, rsaSha256SignerProvider, XyoRSASha256Signature)
     );
+
+    packer.registerSerializerDeserializer(XyoRSASha256Signer.name,
+      new XyoRsaSha256SignerSerializer(rsaSha256SignerProvider)
+    );
+
+    const ecSecp256kSha256SignerProvider = new XyoEcSecp256kSignerProvider(sha256HashProvider, 0x06, 0x01, 0x05, 0x01);
+    packer.registerSerializerDeserializer(XyoRSASha256Signer.name,
+      new XyoEcSecp256kSignerSerializer(0x01, ecSecp256kSha256SignerProvider)
+    );
+
+    const ecSecp256kSha1SignerProvider = new XyoEcSecp256kSignerProvider(sha1HashProvider, 0x06, 0x02, 0x05, 0x012);
+    packer.registerSerializerDeserializer(XyoRSASha256Signer.name,
+      new XyoEcSecp256kSignerSerializer(0x01, ecSecp256kSha1SignerProvider)
+    );
+
+    packer.registerSerializerDeserializer('XyoECDSASecp256k1Sha256Signature',
+      new XyoEcdsaSignatureSerializer(
+        0x01,
+        ecSecp256kSha256SignerProvider.verifySign.bind(ecSecp256kSha256SignerProvider)
+    ));
+
+    packer.registerSerializerDeserializer('XyoECDSASecp256k1Sha1Signature',
+      new XyoEcdsaSignatureSerializer(
+        0x02,
+        ecSecp256kSha1SignerProvider.verifySign.bind(ecSecp256kSha256SignerProvider)
+    ));
 
     return packer;
   }

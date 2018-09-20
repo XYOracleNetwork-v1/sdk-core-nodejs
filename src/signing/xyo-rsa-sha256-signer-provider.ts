@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha256-signer-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 4:43:43 pm
+ * @Last modified time: Thursday, 20th September 2018 10:30:16 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -26,7 +26,7 @@ export class XyoRSASha256SignerProvider implements XyoSignerProvider {
    */
 
   public newInstance(fromPrivateKey?: any) {
-    const key = fromPrivateKey ? new NodeRSA(fromPrivateKey) : new NodeRSA({ b: 2048 });
+    const key = fromPrivateKey ? new NodeRSA(fromPrivateKey, 'pkcs8-private-pem') : new NodeRSA({ b: 2048 });
 
     return new XyoRSASha256Signer(
       // getSignature
@@ -39,7 +39,7 @@ export class XyoRSASha256SignerProvider implements XyoSignerProvider {
       this.verifySign,
 
       // getPrivateKey
-      () => key.exportKey('pkcs1-private-pem')
+      () => key.exportKey('pkcs8-private-pem')
     );
   }
 

@@ -4,17 +4,22 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-signature-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:56:46 pm
+ * @Last modified time: Thursday, 20th September 2018 1:54:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoEcdsaSignature } from '../../components/signing/algorithms/ecc/xyo-ecdsa-signature';
 import { XYOSerializer } from '../xyo-serializer';
+import { XyoSignature } from '../../components/signing/xyo-signature';
+import { XyoObject } from '../../components/xyo-object';
 
-export class XyoEcdsaSignatureCreator extends XYOSerializer<XyoEcdsaSignature> {
+export class XyoEcdsaSignatureSerializer extends XYOSerializer<XyoEcdsaSignature> {
 
-  constructor(private readonly minor: number) {
+  constructor(
+    private readonly minor: number,
+    private readonly verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
+  ) {
     super();
   }
 
@@ -29,18 +34,12 @@ export class XyoEcdsaSignatureCreator extends XYOSerializer<XyoEcdsaSignature> {
   public deserialize(buffer: Buffer) {
     return new XyoEcdsaSignature(
       buffer.slice(1),
-      Buffer.from([this.description.major, this.minor])
+      Buffer.from([this.description.major, this.minor]),
+      this.verifySign
     );
   }
 
   public serialize(ecdsaSignature: XyoEcdsaSignature) {
     return ecdsaSignature.signature;
-  }
-
-  public createFromPacked(buffer: Buffer) {
-    return new XyoEcdsaSignature(
-      buffer.slice(1),
-      Buffer.from([this.description.major, this.description.minor])
-    );
   }
 }

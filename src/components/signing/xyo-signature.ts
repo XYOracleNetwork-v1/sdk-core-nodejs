@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 1:21:22 pm
+ * @Last modified time: Thursday, 20th September 2018 1:47:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -22,4 +22,12 @@ export abstract class XyoSignature extends XyoObject {
    */
 
   public abstract encodedSignature: Buffer;
+
+  /**
+   * Verifies that this signature is valid
+   *
+   * @param data The data that was signed
+   * @param publicKey The public key associated with the crypto key-pair
+   */
+  public abstract verify (data: Buffer, publicKey: XyoObject): Promise<boolean>;
 }

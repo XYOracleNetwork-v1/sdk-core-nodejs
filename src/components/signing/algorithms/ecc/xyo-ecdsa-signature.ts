@@ -4,12 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 12:57:52 pm
+ * @Last modified time: Thursday, 20th September 2018 1:49:08 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoSignature } from '../../xyo-signature';
+import { XyoObject } from '../../../xyo-object';
 
 /**
  * A pojo for Ecdsa Signatures
@@ -23,7 +24,11 @@ export class XyoEcdsaSignature extends XyoSignature {
    * @param rawId
    */
 
-  constructor(public readonly signature: Buffer, rawId: Buffer) {
+  constructor(
+    public readonly signature: Buffer,
+    rawId: Buffer,
+    private readonly verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
+  ) {
     super(rawId[0], rawId[1]);
   }
 
@@ -33,5 +38,16 @@ export class XyoEcdsaSignature extends XyoSignature {
 
   get encodedSignature () {
     return this.signature;
+  }
+
+  /**
+   * Verifies that this signature is valid
+   *
+   * @param data The data that was signed
+   * @param publicKey The public key associated with the crypto key-pair
+   */
+
+  public async verify (data: Buffer, publicKey: XyoObject): Promise<boolean> {
+    return this.verifySign(this, data, publicKey);
   }
 }

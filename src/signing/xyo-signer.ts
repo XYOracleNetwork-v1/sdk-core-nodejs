@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 4:42:11 pm
+ * @Last modified time: Thursday, 20th September 2018 9:33:54 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -16,7 +16,7 @@ import { XyoObject } from '../components/xyo-object';
  * in signing data and sharing public keys in the xyo protocol
  */
 
-export abstract class XyoSigner {
+export abstract class XyoSigner extends XyoObject {
 
   /**
    * Subclasses will return the publicKey of the crypto key pair
