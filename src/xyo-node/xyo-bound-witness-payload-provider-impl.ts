@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-payload-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 3:18:09 pm
+ * @Last modified time: Wednesday, 19th September 2018 5:47:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,6 +14,7 @@ import { XyoOriginChainStateInMemoryRepository } from '../origin-chain/xyo-origi
 import { XyoPayload } from '../components/xyo-payload';
 import { XyoMultiTypeArrayInt } from '../components/arrays/xyo-multi-type-array-int';
 import { XyoBoundWitnessPayloadProvider } from './xyo-node-types';
+import { XyoOriginChainStateRepository } from '../origin-chain/xyo-origin-chain-types';
 
 export class XyoBoundWitnessPayloadProviderImpl implements XyoBoundWitnessPayloadProvider {
 
@@ -25,7 +26,7 @@ export class XyoBoundWitnessPayloadProviderImpl implements XyoBoundWitnessPayloa
    * inside a bound witness
    */
 
-  public async getPayload(originState: XyoOriginChainStateInMemoryRepository): Promise<XyoPayload> {
+  public async getPayload(originState: XyoOriginChainStateRepository): Promise<XyoPayload> {
     const heuristics = await this.getHeuristics();
     const unsignedPayloads: XyoObject[] = ([] as XyoObject[]).concat(heuristics);
     const signedPayloads: XyoObject[] = [];

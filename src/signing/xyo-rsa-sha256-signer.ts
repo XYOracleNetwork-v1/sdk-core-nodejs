@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha256-signer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 2:03:19 pm
+ * @Last modified time: Wednesday, 19th September 2018 4:42:31 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -35,7 +35,8 @@ export class XyoRSASha256Signer implements XyoSigner {
   constructor (
     private readonly getSignature: (data: Buffer) => Buffer,
     private readonly getModulus: () => Buffer,
-    private readonly verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
+    private readonly verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
+    private readonly getPrivateKey: () => any
   ) {}
 
   /**
@@ -57,5 +58,9 @@ export class XyoRSASha256Signer implements XyoSigner {
   get publicKey() {
     const modulus = this.getModulus();
     return new XyoRsaPublicKey(modulus);
+  }
+
+  get privateKey() {
+    return this.getPrivateKey();
   }
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 1:59:20 pm
+ * @Last modified time: Wednesday, 19th September 2018 4:42:11 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -23,6 +23,12 @@ export abstract class XyoSigner {
    */
 
   public abstract publicKey: XyoObject;
+
+  /**
+   * This should return the private key
+   */
+
+  public abstract privateKey: any;
 
   /**
    * Signs an arbitrary data blob

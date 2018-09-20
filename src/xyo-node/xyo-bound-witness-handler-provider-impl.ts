@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 3:17:28 pm
+ * @Last modified time: Wednesday, 19th September 2018 5:46:58 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,10 +15,9 @@ import { XyoNetworkPipe } from '../network/xyo-network';
 import { XyoBoundWitnessInteraction } from './xyo-bound-witness-interaction';
 import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
 import { XyoHashProvider } from '../hash-provider/xyo-hash-provider';
-import { XyoOriginChainStateInMemoryRepository } from '../origin-chain/xyo-origin-chain-state-in-memory-repository';
 import { extractNestedBoundWitnesses } from './bound-witness-origin-chain-extractor';
 import { XyoBoundWitnessHandlerProvider, XyoBoundWitnessPayloadProvider } from './xyo-node-types';
-import { XyoOriginBlockRepository } from '../origin-chain/xyo-origin-chain-types';
+import { XyoOriginBlockRepository, XyoOriginChainStateRepository } from '../origin-chain/xyo-origin-chain-types';
 
 export class XyoBoundWitnessHandlerProviderImpl implements XyoBoundWitnessHandlerProvider {
 
@@ -26,7 +25,7 @@ export class XyoBoundWitnessHandlerProviderImpl implements XyoBoundWitnessHandle
     private readonly xyoPacker: XyoPacker,
     private readonly signers: XyoSigner[],
     private readonly hashingProvider: XyoHashProvider,
-    private readonly originState: XyoOriginChainStateInMemoryRepository,
+    private readonly originState: XyoOriginChainStateRepository,
     private readonly originChainNavigator: XyoOriginBlockRepository,
     private readonly boundWitnessPayloadProvider: XyoBoundWitnessPayloadProvider
   ) {}

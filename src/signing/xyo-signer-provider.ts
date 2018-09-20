@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signer-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 2:00:19 pm
+ * @Last modified time: Wednesday, 19th September 2018 4:36:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -21,7 +21,7 @@ export interface XyoSignerProvider {
   /**
    * Returns a new instance of a signer
    */
-  newInstance(): XyoSigner;
+  newInstance(fromPrivateKey?: any): XyoSigner;
 
   /**
    * Verifies a a signature given the data that was signed, and a public key

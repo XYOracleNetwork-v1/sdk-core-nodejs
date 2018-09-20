@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ec-secp-256k.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 2:01:06 pm
+ * @Last modified time: Wednesday, 19th September 2018 5:17:30 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -44,6 +44,10 @@ export class XyoEcSecp256k extends XyoSigner {
       pk.y.toBuffer(),
       Buffer.from([0x04, 0x01])
     );
+  }
+
+  get privateKey () {
+    return; // TODO
   }
 
   /**
