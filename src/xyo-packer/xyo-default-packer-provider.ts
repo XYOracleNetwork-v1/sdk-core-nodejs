@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 20th September 2018 2:03:51 pm
+ * @Last modified time: Thursday, 20th September 2018 4:21:41 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -58,7 +58,7 @@ import { XyoRsaSha256SignerSerializer } from './serializers/xyo-rsa-sha256-signe
 import { XyoRSASha256Signer } from '../signing/xyo-rsa-sha256-signer';
 import { XyoEcSecp256kSignerSerializer } from './serializers/xyo-ec-secp-256k-serializer';
 import { XyoEcSecp256kSignerProvider } from '../signing/xyo-ec-secp-256k-signer-provider';
-import { XyoEcdsaSignatureSerializer } from '../lib';
+import { XyoEcdsaSignatureSerializer } from './serializers/xyo-ecdsa-signature-serializer';
 
 /**
  * A class for configuring the packing, serialization, and deserialization

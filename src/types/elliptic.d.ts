@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: elliptic.d.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 20th September 2018 2:20:12 pm
+ * @Last modified time: Thursday, 20th September 2018 3:36:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -44,6 +44,7 @@ declare module 'elliptic' {
     getPublic(encoding: string): string;
     getPrivate(encoding: string): string;
     _importPublic(publicKey: EllipticPublicKey): void;
+    verify(message: Buffer, signature: Uint8Array): Promise<boolean>;
   }
 
   class EllipticCurve {

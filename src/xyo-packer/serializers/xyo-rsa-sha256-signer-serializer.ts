@@ -4,13 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha256-signer-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 20th September 2018 1:58:45 pm
+ * @Last modified time: Thursday, 20th September 2018 4:21:25 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XYOSerializer } from '../xyo-serializer';
-import { XyoRSASha256Signer, XyoRSASha256SignerProvider } from '../../lib';
+import { XyoRSASha256SignerProvider } from '../../signing/xyo-rsa-sha256-signer-provider';
+import { XyoRSASha256Signer } from '../../signing/xyo-rsa-sha256-signer';
 
 /**
  * This isn't intended to be used across platforms. Its a simple insecure way of storing

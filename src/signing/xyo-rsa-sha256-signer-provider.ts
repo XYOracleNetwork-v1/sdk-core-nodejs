@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha256-signer-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 20th September 2018 10:30:16 am
+ * @Last modified time: Thursday, 20th September 2018 4:20:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,6 +14,7 @@ import { XyoSignature } from '../components/signing/xyo-signature';
 import { XyoObject } from '../components/xyo-object';
 import NodeRSA from 'node-rsa';
 import { XyoSignerProvider } from './xyo-signer-provider';
+import { XyoRsaPublicKey } from '../components/signing/algorithms/rsa/xyo-rsa-public-key';
 
 /**
  * A service for providing RSA-SHA-256 signing services
@@ -52,6 +53,13 @@ export class XyoRSASha256SignerProvider implements XyoSignerProvider {
    */
 
   public async verifySign(signature: XyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {
-    return true; // TODO BIG TODO
+    const rsaPubKey = publicKey as XyoRsaPublicKey;
+    const key = new NodeRSA();
+    key.importKey({
+      n: rsaPubKey.modulus,
+      e: rsaPubKey.publicExponent
+    });
+
+    return key.verify(data, signature.encodedSignature);
   }
 }

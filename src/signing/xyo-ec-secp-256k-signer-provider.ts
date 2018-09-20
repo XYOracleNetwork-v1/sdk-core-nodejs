@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha256-signer-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 20th September 2018 2:15:21 pm
+ * @Last modified time: Thursday, 20th September 2018 4:18:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,6 +15,7 @@ import { XyoSignerProvider } from './xyo-signer-provider';
 import { ec as EC, EllipticKey } from 'elliptic';
 import { XyoEcSecp256k } from '../components/signing/algorithms/ecc/xyo-ec-secp-256k';
 import { XyoHashProvider } from '../hash-provider/xyo-hash-provider';
+import { XyoUncompressedEcPublicKey } from '../components/signing/algorithms/ecc/xyo-uncompressed-ec-public-key';
 
 const ec = new EC('secp256k1');
 
@@ -36,7 +37,7 @@ export class XyoEcSecp256kSignerProvider implements XyoSignerProvider {
    * Returns a new instance of a signer
    */
 
-  public newInstance(fromHexKey: string) {
+  public newInstance(fromHexKey?: string) {
     let key: EllipticKey;
 
     if (fromHexKey) {
@@ -82,14 +83,48 @@ export class XyoEcSecp256kSignerProvider implements XyoSignerProvider {
    */
 
   public async verifySign(signature: XyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {
-    return true; // TODO BIG TODO
+    const uncompressedEcPublicKey = publicKey as XyoUncompressedEcPublicKey;
+    const x = uncompressedEcPublicKey.x.toString('hex');
+    const y = uncompressedEcPublicKey.y.toString('hex');
+    const hexKey = ['04', x, y].join('');
+    const key = ec.keyFromPublic(hexKey, 'hex');
+    return key.verify(data, this.buildDER(signature.encodedSignature));
   }
 
   private getSignFn(key: EllipticKey) {
     return async (data: Buffer) => {
       const xyoHash = await this.hashProvider.createHash(data);
       const signature = key.sign(xyoHash.hash);
-      return Buffer.concat([signature.r.toBuffer(), signature.s.toBuffer()]);
+      const rBuffer = signature.r.toBuffer();
+      const sBuffer = signature.s.toBuffer();
+
+      return Buffer.concat([
+        Buffer.from([rBuffer.length]),
+        rBuffer,
+        Buffer.from([sBuffer.length]),
+        sBuffer
+      ]);
     };
+  }
+
+  private buildDER(xyBuffer: Buffer) {
+    const sizeOfR = xyBuffer.readUInt8(0);
+    const rBuffer = xyBuffer.slice(1, sizeOfR + 1);
+
+    const source = Buffer.concat([
+      Buffer.from([0x02]),
+      xyBuffer.slice(0, 1),
+      rBuffer,
+      Buffer.from([0x02]),
+      xyBuffer.slice(sizeOfR + 1),
+    ]);
+
+    const sourceBufferSizeBuffer = new Buffer(1);
+    sourceBufferSizeBuffer.writeUInt8(source.length, 0);
+    return new Uint8Array(Buffer.concat([
+      Buffer.from([0x30]),
+      sourceBufferSizeBuffer,
+      source
+    ]));
   }
 }
