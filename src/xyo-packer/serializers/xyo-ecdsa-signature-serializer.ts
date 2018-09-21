@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-signature-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 20th September 2018 1:54:02 pm
+ * @Last modified time: Friday, 21st September 2018 12:24:09 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -27,7 +27,8 @@ export class XyoEcdsaSignatureSerializer extends XYOSerializer<XyoEcdsaSignature
     return {
       major: 0x05,
       minor: this.minor,
-      sizeOfBytesToGetSize: 1
+      sizeOfBytesToGetSize: 1,
+      sizeIdentifierSize: 1
     };
   }
 

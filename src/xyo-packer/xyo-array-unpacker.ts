@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-unpacker.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 14th September 2018 3:31:17 pm
+ * @Last modified time: Friday, 21st September 2018 12:14:04 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -71,14 +71,14 @@ export class XyoArrayUnpacker {
     const typeObject = this.xyoPacker.getSerializerByMajorMinor(major, minor);
 
     if (typeObject) {
-      const sizeOfBytesToReadValue = typeObject.sizeOfBytesToRead;
+      const sizeOfBytesToRead = typeObject.sizeOfBytesToRead;
 
-      if ((sizeOfBytesToReadValue + this.currentPosition) > this.data.length) {
+      if ((sizeOfBytesToRead + this.currentPosition) > this.data.length) {
         return null;
       }
 
       return typeObject.readSize(
-        this.data.slice(this.currentPosition, this.currentPosition + sizeOfBytesToReadValue),
+        this.data.slice(this.currentPosition, this.currentPosition + sizeOfBytesToRead),
         this.xyoPacker
       );
     }

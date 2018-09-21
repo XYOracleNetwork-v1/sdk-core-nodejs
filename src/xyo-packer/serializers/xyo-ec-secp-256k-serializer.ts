@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ec-secp-256k-signer-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 20th September 2018 1:59:33 pm
+ * @Last modified time: Friday, 21st September 2018 12:23:30 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -26,7 +26,8 @@ export class XyoEcSecp256kSignerSerializer extends XYOSerializer<XyoEcSecp256k> 
     return {
       major: 0x06,
       minor: this.minor,
-      sizeOfBytesToGetSize: 1
+      sizeOfBytesToGetSize: 1,
+      sizeIdentifierSize: 1
     };
   }
 

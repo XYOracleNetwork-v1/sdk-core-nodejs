@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-payload-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 3:36:54 pm
+ * @Last modified time: Friday, 21st September 2018 12:27:43 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -49,7 +49,8 @@ export class XyoPayloadSerializer extends XYOSerializer<XyoPayload> {
     return {
       major: 0x02,
       minor: 0x04,
-      sizeOfBytesToGetSize: 4
+      sizeOfBytesToGetSize: 4,
+      sizeIdentifierSize: 4
     };
   }
 }

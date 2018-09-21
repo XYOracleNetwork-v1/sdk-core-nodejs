@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-key-set-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:56:48 pm
+ * @Last modified time: Friday, 21st September 2018 12:25:34 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,7 +20,8 @@ export class XyoKeySetSerializer extends XYOSerializer<XyoKeySet> {
     return {
       major: 0x02,
       minor: 0x02,
-      sizeOfBytesToGetSize: 2
+      sizeOfBytesToGetSize: 2,
+      sizeIdentifierSize: 2
     };
   }
 

@@ -20,7 +20,8 @@ export class XyoSignatureSetSerializer extends XYOSerializer<XyoSignatureSet> {
     return {
       major: 0x02,
       minor: 0x03,
-      sizeOfBytesToGetSize: 2
+      sizeOfBytesToGetSize: 2,
+      sizeIdentifierSize: 2
     };
   }
 

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-signature-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 2:05:19 pm
+ * @Last modified time: Friday, 21st September 2018 12:29:29 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -34,7 +34,8 @@ export class XyoRsaSignatureSerializer extends XYOSerializer<XyoRsaSignature> {
     return {
       major: 0x05,
       minor: this.minor,
-      sizeOfBytesToGetSize: 2
+      sizeOfBytesToGetSize: 2,
+      sizeIdentifierSize: 2
     };
   }
 

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 1:36:37 pm
+ * @Last modified time: Friday, 21st September 2018 12:24:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,7 +32,8 @@ export class XyoHashSerializer extends XYOSerializer<XyoHash> {
     return {
       major: 0x03,
       minor: this.minor,
-      staticSize: this.staticSize
+      staticSize: this.staticSize,
+      sizeIdentifierSize: 0
     };
   }
 

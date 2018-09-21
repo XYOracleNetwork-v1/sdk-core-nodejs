@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 10:56:02 am
+ * @Last modified time: Friday, 21st September 2018 12:55:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -111,13 +111,15 @@ export class XyoPacker extends XyoBase {
         // Get index and assert the index is in range of the underlying data collection
         const index = this.serializerDeserializerMajorMinorIndex[major][minor];
         if (index < this.serializerDeserializersCollection.length) {
-
+          const srcBuffer = buffer.slice(2);
           // Attempt to serialize
           try {
             const serializer = this.serializerDeserializersCollection[index];
-            return serializer.deserialize(buffer.slice(2), this);
+            return serializer.deserialize(srcBuffer, this);
           } catch (err) {
-            this.logError(`There was an attempting to deserialize an object with major ${major}, minor ${minor}`);
+            const errorMessage = `An error occurred deserializing an object with major ${major}, minor ${minor}.
+            \n\nHexBuffer: ${srcBuffer.toString('hex')}`;
+            this.logError(errorMessage);
             throw err;
           }
         }
@@ -199,21 +201,21 @@ export class XyoPacker extends XyoBase {
   }
 
   private encodedSize(sizeOfData: number, config: XYOSerializer<XyoObject>) {
-    if (!config.sizeOfBytesToRead) {
+    if (!config.sizeIdentifierSize) {
       return new Buffer(0);
     }
 
-    const buffer = new Buffer(config.sizeOfBytesToRead || 0);
+    const buffer = new Buffer(config.sizeIdentifierSize || 0);
 
-    switch (config.sizeOfBytesToRead) {
+    switch (config.sizeIdentifierSize) {
       case 1:
-        buffer.writeUInt8(sizeOfData + (config.sizeOfBytesToRead || 0), 0);
+        buffer.writeUInt8(sizeOfData + (config.sizeIdentifierSize || 0), 0);
         break;
       case 2:
-        buffer.writeUInt16BE(sizeOfData + (config.sizeOfBytesToRead || 0), 0);
+        buffer.writeUInt16BE(sizeOfData + (config.sizeIdentifierSize || 0), 0);
         break;
       case 4:
-        buffer.writeUInt32BE(sizeOfData + (config.sizeOfBytesToRead || 0), 0);
+        buffer.writeUInt32BE(sizeOfData + (config.sizeIdentifierSize || 0), 0);
         break;
     }
 
