@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: file-system.storage.provider.impl.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 5:09:50 pm
+ * @Last modified time: Friday, 21st September 2018 9:51:13 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -30,7 +30,7 @@ export class XyoFileSystemStorageProvider implements XYOStorageProvider {
    * @throws Will throw an `XyoError` if the folder does not exist
    */
 
-  constructor(private readonly dataFolder: string) {
+  constructor(private readonly dataFolder: string, private readonly fileNameEncoding: 'hex' | 'utf8') {
     try {
       fs.readdirSync(dataFolder);
     } catch (e) {
@@ -57,7 +57,7 @@ export class XyoFileSystemStorageProvider implements XYOStorageProvider {
     timeout: number
   ): Promise<XyoError | undefined> {
     return new Promise((resolve, reject) => {
-      fs.writeFile(path.join(this.dataFolder, key.toString('hex')), value, (err) => {
+      fs.writeFile(path.join(this.dataFolder, key.toString(this.fileNameEncoding)), value, (err) => {
         if (err) {
           const e = new XyoError(`Could not save file: ${err.message}`, XyoError.errorType.ERR_CRITICAL, err);
           return reject(e);
@@ -78,7 +78,7 @@ export class XyoFileSystemStorageProvider implements XYOStorageProvider {
 
   public read(key: Buffer, timeout: number): Promise<Buffer | undefined> {
     return new Promise((resolve, reject) => {
-      fs.readFile(path.join(this.dataFolder, key.toString('hex')), (err, data) => {
+      fs.readFile(path.join(this.dataFolder, key.toString(this.fileNameEncoding)), (err, data) => {
         if (err) {
           const e = new XyoError(`Could not read file: ${err.message}`, XyoError.errorType.ERR_CRITICAL, err);
           return reject(e);
@@ -115,7 +115,7 @@ export class XyoFileSystemStorageProvider implements XYOStorageProvider {
 
   public delete(key: Buffer): Promise<void> {
     return new Promise((resolve, reject) => {
-      fs.unlink(path.join(this.dataFolder, key.toString('hex')), (err) => {
+      fs.unlink(path.join(this.dataFolder, key.toString(this.fileNameEncoding)), (err) => {
         if (err) {
           const e = new XyoError(`Could not delete data file: ${err.message}`, XyoError.errorType.ERR_CRITICAL, err);
           return reject(e);
@@ -133,7 +133,7 @@ export class XyoFileSystemStorageProvider implements XYOStorageProvider {
 
   public containsKey(key: Buffer): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      fs.access(path.join(this.dataFolder, key.toString('hex')), fs.constants.F_OK, (err) => {
+      fs.access(path.join(this.dataFolder, key.toString(this.fileNameEncoding)), fs.constants.F_OK, (err) => {
         return Boolean(err);
       });
     });

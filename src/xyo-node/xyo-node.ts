@@ -4,14 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-archivist.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 10:48:44 am
+ * @Last modified time: Friday, 21st September 2018 10:55:56 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoPeerConnectionDelegate } from './xyo-node-types';
-
-const logger = console;
+import { XyoBase } from '../components/xyo-base';
 
 /**
  * An XyoNode represents a node in the xyo-network system.
@@ -21,13 +20,15 @@ const logger = console;
  * and what their prerogative is at any given time.
  */
 
-export class XyoNode {
+export class XyoNode extends XyoBase {
 
   /** Some instance variables for managing the xyo-node loop */
   private isLooping: boolean = false;
   private shouldStopLooping: boolean = false;
 
-  constructor(private readonly peerConnectionDelegate: XyoPeerConnectionDelegate) {}
+  constructor(private readonly peerConnectionDelegate: XyoPeerConnectionDelegate) {
+    super();
+  }
 
   /**
    * Calling start will place the xyo-node in loop mode
@@ -55,7 +56,7 @@ export class XyoNode {
       return;
     }
 
-    logger.info(`Starting XyoArchivist loop`);
+    this.logInfo(`Starting XyoArchivist loop`);
 
     const networkPipe = await this.peerConnectionDelegate.provideConnection();
     await this.peerConnectionDelegate.handlePeerConnection(networkPipe);

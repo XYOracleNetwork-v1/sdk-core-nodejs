@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-local-storage-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 9:28:21 am
+ * @Last modified time: Friday, 21st September 2018 10:12:29 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -73,7 +73,7 @@ export class XyoOriginChainLocalStorageRepository implements XyoOriginChainState
     }
 
     try {
-      const stored = await this.storageProvider.read(Buffer.from('current-state'), 60000);
+      const stored = await this.storageProvider.read(Buffer.from('current-state.json'), 60000);
       if (stored) {
         this.inMemoryDelegate = this.deserializeOriginChainState(stored.toString());
         return this.inMemoryDelegate;
@@ -90,13 +90,13 @@ export class XyoOriginChainLocalStorageRepository implements XyoOriginChainState
   private async saveOriginChainState(originState: XyoOriginChainStateInMemoryRepository) {
     const jsonString = await this.serializeOriginChainState(originState);
     try {
-      await this.storageProvider.delete(Buffer.from('current-state'));
+      await this.storageProvider.delete(Buffer.from('current-state.json'));
     } catch (err) {
       // expected error
     }
 
     await this.storageProvider.write(
-      Buffer.from('current-state'),
+      Buffer.from('current-state.json'),
       Buffer.from(jsonString),
       XyoStorageProviderPriority.PRIORITY_HIGH,
       true,
@@ -147,8 +147,8 @@ export class XyoOriginChainLocalStorageRepository implements XyoOriginChainState
       waitingSigners: waitingSigners.map((signer) => {
         return this.packer.serialize(signer, signer.major, signer.minor, true).toString('hex');
       }),
-      nextPublicKey: undefined,
-      previousHash: undefined,
+      nextPublicKey: null,
+      previousHash: null,
     };
 
     if (nextPublicKey) {
@@ -158,7 +158,7 @@ export class XyoOriginChainLocalStorageRepository implements XyoOriginChainState
     }
 
     if (previousHash) {
-      payload.nextPublicKey = this.packer.serialize(
+      payload.previousHash = this.packer.serialize(
         previousHash, previousHash.major, previousHash.minor, true
       ).toString('hex');
     }
@@ -171,6 +171,6 @@ interface SerializedOriginChainState {
   index: string;
   signers: string[];
   waitingSigners: string[];
-  nextPublicKey: string | undefined;
-  previousHash: string | undefined;
+  nextPublicKey: string | null;
+  previousHash: string | null;
 }

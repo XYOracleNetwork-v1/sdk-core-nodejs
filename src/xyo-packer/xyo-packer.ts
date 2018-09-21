@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 3:20:10 pm
+ * @Last modified time: Friday, 21st September 2018 10:56:02 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,15 +12,14 @@
 import { XYOSerializer } from './xyo-serializer';
 import { XyoObject } from '../components/xyo-object';
 import { XyoError } from '../components/xyo-error';
-
-const logger = console;
+import { XyoBase } from '../components/xyo-base';
 
 /**
  * An XyoPacker is a central serializer/deserializer registry service.
  * This will allow classes to not worry about how they themselves are
  * represented in the xyo-packing protocol
  */
-export class XyoPacker {
+export class XyoPacker extends XyoBase {
 
   // tslint:disable-next-line:prefer-array-literal The collections serializer/deserializers
   private readonly serializerDeserializersCollection: Array<XYOSerializer<any>> = [];
@@ -118,7 +117,7 @@ export class XyoPacker {
             const serializer = this.serializerDeserializersCollection[index];
             return serializer.deserialize(buffer.slice(2), this);
           } catch (err) {
-            logger.error(`There was an attempting to deserialize an object with major ${major}, minor ${minor}`);
+            this.logError(`There was an attempting to deserialize an object with major ${major}, minor ${minor}`);
             throw err;
           }
         }

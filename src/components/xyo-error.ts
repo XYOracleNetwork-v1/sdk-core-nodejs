@@ -4,10 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-error.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 29th August 2018 4:03:12 pm
+ * @Last modified time: Friday, 21st September 2018 11:03:15 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
+
+import { XyoBase } from './xyo-base';
 
 /**
  * A list of supported error types
@@ -25,7 +27,7 @@ enum XyoErrorType {
  * Errors in Xyo sdk should only throw these types
  * of errors
  */
-export class XyoError implements Error {
+export class XyoError extends XyoBase implements Error {
 
   public static readonly errorType = XyoErrorType;
 
@@ -46,6 +48,8 @@ export class XyoError implements Error {
     public readonly code: XyoErrorType,
     fromOtherError?: Error
   ) {
+    super();
     this.stack = (fromOtherError && fromOtherError.stack) || new Error().stack;
+    this.logError(`An Xyo error was created with stack\n\n${this.stack}`);
   }
 }

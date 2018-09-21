@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 1:00:14 pm
+ * @Last modified time: Friday, 21st September 2018 10:55:51 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,14 +19,13 @@ import { XYO_TCP_CATALOGUE_LENGTH_IN_BYTES, XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES
 import { XyoError } from '../components/xyo-error';
 import { XyoPacker } from '../xyo-packer/xyo-packer';
 import { XyoSigner } from '../signing/xyo-signer';
-
-const logger = console;
+import { XyoBase } from '../components/xyo-base';
 
 /**
  * An `XyoBoundWitnessInteraction` manages a "session"
  * between two networked nodes.
  */
-export class XyoBoundWitnessInteraction {
+export class XyoBoundWitnessInteraction extends XyoBase {
 
   /**
    * Creates a new instance of a `XyoBoundWitnessInteraction`
@@ -41,7 +40,9 @@ export class XyoBoundWitnessInteraction {
     private readonly networkPipe: XyoNetworkPipe,
     private readonly signers: XyoSigner[],
     private readonly payload: XyoPayload
-  ) {}
+  ) {
+    super();
+  }
 
   /**
    * Does a bound witness with another node
@@ -55,10 +56,10 @@ export class XyoBoundWitnessInteraction {
        */
       const unregister = this.networkPipe.onPeerDisconnect(() => {
         disconnected = true;
-        logger.info(`Peer disconnected in xyo-bound-witness-interaction`);
+        this.logInfo(`Peer disconnected in xyo-bound-witness-interaction`);
       });
 
-      logger.info(`Starting bound witness`);
+      this.logInfo(`Starting bound witness`);
 
       if (!disconnected) {
         // Create the bound witness
@@ -66,7 +67,7 @@ export class XyoBoundWitnessInteraction {
         if (!disconnected) {
           /** Do step 1 of the bound witness */
           const boundWitnessTransfer1 = await boundWitness.incomingData(undefined, false);
-          logger.info(1, this.xyoPacker.serialize(boundWitness, boundWitness.major, boundWitness.minor, true));
+          this.logInfo(1, this.xyoPacker.serialize(boundWitness, boundWitness.major, boundWitness.minor, true));
 
           /** Serialize the transfer value */
           const bytes = this.xyoPacker.serialize(
@@ -99,7 +100,7 @@ export class XyoBoundWitnessInteraction {
 
             /** Add transfer to bound witness */
             const transfer = await boundWitness.incomingData(transferObj, false);
-            logger.info(2, this.xyoPacker.serialize(boundWitness, boundWitness.major, boundWitness.minor, true));
+            this.logInfo(2, this.xyoPacker.serialize(boundWitness, boundWitness.major, boundWitness.minor, true));
 
             if (!disconnected) {
               /** serialize the bound witness transfer */
