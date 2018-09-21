@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-state-manager.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 3:17:09 pm
+ * @Last modified time: Friday, 21st September 2018 9:27:00 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -22,40 +22,25 @@ import { XyoOriginChainStateRepository } from './xyo-origin-chain-types';
  */
 export class XyoOriginChainStateInMemoryRepository implements XyoOriginChainStateRepository {
 
-  /** A next public key value that is only set of if the xyo-node wishes to roll their current key */
-  private nextPublicKey: XyoNextPublicKey | undefined = undefined;
+  /** The index of the block in the origin chain */
+  private idx: number;
 
-  /** A list of signers to use for signing blocks */
-  private readonly currentSigners: XyoSigner[] = [];
-
-  /** Signers queued to use for the next blocks */
-  private readonly waitingSigners: XyoSigner[] = [];
-
-  /** The hash value of the block on top of the chain */
-  private latestHash: XyoHash | undefined = undefined;
-
-  /** The number of blocks in the origin chain */
-  private count: number = 0;
-
-  /** A list of hashes in the origin chain */
-  private allHashes: XyoHash[] = [];
-
-  /** All the public keys used by this node in the origin chain */
-  private allPublicKeys: XyoObject[] = [];
-
-  /**
-   * Creates an instance of a XyoOriginChainStateManager
-   * @param indexOffset Can be used if not all blocks in this manager are available.
-   */
-
-  constructor(private readonly indexOffset: number) {}
+  constructor(
+    index: number,
+    private latestHash: XyoHash | undefined,
+    private readonly currentSigners: XyoSigner[],
+    private nextPublicKey: XyoNextPublicKey | undefined,
+    private readonly waitingSigners: XyoSigner[],
+  ) {
+    this.idx = index;
+  }
 
   /**
    * The index, or number of the blocks in the origin chain
    */
 
   private get index () {
-    return new XyoIndex(this.count + this.indexOffset);
+    return new XyoIndex(this.idx);
   }
 
   /**
@@ -83,6 +68,10 @@ export class XyoOriginChainStateInMemoryRepository implements XyoOriginChainStat
     return this.nextPublicKey;
   }
 
+  public async getWaitingSigners(): Promise<XyoSigner[]> {
+    return this.waitingSigners;
+  }
+
   public async updateOriginChainState(hash: XyoHash): Promise<void> {
     this.newOriginBlock(hash);
   }
@@ -103,7 +92,6 @@ export class XyoOriginChainStateInMemoryRepository implements XyoOriginChainStat
     const publicKey = signer.publicKey;
     this.nextPublicKey = new XyoNextPublicKey(publicKey);
     this.waitingSigners.push(signer);
-    this.allPublicKeys.push(publicKey);
   }
 
   /**
@@ -124,9 +112,8 @@ export class XyoOriginChainStateInMemoryRepository implements XyoOriginChainStat
 
   private newOriginBlock(hash: XyoHash) {
     this.nextPublicKey = undefined;
-    this.allHashes.push(hash);
     this.latestHash = hash;
-    this.count += 1;
+    this.idx += 1;
     this.addWaitingSigner();
   }
 
