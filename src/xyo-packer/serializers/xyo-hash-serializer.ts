@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 12:24:54 pm
+ * @Last modified time: Friday, 21st September 2018 5:44:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -38,7 +38,7 @@ export class XyoHashSerializer extends XYOSerializer<XyoHash> {
   }
 
   public deserialize(buffer: Buffer) {
-    return new this.xyoHashClass(this.hashProvider, buffer.slice(2));
+    return new this.xyoHashClass(this.hashProvider, buffer);
   }
 
   public serialize(publicKey: XyoHash) {
