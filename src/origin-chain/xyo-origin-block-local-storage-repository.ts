@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: origin-chain-manager.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 2:56:06 pm
+ * @Last modified time: Monday, 24th September 2018 3:29:45 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -98,5 +98,20 @@ export class XyoOriginBlockLocalStorageRepository implements XyoOriginBlockRepos
       true,
       60000
     );
+  }
+
+  public async getOriginBlockByHash(hash: Buffer): Promise<XyoBoundWitness | undefined> {
+    try {
+      const result = await this.originBlocksStorageProvider.read(hash, 60000);
+      if (!result) {
+        return undefined;
+      }
+
+      const serializer = this.xyoPacker.getSerializerByName(XyoBoundWitness.name);
+      const boundWitness = serializer.deserialize(result, this.xyoPacker);
+      return boundWitness;
+    } catch (err) {
+      return undefined;
+    }
   }
 }

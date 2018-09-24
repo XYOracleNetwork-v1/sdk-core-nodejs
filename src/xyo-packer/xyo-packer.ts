@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 5:16:07 pm
+ * @Last modified time: Monday, 24th September 2018 1:52:00 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -78,18 +78,15 @@ export class XyoPacker extends XyoBase {
           const serializer = this.serializerDeserializersCollection[index];
           const serialized = serializer.serialize(object, this);
           if (typed === undefined) {
-            this.logInfo(major, minor, serialized.toString('hex'));
             return serialized;
           }
 
           if (typed) {
             const typedResult = this.makeTyped(serialized, serializer);
-            this.logInfo(major, minor, typedResult.toString('hex'));
             return typedResult;
           }
 
           const untypedResult = this.makeUntyped(serialized, serializer);
-          this.logInfo(major, minor, untypedResult.toString('hex'));
           return untypedResult;
         }
       }

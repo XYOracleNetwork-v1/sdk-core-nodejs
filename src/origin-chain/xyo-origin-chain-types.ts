@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-types.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 9:25:52 am
+ * @Last modified time: Monday, 24th September 2018 3:29:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -21,6 +21,7 @@ export interface XyoOriginBlockRepository {
   containsOriginBlock(hash: Buffer): Promise<boolean>;
   getAllOriginBlockHashes(): Promise<Buffer[]>;
   addOriginBlock(hash: XyoHash, originBlock: XyoBoundWitness): Promise<void>;
+  getOriginBlockByHash(hash: Buffer): Promise<XyoBoundWitness | undefined>;
 }
 
 export interface XyoOriginChainStateRepository {

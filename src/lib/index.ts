@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 9:18:03 am
+ * @Last modified time: Monday, 24th September 2018 10:01:49 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -131,3 +131,6 @@ export * from '../xyo-packer/serializers/xyo-uncompressed-ec-public-key-serializ
 export * from '../xyo-packer/serializers/xyo-ecdsa-signature-serializer';
 export * from '../xyo-packer/serializers/xyo-number-signed-serializer';
 export * from '../xyo-packer/serializers/xyo-rsa-public-key-serializer';
+
+/** Utils */
+export * from '../components/xyo-base';

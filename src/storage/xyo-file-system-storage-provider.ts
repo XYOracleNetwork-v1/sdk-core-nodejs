@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: file-system.storage.provider.impl.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 9:51:13 am
+ * @Last modified time: Monday, 24th September 2018 2:57:45 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -101,7 +101,7 @@ export class XyoFileSystemStorageProvider implements XYOStorageProvider {
           return reject(e);
         }
 
-        return resolve(files.map(file => Buffer.from(file)));
+        return resolve(files.map(file => Buffer.from(file, this.fileNameEncoding)));
       });
     });
   }
