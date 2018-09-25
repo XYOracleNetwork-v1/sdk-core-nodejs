@@ -7,7 +7,7 @@ Core functionality for the XYO nodejs projects
 ### Install dependencies
 
 ```sh
-  npm install
+  yarn install
 ```
 
 ### Run tests
@@ -15,7 +15,7 @@ Core functionality for the XYO nodejs projects
 Run all tests:
 
 ```sh
-  npm test
+  yarn test
 ```
 
 Run a set of tests in a particular file:
