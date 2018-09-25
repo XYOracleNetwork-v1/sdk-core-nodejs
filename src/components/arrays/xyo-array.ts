@@ -88,7 +88,7 @@ export class XyoArray extends XyoObject {
 
   public addElement(element: XyoObject, index?: number) {
     if (this.typedId !== undefined && element.id[0] !== this.elementMajor || element.id[1] !== this.elementMinor) {
-      throw new XyoError(`Can not add element to array, mismatched type`, XyoError.errorType.ERR_INVALID_PARAMETERS);
+      throw new XyoError('Can not add element to array, mismatched type', XyoError.errorType.ERR_INVALID_PARAMETERS);
     }
 
     if (index !== undefined && index < this.array.length) {
