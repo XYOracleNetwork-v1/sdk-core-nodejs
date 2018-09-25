@@ -4,14 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 11:26:40 am
+ * @Last modified time: Wednesday, 19th September 2018 1:35:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../xyo-object';
-import { XyoPacker } from '../../xyo-packer/xyo-packer';
-import { XyoHashToHashProviderMap } from './xyo-hash-to-hash-provider-map';
+import { XyoHashProvider } from '../../hash-provider/xyo-hash-provider';
 import { XyoError } from '../xyo-error';
 
 /**
@@ -29,7 +28,7 @@ export class XyoHash extends XyoObject {
    */
 
   constructor(
-    private readonly hashToHashProviderMap: XyoHashToHashProviderMap,
+    private readonly hashProvider: XyoHashProvider | undefined,
     public readonly hash: Buffer,
     public readonly major: number,
     public readonly minor: number
@@ -44,12 +43,11 @@ export class XyoHash extends XyoObject {
    */
 
   public async verifyHash(data: Buffer): Promise<boolean> {
-    const hashProvider = this.hashToHashProviderMap.getProvider(this.id[0], this.id[1]);
-    if (!hashProvider) {
-      throw new XyoError(`Failed to locate hash provider`, XyoError.errorType.ERR_CRITICAL);
+    if (this.hashProvider === undefined) {
+      throw new XyoError(`Can not verify hash, no hash provider provider`, XyoError.errorType.ERR_CRITICAL);
     }
 
-    const xyoHash = await hashProvider.createHash(data);
+    const xyoHash = await this.hashProvider.createHash(data);
     return xyoHash.hash.equals(this.hash);
   }
 }

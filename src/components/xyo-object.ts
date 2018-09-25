@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 1:31:56 pm
+ * @Last modified time: Friday, 21st September 2018 10:54:40 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,9 +14,12 @@
  * will have an id which is important for the serialization process
  */
 
-export abstract class XyoObject {
+import { XyoBase } from './xyo-base';
+export abstract class XyoObject extends XyoBase {
 
-  constructor (public readonly major: number, public readonly minor: number) {}
+  constructor (public readonly major: number, public readonly minor: number) {
+    super();
+  }
 
   /**
    * @returns The id of the `XyoObject`, which is concatenation of the major & minor values

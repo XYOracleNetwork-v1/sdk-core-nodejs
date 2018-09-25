@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rssi-object-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:56:49 pm
+ * @Last modified time: Friday, 21st September 2018 12:26:49 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -28,7 +28,8 @@ export class XyoNumberSignedSerializer extends XYOSerializer<XyoNumberSigned> {
     return {
       major: this.major,
       minor: this.minor,
-      staticSize: this.size
+      staticSize: this.size,
+      sizeIdentifierSize: 0
     };
   }
 

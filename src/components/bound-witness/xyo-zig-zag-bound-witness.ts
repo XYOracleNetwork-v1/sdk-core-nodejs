@@ -4,13 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-zig-zag-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 12:35:37 pm
+ * @Last modified time: Tuesday, 18th September 2018 2:00:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBoundWitness } from './xyo-bound-witness';
-import { XyoSigner } from '../signing/xyo-signer';
 import { XyoPayload } from '../xyo-payload';
 import { XyoSignatureSet } from '../arrays/xyo-signature-set';
 import { XyoBoundWitnessTransfer } from './xyo-bound-witness-transfer';
@@ -18,6 +17,7 @@ import { XyoObject } from '../xyo-object';
 import { XyoError } from '../xyo-error';
 import { XyoKeySet } from '../arrays/xyo-key-set';
 import { XyoPacker } from '../../xyo-packer/xyo-packer';
+import { XyoSigner } from '../../signing/xyo-signer';
 
 /**
  * A `XyoZigZagBoundWitness` is a particular type of way of creating a

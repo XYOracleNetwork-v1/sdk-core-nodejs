@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: test-utils.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:56:43 pm
+ * @Last modified time: Friday, 21st September 2018 12:17:22 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -30,7 +30,8 @@ export class TestXyoObjectSerializer extends XYOSerializer<TestXyoObject> {
     return {
       major: 0xFF,
       minor: 0x00,
-      sizeOfBytesToGetSize: 4
+      sizeOfBytesToGetSize: 4,
+      sizeIdentifierSize: 4
     };
   }
 
@@ -57,7 +58,8 @@ export class TestXyoObjectTypedArraySerializer extends XYOSerializer<TestXyoObje
     return {
       major: 0xEE,
       minor: 0xDD,
-      sizeOfBytesToGetSize: 4
+      sizeOfBytesToGetSize: 4,
+      sizeIdentifierSize: 4
     };
   }
 

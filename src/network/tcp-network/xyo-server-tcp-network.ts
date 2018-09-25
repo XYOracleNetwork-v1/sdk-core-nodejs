@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 5:10:17 pm
+ * @Last modified time: Friday, 21st September 2018 10:55:33 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -16,8 +16,7 @@ import { XyoTcpNetworkPipe } from './xyo-tcp-network-pipe';
 import { XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES, XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES } from './xyo-tcp-network-constants';
 
 import net from 'net';
-
-const logger = console;
+import { XyoBase } from '../../components/xyo-base';
 
 /**
  * A network provider build on top of the TCP/IP stack.
@@ -26,7 +25,7 @@ const logger = console;
  * one `meaningful` connection made to a peer.
  */
 
-export class XyoServerTcpNetwork implements XyoNetworkProviderInterface {
+export class XyoServerTcpNetwork extends XyoBase implements XyoNetworkProviderInterface {
 
   /**
    * An ephemeral short lived server for making connection to peers
@@ -46,7 +45,9 @@ export class XyoServerTcpNetwork implements XyoNetworkProviderInterface {
    * @param port The port to bind to for incoming network requests
    */
 
-  constructor (public readonly port: number) {}
+  constructor (public readonly port: number) {
+    super();
+  }
 
   /**
    * Will attempt to locate peers. Once a peer is found the server will close
@@ -65,12 +66,12 @@ export class XyoServerTcpNetwork implements XyoNetworkProviderInterface {
 
     /** Close the server to new connections while this one is handled */
     this.server.close(() => {
-      logger.info(`Server closed`);
+      this.logInfo(`Server closed`);
     });
 
     /** Clears state so this tcp-network instance can be used again */
     connectionResult.socket.on('close', () => {
-      logger.info(`Xyo TCP Connection closed`);
+      this.logInfo(`Xyo TCP Connection closed`);
       this.connection = undefined;
     });
 
@@ -114,10 +115,10 @@ export class XyoServerTcpNetwork implements XyoNetworkProviderInterface {
   private getConnection(server: net.Server, catalogue: XyoNetworkProcedureCatalogue): Promise<XyoTcpConnectionResult> {
     return new Promise((resolve, reject) => {
       const onConnection = (c: net.Socket) => {
-        logger.info(`Connection made`);
+        this.logInfo(`Connection made`);
 
         if (this.connection) { // Prevents multiple connections
-          logger.info(`Connection already exists, will close incoming connection`);
+          this.logInfo(`Connection already exists, will close incoming connection`);
           c.end();
           return;
         }
@@ -126,7 +127,7 @@ export class XyoServerTcpNetwork implements XyoNetworkProviderInterface {
 
         // tslint:disable-next-line:ter-prefer-arrow-callback
         const onConnectionClose = (hasError: boolean) => {
-          logger.info(this, hasError);
+          this.logInfo(this, hasError);
           this.connection = undefined;
         };
 

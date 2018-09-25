@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: elliptic.d.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 2:13:36 pm
+ * @Last modified time: Thursday, 20th September 2018 3:36:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -40,16 +40,22 @@ declare module 'elliptic' {
 
   class EllipticKey {
     sign(message: Array<any> | Buffer | string): EllipticSignature;
-    getPublic(): EllipticPublicKey
+    getPublic(): EllipticPublicKey;
+    getPublic(encoding: string): string;
+    getPrivate(encoding: string): string;
+    _importPublic(publicKey: EllipticPublicKey): void;
+    verify(message: Buffer, signature: Uint8Array): Promise<boolean>;
   }
 
   class EllipticCurve {
     constructor(preset: CurvePreset);
     genKeyPair(): EllipticKey;
     keyFromPublic(publicKey: string, type: 'hex'): EllipticKey;
+    keyFromPrivate(privateKey: string, type: 'hex'): EllipticKey;
   }
 
   export {
-    EllipticCurve as ec
+    EllipticCurve as ec,
+    EllipticKey
   }
 }

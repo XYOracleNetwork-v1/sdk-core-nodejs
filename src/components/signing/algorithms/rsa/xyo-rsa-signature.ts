@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 1:06:49 pm
+ * @Last modified time: Thursday, 20th September 2018 1:47:32 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,7 +14,7 @@ import { XyoSignature } from '../../xyo-signature';
 /**
  * An RSA signature
  */
-export class XyoRsaSignature extends XyoSignature {
+export abstract class XyoRsaSignature extends XyoSignature {
 
   /**
    * Creates an new instance of a `XyoRsaSignature`

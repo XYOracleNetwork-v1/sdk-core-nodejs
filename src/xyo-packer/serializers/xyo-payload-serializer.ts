@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-payload-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:56:51 pm
+ * @Last modified time: Friday, 21st September 2018 12:27:43 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,11 +18,16 @@ export class XyoPayloadSerializer extends XYOSerializer<XyoPayload> {
 
   public serialize(xyoObject: XyoPayload, xyoPacker: XyoPacker) {
     return Buffer.concat([
-      xyoPacker.serialize(xyoObject, xyoObject.id[0], xyoObject.id[1], false),
+      xyoPacker.serialize(
+        xyoObject.signedPayload,
+        xyoObject.signedPayload.major,
+        xyoObject.signedPayload.minor,
+        false
+      ),
       xyoPacker.serialize(
         xyoObject.unsignedPayload,
-        xyoObject.unsignedPayload.id[0],
-        xyoObject.unsignedPayload.id[1],
+        xyoObject.unsignedPayload.major,
+        xyoObject.unsignedPayload.minor,
         false
       )
     ]);
@@ -44,7 +49,8 @@ export class XyoPayloadSerializer extends XYOSerializer<XyoPayload> {
     return {
       major: 0x02,
       minor: 0x04,
-      sizeOfBytesToGetSize: 4
+      sizeOfBytesToGetSize: 4,
+      sizeIdentifierSize: 4
     };
   }
 }

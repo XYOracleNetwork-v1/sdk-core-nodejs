@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-next-public-key-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:56:49 pm
+ * @Last modified time: Friday, 21st September 2018 12:26:05 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,7 +20,8 @@ export class XyoNextPublicKeySerializer extends XYOSerializer<XyoNextPublicKey> 
     return {
       major: 0x02,
       minor: 0x07,
-      sizeOfBytesToGetSize: 4
+      sizeOfBytesToGetSize: 4,
+      sizeIdentifierSize: 0
     };
   }
 

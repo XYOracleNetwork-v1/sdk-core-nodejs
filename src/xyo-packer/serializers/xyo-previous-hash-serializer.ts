@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-previous-hash-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:56:52 pm
+ * @Last modified time: Friday, 21st September 2018 12:45:38 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -21,7 +21,8 @@ export class XyoPreviousHashSerializer extends XYOSerializer<XyoPreviousHash> {
     return {
       major: 0x02,
       minor: 0x06,
-      sizeOfBytesToGetSize: 2
+      sizeOfBytesToGetSize: 2,
+      sizeIdentifierSize: 0
     };
   }
 
@@ -31,7 +32,7 @@ export class XyoPreviousHashSerializer extends XYOSerializer<XyoPreviousHash> {
   }
 
   public serialize(xyoObject: XyoPreviousHash, xyoPacker: XyoPacker) {
-    return xyoPacker.serialize(xyoObject, xyoObject.id[0], xyoObject.id[1], true);
+    return xyoPacker.serialize(xyoObject.hash, xyoObject.hash.major, xyoObject.hash.minor, true);
   }
 
   public readSize(buffer: Buffer, xyoPacker: XyoPacker) {

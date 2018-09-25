@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 5:10:17 pm
+ * @Last modified time: Friday, 21st September 2018 10:55:51 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,19 +14,18 @@ import { XyoPayload } from '../components/xyo-payload';
 import { CatalogueItem } from '../network/xyo-catalogue-item';
 import { XyoNetworkPipe } from '../network/xyo-network';
 import { XyoBoundWitnessTransfer } from '../components/bound-witness/xyo-bound-witness-transfer';
-import { XyoSigner } from '../components/signing/xyo-signer';
 import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
 import { XYO_TCP_CATALOGUE_LENGTH_IN_BYTES, XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES } from '../network/tcp-network/xyo-tcp-network-constants';
 import { XyoError } from '../components/xyo-error';
 import { XyoPacker } from '../xyo-packer/xyo-packer';
-
-const logger = console;
+import { XyoSigner } from '../signing/xyo-signer';
+import { XyoBase } from '../components/xyo-base';
 
 /**
  * An `XyoBoundWitnessInteraction` manages a "session"
  * between two networked nodes.
  */
-export class XyoBoundWitnessInteraction {
+export class XyoBoundWitnessInteraction extends XyoBase {
 
   /**
    * Creates a new instance of a `XyoBoundWitnessInteraction`
@@ -41,7 +40,9 @@ export class XyoBoundWitnessInteraction {
     private readonly networkPipe: XyoNetworkPipe,
     private readonly signers: XyoSigner[],
     private readonly payload: XyoPayload
-  ) {}
+  ) {
+    super();
+  }
 
   /**
    * Does a bound witness with another node
@@ -55,10 +56,10 @@ export class XyoBoundWitnessInteraction {
        */
       const unregister = this.networkPipe.onPeerDisconnect(() => {
         disconnected = true;
-        logger.info(`Peer disconnected in xyo-bound-witness-interaction`);
+        this.logInfo(`Peer disconnected in xyo-bound-witness-interaction`);
       });
 
-      logger.info(`Starting bound witness`);
+      this.logInfo(`Starting bound witness`);
 
       if (!disconnected) {
         // Create the bound witness
@@ -66,12 +67,13 @@ export class XyoBoundWitnessInteraction {
         if (!disconnected) {
           /** Do step 1 of the bound witness */
           const boundWitnessTransfer1 = await boundWitness.incomingData(undefined, false);
+          this.logInfo(1, this.xyoPacker.serialize(boundWitness, boundWitness.major, boundWitness.minor, true));
 
           /** Serialize the transfer value */
           const bytes = this.xyoPacker.serialize(
             boundWitnessTransfer1,
-            boundWitnessTransfer1.id[0],
-            boundWitnessTransfer1.id[1],
+            boundWitnessTransfer1.major,
+            boundWitnessTransfer1.minor,
             false
           );
 
@@ -98,11 +100,11 @@ export class XyoBoundWitnessInteraction {
 
             /** Add transfer to bound witness */
             const transfer = await boundWitness.incomingData(transferObj, false);
+            this.logInfo(2, this.xyoPacker.serialize(boundWitness, boundWitness.major, boundWitness.minor, true));
 
             if (!disconnected) {
               /** serialize the bound witness transfer */
-              const transferBytes = this.xyoPacker.getSerializerByName(XyoBoundWitnessTransfer.name)
-                .serialize(transfer, this.xyoPacker);
+              const transferBytes = this.xyoPacker.serialize(transfer, transfer.major, transfer.minor, false);
 
               /** Send transfer data, but dont wait for reply */
               await this.networkPipe.send(transferBytes, false);

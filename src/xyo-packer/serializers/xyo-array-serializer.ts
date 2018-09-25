@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-single-type-array-byte-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:56:44 pm
+ * @Last modified time: Friday, 21st September 2018 12:20:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,7 +19,7 @@ export class XyoArraySerializer extends XYOSerializer<XyoArray> {
   constructor (
     private readonly major: number,
     private readonly minor: number,
-    private readonly sizeOfBytesToGetSize: number,
+    private readonly size: number,
     private readonly typed: boolean
   ) {
     super();
@@ -29,7 +29,8 @@ export class XyoArraySerializer extends XYOSerializer<XyoArray> {
     return {
       major: this.major,
       minor: this.minor,
-      sizeOfBytesToGetSize: this.sizeOfBytesToGetSize
+      sizeOfBytesToGetSize: this.size,
+      sizeIdentifierSize: this.size
     };
   }
 
@@ -38,17 +39,21 @@ export class XyoArraySerializer extends XYOSerializer<XyoArray> {
       xyoPacker,
       buffer,
       this.typed,
-      this.sizeOfBytesToGetSize
+      this.size
     );
 
-    return new XyoArray(
+    const array = unpackedArray.array;
+
+    const newArray = new XyoArray(
       unpackedArray.majorType || undefined,
       unpackedArray.minorType || undefined,
       this.major,
       this.minor,
-      this.sizeOfBytesToGetSize,
-      unpackedArray.array
+      this.size,
+      array
     );
+
+    return newArray;
   }
 
   public serialize(xyoArray: XyoArray, xyoPacker: XyoPacker) {

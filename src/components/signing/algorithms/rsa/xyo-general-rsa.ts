@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoSigner } from '../../xyo-signer';
+import { XyoSigner } from '../../../../signing/xyo-signer';
 
 /**
  * A base class for all RSA crypto signers
@@ -17,7 +17,7 @@ import { XyoSigner } from '../../xyo-signer';
 
 export abstract class XyoGeneralRsa extends XyoSigner {
 
-  constructor (public readonly keySize: number) {
-    super();
+  constructor (public readonly keySize: number, major: number, minor: number) {
+    super(major, minor);
   }
 }

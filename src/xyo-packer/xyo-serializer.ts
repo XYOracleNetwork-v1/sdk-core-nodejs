@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-packer-serializer-deserializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:56:43 pm
+ * @Last modified time: Friday, 21st September 2018 12:38:24 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -55,6 +55,10 @@ export abstract class XYOSerializer<T extends XyoObject> {
     throw new XyoError(`XyoSerialization misconfiguration error`, XyoError.errorType.ERR_CREATOR_MAPPING);
   }
 
+  get sizeIdentifierSize () {
+    return this.description.sizeIdentifierSize;
+  }
+
   get id () {
     return Buffer.from([
       this.description.major,
@@ -91,4 +95,5 @@ export interface XyoSerializationDescription {
   minor: number;
   staticSize?: number;
   sizeOfBytesToGetSize?: number;
+  sizeIdentifierSize: number;
 }

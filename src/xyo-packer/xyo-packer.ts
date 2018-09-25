@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:56:55 pm
+ * @Last modified time: Monday, 24th September 2018 1:52:00 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,15 +12,14 @@
 import { XYOSerializer } from './xyo-serializer';
 import { XyoObject } from '../components/xyo-object';
 import { XyoError } from '../components/xyo-error';
-
-const logger = console;
+import { XyoBase } from '../components/xyo-base';
 
 /**
  * An XyoPacker is a central serializer/deserializer registry service.
  * This will allow classes to not worry about how they themselves are
  * represented in the xyo-packing protocol
  */
-export class XyoPacker {
+export class XyoPacker extends XyoBase {
 
   // tslint:disable-next-line:prefer-array-literal The collections serializer/deserializers
   private readonly serializerDeserializersCollection: Array<XYOSerializer<any>> = [];
@@ -75,24 +74,20 @@ export class XyoPacker {
         // Get index and assert the index is in range of the underlying data collection
         const index = this.serializerDeserializerMajorMinorIndex[major][minor];
         if (index < this.serializerDeserializersCollection.length) {
-
           // Attempt to serialize
-          try {
-            const serializer = this.serializerDeserializersCollection[index];
-            const serialized = serializer.serialize(object, this);
-            if (typed === undefined) {
-              return serialized;
-            }
-
-            if (typed) {
-              return this.makeTyped(serialized, serializer);
-            }
-
-            return this.makeUntyped(serialized, serializer);
-          } catch (err) {
-            logger.error(`There was an attempting to deserialize an object with major ${major}, minor ${minor}`);
-            throw err;
+          const serializer = this.serializerDeserializersCollection[index];
+          const serialized = serializer.serialize(object, this);
+          if (typed === undefined) {
+            return serialized;
           }
+
+          if (typed) {
+            const typedResult = this.makeTyped(serialized, serializer);
+            return typedResult;
+          }
+
+          const untypedResult = this.makeUntyped(serialized, serializer);
+          return untypedResult;
         }
       }
     }
@@ -118,13 +113,15 @@ export class XyoPacker {
         // Get index and assert the index is in range of the underlying data collection
         const index = this.serializerDeserializerMajorMinorIndex[major][minor];
         if (index < this.serializerDeserializersCollection.length) {
-
+          const srcBuffer = buffer.slice(2);
           // Attempt to serialize
           try {
             const serializer = this.serializerDeserializersCollection[index];
-            return serializer.deserialize(buffer.slice(2), this);
+            return serializer.deserialize(srcBuffer, this);
           } catch (err) {
-            logger.error(`There was an attempting to deserialize an object with major ${major}, minor ${minor}`);
+            const errorMessage = `An error occurred deserializing an object with major ${major}, minor ${minor}.
+            \n\nHexBuffer: ${srcBuffer.toString('hex')}`;
+            this.logError(errorMessage);
             throw err;
           }
         }
@@ -206,21 +203,21 @@ export class XyoPacker {
   }
 
   private encodedSize(sizeOfData: number, config: XYOSerializer<XyoObject>) {
-    if (!config.sizeOfBytesToRead) {
+    if (!config.sizeIdentifierSize) {
       return new Buffer(0);
     }
 
-    const buffer = new Buffer(config.sizeOfBytesToRead || 0);
+    const buffer = new Buffer(config.sizeIdentifierSize || 0);
 
-    switch (config.sizeOfBytesToRead) {
+    switch (config.sizeIdentifierSize) {
       case 1:
-        buffer.writeUInt8(sizeOfData + (config.sizeOfBytesToRead || 0), 0);
+        buffer.writeUInt8(sizeOfData + (config.sizeIdentifierSize || 0), 0);
         break;
       case 2:
-        buffer.writeUInt16BE(sizeOfData + (config.sizeOfBytesToRead || 0), 0);
+        buffer.writeUInt16BE(sizeOfData + (config.sizeIdentifierSize || 0), 0);
         break;
       case 4:
-        buffer.writeUInt32BE(sizeOfData + (config.sizeOfBytesToRead || 0), 0);
+        buffer.writeUInt32BE(sizeOfData + (config.sizeIdentifierSize || 0), 0);
         break;
     }
 
