@@ -6,7 +6,7 @@
   "types": "dist/lib/index.d.ts",
   "scripts": {
     "test": "export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose --detectOpenHandles",
-    "build": "yarn build-ts && yarn tslint",
+    "build": "yarn install && yarn build-ts && yarn tslint",
     "build-ts": "tsc",
     "dist": "yarn install && tsc -p tsconfig.build.json && yarn tslint",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
