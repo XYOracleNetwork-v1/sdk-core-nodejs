@@ -11,7 +11,7 @@
     "dist": "tsc -p tsconfig.build.json && yarn tslint",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "tslint-fix": "tslint -c tslint.json -p tsconfig.json --fix",
-    "install": "yarn install --ignore-scripts && yarn build-ts",
+    "install": "yarn build-ts",
     "precommit": "echo \"Build must pass before committing\" && yarn build"
   },
   "repository": {
