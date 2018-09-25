@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-error.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 11:03:15 am
+ * @Last modified time: Monday, 24th September 2018 6:38:08 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -50,6 +50,11 @@ export class XyoError extends XyoBase implements Error {
   ) {
     super();
     this.stack = (fromOtherError && fromOtherError.stack) || new Error().stack;
-    this.logError(`An Xyo error was created with stack\n\n${this.stack}`);
+    let errorMsg = `An Xyo error was thrown with message ${message}`;
+    if (this.stack) {
+      errorMsg = errorMsg + ` and stack\n\n${this.stack}`;
+    }
+
+    this.logError(errorMsg);
   }
 }
