@@ -52,7 +52,7 @@ export class XyoError extends XyoBase implements Error {
     this.stack = (fromOtherError && fromOtherError.stack) || new Error().stack;
     let errorMsg = `An Xyo error was thrown with message ${message}`;
     if (this.stack) {
-      errorMsg = errorMsg + ` and stack\n\n${this.stack}`;
+      errorMsg = `${errorMsg} and stack\n\n${this.stack}`;
     }
 
     this.logError(errorMsg);

@@ -21,6 +21,7 @@
     "object-literal-sort-keys": false,
     "no-implicit-dependencies": [true, "dev"],
     "interface-name":false,
-    "no-bitwise": false
+    "no-bitwise": false,
+    "quotemark": false
   }
 }
