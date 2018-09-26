@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-transfer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 12:40:42 pm
+ * @Last modified time: Wednesday, 26th September 2018 12:50:57 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -33,7 +33,7 @@ export class XyoBoundWitnessTransfer extends XyoObject {
     public readonly payloadsToSend: XyoObject[],
     public readonly signatureToSend: XyoObject[]
   ) {
-    super(0x02, 0x0a);
+    super(0x02, 0x0A);
   }
 
   /**
