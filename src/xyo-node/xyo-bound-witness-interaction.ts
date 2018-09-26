@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 1:18:06 pm
+ * @Last modified time: Wednesday, 26th September 2018 1:48:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -67,7 +67,6 @@ export class XyoBoundWitnessInteraction extends XyoBase {
         if (!disconnected) {
           /** Do step 1 of the bound witness */
           const boundWitnessTransfer1 = await boundWitness.incomingData(undefined, false);
-          this.logInfo(1, this.xyoPacker.serialize(boundWitness, boundWitness.major, boundWitness.minor, true));
 
           /** Serialize the transfer value */
           const bytes = this.xyoPacker.serialize(
