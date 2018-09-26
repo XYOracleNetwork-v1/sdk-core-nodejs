@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: generate-lib.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 11:19:59 am
+ * @Last modified time: Wednesday, 26th September 2018 11:41:21 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -37,7 +37,9 @@ async function generateLibString() {
       return excludeRegEx.test(exportCandidate);
     })
     .length === 0;
-
+    if (!shouldInclude) {
+      logger.warn(`Excluding ${exportCandidate}`);
+    }
     return shouldInclude;
   });
 
