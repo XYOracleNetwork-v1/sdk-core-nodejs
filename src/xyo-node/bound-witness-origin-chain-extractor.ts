@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: bound-witness-origin-chain-extractor.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 9:04:24 am
+ * @Last modified time: Wednesday, 26th September 2018 10:32:53 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
 import { XyoPacker } from '../xyo-packer/xyo-packer';
-import { XyoSingleTypeArrayInt } from '../components/arrays/xyo-single-type-array-int';
+import { XyoBridgeBlockSet } from '../components/arrays/xyo-bridge-block-set';
 
 export function extractNestedBoundWitnesses(boundWitness: XyoBoundWitness, xyoPacker: XyoPacker) {
   const nestedBoundWitnesses: XyoBoundWitness[] = [];
@@ -32,16 +32,13 @@ function recursivelyExtractNestedBoundWitnesses(
   boundWitness.payloads.forEach((payload) => {
     payload.unsignedPayload.array.forEach((unsignedPayloadItem) => {
       const xyoObjectId = unsignedPayloadItem.id;
-      const singleTypeArrayMajorMinor = xyoPacker.getMajorMinor(XyoSingleTypeArrayInt.name);
-      const boundWitnessMajorMinor = xyoPacker.getMajorMinor(XyoBoundWitness.name);
+      const bridgeBlockSetMajorMinor = xyoPacker.getMajorMinor(XyoBridgeBlockSet.name);
       if (
-        xyoObjectId[0] === singleTypeArrayMajorMinor.major &&
-        xyoObjectId[1] === singleTypeArrayMajorMinor.minor &&
-        (unsignedPayloadItem as XyoSingleTypeArrayInt).elementMajor === boundWitnessMajorMinor.major &&
-        (unsignedPayloadItem as XyoSingleTypeArrayInt).elementMinor === boundWitnessMajorMinor.minor
+        xyoObjectId[0] === bridgeBlockSetMajorMinor.major &&
+        xyoObjectId[1] === bridgeBlockSetMajorMinor.minor
       ) {
-        const nestedBoundWitnessArray = unsignedPayloadItem as XyoSingleTypeArrayInt;
-        nestedBoundWitnessArray.array.forEach((nestedObj) => {
+        const nestedBridgeBlockSet = unsignedPayloadItem as XyoBridgeBlockSet;
+        nestedBridgeBlockSet.array.forEach((nestedObj) => {
           const nestedBoundWitness = nestedObj as XyoBoundWitness;
           boundWitnessContainer.push(nestedBoundWitness);
           recursivelyExtractNestedBoundWitnesses(nestedBoundWitness, boundWitnessContainer, xyoPacker);

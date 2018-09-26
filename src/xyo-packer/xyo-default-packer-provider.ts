@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 20th September 2018 4:21:41 pm
+ * @Last modified time: Wednesday, 26th September 2018 10:29:33 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -59,6 +59,9 @@ import { XyoRSASha256Signer } from '../signing/xyo-rsa-sha256-signer';
 import { XyoEcSecp256kSignerSerializer } from './serializers/xyo-ec-secp-256k-serializer';
 import { XyoEcSecp256kSignerProvider } from '../signing/xyo-ec-secp-256k-signer-provider';
 import { XyoEcdsaSignatureSerializer } from './serializers/xyo-ecdsa-signature-serializer';
+import { XyoBridgeBlockSet } from '../components/arrays/xyo-bridge-block-set';
+import { XyoBridgeBlockSetSerializer } from './serializers/xyo-bridge-block-set-serializer';
+import { XyoBridgeHashSet } from '../components/arrays/xyo-bridge-hash-set';
 
 /**
  * A class for configuring the packing, serialization, and deserialization
@@ -92,6 +95,7 @@ export class XyoDefaultPackerProvider {
     packer.registerSerializerDeserializer(XyoMultiTypeArrayInt.name, new XyoArraySerializer(0x01, 0x06, 4, false));
     packer.registerSerializerDeserializer(XyoBoundWitnessTransfer.name, new XyoBoundWitnessTransferSerializer());
     packer.registerSerializerDeserializer(XyoBoundWitness.name, new XyoBoundWitnessSerializer());
+    packer.registerSerializerDeserializer(XyoBridgeHashSet.name, new XyoArraySerializer(0x02, 0x08, 2, false));
 
     packer.registerSerializerDeserializer(
       XyoMd2Hash.name,
@@ -122,6 +126,8 @@ export class XyoDefaultPackerProvider {
       XyoSha512Hash.name,
       new XyoHashSerializer(0x06, 64, new XyoSha512HashProvider(), XyoSha512Hash)
     );
+
+    packer.registerSerializerDeserializer(XyoBridgeBlockSet.name, new XyoBridgeBlockSetSerializer());
 
     const rsaSha256SignerProvider = new XyoRSASha256SignerProvider();
 
