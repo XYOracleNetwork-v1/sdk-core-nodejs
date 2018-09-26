@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-packer.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 5:09:13 pm
+ * @Last modified time: Wednesday, 26th September 2018 1:17:58 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -36,7 +36,7 @@ describe(`XyoPacker`, () => {
     const rawValue = 'hello world';
     const value = Buffer.from(rawValue);
     const size = value.length + 4;
-    const sizeBuffer = new Buffer(4);
+    const sizeBuffer = Buffer.alloc(4);
     sizeBuffer.writeUInt32BE(size, 0);
 
     const typedSerialized = Buffer.concat([

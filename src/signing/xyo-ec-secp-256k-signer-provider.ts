@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha256-signer-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 20th September 2018 4:18:28 pm
+ * @Last modified time: Wednesday, 26th September 2018 1:17:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -119,7 +119,7 @@ export class XyoEcSecp256kSignerProvider implements XyoSignerProvider {
       xyBuffer.slice(sizeOfR + 1),
     ]);
 
-    const sourceBufferSizeBuffer = new Buffer(1);
+    const sourceBufferSizeBuffer = Buffer.alloc(1);
     sourceBufferSizeBuffer.writeUInt8(source.length, 0);
     return new Uint8Array(Buffer.concat([
       Buffer.from([0x30]),

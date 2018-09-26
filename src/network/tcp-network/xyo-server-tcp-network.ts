@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 10:55:33 am
+ * @Last modified time: Wednesday, 26th September 2018 1:22:04 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -141,7 +141,7 @@ export class XyoServerTcpNetwork extends XyoBase implements XyoNetworkProviderIn
 
         const onData = (chunk: Buffer) => {
           data = Buffer.concat([
-            data || new Buffer(0),
+            data || Buffer.alloc(0),
             chunk
           ]);
 

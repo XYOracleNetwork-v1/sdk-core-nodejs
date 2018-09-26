@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 11:19:53 am
+ * @Last modified time: Wednesday, 26th September 2018 1:23:00 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-// Auto-generated on Wed Sep 26 2018 11:19:20 GMT-0700 (Pacific Daylight Time)
+// Auto-generated on Wed Sep 26 2018 13:22:34 GMT-0700 (Pacific Daylight Time)
 
 export * from '../components/xyo-base';
 export * from '../components/xyo-error';
@@ -27,8 +27,8 @@ export * from '../network/xyo-network';
 export * from '../origin-chain/xyo-origin-block-local-storage-repository';
 export * from '../origin-chain/xyo-origin-block';
 export * from '../origin-chain/xyo-origin-chain-local-storage-repository';
-export * from '../origin-chain/xyo-origin-chain-types';
 export * from '../origin-chain/xyo-origin-chain-state-in-memory-repository';
+export * from '../origin-chain/xyo-origin-chain-types';
 export * from '../signing/xyo-ec-secp-256k-signer-provider';
 export * from '../signing/xyo-rsa-sha256-signer-provider';
 export * from '../signing/xyo-rsa-sha256-signer';
@@ -38,6 +38,7 @@ export * from '../storage/xyo-file-system-storage-provider';
 export * from '../storage/xyo-in-memory-storage-provider';
 export * from '../storage/xyo-storage-provider';
 export * from '../test/xyo-test-utils';
+export * from '../utils/logger';
 export * from '../utils/xyo-buffer-utils';
 export * from '../xyo-node/bound-witness-origin-chain-extractor';
 export * from '../xyo-node/xyo-bound-witness-handler-provider-impl';
@@ -94,8 +95,8 @@ export * from '../xyo-packer/serializers/xyo-number-unsigned-serializer';
 export * from '../xyo-packer/serializers/xyo-payload-serializer';
 export * from '../xyo-packer/serializers/xyo-previous-hash-serializer';
 export * from '../xyo-packer/serializers/xyo-rsa-public-key-serializer';
-export * from '../xyo-packer/serializers/xyo-rsa-signature-serializer';
 export * from '../xyo-packer/serializers/xyo-rsa-sha256-signer-serializer';
+export * from '../xyo-packer/serializers/xyo-rsa-signature-serializer';
 export * from '../xyo-packer/serializers/xyo-signature-set-serializer';
 export * from '../xyo-packer/serializers/xyo-uncompressed-ec-public-key-serializer';
 export * from '../components/heuristics/numbers/xyo-index';
