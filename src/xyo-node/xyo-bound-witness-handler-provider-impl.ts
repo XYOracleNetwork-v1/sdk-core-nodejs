@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 27th September 2018 11:11:29 am
+ * @Last modified time: Thursday, 27th September 2018 12:57:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,6 +19,8 @@ import { extractNestedBoundWitnesses } from './bound-witness-origin-chain-extrac
 import { XyoBoundWitnessHandlerProvider, XyoBoundWitnessPayloadProvider, XyoBoundWitnessSuccessListener } from './xyo-node-types';
 import { XyoOriginBlockRepository, XyoOriginChainStateRepository } from '../origin-chain/xyo-origin-chain-types';
 import { XyoBase } from '../components/xyo-base';
+import { XyoBoundWitnessInteraction } from './xyo-bound-witness-interaction';
+import { XyoPayload } from '../lib';
 
 export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBoundWitnessHandlerProvider {
 
@@ -29,7 +31,15 @@ export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBo
     private readonly originState: XyoOriginChainStateRepository,
     private readonly originChainNavigator: XyoOriginBlockRepository,
     private readonly boundWitnessPayloadProvider: XyoBoundWitnessPayloadProvider,
-    private readonly boundWitnessSuccessListener: XyoBoundWitnessSuccessListener
+    private readonly boundWitnessSuccessListener: XyoBoundWitnessSuccessListener,
+    private readonly boundWitnessInteractionProvider: {
+      new(
+        packer: XyoPacker,
+        networkPipe: XyoNetworkPipe,
+        signers: XyoSigner[],
+        payload: XyoPayload
+      ): XyoBoundWitnessInteraction
+    }
   ) {
     super();
   }
@@ -37,7 +47,7 @@ export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBo
   public async handle(networkPipe: XyoNetworkPipe): Promise<XyoBoundWitness> {
     const payload = await this.boundWitnessPayloadProvider.getPayload(this.originState);
 
-    const interaction = new XyoBoundWitnessServerInteraction(
+    const interaction = new this.boundWitnessInteractionProvider(
       this.xyoPacker,
       networkPipe,
       this.signers,

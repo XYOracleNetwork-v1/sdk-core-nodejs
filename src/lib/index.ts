@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 27th September 2018 11:14:41 am
+ * @Last modified time: Thursday, 27th September 2018 1:00:13 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-// Auto-generated on Thu Sep 27 2018 11:14:07 GMT-0700 (Pacific Daylight Time)
+// Auto-generated on Thu Sep 27 2018 12:59:50 GMT-0700 (Pacific Daylight Time)
 
 export * from '../components/xyo-base';
 export * from '../components/xyo-error';
@@ -43,6 +43,7 @@ export * from '../utils/xyo-buffer-utils';
 export * from '../xyo-node/bound-witness-origin-chain-extractor';
 export * from '../xyo-node/xyo-bound-witness-client-interaction';
 export * from '../xyo-node/xyo-bound-witness-handler-provider-impl';
+export * from '../xyo-node/xyo-bound-witness-interaction';
 export * from '../xyo-node/xyo-bound-witness-payload-provider-impl';
 export * from '../xyo-node/xyo-bound-witness-server-interaction';
 export * from '../xyo-node/xyo-node-types';

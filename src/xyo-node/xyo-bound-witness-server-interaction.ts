@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 27th September 2018 9:47:56 am
+ * @Last modified time: Thursday, 27th September 2018 12:54:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,34 +19,18 @@ import { XYO_TCP_CATALOGUE_LENGTH_IN_BYTES, XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES
 import { XyoError } from '../components/xyo-error';
 import { XyoPacker } from '../xyo-packer/xyo-packer';
 import { XyoSigner } from '../signing/xyo-signer';
-import { XyoBase } from '../components/xyo-base';
+import { XyoBoundWitnessInteraction } from './xyo-bound-witness-interaction';
 
 /**
  * An `XyoBoundWitnessInteraction` manages a "session"
  * between two networked nodes.
  */
-export class XyoBoundWitnessServerInteraction extends XyoBase {
-
-  /**
-   * Creates a new instance of a `XyoBoundWitnessInteraction`
-   * @param xyoPacker A packer for serializing and deserializing values
-   * @param networkPipe A pipe to communicate with a peers
-   * @param signers The signers to use for the bound witness
-   * @param payload The payload to embed in the bound witness
-   */
-
-  constructor (
-    private readonly xyoPacker: XyoPacker,
-    private readonly networkPipe: XyoNetworkPipe,
-    private readonly signers: XyoSigner[],
-    private readonly payload: XyoPayload
-  ) {
-    super();
-  }
+export class XyoBoundWitnessServerInteraction extends XyoBoundWitnessInteraction {
 
   /**
    * Does a bound witness with another node
    */
+
   public async run(): Promise<XyoBoundWitness> {
     let disconnected = false;
 

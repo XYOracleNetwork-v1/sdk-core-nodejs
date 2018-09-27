@@ -4,50 +4,28 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-client-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 27th September 2018 9:56:09 am
+ * @Last modified time: Thursday, 27th September 2018 12:55:20 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoZigZagBoundWitness } from '../components/bound-witness/xyo-zig-zag-bound-witness';
-import { XyoPayload } from '../components/xyo-payload';
-import { CatalogueItem } from '../network/xyo-catalogue-item';
-import { XyoNetworkPipe } from '../network/xyo-network';
 import { XyoBoundWitnessTransfer } from '../components/bound-witness/xyo-bound-witness-transfer';
 import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
-import { XYO_TCP_CATALOGUE_LENGTH_IN_BYTES, XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES } from '../network/tcp-network/xyo-tcp-network-constants';
 import { XyoError } from '../components/xyo-error';
-import { XyoPacker } from '../xyo-packer/xyo-packer';
-import { XyoSigner } from '../signing/xyo-signer';
-import { XyoBase } from '../components/xyo-base';
+import { XyoBoundWitnessInteraction } from './xyo-bound-witness-interaction';
 
 /**
  * An `XyoBoundWitnessClientInteraction` manages a "session"
  * between two networked nodes.
  */
 
-export class XyoBoundWitnessClientInteraction extends XyoBase {
-
-  /**
-   * Creates a new instance of a `XyoBoundWitnessClientInteraction`
-   * @param xyoPacker A packer for serializing and deserializing values
-   * @param networkPipe A pipe to communicate with a peers
-   * @param signers The signers to use for the bound witness
-   * @param payload The payload to embed in the bound witness
-   */
-
-  constructor (
-    private readonly xyoPacker: XyoPacker,
-    private readonly networkPipe: XyoNetworkPipe,
-    private readonly signers: XyoSigner[],
-    private readonly payload: XyoPayload
-  ) {
-    super();
-  }
+export class XyoBoundWitnessClientInteraction extends XyoBoundWitnessInteraction {
 
   /**
    * Does a bound witness with another node
    */
+
   public async run(): Promise<XyoBoundWitness> {
     let disconnected = false;
 
