@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node-types.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 3:00:07 pm
+ * @Last modified time: Thursday, 27th September 2018 11:10:00 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -37,4 +37,8 @@ export interface XyoPeerConnectionDelegate {
 
 export interface XyoBoundWitnessHandlerProvider {
   handle: xyoBoundWitnessHandlerFn;
+}
+
+export interface XyoBoundWitnessSuccessListener {
+  onBoundWitnessSuccess(boundWitness: XyoBoundWitness): Promise<void>;
 }

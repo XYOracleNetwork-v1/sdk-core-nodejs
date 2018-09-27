@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 27th September 2018 9:48:25 am
+ * @Last modified time: Thursday, 27th September 2018 11:11:29 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -16,7 +16,7 @@ import { XyoBoundWitnessServerInteraction } from './xyo-bound-witness-server-int
 import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
 import { XyoHashProvider } from '../hash-provider/xyo-hash-provider';
 import { extractNestedBoundWitnesses } from './bound-witness-origin-chain-extractor';
-import { XyoBoundWitnessHandlerProvider, XyoBoundWitnessPayloadProvider } from './xyo-node-types';
+import { XyoBoundWitnessHandlerProvider, XyoBoundWitnessPayloadProvider, XyoBoundWitnessSuccessListener } from './xyo-node-types';
 import { XyoOriginBlockRepository, XyoOriginChainStateRepository } from '../origin-chain/xyo-origin-chain-types';
 import { XyoBase } from '../components/xyo-base';
 
@@ -28,7 +28,8 @@ export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBo
     private readonly hashingProvider: XyoHashProvider,
     private readonly originState: XyoOriginChainStateRepository,
     private readonly originChainNavigator: XyoOriginBlockRepository,
-    private readonly boundWitnessPayloadProvider: XyoBoundWitnessPayloadProvider
+    private readonly boundWitnessPayloadProvider: XyoBoundWitnessPayloadProvider,
+    private readonly boundWitnessSuccessListener: XyoBoundWitnessSuccessListener
   ) {
     super();
   }
@@ -63,6 +64,10 @@ export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBo
       const nestedHashValue = await nestedBoundWitness.getHash(this.hashingProvider);
       return this.originChainNavigator.addOriginBlock(nestedHashValue, nestedBoundWitness);
     }));
+
+    if (this.boundWitnessSuccessListener) {
+      await this.boundWitnessSuccessListener.onBoundWitnessSuccess(boundWitness);
+    }
 
     return;
   }

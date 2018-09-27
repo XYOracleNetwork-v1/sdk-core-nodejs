@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 27th September 2018 9:59:18 am
+ * @Last modified time: Thursday, 27th September 2018 11:14:41 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-// Auto-generated on Thu Sep 27 2018 09:58:51 GMT-0700 (Pacific Daylight Time)
+// Auto-generated on Thu Sep 27 2018 11:14:07 GMT-0700 (Pacific Daylight Time)
 
 export * from '../components/xyo-base';
 export * from '../components/xyo-error';

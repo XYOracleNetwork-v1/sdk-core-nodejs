@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-peer-connection-provider-builder.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 5:47:20 pm
+ * @Last modified time: Thursday, 27th September 2018 11:12:40 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoPeerConnectionDelegate, XyoPeerConnectionHandler } from './xyo-node-types';
+import { XyoPeerConnectionDelegate, XyoPeerConnectionHandler, XyoBoundWitnessSuccessListener } from './xyo-node-types';
 import { XyoPeerConnectionDelegateImpl } from './xyo-peer-connection-provider-impl';
 import { XyoNetworkProcedureCatalogue, XyoNetworkProviderInterface } from '../network/xyo-network';
 import { XyoPacker } from '../xyo-packer/xyo-packer';
@@ -30,7 +30,8 @@ export class XyoPeerConnectionProviderFactory {
     private readonly hashingProvider: XyoHashProvider,
     private readonly originChainStateManager: XyoOriginChainStateRepository,
     private readonly originChainNavigator: XyoOriginBlockRepository,
-    private readonly boundWitnessPayloadProvider: XyoBoundWitnessPayloadProviderImpl
+    private readonly boundWitnessPayloadProvider: XyoBoundWitnessPayloadProviderImpl,
+    private readonly boundWitnessSuccessListener: XyoBoundWitnessSuccessListener
   ) {}
 
   public newInstance(): XyoPeerConnectionDelegate {
@@ -48,7 +49,8 @@ export class XyoPeerConnectionProviderFactory {
       this.hashingProvider,
       this.originChainStateManager,
       this.originChainNavigator,
-      this.boundWitnessPayloadProvider
+      this.boundWitnessPayloadProvider,
+      this.boundWitnessSuccessListener
     );
 
     return new XyoPeerConnectionHandlerImpl(boundWitnessHandlerProvider);
