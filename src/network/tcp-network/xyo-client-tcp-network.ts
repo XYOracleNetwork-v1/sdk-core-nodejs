@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-client-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 4:44:33 pm
+ * @Last modified time: Thursday, 27th September 2018 12:38:45 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -85,9 +85,12 @@ export class XyoClientTcpNetwork extends XyoBase implements XyoNetworkProviderIn
     }
   }
 
-  private getConnection(nextAddress: string, catalogue: XyoNetworkProcedureCatalogue): Promise<XyoTcpConnectionResult> {
+  private getConnection(
+    nextAddress: {port: number, host: string},
+    catalogue: XyoNetworkProcedureCatalogue
+  ): Promise<XyoTcpConnectionResult> {
     return new Promise((resolve, reject) => {
-      const client = net.createConnection(nextAddress, () => {
+      const client = net.createConnection(nextAddress.port, nextAddress.host, () => {
         const mask = catalogueItemsToMask(this.catalogueItems);
         const maskBuffer = Buffer.alloc(4);
 
