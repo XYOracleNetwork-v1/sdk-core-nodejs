@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-peer-connection-handler.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 10:54:02 am
+ * @Last modified time: Thursday, 27th September 2018 4:01:11 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -31,6 +31,12 @@ export class XyoPeerConnectionHandlerImpl implements XyoPeerConnectionHandler {
 
     switch (category) {
       case CatalogueItem.BOUND_WITNESS:
+        await this.boundWitnessHandler.handle(networkPipe);
+        return;
+      case CatalogueItem.GIVE_ORIGIN_CHAIN:
+        await this.boundWitnessHandler.handle(networkPipe);
+        return;
+      case CatalogueItem.TAKE_ORIGIN_CHAIN:
         await this.boundWitnessHandler.handle(networkPipe);
         return;
     }
