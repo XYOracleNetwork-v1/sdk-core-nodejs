@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-client-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 27th September 2018 12:38:45 pm
+ * @Last modified time: Thursday, 27th September 2018 2:12:25 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -183,7 +183,7 @@ export class XyoClientTcpNetwork extends XyoBase implements XyoNetworkProviderIn
             data,
             XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES,
             false,
-            XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES + XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES
+            XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES
           );
 
           const appDataStartIndex = XYO_TCP_CATALOGUE_LENGTH_IN_BYTES +

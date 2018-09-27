@@ -4,21 +4,17 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 27th September 2018 12:54:40 pm
+ * @Last modified time: Thursday, 27th September 2018 1:44:39 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoZigZagBoundWitness } from '../components/bound-witness/xyo-zig-zag-bound-witness';
-import { XyoPayload } from '../components/xyo-payload';
 import { CatalogueItem } from '../network/xyo-catalogue-item';
-import { XyoNetworkPipe } from '../network/xyo-network';
 import { XyoBoundWitnessTransfer } from '../components/bound-witness/xyo-bound-witness-transfer';
 import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
 import { XYO_TCP_CATALOGUE_LENGTH_IN_BYTES, XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES } from '../network/tcp-network/xyo-tcp-network-constants';
 import { XyoError } from '../components/xyo-error';
-import { XyoPacker } from '../xyo-packer/xyo-packer';
-import { XyoSigner } from '../signing/xyo-signer';
 import { XyoBoundWitnessInteraction } from './xyo-bound-witness-interaction';
 
 /**
@@ -83,7 +79,6 @@ export class XyoBoundWitnessServerInteraction extends XyoBoundWitnessInteraction
 
             /** Add transfer to bound witness */
             const transfer = await boundWitness.incomingData(transferObj, false);
-            this.logInfo(2, this.xyoPacker.serialize(boundWitness, boundWitness.major, boundWitness.minor, true));
 
             if (!disconnected) {
               /** serialize the bound witness transfer */
