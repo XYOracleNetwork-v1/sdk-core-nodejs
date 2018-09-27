@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 24th September 2018 1:53:40 pm
+ * @Last modified time: Thursday, 27th September 2018 9:48:25 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,7 @@
 import { XyoPacker } from '../xyo-packer/xyo-packer';
 import { XyoSigner } from '../signing/xyo-signer';
 import { XyoNetworkPipe } from '../network/xyo-network';
-import { XyoBoundWitnessInteraction } from './xyo-bound-witness-interaction';
+import { XyoBoundWitnessServerInteraction } from './xyo-bound-witness-server-interaction';
 import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
 import { XyoHashProvider } from '../hash-provider/xyo-hash-provider';
 import { extractNestedBoundWitnesses } from './bound-witness-origin-chain-extractor';
@@ -36,7 +36,7 @@ export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBo
   public async handle(networkPipe: XyoNetworkPipe): Promise<XyoBoundWitness> {
     const payload = await this.boundWitnessPayloadProvider.getPayload(this.originState);
 
-    const interaction = new XyoBoundWitnessInteraction(
+    const interaction = new XyoBoundWitnessServerInteraction(
       this.xyoPacker,
       networkPipe,
       this.signers,
@@ -54,16 +54,6 @@ export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBo
 
   private async handleBoundWitnessSuccess(boundWitness: XyoBoundWitness): Promise<void> {
     const hashValue = await boundWitness.getHash(this.hashingProvider);
-
-    // Print public key values
-    const hashHexValue = this.xyoPacker.serialize(hashValue, hashValue.major, hashValue.minor, true).toString('hex');
-
-    boundWitness.publicKeys.forEach((publicKeySet) => {
-      publicKeySet.array.forEach((element) => {
-        const publicKeyHex = this.xyoPacker.serialize(element, element.major, element.minor, true).toString('hex');
-        this.logInfo(`Bound witness for ${publicKeyHex} for block ${hashHexValue}`);
-      });
-    });
 
     await this.originState.updateOriginChainState(hashValue);
     await this.originChainNavigator.addOriginBlock(hashValue, boundWitness);

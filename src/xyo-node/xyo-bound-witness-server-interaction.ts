@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 1:48:16 pm
+ * @Last modified time: Thursday, 27th September 2018 9:47:56 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -25,7 +25,7 @@ import { XyoBase } from '../components/xyo-base';
  * An `XyoBoundWitnessInteraction` manages a "session"
  * between two networked nodes.
  */
-export class XyoBoundWitnessInteraction extends XyoBase {
+export class XyoBoundWitnessServerInteraction extends XyoBase {
 
   /**
    * Creates a new instance of a `XyoBoundWitnessInteraction`

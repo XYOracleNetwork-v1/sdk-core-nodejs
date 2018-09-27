@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 1:22:04 pm
+ * @Last modified time: Wednesday, 26th September 2018 4:25:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,6 +17,7 @@ import { XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES, XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES
 
 import net from 'net';
 import { XyoBase } from '../../components/xyo-base';
+import { readNumberFromBuffer } from '../../utils/xyo-buffer-utils';
 
 /**
  * A network provider build on top of the TCP/IP stack.
@@ -191,7 +192,20 @@ export class XyoServerTcpNetwork extends XyoBase implements XyoNetworkProviderIn
             c.removeListener('close', onConnectionClose);
             server.removeListener('connection', onConnection);
             this.connection = undefined;
-            return resolve(new XyoTcpConnectionResult(c, data, validCatalogueItems || []));
+            const appDataIndex = readNumberFromBuffer(
+              data,
+              XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES,
+              false,
+              XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES + XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES
+            );
+
+            const trimmedData: Buffer = data.slice(
+              XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES +
+              XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES +
+              appDataIndex
+            );
+
+            return resolve(new XyoTcpConnectionResult(c, trimmedData, validCatalogueItems || []));
           }
         };
 

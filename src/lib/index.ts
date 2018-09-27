@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 1:23:00 pm
+ * @Last modified time: Thursday, 27th September 2018 9:59:18 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-// Auto-generated on Wed Sep 26 2018 13:22:34 GMT-0700 (Pacific Daylight Time)
+// Auto-generated on Thu Sep 27 2018 09:58:51 GMT-0700 (Pacific Daylight Time)
 
 export * from '../components/xyo-base';
 export * from '../components/xyo-error';
@@ -41,9 +41,10 @@ export * from '../test/xyo-test-utils';
 export * from '../utils/logger';
 export * from '../utils/xyo-buffer-utils';
 export * from '../xyo-node/bound-witness-origin-chain-extractor';
+export * from '../xyo-node/xyo-bound-witness-client-interaction';
 export * from '../xyo-node/xyo-bound-witness-handler-provider-impl';
-export * from '../xyo-node/xyo-bound-witness-interaction';
 export * from '../xyo-node/xyo-bound-witness-payload-provider-impl';
+export * from '../xyo-node/xyo-bound-witness-server-interaction';
 export * from '../xyo-node/xyo-node-types';
 export * from '../xyo-node/xyo-node';
 export * from '../xyo-node/xyo-peer-connection-handler-impl';
@@ -77,6 +78,7 @@ export * from '../components/hashing/xyo-sha256-hash';
 export * from '../components/hashing/xyo-sha512-hash';
 export * from '../components/signing/xyo-next-public-key';
 export * from '../components/signing/xyo-signature';
+export * from '../network/tcp-network/xyo-client-tcp-network';
 export * from '../network/tcp-network/xyo-server-tcp-network';
 export * from '../network/tcp-network/xyo-tcp-connection-result';
 export * from '../network/tcp-network/xyo-tcp-network-constants';
