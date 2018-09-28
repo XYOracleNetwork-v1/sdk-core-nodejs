@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 27th September 2018 12:57:48 pm
+ * @Last modified time: Friday, 28th September 2018 10:19:00 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,6 @@
 import { XyoPacker } from '../xyo-packer/xyo-packer';
 import { XyoSigner } from '../signing/xyo-signer';
 import { XyoNetworkPipe } from '../network/xyo-network';
-import { XyoBoundWitnessServerInteraction } from './xyo-bound-witness-server-interaction';
 import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
 import { XyoHashProvider } from '../hash-provider/xyo-hash-provider';
 import { extractNestedBoundWitnesses } from './bound-witness-origin-chain-extractor';
@@ -20,13 +19,13 @@ import { XyoBoundWitnessHandlerProvider, XyoBoundWitnessPayloadProvider, XyoBoun
 import { XyoOriginBlockRepository, XyoOriginChainStateRepository } from '../origin-chain/xyo-origin-chain-types';
 import { XyoBase } from '../components/xyo-base';
 import { XyoBoundWitnessInteraction } from './xyo-bound-witness-interaction';
-import { XyoPayload } from '../lib';
+import { XyoPayload } from '../components/xyo-payload';
+import { XyoError } from '../lib';
 
 export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBoundWitnessHandlerProvider {
 
   constructor (
     private readonly xyoPacker: XyoPacker,
-    private readonly signers: XyoSigner[],
     private readonly hashingProvider: XyoHashProvider,
     private readonly originState: XyoOriginChainStateRepository,
     private readonly originChainNavigator: XyoOriginBlockRepository,
@@ -45,12 +44,19 @@ export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBo
   }
 
   public async handle(networkPipe: XyoNetworkPipe): Promise<XyoBoundWitness> {
-    const payload = await this.boundWitnessPayloadProvider.getPayload(this.originState);
+    const [payload, signers] = await Promise.all([
+      this.boundWitnessPayloadProvider.getPayload(this.originState),
+      this.originState.getSigners()
+    ]);
+
+    if (!networkPipe.otherCatalogue || networkPipe.otherCatalogue.length !== 1) {
+      throw new XyoError(`No catalogue found. Catalogue required`, XyoError.errorType.ERR_INVALID_PARAMETERS);
+    }
 
     const interaction = new this.boundWitnessInteractionProvider(
       this.xyoPacker,
       networkPipe,
-      this.signers,
+      signers,
       payload
     );
 

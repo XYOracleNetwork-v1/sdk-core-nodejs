@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 27th September 2018 12:52:48 pm
+ * @Last modified time: Friday, 28th September 2018 9:45:44 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -16,6 +16,7 @@ import { XyoPacker } from '../xyo-packer/xyo-packer';
 import { XyoNetworkPipe } from '../network/xyo-network';
 import { XyoSigner } from '../signing/xyo-signer';
 import { XyoPayload } from '../components/xyo-payload';
+import { CatalogueItem } from '../network/xyo-catalogue-item';
 
 export abstract class XyoBoundWitnessInteraction extends XyoBase implements XyoNodeInteraction<XyoBoundWitness> {
 

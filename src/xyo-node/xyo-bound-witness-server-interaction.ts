@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 27th September 2018 5:25:56 pm
+ * @Last modified time: Friday, 28th September 2018 9:48:42 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -21,7 +21,9 @@ import { XyoBoundWitnessInteraction } from './xyo-bound-witness-interaction';
  * An `XyoBoundWitnessInteraction` manages a "session"
  * between two networked nodes.
  */
-export class XyoBoundWitnessServerInteraction extends XyoBoundWitnessInteraction {
+export abstract class XyoBoundWitnessServerInteraction extends XyoBoundWitnessInteraction {
+
+  public abstract catalogueItem: CatalogueItem;
 
   /**
    * Does a bound witness with another node
@@ -58,7 +60,7 @@ export class XyoBoundWitnessServerInteraction extends XyoBoundWitnessInteraction
 
           /** Tell the other node this is the catalogue item you chose */
           const catalogueBuffer = Buffer.alloc(XYO_TCP_CATALOGUE_LENGTH_IN_BYTES);
-          catalogueBuffer.writeUInt32BE(CatalogueItem.TAKE_ORIGIN_CHAIN, 0);
+          catalogueBuffer.writeUInt32BE(this.catalogueItem, 0);
           const sizeOfCatalogueInBytesBuffers = Buffer.alloc(XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES);
           sizeOfCatalogueInBytesBuffers.writeUInt8(XYO_TCP_CATALOGUE_LENGTH_IN_BYTES, 0);
 

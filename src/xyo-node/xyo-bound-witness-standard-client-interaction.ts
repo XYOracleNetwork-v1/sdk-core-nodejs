@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-client-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 27th September 2018 12:55:20 pm
+ * @Last modified time: Friday, 28th September 2018 9:59:24 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,7 +20,7 @@ import { XyoBoundWitnessInteraction } from './xyo-bound-witness-interaction';
  * between two networked nodes.
  */
 
-export class XyoBoundWitnessClientInteraction extends XyoBoundWitnessInteraction {
+export class XyoBoundWitnessStandardClientInteraction extends XyoBoundWitnessInteraction {
 
   /**
    * Does a bound witness with another node
