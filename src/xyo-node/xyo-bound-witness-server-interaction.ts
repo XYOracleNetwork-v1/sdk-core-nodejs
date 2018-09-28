@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 27th September 2018 1:44:39 pm
+ * @Last modified time: Thursday, 27th September 2018 5:25:56 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -58,7 +58,7 @@ export class XyoBoundWitnessServerInteraction extends XyoBoundWitnessInteraction
 
           /** Tell the other node this is the catalogue item you chose */
           const catalogueBuffer = Buffer.alloc(XYO_TCP_CATALOGUE_LENGTH_IN_BYTES);
-          catalogueBuffer.writeUInt32BE(CatalogueItem.BOUND_WITNESS, 0);
+          catalogueBuffer.writeUInt32BE(CatalogueItem.TAKE_ORIGIN_CHAIN, 0);
           const sizeOfCatalogueInBytesBuffers = Buffer.alloc(XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES);
           sizeOfCatalogueInBytesBuffers.writeUInt8(XYO_TCP_CATALOGUE_LENGTH_IN_BYTES, 0);
 
