@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 27th September 2018 12:31:53 pm
+ * @Last modified time: Friday, 28th September 2018 1:53:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -117,7 +117,7 @@ export class XyoServerTcpNetwork extends XyoBase implements XyoNetworkProviderIn
   private getConnection(server: net.Server, catalogue: XyoNetworkProcedureCatalogue): Promise<XyoTcpConnectionResult> {
     return new Promise((resolve, reject) => {
       const onConnection = (c: net.Socket) => {
-        this.logInfo(`Connection made`);
+        this.logInfo(`Server Connection made with ${c.remoteAddress || 'unknown ip'}`);
 
         if (this.connection) { // Prevents multiple connections
           this.logInfo(`Connection already exists, will close incoming connection`);

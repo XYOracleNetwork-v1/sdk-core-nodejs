@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-connection-result.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 4:13:22 pm
+ * @Last modified time: Friday, 28th September 2018 1:53:09 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -35,13 +35,7 @@ export class XyoTcpConnectionResult {
     public readonly data: Buffer,
     public readonly catalogueItems: CatalogueItem[]
   ) {
-    const socketInfo = socket.address() as net.AddressInfo;
-    this.socketId = Buffer.from([
-      socketInfo.family,
-      '__',
-      socketInfo.address,
-      '__',
-      socketInfo.port
-    ]);
+
+    this.socketId = Buffer.from(socket.remoteAddress || 'unknown');
   }
 }
