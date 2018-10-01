@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 1st October 2018 11:09:15 am
+ * @Last modified time: Monday, 1st October 2018 11:26:25 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -48,10 +48,6 @@ export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBo
       this.boundWitnessPayloadProvider.getPayload(this.originState),
       this.originState.getSigners()
     ]);
-
-    if (!networkPipe.otherCatalogue || networkPipe.otherCatalogue.length !== 1) {
-      throw new XyoError(`No catalogue found. Catalogue required`, XyoError.errorType.ERR_INVALID_PARAMETERS);
-    }
 
     const interaction = new this.boundWitnessInteractionProvider(
       this.xyoPacker,
