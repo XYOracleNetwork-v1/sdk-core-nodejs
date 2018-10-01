@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 28th September 2018 10:19:00 am
+ * @Last modified time: Monday, 1st October 2018 11:09:15 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,7 +20,7 @@ import { XyoOriginBlockRepository, XyoOriginChainStateRepository } from '../orig
 import { XyoBase } from '../components/xyo-base';
 import { XyoBoundWitnessInteraction } from './xyo-bound-witness-interaction';
 import { XyoPayload } from '../components/xyo-payload';
-import { XyoError } from '../lib';
+import { XyoError } from '../components/xyo-error';
 
 export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBoundWitnessHandlerProvider {
 

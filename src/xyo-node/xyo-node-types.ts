@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node-types.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 28th September 2018 10:31:42 am
+ * @Last modified time: Monday, 1st October 2018 11:09:58 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,7 +13,7 @@ import { XyoNetworkPipe } from '../network/xyo-network';
 import { XyoPayload } from '../components/xyo-payload';
 import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
 import { XyoOriginChainStateRepository } from '../origin-chain/xyo-origin-chain-types';
-import { CatalogueItem } from '../lib';
+import { CatalogueItem } from '../network/xyo-catalogue-item';
 
 export type xyoBoundWitnessHandlerFn = (networkPipe: XyoNetworkPipe) => Promise<XyoBoundWitness>;
 
