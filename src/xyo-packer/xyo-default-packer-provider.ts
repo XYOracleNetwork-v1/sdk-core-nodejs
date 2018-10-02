@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 10:29:33 am
+ * @Last modified time: Thursday, 27th September 2018 4:39:05 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -62,6 +62,7 @@ import { XyoEcdsaSignatureSerializer } from './serializers/xyo-ecdsa-signature-s
 import { XyoBridgeBlockSet } from '../components/arrays/xyo-bridge-block-set';
 import { XyoBridgeBlockSetSerializer } from './serializers/xyo-bridge-block-set-serializer';
 import { XyoBridgeHashSet } from '../components/arrays/xyo-bridge-hash-set';
+import { XyoEcSecp256k } from '../components/signing/algorithms/ecc/xyo-ec-secp-256k';
 
 /**
  * A class for configuring the packing, serialization, and deserialization
@@ -144,9 +145,9 @@ export class XyoDefaultPackerProvider {
       new XyoEcSecp256kSignerSerializer(0x01, ecSecp256kSha256SignerProvider)
     );
 
-    const ecSecp256kSha1SignerProvider = new XyoEcSecp256kSignerProvider(sha1HashProvider, 0x06, 0x02, 0x05, 0x012);
-    packer.registerSerializerDeserializer(XyoRSASha256Signer.name,
-      new XyoEcSecp256kSignerSerializer(0x01, ecSecp256kSha1SignerProvider)
+    const ecSecp256kSha1SignerProvider = new XyoEcSecp256kSignerProvider(sha1HashProvider, 0x06, 0x02, 0x05, 0x02);
+    packer.registerSerializerDeserializer(`XyoRSASha1Signer`,
+      new XyoEcSecp256kSignerSerializer(0x0, ecSecp256kSha1SignerProvider)
     );
 
     packer.registerSerializerDeserializer('XyoECDSASecp256k1Sha256Signature',

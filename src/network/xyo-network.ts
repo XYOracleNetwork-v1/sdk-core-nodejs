@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-network-interfaces.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 4:52:41 pm
+ * @Last modified time: Friday, 28th September 2018 2:52:58 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -34,6 +34,7 @@ export interface XyoNetworkPeer {
  */
 export interface XyoNetworkProcedureCatalogue {
   canDo(catalogueItem: CatalogueItem): boolean;
+  getCurrentCatalogue(): CatalogueItem[];
 }
 
 /**
@@ -64,4 +65,8 @@ export interface XyoNetworkPipe {
 export interface XyoNetworkProviderInterface {
   find(catalogue: XyoNetworkProcedureCatalogue): Promise<XyoNetworkPipe>;
   stopServer(): Promise<void>;
+}
+
+export interface XyoNetworkAddressProvider {
+  next(): Promise<{host: string, port: number}>;
 }

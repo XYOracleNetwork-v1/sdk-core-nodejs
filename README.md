@@ -1,6 +1,8 @@
 # sdk-core-nodejs
 
-Core functionality for the XYO nodejs projects
+Core functionality for the XYO nodejs projects. This repository implements
+the core objects used in the XYO protocol. Additionally it provides core
+XYO features like performing bound-witnesses, hashing, signing, and serialization.
 
 ## Getting started
 

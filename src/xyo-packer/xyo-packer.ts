@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 24th September 2018 1:52:00 pm
+ * @Last modified time: Wednesday, 26th September 2018 1:19:31 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -176,7 +176,7 @@ export class XyoPacker extends XyoBase {
 
   private makeTyped(data: Buffer, config: XYOSerializer<XyoObject>) {
     const encodedSizeBuffer = this.encodedSize(data.length, config);
-    const dataBuffer = data || new Buffer(0);
+    const dataBuffer = data || Buffer.alloc(0);
 
     const typedBufferSize = config.id.length + encodedSizeBuffer.length + dataBuffer.length;
 
@@ -191,7 +191,7 @@ export class XyoPacker extends XyoBase {
 
   private makeUntyped(data: Buffer, config: XYOSerializer<XyoObject>) {
     const encodedSizeBuffer = this.encodedSize(data.length, config);
-    const dataBuffer = data || new Buffer(0);
+    const dataBuffer = data || Buffer.alloc(0);
     const typedBufferSize = encodedSizeBuffer.length + dataBuffer.length;
 
     const unTypedBuffer = Buffer.concat([
@@ -204,10 +204,10 @@ export class XyoPacker extends XyoBase {
 
   private encodedSize(sizeOfData: number, config: XYOSerializer<XyoObject>) {
     if (!config.sizeIdentifierSize) {
-      return new Buffer(0);
+      return Buffer.alloc(0);
     }
 
-    const buffer = new Buffer(config.sizeIdentifierSize || 0);
+    const buffer = Buffer.alloc(config.sizeIdentifierSize || 0);
 
     switch (config.sizeIdentifierSize) {
       case 1:

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network-pipe.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 5:10:16 pm
+ * @Last modified time: Wednesday, 26th September 2018 1:17:49 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,6 +12,7 @@
 import { XyoNetworkPipe } from '../xyo-network';
 import { XyoTcpConnectionResult } from './xyo-tcp-connection-result';
 import { XyoError } from '../../components/xyo-error';
+import { CatalogueItem } from '../xyo-catalogue-item';
 
 /**
  * A communication pipe using tcp/ip stack
@@ -42,7 +43,7 @@ export class XyoTcpNetworkPipe implements XyoNetworkPipe {
    * The peers catalogue
    */
 
-  get otherCatalogue () {
+  get otherCatalogue (): CatalogueItem[] {
     return this.connectionResult.catalogueItems;
   }
 
@@ -103,7 +104,7 @@ export class XyoTcpNetworkPipe implements XyoNetworkPipe {
    */
 
   private padBufferWithSize(b: Buffer) {
-    const sizeBuffer = new Buffer(4);
+    const sizeBuffer = Buffer.alloc(4);
     sizeBuffer.writeUInt32BE(b.length + 4, 0);
 
     return Buffer.concat([sizeBuffer, b]);
@@ -135,7 +136,7 @@ export class XyoTcpNetworkPipe implements XyoNetworkPipe {
       }
 
       data = Buffer.concat([
-        data || new Buffer(0),
+        data || Buffer.alloc(0),
         chunk
       ]);
 

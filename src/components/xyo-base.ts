@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 24th September 2018 6:43:48 pm
+ * @Last modified time: Wednesday, 26th September 2018 2:04:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-type XyoLogger = Console;
+import { XyoLogger } from "../utils/logger";
 
 export abstract class XyoBase {
   public logger!: XyoLogger;
@@ -42,4 +42,4 @@ export abstract class XyoBase {
   }
 }
 
-XyoBase.prototype.logger = console;
+XyoBase.prototype.logger = new XyoLogger();

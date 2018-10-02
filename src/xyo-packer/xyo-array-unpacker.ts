@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-unpacker.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 12:14:04 pm
+ * @Last modified time: Wednesday, 26th September 2018 1:19:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -93,7 +93,7 @@ export class XyoArrayUnpacker {
     this.getSize(this.sizeOfSize);
 
     const items: XyoObject[] = [];
-    let arrayType = new Buffer(0);
+    let arrayType = Buffer.alloc(0);
 
     if (this.typed) {
       arrayType = this.getMajorMinor();
@@ -115,7 +115,7 @@ export class XyoArrayUnpacker {
 
       const sizeOfElement = this.readCurrentSize(arrayType[0], arrayType[1]);
       if (sizeOfElement !== null) {
-        const field = new Buffer(sizeOfElement);
+        const field = Buffer.alloc(sizeOfElement);
 
         for (let i = 0; i < sizeOfElement; i += 1) {
           const byte = this.data[this.currentPosition + i];
@@ -147,7 +147,7 @@ export class XyoArrayUnpacker {
    */
 
   private getSize(sizeSize: number): number {
-    const buffer = new Buffer(sizeSize);
+    const buffer = Buffer.alloc(sizeSize);
     for (let i = 0; i < sizeSize; i += 1) {
       buffer[i] = this.data[this.currentPosition + i];
       this.currentPosition += 1;

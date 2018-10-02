@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-state-manager.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 9:27:00 am
+ * @Last modified time: Friday, 28th September 2018 11:09:49 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -85,13 +85,19 @@ export class XyoOriginChainStateInMemoryRepository implements XyoOriginChainStat
   }
 
   /**
-   * Adds a signer to be used in the next bound-witness interaction
+   * Adds a signer to be used in the next bound-witness interaction.
+   * However, if the index is 0 it will add this signer for the
+   * current block
    */
 
   public async addSigner(signer: XyoSigner) {
     const publicKey = signer.publicKey;
     this.nextPublicKey = new XyoNextPublicKey(publicKey);
-    this.waitingSigners.push(signer);
+    if (this.idx !== 0) {
+      this.waitingSigners.push(signer);
+    } else {
+      this.currentSigners.push(signer);
+    }
   }
 
   /**
@@ -124,7 +130,7 @@ export class XyoOriginChainStateInMemoryRepository implements XyoOriginChainStat
   private addWaitingSigner() {
     if (this.waitingSigners.length > 0) {
       this.currentSigners.push(this.waitingSigners[0]);
-      this.waitingSigners.splice(1, 0);
+      this.waitingSigners.splice(0, 1);
     }
   }
 }

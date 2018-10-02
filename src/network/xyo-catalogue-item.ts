@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-catalogue-item.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 2:13:17 pm
+ * @Last modified time: Wednesday, 26th September 2018 3:34:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -44,4 +44,8 @@ export function bufferToCatalogueItems(buffer: Buffer): CatalogueItem[] {
     (CatalogueItem.GIVE_ORIGIN_CHAIN & values) > 0 ? CatalogueItem.GIVE_ORIGIN_CHAIN : null
   ]
   .filter(catalogueItem => catalogueItem !== null) as CatalogueItem[];
+}
+
+export function catalogueItemsToMask(catalogueItems: CatalogueItem[]) {
+  return catalogueItems.reduce((sum, item) => sum + item, 0);
 }

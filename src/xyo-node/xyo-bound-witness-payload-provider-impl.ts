@@ -4,13 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-payload-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 5:47:54 pm
+ * @Last modified time: Thursday, 27th September 2018 10:12:32 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../components/xyo-object';
-import { XyoOriginChainStateInMemoryRepository } from '../origin-chain/xyo-origin-chain-state-in-memory-repository';
 import { XyoPayload } from '../components/xyo-payload';
 import { XyoMultiTypeArrayInt } from '../components/arrays/xyo-multi-type-array-int';
 import { XyoBoundWitnessPayloadProvider } from './xyo-node-types';
@@ -18,8 +17,11 @@ import { XyoOriginChainStateRepository } from '../origin-chain/xyo-origin-chain-
 
 export class XyoBoundWitnessPayloadProviderImpl implements XyoBoundWitnessPayloadProvider {
 
-  /** A mapping of name to heuristic-providers */
-  private readonly heuristicsProviders: {[s: string]: () => Promise<XyoObject>} = {};
+  /** A mapping of name to unsigned-heuristic-providers */
+  private readonly unsignedHeuristicsProviders: {[s: string]: () => Promise<XyoObject>} = {};
+
+  /** A mapping of name to signed-heuristic-providers */
+  private readonly signedHeuristicsProviders: {[s: string]: () => Promise<XyoObject>} = {};
 
   /**
    * A helper function for composing the payload values that will go
@@ -27,9 +29,11 @@ export class XyoBoundWitnessPayloadProviderImpl implements XyoBoundWitnessPayloa
    */
 
   public async getPayload(originState: XyoOriginChainStateRepository): Promise<XyoPayload> {
-    const heuristics = await this.getHeuristics();
-    const unsignedPayloads: XyoObject[] = ([] as XyoObject[]).concat(heuristics);
-    const signedPayloads: XyoObject[] = [];
+    const signedHeuristics = await this.getHeuristics(true);
+    const unsignedHeuristics = await this.getHeuristics(false);
+
+    const unsignedPayloads: XyoObject[] = ([] as XyoObject[]).concat(unsignedHeuristics);
+    const signedPayloads: XyoObject[] = ([] as XyoObject[]).concat(signedHeuristics);
 
     const previousHash = await originState.getPreviousHash();
     const index = await originState.getIndex();
@@ -55,11 +59,30 @@ export class XyoBoundWitnessPayloadProviderImpl implements XyoBoundWitnessPayloa
    * provider will be placed in the bound-witness
    *
    * @param name The name of the heuristics provider
+   * @param signed true if it should go into the signed payload, false if it should go into the unsigned payload
    * @param providerFn A callback function that asynchronously returns a value
    */
 
-  public addHeuristicsProvider(name: string, providerFn: () => Promise<XyoObject>) {
-    this.heuristicsProviders[name] = providerFn;
+  public addHeuristicsProvider(name: string, signed: boolean, providerFn: () => Promise<XyoObject>) {
+    if (signed) {
+      this.signedHeuristicsProviders[name] = providerFn;
+    } else {
+      this.unsignedHeuristicsProviders[name] = providerFn;
+    }
+  }
+
+  /**
+   * Removes a heuristics provider
+   * @param name The name of the heuristics provider
+   * @param signed true if it should remove from the signed payload, false if it should remove from the unsigned payload
+   */
+
+  public removeHeuristicsProvider(name: string, signed: boolean) {
+    if (signed) {
+      delete this.signedHeuristicsProviders[name];
+    } else {
+      delete this.unsignedHeuristicsProviders[name];
+    }
   }
 
   /**
@@ -67,14 +90,16 @@ export class XyoBoundWitnessPayloadProviderImpl implements XyoBoundWitnessPayloa
    * their values
    */
 
-  private async getHeuristics(): Promise<XyoObject[]> {
-    if (Object.keys(this.heuristicsProviders).length === 0) {
+  private async getHeuristics(signed: boolean): Promise<XyoObject[]> {
+    const heuristicsProvider = signed ? this.signedHeuristicsProviders : this.unsignedHeuristicsProviders;
+
+    if (Object.keys(heuristicsProvider).length === 0) {
       return [];
     }
 
     return Promise.all(
-      Object.keys(this.heuristicsProviders).map((heuristicName) => {
-        const providerFn = this.heuristicsProviders[heuristicName];
+      Object.keys(heuristicsProvider).map((heuristicName) => {
+        const providerFn = heuristicsProvider[heuristicName];
         return providerFn();
       })
     );

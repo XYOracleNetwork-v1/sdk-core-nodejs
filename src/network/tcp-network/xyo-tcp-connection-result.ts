@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-connection-result.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 2:02:45 pm
+ * @Last modified time: Friday, 28th September 2018 1:53:09 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,9 +19,6 @@ import { CatalogueItem } from '../xyo-catalogue-item';
 
 export class XyoTcpConnectionResult {
 
-  /** The payload of everything from the tcp request, outside the tcp protocol sizing headers */
-  public readonly data: Buffer | undefined;
-
   /** An id given to the socket that should be the same if it belongs to the same client across multiple requests */
   public readonly socketId: Buffer;
 
@@ -29,24 +26,16 @@ export class XyoTcpConnectionResult {
    * Creates a new instance of a XyoTcpConnectionResult
    *
    * @param socket The socket underpinning the TCP connection
-   * @param socketData The data extracted from TCP request
+   * @param data The payload of everything from the tcp request, outside the tcp protocol sizing headers
    * @param catalogueItems A list of catalogue items
    */
 
   constructor (
     public readonly socket: net.Socket,
-    socketData: Buffer,
+    public readonly data: Buffer,
     public readonly catalogueItems: CatalogueItem[]
   ) {
-    const socketInfo = socket.address() as net.AddressInfo;
-    this.socketId = Buffer.from([
-      socketInfo.family,
-      '__',
-      socketInfo.address,
-      '__',
-      socketInfo.port
-    ]);
 
-    this.data = socketData.length > (4 + 4) ? socketData.slice(4 + 4) : undefined;
+    this.socketId = Buffer.from(socket.remoteAddress || 'unknown');
   }
 }

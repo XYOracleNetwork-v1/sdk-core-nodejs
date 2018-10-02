@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node-types.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 5:47:18 pm
+ * @Last modified time: Monday, 1st October 2018 11:09:58 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,8 +12,8 @@
 import { XyoNetworkPipe } from '../network/xyo-network';
 import { XyoPayload } from '../components/xyo-payload';
 import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
-import { XyoOriginChainStateInMemoryRepository } from '../origin-chain/xyo-origin-chain-state-in-memory-repository';
 import { XyoOriginChainStateRepository } from '../origin-chain/xyo-origin-chain-types';
+import { CatalogueItem } from '../network/xyo-catalogue-item';
 
 export type xyoBoundWitnessHandlerFn = (networkPipe: XyoNetworkPipe) => Promise<XyoBoundWitness>;
 
@@ -38,4 +38,20 @@ export interface XyoPeerConnectionDelegate {
 
 export interface XyoBoundWitnessHandlerProvider {
   handle: xyoBoundWitnessHandlerFn;
+}
+
+export interface XyoBoundWitnessSuccessListener {
+  onBoundWitnessSuccess(boundWitness: XyoBoundWitness): Promise<void>;
+}
+
+export interface XyoNodeInteraction <T> {
+  run(): Promise<T>;
+}
+
+export interface XyoCatalogueResolver {
+  resolveCategory(catalogueItems: CatalogueItem[]): CatalogueItem | undefined;
+}
+
+export interface XyoCategoryRouter {
+  getHandler(catalogueItem: CatalogueItem): XyoBoundWitnessHandlerProvider | undefined;
 }

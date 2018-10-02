@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 10:55:33 am
+ * @Last modified time: Friday, 28th September 2018 1:53:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,6 +17,7 @@ import { XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES, XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES
 
 import net from 'net';
 import { XyoBase } from '../../components/xyo-base';
+import { readNumberFromBuffer } from '../../utils/xyo-buffer-utils';
 
 /**
  * A network provider build on top of the TCP/IP stack.
@@ -60,6 +61,7 @@ export class XyoServerTcpNetwork extends XyoBase implements XyoNetworkProviderIn
     /** Create a server and listen on port */
     this.server = net.createServer();
     this.server.listen(this.port);
+    this.logInfo(`Listening on port ${this.port}} for incoming connections`);
 
     /** Wait for a single XYO connection */
     const connectionResult = await this.getConnection(this.server, catalogue);
@@ -115,7 +117,7 @@ export class XyoServerTcpNetwork extends XyoBase implements XyoNetworkProviderIn
   private getConnection(server: net.Server, catalogue: XyoNetworkProcedureCatalogue): Promise<XyoTcpConnectionResult> {
     return new Promise((resolve, reject) => {
       const onConnection = (c: net.Socket) => {
-        this.logInfo(`Connection made`);
+        this.logInfo(`Server Connection made with ${c.remoteAddress || 'unknown ip'}`);
 
         if (this.connection) { // Prevents multiple connections
           this.logInfo(`Connection already exists, will close incoming connection`);
@@ -141,7 +143,7 @@ export class XyoServerTcpNetwork extends XyoBase implements XyoNetworkProviderIn
 
         const onData = (chunk: Buffer) => {
           data = Buffer.concat([
-            data || new Buffer(0),
+            data || Buffer.alloc(0),
             chunk
           ]);
 
@@ -191,7 +193,20 @@ export class XyoServerTcpNetwork extends XyoBase implements XyoNetworkProviderIn
             c.removeListener('close', onConnectionClose);
             server.removeListener('connection', onConnection);
             this.connection = undefined;
-            return resolve(new XyoTcpConnectionResult(c, data, validCatalogueItems || []));
+            const appDataIndex = readNumberFromBuffer(
+              data,
+              XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES,
+              false,
+              XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES + XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES
+            );
+
+            const trimmedData: Buffer = data.slice(
+              XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES +
+              XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES +
+              appDataIndex
+            );
+
+            return resolve(new XyoTcpConnectionResult(c, trimmedData, validCatalogueItems || []));
           }
         };
 

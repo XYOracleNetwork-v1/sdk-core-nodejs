@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-transfer-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 12:22:28 pm
+ * @Last modified time: Wednesday, 26th September 2018 12:41:11 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -24,7 +24,7 @@ export class XyoBoundWitnessTransferSerializer extends XYOSerializer<XyoBoundWit
   get description () {
     return {
       major: 0x02,
-      minor: 0x08,
+      minor: 0x0A,
       sizeOfBytesToGetSize: 4,
       sizeIdentifierSize: 4
     };

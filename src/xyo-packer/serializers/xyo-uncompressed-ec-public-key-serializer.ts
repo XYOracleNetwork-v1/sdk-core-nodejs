@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-uncompressed-ec-public-key-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 12:33:09 pm
+ * @Last modified time: Thursday, 27th September 2018 1:15:11 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,7 +20,7 @@ export class XyoUncompressedEcPublicKeySerializer extends XYOSerializer<XyoUncom
 
   get description () {
     return {
-      major: 0x02,
+      major: 0x04,
       minor: this.minor,
       staticSize: 64,
       sizeIdentifierSize: 0

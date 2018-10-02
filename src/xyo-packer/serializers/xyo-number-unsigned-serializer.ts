@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rssi-object-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 12:27:00 pm
+ * @Last modified time: Wednesday, 26th September 2018 1:18:57 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -63,11 +63,11 @@ export class XyoNumberUnsignedSerializer extends XYOSerializer<XyoNumberUnsigned
         buf = Buffer.from([unsignedNumber.number]);
         break;
       case XyoNumberType.SHORT:
-        buf = new Buffer(2);
+        buf = Buffer.alloc(2);
         buf.writeUInt16BE(unsignedNumber.number, 0);
         break;
       case XyoNumberType.INT:
-        buf = new Buffer(4);
+        buf = Buffer.alloc(4);
         buf.writeUInt32BE(unsignedNumber.number, 0);
         break;
       case XyoNumberType.LONG:
