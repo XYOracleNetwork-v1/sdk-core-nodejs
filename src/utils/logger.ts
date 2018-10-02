@@ -1,13 +1,25 @@
-import { Logger as WinstonLogger, TransportInstance } from 'winston';
-// tslint:disable-next-line:no-duplicate-imports
 import winston from 'winston';
-export class XyoLogger extends WinstonLogger {
 
-  constructor() {
-    const transports: TransportInstance[] = [
-      new winston.transports.Console({ level: 'debug' })
-    ];
+export class XyoLogger {
+  private readonly logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    transports: [
+      new winston.transports.Console({
+        format: winston.format.simple()
+      })
+    ]
+  });
 
-    super({ transports });
+  public info(message: string, ...meta: any[]) {
+    this.logger.info(message, meta);
+  }
+
+  public error(message: string, ...meta: any[]) {
+    this.logger.error(message, meta);
+  }
+
+  public warn(message: string, ...meta: any[]) {
+    this.logger.error(message, meta);
   }
 }
