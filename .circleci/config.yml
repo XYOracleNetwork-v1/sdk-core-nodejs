@@ -18,22 +18,7 @@ jobs:
 
     steps:
       - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            # when lock file changes, use increasingly general patterns to restore cache
-            - yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-packages-v1-{{ .Branch }}-
-            - yarn-packages-v1-
-
       - run: yarn dist
-
-      - save_cache:
-        paths:
-          - ~/.cache/yarn
-        key: yarn-packages-v1-{{ .Branch }}-{{ checksum "yarn.lock" }}
-
         
       # run tests!
       - run: yarn test
