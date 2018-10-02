@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signature-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 11:11:42 am
+ * @Last modified time: Wednesday, 3rd October 2018 4:37:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -22,6 +22,9 @@ import { XyoArray } from './xyo-array';
 
 export class XyoSignatureSet extends XyoArray {
 
+  public static major = 0x02;
+  public static minor = 0x03;
+
   /**
    * Creates a new instance of a XyoSignatureSet
    *
@@ -29,6 +32,6 @@ export class XyoSignatureSet extends XyoArray {
    */
 
   constructor (public readonly array: XyoObject[]) {
-    super(undefined, undefined, 0x02, 0x03, 2, array);
+    super(undefined, undefined, XyoSignatureSet.major, XyoSignatureSet.minor, 2, array);
   }
 }

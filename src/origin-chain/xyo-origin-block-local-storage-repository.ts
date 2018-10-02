@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: origin-chain-manager.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 24th September 2018 3:29:45 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:19:29 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -28,15 +28,12 @@ export class XyoOriginBlockLocalStorageRepository implements XyoOriginBlockRepos
    *
    * @param xyoPacker a packer for serializing / deserializing values
    * @param originBlocksStorageProvider A storage provider for storage management
-   * @param hashingProvider A hashing provider for providing basic hash functionality
-   *                        used in blockchain like ways
    */
 
   constructor(
     private readonly xyoPacker: XyoPacker,
     private readonly originBlocksStorageProvider: XYOStorageProvider,
-    private readonly originBlockNextHashStorageProvider: XYOStorageProvider,
-    private readonly hashingProvider: XyoHashProvider,
+    private readonly originBlockNextHashStorageProvider: XYOStorageProvider
   ) {}
 
   /**
@@ -107,7 +104,7 @@ export class XyoOriginBlockLocalStorageRepository implements XyoOriginBlockRepos
         return undefined;
       }
 
-      const serializer = this.xyoPacker.getSerializerByName(XyoBoundWitness.name);
+      const serializer = this.xyoPacker.getSerializerByDescriptor(XyoBoundWitness);
       const boundWitness = serializer.deserialize(result, this.xyoPacker);
       return boundWitness;
     } catch (err) {

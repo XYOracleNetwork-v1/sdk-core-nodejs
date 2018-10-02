@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bridge-hash-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 10:25:03 am
+ * @Last modified time: Wednesday, 3rd October 2018 4:37:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,6 +13,9 @@ import { XyoArray } from "./xyo-array";
 import { XyoHash } from "../hashing/xyo-hash";
 
 export class XyoBridgeHashSet extends XyoArray {
+
+  public static major = 0x02;
+  public static minor = 0x08;
   /**
    * Creates a new instance of a XyoBridgeHashSet
    *
@@ -20,6 +23,6 @@ export class XyoBridgeHashSet extends XyoArray {
    */
 
   constructor (public readonly array: XyoHash[]) {
-    super(undefined, undefined, 0x02, 0x08, 2, array);
+    super(undefined, undefined, XyoBridgeHashSet.major, XyoBridgeHashSet.minor, 2, array);
   }
 }

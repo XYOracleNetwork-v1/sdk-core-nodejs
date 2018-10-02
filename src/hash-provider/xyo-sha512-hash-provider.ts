@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-sha512-hash-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 11:09:40 am
+ * @Last modified time: Wednesday, 3rd October 2018 5:02:21 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -23,6 +23,6 @@ export class XyoSha512HashProvider extends XyoNativeBaseHashProvider {
    */
 
   constructor() {
-    super('sha512', XyoSha512Hash);
+    super('sha512', { newInstance: (hashProvider, hash) => new XyoSha512Hash(hashProvider, hash) });
   }
 }

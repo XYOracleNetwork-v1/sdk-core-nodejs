@@ -4,23 +4,23 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-previous-hash-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 12:45:38 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:25:22 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoPreviousHash } from '../../components/hashing/xyo-previous-hash';
 import { XyoHash } from '../../components/hashing/xyo-hash';
-import { XYOSerializer } from '../xyo-serializer';
+import { XyoSerializer } from '../xyo-serializer';
 import { XyoPacker } from '../xyo-packer';
 import { XyoError } from '../../components/xyo-error';
 
-export class XyoPreviousHashSerializer extends XYOSerializer<XyoPreviousHash> {
+export class XyoPreviousHashSerializer extends XyoSerializer<XyoPreviousHash> {
 
   get description () {
     return {
-      major: 0x02,
-      minor: 0x06,
+      major: XyoPreviousHash.major,
+      minor: XyoPreviousHash.minor,
       sizeOfBytesToGetSize: 2,
       sizeIdentifierSize: 0
     };

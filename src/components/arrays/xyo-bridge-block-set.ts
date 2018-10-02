@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bridge-block-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 10:24:32 am
+ * @Last modified time: Wednesday, 3rd October 2018 4:37:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -16,6 +16,9 @@ import { XyoBridgeHashSet } from "./xyo-bridge-hash-set";
 
 export class XyoBridgeBlockSet extends XyoArray {
 
+  public static major = 0x02;
+  public static minor = 0x09;
+
   /**
    * Creates a new instance of a XyoBridgeBlockSet
    *
@@ -23,7 +26,7 @@ export class XyoBridgeBlockSet extends XyoArray {
    */
 
   constructor (public readonly array: XyoBoundWitness[]) {
-    super(0x02, 0x01, 0x02, 0x09, 2, array);
+    super(XyoBoundWitness.major, XyoBoundWitness.minor, XyoBridgeBlockSet.major, XyoBridgeBlockSet.minor, 2, array);
   }
 
   public async getHashSet(hashProvider: XyoHashProvider) {

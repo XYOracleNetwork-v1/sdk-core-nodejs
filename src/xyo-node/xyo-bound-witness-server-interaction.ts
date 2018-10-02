@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 28th September 2018 9:48:42 am
+ * @Last modified time: Wednesday, 3rd October 2018 6:15:04 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -76,7 +76,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBoundWitnessIn
             const response = await this.networkPipe.send(bytesToSend);
 
             /** Deserialize bytes into bound witness  */
-            const transferObj = this.xyoPacker.getSerializerByName(XyoBoundWitnessTransfer.name)
+            const transferObj = this.xyoPacker.getSerializerByDescriptor(XyoBoundWitnessTransfer)
               .deserialize(response!, this.xyoPacker);
 
             /** Add transfer to bound witness */

@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-transfer-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 12:41:11 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:25:06 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBoundWitnessTransfer } from '../../components/bound-witness/xyo-bound-witness-transfer';
 import { XyoObject } from '../../components/xyo-object';
-import { XYOSerializer } from '../xyo-serializer';
+import { XyoSerializer } from '../xyo-serializer';
 import { XyoPayload } from '../../components/xyo-payload';
 import { XyoSignatureSet } from '../../components/arrays/xyo-signature-set';
 import { XyoKeySet } from '../../components/arrays/xyo-key-set';
@@ -19,12 +19,12 @@ import { XyoPacker } from '../xyo-packer';
 import { XyoSingleTypeArrayShort } from '../../components/arrays/xyo-single-type-array-short';
 import { XyoSingleTypeArrayInt } from '../../components/arrays/xyo-single-type-array-int';
 
-export class XyoBoundWitnessTransferSerializer extends XYOSerializer<XyoBoundWitnessTransfer> {
+export class XyoBoundWitnessTransferSerializer extends XyoSerializer<XyoBoundWitnessTransfer> {
 
   get description () {
     return {
-      major: 0x02,
-      minor: 0x0A,
+      major: XyoBoundWitnessTransfer.major,
+      minor: XyoBoundWitnessTransfer.minor,
       sizeOfBytesToGetSize: 4,
       sizeIdentifierSize: 4
     };
@@ -38,8 +38,8 @@ export class XyoBoundWitnessTransferSerializer extends XYOSerializer<XyoBoundWit
     let payloadArray: XyoSingleTypeArrayInt | null = null;
     let signatureArray: XyoSingleTypeArrayShort | null = null;
 
-    const singleTypeArrayShortSerializer = xyoPacker.getSerializerByName(XyoSingleTypeArrayShort.name);
-    const singleTypeArrayIntSerializer = xyoPacker.getSerializerByName(XyoSingleTypeArrayInt.name);
+    const singleTypeArrayShortSerializer = xyoPacker.getSerializerByDescriptor(XyoSingleTypeArrayShort);
+    const singleTypeArrayIntSerializer = xyoPacker.getSerializerByDescriptor(XyoSingleTypeArrayInt);
     const shortArrayReadSizeValue = singleTypeArrayShortSerializer.sizeOfBytesToRead;
     const intArrayReadSizeValue = singleTypeArrayIntSerializer.sizeOfBytesToRead;
 
@@ -86,14 +86,10 @@ export class XyoBoundWitnessTransferSerializer extends XYOSerializer<XyoBoundWit
     let payloadArray: Buffer | null = null;
     let signatureArray: Buffer | null = null;
 
-    const keySetMajorMinor = xyoPacker.getMajorMinor(XyoKeySet.name);
-    const payloadMajorMinor = xyoPacker.getMajorMinor(XyoPayload.name);
-    const signatureSetMajorMinor = xyoPacker.getMajorMinor(XyoSignatureSet.name);
-
     if (boundWitnessTransfer.stage === 0x01 || boundWitnessTransfer.stage === 0x02) {
       const keySetArrayInstance = new XyoSingleTypeArrayShort(
-        keySetMajorMinor.major,
-        keySetMajorMinor.minor,
+        XyoKeySet.major,
+        XyoKeySet.minor,
         boundWitnessTransfer.keysToSend
       );
 
@@ -105,8 +101,8 @@ export class XyoBoundWitnessTransferSerializer extends XYOSerializer<XyoBoundWit
       );
 
       const payloadArrayInstance = new XyoSingleTypeArrayInt(
-        payloadMajorMinor.major,
-        payloadMajorMinor.minor,
+        XyoPayload.major,
+        XyoPayload.minor,
         boundWitnessTransfer.payloadsToSend
       );
 
@@ -120,8 +116,8 @@ export class XyoBoundWitnessTransferSerializer extends XYOSerializer<XyoBoundWit
 
     if (boundWitnessTransfer.stage === 0x02 || boundWitnessTransfer.stage === 0x03) {
       const signatureArrayInstance = new XyoSingleTypeArrayShort(
-        signatureSetMajorMinor.major,
-        signatureSetMajorMinor.minor,
+        XyoSignatureSet.major,
+        XyoSignatureSet.minor,
         boundWitnessTransfer.signatureToSend
       );
 

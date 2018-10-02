@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-key-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 11:04:53 am
+ * @Last modified time: Wednesday, 3rd October 2018 4:37:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -21,6 +21,9 @@ import { XyoObject } from '../xyo-object';
 
 export class XyoKeySet extends XyoArray {
 
+  public static major = 0x02;
+  public static minor = 0x02;
+
   /**
    * Creates a new instance of an XyoKeySet
    *
@@ -28,6 +31,6 @@ export class XyoKeySet extends XyoArray {
    */
 
   constructor (public readonly array: XyoObject[]) {
-    super(undefined, undefined, 0x02, 0x02, 2, array);
+    super(undefined, undefined, XyoKeySet.major, XyoKeySet.minor, 2, array);
   }
 }

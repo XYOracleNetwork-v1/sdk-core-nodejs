@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: bound-witness-origin-chain-extractor.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 10:32:53 am
+ * @Last modified time: Wednesday, 3rd October 2018 6:12:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,10 +32,9 @@ function recursivelyExtractNestedBoundWitnesses(
   boundWitness.payloads.forEach((payload) => {
     payload.unsignedPayload.array.forEach((unsignedPayloadItem) => {
       const xyoObjectId = unsignedPayloadItem.id;
-      const bridgeBlockSetMajorMinor = xyoPacker.getMajorMinor(XyoBridgeBlockSet.name);
       if (
-        xyoObjectId[0] === bridgeBlockSetMajorMinor.major &&
-        xyoObjectId[1] === bridgeBlockSetMajorMinor.minor
+        xyoObjectId[0] === XyoBridgeBlockSet.major &&
+        xyoObjectId[1] === XyoBridgeBlockSet.minor
       ) {
         const nestedBridgeBlockSet = unsignedPayloadItem as XyoBridgeBlockSet;
         nestedBridgeBlockSet.array.forEach((nestedObj) => {

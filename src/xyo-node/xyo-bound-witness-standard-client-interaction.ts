@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-client-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 28th September 2018 9:59:24 am
+ * @Last modified time: Wednesday, 3rd October 2018 6:15:05 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -45,7 +45,7 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBoundWitnessInt
         const boundWitness = await this.startBoundWitness();
         if (!disconnected) {
           /** Do step 1 of the bound witness */
-          const boundWitnessTransferSerializer = this.xyoPacker.getSerializerByName(XyoBoundWitnessTransfer.name);
+          const boundWitnessTransferSerializer = this.xyoPacker.getSerializerByDescriptor(XyoBoundWitnessTransfer);
           const boundWitnessTransfer1 = boundWitnessTransferSerializer.deserialize(
             this.networkPipe.initiationData!, this.xyoPacker
           );

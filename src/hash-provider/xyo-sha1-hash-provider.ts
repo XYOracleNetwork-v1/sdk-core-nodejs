@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-sha1-hash-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 11:08:40 am
+ * @Last modified time: Wednesday, 3rd October 2018 5:01:37 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -23,6 +23,6 @@ export class XyoSha1HashProvider extends XyoNativeBaseHashProvider {
    */
 
   constructor() {
-    super('sha1', XyoSha1Hash);
+    super('sha1', { newInstance: (hashProvider, hash) => new XyoSha1Hash(hashProvider, hash) });
   }
 }

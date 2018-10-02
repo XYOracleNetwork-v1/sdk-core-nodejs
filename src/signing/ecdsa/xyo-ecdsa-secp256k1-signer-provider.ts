@@ -4,18 +4,18 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha256-signer-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 1:17:53 pm
+ * @Last modified time: Wednesday, 3rd October 2018 12:27:36 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoSignature } from '../components/signing/xyo-signature';
-import { XyoObject } from '../components/xyo-object';
-import { XyoSignerProvider } from './xyo-signer-provider';
+import { XyoSignature } from '../xyo-signature';
+import { XyoObject } from '../../components/xyo-object';
+import { XyoSignerProvider } from '../xyo-signer-provider';
 import { ec as EC, EllipticKey } from 'elliptic';
-import { XyoEcSecp256k } from '../components/signing/algorithms/ecc/xyo-ec-secp-256k';
-import { XyoHashProvider } from '../hash-provider/xyo-hash-provider';
-import { XyoUncompressedEcPublicKey } from '../components/signing/algorithms/ecc/xyo-uncompressed-ec-public-key';
+import { XyoEcdsaSecp256k1Signer } from './xyo-ecdsa-secp256k1-signer';
+import { XyoHashProvider } from '../../hash-provider/xyo-hash-provider';
+import { XyoEcdsaUncompressedPublicKey } from './xyo-ecdsa-uncompressed-public-key';
 
 const ec = new EC('secp256k1');
 
@@ -23,15 +23,16 @@ const ec = new EC('secp256k1');
  * A service for providing EcSecp256k signing services
  */
 
-export class XyoEcSecp256kSignerProvider implements XyoSignerProvider {
+export abstract class XyoEcdsaSecp256k1SignerProvider extends XyoObject implements XyoSignerProvider {
 
-  constructor (
-    private readonly hashProvider: XyoHashProvider,
-    private readonly signerMajor: number,
-    private readonly signerMinor: number,
-    private readonly signatureMajor: number,
-    private readonly signatureMinor: number,
-  ) {}
+  public abstract hashProvider: XyoHashProvider;
+
+  public abstract getSigner(
+    sign: (data: Buffer) => Promise<Buffer>,
+    getPublicXY: () => {x: Buffer, y: Buffer},
+    verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
+    getPrivateKey: () => string
+  ): XyoEcdsaSecp256k1Signer;
 
   /**
    * Returns a new instance of a signer
@@ -49,11 +50,8 @@ export class XyoEcSecp256kSignerProvider implements XyoSignerProvider {
       key = ec.genKeyPair();
     }
 
-    return new XyoEcSecp256k(
-      // getSignature
+    return this.getSigner(
       this.getSignFn(key).bind(this),
-
-      // getPublicXY
       () => {
         const publicKey = key.getPublic();
         return {
@@ -61,16 +59,10 @@ export class XyoEcSecp256kSignerProvider implements XyoSignerProvider {
           y: publicKey.y.toBuffer(),
         };
       },
-
-      // verifySign
       () => this.verifySign.bind(this),
-
-      // getPrivateKey
       () => {
         return key.getPrivate('hex');
-      },
-      Buffer.from([this.signerMajor, this.signerMinor]),
-      Buffer.from([this.signatureMajor, this.signatureMinor])
+      }
     );
   }
 
@@ -83,7 +75,7 @@ export class XyoEcSecp256kSignerProvider implements XyoSignerProvider {
    */
 
   public async verifySign(signature: XyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {
-    const uncompressedEcPublicKey = publicKey as XyoUncompressedEcPublicKey;
+    const uncompressedEcPublicKey = publicKey as XyoEcdsaUncompressedPublicKey;
     const x = uncompressedEcPublicKey.x.toString('hex');
     const y = uncompressedEcPublicKey.y.toString('hex');
     const hexKey = ['04', x, y].join('');

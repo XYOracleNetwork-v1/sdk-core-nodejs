@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-md2-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 10:36:41 am
+ * @Last modified time: Wednesday, 3rd October 2018 4:37:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,6 +18,9 @@ import { XyoHashProvider } from '../../hash-provider/xyo-hash-provider';
 
 export class XyoMd2Hash extends XyoHash {
 
+  public static major = 0x03;
+  public static minor = 0x01;
+
   /**
    * Creates a new instance of a XyoMd2Hash
    * @param md2HashProvider A hash provider for md2
@@ -25,6 +28,6 @@ export class XyoMd2Hash extends XyoHash {
    */
 
   constructor(md2HashProvider: XyoHashProvider | undefined, md2Hash: Buffer) {
-    super(md2HashProvider, md2Hash, 0x03, 0x01);
+    super(md2HashProvider, md2Hash, XyoMd2Hash.major, XyoMd2Hash.minor);
   }
 }

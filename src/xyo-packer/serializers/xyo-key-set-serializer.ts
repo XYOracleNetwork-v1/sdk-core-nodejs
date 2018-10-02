@@ -4,22 +4,22 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-key-set-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 12:25:34 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:25:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoArrayUnpacker } from '../xyo-array-unpacker';
-import { XYOSerializer } from '../xyo-serializer';
+import { XyoSerializer } from '../xyo-serializer';
 import { XyoKeySet } from '../../components/arrays/xyo-key-set';
 import { XyoPacker } from '../xyo-packer';
 
-export class XyoKeySetSerializer extends XYOSerializer<XyoKeySet> {
+export class XyoKeySetSerializer extends XyoSerializer<XyoKeySet> {
 
   get description () {
     return {
-      major: 0x02,
-      minor: 0x02,
+      major: XyoKeySet.major,
+      minor: XyoKeySet.minor,
       sizeOfBytesToGetSize: 2,
       sizeIdentifierSize: 2
     };

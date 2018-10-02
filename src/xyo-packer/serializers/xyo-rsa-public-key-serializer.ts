@@ -4,20 +4,20 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-public-key-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 12:28:49 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:25:21 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoRsaPublicKey } from '../../components/signing/algorithms/rsa/xyo-rsa-public-key';
-import { XYOSerializer } from '../xyo-serializer';
+import { XyoRsaPublicKey } from '../../signing/rsa/xyo-rsa-public-key';
+import { XyoSerializer } from '../xyo-serializer';
 
-export class XyoRsaPublicKeySerializer extends XYOSerializer<XyoRsaPublicKey> {
+export class XyoRsaPublicKeySerializer extends XyoSerializer<XyoRsaPublicKey> {
 
   get description () {
     return {
-      major: 0x04,
-      minor: 0x03,
+      major: XyoRsaPublicKey.major,
+      minor: XyoRsaPublicKey.minor,
       sizeOfBytesToGetSize: 2,
       sizeIdentifierSize: 2
     };

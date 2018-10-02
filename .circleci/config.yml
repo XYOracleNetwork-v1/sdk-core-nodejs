@@ -18,7 +18,8 @@ jobs:
 
     steps:
       - checkout
-      - run: yarn dist
+      - run: yarn install
+      - run: yarn build-ci
         
       # run tests!
       - run: yarn test

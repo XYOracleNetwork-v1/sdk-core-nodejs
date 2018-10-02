@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-block.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 2:15:20 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:11:04 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -42,7 +42,7 @@ export class XyoOriginBlock {
       const signedPayloadValue = payload.signedPayloadMapping;
 
       /** Get the major and minor values for the previous hash type */
-      const { major, minor } = this.xyoPacker.getMajorMinor(XyoPreviousHash.name);
+      const { major, minor } = XyoPreviousHash;
 
       /** Turn that into an id by concatenating the values */
       const id = Buffer.from([major, minor]);

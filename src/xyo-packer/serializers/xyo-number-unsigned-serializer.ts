@@ -4,17 +4,17 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rssi-object-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 1:18:57 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:25:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XYOSerializer } from '../xyo-serializer';
+import { XyoSerializer } from '../xyo-serializer';
 import { XyoNumberUnsigned } from '../../components/heuristics/numbers/xyo-number-unsigned';
 import { XyoNumberType } from '../../components/heuristics/numbers/xyo-number-type';
 import { XyoError } from '../../components/xyo-error';
 
-export class XyoNumberUnsignedSerializer extends XYOSerializer<XyoNumberUnsigned> {
+export class XyoNumberUnsignedSerializer extends XyoSerializer<XyoNumberUnsigned> {
 
   constructor(
     private readonly major: number,

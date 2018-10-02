@@ -4,23 +4,23 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bridge-block-set-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 12:57:23 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:25:05 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoArrayUnpacker } from '../xyo-array-unpacker';
-import { XYOSerializer } from '../xyo-serializer';
+import { XyoSerializer } from '../xyo-serializer';
 import { XyoPacker } from '../xyo-packer';
 import { XyoBridgeBlockSet } from '../../components/arrays/xyo-bridge-block-set';
 import { XyoBoundWitness } from '../../components/bound-witness/xyo-bound-witness';
 
-export class XyoBridgeBlockSetSerializer extends XYOSerializer<XyoBridgeBlockSet> {
+export class XyoBridgeBlockSetSerializer extends XyoSerializer<XyoBridgeBlockSet> {
 
   get description () {
     return {
-      major: 0x02,
-      minor: 0x09,
+      major: XyoBridgeBlockSet.major,
+      minor: XyoBridgeBlockSet.minor,
       sizeOfBytesToGetSize: 4,
       sizeIdentifierSize: 4
     };

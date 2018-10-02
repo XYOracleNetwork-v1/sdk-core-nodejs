@@ -4,22 +4,22 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-next-public-key-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 12:26:05 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:25:01 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoNextPublicKey } from '../../components/signing/xyo-next-public-key';
-import { XYOSerializer } from '../xyo-serializer';
+import { XyoNextPublicKey } from '../../signing/xyo-next-public-key';
+import { XyoSerializer } from '../xyo-serializer';
 import { XyoPacker } from '../xyo-packer';
 import { XyoError } from '../../components/xyo-error';
 
-export class XyoNextPublicKeySerializer extends XYOSerializer<XyoNextPublicKey> {
+export class XyoNextPublicKeySerializer extends XyoSerializer<XyoNextPublicKey> {
 
   get description () {
     return {
-      major: 0x02,
-      minor: 0x07,
+      major: XyoNextPublicKey.major,
+      minor: XyoNextPublicKey.minor,
       sizeOfBytesToGetSize: 4,
       sizeIdentifierSize: 0
     };

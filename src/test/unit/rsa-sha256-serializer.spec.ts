@@ -4,28 +4,28 @@
  * @Email:  developer@xyfindables.com
  * @Filename: rsa-sha256-serializer.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 24th September 2018 1:44:32 pm
+ * @Last modified time: Wednesday, 3rd October 2018 12:30:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoDefaultPackerProvider } from '../../xyo-packer/xyo-default-packer-provider';
-import { XyoRSASha256Signature } from '../../components/signing/algorithms/rsa/xyo-rsa-sha256-signature';
-import { XyoRSASha256SignerProvider } from '../../signing/xyo-rsa-sha256-signer-provider';
-import { XyoRSASha256Signer } from '../../signing/xyo-rsa-sha256-signer';
+import { XyoRsaSha256Signature } from '../../signing/rsa/xyo-rsa-sha256-signature';
+import { XyoRsaSha256SignerProvider } from '../../signing/rsa/xyo-rsa-sha256-signer-provider';
+import { XyoRsaSha256Signer } from '../../signing/rsa/xyo-rsa-sha256-signer';
 
 describe('XyoRsaSha256SignerSerializer', () => {
   it('Should serialize and deserialize rsa-sha256 signers', async () => {
     const packer = new XyoDefaultPackerProvider().getXyoPacker();
-    const signerProvider = new XyoRSASha256SignerProvider();
+    const signerProvider = new XyoRsaSha256SignerProvider();
     const signer = signerProvider.newInstance();
-    const sig1 = (await signer.signData(Buffer.from('hello world'))) as XyoRSASha256Signature;
+    const sig1 = (await signer.signData(Buffer.from('hello world'))) as XyoRsaSha256Signature;
     const typedSerialization = packer.serialize(signer, signer.major, signer.minor, true);
-    const hydratedSigner = packer.deserialize(typedSerialization) as XyoRSASha256Signer;
+    const hydratedSigner = packer.deserialize(typedSerialization) as XyoRsaSha256Signer;
     expect(signer.publicKey.modulus.equals(hydratedSigner.publicKey.modulus)).toBe(true);
     expect(signer.privateKey === hydratedSigner.privateKey).toBe(true);
 
-    const sig2 = (await hydratedSigner.signData(Buffer.from('hello world'))) as XyoRSASha256Signature;
+    const sig2 = (await hydratedSigner.signData(Buffer.from('hello world'))) as XyoRsaSha256Signature;
     expect(sig2.encodedSignature.equals(sig1.encodedSignature)).toBe(true);
   });
 });
