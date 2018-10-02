@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 28th September 2018 9:54:54 am
+ * @Last modified time: Tuesday, 2nd October 2018 10:07:06 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-// Auto-generated on Thu Sep 27 2018 12:59:50 GMT-0700 (Pacific Daylight Time)
+// Auto-generated on Tue Oct 02 2018 10:06:42 GMT-0700 (Pacific Daylight Time)
 
 export * from '../components/xyo-base';
 export * from '../components/xyo-error';
@@ -41,11 +41,11 @@ export * from '../test/xyo-test-utils';
 export * from '../utils/logger';
 export * from '../utils/xyo-buffer-utils';
 export * from '../xyo-node/bound-witness-origin-chain-extractor';
-export * from '../xyo-node/xyo-bound-witness-standard-client-interaction';
 export * from '../xyo-node/xyo-bound-witness-handler-provider-impl';
 export * from '../xyo-node/xyo-bound-witness-interaction';
 export * from '../xyo-node/xyo-bound-witness-payload-provider-impl';
 export * from '../xyo-node/xyo-bound-witness-server-interaction';
+export * from '../xyo-node/xyo-bound-witness-standard-client-interaction';
 export * from '../xyo-node/xyo-node-types';
 export * from '../xyo-node/xyo-node';
 export * from '../xyo-node/xyo-peer-connection-handler-impl';
@@ -84,6 +84,8 @@ export * from '../network/tcp-network/xyo-server-tcp-network';
 export * from '../network/tcp-network/xyo-tcp-connection-result';
 export * from '../network/tcp-network/xyo-tcp-network-constants';
 export * from '../network/tcp-network/xyo-tcp-network-pipe';
+export * from '../xyo-node/bound-witness-handlers/xyo-bound-witness-standard-server-interaction';
+export * from '../xyo-node/bound-witness-handlers/xyo-bound-witness-take-origin-chain-server-interaction';
 export * from '../xyo-packer/serializers/xyo-array-serializer';
 export * from '../xyo-packer/serializers/xyo-bound-witness-serializer';
 export * from '../xyo-packer/serializers/xyo-bound-witness-transfer-serializer';
