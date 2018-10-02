@@ -1,5 +1,6 @@
-import { default as winston, Logger as WinstonLogger, TransportInstance } from 'winston';
-
+import { Logger as WinstonLogger, TransportInstance } from 'winston';
+// tslint:disable-next-line:no-duplicate-imports
+import winston from 'winston';
 export class XyoLogger extends WinstonLogger {
 
   constructor() {
