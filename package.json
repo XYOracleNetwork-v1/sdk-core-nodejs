@@ -6,13 +6,12 @@
   "types": "dist/lib/index.d.ts",
   "scripts": {
     "test": "export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose --detectOpenHandles",
-    "build": "yarn build-ts && yarn tslint",
-    "build-ts": "tsc",
-    "dist": "tsc -p tsconfig.build.json && yarn tslint",
+    "build": "tsc -p tsconfig.build.json",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
-    "tslint-fix": "tslint -c tslint.json -p tsconfig.json --fix",
-    "install": "yarn build-ts",
-    "precommit": "echo \"Build must pass before committing\" && yarn build"
+    "precommit": "echo \"Build must pass before committing\" && yarn build && yarn tslint",
+    "prepare" : "yarn build",
+    "prepublishOnly" : "yarn test && yarn tslint",
+    "preversion" : "yarn tslint"
   },
   "repository": {
     "type": "git",
