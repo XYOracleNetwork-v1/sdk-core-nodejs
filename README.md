@@ -1,4 +1,10 @@
-# sdk-core-nodejs
+[logo]: https://www.xy.company/img/home/logo_xy.png
+
+![logo]
+
+# XYO CORE SDK (sdk-core-nodejs)
+
+[![CircleCI](https://circleci.com/gh/XYOracleNetwork/sdk-core-nodejs.svg?style=svg)](https://circleci.com/gh/XYOracleNetwork/sdk-core-nodejs)
 
 Core functionality for the XYO nodejs projects. This repository implements
 the core objects used in the XYO protocol. Additionally it provides core
@@ -42,3 +48,12 @@ i.e.
 ```sh
   git commit --no-verify -m "COMMIT MSG"
 ```
+
+## License
+
+Only for internal XY Company use at this time
+
+## Credits
+
+Made with ❤️
+by [XYO](https://xyo.network)
