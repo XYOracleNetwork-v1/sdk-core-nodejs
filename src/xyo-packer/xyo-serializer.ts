@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-packer-serializer-deserializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 12:38:24 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:24:59 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,7 +18,7 @@ import { XyoError } from '../components/xyo-error';
  * of any XyoObject
  */
 
-export abstract class XYOSerializer<T extends XyoObject> {
+export abstract class XyoSerializer<T extends XyoObject> {
 
   /**
    * The attributes necessary to be able to properly serialize/deserialize

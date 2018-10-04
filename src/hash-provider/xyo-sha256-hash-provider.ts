@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-sha-256-hash-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 11:09:16 am
+ * @Last modified time: Wednesday, 3rd October 2018 5:02:09 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -23,6 +23,6 @@ export class XyoSha256HashProvider extends XyoNativeBaseHashProvider {
    */
 
   constructor() {
-    super('sha256', XyoSha256Hash);
+    super('sha256', { newInstance: (hashProvider, hash) => new XyoSha256Hash(hashProvider, hash) });
   }
 }

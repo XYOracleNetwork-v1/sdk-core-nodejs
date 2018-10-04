@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-types.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 24th September 2018 3:29:53 pm
+ * @Last modified time: Wednesday, 3rd October 2018 12:24:42 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,7 +14,7 @@ import { XyoHash } from '../components/hashing/xyo-hash';
 import { XyoIndex } from '../components/heuristics/numbers/xyo-index';
 import { XyoPreviousHash } from '../components/hashing/xyo-previous-hash';
 import { XyoSigner } from '../signing/xyo-signer';
-import { XyoNextPublicKey } from '../components/signing/xyo-next-public-key';
+import { XyoNextPublicKey } from '../signing/xyo-next-public-key';
 
 export interface XyoOriginBlockRepository {
   removeOriginBlock(hash: Buffer): Promise<void>;

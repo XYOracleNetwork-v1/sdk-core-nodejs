@@ -2,34 +2,48 @@
  * @Author: XY | The Findables Company <ryanxyo>
  * @Date:   Tuesday, 18th September 2018 1:10:57 pm
  * @Email:  developer@xyfindables.com
- * @Filename: xyo-rsa-sha256-signer-provider.ts
+ * @Filename: xyo-rsa-sha-signer-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 20th September 2018 4:20:53 pm
+ * @Last modified time: Wednesday, 3rd October 2018 5:55:56 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoRSASha256Signer } from './xyo-rsa-sha256-signer';
-import { XyoSignature } from '../components/signing/xyo-signature';
-import { XyoObject } from '../components/xyo-object';
+import { XyoSignature } from '../xyo-signature';
+import { XyoObject } from '../../components/xyo-object';
 import NodeRSA from 'node-rsa';
-import { XyoSignerProvider } from './xyo-signer-provider';
-import { XyoRsaPublicKey } from '../components/signing/algorithms/rsa/xyo-rsa-public-key';
+import { XyoSignerProvider } from '../xyo-signer-provider';
+import { XyoRsaPublicKey } from './xyo-rsa-public-key';
+import { XyoRsaShaSignerFactory } from './xyo-rsa-types';
+import { XyoRsaShaSigner } from './xyo-rsa-sha-signer';
 
 /**
  * A service for providing RSA-SHA-256 signing services
  */
 
-export class XyoRSASha256SignerProvider implements XyoSignerProvider {
+export abstract class XyoRsaShaSignerProvider implements XyoSignerProvider {
+
+  constructor (
+    private readonly signingScheme: 'pkcs1-sha1' | 'pkcs1-sha256',
+    private readonly rsaShaSignerFactory: XyoRsaShaSignerFactory
+  ) {}
 
   /**
    * Returns a new instance of a signer
    */
 
-  public newInstance(fromPrivateKey?: any) {
-    const key = fromPrivateKey ? new NodeRSA(fromPrivateKey, 'pkcs8-private-pem') : new NodeRSA({ b: 2048 });
+  public newInstance(fromPrivateKey?: any): XyoRsaShaSigner {
+    let key: NodeRSA;
 
-    return new XyoRSASha256Signer(
+    if (fromPrivateKey) {
+      key = new NodeRSA(fromPrivateKey, 'pkcs8-private-pem');
+      key.setOptions({ signingScheme: this.signingScheme });
+    } else {
+      key = new NodeRSA({ b: 2048 });
+      key.setOptions({ signingScheme: this.signingScheme });
+    }
+
+    return this.rsaShaSignerFactory.newInstance(
       // getSignature
       (data: Buffer) => key.sign(data),
 
@@ -55,6 +69,7 @@ export class XyoRSASha256SignerProvider implements XyoSignerProvider {
   public async verifySign(signature: XyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {
     const rsaPubKey = publicKey as XyoRsaPublicKey;
     const key = new NodeRSA();
+    key.setOptions({ signingScheme: this.signingScheme });
     key.importKey({
       n: rsaPubKey.modulus,
       e: rsaPubKey.publicExponent

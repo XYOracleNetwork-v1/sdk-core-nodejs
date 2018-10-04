@@ -29,6 +29,9 @@ import { XyoArray } from './arrays/xyo-array';
 
 export class XyoPayload extends XyoObject {
 
+  public static major = 0x02;
+  public static minor = 0x04;
+
   /**
    * Creates a new Instance of an XyoPayload
    *
@@ -37,7 +40,7 @@ export class XyoPayload extends XyoObject {
    */
 
   constructor(public readonly signedPayload: XyoArray, public readonly unsignedPayload: XyoArray) {
-    super(0x02, 0x04);
+    super(XyoPayload.major, XyoPayload.minor);
   }
 
   /**

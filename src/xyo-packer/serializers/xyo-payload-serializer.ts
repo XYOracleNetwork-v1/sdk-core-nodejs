@@ -4,17 +4,26 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-payload-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 12:27:43 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:25:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoPayload } from '../../components/xyo-payload';
-import { XYOSerializer } from '../xyo-serializer';
+import { XyoSerializer } from '../xyo-serializer';
 import { XyoPacker } from '../xyo-packer';
 import { XyoMultiTypeArrayInt } from '../../components/arrays/xyo-multi-type-array-int';
 
-export class XyoPayloadSerializer extends XYOSerializer<XyoPayload> {
+export class XyoPayloadSerializer extends XyoSerializer<XyoPayload> {
+
+  get description () {
+    return {
+      major: XyoPayload.major,
+      minor: XyoPayload.minor,
+      sizeOfBytesToGetSize: 4,
+      sizeIdentifierSize: 4
+    };
+  }
 
   public serialize(xyoObject: XyoPayload, xyoPacker: XyoPacker) {
     return Buffer.concat([
@@ -39,18 +48,9 @@ export class XyoPayloadSerializer extends XYOSerializer<XyoPayload> {
     const signedPayload = buffer.slice(4, 4 + signedPayloadSize);
     const unsignedPayload = buffer.slice(4 + signedPayloadSize, 4 + signedPayloadSize + unsignedPayloadSize);
 
-    const serializer = xyoPacker.getSerializerByName(XyoMultiTypeArrayInt.name);
+    const serializer = xyoPacker.getSerializerByDescriptor(XyoMultiTypeArrayInt);
     const signedPayloadCreated = serializer.deserialize(signedPayload, xyoPacker);
     const unsignedPayloadCreated = serializer.deserialize(unsignedPayload, xyoPacker);
     return new XyoPayload(signedPayloadCreated, unsignedPayloadCreated);
-  }
-
-  get description () {
-    return {
-      major: 0x02,
-      minor: 0x04,
-      sizeOfBytesToGetSize: 4,
-      sizeIdentifierSize: 4
-    };
   }
 }

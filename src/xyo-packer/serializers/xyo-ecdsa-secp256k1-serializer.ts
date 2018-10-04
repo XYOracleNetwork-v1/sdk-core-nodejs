@@ -4,20 +4,20 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ec-secp-256k-signer-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 12:23:30 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:25:05 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XYOSerializer } from '../xyo-serializer';
-import { XyoEcSecp256k } from '../../components/signing/algorithms/ecc/xyo-ec-secp-256k';
-import { XyoEcSecp256kSignerProvider } from '../../signing/xyo-ec-secp-256k-signer-provider';
+import { XyoSerializer } from '../xyo-serializer';
+import { XyoEcdsaSecp256k1Signer } from '../../signing/ecdsa/xyo-ecdsa-secp256k1-signer';
+import { XyoEcdsaSecp256k1SignerProvider } from '../../signing/ecdsa/xyo-ecdsa-secp256k1-signer-provider';
 
-export class XyoEcSecp256kSignerSerializer extends XYOSerializer<XyoEcSecp256k> {
+export class XyoEcdsaSecp256k1SignerSerializer extends XyoSerializer<XyoEcdsaSecp256k1Signer> {
 
   constructor (
     private readonly minor: number,
-    private readonly ecSecp256kSignerProvider: XyoEcSecp256kSignerProvider
+    private readonly ecSecp256kSignerProvider: XyoEcdsaSecp256k1SignerProvider
     ) {
     super();
   }
@@ -34,10 +34,10 @@ export class XyoEcSecp256kSignerSerializer extends XYOSerializer<XyoEcSecp256k> 
   public deserialize(buffer: Buffer) {
     const privateKeyBuffer = buffer.slice(1);
     const privateKeyHex = privateKeyBuffer.toString();
-    return this.ecSecp256kSignerProvider.newInstance(privateKeyHex) as XyoEcSecp256k;
+    return this.ecSecp256kSignerProvider.newInstance(privateKeyHex) as XyoEcdsaSecp256k1Signer;
   }
 
-  public serialize(signer: XyoEcSecp256k) {
+  public serialize(signer: XyoEcdsaSecp256k1Signer) {
     const privateKey = signer.privateKey;
     return Buffer.from(privateKey);
   }

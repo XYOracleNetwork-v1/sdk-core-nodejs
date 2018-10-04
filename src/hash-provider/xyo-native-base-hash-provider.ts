@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-hash-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 1:35:33 pm
+ * @Last modified time: Wednesday, 3rd October 2018 4:58:45 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,6 +13,7 @@ import { XyoHashProvider } from './xyo-hash-provider';
 import { XyoHash } from '../components/hashing/xyo-hash';
 import crypto from 'crypto';
 import { XyoError } from '../components/xyo-error';
+import { XyoHashFactory } from './hash-types';
 
 /**
  * A hash provider that wraps and utilizes the natives nodejs hash functionality
@@ -28,7 +29,7 @@ export class XyoNativeBaseHashProvider implements XyoHashProvider {
 
   constructor (
     private readonly hashAlgorithm: string,
-    private readonly xyoHashClass: { new(hashProvider: XyoHashProvider | undefined, hash: Buffer): XyoHash}
+    private readonly xyoHashFactory: XyoHashFactory
   ) {}
 
   /**
@@ -43,7 +44,7 @@ export class XyoNativeBaseHashProvider implements XyoHashProvider {
       const hashPromise = new Promise((resolve, reject) => {
         hash.on('readable', () => {
           const hashOfData = hash.read();
-          const xyoHashInstance = new this.xyoHashClass(this, hashOfData as Buffer);
+          const xyoHashInstance = this.xyoHashFactory.newInstance(this, hashOfData as Buffer);
           if (hashOfData) {
             return resolve(xyoHashInstance);
           }

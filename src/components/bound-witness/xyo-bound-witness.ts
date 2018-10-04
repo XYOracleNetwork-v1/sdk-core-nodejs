@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 3:40:39 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:10:55 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -35,6 +35,9 @@ import { XyoSigner } from '../../signing/xyo-signer';
 
 export abstract class XyoBoundWitness extends XyoObject {
 
+  public static major = 0x02;
+  public static minor = 0x01;
+
   /** The public keys that are part of the bound-witness */
   public abstract publicKeys: XyoKeySet[];
 
@@ -51,7 +54,7 @@ export abstract class XyoBoundWitness extends XyoObject {
    */
 
   constructor (private readonly xyoPacker: XyoPacker) {
-    super(0x02, 0x01);
+    super(XyoBoundWitness.major, XyoBoundWitness.minor);
   }
 
   /**
@@ -141,7 +144,7 @@ export abstract class XyoBoundWitness extends XyoObject {
    */
 
   private getPublicKeysMajorMinor() {
-    return this.xyoPacker.getMajorMinor(XyoKeySet.name);
+    return { major: XyoKeySet.major, minor: XyoKeySet.minor };
   }
 
   /**
@@ -149,7 +152,7 @@ export abstract class XyoBoundWitness extends XyoObject {
    */
 
   private getSignaturesMajorMinor() {
-    return this.xyoPacker.getMajorMinor(XyoSignatureSet.name);
+    return { major: XyoSignatureSet.major, minor: XyoSignatureSet.minor };
   }
 
   /**
@@ -157,6 +160,6 @@ export abstract class XyoBoundWitness extends XyoObject {
    */
 
   private getPayloadsMajorMinor() {
-    return this.xyoPacker.getMajorMinor(XyoPayload.name);
+    return { major: XyoPayload.major, minor: XyoPayload.minor };
   }
 }

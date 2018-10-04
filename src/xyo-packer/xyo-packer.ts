@@ -4,15 +4,16 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 1:19:31 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:25:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XYOSerializer } from './xyo-serializer';
+import { XyoSerializer } from './xyo-serializer';
 import { XyoObject } from '../components/xyo-object';
 import { XyoError } from '../components/xyo-error';
 import { XyoBase } from '../components/xyo-base';
+import { XyoObjectDescriptor } from '../components/xyo-object-descriptor';
 
 /**
  * An XyoPacker is a central serializer/deserializer registry service.
@@ -22,7 +23,7 @@ import { XyoBase } from '../components/xyo-base';
 export class XyoPacker extends XyoBase {
 
   // tslint:disable-next-line:prefer-array-literal The collections serializer/deserializers
-  private readonly serializerDeserializersCollection: Array<XYOSerializer<any>> = [];
+  private readonly serializerDeserializersCollection: Array<XyoSerializer<any>> = [];
 
   // An index from name to the index of the array in which the serializer/deserializer is located
   private readonly serializerDeserializersByNameIndex: {[s: string]: number } = {};
@@ -39,8 +40,8 @@ export class XyoPacker extends XyoBase {
    */
 
   public registerSerializerDeserializer<T extends XyoObject>(
-    name: string,
-    serializerDeserializer: XYOSerializer<T>
+    descriptor: XyoObjectDescriptor,
+    serializerDeserializer: XyoSerializer<T>
   ) {
     /** Add to collection */
     this.serializerDeserializersCollection.push(serializerDeserializer);
@@ -48,7 +49,7 @@ export class XyoPacker extends XyoBase {
     /** Add to the indexes */
     const index = this.serializerDeserializersCollection.length - 1;
     const { major, minor } = serializerDeserializer.description;
-    this.serializerDeserializersByNameIndex[name] = index;
+    this.serializerDeserializersByNameIndex[descriptor.name] = index;
     this.serializerDeserializerMajorMinorIndex[major] = this.serializerDeserializerMajorMinorIndex[major] || {};
     this.serializerDeserializerMajorMinorIndex[major][minor] = index;
   }
@@ -134,29 +135,7 @@ export class XyoPacker extends XyoBase {
     );
   }
 
-  public getMajor(name: string): number {
-    const serializer = this.getSerializerByName(name);
-    return serializer.description.major;
-  }
-
-  public getMinor(name: string): number | undefined {
-    const serializer = this.getSerializerByName(name);
-    return serializer.description.minor;
-  }
-
-  public getMajorMinor(name: string) {
-    const serializer = this.getSerializerByName(name);
-
-    return {
-      major: serializer.description.major,
-      minor: serializer.description.minor
-    };
-  }
-
-  public getSerializerByMajorMinor(
-    major: number,
-    minor: number
-  ): XYOSerializer<XyoObject> | undefined {
+  public getSerializerByMajorMinor(major: number, minor: number): XyoSerializer<XyoObject> | undefined {
     const index = this.serializerDeserializerMajorMinorIndex[major][minor];
     if (index < this.serializerDeserializersCollection.length) {
       return this.serializerDeserializersCollection[index];
@@ -165,16 +144,16 @@ export class XyoPacker extends XyoBase {
     return undefined;
   }
 
-  public getSerializerByName(name: string) {
-    const serializerIndex = this.serializerDeserializersByNameIndex[name];
+  public getSerializerByDescriptor(descriptor: XyoObjectDescriptor) {
+    const serializerIndex = this.serializerDeserializersByNameIndex[descriptor.name];
     if (serializerIndex === undefined || serializerIndex >= this.serializerDeserializersCollection.length) {
-      throw new XyoError(`Unable to locate serializer ${name}`, XyoError.errorType.ERR_CREATOR_MAPPING);
+      throw new XyoError(`Unable to locate serializer ${descriptor.name}`, XyoError.errorType.ERR_CREATOR_MAPPING);
     }
 
     return this.serializerDeserializersCollection[serializerIndex];
   }
 
-  private makeTyped(data: Buffer, config: XYOSerializer<XyoObject>) {
+  private makeTyped(data: Buffer, config: XyoSerializer<XyoObject>) {
     const encodedSizeBuffer = this.encodedSize(data.length, config);
     const dataBuffer = data || Buffer.alloc(0);
 
@@ -189,7 +168,7 @@ export class XyoPacker extends XyoBase {
     return typedBuffer;
   }
 
-  private makeUntyped(data: Buffer, config: XYOSerializer<XyoObject>) {
+  private makeUntyped(data: Buffer, config: XyoSerializer<XyoObject>) {
     const encodedSizeBuffer = this.encodedSize(data.length, config);
     const dataBuffer = data || Buffer.alloc(0);
     const typedBufferSize = encodedSizeBuffer.length + dataBuffer.length;
@@ -202,7 +181,7 @@ export class XyoPacker extends XyoBase {
     return unTypedBuffer;
   }
 
-  private encodedSize(sizeOfData: number, config: XYOSerializer<XyoObject>) {
+  private encodedSize(sizeOfData: number, config: XyoSerializer<XyoObject>) {
     if (!config.sizeIdentifierSize) {
       return Buffer.alloc(0);
     }

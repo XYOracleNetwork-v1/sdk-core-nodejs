@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: test-utils.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 12:17:22 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:25:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,24 +12,27 @@
 // tslint:disable:max-classes-per-file
 
 import { XyoObject } from '../components/xyo-object';
-import { XYOSerializer } from '../xyo-packer/xyo-serializer';
+import { XyoSerializer } from '../xyo-packer/xyo-serializer';
 import { XyoPacker } from '../xyo-packer/xyo-packer';
 import { XyoArray } from '../components/arrays/xyo-array';
 import { XyoArrayUnpacker } from '../xyo-packer/xyo-array-unpacker';
 
 export class TestXyoObject extends XyoObject {
 
+  public static major = 0xFF;
+  public static minor = 0x00;
+
   constructor (public readonly value: string) {
-    super(0xFF, 0x00);
+    super(TestXyoObject.major, TestXyoObject.minor);
   }
 }
 
-export class TestXyoObjectSerializer extends XYOSerializer<TestXyoObject> {
+export class TestXyoObjectSerializer extends XyoSerializer<TestXyoObject> {
 
   get description() {
     return {
-      major: 0xFF,
-      minor: 0x00,
+      major: TestXyoObject.major,
+      minor: TestXyoObject.minor,
       sizeOfBytesToGetSize: 4,
       sizeIdentifierSize: 4
     };
@@ -47,31 +50,41 @@ export class TestXyoObjectSerializer extends XYOSerializer<TestXyoObject> {
 }
 
 export class TestXyoObjectTypedArray extends XyoArray {
+
+  public static major = 0xEE;
+  public static minor = 0xDD;
+
   constructor(array: TestXyoObject[]) {
-    super(0xFF, 0x00, 0xEE, 0xDD, 4, array);
+    super(
+      TestXyoObject.major,
+      TestXyoObject.minor,
+      TestXyoObjectTypedArray.major,
+      TestXyoObjectTypedArray.minor,
+      4,
+      array
+    );
   }
 }
 
-export class TestXyoObjectTypedArraySerializer extends XYOSerializer<TestXyoObjectTypedArray> {
+export class TestXyoObjectTypedArraySerializer extends XyoSerializer<TestXyoObjectTypedArray> {
 
   get description() {
     return {
-      major: 0xEE,
-      minor: 0xDD,
+      major: TestXyoObjectTypedArray.major,
+      minor: TestXyoObjectTypedArray.minor,
       sizeOfBytesToGetSize: 4,
       sizeIdentifierSize: 4
     };
   }
 
   public serialize(testXyoObjectTypedArray: TestXyoObjectTypedArray, xyoPacker: XyoPacker) {
-    const majorMinor = xyoPacker.getMajorMinor(TestXyoObject.name);
     const packedElements = Buffer.concat(
       testXyoObjectTypedArray.array.map(element =>
       xyoPacker.serialize(element, element.id[0], element.id[1], false))
     );
 
     return Buffer.concat([
-      Buffer.from([majorMinor.major, majorMinor.minor]),
+      Buffer.from([TestXyoObject.major, TestXyoObject.minor]),
       packedElements
     ]);
   }

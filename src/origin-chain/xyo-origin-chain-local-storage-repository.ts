@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-local-storage-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 10:12:29 am
+ * @Last modified time: Wednesday, 3rd October 2018 12:24:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,7 +13,7 @@ import { XyoOriginChainStateRepository } from './xyo-origin-chain-types';
 import { XyoIndex } from '../components/heuristics/numbers/xyo-index';
 import { XyoPreviousHash } from '../components/hashing/xyo-previous-hash';
 import { XyoSigner } from '../signing/xyo-signer';
-import { XyoNextPublicKey } from '../components/signing/xyo-next-public-key';
+import { XyoNextPublicKey } from '../signing/xyo-next-public-key';
 import { XyoHash } from '../components/hashing/xyo-hash';
 import { XYOStorageProvider, XyoStorageProviderPriority } from '../storage/xyo-storage-provider';
 import { XyoPacker } from '../xyo-packer/xyo-packer';

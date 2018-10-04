@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signer-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 4:36:27 pm
+ * @Last modified time: Wednesday, 3rd October 2018 12:24:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoSigner } from './xyo-signer';
-import { XyoSignature } from '../components/signing/xyo-signature';
+import { XyoSignature } from './xyo-signature';
 import { XyoObject } from '../components/xyo-object';
 
 /**

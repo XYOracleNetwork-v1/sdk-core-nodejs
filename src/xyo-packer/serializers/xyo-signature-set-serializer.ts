@@ -11,15 +11,15 @@
 
 import { XyoArrayUnpacker } from '../xyo-array-unpacker';
 import { XyoSignatureSet } from '../../components/arrays/xyo-signature-set';
-import { XYOSerializer } from '../xyo-serializer';
+import { XyoSerializer } from '../xyo-serializer';
 import { XyoPacker } from '../xyo-packer';
 
-export class XyoSignatureSetSerializer extends XYOSerializer<XyoSignatureSet> {
+export class XyoSignatureSetSerializer extends XyoSerializer<XyoSignatureSet> {
 
   get description () {
     return {
-      major: 0x02,
-      minor: 0x03,
+      major: XyoSignatureSet.major,
+      minor: XyoSignatureSet.minor,
       sizeOfBytesToGetSize: 2,
       sizeIdentifierSize: 2
     };

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 12:45:30 pm
+ * @Last modified time: Wednesday, 3rd October 2018 4:37:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -22,7 +22,10 @@ import { XyoNumberType } from './xyo-number-type';
 
 export class XyoIndex extends XyoNumberUnsigned {
 
+  public static major = 0x02;
+  public static minor = 0x05;
+
   constructor(index: number) {
-    super(index, 0x02, 0x05, XyoNumberType.INT);
+    super(index, XyoIndex.major, XyoIndex.minor, XyoNumberType.INT);
   }
 }

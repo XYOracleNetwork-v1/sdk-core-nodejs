@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-previous-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 12:43:39 pm
+ * @Last modified time: Wednesday, 3rd October 2018 4:37:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,6 +20,9 @@ import { XyoHash } from './xyo-hash';
 
 export class XyoPreviousHash extends XyoObject {
 
+  public static major = 0x02;
+  public static minor = 0x06;
+
   /**
    * Creates a new instance of a `XyoPreviousHash`
    *
@@ -27,6 +30,6 @@ export class XyoPreviousHash extends XyoObject {
    */
 
   constructor (public readonly hash: XyoHash) {
-    super(0x02, 0x06);
+    super(XyoPreviousHash.major, XyoPreviousHash.minor);
   }
 }

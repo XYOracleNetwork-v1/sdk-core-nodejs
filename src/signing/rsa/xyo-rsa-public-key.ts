@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoObject } from '../../../xyo-object';
+import { XyoObject } from '../../components/xyo-object';
 
 /**
  * An RSA public key
@@ -20,13 +20,16 @@ import { XyoObject } from '../../../xyo-object';
 
 export class XyoRsaPublicKey extends XyoObject {
 
+  public static major = 0x04;
+  public static minor = 0x03;
+
   /**
    * Creates a new instance of a XyoRsaPublicKey
    * @param modulus The modulus in an RSA crypto keypair
    */
 
   constructor(public readonly modulus: Buffer) {
-    super(0x04, 0x03);
+    super(XyoRsaPublicKey.major, XyoRsaPublicKey.minor);
   }
 
   /**

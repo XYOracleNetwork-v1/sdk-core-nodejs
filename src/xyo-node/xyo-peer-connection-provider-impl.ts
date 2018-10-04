@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-peer-connection-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 11:00:18 am
+ * @Last modified time: Wednesday, 3rd October 2018 6:25:08 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoNetworkProviderInterface, XyoNetworkProcedureCatalogue, XyoNetworkPipe } from '../network/xyo-network';
-import { XyoPeerConnectionDelegate, xyoPeerConnectionHandler, XyoPeerConnectionHandler } from './xyo-node-types';
+import { XyoPeerConnectionDelegate, XyoPeerConnectionHandler } from './xyo-node-types';
 
 export class XyoPeerConnectionDelegateImpl implements XyoPeerConnectionDelegate {
 

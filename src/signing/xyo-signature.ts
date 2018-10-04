@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 20th September 2018 1:47:15 pm
+ * @Last modified time: Wednesday, 3rd October 2018 12:24:47 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoObject } from '../xyo-object';
+import { XyoObject } from '../components/xyo-object';
 
 /**
  * A base-class for signature objects

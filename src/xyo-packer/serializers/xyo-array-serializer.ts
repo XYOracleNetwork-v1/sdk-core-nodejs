@@ -4,17 +4,17 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-single-type-array-byte-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 12:20:44 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:25:08 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoArrayUnpacker } from '../xyo-array-unpacker';
-import { XYOSerializer } from '../xyo-serializer';
+import { XyoSerializer } from '../xyo-serializer';
 import { XyoArray } from '../../components/arrays/xyo-array';
 import { XyoPacker } from '../xyo-packer';
 
-export class XyoArraySerializer extends XYOSerializer<XyoArray> {
+export class XyoArraySerializer extends XyoSerializer<XyoArray> {
 
   constructor (
     private readonly major: number,

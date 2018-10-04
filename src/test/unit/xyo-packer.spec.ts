@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-packer.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 1:17:58 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:11:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -23,8 +23,8 @@ let packer: XyoPacker | undefined;
 describe(`XyoPacker`, () => {
   beforeAll(() => {
     packer = new XyoPacker();
-    packer.registerSerializerDeserializer(TestXyoObject.name, new TestXyoObjectSerializer());
-    packer.registerSerializerDeserializer(TestXyoObjectTypedArray.name, new TestXyoObjectTypedArraySerializer());
+    packer.registerSerializerDeserializer(TestXyoObject, new TestXyoObjectSerializer());
+    packer.registerSerializerDeserializer(TestXyoObjectTypedArray, new TestXyoObjectTypedArraySerializer());
   });
 
   it(`Should serialize and deserialize objects`, () => {
@@ -32,7 +32,7 @@ describe(`XyoPacker`, () => {
       throw new Error(`Tests not initialized`);
     }
 
-    const { major, minor } = packer.getMajorMinor(TestXyoObject.name);
+    const { major, minor } = TestXyoObject;
     const rawValue = 'hello world';
     const value = Buffer.from(rawValue);
     const size = value.length + 4;
@@ -68,8 +68,8 @@ describe(`XyoPacker`, () => {
     }
 
     const array = new TestXyoObjectTypedArray([new TestXyoObject('hello world')]);
-    const { major, minor } = packer.getMajorMinor(TestXyoObjectTypedArray.name);
-    const { major: elementMajor, minor: elementMinor } = packer.getMajorMinor(TestXyoObject.name);
+    const { major, minor } = TestXyoObjectTypedArray;
+    const { major: elementMajor, minor: elementMinor } = TestXyoObject;
 
     const rawSerialization = packer.serialize(array, major, minor, undefined);
     const typedSerialization = packer.serialize(array, major, minor, true);

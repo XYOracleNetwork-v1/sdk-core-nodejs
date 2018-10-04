@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-sha224-hash-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 11:08:49 am
+ * @Last modified time: Wednesday, 3rd October 2018 5:01:55 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -23,6 +23,6 @@ export class XyoSha224HashProvider extends XyoNativeBaseHashProvider {
    */
 
   constructor() {
-    super('sha224', XyoSha224Hash);
+    super('sha224', { newInstance: (hashProvider, hash) => new XyoSha224Hash(hashProvider, hash) });
   }
 }

@@ -4,40 +4,28 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 20th September 2018 1:49:08 pm
+ * @Last modified time: Wednesday, 3rd October 2018 12:24:26 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoSignature } from '../../xyo-signature';
-import { XyoObject } from '../../../xyo-object';
+import { XyoSignature } from '../xyo-signature';
+import { XyoObject } from '../../components/xyo-object';
 
 /**
  * A pojo for Ecdsa Signatures
  */
-export class XyoEcdsaSignature extends XyoSignature {
+export abstract class XyoEcdsaSignature extends XyoSignature {
 
-  /**
-   * Creates new instance of a `XyoEcdsaSignature`
-   *
-   * @param signature The raw signature
-   * @param rawId
-   */
-
-  constructor(
-    public readonly signature: Buffer,
-    rawId: Buffer,
-    private readonly verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
-  ) {
-    super(rawId[0], rawId[1]);
-  }
+  public abstract getSignature(): Buffer;
+  public abstract verifySign(signature: XyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean>;
 
   /**
    * Returns the binary representation of the signature
    */
 
   get encodedSignature () {
-    return this.signature;
+    return this.getSignature();
   }
 
   /**

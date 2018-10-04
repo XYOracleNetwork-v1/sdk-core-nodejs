@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: tasks.json
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 10:20:20 am
+ * @Last modified time: Tuesday, 2nd October 2018 4:27:12 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,9 +15,10 @@
   "command": "yarn",
   "tasks": [
     {
-      "label": "build",
-      "script": "build",
+      "type": "npm",
+      "script": "build-ci",
       "problemMatcher": []
     }
-  ]
+  ],
+  "problemMatchers": []
 }

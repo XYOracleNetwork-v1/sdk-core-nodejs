@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rssi.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 12:50:14 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:17:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -23,6 +23,9 @@ import { XyoNumberType } from './xyo-number-type';
  */
 export class XyoRssi extends XyoNumberSigned {
 
+  public static major = 0x08;
+  public static minor = 0x01;
+
   /**
    * Creates a new instance of a XyoRssi class
    *
@@ -30,6 +33,6 @@ export class XyoRssi extends XyoNumberSigned {
    */
 
   constructor(rssi: number) {
-    super(rssi, 0x08, 0x01, XyoNumberType.BYTE);
+    super(rssi, XyoRssi.major, XyoRssi.minor, XyoNumberType.BYTE);
   }
 }

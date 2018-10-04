@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: zig-zag-bound-witness.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th September 2018 1:36:23 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:13:19 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,7 @@
 import { XyoZigZagBoundWitness } from '../../components/bound-witness/xyo-zig-zag-bound-witness';
 import { XyoDefaultPackerProvider } from '../../xyo-packer/xyo-default-packer-provider';
 import { XyoBoundWitness } from '../../components/bound-witness/xyo-bound-witness';
-import { XyoRSASha256SignerProvider } from '../../signing/xyo-rsa-sha256-signer-provider';
+import { XyoRsaSha256SignerProvider } from '../../signing/rsa/xyo-rsa-sha256-signer-provider';
 import { XyoPayload } from '../../components/xyo-payload';
 import { XyoMultiTypeArrayInt } from '../../components/arrays/xyo-multi-type-array-int';
 import { XyoRssi } from '../../components/heuristics/numbers/xyo-rssi';
@@ -21,8 +21,8 @@ describe(`ZigZagBoundWitness`, () => {
 
   it(`Should leave two parties with the same set of bound-witness data`, async () => {
     const packer = new XyoDefaultPackerProvider().getXyoPacker();
-    const { major: boundWitnessMajor, minor: boundWitnessMinor } = packer.getMajorMinor(XyoBoundWitness.name);
-    const signerProvider = new XyoRSASha256SignerProvider();
+    const { major: boundWitnessMajor, minor: boundWitnessMinor } = XyoBoundWitness;
+    const signerProvider = new XyoRsaSha256SignerProvider();
 
     const bobSigners = [signerProvider.newInstance()];
     const aliceSigners = [signerProvider.newInstance()];

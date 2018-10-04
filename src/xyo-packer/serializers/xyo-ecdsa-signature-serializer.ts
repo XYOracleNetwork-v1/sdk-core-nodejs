@@ -4,21 +4,22 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-signature-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 12:24:09 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:25:04 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoEcdsaSignature } from '../../components/signing/algorithms/ecc/xyo-ecdsa-signature';
-import { XYOSerializer } from '../xyo-serializer';
-import { XyoSignature } from '../../components/signing/xyo-signature';
+import { XyoEcdsaSignature } from '../../signing/ecdsa/xyo-ecdsa-signature';
+import { XyoSerializer } from '../xyo-serializer';
+import { XyoSignature } from '../../signing/xyo-signature';
 import { XyoObject } from '../../components/xyo-object';
 
-export class XyoEcdsaSignatureSerializer extends XYOSerializer<XyoEcdsaSignature> {
+export class XyoEcdsaSignatureSerializer extends XyoSerializer<XyoEcdsaSignature> {
 
   constructor(
     private readonly minor: number,
-    private readonly verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
+    private readonly verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
+    private readonly ecdsaSignatureFactory: XyoEcdsaSignatureFactory
   ) {
     super();
   }
@@ -33,14 +34,17 @@ export class XyoEcdsaSignatureSerializer extends XYOSerializer<XyoEcdsaSignature
   }
 
   public deserialize(buffer: Buffer) {
-    return new XyoEcdsaSignature(
-      buffer.slice(1),
-      Buffer.from([this.description.major, this.minor]),
-      this.verifySign
-    );
+    return this.ecdsaSignatureFactory.newInstance(buffer.slice(1), this.verifySign);
   }
 
   public serialize(ecdsaSignature: XyoEcdsaSignature) {
-    return ecdsaSignature.signature;
+    return ecdsaSignature.getSignature();
   }
+}
+
+export interface XyoEcdsaSignatureFactory {
+  newInstance(
+    signature: Buffer,
+    verify: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
+  ): XyoEcdsaSignature;
 }

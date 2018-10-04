@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-transfer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 12:50:57 pm
+ * @Last modified time: Wednesday, 3rd October 2018 4:37:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,6 +20,9 @@ import { XyoObject } from '../xyo-object';
  */
 export class XyoBoundWitnessTransfer extends XyoObject {
 
+  public static major = 0x02;
+  public static minor = 0x0a;
+
   /**
    * Creates a new instance of a XyoBoundWitnessTransfer
    *
@@ -33,7 +36,7 @@ export class XyoBoundWitnessTransfer extends XyoObject {
     public readonly payloadsToSend: XyoObject[],
     public readonly signatureToSend: XyoObject[]
   ) {
-    super(0x02, 0x0A);
+    super(XyoBoundWitnessTransfer.major, XyoBoundWitnessTransfer.minor);
   }
 
   /**

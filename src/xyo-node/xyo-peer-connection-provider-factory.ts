@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-peer-connection-provider-builder.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 28th September 2018 10:38:13 am
+ * @Last modified time: Wednesday, 3rd October 2018 6:24:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoPeerConnectionDelegate, XyoPeerConnectionHandler, XyoBoundWitnessSuccessListener, XyoCategoryRouter, XyoBoundWitnessHandlerProvider, XyoCatalogueResolver } from './xyo-node-types';
+import { XyoPeerConnectionDelegate, XyoBoundWitnessSuccessListener, XyoCategoryRouter, XyoBoundWitnessHandlerProvider, XyoCatalogueResolver } from './xyo-node-types';
 import { XyoPeerConnectionDelegateImpl } from './xyo-peer-connection-provider-impl';
 import { XyoNetworkProcedureCatalogue, XyoNetworkProviderInterface } from '../network/xyo-network';
 import { XyoPacker } from '../xyo-packer/xyo-packer';
@@ -56,7 +56,11 @@ export class XyoPeerConnectionProviderFactory implements XyoCategoryRouter, XyoC
             this.originChainNavigator,
             this.boundWitnessPayloadProvider,
             this.boundWitnessSuccessListener,
-            XyoBoundWitnessStandardServerInteraction
+            {
+              newInstance: (packer, pipe, signers, payload) =>  {
+                return new XyoBoundWitnessStandardServerInteraction(packer, pipe, signers, payload);
+              }
+            }
           );
         case CatalogueItem.TAKE_ORIGIN_CHAIN:
           return new XyoBoundWitnessHandlerProviderImpl(
@@ -66,7 +70,11 @@ export class XyoPeerConnectionProviderFactory implements XyoCategoryRouter, XyoC
             this.originChainNavigator,
             this.boundWitnessPayloadProvider,
             this.boundWitnessSuccessListener,
-            XyoBoundWitnessTakeOriginChainServerInteraction
+            {
+              newInstance: (packer, pipe, signers, payload) =>  {
+                return new XyoBoundWitnessTakeOriginChainServerInteraction(packer, pipe, signers, payload);
+              }
+            }
           );
         default:
           return undefined;
@@ -82,7 +90,11 @@ export class XyoPeerConnectionProviderFactory implements XyoCategoryRouter, XyoC
           this.originChainNavigator,
           this.boundWitnessPayloadProvider,
           this.boundWitnessSuccessListener,
-          XyoBoundWitnessStandardClientInteraction
+          {
+            newInstance: (packer, pipe, signers, payload) =>  {
+              return new XyoBoundWitnessStandardClientInteraction(packer, pipe, signers, payload);
+            }
+          }
         );
       case CatalogueItem.GIVE_ORIGIN_CHAIN:
         return undefined;

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-multi-type-array-byte.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 11:08:15 am
+ * @Last modified time: Wednesday, 3rd October 2018 4:37:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -22,6 +22,9 @@ import { XyoObject } from '../xyo-object';
 
 export class XyoMultiTypeArrayByte extends XyoArray {
 
+  public static major = 0x01;
+  public static minor = 0x04;
+
   /**
    * Creates a new instance of a XyoMultiTypeArrayByte
    *
@@ -29,6 +32,6 @@ export class XyoMultiTypeArrayByte extends XyoArray {
    */
 
   constructor(array: XyoObject[]) {
-    super(undefined, undefined, 0x01, 0x04, 1, array);
+    super(undefined, undefined, XyoMultiTypeArrayByte.major, XyoMultiTypeArrayByte.minor, 1, array);
   }
 }

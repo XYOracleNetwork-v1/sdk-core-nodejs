@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-single-type-array-short.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 11:20:18 am
+ * @Last modified time: Wednesday, 3rd October 2018 4:37:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -22,6 +22,9 @@ import { XyoObject } from '../xyo-object';
 
 export class XyoSingleTypeArrayShort extends XyoArray {
 
+  public static major = 0x01;
+  public static minor = 0x02;
+
   /**
    * Creates a new instance of XyoSingleTypeArrayShort
    *
@@ -31,6 +34,6 @@ export class XyoSingleTypeArrayShort extends XyoArray {
    */
 
   constructor(elementMajor: number, elementMinor: number, array: XyoObject[]) {
-    super(elementMajor, elementMinor, 0x01, 0x02, 2, array);
+    super(elementMajor, elementMinor, XyoSingleTypeArrayShort.major, XyoSingleTypeArrayShort.minor, 2, array);
   }
 }

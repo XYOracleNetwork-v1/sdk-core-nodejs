@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 12:22:08 pm
+ * @Last modified time: Wednesday, 3rd October 2018 6:30:01 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 // tslint:disable:max-classes-per-file
 
-import { XYOSerializer } from '../xyo-serializer';
+import { XyoSerializer } from '../xyo-serializer';
 import { XyoBoundWitness } from '../../components/bound-witness/xyo-bound-witness';
 import { XyoPayload } from '../../components/xyo-payload';
 import { XyoSignatureSet } from '../../components/arrays/xyo-signature-set';
@@ -21,12 +21,12 @@ import { XyoPacker } from '../xyo-packer';
 import { XyoSingleTypeArrayShort } from '../../components/arrays/xyo-single-type-array-short';
 import { XyoSingleTypeArrayInt } from '../../components/arrays/xyo-single-type-array-int';
 
-export class XyoBoundWitnessSerializer extends XYOSerializer<XyoBoundWitness> {
+export class XyoBoundWitnessSerializer extends XyoSerializer<XyoBoundWitness> {
 
   get description () {
     return {
-      major: 0x02,
-      minor: 0x01,
+      major: XyoBoundWitness.major,
+      minor: XyoBoundWitness.minor,
       sizeOfBytesToGetSize: 4,
       sizeIdentifierSize: 4
     };
@@ -45,10 +45,10 @@ export class XyoBoundWitnessSerializer extends XYOSerializer<XyoBoundWitness> {
   }
 
   public deserialize(buffer: Buffer, xyoPacker: XyoPacker): XyoBoundWitness {
-    const shortArraySerializer = xyoPacker.getSerializerByName(XyoSingleTypeArrayShort.name);
+    const shortArraySerializer = xyoPacker.getSerializerByDescriptor(XyoSingleTypeArrayShort);
     const shortArraySizeReadSize = shortArraySerializer.sizeOfBytesToRead;
 
-    const intArraySerializer = xyoPacker.getSerializerByName(XyoSingleTypeArrayInt.name);
+    const intArraySerializer = xyoPacker.getSerializerByDescriptor(XyoSingleTypeArrayInt);
     const intArraySizeReadSize = intArraySerializer.sizeOfBytesToRead;
     return this.unpackIntoEncodedArrays(buffer, shortArraySizeReadSize, intArraySizeReadSize, xyoPacker);
   }
@@ -59,12 +59,12 @@ export class XyoBoundWitnessSerializer extends XYOSerializer<XyoBoundWitness> {
     intArrayReadSize: number,
     xyoPacker: XyoPacker
   ): XyoBoundWitness {
-    const keySetArraySizeValue = xyoPacker.getSerializerByName(XyoSingleTypeArrayShort.name)
+    const keySetArraySizeValue = xyoPacker.getSerializerByDescriptor(XyoSingleTypeArrayShort)
       .readSize(buffer.slice(4, 4 + shortArrayReadSize), xyoPacker);
 
     const keySetsValue = this.getKeySetsArray(buffer.slice(4, 4 + keySetArraySizeValue), xyoPacker);
 
-    const payloadArraySizeValue = xyoPacker.getSerializerByName(XyoSingleTypeArrayInt.name).readSize(
+    const payloadArraySizeValue = xyoPacker.getSerializerByDescriptor(XyoSingleTypeArrayInt).readSize(
       buffer.slice(keySetArraySizeValue + 4, keySetArraySizeValue + 4 + intArrayReadSize), xyoPacker
     );
 
@@ -73,7 +73,7 @@ export class XyoBoundWitnessSerializer extends XYOSerializer<XyoBoundWitness> {
       xyoPacker
     );
 
-    const signatureArraySizeValue = xyoPacker.getSerializerByName(XyoSingleTypeArrayShort.name).readSize(
+    const signatureArraySizeValue = xyoPacker.getSerializerByDescriptor(XyoSingleTypeArrayShort).readSize(
       buffer.slice(
         keySetArraySizeValue + payloadArraySizeValue + 4,
         keySetArraySizeValue + payloadArraySizeValue + 4 + shortArrayReadSize
@@ -109,7 +109,7 @@ export class XyoBoundWitnessSerializer extends XYOSerializer<XyoBoundWitness> {
   }
 
   private getSignatureArray(bytes: Buffer, xyoPacker: XyoPacker): XyoSignatureSet[] {
-    const signatureArrayValue = xyoPacker.getSerializerByName(XyoSingleTypeArrayShort.name)
+    const signatureArrayValue = xyoPacker.getSerializerByDescriptor(XyoSingleTypeArrayShort)
       .deserialize(bytes, xyoPacker);
 
     if (signatureArrayValue !== null) {
@@ -120,7 +120,7 @@ export class XyoBoundWitnessSerializer extends XYOSerializer<XyoBoundWitness> {
   }
 
   private getPayloadsArray(bytes: Buffer, xyoPacker: XyoPacker): XyoPayload[] {
-    const payloadArrayValue = xyoPacker.getSerializerByName(XyoSingleTypeArrayInt.name).deserialize(bytes, xyoPacker);
+    const payloadArrayValue = xyoPacker.getSerializerByDescriptor(XyoSingleTypeArrayInt).deserialize(bytes, xyoPacker);
 
     if (payloadArrayValue !== null) {
       return payloadArrayValue.array as XyoPayload[];
@@ -130,7 +130,9 @@ export class XyoBoundWitnessSerializer extends XYOSerializer<XyoBoundWitness> {
   }
 
   private getKeySetsArray(buffer: Buffer, xyoPacker: XyoPacker): XyoKeySet[] {
-    const keySetArrayValue = xyoPacker.getSerializerByName(XyoSingleTypeArrayShort.name).deserialize(buffer, xyoPacker);
+    const keySetArrayValue = xyoPacker.getSerializerByDescriptor(
+      XyoSingleTypeArrayShort
+    ).deserialize(buffer, xyoPacker);
 
     if (keySetArrayValue !== null) {
       return keySetArrayValue.array as XyoKeySet[];

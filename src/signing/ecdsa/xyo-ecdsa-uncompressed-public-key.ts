@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-uncompressed-ec-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 1:01:44 pm
+ * @Last modified time: Wednesday, 3rd October 2018 1:10:12 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoObject } from '../../../xyo-object';
+import { XyoObject } from '../../components/xyo-object';
 
 /**
  * Sharing public keys is an integral part of the Xyo protocol
@@ -17,18 +17,10 @@ import { XyoObject } from '../../../xyo-object';
  * Ec public key
  */
 
-export class XyoUncompressedEcPublicKey extends XyoObject {
+export abstract class XyoEcdsaUncompressedPublicKey extends XyoObject {
 
-  /**
-   * Creates a new instance of a XyoUncompressedEcPublicKey
-   * @param x The x point on the curve in binary representation
-   * @param y The y point on the curve in binary representation
-   * @param rawId The rawId corresponding to particular type of EC public key this is.
-   */
-
-  constructor(public readonly x: Buffer, public readonly y: Buffer, public readonly rawId: Buffer) {
-    super(rawId[0], rawId[1]);
-  }
+  public abstract x: Buffer;
+  public abstract y: Buffer;
 
   public get32ByteEcPoint(point: Buffer) {
     if (point.length === 32) {

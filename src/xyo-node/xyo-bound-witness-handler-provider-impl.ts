@@ -4,23 +4,19 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 1st October 2018 11:26:25 am
+ * @Last modified time: Wednesday, 3rd October 2018 6:23:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoPacker } from '../xyo-packer/xyo-packer';
-import { XyoSigner } from '../signing/xyo-signer';
 import { XyoNetworkPipe } from '../network/xyo-network';
 import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
 import { XyoHashProvider } from '../hash-provider/xyo-hash-provider';
 import { extractNestedBoundWitnesses } from './bound-witness-origin-chain-extractor';
-import { XyoBoundWitnessHandlerProvider, XyoBoundWitnessPayloadProvider, XyoBoundWitnessSuccessListener } from './xyo-node-types';
+import { XyoBoundWitnessHandlerProvider, XyoBoundWitnessPayloadProvider, XyoBoundWitnessSuccessListener, XyoBoundWitnessInteractionFactory } from './xyo-node-types';
 import { XyoOriginBlockRepository, XyoOriginChainStateRepository } from '../origin-chain/xyo-origin-chain-types';
 import { XyoBase } from '../components/xyo-base';
-import { XyoBoundWitnessInteraction } from './xyo-bound-witness-interaction';
-import { XyoPayload } from '../components/xyo-payload';
-import { XyoError } from '../components/xyo-error';
 
 export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBoundWitnessHandlerProvider {
 
@@ -31,14 +27,7 @@ export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBo
     private readonly originChainNavigator: XyoOriginBlockRepository,
     private readonly boundWitnessPayloadProvider: XyoBoundWitnessPayloadProvider,
     private readonly boundWitnessSuccessListener: XyoBoundWitnessSuccessListener,
-    private readonly boundWitnessInteractionProvider: {
-      new(
-        packer: XyoPacker,
-        networkPipe: XyoNetworkPipe,
-        signers: XyoSigner[],
-        payload: XyoPayload
-      ): XyoBoundWitnessInteraction
-    }
+    private readonly boundWitnessInteractionFactory: XyoBoundWitnessInteractionFactory
   ) {
     super();
   }
@@ -49,7 +38,7 @@ export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBo
       this.originState.getSigners()
     ]);
 
-    const interaction = new this.boundWitnessInteractionProvider(
+    const interaction = this.boundWitnessInteractionFactory.newInstance(
       this.xyoPacker,
       networkPipe,
       signers,

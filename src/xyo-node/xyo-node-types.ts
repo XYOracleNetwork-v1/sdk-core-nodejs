@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node-types.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 1st October 2018 11:09:58 am
+ * @Last modified time: Wednesday, 3rd October 2018 5:32:39 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,6 +14,9 @@ import { XyoPayload } from '../components/xyo-payload';
 import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
 import { XyoOriginChainStateRepository } from '../origin-chain/xyo-origin-chain-types';
 import { CatalogueItem } from '../network/xyo-catalogue-item';
+import { XyoPacker } from '../xyo-packer/xyo-packer';
+import { XyoSigner } from '../signing/xyo-signer';
+import { XyoBoundWitnessInteraction } from './xyo-bound-witness-interaction';
 
 export type xyoBoundWitnessHandlerFn = (networkPipe: XyoNetworkPipe) => Promise<XyoBoundWitness>;
 
@@ -54,4 +57,13 @@ export interface XyoCatalogueResolver {
 
 export interface XyoCategoryRouter {
   getHandler(catalogueItem: CatalogueItem): XyoBoundWitnessHandlerProvider | undefined;
+}
+
+export interface XyoBoundWitnessInteractionFactory {
+  newInstance: (
+    packer: XyoPacker,
+    networkPipe: XyoNetworkPipe,
+    signers: XyoSigner[],
+    payload: XyoPayload
+  ) => XyoBoundWitnessInteraction;
 }

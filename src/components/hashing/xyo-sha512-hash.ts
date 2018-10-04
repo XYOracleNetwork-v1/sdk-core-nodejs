@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-sha512-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 10:37:02 am
+ * @Last modified time: Wednesday, 3rd October 2018 4:37:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,6 +18,9 @@ import { XyoHashProvider } from '../../hash-provider/xyo-hash-provider';
 
 export class XyoSha512Hash extends XyoHash {
 
+  public static major = 0x03;
+  public static minor = 0x06;
+
   /**
    * Creates a new instance of a XyoSha512Hash
    * @param sha512HashProvider A hash provider for sha512
@@ -25,6 +28,6 @@ export class XyoSha512Hash extends XyoHash {
    */
 
   constructor(sha512HashProvider: XyoHashProvider | undefined, sha512Hash: Buffer) {
-    super(sha512HashProvider, sha512Hash, 0x03, 0x06);
+    super(sha512HashProvider, sha512Hash, XyoSha512Hash.major, XyoSha512Hash.minor);
   }
 }
