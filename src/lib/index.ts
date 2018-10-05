@@ -4,23 +4,24 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 4:43:47 pm
+ * @Last modified time: Friday, 5th October 2018 11:52:54 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-// Auto-generated on Wed Oct 03 2018 16:43:15 GMT-0700 (Pacific Daylight Time)
+// Auto-generated on Fri Oct 05 2018 11:52:33 GMT-0700 (Pacific Daylight Time)
 
 export * from '../components/xyo-base';
 export * from '../components/xyo-error';
 export * from '../components/xyo-object-descriptor';
 export * from '../components/xyo-object';
 export * from '../components/xyo-payload';
+export * from '../hash-provider/hash-types';
 export * from '../hash-provider/xyo-hash-provider';
 export * from '../hash-provider/xyo-md5-hash-provider';
 export * from '../hash-provider/xyo-native-base-hash-provider';
-export * from '../hash-provider/xyo-sha224-hash-provider';
 export * from '../hash-provider/xyo-sha1-hash-provider';
+export * from '../hash-provider/xyo-sha224-hash-provider';
 export * from '../hash-provider/xyo-sha256-hash-provider';
 export * from '../hash-provider/xyo-sha512-hash-provider';
 export * from '../network/xyo-catalogue-item';
@@ -103,6 +104,7 @@ export * from '../signing/rsa/xyo-rsa-sha256-signature';
 export * from '../signing/rsa/xyo-rsa-sha256-signer-provider';
 export * from '../signing/rsa/xyo-rsa-sha256-signer';
 export * from '../signing/rsa/xyo-rsa-signature';
+export * from '../signing/rsa/xyo-rsa-types';
 export * from '../xyo-node/bound-witness-handlers/xyo-bound-witness-standard-server-interaction';
 export * from '../xyo-node/bound-witness-handlers/xyo-bound-witness-take-origin-chain-server-interaction';
 export * from '../xyo-packer/serializers/xyo-array-serializer';

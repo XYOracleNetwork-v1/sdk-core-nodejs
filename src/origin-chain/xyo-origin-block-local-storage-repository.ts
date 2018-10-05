@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: origin-chain-manager.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:19:29 pm
+ * @Last modified time: Thursday, 4th October 2018 2:32:19 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,6 @@
 import { XYOStorageProvider, XyoStorageProviderPriority } from '../storage/xyo-storage-provider';
 import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
 import { XyoOriginBlock } from './xyo-origin-block';
-import { XyoHashProvider } from '../hash-provider/xyo-hash-provider';
 import { XyoPacker } from '../xyo-packer/xyo-packer';
 import { XyoOriginBlockRepository } from './xyo-origin-chain-types';
 import { XyoHash } from '../components/hashing/xyo-hash';

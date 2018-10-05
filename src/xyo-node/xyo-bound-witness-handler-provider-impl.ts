@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:23:44 pm
+ * @Last modified time: Friday, 5th October 2018 12:10:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -63,6 +63,8 @@ export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBo
 
     await Promise.all(nestedBoundWitnesses.map(async (nestedBoundWitness) => {
       const nestedHashValue = await nestedBoundWitness.getHash(this.hashingProvider);
+      const nestedHash = this.xyoPacker.serialize(nestedHashValue, nestedHashValue.major, nestedHashValue.minor, true);
+      this.logInfo(`Extracted nested block with hash ${nestedHash.toString('hex')}`);
       return this.originChainNavigator.addOriginBlock(nestedHashValue, nestedBoundWitness);
     }));
 

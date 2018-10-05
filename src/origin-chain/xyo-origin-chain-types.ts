@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-types.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 12:24:42 pm
+ * @Last modified time: Thursday, 4th October 2018 9:35:45 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -33,4 +33,5 @@ export interface XyoOriginChainStateRepository {
   getNextPublicKey(): Promise<XyoNextPublicKey | undefined>;
   updateOriginChainState(hash: XyoHash): Promise<void>;
   getWaitingSigners(): Promise<XyoSigner[]>;
+  setCurrentSigners(signers: XyoSigner[]): Promise<void>;
 }

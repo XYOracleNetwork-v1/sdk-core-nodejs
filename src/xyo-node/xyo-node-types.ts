@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node-types.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 5:32:39 pm
+ * @Last modified time: Friday, 5th October 2018 11:49:57 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -51,8 +51,10 @@ export interface XyoNodeInteraction <T> {
   run(): Promise<T>;
 }
 
+export type resolveCategoryFn = (catalogueItems: CatalogueItem[]) => CatalogueItem | undefined;
+
 export interface XyoCatalogueResolver {
-  resolveCategory(catalogueItems: CatalogueItem[]): CatalogueItem | undefined;
+  resolveCategory: resolveCategoryFn;
 }
 
 export interface XyoCategoryRouter {

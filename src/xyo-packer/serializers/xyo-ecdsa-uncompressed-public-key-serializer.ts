@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-uncompressed-ec-public-key-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:25:03 pm
+ * @Last modified time: Thursday, 4th October 2018 1:16:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -39,9 +39,25 @@ export class XyoEcdsaUncompressedPublicKeySerializer extends XyoSerializer<XyoEc
 
   public serialize(publicKey: XyoEcdsaUncompressedPublicKey) {
     return Buffer.concat([
-      publicKey.get32ByteEcPoint(publicKey.x),
-      publicKey.get32ByteEcPoint(publicKey.y)
+      (this.writePointTo32ByteBuffer(publicKey.x)),
+      (this.writePointTo32ByteBuffer(publicKey.y))
     ]);
+  }
+
+  private writePointTo32ByteBuffer(point: Buffer) {
+    if (point.length === 32) {
+      return point;
+    }
+    const dest = Buffer.alloc(32);
+    const offset = dest.length - point.length;
+    let index = 0;
+
+    while (index < point.length) {
+      dest[offset + index] = point[index];
+      index += 1;
+    }
+
+    return dest;
   }
 }
 

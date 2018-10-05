@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:25:17 pm
+ * @Last modified time: Thursday, 4th October 2018 11:58:36 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -76,23 +76,18 @@ import { XyoEcdsaSecp256k1Sha1Signer } from '../signing/ecdsa/xyo-ecdsa-secp256k
 import { XyoObject } from '../components/xyo-object';
 import { XyoSerializer } from './xyo-serializer';
 import { XyoObjectDescriptor } from '../components/xyo-object-descriptor';
+import { XyoBase } from '../components/xyo-base';
 
 /**
  * A class for configuring the packing, serialization, and deserialization
  * for the xyo protocol
  */
 
-export class XyoDefaultPackerProvider {
-
-  private static getRegisterFn(packer: XyoPacker) {
-    return <T extends XyoObject>(descriptor: XyoObjectDescriptor, serializer: XyoSerializer<T>) => {
-      packer.registerSerializerDeserializer(descriptor, serializer);
-    };
-  }
+export class XyoDefaultPackerProvider extends XyoBase {
 
   public getXyoPacker() {
     const packer = new XyoPacker();
-    const add = XyoDefaultPackerProvider.getRegisterFn(packer);
+    const add = this.getRegisterFn(packer);
 
     const sha256HashProvider = new XyoSha256HashProvider();
     const sha1HashProvider = new XyoSha1HashProvider();
@@ -136,5 +131,12 @@ export class XyoDefaultPackerProvider {
     add(XyoEcdsaSecp256k1Sha1Signature, new XyoEcdsaSignatureSerializer(XyoEcdsaSecp256k1Sha1Signature.minor, ecdsaSecp256k1Sha1SignerProvider.verifySign.bind(ecdsaSecp256k1Sha256SignerProvider), { newInstance: (signature, verify) => new XyoEcdsaSecp256k1Sha1Signature(signature, verify) }));
 
     return packer;
+  }
+
+  private getRegisterFn(packer: XyoPacker) {
+    return <T extends XyoObject>(descriptor: XyoObjectDescriptor, serializer: XyoSerializer<T>) => {
+      this.logInfo(`Adding ${descriptor.name} as ${descriptor.major.toString(16)} ${descriptor.minor.toString(16)}`);
+      packer.registerSerializerDeserializer(descriptor, serializer);
+    };
   }
 }

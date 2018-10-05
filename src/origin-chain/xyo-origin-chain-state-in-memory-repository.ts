@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-state-manager.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:20:02 pm
+ * @Last modified time: Thursday, 4th October 2018 9:35:42 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -85,17 +85,25 @@ export class XyoOriginChainStateInMemoryRepository implements XyoOriginChainStat
 
   /**
    * Adds a signer to be used in the next bound-witness interaction.
-   * However, if the index is 0 it will add this signer for the
-   * current block
    */
 
   public async addSigner(signer: XyoSigner) {
-    const publicKey = signer.publicKey;
-    this.nextPublicKey = new XyoNextPublicKey(publicKey);
-    if (this.idx !== 0) {
-      this.waitingSigners.push(signer);
-    } else {
-      this.currentSigners.push(signer);
+    this.nextPublicKey = new XyoNextPublicKey(signer.publicKey);
+    this.waitingSigners.push(signer);
+  }
+
+  /**
+   * Set the current signers
+   * @param signers A collection of signers to set for the current block
+   */
+  public async setCurrentSigners(signers: XyoSigner[]) {
+    // this.currentSigners is immutable, so we empty then fill up the array
+    while (this.currentSigners.length) {
+      this.currentSigners.pop();
+    }
+
+    while (signers.length) {
+      this.currentSigners.push(signers.pop()!);
     }
   }
 

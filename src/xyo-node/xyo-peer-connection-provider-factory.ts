@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-peer-connection-provider-builder.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:24:15 pm
+ * @Last modified time: Friday, 5th October 2018 11:51:41 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -34,7 +34,8 @@ export class XyoPeerConnectionProviderFactory implements XyoCategoryRouter, XyoC
     private readonly originChainNavigator: XyoOriginBlockRepository,
     private readonly boundWitnessPayloadProvider: XyoBoundWitnessPayloadProviderImpl,
     private readonly boundWitnessSuccessListener: XyoBoundWitnessSuccessListener,
-    private readonly isServer: boolean
+    private readonly isServer: boolean,
+    private readonly catalogueResolver?: XyoCatalogueResolver
   ) {}
 
   public newInstance(): XyoPeerConnectionDelegate {
@@ -105,6 +106,10 @@ export class XyoPeerConnectionProviderFactory implements XyoCategoryRouter, XyoC
   }
 
   public resolveCategory(catalogueItems: CatalogueItem[]): CatalogueItem | undefined {
+    if (this.catalogueResolver) {
+      return this.catalogueResolver.resolveCategory(catalogueItems);
+    }
+
     return (catalogueItems && catalogueItems.length > 0 && catalogueItems[0]) || undefined;
   }
 }

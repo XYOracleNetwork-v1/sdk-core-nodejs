@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-local-storage-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 12:24:44 pm
+ * @Last modified time: Thursday, 4th October 2018 9:36:54 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -63,6 +63,13 @@ export class XyoOriginChainLocalStorageRepository implements XyoOriginChainState
   public async updateOriginChainState(hash: XyoHash): Promise<void> {
     const delegate = await this.getOrCreateInMemoryDelegate();
     await delegate.updateOriginChainState(hash);
+    await this.saveOriginChainState(delegate);
+    return;
+  }
+
+  public async setCurrentSigners(signers: XyoSigner[]): Promise<void> {
+    const delegate = await this.getOrCreateInMemoryDelegate();
+    await delegate.setCurrentSigners(signers);
     await this.saveOriginChainState(delegate);
     return;
   }

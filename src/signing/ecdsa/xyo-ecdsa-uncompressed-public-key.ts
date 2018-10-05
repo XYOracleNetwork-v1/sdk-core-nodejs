@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-uncompressed-ec-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 1:10:12 pm
+ * @Last modified time: Thursday, 4th October 2018 1:10:17 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,26 +18,6 @@ import { XyoObject } from '../../components/xyo-object';
  */
 
 export abstract class XyoEcdsaUncompressedPublicKey extends XyoObject {
-
   public abstract x: Buffer;
   public abstract y: Buffer;
-
-  public get32ByteEcPoint(point: Buffer) {
-    if (point.length === 32) {
-      return point;
-    }
-
-    return point.slice(1, 33);
-  }
-
-  /**
-   * Returns the binary encoded public key
-   */
-
-  public getEncoded() {
-    return Buffer.concat([
-      this.get32ByteEcPoint(this.x),
-      this.get32ByteEcPoint(this.y)
-    ]);
-  }
 }
