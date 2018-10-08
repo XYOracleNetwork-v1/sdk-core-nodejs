@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-verifier.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 8th October 2018 4:33:59 pm
+ * @Last modified time: Monday, 8th October 2018 4:53:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -134,7 +134,7 @@ export class XyoOriginChainVerifier extends XyoBase {
     }
 
     const serializedPublicKeySet = publicKeySet.array.map((pk) => {
-      return this.packer.serialize(pk, pk.major, pk.minor);
+      return this.packer.serialize(pk);
     });
 
     const foundMatches = matchedIndexes.filter((matchedIndex) => {
@@ -144,11 +144,7 @@ export class XyoOriginChainVerifier extends XyoBase {
       }
 
       const rawNextPublicKey = (party.nextPublicKey as XyoNextPublicKey).publicKey;
-      const serializedValue = this.packer.serialize(
-        rawNextPublicKey,
-        rawNextPublicKey.major,
-        rawNextPublicKey.minor
-      );
+      const serializedValue = this.packer.serialize(rawNextPublicKey);
 
       return serializedPublicKeySet.indexOf(serializedValue) > -1;
     });

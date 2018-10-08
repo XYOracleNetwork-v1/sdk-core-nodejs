@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-client-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 4th October 2018 11:03:43 am
+ * @Last modified time: Monday, 8th October 2018 4:44:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -53,12 +53,7 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBoundWitnessInt
           const boundWitnessTransfer2 = await boundWitness.incomingData(boundWitnessTransfer1, true);
 
           /** Serialize the transfer value */
-          const bytes = this.xyoPacker.serialize(
-            boundWitnessTransfer2,
-            boundWitnessTransfer2.major,
-            boundWitnessTransfer2.minor,
-            false
-          );
+          const bytes = this.xyoPacker.serialize(boundWitnessTransfer2, false);
 
           if (!disconnected) {
             /* Send the message and wait for reply */

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-block.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:11:04 pm
+ * @Last modified time: Monday, 8th October 2018 4:39:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -53,7 +53,7 @@ export class XyoOriginBlock {
       /** Retrieve the value, if it exists add it to the previous hash list */
       const signedPayload = signedPayloadValue[idHashValue];
       if (signedPayload) {
-        previousHashes.push(this.xyoPacker.serialize(signedPayload, signedPayload.id[0], signedPayload.id[1], false));
+        previousHashes.push(this.xyoPacker.serialize(signedPayload, false));
       }
     });
 

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: origin-chain-manager.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 4th October 2018 2:32:19 pm
+ * @Last modified time: Monday, 8th October 2018 4:39:29 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -67,8 +67,8 @@ export class XyoOriginBlockLocalStorageRepository implements XyoOriginBlockRepos
    */
 
   public async addOriginBlock(blockHash: XyoHash, originBlock: XyoBoundWitness): Promise<void> {
-    const blockDataValue = this.xyoPacker.serialize(originBlock, originBlock.major, originBlock.minor, false);
-    const blockHashValue = this.xyoPacker.serialize(blockHash, blockHash.major, blockHash.minor, true);
+    const blockDataValue = this.xyoPacker.serialize(originBlock, false);
+    const blockHashValue = this.xyoPacker.serialize(blockHash, true);
 
     const previousHashes = await new XyoOriginBlock(this.xyoPacker, originBlock).findPreviousBlocks();
     const promises = previousHashes.map((hash) => {

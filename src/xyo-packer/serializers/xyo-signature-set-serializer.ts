@@ -32,7 +32,7 @@ export class XyoSignatureSetSerializer extends XyoSerializer<XyoSignatureSet> {
 
   public serialize(signatureSet: XyoSignatureSet, xyoPacker: XyoPacker) {
     return Buffer.concat(
-      signatureSet.array.map(element => xyoPacker.serialize(element, element.major, element.minor, true))
+      signatureSet.array.map(element => xyoPacker.serialize(element, true))
     );
   }
 }

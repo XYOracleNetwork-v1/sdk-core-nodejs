@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 8th October 2018 3:54:28 pm
+ * @Last modified time: Monday, 8th October 2018 4:39:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -80,7 +80,7 @@ export abstract class XyoBoundWitness extends XyoObject {
     const { major, minor } = this.getPublicKeysMajorMinor();
     const publicKeys = new XyoSingleTypeArrayShort(major, minor, this.publicKeys);
 
-    return this.xyoPacker.serialize(publicKeys, publicKeys.major, publicKeys.minor, false);
+    return this.xyoPacker.serialize(publicKeys, false);
   }
 
   /**
@@ -93,7 +93,7 @@ export abstract class XyoBoundWitness extends XyoObject {
   public makeSignaturesUntyped(): Buffer {
     const { major, minor } =  this.getSignaturesMajorMinor();
     const signatures = new XyoSingleTypeArrayShort(major, minor, this.signatures);
-    return this.xyoPacker.serialize(signatures, signatures.major, signatures.minor, false);
+    return this.xyoPacker.serialize(signatures, false);
   }
 
   /**
@@ -107,7 +107,7 @@ export abstract class XyoBoundWitness extends XyoObject {
     const { major, minor } =  this.getPayloadsMajorMinor();
 
     const payloads = new XyoSingleTypeArrayInt(major, minor, this.payloads);
-    return this.xyoPacker.serialize(payloads, payloads.major, payloads.minor, false);
+    return this.xyoPacker.serialize(payloads, false);
   }
 
   /**
@@ -125,7 +125,7 @@ export abstract class XyoBoundWitness extends XyoObject {
         throw new XyoError(`Payload can't be null`, XyoError.errorType.ERR_CREATOR_MAPPING);
       }
       const payloadData = payload.signedPayload;
-      collection.push(this.xyoPacker.serialize(payloadData, payloadData.major, payloadData.minor, false));
+      collection.push(this.xyoPacker.serialize(payloadData, false));
     }
 
     return Buffer.concat(collection);

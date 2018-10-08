@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 4th October 2018 11:08:04 am
+ * @Last modified time: Monday, 8th October 2018 4:44:37 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -51,12 +51,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBoundWitnessIn
           const boundWitnessTransfer1 = await boundWitness.incomingData(undefined, false);
 
           /** Serialize the transfer value */
-          const bytes = this.xyoPacker.serialize(
-            boundWitnessTransfer1,
-            boundWitnessTransfer1.major,
-            boundWitnessTransfer1.minor,
-            false
-          );
+          const bytes = this.xyoPacker.serialize(boundWitnessTransfer1, false);
 
           /** Tell the other node this is the catalogue item you chose */
           const catalogueBuffer = Buffer.alloc(XYO_TCP_CATALOGUE_LENGTH_IN_BYTES);
@@ -86,7 +81,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBoundWitnessIn
 
             if (!disconnected) {
               /** serialize the bound witness transfer */
-              const transferBytes = this.xyoPacker.serialize(transfer, transfer.major, transfer.minor, false);
+              const transferBytes = this.xyoPacker.serialize(transfer, false);
 
               /** Send transfer data, but dont wait for reply */
               this.logInfo(`Sending final Transfer 3. Will disconnect`);

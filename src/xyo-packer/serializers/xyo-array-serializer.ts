@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-single-type-array-byte-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:25:08 pm
+ * @Last modified time: Monday, 8th October 2018 4:43:56 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -58,14 +58,7 @@ export class XyoArraySerializer extends XyoSerializer<XyoArray> {
 
   public serialize(xyoArray: XyoArray, xyoPacker: XyoPacker) {
     if (!this.typed) {
-      return Buffer.concat(
-        xyoArray.array.map((element) => {
-          const id = element.id;
-          const major = id[0];
-          const minor = id[1];
-          return xyoPacker.serialize(element, major, minor, true);
-        })
-      );
+      return Buffer.concat(xyoArray.array.map(element => xyoPacker.serialize(element, true)));
     }
 
     const typedBuffer = Buffer.from([
@@ -75,9 +68,7 @@ export class XyoArraySerializer extends XyoSerializer<XyoArray> {
 
     return Buffer.concat([
       typedBuffer,
-      ...xyoArray.array.map(element =>
-        xyoPacker.serialize(element, xyoArray.elementMajor!, xyoArray.elementMinor!, false)
-      )
+      ...xyoArray.array.map(element => xyoPacker.serialize(element, false))
     ]);
   }
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-key-set-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:25:02 pm
+ * @Last modified time: Monday, 8th October 2018 4:41:55 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,7 +32,7 @@ export class XyoKeySetSerializer extends XyoSerializer<XyoKeySet> {
 
   public serialize(xyoKeySet: XyoKeySet, xyoPacker: XyoPacker) {
     return Buffer.concat(xyoKeySet.array.map(element =>
-      xyoPacker.serialize(element, element.id[0], element.id[1], true))
+      xyoPacker.serialize(element, true))
     );
   }
 }

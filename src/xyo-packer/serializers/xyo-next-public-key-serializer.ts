@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-next-public-key-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:25:01 pm
+ * @Last modified time: Monday, 8th October 2018 4:41:46 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -30,12 +30,7 @@ export class XyoNextPublicKeySerializer extends XyoSerializer<XyoNextPublicKey> 
   }
 
   public serialize(nextPublicKey: XyoNextPublicKey, xyoPacker: XyoPacker) {
-    return xyoPacker.serialize(
-      nextPublicKey.publicKey,
-      nextPublicKey.publicKey.id[0],
-      nextPublicKey.publicKey.id[1],
-      true
-    );
+    return xyoPacker.serialize(nextPublicKey.publicKey, true);
   }
 
   public readSize(buffer: Buffer, xyoPacker: XyoPacker) {

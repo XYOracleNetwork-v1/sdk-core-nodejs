@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: rsa-sha256-serializer.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 12:30:33 pm
+ * @Last modified time: Monday, 8th October 2018 4:46:29 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,7 +20,7 @@ describe('XyoRsaSha256SignerSerializer', () => {
     const signerProvider = new XyoRsaSha256SignerProvider();
     const signer = signerProvider.newInstance();
     const sig1 = (await signer.signData(Buffer.from('hello world'))) as XyoRsaSha256Signature;
-    const typedSerialization = packer.serialize(signer, signer.major, signer.minor, true);
+    const typedSerialization = packer.serialize(signer, true);
     const hydratedSigner = packer.deserialize(typedSerialization) as XyoRsaSha256Signer;
     expect(signer.publicKey.modulus.equals(hydratedSigner.publicKey.modulus)).toBe(true);
     expect(signer.privateKey === hydratedSigner.privateKey).toBe(true);

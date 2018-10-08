@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-transfer-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:25:06 pm
+ * @Last modified time: Monday, 8th October 2018 4:42:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -93,12 +93,7 @@ export class XyoBoundWitnessTransferSerializer extends XyoSerializer<XyoBoundWit
         boundWitnessTransfer.keysToSend
       );
 
-      keySetArray = xyoPacker.serialize(
-        keySetArrayInstance,
-        keySetArrayInstance.id[0],
-        keySetArrayInstance.id[1],
-        false
-      );
+      keySetArray = xyoPacker.serialize(keySetArrayInstance, false);
 
       const payloadArrayInstance = new XyoSingleTypeArrayInt(
         XyoPayload.major,
@@ -106,12 +101,7 @@ export class XyoBoundWitnessTransferSerializer extends XyoSerializer<XyoBoundWit
         boundWitnessTransfer.payloadsToSend
       );
 
-      payloadArray = xyoPacker.serialize(
-        payloadArrayInstance,
-        payloadArrayInstance.id[0],
-        payloadArrayInstance.id[1],
-        false
-      );
+      payloadArray = xyoPacker.serialize(payloadArrayInstance, false);
     }
 
     if (boundWitnessTransfer.stage === 0x02 || boundWitnessTransfer.stage === 0x03) {
@@ -121,12 +111,7 @@ export class XyoBoundWitnessTransferSerializer extends XyoSerializer<XyoBoundWit
         boundWitnessTransfer.signatureToSend
       );
 
-      signatureArray = xyoPacker.serialize(
-        signatureArrayInstance,
-        signatureArrayInstance.id[0],
-        signatureArrayInstance.id[1],
-        false
-      );
+      signatureArray = xyoPacker.serialize(signatureArrayInstance, false);
     }
 
     const notNullValues = [

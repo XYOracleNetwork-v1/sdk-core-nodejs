@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-local-storage-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 4th October 2018 9:36:54 am
+ * @Last modified time: Monday, 8th October 2018 4:40:41 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -147,27 +147,23 @@ export class XyoOriginChainLocalStorageRepository implements XyoOriginChainState
     const waitingSigners = await originChainState.getWaitingSigners();
 
     const payload: SerializedOriginChainState = {
-      index: this.packer.serialize(index, index.major, index.minor, true).toString('hex'),
+      index: this.packer.serialize(index, true).toString('hex'),
       signers: signers.map((signer) => {
-        return this.packer.serialize(signer, signer.major, signer.minor, true).toString('hex');
+        return this.packer.serialize(signer, true).toString('hex');
       }),
       waitingSigners: waitingSigners.map((signer) => {
-        return this.packer.serialize(signer, signer.major, signer.minor, true).toString('hex');
+        return this.packer.serialize(signer, true).toString('hex');
       }),
       nextPublicKey: null,
       previousHash: null,
     };
 
     if (nextPublicKey) {
-      payload.nextPublicKey = this.packer.serialize(
-        nextPublicKey, nextPublicKey.major, nextPublicKey.minor, true
-      ).toString('hex');
+      payload.nextPublicKey = this.packer.serialize(nextPublicKey,  true).toString('hex');
     }
 
     if (previousHash) {
-      payload.previousHash = this.packer.serialize(
-        previousHash, previousHash.major, previousHash.minor, true
-      ).toString('hex');
+      payload.previousHash = this.packer.serialize(previousHash, true).toString('hex');
     }
 
     return JSON.stringify(payload);

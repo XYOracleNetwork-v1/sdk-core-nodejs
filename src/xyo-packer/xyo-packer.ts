@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:25:16 pm
+ * @Last modified time: Monday, 8th October 2018 4:38:38 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -66,14 +66,14 @@ export class XyoPacker extends XyoBase {
    * @throws Will throw an `XyoError` of type `ERR_CREATOR_MAPPING` if a serializer can not be located
    */
 
-  public serialize(object: XyoObject, major: number, minor: number, typed?: boolean): Buffer {
-    if (this.serializerDeserializerMajorMinorIndex[major]) { // See if a major record exist
+  public serialize(object: XyoObject, typed?: boolean): Buffer {
+    if (this.serializerDeserializerMajorMinorIndex[object.major]) { // See if a major record exist
 
       // Check to see if a minor record exists. Assert typeof number since `0` is a valid value
-      if (typeof this.serializerDeserializerMajorMinorIndex[major][minor] === 'number') {
+      if (typeof this.serializerDeserializerMajorMinorIndex[object.major][object.minor] === 'number') {
 
         // Get index and assert the index is in range of the underlying data collection
-        const index = this.serializerDeserializerMajorMinorIndex[major][minor];
+        const index = this.serializerDeserializerMajorMinorIndex[object.major][object.minor];
         if (index < this.serializerDeserializersCollection.length) {
           // Attempt to serialize
           const serializer = this.serializerDeserializersCollection[index];
@@ -94,7 +94,7 @@ export class XyoPacker extends XyoBase {
     }
 
     throw new XyoError(
-      `Could not find serializer for major ${major} and minor ${minor}`,
+      `Could not find serializer for major ${object.major} and minor ${object.minor}`,
       XyoError.errorType.ERR_CREATOR_MAPPING
     );
   }

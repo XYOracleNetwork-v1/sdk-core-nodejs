@@ -1,3 +1,14 @@
+/*
+ * @Author: XY | The Findables Company <ryanxyo>
+ * @Date:   Monday, 8th October 2018 10:10:39 am
+ * @Email:  developer@xyfindables.com
+ * @Filename: xyo-origin-chain-verifier.spec.ts
+ * @Last modified by: ryanxyo
+ * @Last modified time: Monday, 8th October 2018 4:51:09 pm
+ * @License: All Rights Reserved
+ * @Copyright: Copyright XY | The Findables Company
+ */
+
 import { XyoZigZagBoundWitness } from "../../components/bound-witness/xyo-zig-zag-bound-witness";
 import { XyoDefaultPackerProvider } from "../../xyo-packer/xyo-default-packer-provider";
 
@@ -11,16 +22,6 @@ import { XyoSha256HashProvider } from "../../hash-provider/xyo-sha256-hash-provi
 import { XyoPreviousHash } from "../../components/hashing/xyo-previous-hash";
 import { XyoNextPublicKey } from "../../signing/xyo-next-public-key";
 
-/*
- * @Author: XY | The Findables Company <ryanxyo>
- * @Date:   Monday, 8th October 2018 10:10:39 am
- * @Email:  developer@xyfindables.com
- * @Filename: xyo-origin-chain-verifier.spec.ts
- * @Last modified by: ryanxyo
- * @Last modified time: Monday, 8th October 2018 3:49:03 pm
- * @License: All Rights Reserved
- * @Copyright: Copyright XY | The Findables Company
- */
 const packer = new XyoDefaultPackerProvider().getXyoPacker();
 const signerProvider = new XyoRsaSha256SignerProvider();
 const hashProvider = new XyoSha256HashProvider();

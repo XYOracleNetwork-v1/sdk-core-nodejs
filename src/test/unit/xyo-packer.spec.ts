@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-packer.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:11:33 pm
+ * @Last modified time: Monday, 8th October 2018 4:47:42 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -52,13 +52,13 @@ describe(`XyoPacker`, () => {
 
     const testValue = new TestXyoObject(rawValue);
 
-    const typedSerialization = packer.serialize(testValue, major, minor, true);
+    const typedSerialization = packer.serialize(testValue, true);
     expect(typedSerialization.equals(typedSerialized)).toBe(true);
 
-    const untypedSerialization = packer.serialize(testValue, major, minor, false);
+    const untypedSerialization = packer.serialize(testValue, false);
     expect(untypedSerialization.equals(untypedSerialized)).toBe(true);
 
-    const rawData = packer.serialize(testValue, major, minor, undefined);
+    const rawData = packer.serialize(testValue, undefined);
     expect(value.equals(rawData)).toBe(true);
   });
 
@@ -71,9 +71,9 @@ describe(`XyoPacker`, () => {
     const { major, minor } = TestXyoObjectTypedArray;
     const { major: elementMajor, minor: elementMinor } = TestXyoObject;
 
-    const rawSerialization = packer.serialize(array, major, minor, undefined);
-    const typedSerialization = packer.serialize(array, major, minor, true);
-    const untypedSerialization = packer.serialize(array, major, minor, false);
+    const rawSerialization = packer.serialize(array, undefined);
+    const typedSerialization = packer.serialize(array, true);
+    const untypedSerialization = packer.serialize(array, false);
 
     expect(rawSerialization[0]).toBe(elementMajor);
     expect(rawSerialization[1]).toBe(elementMinor);

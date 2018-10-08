@@ -4,14 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: zig-zag-bound-witness.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:13:19 pm
+ * @Last modified time: Monday, 8th October 2018 4:47:20 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoZigZagBoundWitness } from '../../components/bound-witness/xyo-zig-zag-bound-witness';
 import { XyoDefaultPackerProvider } from '../../xyo-packer/xyo-default-packer-provider';
-import { XyoBoundWitness } from '../../components/bound-witness/xyo-bound-witness';
 import { XyoRsaSha256SignerProvider } from '../../signing/rsa/xyo-rsa-sha256-signer-provider';
 import { XyoPayload } from '../../components/xyo-payload';
 import { XyoMultiTypeArrayInt } from '../../components/arrays/xyo-multi-type-array-int';
@@ -21,7 +20,6 @@ describe(`ZigZagBoundWitness`, () => {
 
   it(`Should leave two parties with the same set of bound-witness data`, async () => {
     const packer = new XyoDefaultPackerProvider().getXyoPacker();
-    const { major: boundWitnessMajor, minor: boundWitnessMinor } = XyoBoundWitness;
     const signerProvider = new XyoRsaSha256SignerProvider();
 
     const bobSigners = [signerProvider.newInstance()];
@@ -54,8 +52,8 @@ describe(`ZigZagBoundWitness`, () => {
     const transfer3 = await bobBoundWitness.incomingData(transfer2, false);
     const transfer4 = await aliceBoundWitness.incomingData(transfer3, false);
 
-    const bobTypedSerialized = packer.serialize(bobBoundWitness, boundWitnessMajor, boundWitnessMinor, true);
-    const aliceTypedSerialized = packer.serialize(aliceBoundWitness, boundWitnessMajor, boundWitnessMinor, true);
+    const bobTypedSerialized = packer.serialize(bobBoundWitness, true);
+    const aliceTypedSerialized = packer.serialize(aliceBoundWitness, true);
     expect(bobTypedSerialized.equals(aliceTypedSerialized)).toBe(true);
 
   });

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bridge-block-set-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:25:05 pm
+ * @Last modified time: Monday, 8th October 2018 4:42:06 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -33,7 +33,7 @@ export class XyoBridgeBlockSetSerializer extends XyoSerializer<XyoBridgeBlockSet
 
   public serialize(xyoBridgeBlockSet: XyoBridgeBlockSet, xyoPacker: XyoPacker) {
     const buffer = Buffer.concat(xyoBridgeBlockSet.array.map(element =>
-      xyoPacker.serialize(element, element.id[0], element.id[1], false))
+      xyoPacker.serialize(element, false))
     );
 
     return Buffer.concat([
