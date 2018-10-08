@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-zig-zag-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th September 2018 2:00:53 pm
+ * @Last modified time: Monday, 8th October 2018 12:08:34 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -141,7 +141,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
           payloadsToSend.push(this.payloads[i]);
         }
 
-        for (let i = signatureReceivedSize; i < this.signatures.length; i += 1) {
+        for (let i = (this.signatures.length - signatureReceivedSize) - 1; i >= 0; i -= 1) {
           signatureToSend.push(this.signatures[i]);
         }
       }
@@ -198,7 +198,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
     for (const obj of incomingSignatures) {
       const incomingSignatureSet = obj as XyoSignatureSet;
       if (incomingSignatureSet) {
-        this.dynamicSignatureSets.push(incomingSignatureSet);
+        this.dynamicSignatureSets.unshift(incomingSignatureSet);
       } else {
         throw new XyoError(`Error unpacking signatureSet`, XyoError.errorType.ERR_CRITICAL);
       }
@@ -232,7 +232,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
 
   private async signForSelf() {
     const signatureSet = await this.signBoundWitness();
-    this.dynamicSignatureSets.push(signatureSet);
+    this.dynamicSignatureSets.unshift(signatureSet);
   }
 
   /**

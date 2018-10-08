@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-previous-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 4:37:23 pm
+ * @Last modified time: Monday, 8th October 2018 9:20:26 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -31,5 +31,18 @@ export class XyoPreviousHash extends XyoObject {
 
   constructor (public readonly hash: XyoHash) {
     super(XyoPreviousHash.major, XyoPreviousHash.minor);
+  }
+
+  public equals(other: any): boolean {
+    if (other === this) {
+      return true;
+    }
+
+    if (!(other instanceof XyoPreviousHash)) {
+      return false;
+    }
+
+    const otherPreviousHash = other as XyoPreviousHash;
+    return otherPreviousHash.hash.hash.equals(this.hash.hash);
   }
 }

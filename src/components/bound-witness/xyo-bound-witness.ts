@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:10:55 pm
+ * @Last modified time: Monday, 8th October 2018 3:54:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,6 +20,7 @@ import { XyoPacker } from '../../xyo-packer/xyo-packer';
 import { XyoSingleTypeArrayShort } from '../arrays/xyo-single-type-array-short';
 import { XyoSingleTypeArrayInt } from '../arrays/xyo-single-type-array-int';
 import { XyoSigner } from '../../signing/xyo-signer';
+import { XyoSignature } from '../../signing/xyo-signature';
 
 /**
  * An XyoBoundWitness is one of the core pieces in the XYO protocol.
@@ -110,20 +111,11 @@ export abstract class XyoBoundWitness extends XyoObject {
   }
 
   /**
-   * Calculates a signature based on the current state of the bound-witness
-   * @param signer A signer object used to get the signature
-   */
-
-  protected async signCurrent(signer: XyoSigner) {
-    return signer.signData(this.getSigningData());
-  }
-
-  /**
    * Packs the relevant signing data into Buffer. This includes public keys and
    * the signed portion of the payload
    */
 
-  private getSigningData (): Buffer {
+  public getSigningData (): Buffer {
     const collection: Buffer[] = [];
     const publicKeysUntyped = this.makePublicKeysUntyped();
     collection.push(publicKeysUntyped);
@@ -137,6 +129,38 @@ export abstract class XyoBoundWitness extends XyoObject {
     }
 
     return Buffer.concat(collection);
+  }
+
+  public async validateSignatures() {
+    if (this.signatures.length !== this.publicKeys.length) {
+      throw new Error(`Public key and signature set length mismatch`);
+    }
+
+    const signingData = this.getSigningData();
+
+    return Promise.all(this.signatures.map(async (sigSet, index) => {
+      if (sigSet.array.length !== this.publicKeys[index].array.length) {
+        throw new Error(`Public key and signature set length mismatch`);
+      }
+
+      return Promise.all(sigSet.array.map(async (sig, sigIndex) => {
+        const signature = (sig as XyoSignature);
+        const publicKey = this.publicKeys[index].array[sigIndex];
+        const isValid = await signature.verify(signingData, publicKey);
+        if (!isValid) {
+          throw new Error(`Signature [${index}][${sigIndex}] ${signature.encodedSignature.toString('hex')} is invalid`);
+        }
+      }));
+    }));
+  }
+
+  /**
+   * Calculates a signature based on the current state of the bound-witness
+   * @param signer A signer object used to get the signature
+   */
+
+  protected async signCurrent(signer: XyoSigner) {
+    return signer.signData(this.getSigningData());
   }
 
   /**

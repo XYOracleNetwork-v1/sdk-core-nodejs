@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha-signer-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 5:55:56 pm
+ * @Last modified time: Monday, 8th October 2018 4:23:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -16,17 +16,20 @@ import { XyoSignerProvider } from '../xyo-signer-provider';
 import { XyoRsaPublicKey } from './xyo-rsa-public-key';
 import { XyoRsaShaSignerFactory } from './xyo-rsa-types';
 import { XyoRsaShaSigner } from './xyo-rsa-sha-signer';
+import { XyoBase } from '../../components/xyo-base';
 
 /**
  * A service for providing RSA-SHA-256 signing services
  */
 
-export abstract class XyoRsaShaSignerProvider implements XyoSignerProvider {
+export abstract class XyoRsaShaSignerProvider extends XyoBase implements XyoSignerProvider {
 
   constructor (
     private readonly signingScheme: 'pkcs1-sha1' | 'pkcs1-sha256',
     private readonly rsaShaSignerFactory: XyoRsaShaSignerFactory
-  ) {}
+  ) {
+    super();
+  }
 
   /**
    * Returns a new instance of a signer
@@ -51,7 +54,7 @@ export abstract class XyoRsaShaSignerProvider implements XyoSignerProvider {
       () => key.exportKey('components-public').n,
 
       // verifySign
-      this.verifySign,
+      this.verifySign.bind(this),
 
       // getPrivateKey
       () => key.exportKey('pkcs8-private-pem')
@@ -74,7 +77,6 @@ export abstract class XyoRsaShaSignerProvider implements XyoSignerProvider {
       n: rsaPubKey.modulus,
       e: rsaPubKey.publicExponent
     });
-
     return key.verify(data, signature.encodedSignature);
   }
 }

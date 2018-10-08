@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 4th October 2018 11:58:36 am
+ * @Last modified time: Monday, 8th October 2018 4:30:46 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -135,7 +135,7 @@ export class XyoDefaultPackerProvider extends XyoBase {
 
   private getRegisterFn(packer: XyoPacker) {
     return <T extends XyoObject>(descriptor: XyoObjectDescriptor, serializer: XyoSerializer<T>) => {
-      this.logInfo(`Adding ${descriptor.name} as ${descriptor.major.toString(16)} ${descriptor.minor.toString(16)}`);
+      // this.logInfo(`Adding ${descriptor.name} as ${descriptor.major.toString(16)} ${descriptor.minor.toString(16)}`);
       packer.registerSerializerDeserializer(descriptor, serializer);
     };
   }
