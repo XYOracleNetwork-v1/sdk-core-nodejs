@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: generate-lib.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 11:41:21 am
+ * @Last modified time: Tuesday, 9th October 2018 10:12:59 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -44,12 +44,13 @@ async function generateLibString() {
   });
 
   const mappedExports = filteredExports.map((item) => {
-    const indexOfTs = item.indexOf('.ts');
-    if (!indexOfTs) {
+    let trimIndex = item.indexOf('.d.ts');
+    trimIndex = trimIndex === -1 ? item.indexOf('.ts') : trimIndex;
+    if (trimIndex === -1) {
       return undefined;
     }
 
-    const exportPath = item.substring(0, indexOfTs);
+    const exportPath = item.substring(0, trimIndex);
     return `export * from '${exportPath}';`;
   })
   .filter(item => item !== undefined)

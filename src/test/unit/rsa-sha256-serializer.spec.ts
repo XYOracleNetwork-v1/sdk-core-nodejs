@@ -4,15 +4,15 @@
  * @Email:  developer@xyfindables.com
  * @Filename: rsa-sha256-serializer.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 8th October 2018 4:46:29 pm
+ * @Last modified time: Tuesday, 9th October 2018 3:08:26 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoDefaultPackerProvider } from '../../xyo-packer/xyo-default-packer-provider';
-import { XyoRsaSha256Signature } from '../../signing/rsa/xyo-rsa-sha256-signature';
-import { XyoRsaSha256SignerProvider } from '../../signing/rsa/xyo-rsa-sha256-signer-provider';
-import { XyoRsaSha256Signer } from '../../signing/rsa/xyo-rsa-sha256-signer';
+import { XyoDefaultPackerProvider } from '../../xyo-serialization/xyo-default-packer-provider';
+import { XyoRsaSha256Signature } from '../../xyo-signing/rsa/sha256/xyo-rsa-sha256-signature';
+import { XyoRsaSha256SignerProvider } from '../../xyo-signing/rsa/sha256/xyo-rsa-sha256-signer-provider';
+import { XyoRsaSha256Signer } from '../../xyo-signing/rsa/sha256/xyo-rsa-sha256-signer';
 
 describe('XyoRsaSha256SignerSerializer', () => {
   it('Should serialize and deserialize rsa-sha256 signers', async () => {

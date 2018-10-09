@@ -4,19 +4,19 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 8th October 2018 4:44:46 pm
+ * @Last modified time: Tuesday, 9th October 2018 1:19:13 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoPacker } from '../xyo-packer/xyo-packer';
-import { XyoNetworkPipe } from '../network/xyo-network';
-import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
-import { XyoHashProvider } from '../hash-provider/xyo-hash-provider';
+import { XyoPacker } from '../xyo-serialization/xyo-packer';
+import { XyoNetworkPipe } from '../@types/xyo-network';
+import { XyoBoundWitness } from '../xyo-bound-witness/xyo-bound-witness';
+import { XyoHashProvider } from '../@types/xyo-hashing';
 import { extractNestedBoundWitnesses } from './bound-witness-origin-chain-extractor';
-import { XyoBoundWitnessHandlerProvider, XyoBoundWitnessPayloadProvider, XyoBoundWitnessSuccessListener, XyoBoundWitnessInteractionFactory } from './xyo-node-types';
-import { XyoOriginBlockRepository, XyoOriginChainStateRepository } from '../origin-chain/xyo-origin-chain-types';
-import { XyoBase } from '../components/xyo-base';
+import { XyoBoundWitnessHandlerProvider, XyoBoundWitnessPayloadProvider, XyoBoundWitnessSuccessListener, XyoBoundWitnessInteractionFactory } from '../@types/xyo-node';
+import { XyoOriginBlockRepository, XyoOriginChainStateRepository } from '../@types/xyo-origin-chain';
+import { XyoBase } from '../xyo-core-components/xyo-base';
 
 export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBoundWitnessHandlerProvider {
 
@@ -38,14 +38,9 @@ export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBo
       this.originState.getSigners()
     ]);
 
-    const interaction = this.boundWitnessInteractionFactory.newInstance(
-      this.xyoPacker,
-      networkPipe,
-      signers,
-      payload
-    );
+    const interaction = this.boundWitnessInteractionFactory.newInstance(signers, payload);
 
-    const boundWitness = await interaction.run();
+    const boundWitness = await interaction.run(networkPipe);
     await this.handleBoundWitnessSuccess(boundWitness);
     return boundWitness;
   }

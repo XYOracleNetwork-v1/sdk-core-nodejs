@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-archivist.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st September 2018 10:55:56 am
+ * @Last modified time: Tuesday, 9th October 2018 12:05:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoPeerConnectionDelegate } from './xyo-node-types';
-import { XyoBase } from '../components/xyo-base';
+import { XyoPeerConnectionDelegateInterface } from '../@types/xyo-node';
+import { XyoBase } from '../xyo-core-components/xyo-base';
 
 /**
  * An XyoNode represents a node in the xyo-network system.
@@ -26,7 +26,7 @@ export class XyoNode extends XyoBase {
   private isLooping: boolean = false;
   private shouldStopLooping: boolean = false;
 
-  constructor(private readonly peerConnectionDelegate: XyoPeerConnectionDelegate) {
+  constructor(private readonly peerConnectionDelegate: XyoPeerConnectionDelegateInterface) {
     super();
   }
 

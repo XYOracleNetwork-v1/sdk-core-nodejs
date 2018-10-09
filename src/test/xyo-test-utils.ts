@@ -4,18 +4,18 @@
  * @Email:  developer@xyfindables.com
  * @Filename: test-utils.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 8th October 2018 4:44:55 pm
+ * @Last modified time: Tuesday, 9th October 2018 10:59:17 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 // tslint:disable:max-classes-per-file
 
-import { XyoObject } from '../components/xyo-object';
-import { XyoSerializer } from '../xyo-packer/xyo-serializer';
-import { XyoPacker } from '../xyo-packer/xyo-packer';
-import { XyoArray } from '../components/arrays/xyo-array';
-import { XyoArrayUnpacker } from '../xyo-packer/xyo-array-unpacker';
+import { XyoObject } from '../xyo-core-components/xyo-object';
+import { XyoSerializer } from '../xyo-serialization/xyo-serializer';
+import { XyoPacker } from '../xyo-serialization/xyo-packer';
+import { XyoArray } from '../xyo-core-components/arrays/xyo-array';
+import { XyoArrayUnpacker } from '../xyo-serialization/xyo-array-unpacker';
 
 export class TestXyoObject extends XyoObject {
 

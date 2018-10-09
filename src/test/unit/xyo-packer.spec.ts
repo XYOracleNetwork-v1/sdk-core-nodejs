@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-packer.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 8th October 2018 4:47:42 pm
+ * @Last modified time: Tuesday, 9th October 2018 10:59:20 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 // tslint:disable:max-classes-per-file
 
-import { XyoPacker } from '../../xyo-packer/xyo-packer';
+import { XyoPacker } from '../../xyo-serialization/xyo-packer';
 import {
   TestXyoObject,
   TestXyoObjectSerializer,

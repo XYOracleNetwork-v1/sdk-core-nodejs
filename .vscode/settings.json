@@ -13,6 +13,7 @@
     "deserializing",
     "hasher",
     "pojo",
+    "promisify",
     "rssi",
     "ryanxyo",
     "secp",

@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: bound-witness-origin-chain-extractor.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:12:16 pm
+ * @Last modified time: Tuesday, 9th October 2018 11:02:30 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBoundWitness } from '../components/bound-witness/xyo-bound-witness';
-import { XyoPacker } from '../xyo-packer/xyo-packer';
-import { XyoBridgeBlockSet } from '../components/arrays/xyo-bridge-block-set';
+import { XyoBoundWitness } from '../xyo-bound-witness/xyo-bound-witness';
+import { XyoPacker } from '../xyo-serialization/xyo-packer';
+import { XyoBridgeBlockSet } from '../xyo-core-components/arrays/xyo-bridge-block-set';
 
 export function extractNestedBoundWitnesses(boundWitness: XyoBoundWitness, xyoPacker: XyoPacker) {
   const nestedBoundWitnesses: XyoBoundWitness[] = [];

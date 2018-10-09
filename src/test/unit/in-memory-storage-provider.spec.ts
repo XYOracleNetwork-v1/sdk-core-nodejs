@@ -4,19 +4,19 @@
  * @Email:  developer@xyfindables.com
  * @Filename: in-memory-storage-provider.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 5:09:55 pm
+ * @Last modified time: Tuesday, 9th October 2018 3:07:03 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoInMemoryStorageProvider } from '../../storage/xyo-in-memory-storage-provider';
-import { XyoStorageProviderPriority } from '../../storage/xyo-storage-provider';
+import { XyoInMemoryStorageProvider } from '../../xyo-storage/xyo-in-memory-storage-provider';
+import { XyoStoragePriority } from '../../xyo-storage/xyo-storage-priority';
 
 describe('Storage', () => {
   it(`Should manage memory`, async () => {
     const storage = new XyoInMemoryStorageProvider();
     const value = Buffer.from(`hotdog`);
-    const result1 = await storage.write(Buffer.from(`key`), value, XyoStorageProviderPriority.PRIORITY_LOW, true, 1000);
+    const result1 = await storage.write(Buffer.from(`key`), value, XyoStoragePriority.PRIORITY_LOW, true, 1000);
     expect(result1).toBe(undefined);
 
     const result2 = await storage.read(Buffer.from(`key`), 1000);

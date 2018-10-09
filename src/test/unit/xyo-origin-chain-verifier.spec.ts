@@ -4,23 +4,23 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-verifier.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 8th October 2018 5:37:19 pm
+ * @Last modified time: Tuesday, 9th October 2018 3:12:31 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoZigZagBoundWitness } from "../../components/bound-witness/xyo-zig-zag-bound-witness";
-import { XyoDefaultPackerProvider } from "../../xyo-packer/xyo-default-packer-provider";
+import { XyoZigZagBoundWitness } from "../../xyo-bound-witness/xyo-zig-zag-bound-witness";
+import { XyoDefaultPackerProvider } from "../../xyo-serialization/xyo-default-packer-provider";
 
-import { XyoRsaSha256SignerProvider } from "../../signing/rsa/xyo-rsa-sha256-signer-provider";
-import { XyoPayload } from "../../components/xyo-payload";
-import { XyoMultiTypeArrayInt } from "../../components/arrays/xyo-multi-type-array-int";
-import { XyoRssi } from "../../components/heuristics/numbers/xyo-rssi";
-import { XyoIndex } from "../../components/heuristics/numbers/xyo-index";
-import { XyoOriginChainVerifier } from "../../origin-chain/xyo-origin-chain-verifier";
-import { XyoSha256HashProvider } from "../../hash-provider/xyo-sha256-hash-provider";
-import { XyoPreviousHash } from "../../components/hashing/xyo-previous-hash";
-import { XyoNextPublicKey } from "../../signing/xyo-next-public-key";
+import { XyoRsaSha256SignerProvider } from "../../xyo-signing/rsa/sha256/xyo-rsa-sha256-signer-provider";
+import { XyoPayload } from "../../xyo-core-components/xyo-payload";
+import { XyoMultiTypeArrayInt } from "../../xyo-core-components/arrays/xyo-multi-type-array-int";
+import { XyoRssi } from "../../xyo-core-components/heuristics/numbers/xyo-rssi";
+import { XyoIndex } from "../../xyo-core-components/heuristics/numbers/xyo-index";
+import { XyoOriginChainVerifier } from "../../xyo-origin-chain/xyo-origin-chain-verifier";
+import { XyoSha256HashProvider } from "../../xyo-hashing/sha256/xyo-sha256-hash-provider";
+import { XyoPreviousHash } from "../../xyo-hashing/xyo-previous-hash";
+import { XyoNextPublicKey } from "../../xyo-signing/xyo-next-public-key";
 
 const packer = new XyoDefaultPackerProvider().getXyoPacker();
 const signerProvider = new XyoRsaSha256SignerProvider();
@@ -47,7 +47,7 @@ describe(`XyoOriginChainVerifier`, () => {
 
     await doBoundWitness(aliceBoundWitness, bobBoundWitness);
 
-    const result = await new XyoOriginChainVerifier(packer).verify([aliceBoundWitness]);
+    const result = await new XyoOriginChainVerifier().verify([aliceBoundWitness]);
     expect(result.isValid).toBe(true);
   });
 
@@ -70,7 +70,7 @@ describe(`XyoOriginChainVerifier`, () => {
 
     await doBoundWitness(aliceBoundWitness, bobBoundWitness);
 
-    const result = await new XyoOriginChainVerifier(packer).verify([aliceBoundWitness]);
+    const result = await new XyoOriginChainVerifier().verify([aliceBoundWitness]);
     expect(result.isValid).toBe(false);
   });
 
@@ -113,10 +113,10 @@ describe(`XyoOriginChainVerifier`, () => {
     const bobBoundWitness2 = new XyoZigZagBoundWitness(packer, bobSigners, bobPayload);
     await doBoundWitness(aliceBoundWitness2, bobBoundWitness2);
 
-    const result = await new XyoOriginChainVerifier(packer).verify([aliceBoundWitness1, aliceBoundWitness2]);
+    const result = await new XyoOriginChainVerifier().verify([aliceBoundWitness1, aliceBoundWitness2]);
     expect(result.isValid).toBe(true);
 
-    const result2 = await new XyoOriginChainVerifier(packer).verify([aliceBoundWitness2, aliceBoundWitness1]);
+    const result2 = await new XyoOriginChainVerifier().verify([aliceBoundWitness2, aliceBoundWitness1]);
     expect(result2.isValid).toBe(false);
   });
 
@@ -159,7 +159,7 @@ describe(`XyoOriginChainVerifier`, () => {
     const bobBoundWitness2 = new XyoZigZagBoundWitness(packer, bobSigners, bobPayload);
     await doBoundWitness(aliceBoundWitness2, bobBoundWitness2);
 
-    const result = await new XyoOriginChainVerifier(packer).verify([aliceBoundWitness1, aliceBoundWitness2]);
+    const result = await new XyoOriginChainVerifier().verify([aliceBoundWitness1, aliceBoundWitness2]);
     expect(result.isValid).toBe(false);
   });
 
@@ -206,7 +206,7 @@ describe(`XyoOriginChainVerifier`, () => {
     const bobBoundWitness2 = new XyoZigZagBoundWitness(packer, bobSigners, bobPayload);
     await doBoundWitness(aliceBoundWitness2, bobBoundWitness2);
 
-    const result = await new XyoOriginChainVerifier(packer).verify([aliceBoundWitness1, aliceBoundWitness2]);
+    const result = await new XyoOriginChainVerifier().verify([aliceBoundWitness1, aliceBoundWitness2]);
     expect(result.isValid).toBe(false);
   });
 
@@ -253,7 +253,7 @@ describe(`XyoOriginChainVerifier`, () => {
     const bobBoundWitness2 = new XyoZigZagBoundWitness(packer, bobSigners, bobPayload);
     await doBoundWitness(aliceBoundWitness2, bobBoundWitness2);
 
-    const result = await new XyoOriginChainVerifier(packer).verify([aliceBoundWitness1, aliceBoundWitness2]);
+    const result = await new XyoOriginChainVerifier().verify([aliceBoundWitness1, aliceBoundWitness2]);
     expect(result.isValid).toBe(true);
   });
 });

@@ -4,17 +4,17 @@
  * @Email:  developer@xyfindables.com
  * @Filename: zig-zag-bound-witness.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 8th October 2018 4:47:20 pm
+ * @Last modified time: Tuesday, 9th October 2018 3:08:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoZigZagBoundWitness } from '../../components/bound-witness/xyo-zig-zag-bound-witness';
-import { XyoDefaultPackerProvider } from '../../xyo-packer/xyo-default-packer-provider';
-import { XyoRsaSha256SignerProvider } from '../../signing/rsa/xyo-rsa-sha256-signer-provider';
-import { XyoPayload } from '../../components/xyo-payload';
-import { XyoMultiTypeArrayInt } from '../../components/arrays/xyo-multi-type-array-int';
-import { XyoRssi } from '../../components/heuristics/numbers/xyo-rssi';
+import { XyoZigZagBoundWitness } from '../../xyo-bound-witness/xyo-zig-zag-bound-witness';
+import { XyoDefaultPackerProvider } from '../../xyo-serialization/xyo-default-packer-provider';
+import { XyoRsaSha256SignerProvider } from '../../xyo-signing/rsa/sha256/xyo-rsa-sha256-signer-provider';
+import { XyoPayload } from '../../xyo-core-components/xyo-payload';
+import { XyoMultiTypeArrayInt } from '../../xyo-core-components/arrays/xyo-multi-type-array-int';
+import { XyoRssi } from '../../xyo-core-components/heuristics/numbers/xyo-rssi';
 
 describe(`ZigZagBoundWitness`, () => {
 
