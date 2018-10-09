@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-verifier.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 8th October 2018 4:51:09 pm
+ * @Last modified time: Monday, 8th October 2018 5:37:19 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -27,6 +27,7 @@ const signerProvider = new XyoRsaSha256SignerProvider();
 const hashProvider = new XyoSha256HashProvider();
 
 describe(`XyoOriginChainVerifier`, () => {
+
   it(`Should validate a single valid block with indexes`, async () => {
     const aliceSigners = [signerProvider.newInstance()];
     const bobSigners = [signerProvider.newInstance()];

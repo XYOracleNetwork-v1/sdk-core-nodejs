@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-verifier.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 8th October 2018 4:53:02 pm
+ * @Last modified time: Monday, 8th October 2018 6:01:13 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,6 +18,7 @@ import { XyoPacker } from "../xyo-packer/xyo-packer";
 import { XyoBase } from "../components/xyo-base";
 import { XyoKeySet } from "../components/arrays/xyo-key-set";
 import { XyoNextPublicKey } from "../signing/xyo-next-public-key";
+import { XyoPublicKey } from "../signing/xyo-public-key";
 
 export class XyoOriginChainVerifier extends XyoBase {
 
@@ -134,7 +135,7 @@ export class XyoOriginChainVerifier extends XyoBase {
     }
 
     const serializedPublicKeySet = publicKeySet.array.map((pk) => {
-      return this.packer.serialize(pk);
+      return (pk as XyoPublicKey).getRawPublicKey();
     });
 
     const foundMatches = matchedIndexes.filter((matchedIndex) => {
@@ -143,10 +144,11 @@ export class XyoOriginChainVerifier extends XyoBase {
         return true;
       }
 
-      const rawNextPublicKey = (party.nextPublicKey as XyoNextPublicKey).publicKey;
-      const serializedValue = this.packer.serialize(rawNextPublicKey);
+      const rawNextPublicKey = (party.nextPublicKey as XyoNextPublicKey).publicKey.getRawPublicKey();
 
-      return serializedPublicKeySet.indexOf(serializedValue) > -1;
+      return serializedPublicKeySet.find((pkCandidate) => {
+        return pkCandidate.equals(rawNextPublicKey);
+      });
     });
 
     if (foundMatches.length > 0) {

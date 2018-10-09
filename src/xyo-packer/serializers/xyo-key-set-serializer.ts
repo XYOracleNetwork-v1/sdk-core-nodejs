@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-key-set-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 8th October 2018 4:41:55 pm
+ * @Last modified time: Monday, 8th October 2018 6:02:11 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,6 +13,7 @@ import { XyoArrayUnpacker } from '../xyo-array-unpacker';
 import { XyoSerializer } from '../xyo-serializer';
 import { XyoKeySet } from '../../components/arrays/xyo-key-set';
 import { XyoPacker } from '../xyo-packer';
+import { XyoPublicKey } from '../../signing/xyo-public-key';
 
 export class XyoKeySetSerializer extends XyoSerializer<XyoKeySet> {
 
@@ -27,7 +28,7 @@ export class XyoKeySetSerializer extends XyoSerializer<XyoKeySet> {
 
   public deserialize(buffer: Buffer, xyoPacker: XyoPacker) {
     const unpackedArray = new XyoArrayUnpacker(xyoPacker, buffer, false, 2);
-    return new XyoKeySet(unpackedArray.array);
+    return new XyoKeySet(unpackedArray.array as XyoPublicKey[]);
   }
 
   public serialize(xyoKeySet: XyoKeySet, xyoPacker: XyoPacker) {

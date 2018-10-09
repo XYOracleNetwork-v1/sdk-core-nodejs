@@ -4,12 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 20th September 2018 9:33:54 am
+ * @Last modified time: Monday, 8th October 2018 5:55:25 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../components/xyo-object';
+import { XyoPublicKey } from './xyo-public-key';
 
 /**
  * An XyoSigner provides crypto functionality to be used
@@ -22,7 +23,7 @@ export abstract class XyoSigner extends XyoObject {
    * Subclasses will return the publicKey of the crypto key pair
    */
 
-  public abstract publicKey: XyoObject;
+  public abstract publicKey: XyoPublicKey;
 
   /**
    * This should return the private key

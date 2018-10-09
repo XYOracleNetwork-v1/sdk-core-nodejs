@@ -10,7 +10,7 @@
  */
 
 import { XyoObject } from '../../components/xyo-object';
-
+import { XyoPublicKey } from '../xyo-public-key';
 /**
  * An RSA public key
  *
@@ -18,7 +18,7 @@ import { XyoObject } from '../../components/xyo-object';
  * @minor: 0x03
  */
 
-export class XyoRsaPublicKey extends XyoObject {
+export class XyoRsaPublicKey extends XyoObject implements XyoPublicKey {
 
   public static major = 0x04;
   public static minor = 0x03;
@@ -39,5 +39,9 @@ export class XyoRsaPublicKey extends XyoObject {
 
   get publicExponent() {
     return Buffer.from([0x01, 0x00, 0x01]);
+  }
+
+  public getRawPublicKey() {
+    return this.modulus;
   }
 }

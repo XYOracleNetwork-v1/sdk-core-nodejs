@@ -4,12 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-next-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 4:37:23 pm
+ * @Last modified time: Monday, 8th October 2018 5:56:08 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../components/xyo-object';
+import { XyoPublicKey } from './xyo-public-key';
 
 /**
  * In the XYO protocol, the next public is important for rolling
@@ -29,7 +30,7 @@ export class XyoNextPublicKey extends XyoObject {
    * @param publicKey The next public key that will be used for verification of origin blocks
    */
 
-  constructor (public readonly publicKey: XyoObject) {
+  constructor (public readonly publicKey: XyoPublicKey) {
     super(XyoNextPublicKey.major, XyoNextPublicKey.minor);
   }
 }

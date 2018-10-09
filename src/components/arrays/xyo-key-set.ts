@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-key-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 4:37:23 pm
+ * @Last modified time: Monday, 8th October 2018 5:54:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoArray } from './xyo-array';
-import { XyoObject } from '../xyo-object';
+import { XyoPublicKey } from '../../signing/xyo-public-key';
 
 /**
  * A non-homogenous wrapper class for a collections of different keys
@@ -30,7 +30,7 @@ export class XyoKeySet extends XyoArray {
    * @param array The collection of keys to wrap
    */
 
-  constructor (public readonly array: XyoObject[]) {
+  constructor (public readonly array: XyoPublicKey[]) {
     super(undefined, undefined, XyoKeySet.major, XyoKeySet.minor, 2, array);
   }
 }

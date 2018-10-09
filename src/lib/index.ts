@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 8th October 2018 4:32:51 pm
+ * @Last modified time: Tuesday, 9th October 2018 9:34:32 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-// Auto-generated on Mon Oct 08 2018 16:32:21 GMT-0700 (Pacific Daylight Time)
+// Auto-generated on Tue Oct 09 2018 09:32:58 GMT-0700 (Pacific Daylight Time)
 
 export * from '../components/xyo-base';
 export * from '../components/xyo-error';
@@ -29,10 +29,11 @@ export * from '../network/xyo-network';
 export * from '../origin-chain/xyo-origin-block-local-storage-repository';
 export * from '../origin-chain/xyo-origin-block';
 export * from '../origin-chain/xyo-origin-chain-local-storage-repository';
-export * from '../origin-chain/xyo-origin-chain-types';
 export * from '../origin-chain/xyo-origin-chain-state-in-memory-repository';
+export * from '../origin-chain/xyo-origin-chain-types';
 export * from '../origin-chain/xyo-origin-chain-verifier';
 export * from '../signing/xyo-next-public-key';
+export * from '../signing/xyo-public-key';
 export * from '../signing/xyo-signature';
 export * from '../signing/xyo-signer-provider';
 export * from '../signing/xyo-signer';

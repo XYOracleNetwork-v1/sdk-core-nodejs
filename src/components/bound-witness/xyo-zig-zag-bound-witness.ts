@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-zig-zag-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 8th October 2018 12:08:34 pm
+ * @Last modified time: Monday, 8th October 2018 5:55:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,6 +18,7 @@ import { XyoError } from '../xyo-error';
 import { XyoKeySet } from '../arrays/xyo-key-set';
 import { XyoPacker } from '../../xyo-packer/xyo-packer';
 import { XyoSigner } from '../../signing/xyo-signer';
+import { XyoPublicKey } from '../../signing/xyo-public-key';
 
 /**
  * A `XyoZigZagBoundWitness` is a particular type of way of creating a
@@ -210,7 +211,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
    */
 
   private makeSelfKeySet(): XyoKeySet {
-    const publicKeys: XyoObject[] = [];
+    const publicKeys: XyoPublicKey[] = [];
 
     this.signers.forEach((signer) => {
       const publicKey = signer.publicKey;
