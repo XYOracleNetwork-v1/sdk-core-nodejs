@@ -16,7 +16,7 @@ import { IXyoSigner } from '../@types/xyo-signing';
 import { XyoNextPublicKey } from '../xyo-bound-witness/components/next-public-key/xyo-next-public-key';
 import { XyoHash } from '../xyo-hashing/xyo-hash';
 import { XyoStoragePriority } from '../xyo-storage/xyo-storage-priority';
-import { IXYOStorageProvider } from '../@types/xyo-storage';
+import { IXyoStorageProvider } from '../@types/xyo-storage';
 import { XyoPacker } from '../xyo-serialization/xyo-packer';
 import { XyoOriginChainStateInMemoryRepository } from './xyo-origin-chain-state-in-memory-repository';
 
@@ -25,7 +25,7 @@ export class XyoOriginChainLocalStorageRepository implements IXyoOriginChainStat
   private inMemoryDelegate: XyoOriginChainStateInMemoryRepository | undefined;
 
   constructor (
-    private readonly storageProvider: IXYOStorageProvider,
+    private readonly storageProvider: IXyoStorageProvider,
     private readonly packer: XyoPacker
   ) {}
 

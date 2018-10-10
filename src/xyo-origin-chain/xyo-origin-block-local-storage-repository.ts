@@ -10,7 +10,7 @@
  */
 
 import { XyoStoragePriority } from '../xyo-storage/xyo-storage-priority';
-import { IXYOStorageProvider } from '../@types/xyo-storage';
+import { IXyoStorageProvider } from '../@types/xyo-storage';
 import { XyoBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-bound-witness';
 import { XyoOriginBlock } from './xyo-origin-block';
 import { XyoPacker } from '../xyo-serialization/xyo-packer';
@@ -32,8 +32,8 @@ export class XyoOriginBlockLocalStorageRepository implements IXyoOriginBlockRepo
 
   constructor(
     private readonly xyoPacker: XyoPacker,
-    private readonly originBlocksStorageProvider: IXYOStorageProvider,
-    private readonly originBlockNextHashStorageProvider: IXYOStorageProvider
+    private readonly originBlocksStorageProvider: IXyoStorageProvider,
+    private readonly originBlockNextHashStorageProvider: IXyoStorageProvider
   ) {}
 
   /**
