@@ -10,10 +10,10 @@
  */
 
 import { IXyoOriginChainStateRepository } from '../@types/xyo-origin-chain';
-import { XyoIndex } from '../xyo-core-components/heuristics/numbers/xyo-index';
-import { XyoPreviousHash } from '../xyo-hashing/xyo-previous-hash';
+import { XyoIndex } from '../xyo-bound-witness/components/index/xyo-index';
+import { XyoPreviousHash } from '../xyo-bound-witness/components/previous-hash/xyo-previous-hash';
 import { IXyoSigner } from '../@types/xyo-signing';
-import { XyoNextPublicKey } from '../xyo-signing/xyo-next-public-key';
+import { XyoNextPublicKey } from '../xyo-bound-witness/components/next-public-key/xyo-next-public-key';
 import { XyoHash } from '../xyo-hashing/xyo-hash';
 import { XyoStoragePriority } from '../xyo-storage/xyo-storage-priority';
 import { IXYOStorageProvider } from '../@types/xyo-storage';

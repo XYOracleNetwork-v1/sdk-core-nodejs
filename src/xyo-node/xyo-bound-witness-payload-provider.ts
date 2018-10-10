@@ -10,8 +10,8 @@
  */
 
 import { XyoObject } from '../xyo-core-components/xyo-object';
-import { XyoPayload } from '../xyo-core-components/xyo-payload';
-import { XyoMultiTypeArrayInt } from '../xyo-core-components/arrays/xyo-multi-type-array-int';
+import { XyoPayload } from '../xyo-bound-witness/components/payload/xyo-payload';
+import { XyoMultiTypeArrayInt } from '../xyo-core-components/arrays/multi/xyo-multi-type-array-int';
 import { IXyoBoundWitnessPayloadProvider } from '../@types/xyo-node';
 import { IXyoOriginChainStateRepository } from '../@types/xyo-origin-chain';
 

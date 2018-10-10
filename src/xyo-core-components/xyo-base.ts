@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoLogger } from "../xyo-utils/logger";
+import { XyoLogger } from "./xyo-logger";
 
 export abstract class XyoBase {
   public logger!: XyoLogger;

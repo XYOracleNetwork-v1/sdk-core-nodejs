@@ -11,8 +11,8 @@
 
 import { XyoDefaultPackerProvider } from '../../xyo-serialization/xyo-default-packer-provider';
 import { XyoSha256HashProvider } from '../../xyo-hashing/sha256/xyo-sha256-hash-provider';
-import { XyoEcdsaSignature } from '../../xyo-signing/ecdsa/xyo-ecdsa-signature';
-import { XyoEcdsaSecp256k1Signer } from '../../xyo-signing/ecdsa/secp256k1/xyo-ecdsa-secp256k1-signer';
+import { XyoEcdsaSignature } from '../../xyo-signing/ecdsa/signature/xyo-ecdsa-signature';
+import { XyoEcdsaSecp256k1Signer } from '../../xyo-signing/ecdsa/secp256k1/signer/xyo-ecdsa-secp256k1-signer';
 import { XyoEcdsaSecp256k1Sha256SignerProvider } from '../../xyo-signing/ecdsa/secp256k1/sha256/xyo-ecdsa-secp256k1-sha256-signer-provider';
 
 describe('XyoEcdsaSecp256k1SignerSerializer', () => {

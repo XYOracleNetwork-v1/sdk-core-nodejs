@@ -19,7 +19,7 @@ import {
 import net from 'net';
 import { CatalogueItem, catalogueItemsToMask, bufferToCatalogueItems } from "../xyo-catalogue-item";
 import { XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES, XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES, XYO_TCP_CATALOGUE_LENGTH_IN_BYTES } from "./xyo-tcp-network-constants";
-import { writeNumberToBuffer, readNumberFromBuffer } from "../../xyo-utils/xyo-buffer-utils";
+import { writeNumberToBuffer, readNumberFromBuffer } from "../../xyo-core-components/xyo-buffer-utils";
 import { XyoTcpConnectionResult } from "./xyo-tcp-connection-result";
 import { XyoBase } from "../../xyo-core-components/xyo-base";
 import { XyoTcpNetworkPipe } from "./xyo-tcp-network-pipe";

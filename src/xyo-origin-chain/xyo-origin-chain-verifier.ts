@@ -9,14 +9,14 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBoundWitness } from "../xyo-bound-witness/xyo-bound-witness";
-import { XyoIndex } from "../xyo-core-components/heuristics/numbers/xyo-index";
+import { XyoBoundWitness } from "../xyo-bound-witness/bound-witness/xyo-bound-witness";
+import { XyoIndex } from "../xyo-bound-witness/components/index/xyo-index";
 import { XyoObject } from "../xyo-core-components/xyo-object";
-import { XyoPayload } from "../xyo-core-components/xyo-payload";
-import { XyoPreviousHash } from "../xyo-hashing/xyo-previous-hash";
+import { XyoPayload } from "../xyo-bound-witness/components/payload/xyo-payload";
+import { XyoPreviousHash } from "../xyo-bound-witness/components/previous-hash/xyo-previous-hash";
 import { XyoBase } from "../xyo-core-components/xyo-base";
-import { XyoKeySet } from "../xyo-signing/xyo-key-set";
-import { XyoNextPublicKey } from "../xyo-signing/xyo-next-public-key";
+import { XyoKeySet } from "../xyo-bound-witness/components/key-set/xyo-key-set";
+import { XyoNextPublicKey } from "../xyo-bound-witness/components/next-public-key/xyo-next-public-key";
 import { IXyoPublicKey } from '../@types/xyo-signing';
 
 export class XyoOriginChainVerifier extends XyoBase {

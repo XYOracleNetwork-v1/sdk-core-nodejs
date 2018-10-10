@@ -11,9 +11,9 @@
 
 import { XyoPacker } from '../xyo-serialization/xyo-packer';
 import { IXyoNetworkPipe } from '../@types/xyo-network';
-import { XyoBoundWitness } from '../xyo-bound-witness/xyo-bound-witness';
+import { XyoBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-bound-witness';
 import { IXyoHashProvider } from '../@types/xyo-hashing';
-import { extractNestedBoundWitnesses } from './bound-witness-origin-chain-extractor';
+import { extractNestedBoundWitnesses } from '../xyo-bound-witness/bound-witness/xyo-bound-witness-origin-chain-extractor';
 import { IXyoBoundWitnessHandlerProvider, IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessSuccessListener, IXyoBoundWitnessInteractionFactory } from '../@types/xyo-node';
 import { IXyoOriginBlockRepository, IXyoOriginChainStateRepository } from '../@types/xyo-origin-chain';
 import { XyoBase } from '../xyo-core-components/xyo-base';

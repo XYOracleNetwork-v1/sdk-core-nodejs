@@ -17,7 +17,7 @@ import { XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES, XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES
 
 import net from 'net';
 import { XyoBase } from '../../xyo-core-components/xyo-base';
-import { readNumberFromBuffer } from '../../xyo-utils/xyo-buffer-utils';
+import { readNumberFromBuffer } from '../../xyo-core-components/xyo-buffer-utils';
 
 /**
  * A network provider build on top of the TCP/IP stack.

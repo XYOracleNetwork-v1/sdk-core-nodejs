@@ -11,7 +11,7 @@
 
 import { XyoStoragePriority } from '../xyo-storage/xyo-storage-priority';
 import { IXYOStorageProvider } from '../@types/xyo-storage';
-import { XyoBoundWitness } from '../xyo-bound-witness/xyo-bound-witness';
+import { XyoBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-bound-witness';
 import { XyoOriginBlock } from './xyo-origin-block';
 import { XyoPacker } from '../xyo-serialization/xyo-packer';
 import { IXyoOriginBlockRepository } from '../@types/xyo-origin-chain';

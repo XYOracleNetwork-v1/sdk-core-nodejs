@@ -10,8 +10,8 @@
  */
 
 import { IXyoNetworkPipe } from './xyo-network';
-import { XyoPayload } from '../xyo-core-components/xyo-payload';
-import { XyoBoundWitness } from '../xyo-bound-witness/xyo-bound-witness';
+import { XyoPayload } from '../xyo-bound-witness/components/payload/xyo-payload';
+import { XyoBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-bound-witness';
 import { IXyoOriginChainStateRepository } from './xyo-origin-chain';
 import { CatalogueItem } from '../xyo-network/xyo-catalogue-item';
 import { IXyoSigner } from './xyo-signing';

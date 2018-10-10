@@ -9,12 +9,12 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBoundWitness } from '../xyo-bound-witness/xyo-bound-witness';
+import { XyoBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-bound-witness';
 import { XyoHash } from '../xyo-hashing/xyo-hash';
-import { XyoIndex } from '../xyo-core-components/heuristics/numbers/xyo-index';
-import { XyoPreviousHash } from '../xyo-hashing/xyo-previous-hash';
+import { XyoIndex } from '../xyo-bound-witness/components/index/xyo-index';
+import { XyoPreviousHash } from '../xyo-bound-witness/components/previous-hash/xyo-previous-hash';
 import { IXyoSigner } from './xyo-signing';
-import { XyoNextPublicKey } from '../xyo-signing/xyo-next-public-key';
+import { XyoNextPublicKey } from '../xyo-bound-witness/components/next-public-key/xyo-next-public-key';
 
 export interface IXyoOriginBlockRepository {
   removeOriginBlock(hash: Buffer): Promise<void>;

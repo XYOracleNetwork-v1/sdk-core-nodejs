@@ -11,7 +11,7 @@
 
 import { XyoObject } from "../xyo-core-components/xyo-object";
 import { IXyoSignature } from './xyo-signing';
-import { XyoRsaShaSigner } from "../xyo-signing/rsa/xyo-rsa-sha-signer";
+import { XyoRsaShaSigner } from "../xyo-signing/rsa/signer/xyo-rsa-sha-signer";
 
 export interface IXyoPublicKey extends XyoObject {
   getRawPublicKey(): Buffer;

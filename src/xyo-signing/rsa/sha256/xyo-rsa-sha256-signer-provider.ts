@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoRsaShaSignerProvider } from '../xyo-rsa-sha-signer-provider';
+import { XyoRsaShaSignerProvider } from '../signer/xyo-rsa-sha-signer-provider';
 import { XyoRsaSha256Signer } from './xyo-rsa-sha256-signer';
 
 /**

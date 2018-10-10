@@ -9,16 +9,16 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoZigZagBoundWitness } from '../../xyo-bound-witness/xyo-zig-zag-bound-witness';
-import { XyoBoundWitnessTransfer } from '../../xyo-bound-witness/xyo-bound-witness-transfer';
-import { XyoBoundWitness } from '../../xyo-bound-witness/xyo-bound-witness';
+import { XyoZigZagBoundWitness } from '../../xyo-bound-witness/bound-witness/xyo-zig-zag-bound-witness';
+import { XyoBoundWitnessTransfer } from '../../xyo-bound-witness/bound-witness/xyo-bound-witness-transfer';
+import { XyoBoundWitness } from '../../xyo-bound-witness/bound-witness/xyo-bound-witness';
 import { XyoError } from '../../xyo-core-components/xyo-error';
 import { IXyoNodeInteraction } from '../../@types/xyo-node';
 import { IXyoNetworkPipe } from '../../@types/xyo-network';
 import { XyoBase } from '../../xyo-core-components/xyo-base';
 import { XyoPacker } from '../../xyo-serialization/xyo-packer';
 import { IXyoSigner } from '../../@types/xyo-signing';
-import { XyoPayload } from '../../xyo-core-components/xyo-payload';
+import { XyoPayload } from '../../xyo-bound-witness/components/payload/xyo-payload';
 
 /**
  * An `XyoBoundWitnessClientInteraction` manages a "session"

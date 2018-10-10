@@ -9,9 +9,9 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBoundWitness } from '../xyo-bound-witness/xyo-bound-witness';
-import { getBufferHash } from '../xyo-utils/xyo-buffer-utils';
-import { XyoPreviousHash } from '../xyo-hashing/xyo-previous-hash';
+import { XyoBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-bound-witness';
+import { getBufferHash } from '../xyo-core-components/xyo-buffer-utils';
+import { XyoPreviousHash } from '../xyo-bound-witness/components/previous-hash/xyo-previous-hash';
 import { XyoPacker } from '../xyo-serialization/xyo-packer';
 
 /**

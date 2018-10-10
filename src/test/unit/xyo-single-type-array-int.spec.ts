@@ -12,7 +12,7 @@
 // tslint:disable:max-line-length
 
 import { XyoDefaultPackerProvider } from '../../xyo-serialization/xyo-default-packer-provider';
-import { XyoSingleTypeArrayInt } from '../../xyo-core-components/arrays/xyo-single-type-array-int';
+import { XyoSingleTypeArrayInt } from '../../xyo-core-components/arrays/single/xyo-single-type-array-int';
 
 describe('XyoSingleTypeArrayInt', () => {
   it('Should deserialize', () => {

@@ -9,11 +9,11 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoZigZagBoundWitness } from '../../xyo-bound-witness/xyo-zig-zag-bound-witness';
+import { XyoZigZagBoundWitness } from '../../xyo-bound-witness/bound-witness/xyo-zig-zag-bound-witness';
 import { XyoDefaultPackerProvider } from '../../xyo-serialization/xyo-default-packer-provider';
 import { XyoRsaSha256SignerProvider } from '../../xyo-signing/rsa/sha256/xyo-rsa-sha256-signer-provider';
-import { XyoPayload } from '../../xyo-core-components/xyo-payload';
-import { XyoMultiTypeArrayInt } from '../../xyo-core-components/arrays/xyo-multi-type-array-int';
+import { XyoPayload } from '../../xyo-bound-witness/components/payload/xyo-payload';
+import { XyoMultiTypeArrayInt } from '../../xyo-core-components/arrays/multi/xyo-multi-type-array-int';
 import { XyoRssi } from '../../xyo-core-components/heuristics/numbers/xyo-rssi';
 
 describe(`ZigZagBoundWitness`, () => {
