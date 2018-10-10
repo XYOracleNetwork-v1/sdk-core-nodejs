@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 12:07:24 pm
+ * @Last modified time: Wednesday, 10th October 2018 4:17:58 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoNetworkProviderInterface, IXyoNetworkProcedureCatalogue, IXyoNetworkPipe } from '../../@types/xyo-network';
+import { IXyoNetworkProvider, IXyoNetworkProcedureCatalogue, IXyoNetworkPipe } from '../../@types/xyo-network';
 import { bufferToCatalogueItems, CatalogueItem } from '../xyo-catalogue-item';
 import { XyoTcpConnectionResult } from './xyo-tcp-connection-result';
 import { XyoTcpNetworkPipe } from './xyo-tcp-network-pipe';
@@ -26,7 +26,7 @@ import { readNumberFromBuffer } from '../../xyo-core-components/xyo-buffer-utils
  * one `meaningful` connection made to a peer.
  */
 
-export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProviderInterface {
+export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider {
 
   /**
    * An ephemeral short lived server for making connection to peers

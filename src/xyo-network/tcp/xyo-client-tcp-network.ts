@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-client-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 12:07:31 pm
+ * @Last modified time: Wednesday, 10th October 2018 4:17:58 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import {
-  IXyoNetworkProviderInterface,
+  IXyoNetworkProvider,
   IXyoNetworkProcedureCatalogue,
   IXyoNetworkPipe,
   IXyoNetworkAddressProvider
@@ -24,7 +24,7 @@ import { XyoTcpConnectionResult } from "./xyo-tcp-connection-result";
 import { XyoBase } from "../../xyo-core-components/xyo-base";
 import { XyoTcpNetworkPipe } from "./xyo-tcp-network-pipe";
 
-export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProviderInterface {
+export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider {
 
   private shouldStopPromise: (() => void) | undefined = undefined;
   private isLooping = false;

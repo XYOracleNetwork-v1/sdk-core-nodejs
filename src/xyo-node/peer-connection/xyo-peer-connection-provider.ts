@@ -4,19 +4,19 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-peer-connection-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 12:05:45 pm
+ * @Last modified time: Wednesday, 10th October 2018 4:18:00 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoNetworkProviderInterface, IXyoNetworkProcedureCatalogue, IXyoNetworkPipe } from '../../@types/xyo-network';
+import { IXyoNetworkProvider, IXyoNetworkProcedureCatalogue, IXyoNetworkPipe } from '../../@types/xyo-network';
 import { IXyoPeerConnectionDelegate, IXyoPeerConnectionHandler } from '../../@types/xyo-node';
 import { XyoBase } from '../../xyo-core-components/xyo-base';
 
 export class XyoPeerConnectionDelegate extends XyoBase implements IXyoPeerConnectionDelegate {
 
   constructor (
-    private readonly network: IXyoNetworkProviderInterface,
+    private readonly network: IXyoNetworkProvider,
     private readonly catalogue: IXyoNetworkProcedureCatalogue,
     private readonly peerConnectionHandler: IXyoPeerConnectionHandler
   ) {

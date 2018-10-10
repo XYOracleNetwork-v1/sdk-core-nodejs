@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 11:58:19 am
+ * @Last modified time: Wednesday, 10th October 2018 5:45:46 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -24,9 +24,6 @@ export class XyoPacker extends XyoBase {
 
   // tslint:disable-next-line:prefer-array-literal The collections serializer/deserializers
   private readonly serializerDeserializersCollection: Array<XyoSerializer<any>> = [];
-
-  // An index from name to the index of the array in which the serializer/deserializer is located
-  private readonly serializerDeserializersByNameIndex: {[s: string]: number } = {};
 
   // An index from [major][minor] to the index of the array in which the serializer/deserializer is located
   private readonly serializerDeserializerMajorMinorIndex: {[s: string]: {[s: string]: number } } = {};
@@ -49,7 +46,6 @@ export class XyoPacker extends XyoBase {
     /** Add to the indexes */
     const index = this.serializerDeserializersCollection.length - 1;
     const { major, minor } = serializerDeserializer.description;
-    this.serializerDeserializersByNameIndex[descriptor.name] = index;
     this.serializerDeserializerMajorMinorIndex[major] = this.serializerDeserializerMajorMinorIndex[major] || {};
     this.serializerDeserializerMajorMinorIndex[major][minor] = index;
   }
@@ -145,9 +141,13 @@ export class XyoPacker extends XyoBase {
   }
 
   public getSerializerByDescriptor(descriptor: IXyoObjectDescriptor) {
-    const serializerIndex = this.serializerDeserializersByNameIndex[descriptor.name];
+    const majorIndex = this.serializerDeserializerMajorMinorIndex[descriptor.major] || {};
+    const serializerIndex = majorIndex[descriptor.minor];
     if (serializerIndex === undefined || serializerIndex >= this.serializerDeserializersCollection.length) {
-      throw new XyoError(`Unable to locate serializer ${descriptor.name}`, XyoError.errorType.ERR_CREATOR_MAPPING);
+      throw new XyoError(
+        `Unable to locate serializer [${descriptor.major}][${descriptor.major}]`,
+        XyoError.errorType.ERR_CREATOR_MAPPING
+      );
     }
 
     return this.serializerDeserializersCollection[serializerIndex];

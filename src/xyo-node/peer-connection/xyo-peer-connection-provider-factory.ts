@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-peer-connection-provider-builder.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:11:04 pm
+ * @Last modified time: Wednesday, 10th October 2018 4:17:59 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoPeerConnectionDelegate, IXyoBoundWitnessSuccessListener, IXyoCategoryRouter, IXyoBoundWitnessHandlerProvider, IXyoCatalogueResolver } from '../../@types/xyo-node';
 import { XyoPeerConnectionDelegate } from './xyo-peer-connection-provider';
-import { IXyoNetworkProcedureCatalogue, IXyoNetworkProviderInterface } from '../../@types/xyo-network';
+import { IXyoNetworkProcedureCatalogue, IXyoNetworkProvider } from '../../@types/xyo-network';
 import { XyoPacker } from '../../xyo-serialization/xyo-packer';
 import { IXyoHashProvider } from '../../@types/xyo-hashing';
 import { XyoBoundWitnessPayloadProvider } from '../xyo-bound-witness-payload-provider';
@@ -26,7 +26,7 @@ import { XyoBoundWitnessTakeOriginChainServerInteraction } from '../bound-witnes
 export class XyoPeerConnectionProviderFactory implements IXyoCategoryRouter, IXyoCatalogueResolver {
 
   constructor(
-    private readonly network: IXyoNetworkProviderInterface,
+    private readonly network: IXyoNetworkProvider,
     private readonly catalogue: IXyoNetworkProcedureCatalogue,
     private readonly xyoPacker: XyoPacker,
     private readonly hashingProvider: IXyoHashProvider,

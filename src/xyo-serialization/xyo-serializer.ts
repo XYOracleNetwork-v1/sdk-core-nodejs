@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-packer-serializer-deserializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 4th October 2018 1:02:46 pm
+ * @Last modified time: Wednesday, 10th October 2018 5:39:32 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,6 +13,7 @@ import { XyoObject } from '../xyo-core-components/xyo-object';
 import { XyoPacker } from './xyo-packer';
 import { XyoError } from '../xyo-core-components/xyo-error';
 import { XyoBase } from '../xyo-core-components/xyo-base';
+import { IXyoSerializationDescription } from '../@types/xyo-serialization';
 
 /**
  * An interface for going between serialized and deserialized versions
@@ -89,12 +90,4 @@ export abstract class XyoSerializer<T extends XyoObject> extends XyoBase {
 
     throw new XyoError(`XyoSerialization misconfiguration error`, XyoError.errorType.ERR_CREATOR_MAPPING);
   }
-}
-
-export interface IXyoSerializationDescription {
-  major: number;
-  minor: number;
-  staticSize?: number;
-  sizeOfBytesToGetSize?: number;
-  sizeIdentifierSize: number;
 }
