@@ -10,10 +10,10 @@
  */
 
 import { XyoObject } from '../../../xyo-core-components/xyo-object';
-import { XyoSignerProvider, XyoSignature } from '../../../@types/xyo-signing';
+import { IXyoSignerProvider, IXyoSignature } from '../../../@types/xyo-signing';
 import { ec as EC, EllipticKey } from 'elliptic';
 import { XyoEcdsaSecp256k1Signer } from './xyo-ecdsa-secp256k1-signer';
-import { XyoHashProvider } from '../../../@types/xyo-hashing';
+import { IXyoHashProvider } from '../../../@types/xyo-hashing';
 import { XyoEcdsaUncompressedPublicKey } from '../xyo-ecdsa-uncompressed-public-key';
 
 const ec = new EC('secp256k1');
@@ -22,14 +22,14 @@ const ec = new EC('secp256k1');
  * A service for providing EcSecp256k signing services
  */
 
-export abstract class XyoEcdsaSecp256k1SignerProvider extends XyoObject implements XyoSignerProvider {
+export abstract class XyoEcdsaSecp256k1SignerProvider extends XyoObject implements IXyoSignerProvider {
 
-  public abstract hashProvider: XyoHashProvider;
+  public abstract hashProvider: IXyoHashProvider;
 
   public abstract getSigner(
     sign: (data: Buffer) => Promise<Buffer>,
     getPublicXY: () => {x: Buffer, y: Buffer},
-    verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
+    verifySign: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
     getPrivateKey: () => string
   ): XyoEcdsaSecp256k1Signer;
 
@@ -73,7 +73,7 @@ export abstract class XyoEcdsaSecp256k1SignerProvider extends XyoObject implemen
    * @param publicKey The corresponding publicKey of public cryptography key-pair
    */
 
-  public async verifySign(signature: XyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {
+  public async verifySign(signature: IXyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {
     const uncompressedEcPublicKey = publicKey as XyoEcdsaUncompressedPublicKey;
     const x = uncompressedEcPublicKey.x.toString('hex');
     const y = uncompressedEcPublicKey.y.toString('hex');

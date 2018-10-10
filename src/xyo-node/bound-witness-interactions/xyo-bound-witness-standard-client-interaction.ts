@@ -13,11 +13,11 @@ import { XyoZigZagBoundWitness } from '../../xyo-bound-witness/xyo-zig-zag-bound
 import { XyoBoundWitnessTransfer } from '../../xyo-bound-witness/xyo-bound-witness-transfer';
 import { XyoBoundWitness } from '../../xyo-bound-witness/xyo-bound-witness';
 import { XyoError } from '../../xyo-core-components/xyo-error';
-import { XyoNodeInteraction } from '../../@types/xyo-node';
-import { XyoNetworkPipe } from '../../@types/xyo-network';
+import { IXyoNodeInteraction } from '../../@types/xyo-node';
+import { IXyoNetworkPipe } from '../../@types/xyo-network';
 import { XyoBase } from '../../xyo-core-components/xyo-base';
 import { XyoPacker } from '../../xyo-serialization/xyo-packer';
-import { XyoSigner } from '../../@types/xyo-signing';
+import { IXyoSigner } from '../../@types/xyo-signing';
 import { XyoPayload } from '../../xyo-core-components/xyo-payload';
 
 /**
@@ -25,11 +25,11 @@ import { XyoPayload } from '../../xyo-core-components/xyo-payload';
  * between two networked nodes.
  */
 
-export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements XyoNodeInteraction<XyoBoundWitness> {
+export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements IXyoNodeInteraction<XyoBoundWitness> {
 
   constructor (
     private readonly packer: XyoPacker,
-    private readonly signers: XyoSigner[],
+    private readonly signers: IXyoSigner[],
     private readonly payload: XyoPayload
   ) {
     super();
@@ -39,7 +39,7 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements
    * Does a bound witness with another node
    */
 
-  public async run(networkPipe: XyoNetworkPipe): Promise<XyoBoundWitness> {
+  public async run(networkPipe: IXyoNetworkPipe): Promise<XyoBoundWitness> {
     let disconnected = false;
 
     return new Promise(async (resolve, reject) => {

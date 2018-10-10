@@ -11,15 +11,15 @@ import { XyoHash } from "../xyo-hashing/xyo-hash";
  * @Copyright: Copyright XY | The Findables Company
  */
 
-export interface XyoHashFactory {
-  newInstance(hashProvider: XyoHashProvider | undefined, hash: Buffer): XyoHash;
+export interface IXyoHashFactory {
+  newInstance(hashProvider: IXyoHashProvider | undefined, hash: Buffer): XyoHash;
 }
 
 /**
  * The interface for hashing providers in the system
  */
 
-export interface XyoHashProvider {
+export interface IXyoHashProvider {
   createHash(data: Buffer): Promise<XyoHash>;
   verifyHash(data: Buffer, hash: Buffer): Promise<boolean>;
 }

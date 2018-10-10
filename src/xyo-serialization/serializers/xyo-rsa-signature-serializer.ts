@@ -12,17 +12,17 @@
 import { XyoRsaSignature } from '../../xyo-signing/rsa/xyo-rsa-signature';
 import { XyoSerializer } from '../xyo-serializer';
 import { XyoObject } from '../../xyo-core-components/xyo-object';
-import { XyoSignerProvider, XyoSignature } from '../../@types/xyo-signing';
+import { IXyoSignerProvider, IXyoSignature } from '../../@types/xyo-signing';
 
 export class XyoRsaSignatureSerializer extends XyoSerializer<XyoRsaSignature> {
 
   constructor(
     private readonly minor: number,
-    private readonly xyoRsaSignerProvider: XyoSignerProvider,
+    private readonly xyoRsaSignerProvider: IXyoSignerProvider,
     private readonly xyoRsaSignatureClass: {
       new (
         signature: Buffer,
-        verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
+        verifySign: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
       ): XyoRsaSignature
     }
   ) {

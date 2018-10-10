@@ -11,7 +11,7 @@
 
 import { XyoObject } from '../../xyo-core-components/xyo-object';
 import NodeRSA from 'node-rsa';
-import { XyoSignerProvider, XyoRsaShaSignerFactory, XyoSignature } from '../../@types/xyo-signing';
+import { IXyoSignerProvider, IXyoRsaShaSignerFactory, IXyoSignature } from '../../@types/xyo-signing';
 import { XyoRsaPublicKey } from './xyo-rsa-public-key';
 import { XyoRsaShaSigner } from './xyo-rsa-sha-signer';
 import { XyoBase } from '../../xyo-core-components/xyo-base';
@@ -20,11 +20,11 @@ import { XyoBase } from '../../xyo-core-components/xyo-base';
  * A service for providing RSA-SHA-256 signing services
  */
 
-export abstract class XyoRsaShaSignerProvider extends XyoBase implements XyoSignerProvider {
+export abstract class XyoRsaShaSignerProvider extends XyoBase implements IXyoSignerProvider {
 
   constructor (
     private readonly signingScheme: 'pkcs1-sha1' | 'pkcs1-sha256',
-    private readonly rsaShaSignerFactory: XyoRsaShaSignerFactory
+    private readonly rsaShaSignerFactory: IXyoRsaShaSignerFactory
   ) {
     super();
   }
@@ -67,7 +67,7 @@ export abstract class XyoRsaShaSignerProvider extends XyoBase implements XyoSign
    * @param publicKey The corresponding publicKey of public cryptography key-pair
    */
 
-  public async verifySign(signature: XyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {
+  public async verifySign(signature: IXyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {
     const rsaPubKey = publicKey as XyoRsaPublicKey;
     const key = new NodeRSA();
     key.setOptions({ signingScheme: this.signingScheme });

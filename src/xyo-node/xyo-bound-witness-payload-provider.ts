@@ -12,10 +12,10 @@
 import { XyoObject } from '../xyo-core-components/xyo-object';
 import { XyoPayload } from '../xyo-core-components/xyo-payload';
 import { XyoMultiTypeArrayInt } from '../xyo-core-components/arrays/xyo-multi-type-array-int';
-import { XyoBoundWitnessPayloadProvider } from '../@types/xyo-node';
-import { XyoOriginChainStateRepository } from '../@types/xyo-origin-chain';
+import { IXyoBoundWitnessPayloadProvider } from '../@types/xyo-node';
+import { IXyoOriginChainStateRepository } from '../@types/xyo-origin-chain';
 
-export class XyoBoundWitnessPayloadProviderImpl implements XyoBoundWitnessPayloadProvider {
+export class XyoBoundWitnessPayloadProvider implements IXyoBoundWitnessPayloadProvider {
 
   /** A mapping of name to unsigned-heuristic-providers */
   private readonly unsignedHeuristicsProviders: {[s: string]: () => Promise<XyoObject>} = {};
@@ -28,7 +28,7 @@ export class XyoBoundWitnessPayloadProviderImpl implements XyoBoundWitnessPayloa
    * inside a bound witness
    */
 
-  public async getPayload(originState: XyoOriginChainStateRepository): Promise<XyoPayload> {
+  public async getPayload(originState: IXyoOriginChainStateRepository): Promise<XyoPayload> {
     const signedHeuristics = await this.getHeuristics(true);
     const unsignedHeuristics = await this.getHeuristics(false);
 

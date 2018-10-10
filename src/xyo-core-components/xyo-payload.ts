@@ -12,7 +12,7 @@
 import { XyoObject } from './xyo-object';
 import { getBufferHash } from '../xyo-utils/xyo-buffer-utils';
 import { XyoArray } from './arrays/xyo-array';
-import { XyoObjectDescriptor } from '../@types/xyo-serialization';
+import { IXyoObjectDescriptor } from '../@types/xyo-serialization';
 
 /**
  * An XyoPayload is meant to represent the meaningful data
@@ -53,7 +53,7 @@ export class XyoPayload extends XyoObject {
     return this.getMappingOfElements(this.signedPayload.array);
   }
 
-  public extractFromSignedPayload<T>(description: XyoObjectDescriptor): T | undefined {
+  public extractFromSignedPayload<T>(description: IXyoObjectDescriptor): T | undefined {
     return this.signedPayload.array.find((item) => {
       return item.major === description.major && item.minor === description.minor;
     }) as T | undefined;

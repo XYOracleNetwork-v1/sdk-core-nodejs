@@ -18,8 +18,8 @@ import { XyoKeySet } from '../xyo-signing/xyo-key-set';
 import { XyoPacker } from '../xyo-serialization/xyo-packer';
 import { XyoSingleTypeArrayShort } from '../xyo-core-components/arrays/xyo-single-type-array-short';
 import { XyoSingleTypeArrayInt } from '../xyo-core-components/arrays/xyo-single-type-array-int';
-import { XyoSigner, XyoSignature } from '../@types/xyo-signing';
-import { XyoHashProvider } from '../@types/xyo-hashing';
+import { IXyoSigner, IXyoSignature } from '../@types/xyo-signing';
+import { IXyoHashProvider } from '../@types/xyo-hashing';
 
 /**
  * An XyoBoundWitness is one of the core pieces in the XYO protocol.
@@ -63,7 +63,7 @@ export abstract class XyoBoundWitness extends XyoObject {
    * @param hashProvider A hash provider to be used for calculating the hash
    */
 
-  public async getHash (hashProvider: XyoHashProvider): Promise<XyoHash> {
+  public async getHash (hashProvider: IXyoHashProvider): Promise<XyoHash> {
     const dataToHashValue = this.getSigningData();
     return hashProvider.createHash(dataToHashValue);
   }
@@ -143,7 +143,7 @@ export abstract class XyoBoundWitness extends XyoObject {
       }
 
       return Promise.all(sigSet.array.map(async (sig, sigIndex) => {
-        const signature = (sig as XyoSignature);
+        const signature = (sig as IXyoSignature);
         const publicKey = this.publicKeys[index].array[sigIndex];
         const isValid = await signature.verify(signingData, publicKey);
         if (!isValid) {
@@ -158,7 +158,7 @@ export abstract class XyoBoundWitness extends XyoObject {
    * @param signer A signer object used to get the signature
    */
 
-  protected async signCurrent(signer: XyoSigner) {
+  protected async signCurrent(signer: IXyoSigner) {
     return signer.signData(this.getSigningData());
   }
 

@@ -11,7 +11,7 @@
 
 import { XyoEcdsaSecp256k1Signer } from "../xyo-ecdsa-secp256k1-signer";
 import { XyoEcdsaSecp256k1Sha256Signature } from "./xyo-ecdsa-secp256k1-sha256-signature";
-import { XyoSignature } from '../../../../@types/xyo-signing';
+import { IXyoSignature } from '../../../../@types/xyo-signing';
 import { XyoObject } from "../../../../xyo-core-components/xyo-object";
 
 export class XyoEcdsaSecp256k1Sha256Signer extends XyoEcdsaSecp256k1Signer {
@@ -22,7 +22,7 @@ export class XyoEcdsaSecp256k1Sha256Signer extends XyoEcdsaSecp256k1Signer {
   constructor(
     private readonly getSignature: (data: Buffer) => Promise<Buffer>,
     public readonly getPublicXY: () => {x: Buffer, y: Buffer},
-    private readonly verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
+    private readonly verifySign: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
     public readonly getPrivateKey: () => string
   ) {
     super(XyoEcdsaSecp256k1Sha256Signer.major, XyoEcdsaSecp256k1Sha256Signer.minor);

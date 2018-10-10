@@ -10,7 +10,7 @@
  */
 
 import { XyoObject } from '../../xyo-core-components/xyo-object';
-import { XyoPublicKey } from '../../@types/xyo-signing';
+import { IXyoPublicKey } from '../../@types/xyo-signing';
 
 /**
  * Sharing public keys is an integral part of the Xyo protocol
@@ -18,7 +18,7 @@ import { XyoPublicKey } from '../../@types/xyo-signing';
  * Ec public key
  */
 
-export abstract class XyoEcdsaUncompressedPublicKey extends XyoObject implements XyoPublicKey {
+export abstract class XyoEcdsaUncompressedPublicKey extends XyoObject implements IXyoPublicKey {
   public abstract x: Buffer;
   public abstract y: Buffer;
 

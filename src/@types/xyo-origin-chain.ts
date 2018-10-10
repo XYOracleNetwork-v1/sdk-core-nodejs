@@ -13,10 +13,10 @@ import { XyoBoundWitness } from '../xyo-bound-witness/xyo-bound-witness';
 import { XyoHash } from '../xyo-hashing/xyo-hash';
 import { XyoIndex } from '../xyo-core-components/heuristics/numbers/xyo-index';
 import { XyoPreviousHash } from '../xyo-hashing/xyo-previous-hash';
-import { XyoSigner } from './xyo-signing';
+import { IXyoSigner } from './xyo-signing';
 import { XyoNextPublicKey } from '../xyo-signing/xyo-next-public-key';
 
-export interface XyoOriginBlockRepository {
+export interface IXyoOriginBlockRepository {
   removeOriginBlock(hash: Buffer): Promise<void>;
   containsOriginBlock(hash: Buffer): Promise<boolean>;
   getAllOriginBlockHashes(): Promise<Buffer[]>;
@@ -24,14 +24,14 @@ export interface XyoOriginBlockRepository {
   getOriginBlockByHash(hash: Buffer): Promise<XyoBoundWitness | undefined>;
 }
 
-export interface XyoOriginChainStateRepository {
+export interface IXyoOriginChainStateRepository {
   getIndex(): Promise<XyoIndex>;
   getPreviousHash(): Promise<XyoPreviousHash | undefined>;
-  getSigners(): Promise<XyoSigner[]>;
-  addSigner(signer: XyoSigner): Promise<void>;
+  getSigners(): Promise<IXyoSigner[]>;
+  addSigner(signer: IXyoSigner): Promise<void>;
   removeOldestSigner(): Promise<void>;
   getNextPublicKey(): Promise<XyoNextPublicKey | undefined>;
   updateOriginChainState(hash: XyoHash): Promise<void>;
-  getWaitingSigners(): Promise<XyoSigner[]>;
-  setCurrentSigners(signers: XyoSigner[]): Promise<void>;
+  getWaitingSigners(): Promise<IXyoSigner[]>;
+  setCurrentSigners(signers: IXyoSigner[]): Promise<void>;
 }

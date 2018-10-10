@@ -17,7 +17,7 @@ import { XyoObject } from '../xyo-core-components/xyo-object';
 import { XyoError } from '../xyo-core-components/xyo-error';
 import { XyoKeySet } from '../xyo-signing/xyo-key-set';
 import { XyoPacker } from '../xyo-serialization/xyo-packer';
-import { XyoSigner, XyoPublicKey } from '../@types/xyo-signing';
+import { IXyoSigner, IXyoPublicKey } from '../@types/xyo-signing';
 
 /**
  * A `XyoZigZagBoundWitness` is a particular type of way of creating a
@@ -69,7 +69,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
    * @param payload The payload that belongs to the party that is to be included in the BoundWitness
    */
 
-  constructor (xyoPacker: XyoPacker, private readonly signers: XyoSigner[], private readonly payload: XyoPayload) {
+  constructor (xyoPacker: XyoPacker, private readonly signers: IXyoSigner[], private readonly payload: XyoPayload) {
     super(xyoPacker);
   }
 
@@ -210,7 +210,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
    */
 
   private makeSelfKeySet(): XyoKeySet {
-    const publicKeys: XyoPublicKey[] = [];
+    const publicKeys: IXyoPublicKey[] = [];
 
     this.signers.forEach((signer) => {
       const publicKey = signer.publicKey;

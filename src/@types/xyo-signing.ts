@@ -10,23 +10,23 @@
  */
 
 import { XyoObject } from "../xyo-core-components/xyo-object";
-import { XyoSignature } from './xyo-signing';
+import { IXyoSignature } from './xyo-signing';
 import { XyoRsaShaSigner } from "../xyo-signing/rsa/xyo-rsa-sha-signer";
 
-export interface XyoPublicKey extends XyoObject {
+export interface IXyoPublicKey extends XyoObject {
   getRawPublicKey(): Buffer;
 }
 
-export interface XyoRsaShaSignerFactory {
+export interface IXyoRsaShaSignerFactory {
   newInstance(
     getSignature: (data: Buffer) => Buffer,
     getModulus: () => Buffer,
-    verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
+    verifySign: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
     getPrivateKey: () => any
   ): XyoRsaShaSigner;
 }
 
-export interface XyoSignature extends XyoObject {
+export interface IXyoSignature extends XyoObject {
 
   /**
    * Subclasses will return a binary-representation of the signature
@@ -43,11 +43,11 @@ export interface XyoSignature extends XyoObject {
   verify (data: Buffer, publicKey: XyoObject): Promise<boolean>;
 }
 
-export interface XyoSignerProvider {
+export interface IXyoSignerProvider {
   /**
    * Returns a new instance of a signer
    */
-  newInstance(fromPrivateKey?: any): XyoSigner;
+  newInstance(fromPrivateKey?: any): IXyoSigner;
 
   /**
    * Verifies a a signature given the data that was signed, and a public key
@@ -56,16 +56,16 @@ export interface XyoSignerProvider {
    * @param data The data that was signed
    * @param publicKey The corresponding publicKey of public cryptography key-pair
    */
-  verifySign(signature: XyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean>;
+  verifySign(signature: IXyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean>;
 }
 
-export interface XyoSigner extends XyoObject {
+export interface IXyoSigner extends XyoObject {
 
   /**
    * Subclasses will return the publicKey of the crypto key pair
    */
 
-  publicKey: XyoPublicKey;
+  publicKey: IXyoPublicKey;
 
   /**
    * This should return the private key
@@ -87,11 +87,11 @@ export interface XyoSigner extends XyoObject {
  * A factory for creating new XyoSigners and a service for verifying signatures
  */
 
-export interface XyoSignerProvider {
+export interface IXyoSignerProvider {
   /**
    * Returns a new instance of a signer
    */
-  newInstance(fromPrivateKey?: any): XyoSigner;
+  newInstance(fromPrivateKey?: any): IXyoSigner;
 
   /**
    * Verifies a a signature given the data that was signed, and a public key
@@ -100,5 +100,5 @@ export interface XyoSignerProvider {
    * @param data The data that was signed
    * @param publicKey The corresponding publicKey of public cryptography key-pair
    */
-  verifySign(signature: XyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean>;
+  verifySign(signature: IXyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean>;
 }

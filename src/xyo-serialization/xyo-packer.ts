@@ -13,7 +13,7 @@ import { XyoSerializer } from './xyo-serializer';
 import { XyoObject } from '../xyo-core-components/xyo-object';
 import { XyoError } from '../xyo-core-components/xyo-error';
 import { XyoBase } from '../xyo-core-components/xyo-base';
-import { XyoObjectDescriptor } from '../@types/xyo-serialization';
+import { IXyoObjectDescriptor } from '../@types/xyo-serialization';
 
 /**
  * An XyoPacker is a central serializer/deserializer registry service.
@@ -40,7 +40,7 @@ export class XyoPacker extends XyoBase {
    */
 
   public registerSerializerDeserializer<T extends XyoObject>(
-    descriptor: XyoObjectDescriptor,
+    descriptor: IXyoObjectDescriptor,
     serializerDeserializer: XyoSerializer<T>
   ) {
     /** Add to collection */
@@ -144,7 +144,7 @@ export class XyoPacker extends XyoBase {
     return undefined;
   }
 
-  public getSerializerByDescriptor(descriptor: XyoObjectDescriptor) {
+  public getSerializerByDescriptor(descriptor: IXyoObjectDescriptor) {
     const serializerIndex = this.serializerDeserializersByNameIndex[descriptor.name];
     if (serializerIndex === undefined || serializerIndex >= this.serializerDeserializersCollection.length) {
       throw new XyoError(`Unable to locate serializer ${descriptor.name}`, XyoError.errorType.ERR_CREATOR_MAPPING);

@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-export interface XyoObjectDescriptor {
+export interface IXyoObjectDescriptor {
   major: number;
   minor: number;
   name: string;

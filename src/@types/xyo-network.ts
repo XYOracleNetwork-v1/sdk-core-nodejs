@@ -20,7 +20,7 @@ import { CatalogueItem } from '../xyo-network/xyo-catalogue-item';
  * A peer, meant to represent the meaningful attributes of the
  * node on the other side of the network pipe
  */
-export interface XyoNetworkPeer {
+export interface IXyoNetworkPeer {
   /**
    * Returns an id for a peer that should be consistent across multiple connections
    * to the same node
@@ -32,7 +32,7 @@ export interface XyoNetworkPeer {
  * An interface that allows the network to delegate to implementer of
  * this interface as to which operations the xyo-node supports
  */
-export interface XyoNetworkProcedureCatalogue {
+export interface IXyoNetworkProcedureCatalogue {
   canDo(catalogueItem: CatalogueItem): boolean;
   getCurrentCatalogue(): CatalogueItem[];
 }
@@ -42,9 +42,9 @@ export interface XyoNetworkProcedureCatalogue {
  * nodes and will be used the fundamental way that two
  * nodes communicate with one another
  */
-export interface XyoNetworkPipe {
+export interface IXyoNetworkPipe {
   /** The peer on the other side of the pipe */
-  peer: XyoNetworkPeer;
+  peer: IXyoNetworkPeer;
 
   /** The catalogue of operations that the peer can perform */
   otherCatalogue: CatalogueItem[] | undefined;
@@ -62,11 +62,11 @@ export interface XyoNetworkPipe {
   close(): Promise<void>;
 }
 
-export interface XyoNetworkProviderInterface {
-  find(catalogue: XyoNetworkProcedureCatalogue): Promise<XyoNetworkPipe>;
+export interface IXyoNetworkProviderInterface {
+  find(catalogue: IXyoNetworkProcedureCatalogue): Promise<IXyoNetworkPipe>;
   stopServer(): Promise<void>;
 }
 
-export interface XyoNetworkAddressProvider {
+export interface IXyoNetworkAddressProvider {
   next(): Promise<{host: string, port: number}>;
 }

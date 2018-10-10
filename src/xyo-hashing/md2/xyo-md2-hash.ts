@@ -10,7 +10,7 @@
  */
 
 import { XyoHash } from '../xyo-hash';
-import { XyoHashProvider } from '../../@types/xyo-hashing';
+import { IXyoHashProvider } from '../../@types/xyo-hashing';
 
 /**
  * An md2 hash data object
@@ -27,7 +27,7 @@ export class XyoMd2Hash extends XyoHash {
    * @param md2Hash The binary representation of the hash itself
    */
 
-  constructor(md2HashProvider: XyoHashProvider | undefined, md2Hash: Buffer) {
+  constructor(md2HashProvider: IXyoHashProvider | undefined, md2Hash: Buffer) {
     super(md2HashProvider, md2Hash, XyoMd2Hash.major, XyoMd2Hash.minor);
   }
 }

@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoNetworkProviderInterface, XyoNetworkProcedureCatalogue, XyoNetworkPipe } from '../../@types/xyo-network';
+import { IXyoNetworkProviderInterface, IXyoNetworkProcedureCatalogue, IXyoNetworkPipe } from '../../@types/xyo-network';
 import { bufferToCatalogueItems, CatalogueItem } from '../xyo-catalogue-item';
 import { XyoTcpConnectionResult } from './xyo-tcp-connection-result';
 import { XyoTcpNetworkPipe } from './xyo-tcp-network-pipe';
@@ -26,7 +26,7 @@ import { readNumberFromBuffer } from '../../xyo-utils/xyo-buffer-utils';
  * one `meaningful` connection made to a peer.
  */
 
-export class XyoServerTcpNetwork extends XyoBase implements XyoNetworkProviderInterface {
+export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProviderInterface {
 
   /**
    * An ephemeral short lived server for making connection to peers
@@ -57,7 +57,7 @@ export class XyoServerTcpNetwork extends XyoBase implements XyoNetworkProviderIn
    * @param catalogue A peer-matchmaking delegate
    */
 
-  public async find(catalogue: XyoNetworkProcedureCatalogue): Promise<XyoNetworkPipe> {
+  public async find(catalogue: IXyoNetworkProcedureCatalogue): Promise<IXyoNetworkPipe> {
     /** Create a server and listen on port */
     this.server = net.createServer();
     this.server.listen(this.port);
@@ -114,7 +114,7 @@ export class XyoServerTcpNetwork extends XyoBase implements XyoNetworkProviderIn
    * @param catalogue The peer-matchmaking catalogue
    */
 
-  private getConnection(server: net.Server, catalogue: XyoNetworkProcedureCatalogue): Promise<XyoTcpConnectionResult> {
+  private getConnection(server: net.Server, catalogue: IXyoNetworkProcedureCatalogue): Promise<XyoTcpConnectionResult> {
     return new Promise((resolve, reject) => {
       const onConnection = (c: net.Socket) => {
         this.logInfo(`Server Connection made with ${c.remoteAddress || 'unknown ip'}`);

@@ -11,7 +11,7 @@
 
 import { XyoArray } from "./xyo-array";
 import { XyoBoundWitness } from "../../xyo-bound-witness/xyo-bound-witness";
-import { XyoHashProvider } from '../../@types/xyo-hashing';
+import { IXyoHashProvider } from '../../@types/xyo-hashing';
 import { XyoBridgeHashSet } from "./xyo-bridge-hash-set";
 
 export class XyoBridgeBlockSet extends XyoArray {
@@ -29,7 +29,7 @@ export class XyoBridgeBlockSet extends XyoArray {
     super(XyoBoundWitness.major, XyoBoundWitness.minor, XyoBridgeBlockSet.major, XyoBridgeBlockSet.minor, 2, array);
   }
 
-  public async getHashSet(hashProvider: XyoHashProvider) {
+  public async getHashSet(hashProvider: IXyoHashProvider) {
     const hashes = await Promise.all(this.array.map((boundWitness) => {
       return boundWitness.getHash(hashProvider);
     }));

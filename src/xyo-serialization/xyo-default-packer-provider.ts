@@ -76,7 +76,7 @@ import { XyoEcdsaSecp256k1Sha1Signer } from '../xyo-signing/ecdsa/secp256k1/sha1
 import { XyoObject } from '../xyo-core-components/xyo-object';
 import { XyoSerializer } from './xyo-serializer';
 import { XyoBase } from '../xyo-core-components/xyo-base';
-import { XyoObjectDescriptor } from '../@types/xyo-serialization';
+import { IXyoObjectDescriptor } from '../@types/xyo-serialization';
 
 /**
  * A class for configuring the packing, serialization, and deserialization
@@ -134,7 +134,7 @@ export class XyoDefaultPackerProvider extends XyoBase {
   }
 
   private getRegisterFn(packer: XyoPacker) {
-    return <T extends XyoObject>(descriptor: XyoObjectDescriptor, serializer: XyoSerializer<T>) => {
+    return <T extends XyoObject>(descriptor: IXyoObjectDescriptor, serializer: XyoSerializer<T>) => {
       // this.logInfo(`Adding ${descriptor.name} as ${descriptor.major.toString(16)} ${descriptor.minor.toString(16)}`);
       packer.registerSerializerDeserializer(descriptor, serializer);
     };

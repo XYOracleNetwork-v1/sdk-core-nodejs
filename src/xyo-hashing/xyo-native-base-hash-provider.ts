@@ -12,13 +12,13 @@
 import { XyoHash } from './xyo-hash';
 import crypto from 'crypto';
 import { XyoError } from '../xyo-core-components/xyo-error';
-import { XyoHashProvider, XyoHashFactory } from '../@types/xyo-hashing';
+import { IXyoHashProvider, IXyoHashFactory } from '../@types/xyo-hashing';
 
 /**
  * A hash provider that wraps and utilizes the natives nodejs hash functionality
  */
 
-export class XyoNativeBaseHashProvider implements XyoHashProvider {
+export class XyoNativeBaseHashProvider implements IXyoHashProvider {
 
   /**
    * Creates a new instance of a XyoNativeBaseHashProvider
@@ -28,7 +28,7 @@ export class XyoNativeBaseHashProvider implements XyoHashProvider {
 
   constructor (
     private readonly hashAlgorithm: string,
-    private readonly xyoHashFactory: XyoHashFactory
+    private readonly xyoHashFactory: IXyoHashFactory
   ) {}
 
   /**

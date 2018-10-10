@@ -10,7 +10,7 @@
  */
 
 import { XyoHash } from '../xyo-hash';
-import { XyoHashProvider } from '../../@types/xyo-hashing';
+import { IXyoHashProvider } from '../../@types/xyo-hashing';
 
 /**
  * An sha512 hash data object
@@ -27,7 +27,7 @@ export class XyoSha512Hash extends XyoHash {
    * @param sha512Hash The binary representation of the hash itself
    */
 
-  constructor(sha512HashProvider: XyoHashProvider | undefined, sha512Hash: Buffer) {
+  constructor(sha512HashProvider: IXyoHashProvider | undefined, sha512Hash: Buffer) {
     super(sha512HashProvider, sha512Hash, XyoSha512Hash.major, XyoSha512Hash.minor);
   }
 }

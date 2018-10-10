@@ -11,7 +11,7 @@
 
 import { XyoObject } from '../../xyo-core-components/xyo-object';
 import { XyoRsaPublicKey } from './xyo-rsa-public-key';
-import { XyoSigner } from '../../@types/xyo-signing';
+import { IXyoSigner } from '../../@types/xyo-signing';
 
 /**
  * A service for signing using RSASha. This particular class
@@ -20,7 +20,7 @@ import { XyoSigner } from '../../@types/xyo-signing';
  * crypto functionality.
  */
 
-export abstract class XyoRsaShaSigner extends XyoObject implements XyoSigner {
+export abstract class XyoRsaShaSigner extends XyoObject implements IXyoSigner {
 
   public abstract readonly getSignature: (data: Buffer) => Buffer;
   public abstract readonly getModulus: () => Buffer;

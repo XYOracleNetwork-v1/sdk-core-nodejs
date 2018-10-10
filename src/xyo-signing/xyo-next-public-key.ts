@@ -10,7 +10,7 @@
  */
 
 import { XyoObject } from '../xyo-core-components/xyo-object';
-import { XyoPublicKey } from '../@types/xyo-signing';
+import { IXyoPublicKey } from '../@types/xyo-signing';
 
 /**
  * In the XYO protocol, the next public is important for rolling
@@ -30,7 +30,7 @@ export class XyoNextPublicKey extends XyoObject {
    * @param publicKey The next public key that will be used for verification of origin blocks
    */
 
-  constructor (public readonly publicKey: XyoPublicKey) {
+  constructor (public readonly publicKey: IXyoPublicKey) {
     super(XyoNextPublicKey.major, XyoNextPublicKey.minor);
   }
 }

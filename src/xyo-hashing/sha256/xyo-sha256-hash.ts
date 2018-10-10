@@ -10,7 +10,7 @@
  */
 
 import { XyoHash } from '../xyo-hash';
-import { XyoHashProvider } from '../../@types/xyo-hashing';
+import { IXyoHashProvider } from '../../@types/xyo-hashing';
 
 /**
  * An sha256 hash data object
@@ -27,7 +27,7 @@ export class XyoSha256Hash extends XyoHash {
    * @param sha256Hash The binary representation of the hash itself
    */
 
-  constructor(sha256HashProvider: XyoHashProvider | undefined, sha256Hash: Buffer) {
+  constructor(sha256HashProvider: IXyoHashProvider | undefined, sha256Hash: Buffer) {
     super(sha256HashProvider, sha256Hash, XyoSha256Hash.major, XyoSha256Hash.minor);
   }
 }

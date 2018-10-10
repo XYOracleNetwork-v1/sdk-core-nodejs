@@ -11,15 +11,15 @@
 
 import { XyoEcdsaSignature } from '../../xyo-signing/ecdsa/xyo-ecdsa-signature';
 import { XyoSerializer } from '../xyo-serializer';
-import { XyoSignature } from '../../@types/xyo-signing';
+import { IXyoSignature } from '../../@types/xyo-signing';
 import { XyoObject } from '../../xyo-core-components/xyo-object';
 
 export class XyoEcdsaSignatureSerializer extends XyoSerializer<XyoEcdsaSignature> {
 
   constructor(
     private readonly minor: number,
-    private readonly verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
-    private readonly ecdsaSignatureFactory: XyoEcdsaSignatureFactory
+    private readonly verifySign: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
+    private readonly ecdsaSignatureFactory: IXyoEcdsaSignatureFactory
   ) {
     super();
   }
@@ -42,9 +42,9 @@ export class XyoEcdsaSignatureSerializer extends XyoSerializer<XyoEcdsaSignature
   }
 }
 
-export interface XyoEcdsaSignatureFactory {
+export interface IXyoEcdsaSignatureFactory {
   newInstance(
     signature: Buffer,
-    verify: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
+    verify: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
   ): XyoEcdsaSignature;
 }

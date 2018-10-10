@@ -10,7 +10,7 @@
  */
 
 import { XyoObject } from '../../xyo-core-components/xyo-object';
-import { XyoPublicKey } from '../../@types/xyo-signing';
+import { IXyoPublicKey } from '../../@types/xyo-signing';
 /**
  * An RSA public key
  *
@@ -18,7 +18,7 @@ import { XyoPublicKey } from '../../@types/xyo-signing';
  * @minor: 0x03
  */
 
-export class XyoRsaPublicKey extends XyoObject implements XyoPublicKey {
+export class XyoRsaPublicKey extends XyoObject implements IXyoPublicKey {
 
   public static major = 0x04;
   public static minor = 0x03;

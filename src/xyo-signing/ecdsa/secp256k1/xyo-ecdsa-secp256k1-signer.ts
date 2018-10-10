@@ -10,10 +10,10 @@
  */
 
 import { XyoObject } from '../../../xyo-core-components/xyo-object';
-import { XyoSigner } from '../../../@types/xyo-signing';
+import { IXyoSigner } from '../../../@types/xyo-signing';
 import { XyoEcdsaSecp256k1UnCompressedPublicKey } from './xyo-ecdsa-secp256k1-uncompressed-public-key';
 
-export abstract class XyoEcdsaSecp256k1Signer extends XyoObject implements XyoSigner {
+export abstract class XyoEcdsaSecp256k1Signer extends XyoObject implements IXyoSigner {
 
   public abstract getPublicXY: () => {x: Buffer, y: Buffer};
   public abstract getPrivateKey: () => string;

@@ -10,7 +10,7 @@
  */
 
 import { XyoObject } from '../xyo-core-components/xyo-object';
-import { XyoHashProvider } from '../@types/xyo-hashing';
+import { IXyoHashProvider } from '../@types/xyo-hashing';
 import { XyoError } from '../xyo-core-components/xyo-error';
 
 /**
@@ -28,7 +28,7 @@ export class XyoHash extends XyoObject {
    */
 
   constructor(
-    private readonly hashProvider: XyoHashProvider | undefined,
+    private readonly hashProvider: IXyoHashProvider | undefined,
     public readonly hash: Buffer,
     public readonly major: number,
     public readonly minor: number

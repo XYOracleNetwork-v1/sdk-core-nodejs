@@ -16,7 +16,7 @@ export class XyoEcdsaUncompressedPublicKeySerializer extends XyoSerializer<XyoEc
 
   constructor(
     private readonly minor: number,
-    private readonly ecdsaUncompressedPublicKeyFactory: XyoEcdsaUncompressedPublicKeyFactory
+    private readonly ecdsaUncompressedPublicKeyFactory: IXyoEcdsaUncompressedPublicKeyFactory
   ) {
     super();
   }
@@ -61,6 +61,6 @@ export class XyoEcdsaUncompressedPublicKeySerializer extends XyoSerializer<XyoEc
   }
 }
 
-export interface XyoEcdsaUncompressedPublicKeyFactory {
+export interface IXyoEcdsaUncompressedPublicKeyFactory {
   newInstance: (x: Buffer, y: Buffer) => XyoEcdsaUncompressedPublicKey;
 }

@@ -10,7 +10,7 @@
  */
 
 import { XyoStoragePriority } from './xyo-storage-priority';
-import { XYOStorageProvider } from '../@types/xyo-storage';
+import { IXYOStorageProvider } from '../@types/xyo-storage';
 import { XyoError } from '../xyo-core-components/xyo-error';
 
 /**
@@ -19,7 +19,7 @@ import { XyoError } from '../xyo-core-components/xyo-error';
  * does not persist beyond the lifetime of the application
  */
 
-export class XyoInMemoryStorageProvider implements XYOStorageProvider {
+export class XyoInMemoryStorageProvider implements IXYOStorageProvider {
 
   /** A simple key value map to map addresses to values */
   private readonly data: {[s: string]: Buffer} = {};

@@ -9,59 +9,59 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoNetworkPipe } from './xyo-network';
+import { IXyoNetworkPipe } from './xyo-network';
 import { XyoPayload } from '../xyo-core-components/xyo-payload';
 import { XyoBoundWitness } from '../xyo-bound-witness/xyo-bound-witness';
-import { XyoOriginChainStateRepository } from './xyo-origin-chain';
+import { IXyoOriginChainStateRepository } from './xyo-origin-chain';
 import { CatalogueItem } from '../xyo-network/xyo-catalogue-item';
-import { XyoSigner } from './xyo-signing';
+import { IXyoSigner } from './xyo-signing';
 
-export type xyoBoundWitnessHandlerFn = (networkPipe: XyoNetworkPipe) => Promise<XyoBoundWitness>;
+export type xyoBoundWitnessHandlerFn = (networkPipe: IXyoNetworkPipe) => Promise<XyoBoundWitness>;
 
 export type xyoBoundWitnessPayloadProvider =
-  (originState: XyoOriginChainStateRepository) => Promise<XyoPayload>;
+  (originState: IXyoOriginChainStateRepository) => Promise<XyoPayload>;
 
-export type xyoPeerConnectionHandler = (networkPipe: XyoNetworkPipe) => Promise<void>;
+export type xyoPeerConnectionHandler = (networkPipe: IXyoNetworkPipe) => Promise<void>;
 
-export interface XyoBoundWitnessPayloadProvider {
+export interface IXyoBoundWitnessPayloadProvider {
   getPayload: xyoBoundWitnessPayloadProvider;
 }
 
-export interface XyoPeerConnectionHandlerInterface {
+export interface IXyoPeerConnectionHandler {
   handlePeerConnection: xyoPeerConnectionHandler;
 }
 
-export interface XyoPeerConnectionDelegateInterface {
+export interface IXyoPeerConnectionDelegateInterface {
   handlePeerConnection: xyoPeerConnectionHandler;
-  provideConnection(): Promise<XyoNetworkPipe>;
+  provideConnection(): Promise<IXyoNetworkPipe>;
   stopProvidingConnections(): Promise<void>;
 }
 
-export interface XyoBoundWitnessHandlerProvider {
+export interface IXyoBoundWitnessHandlerProvider {
   handle: xyoBoundWitnessHandlerFn;
 }
 
-export interface XyoBoundWitnessSuccessListener {
+export interface IXyoBoundWitnessSuccessListener {
   onBoundWitnessSuccess(boundWitness: XyoBoundWitness): Promise<void>;
 }
 
-export interface XyoNodeInteraction <T> {
-  run(networkPipe: XyoNetworkPipe): Promise<T>;
+export interface IXyoNodeInteraction <T> {
+  run(networkPipe: IXyoNetworkPipe): Promise<T>;
 }
 
 export type resolveCategoryFn = (catalogueItems: CatalogueItem[]) => CatalogueItem | undefined;
 
-export interface XyoCatalogueResolver {
+export interface IXyoCatalogueResolver {
   resolveCategory: resolveCategoryFn;
 }
 
-export interface XyoCategoryRouter {
-  getHandler(catalogueItem: CatalogueItem): XyoBoundWitnessHandlerProvider | undefined;
+export interface IXyoCategoryRouter {
+  getHandler(catalogueItem: CatalogueItem): IXyoBoundWitnessHandlerProvider | undefined;
 }
 
-export interface XyoBoundWitnessInteractionFactory {
+export interface IXyoBoundWitnessInteractionFactory {
   newInstance: (
-    signers: XyoSigner[],
+    signers: IXyoSigner[],
     payload: XyoPayload
-  ) => XyoNodeInteraction<XyoBoundWitness>;
+  ) => IXyoNodeInteraction<XyoBoundWitness>;
 }

@@ -10,7 +10,7 @@
  */
 
 import { XyoRsaSignature } from '../xyo-rsa-signature';
-import { XyoSignature } from '../../../@types/xyo-signing';
+import { IXyoSignature } from '../../../@types/xyo-signing';
 import { XyoObject } from '../../../xyo-core-components/xyo-object';
 
 /**
@@ -34,12 +34,12 @@ export class XyoRsaSha1Signature extends XyoRsaSignature {
 
   constructor(
     public readonly rawSignature: Buffer,
-    public readonly verifyFn: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
+    public readonly verifyFn: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
   ) {
     super(XyoRsaSha1Signature.major, XyoRsaSha1Signature.minor);
   }
 
-  public verifySign(signature: XyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {
+  public verifySign(signature: IXyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {
     return this.verifyFn(signature, data, publicKey);
   }
 }

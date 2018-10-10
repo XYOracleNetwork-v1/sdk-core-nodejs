@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoNetworkPipe } from '../../@types/xyo-network';
+import { IXyoNetworkPipe } from '../../@types/xyo-network';
 import { XyoTcpConnectionResult } from './xyo-tcp-connection-result';
 import { XyoError } from '../../xyo-core-components/xyo-error';
 import { CatalogueItem } from '../xyo-catalogue-item';
@@ -17,7 +17,7 @@ import { CatalogueItem } from '../xyo-catalogue-item';
 /**
  * A communication pipe using tcp/ip stack
  */
-export class XyoTcpNetworkPipe implements XyoNetworkPipe {
+export class XyoTcpNetworkPipe implements IXyoNetworkPipe {
 
   /**
    * Creates an instance of a XyoTcpNetworkPipe

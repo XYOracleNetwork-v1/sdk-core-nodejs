@@ -9,36 +9,36 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoPeerConnectionDelegateInterface, XyoBoundWitnessSuccessListener, XyoCategoryRouter, XyoBoundWitnessHandlerProvider, XyoCatalogueResolver } from '../@types/xyo-node';
+import { IXyoPeerConnectionDelegateInterface, IXyoBoundWitnessSuccessListener, IXyoCategoryRouter, IXyoBoundWitnessHandlerProvider, IXyoCatalogueResolver } from '../../@types/xyo-node';
 import { XyoPeerConnectionDelegate } from './xyo-peer-connection-provider';
-import { XyoNetworkProcedureCatalogue, XyoNetworkProviderInterface } from '../@types/xyo-network';
-import { XyoPacker } from '../xyo-serialization/xyo-packer';
-import { XyoHashProvider } from '../@types/xyo-hashing';
-import { XyoBoundWitnessPayloadProviderImpl } from './xyo-bound-witness-payload-provider-impl';
-import { XyoBoundWitnessHandlerProviderImpl } from './xyo-bound-witness-handler-provider-impl';
+import { IXyoNetworkProcedureCatalogue, IXyoNetworkProviderInterface } from '../../@types/xyo-network';
+import { XyoPacker } from '../../xyo-serialization/xyo-packer';
+import { IXyoHashProvider } from '../../@types/xyo-hashing';
+import { XyoBoundWitnessPayloadProvider } from '../xyo-bound-witness-payload-provider';
+import { XyoBoundWitnessHandlerProvider } from '../xyo-bound-witness-handler-provider';
 import { XyoPeerConnectionHandlerImpl } from './xyo-peer-connection-handler';
-import { XyoOriginBlockRepository, XyoOriginChainStateRepository } from '../@types/xyo-origin-chain';
-import { XyoBoundWitnessStandardServerInteraction } from './bound-witness-interactions/xyo-bound-witness-standard-server-interaction';
-import { CatalogueItem } from '../xyo-network/xyo-catalogue-item';
-import { XyoBoundWitnessStandardClientInteraction } from './bound-witness-interactions/xyo-bound-witness-standard-client-interaction';
-import { XyoBoundWitnessTakeOriginChainServerInteraction } from './bound-witness-interactions/xyo-bound-witness-take-origin-chain-server-interaction';
+import { IXyoOriginBlockRepository, IXyoOriginChainStateRepository } from '../../@types/xyo-origin-chain';
+import { XyoBoundWitnessStandardServerInteraction } from '../bound-witness-interactions/xyo-bound-witness-standard-server-interaction';
+import { CatalogueItem } from '../../xyo-network/xyo-catalogue-item';
+import { XyoBoundWitnessStandardClientInteraction } from '../bound-witness-interactions/xyo-bound-witness-standard-client-interaction';
+import { XyoBoundWitnessTakeOriginChainServerInteraction } from '../bound-witness-interactions/xyo-bound-witness-take-origin-chain-server-interaction';
 
-export class XyoPeerConnectionProviderFactory implements XyoCategoryRouter, XyoCatalogueResolver {
+export class XyoPeerConnectionProviderFactory implements IXyoCategoryRouter, IXyoCatalogueResolver {
 
   constructor(
-    private readonly network: XyoNetworkProviderInterface,
-    private readonly catalogue: XyoNetworkProcedureCatalogue,
+    private readonly network: IXyoNetworkProviderInterface,
+    private readonly catalogue: IXyoNetworkProcedureCatalogue,
     private readonly xyoPacker: XyoPacker,
-    private readonly hashingProvider: XyoHashProvider,
-    private readonly originChainStateManager: XyoOriginChainStateRepository,
-    private readonly originChainNavigator: XyoOriginBlockRepository,
-    private readonly boundWitnessPayloadProvider: XyoBoundWitnessPayloadProviderImpl,
-    private readonly boundWitnessSuccessListener: XyoBoundWitnessSuccessListener,
+    private readonly hashingProvider: IXyoHashProvider,
+    private readonly originChainStateManager: IXyoOriginChainStateRepository,
+    private readonly originChainNavigator: IXyoOriginBlockRepository,
+    private readonly boundWitnessPayloadProvider: XyoBoundWitnessPayloadProvider,
+    private readonly boundWitnessSuccessListener: IXyoBoundWitnessSuccessListener,
     private readonly isServer: boolean,
-    private readonly catalogueResolver?: XyoCatalogueResolver
+    private readonly catalogueResolver?: IXyoCatalogueResolver
   ) {}
 
-  public newInstance(): XyoPeerConnectionDelegateInterface {
+  public newInstance(): IXyoPeerConnectionDelegateInterface {
     return new XyoPeerConnectionDelegate(
       this.network,
       this.catalogue,
@@ -46,11 +46,11 @@ export class XyoPeerConnectionProviderFactory implements XyoCategoryRouter, XyoC
     );
   }
 
-  public getHandler(catalogueItem: CatalogueItem): XyoBoundWitnessHandlerProvider | undefined {
+  public getHandler(catalogueItem: CatalogueItem): IXyoBoundWitnessHandlerProvider | undefined {
     if (this.isServer) {
       switch (catalogueItem) {
         case CatalogueItem.BOUND_WITNESS:
-          return new XyoBoundWitnessHandlerProviderImpl(
+          return new XyoBoundWitnessHandlerProvider(
             this.xyoPacker,
             this.hashingProvider,
             this.originChainStateManager,
@@ -64,7 +64,7 @@ export class XyoPeerConnectionProviderFactory implements XyoCategoryRouter, XyoC
             }
           );
         case CatalogueItem.TAKE_ORIGIN_CHAIN:
-          return new XyoBoundWitnessHandlerProviderImpl(
+          return new XyoBoundWitnessHandlerProvider(
             this.xyoPacker,
             this.hashingProvider,
             this.originChainStateManager,
@@ -84,7 +84,7 @@ export class XyoPeerConnectionProviderFactory implements XyoCategoryRouter, XyoC
 
     switch (catalogueItem) {
       case CatalogueItem.BOUND_WITNESS:
-        return new XyoBoundWitnessHandlerProviderImpl(
+        return new XyoBoundWitnessHandlerProvider(
           this.xyoPacker,
           this.hashingProvider,
           this.originChainStateManager,

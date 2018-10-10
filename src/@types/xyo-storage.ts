@@ -17,7 +17,7 @@ import { XyoStoragePriority } from "../xyo-storage/xyo-storage-priority";
  * abstraction over a key/value store.
  */
 
-export interface XYOStorageProvider {
+export interface IXYOStorageProvider {
   write(
     key: Buffer,
     value: Buffer,

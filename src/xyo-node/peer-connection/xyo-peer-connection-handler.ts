@@ -9,17 +9,17 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoNetworkPipe } from '../@types/xyo-network';
-import { XyoPeerConnectionHandlerInterface, XyoCatalogueResolver, XyoCategoryRouter } from '../@types/xyo-node';
-import { XyoBase } from '../xyo-core-components/xyo-base';
+import { IXyoNetworkPipe } from '../../@types/xyo-network';
+import { IXyoPeerConnectionHandler, IXyoCatalogueResolver, IXyoCategoryRouter } from '../../@types/xyo-node';
+import { XyoBase } from '../../xyo-core-components/xyo-base';
 
-export class XyoPeerConnectionHandlerImpl extends XyoBase implements XyoPeerConnectionHandlerInterface {
+export class XyoPeerConnectionHandlerImpl extends XyoBase implements IXyoPeerConnectionHandler {
 
-  constructor(private readonly router: XyoCategoryRouter, private readonly categoryResolver: XyoCatalogueResolver) {
+  constructor(private readonly router: IXyoCategoryRouter, private readonly categoryResolver: IXyoCatalogueResolver) {
     super();
   }
 
-  public async handlePeerConnection(networkPipe: XyoNetworkPipe) {
+  public async handlePeerConnection(networkPipe: IXyoNetworkPipe) {
     if (!networkPipe.otherCatalogue || networkPipe.otherCatalogue.length < 1) {
       this.logInfo(`No catalogue items in other catalogue, closing connection`);
       await networkPipe.close();

@@ -10,29 +10,29 @@
  */
 
 import { XyoPacker } from '../xyo-serialization/xyo-packer';
-import { XyoNetworkPipe } from '../@types/xyo-network';
+import { IXyoNetworkPipe } from '../@types/xyo-network';
 import { XyoBoundWitness } from '../xyo-bound-witness/xyo-bound-witness';
-import { XyoHashProvider } from '../@types/xyo-hashing';
+import { IXyoHashProvider } from '../@types/xyo-hashing';
 import { extractNestedBoundWitnesses } from './bound-witness-origin-chain-extractor';
-import { XyoBoundWitnessHandlerProvider, XyoBoundWitnessPayloadProvider, XyoBoundWitnessSuccessListener, XyoBoundWitnessInteractionFactory } from '../@types/xyo-node';
-import { XyoOriginBlockRepository, XyoOriginChainStateRepository } from '../@types/xyo-origin-chain';
+import { IXyoBoundWitnessHandlerProvider, IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessSuccessListener, IXyoBoundWitnessInteractionFactory } from '../@types/xyo-node';
+import { IXyoOriginBlockRepository, IXyoOriginChainStateRepository } from '../@types/xyo-origin-chain';
 import { XyoBase } from '../xyo-core-components/xyo-base';
 
-export class XyoBoundWitnessHandlerProviderImpl extends XyoBase implements XyoBoundWitnessHandlerProvider {
+export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBoundWitnessHandlerProvider {
 
   constructor (
     private readonly xyoPacker: XyoPacker,
-    private readonly hashingProvider: XyoHashProvider,
-    private readonly originState: XyoOriginChainStateRepository,
-    private readonly originChainNavigator: XyoOriginBlockRepository,
-    private readonly boundWitnessPayloadProvider: XyoBoundWitnessPayloadProvider,
-    private readonly boundWitnessSuccessListener: XyoBoundWitnessSuccessListener,
-    private readonly boundWitnessInteractionFactory: XyoBoundWitnessInteractionFactory
+    private readonly hashingProvider: IXyoHashProvider,
+    private readonly originState: IXyoOriginChainStateRepository,
+    private readonly originChainNavigator: IXyoOriginBlockRepository,
+    private readonly boundWitnessPayloadProvider: IXyoBoundWitnessPayloadProvider,
+    private readonly boundWitnessSuccessListener: IXyoBoundWitnessSuccessListener,
+    private readonly boundWitnessInteractionFactory: IXyoBoundWitnessInteractionFactory
   ) {
     super();
   }
 
-  public async handle(networkPipe: XyoNetworkPipe): Promise<XyoBoundWitness> {
+  public async handle(networkPipe: IXyoNetworkPipe): Promise<XyoBoundWitness> {
     const [payload, signers] = await Promise.all([
       this.boundWitnessPayloadProvider.getPayload(this.originState),
       this.originState.getSigners()

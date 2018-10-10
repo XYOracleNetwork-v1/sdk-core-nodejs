@@ -9,16 +9,16 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoSignature } from '../../@types/xyo-signing';
+import { IXyoSignature } from '../../@types/xyo-signing';
 import { XyoObject } from '../../xyo-core-components/xyo-object';
 
 /**
  * An RSA signature
  */
-export abstract class XyoRsaSignature  extends XyoObject implements XyoSignature {
+export abstract class XyoRsaSignature  extends XyoObject implements IXyoSignature {
 
   public abstract readonly rawSignature: Buffer;
-  public abstract verifySign(signature: XyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean>;
+  public abstract verifySign(signature: IXyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean>;
 
   /**
    * Returns the binary-representation of the signature

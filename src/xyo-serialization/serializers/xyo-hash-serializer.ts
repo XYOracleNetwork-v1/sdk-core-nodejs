@@ -11,7 +11,7 @@
 
 import { XyoHash } from '../../xyo-hashing/xyo-hash';
 import { XyoSerializer } from '../xyo-serializer';
-import { XyoHashProvider, XyoHashFactory } from '../../@types/xyo-hashing';
+import { IXyoHashProvider, IXyoHashFactory } from '../../@types/xyo-hashing';
 
 /**
  * The corresponding Creator class for `XyoHash`
@@ -22,8 +22,8 @@ export class XyoHashSerializer extends XyoSerializer<XyoHash> {
   constructor(
     private readonly minor: number,
     private readonly staticSize: number,
-    private readonly hashProvider: XyoHashProvider | undefined,
-    private readonly xyoHashFactory: XyoHashFactory
+    private readonly hashProvider: IXyoHashProvider | undefined,
+    private readonly xyoHashFactory: IXyoHashFactory
   ) {
     super();
   }

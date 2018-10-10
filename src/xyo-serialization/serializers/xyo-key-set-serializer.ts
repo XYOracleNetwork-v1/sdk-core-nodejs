@@ -13,7 +13,7 @@ import { XyoArrayUnpacker } from '../xyo-array-unpacker';
 import { XyoSerializer } from '../xyo-serializer';
 import { XyoKeySet } from '../../xyo-signing/xyo-key-set';
 import { XyoPacker } from '../xyo-packer';
-import { XyoPublicKey } from '../../@types/xyo-signing';
+import { IXyoPublicKey } from '../../@types/xyo-signing';
 
 export class XyoKeySetSerializer extends XyoSerializer<XyoKeySet> {
 
@@ -28,7 +28,7 @@ export class XyoKeySetSerializer extends XyoSerializer<XyoKeySet> {
 
   public deserialize(buffer: Buffer, xyoPacker: XyoPacker) {
     const unpackedArray = new XyoArrayUnpacker(xyoPacker, buffer, false, 2);
-    return new XyoKeySet(unpackedArray.array as XyoPublicKey[]);
+    return new XyoKeySet(unpackedArray.array as IXyoPublicKey[]);
   }
 
   public serialize(xyoKeySet: XyoKeySet, xyoPacker: XyoPacker) {

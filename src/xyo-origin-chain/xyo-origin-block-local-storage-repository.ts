@@ -10,18 +10,18 @@
  */
 
 import { XyoStoragePriority } from '../xyo-storage/xyo-storage-priority';
-import { XYOStorageProvider } from '../@types/xyo-storage';
+import { IXYOStorageProvider } from '../@types/xyo-storage';
 import { XyoBoundWitness } from '../xyo-bound-witness/xyo-bound-witness';
 import { XyoOriginBlock } from './xyo-origin-block';
 import { XyoPacker } from '../xyo-serialization/xyo-packer';
-import { XyoOriginBlockRepository } from '../@types/xyo-origin-chain';
+import { IXyoOriginBlockRepository } from '../@types/xyo-origin-chain';
 import { XyoHash } from '../xyo-hashing/xyo-hash';
 
 /**
  * An XyoOriginChainNavigator exposes an api for managing
  * an origin chain
  */
-export class XyoOriginBlockLocalStorageRepository implements XyoOriginBlockRepository {
+export class XyoOriginBlockLocalStorageRepository implements IXyoOriginBlockRepository {
 
   /**
    * Creates an instance of a XyoOriginChainNavigator
@@ -32,8 +32,8 @@ export class XyoOriginBlockLocalStorageRepository implements XyoOriginBlockRepos
 
   constructor(
     private readonly xyoPacker: XyoPacker,
-    private readonly originBlocksStorageProvider: XYOStorageProvider,
-    private readonly originBlockNextHashStorageProvider: XYOStorageProvider
+    private readonly originBlocksStorageProvider: IXYOStorageProvider,
+    private readonly originBlockNextHashStorageProvider: IXYOStorageProvider
   ) {}
 
   /**

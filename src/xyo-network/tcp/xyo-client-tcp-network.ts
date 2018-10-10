@@ -10,10 +10,10 @@
  */
 
 import {
-  XyoNetworkProviderInterface,
-  XyoNetworkProcedureCatalogue,
-  XyoNetworkPipe,
-  XyoNetworkAddressProvider
+  IXyoNetworkProviderInterface,
+  IXyoNetworkProcedureCatalogue,
+  IXyoNetworkPipe,
+  IXyoNetworkAddressProvider
 } from "../../@types/xyo-network";
 
 import net from 'net';
@@ -24,19 +24,20 @@ import { XyoTcpConnectionResult } from "./xyo-tcp-connection-result";
 import { XyoBase } from "../../xyo-core-components/xyo-base";
 import { XyoTcpNetworkPipe } from "./xyo-tcp-network-pipe";
 
-export class XyoClientTcpNetwork extends XyoBase implements XyoNetworkProviderInterface {
+export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProviderInterface {
 
   private shouldStopPromise: (() => void) | undefined = undefined;
   private isLooping = false;
 
-  constructor (private readonly networkAddressProvider: XyoNetworkAddressProvider) {
+  constructor (private readonly networkAddressProvider: IXyoNetworkAddressProvider) {
     super();
   }
 
-  public async find(catalogue: XyoNetworkProcedureCatalogue): Promise<XyoNetworkPipe> {
+  public async find(catalogue: IXyoNetworkProcedureCatalogue): Promise<IXyoNetworkPipe> {
+    this.logInfo(`Attempting to find peers`);
     return new Promise((resolve, reject) => {
       this.loop(catalogue, resolve, reject);
-    }) as Promise<XyoNetworkPipe>;
+    }) as Promise<IXyoNetworkPipe>;
   }
 
   public stopServer(): Promise<void> {
@@ -54,17 +55,21 @@ export class XyoClientTcpNetwork extends XyoBase implements XyoNetworkProviderIn
   }
 
   private async loop(
-    catalogue: XyoNetworkProcedureCatalogue,
-    resolve: (networkPipe: XyoNetworkPipe) => void,
-    reject: (error?: any) => void) {
+    catalogue: IXyoNetworkProcedureCatalogue,
+    resolve: (networkPipe: IXyoNetworkPipe) => void,
+    reject: (error?: any) => void
+  ) {
+    this.logInfo(`Run loop entered`);
     if (this.shouldStopPromise) {
+      this.logInfo(`Run loop will end`);
       this.isLooping = false;
       reject();
       return this.shouldStopPromise();
     }
 
+    this.logInfo(`Will try to find next address`);
     const nextAddress = await this.networkAddressProvider.next();
-
+    this.logInfo(`Found next address ${nextAddress}`);
     if (!nextAddress) {
       return setTimeout(() => {
         this.loop(catalogue, resolve, reject);
@@ -72,7 +77,9 @@ export class XyoClientTcpNetwork extends XyoBase implements XyoNetworkProviderIn
     }
 
     try {
+      this.logInfo(`Trying to get connection`);
       const connectionResult = await this.getConnection(nextAddress, catalogue);
+      this.logInfo(`Connection received`);
       return resolve(new XyoTcpNetworkPipe(connectionResult));
     } catch (err) {
       this.logError(`There was an error creating client connection, ${err}`);
@@ -84,7 +91,7 @@ export class XyoClientTcpNetwork extends XyoBase implements XyoNetworkProviderIn
 
   private getConnection(
     nextAddress: {port: number, host: string},
-    catalogue: XyoNetworkProcedureCatalogue
+    catalogue: IXyoNetworkProcedureCatalogue
   ): Promise<XyoTcpConnectionResult> {
     return new Promise((resolve, reject) => {
       const client = net.createConnection(nextAddress.port, nextAddress.host, () => {
@@ -115,9 +122,10 @@ export class XyoClientTcpNetwork extends XyoBase implements XyoNetworkProviderIn
         client.write(negotiationBuffer);
       });
 
-      function onError(err: any) {
+      const onError = (err: any) => {
+        this.logError(`An error occurred while getting connection`);
         reject(err);
-      }
+      };
 
       client.on('error', onError);
 

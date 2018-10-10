@@ -10,7 +10,7 @@
  */
 
 import { XyoArray } from '../xyo-core-components/arrays/xyo-array';
-import { XyoPublicKey } from '../@types/xyo-signing';
+import { IXyoPublicKey } from '../@types/xyo-signing';
 
 /**
  * A non-homogenous wrapper class for a collections of different keys
@@ -30,7 +30,7 @@ export class XyoKeySet extends XyoArray {
    * @param array The collection of keys to wrap
    */
 
-  constructor (public readonly array: XyoPublicKey[]) {
+  constructor (public readonly array: IXyoPublicKey[]) {
     super(undefined, undefined, XyoKeySet.major, XyoKeySet.minor, 2, array);
   }
 }

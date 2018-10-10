@@ -17,7 +17,7 @@ import { XyoPreviousHash } from "../xyo-hashing/xyo-previous-hash";
 import { XyoBase } from "../xyo-core-components/xyo-base";
 import { XyoKeySet } from "../xyo-signing/xyo-key-set";
 import { XyoNextPublicKey } from "../xyo-signing/xyo-next-public-key";
-import { XyoPublicKey } from '../@types/xyo-signing';
+import { IXyoPublicKey } from '../@types/xyo-signing';
 
 export class XyoOriginChainVerifier extends XyoBase {
 
@@ -26,11 +26,11 @@ export class XyoOriginChainVerifier extends XyoBase {
    * correspond the earliest origin block and the last element should correspond to the latest
    */
 
-  public async verify(originBlocks: XyoBoundWitness[]): Promise<XyoOriginVerificationResult> {
+  public async verify(originBlocks: XyoBoundWitness[]): Promise<IXyoOriginVerificationResult> {
     try {
       await originBlocks.reduce(async (promiseChain, originBlock, currentIndex) => {
         return this.validateBlockReducer(originBlock, await promiseChain, currentIndex === 0);
-      }, Promise.resolve() as Promise<PreviousBlockInfo | undefined>);
+      }, Promise.resolve() as Promise<IPreviousBlockInfo | undefined>);
     } catch (err) {
       this.logError(`Could not validate origin-blocks with error ${err.message}`);
 
@@ -47,7 +47,7 @@ export class XyoOriginChainVerifier extends XyoBase {
 
   private async validateBlockReducer(
     originBlock: XyoBoundWitness,
-    previousBlockInfo: PreviousBlockInfo | undefined,
+    previousBlockInfo: IPreviousBlockInfo | undefined,
     isFirstBlock: boolean
   ) {
     if (!isFirstBlock && !previousBlockInfo) {
@@ -56,7 +56,7 @@ export class XyoOriginChainVerifier extends XyoBase {
 
     await originBlock.validateSignatures();
 
-    const parties: PreviousBlockParty[] = [];
+    const parties: IPreviousBlockParty[] = [];
 
     const matches = await originBlock.payloads.reduce(async (matchesPromise, payload, payloadIndex) => {
       const matchesForPreviousHash = await matchesPromise;
@@ -90,8 +90,8 @@ export class XyoOriginChainVerifier extends XyoBase {
   private async validatePayloadReducer(
     payload: XyoPayload,
     matchesForPreviousHash: number[],
-    parties: PreviousBlockParty[],
-    previousBlockInfo: PreviousBlockInfo | undefined,
+    parties: IPreviousBlockParty[],
+    previousBlockInfo: IPreviousBlockInfo | undefined,
     publicKeySet: XyoKeySet,
     payloadIndex: number
   ) {
@@ -130,7 +130,7 @@ export class XyoOriginChainVerifier extends XyoBase {
     }
 
     const serializedPublicKeySet = publicKeySet.array.map((pk) => {
-      return (pk as XyoPublicKey).getRawPublicKey();
+      return (pk as IXyoPublicKey).getRawPublicKey();
     });
 
     const foundMatches = matchedIndexes.filter((matchedIndex) => {
@@ -170,19 +170,19 @@ export class XyoOriginChainVerifier extends XyoBase {
   }
 }
 
-interface PreviousBlockInfo {
+interface IPreviousBlockInfo {
   signingData: Buffer;
-  parties: PreviousBlockParty[];
+  parties: IPreviousBlockParty[];
 }
 
-interface PreviousBlockParty { // block-party lol
+interface IPreviousBlockParty { // block-party lol
   index?: XyoIndex;
   publicKeys?: XyoKeySet;
   nextPublicKey?: XyoObject;
   isAssigned?: boolean;
 }
 
-interface XyoOriginVerificationResult {
+export interface IXyoOriginVerificationResult {
   isValid: boolean;
   failureReason?: string;
 }

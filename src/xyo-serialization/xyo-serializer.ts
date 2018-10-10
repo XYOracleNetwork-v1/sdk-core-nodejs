@@ -26,7 +26,7 @@ export abstract class XyoSerializer<T extends XyoObject> extends XyoBase {
    * according to xyo-packing protocol
    */
 
-  public abstract description: XyoSerializationDescription;
+  public abstract description: IXyoSerializationDescription;
 
   /**
    * Should return a Buffer representation of the
@@ -91,7 +91,7 @@ export abstract class XyoSerializer<T extends XyoObject> extends XyoBase {
   }
 }
 
-export interface XyoSerializationDescription {
+export interface IXyoSerializationDescription {
   major: number;
   minor: number;
   staticSize?: number;

@@ -13,7 +13,7 @@ import { XyoNextPublicKey } from '../../xyo-signing/xyo-next-public-key';
 import { XyoSerializer } from '../xyo-serializer';
 import { XyoPacker } from '../xyo-packer';
 import { XyoError } from '../../xyo-core-components/xyo-error';
-import { XyoPublicKey } from '../../@types/xyo-signing';
+import { IXyoPublicKey } from '../../@types/xyo-signing';
 
 export class XyoNextPublicKeySerializer extends XyoSerializer<XyoNextPublicKey> {
 
@@ -27,7 +27,7 @@ export class XyoNextPublicKeySerializer extends XyoSerializer<XyoNextPublicKey> 
   }
 
   public deserialize(buffer: Buffer, xyoPacker: XyoPacker) {
-    return new XyoNextPublicKey(xyoPacker.deserialize(buffer) as XyoPublicKey);
+    return new XyoNextPublicKey(xyoPacker.deserialize(buffer) as IXyoPublicKey);
   }
 
   public serialize(nextPublicKey: XyoNextPublicKey, xyoPacker: XyoPacker) {

@@ -15,24 +15,24 @@ import { XyoBoundWitnessTransfer } from '../../xyo-bound-witness/xyo-bound-witne
 import { XyoBoundWitness } from '../../xyo-bound-witness/xyo-bound-witness';
 import { XYO_TCP_CATALOGUE_LENGTH_IN_BYTES, XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES } from '../../xyo-network/tcp/xyo-tcp-network-constants';
 import { XyoError } from '../../xyo-core-components/xyo-error';
-import { XyoNodeInteraction } from '../../@types/xyo-node';
-import { XyoNetworkPipe } from '../../@types/xyo-network';
+import { IXyoNodeInteraction } from '../../@types/xyo-node';
+import { IXyoNetworkPipe } from '../../@types/xyo-network';
 import { XyoBase } from '../../xyo-core-components/xyo-base';
 import { XyoPacker } from '../../xyo-serialization/xyo-packer';
-import { XyoSigner } from '../../@types/xyo-signing';
+import { IXyoSigner } from '../../@types/xyo-signing';
 import { XyoPayload } from '../../xyo-core-components/xyo-payload';
 
 /**
  * An `XyoBoundWitnessInteraction` manages a "session"
  * between two networked nodes.
  */
-export abstract class XyoBoundWitnessServerInteraction extends XyoBase implements XyoNodeInteraction<XyoBoundWitness> {
+export abstract class XyoBoundWitnessServerInteraction extends XyoBase implements IXyoNodeInteraction<XyoBoundWitness> {
 
   public abstract catalogueItem: CatalogueItem;
 
   constructor(
     private readonly packer: XyoPacker,
-    private readonly signers: XyoSigner[],
+    private readonly signers: IXyoSigner[],
     private readonly payload: XyoPayload
   ) {
     super();
@@ -42,7 +42,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
    * Does a bound witness with another node
    */
 
-  public async run(networkPipe: XyoNetworkPipe): Promise<XyoBoundWitness> {
+  public async run(networkPipe: IXyoNetworkPipe): Promise<XyoBoundWitness> {
     let disconnected = false;
 
     return new Promise(async (resolve, reject) => {
