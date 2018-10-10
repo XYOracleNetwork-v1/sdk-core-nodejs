@@ -31,7 +31,7 @@ export interface IXyoPeerConnectionHandler {
   handlePeerConnection: xyoPeerConnectionHandler;
 }
 
-export interface IXyoPeerConnectionDelegateInterface {
+export interface IXyoPeerConnectionDelegate {
   handlePeerConnection: xyoPeerConnectionHandler;
   provideConnection(): Promise<IXyoNetworkPipe>;
   stopProvidingConnections(): Promise<void>;

@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoPeerConnectionDelegateInterface } from '../@types/xyo-node';
+import { IXyoPeerConnectionDelegate } from '../@types/xyo-node';
 import { XyoBase } from '../xyo-core-components/xyo-base';
 
 /**
@@ -26,7 +26,7 @@ export class XyoNode extends XyoBase {
   private isLooping: boolean = false;
   private shouldStopLooping: boolean = false;
 
-  constructor(private readonly peerConnectionDelegate: IXyoPeerConnectionDelegateInterface) {
+  constructor(private readonly peerConnectionDelegate: IXyoPeerConnectionDelegate) {
     super();
   }
 

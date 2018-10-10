@@ -10,10 +10,10 @@
  */
 
 import { IXyoNetworkProviderInterface, IXyoNetworkProcedureCatalogue, IXyoNetworkPipe } from '../../@types/xyo-network';
-import { IXyoPeerConnectionDelegateInterface, IXyoPeerConnectionHandler } from '../../@types/xyo-node';
+import { IXyoPeerConnectionDelegate, IXyoPeerConnectionHandler } from '../../@types/xyo-node';
 import { XyoBase } from '../../xyo-core-components/xyo-base';
 
-export class XyoPeerConnectionDelegate extends XyoBase implements IXyoPeerConnectionDelegateInterface {
+export class XyoPeerConnectionDelegate extends XyoBase implements IXyoPeerConnectionDelegate {
 
   constructor (
     private readonly network: IXyoNetworkProviderInterface,

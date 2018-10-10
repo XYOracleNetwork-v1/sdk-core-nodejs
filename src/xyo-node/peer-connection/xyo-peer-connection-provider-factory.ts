@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoPeerConnectionDelegateInterface, IXyoBoundWitnessSuccessListener, IXyoCategoryRouter, IXyoBoundWitnessHandlerProvider, IXyoCatalogueResolver } from '../../@types/xyo-node';
+import { IXyoPeerConnectionDelegate, IXyoBoundWitnessSuccessListener, IXyoCategoryRouter, IXyoBoundWitnessHandlerProvider, IXyoCatalogueResolver } from '../../@types/xyo-node';
 import { XyoPeerConnectionDelegate } from './xyo-peer-connection-provider';
 import { IXyoNetworkProcedureCatalogue, IXyoNetworkProviderInterface } from '../../@types/xyo-network';
 import { XyoPacker } from '../../xyo-serialization/xyo-packer';
@@ -38,7 +38,7 @@ export class XyoPeerConnectionProviderFactory implements IXyoCategoryRouter, IXy
     private readonly catalogueResolver?: IXyoCatalogueResolver
   ) {}
 
-  public newInstance(): IXyoPeerConnectionDelegateInterface {
+  public newInstance(): IXyoPeerConnectionDelegate {
     return new XyoPeerConnectionDelegate(
       this.network,
       this.catalogue,
