@@ -4,42 +4,58 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 12:07:00 pm
+ * @Last modified time: Thursday, 11th October 2018 3:54:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoLogger } from "./xyo-logger";
 
+/**
+ * A general purpose base class that can be used to incorporate
+ * base functionality into the classes that extend it.
+ *
+ * This can be extended to include cross-cutting features like
+ * logging that are not domain-specific.
+ *
+ * @export
+ * @abstract
+ * @class XyoBase
+ */
 export abstract class XyoBase {
-  public logger!: XyoLogger;
 
+  /** Exposes a logger instance that can be used to log to central output stream */
+  public static logger: XyoLogger;
+
+  /** Logs to the `info` level */
   protected logInfo(message?: any, ...optionalParams: any[]) {
     const resolvedOptionalParams = (optionalParams && optionalParams.length && optionalParams) || undefined;
     if (resolvedOptionalParams) {
-      this.logger.info(`${this.constructor.name}: ${message}`, resolvedOptionalParams);
+      XyoBase.logger.info(`${this.constructor.name}: ${message}`, resolvedOptionalParams);
     } else {
-      this.logger.info(`${this.constructor.name}: ${message}`);
+      XyoBase.logger.info(`${this.constructor.name}: ${message}`);
     }
   }
 
+  /** Logs to the `error` level */
   protected logError(message?: any, ...optionalParams: any[]) {
     const resolvedOptionalParams = (optionalParams && optionalParams.length && optionalParams) || undefined;
     if (resolvedOptionalParams) {
-      this.logger.error(`${this.constructor.name}: ${message}`, resolvedOptionalParams);
+      XyoBase.logger.error(`${this.constructor.name}: ${message}`, resolvedOptionalParams);
     } else {
-      this.logger.error(`${this.constructor.name}: ${message}`);
+      XyoBase.logger.error(`${this.constructor.name}: ${message}`);
     }
   }
 
+  /** Logs to the `warn` level */
   protected logWarn(message?: any, ...optionalParams: any[]) {
     const resolvedOptionalParams = (optionalParams && optionalParams.length && optionalParams) || undefined;
     if (resolvedOptionalParams) {
-      this.logger.warn(`${this.constructor.name}: ${message}`, resolvedOptionalParams);
+      XyoBase.logger.warn(`${this.constructor.name}: ${message}`, resolvedOptionalParams);
     } else {
-      this.logger.warn(`${this.constructor.name}: ${message}`);
+      XyoBase.logger.warn(`${this.constructor.name}: ${message}`);
     }
   }
 }
 
-XyoBase.prototype.logger = new XyoLogger();
+XyoBase.logger = new XyoLogger();

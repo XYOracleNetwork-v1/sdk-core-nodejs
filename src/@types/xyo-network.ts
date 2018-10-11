@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 10th October 2018 4:22:40 pm
+ * @Last modified time: Thursday, 11th October 2018 1:46:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -102,5 +102,10 @@ export interface IXyoNetworkAddressProvider {
    * discovery protocol.
    */
 
-  next(): Promise<{host: string, port: number}>;
+  next(): Promise<IXyoTCPNetworkAddress>;
+}
+
+export interface IXyoTCPNetworkAddress {
+  host: string;
+  port: number;
 }

@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-hash-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 11:58:45 am
+ * @Last modified time: Thursday, 11th October 2018 1:19:06 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoHash } from './xyo-hash';
 import crypto from 'crypto';
-import { XyoError } from '../xyo-core-components/xyo-error';
+import { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
 import { IXyoHashProvider, IXyoHashFactory } from '../@types/xyo-hashing';
 
 /**
@@ -56,7 +56,7 @@ export class XyoNativeBaseHashProvider implements IXyoHashProvider {
     } catch (err) {
       throw new XyoError(
         `Could not locate crypto hash-provider ${this.hashAlgorithm}`,
-        XyoError.errorType.ERR_CRITICAL
+        XyoErrors.CRITICAL
       );
     }
   }

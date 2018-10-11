@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:12:27 pm
+ * @Last modified time: Thursday, 11th October 2018 1:27:39 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,11 +14,20 @@ import { XyoSerializer } from '../xyo-serialization/xyo-serializer';
 import { IXyoHashProvider, IXyoHashFactory } from '../@types/xyo-hashing';
 
 /**
- * The corresponding Creator class for `XyoHash`
+ * A general-purpose XyoHash Serializer class for `XyoHash`
  */
 
 export class XyoHashSerializer extends XyoSerializer<XyoHash> {
 
+  /**
+   * Creates an instance of XyoHashSerializer.
+   *
+   * @param {number} minor The corresponding minor value of the XyoObject
+   * @param {number} staticSize The static size of the hash in bytes
+   * @param {(IXyoHashProvider | undefined)} hashProvider The corresponding hashProvider
+   * @param {IXyoHashFactory} xyoHashFactory A hash-factory
+   * @memberof XyoHashSerializer
+   */
   constructor(
     private readonly minor: number,
     private readonly staticSize: number,
@@ -37,10 +46,12 @@ export class XyoHashSerializer extends XyoSerializer<XyoHash> {
     };
   }
 
+  /** Get object representation of a XyoHash from bytes */
   public deserialize(buffer: Buffer) {
     return this.xyoHashFactory.newInstance(this.hashProvider, buffer);
   }
 
+  /** Get the bytes representation of a XyoHash from object */
   public serialize(publicKey: XyoHash) {
     return publicKey.hash;
   }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-packer.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 10:59:20 am
+ * @Last modified time: Thursday, 11th October 2018 5:35:45 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,20 +18,16 @@ import {
   TestXyoObjectTypedArraySerializer,
   TestXyoObjectTypedArray
 } from '../xyo-test-utils';
+import { XyoObject } from '../../xyo-core-components/xyo-object';
 
-let packer: XyoPacker | undefined;
 describe(`XyoPacker`, () => {
   beforeAll(() => {
-    packer = new XyoPacker();
-    packer.registerSerializerDeserializer(TestXyoObject, new TestXyoObjectSerializer());
-    packer.registerSerializerDeserializer(TestXyoObjectTypedArray, new TestXyoObjectTypedArraySerializer());
+    XyoObject.packer = new XyoPacker();
+    XyoObject.packer.registerSerializerDeserializer(TestXyoObject, new TestXyoObjectSerializer());
+    XyoObject.packer.registerSerializerDeserializer(TestXyoObjectTypedArray, new TestXyoObjectTypedArraySerializer());
   });
 
   it(`Should serialize and deserialize objects`, () => {
-    if (!packer) {
-      throw new Error(`Tests not initialized`);
-    }
-
     const { major, minor } = TestXyoObject;
     const rawValue = 'hello world';
     const value = Buffer.from(rawValue);
@@ -52,28 +48,24 @@ describe(`XyoPacker`, () => {
 
     const testValue = new TestXyoObject(rawValue);
 
-    const typedSerialization = packer.serialize(testValue, true);
+    const typedSerialization = testValue.serialize(true);
     expect(typedSerialization.equals(typedSerialized)).toBe(true);
 
-    const untypedSerialization = packer.serialize(testValue, false);
+    const untypedSerialization = testValue.serialize(false);
     expect(untypedSerialization.equals(untypedSerialized)).toBe(true);
 
-    const rawData = packer.serialize(testValue, undefined);
+    const rawData = testValue.serialize(undefined);
     expect(value.equals(rawData)).toBe(true);
   });
 
   it(`Should serialize and deserialize arrays`, () => {
-    if (!packer) {
-      throw new Error(`Tests not initialized`);
-    }
-
     const array = new TestXyoObjectTypedArray([new TestXyoObject('hello world')]);
     const { major, minor } = TestXyoObjectTypedArray;
     const { major: elementMajor, minor: elementMinor } = TestXyoObject;
 
-    const rawSerialization = packer.serialize(array, undefined);
-    const typedSerialization = packer.serialize(array, true);
-    const untypedSerialization = packer.serialize(array, false);
+    const rawSerialization = array.serialize(undefined);
+    const typedSerialization = array.serialize(true);
+    const untypedSerialization = array.serialize(false);
 
     expect(rawSerialization[0]).toBe(elementMajor);
     expect(rawSerialization[1]).toBe(elementMinor);

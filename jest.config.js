@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: jest.config.js
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 2nd October 2018 3:53:55 pm
+ * @Last modified time: Thursday, 11th October 2018 2:50:58 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,6 +19,6 @@ module.exports = {
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest"
   },
-  testMatch: ["**/test/**/*.spec.(ts)"],
+  testMatch: ["**/spec/**/*.spec.(ts)"],
   testEnvironment: "node"
 };

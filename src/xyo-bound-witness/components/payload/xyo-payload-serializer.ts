@@ -4,15 +4,15 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-payload-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 11:29:23 am
+ * @Last modified time: Thursday, 11th October 2018 5:14:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoPayload } from './xyo-payload';
 import { XyoSerializer } from '../../../xyo-serialization/xyo-serializer';
-import { XyoPacker } from '../../../xyo-serialization/xyo-packer';
 import { XyoMultiTypeArrayInt } from '../../../xyo-core-components/arrays/multi/xyo-multi-type-array-int';
+import { XyoObject } from '../../../xyo-core-components/xyo-object';
 
 /** A serializer for the `XyoPayload` object */
 export class XyoPayloadSerializer extends XyoSerializer<XyoPayload> {
@@ -27,23 +27,23 @@ export class XyoPayloadSerializer extends XyoSerializer<XyoPayload> {
   }
 
   /** Get the byte representation from the object representation for a XyoPayload */
-  public serialize(xyoObject: XyoPayload, xyoPacker: XyoPacker) {
+  public serialize(xyoObject: XyoPayload) {
     return Buffer.concat([
-      xyoPacker.serialize(xyoObject.signedPayload, false),
-      xyoPacker.serialize(xyoObject.unsignedPayload, false)
+      xyoObject.signedPayload.serialize(false),
+      xyoObject.unsignedPayload.serialize(false)
     ]);
   }
 
   /** Get the object representation from the byte representation for a XyoPayload */
-  public deserialize(buffer: Buffer, xyoPacker: XyoPacker): XyoPayload {
+  public deserialize(buffer: Buffer): XyoPayload {
     const signedPayloadSize = buffer.readUInt32BE(4);
     const unsignedPayloadSize = buffer.readUInt32BE(4 + signedPayloadSize);
     const signedPayload = buffer.slice(4, 4 + signedPayloadSize);
     const unsignedPayload = buffer.slice(4 + signedPayloadSize, 4 + signedPayloadSize + unsignedPayloadSize);
 
-    const serializer = xyoPacker.getSerializerByDescriptor(XyoMultiTypeArrayInt);
-    const signedPayloadCreated = serializer.deserialize(signedPayload, xyoPacker);
-    const unsignedPayloadCreated = serializer.deserialize(unsignedPayload, xyoPacker);
+    const serializer = XyoMultiTypeArrayInt.getSerializer<XyoMultiTypeArrayInt>();
+    const signedPayloadCreated = serializer.deserialize(signedPayload);
+    const unsignedPayloadCreated = serializer.deserialize(unsignedPayload);
     return new XyoPayload(signedPayloadCreated, unsignedPayloadCreated);
   }
 }

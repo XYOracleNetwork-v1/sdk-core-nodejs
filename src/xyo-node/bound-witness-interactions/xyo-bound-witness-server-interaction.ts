@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:11:32 pm
+ * @Last modified time: Thursday, 11th October 2018 5:19:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,11 +14,10 @@ import { CatalogueItem } from '../../xyo-network/xyo-catalogue-item';
 import { XyoBoundWitnessTransfer } from '../../xyo-bound-witness/bound-witness/xyo-bound-witness-transfer';
 import { XyoBoundWitness } from '../../xyo-bound-witness/bound-witness/xyo-bound-witness';
 import { XYO_TCP_CATALOGUE_LENGTH_IN_BYTES, XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES } from '../../xyo-network/tcp/xyo-tcp-network-constants';
-import { XyoError } from '../../xyo-core-components/xyo-error';
+import { XyoError, XyoErrors } from '../../xyo-core-components/xyo-error';
 import { IXyoNodeInteraction } from '../../@types/xyo-node';
 import { IXyoNetworkPipe } from '../../@types/xyo-network';
 import { XyoBase } from '../../xyo-core-components/xyo-base';
-import { XyoPacker } from '../../xyo-serialization/xyo-packer';
 import { IXyoSigner } from '../../@types/xyo-signing';
 import { XyoPayload } from '../../xyo-bound-witness/components/payload/xyo-payload';
 
@@ -31,7 +30,6 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
   public abstract catalogueItem: CatalogueItem;
 
   constructor(
-    private readonly packer: XyoPacker,
     private readonly signers: IXyoSigner[],
     private readonly payload: XyoPayload
   ) {
@@ -64,7 +62,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
           const boundWitnessTransfer1 = await boundWitness.incomingData(undefined, false);
 
           /** Serialize the transfer value */
-          const bytes = this.packer.serialize(boundWitnessTransfer1, false);
+          const bytes = boundWitnessTransfer1.serialize(false);
 
           /** Tell the other node this is the catalogue item you chose */
           const catalogueBuffer = Buffer.alloc(XYO_TCP_CATALOGUE_LENGTH_IN_BYTES);
@@ -86,15 +84,14 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
             this.logInfo(`Received BoundWitnessTransfer 2`, response!.toString('hex'));
 
             /** Deserialize bytes into bound witness  */
-            const transferObj = this.packer.getSerializerByDescriptor(XyoBoundWitnessTransfer)
-              .deserialize(response!, this.packer);
+            const transferObj = XyoBoundWitnessTransfer.getSerializer<XyoBoundWitnessTransfer>().deserialize(response!);
 
             /** Add transfer to bound witness */
             const transfer = await boundWitness.incomingData(transferObj, false);
 
             if (!disconnected) {
               /** serialize the bound witness transfer */
-              const transferBytes = this.packer.serialize(transfer, false);
+              const transferBytes = transfer.serialize(false);
 
               /** Send transfer data, but dont wait for reply */
               this.logInfo(`Sending final Transfer 3. Will disconnect`);
@@ -114,13 +111,13 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
       }
 
       return reject(
-        new XyoError(`Peer disconnected in xyo-bound-witness-interaction`, XyoError.errorType.ERR_CRITICAL)
+        new XyoError(`Peer disconnected in xyo-bound-witness-interaction`, XyoErrors.CRITICAL)
       );
     }) as Promise<XyoBoundWitness>;
   }
 
   private async startBoundWitness(): Promise<XyoZigZagBoundWitness> {
-    const boundWitness = new XyoZigZagBoundWitness(this.packer, this.signers, this.payload);
+    const boundWitness = new XyoZigZagBoundWitness(this.signers, this.payload);
     return boundWitness;
   }
 }

@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 10th October 2018 5:45:46 pm
+ * @Last modified time: Thursday, 11th October 2018 5:29:03 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoSerializer } from './xyo-serializer';
 import { XyoObject } from '../xyo-core-components/xyo-object';
-import { XyoError } from '../xyo-core-components/xyo-error';
+import { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
 import { XyoBase } from '../xyo-core-components/xyo-base';
 import { IXyoObjectDescriptor } from '../@types/xyo-serialization';
 
@@ -73,7 +73,7 @@ export class XyoPacker extends XyoBase {
         if (index < this.serializerDeserializersCollection.length) {
           // Attempt to serialize
           const serializer = this.serializerDeserializersCollection[index];
-          const serialized = serializer.serialize(object, this);
+          const serialized = serializer.serialize(object);
           if (typed === undefined) {
             return serialized;
           }
@@ -91,13 +91,13 @@ export class XyoPacker extends XyoBase {
 
     throw new XyoError(
       `Could not find serializer for major ${object.major} and minor ${object.minor}`,
-      XyoError.errorType.ERR_CREATOR_MAPPING
+      XyoErrors.CREATOR_MAPPING
     );
   }
 
-  public deserialize(buffer: Buffer): XyoObject {
+  public deserialize<T extends XyoObject>(buffer: Buffer): T {
     if (!buffer || buffer.length < 2) {
-      throw new XyoError(`Unable to deserialize buffer`, XyoError.errorType.ERR_CREATOR_MAPPING);
+      throw new XyoError(`Unable to deserialize buffer`, XyoErrors.CREATOR_MAPPING);
     }
 
     const major = buffer[0];
@@ -114,7 +114,7 @@ export class XyoPacker extends XyoBase {
           // Attempt to serialize
           try {
             const serializer = this.serializerDeserializersCollection[index];
-            return serializer.deserialize(srcBuffer, this);
+            return serializer.deserialize(srcBuffer);
           } catch (err) {
             const errorMessage = `An error occurred deserializing an object with major ${major}, minor ${minor}.
             \n\nHexBuffer: ${srcBuffer.toString('hex')}`;
@@ -125,13 +125,10 @@ export class XyoPacker extends XyoBase {
       }
     }
 
-    throw new XyoError(
-      `Could not find serializer for major ${major} and minor ${minor}`,
-      XyoError.errorType.ERR_CREATOR_MAPPING
-    );
+    throw new XyoError(`Could not find serializer for major ${major} and minor ${minor}`, XyoErrors.CREATOR_MAPPING);
   }
 
-  public getSerializerByMajorMinor(major: number, minor: number): XyoSerializer<XyoObject> | undefined {
+  public getSerializerByMajorMinor<T extends XyoObject>(major: number, minor: number): XyoSerializer<T> | undefined {
     const index = this.serializerDeserializerMajorMinorIndex[major][minor];
     if (index < this.serializerDeserializersCollection.length) {
       return this.serializerDeserializersCollection[index];
@@ -146,7 +143,7 @@ export class XyoPacker extends XyoBase {
     if (serializerIndex === undefined || serializerIndex >= this.serializerDeserializersCollection.length) {
       throw new XyoError(
         `Unable to locate serializer [${descriptor.major}][${descriptor.major}]`,
-        XyoError.errorType.ERR_CREATOR_MAPPING
+        XyoErrors.CREATOR_MAPPING
       );
     }
 

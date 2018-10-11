@@ -10,7 +10,30 @@ Core functionality for the XYO nodejs projects. This repository implements
 the core objects used in the XYO protocol. Additionally it provides core
 XYO features like performing bound-witnesses, hashing, signing, and serialization.
 
+The XYO protocol for creating origin-blocks is specified [here](https://docs.xyo.network/XYO-Yellow-Paper.pdf).
+In it, it specifies the behavior of how a node on the XYO network should create
+bound-witnesses. Importantly, the behavior does not specify any technology
+constraints around transport layers, cryptographic algorithms, or hashing algorithms.
+As such, the design of the system is aimed at trying to abstract these concepts
+so that the concrete implementations of these components can be swapped out so long
+as conform to the correct interfaces.
+
+Practically, this library uses TypeScript, which transpiles to JavaScript. Additionally, a TCP
+network provider has been implemented. Furthermore, some of the most popular public-key cryptography
+algorithms and hashing algorithms have been wrapped and made available to the core library as well.
+If you're favorite crypto signing algorithm is not yet supported, we welcome pull-requests and suggestions.
+
+[Here](https://github.com/XYOracleNetwork/spec-coreobjectmodel-tex) is a link to the core object model that contains
+an index of major/minor values to their respective objects.
+
 ## Getting started
+
+Since this project is meant to function as a library there is no application to be run. There are number of tests
+that can be run from the command-line using.
+
+```sh
+  yarn test
+```
 
 ### Install dependencies
 

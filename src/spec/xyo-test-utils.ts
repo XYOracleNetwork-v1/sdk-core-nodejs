@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: test-utils.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 10:59:17 am
+ * @Last modified time: Thursday, 11th October 2018 5:10:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,7 +13,6 @@
 
 import { XyoObject } from '../xyo-core-components/xyo-object';
 import { XyoSerializer } from '../xyo-serialization/xyo-serializer';
-import { XyoPacker } from '../xyo-serialization/xyo-packer';
 import { XyoArray } from '../xyo-core-components/arrays/xyo-array';
 import { XyoArrayUnpacker } from '../xyo-serialization/xyo-array-unpacker';
 
@@ -38,11 +37,11 @@ export class TestXyoObjectSerializer extends XyoSerializer<TestXyoObject> {
     };
   }
 
-  public serialize(testObject: TestXyoObject, xyoPacker: XyoPacker) {
+  public serialize(testObject: TestXyoObject) {
     return Buffer.from(testObject.value);
   }
 
-  public deserialize(buffer: Buffer, xyoPacker: XyoPacker) {
+  public deserialize(buffer: Buffer) {
     const size = buffer.readUInt32BE(0);
     const valueBuffer = buffer.slice(4, 4 + size);
     return new TestXyoObject(valueBuffer.toString());
@@ -77,10 +76,10 @@ export class TestXyoObjectTypedArraySerializer extends XyoSerializer<TestXyoObje
     };
   }
 
-  public serialize(testXyoObjectTypedArray: TestXyoObjectTypedArray, xyoPacker: XyoPacker) {
+  public serialize(testXyoObjectTypedArray: TestXyoObjectTypedArray) {
     const packedElements = Buffer.concat(
       testXyoObjectTypedArray.array.map(element =>
-      xyoPacker.serialize(element, false))
+        element.serialize(false))
     );
 
     return Buffer.concat([
@@ -89,8 +88,8 @@ export class TestXyoObjectTypedArraySerializer extends XyoSerializer<TestXyoObje
     ]);
   }
 
-  public deserialize(buffer: Buffer, xyoPacker: XyoPacker) {
-    const unpackedArray = new XyoArrayUnpacker(xyoPacker, buffer, true, 4);
+  public deserialize(buffer: Buffer) {
+    const unpackedArray = new XyoArrayUnpacker(buffer, true, 4);
     return new TestXyoObjectTypedArray(unpackedArray.array as TestXyoObject[]);
   }
 }

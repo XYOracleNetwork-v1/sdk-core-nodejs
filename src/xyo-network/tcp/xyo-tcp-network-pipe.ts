@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network-pipe.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 11:57:28 am
+ * @Last modified time: Thursday, 11th October 2018 1:19:07 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoNetworkPipe } from '../../@types/xyo-network';
 import { XyoTcpConnectionResult } from './xyo-tcp-connection-result';
-import { XyoError } from '../../xyo-core-components/xyo-error';
+import { XyoError, XyoErrors } from '../../xyo-core-components/xyo-error';
 import { CatalogueItem } from '../xyo-catalogue-item';
 
 /**
@@ -129,7 +129,7 @@ export class XyoTcpNetworkPipe implements IXyoNetworkPipe {
       if (data === undefined) {
         if (chunk.length < 4) {
           this.connectionResult.socket.end();
-          return reject(new XyoError(`Corrupt payload`, XyoError.errorType.ERR_CRITICAL));
+          return reject(new XyoError(`Corrupt payload`, XyoErrors.CRITICAL));
         }
 
         sizeOfPayload = chunk.readUInt32BE(0);

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-peer-connection-provider-builder.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 10th October 2018 4:17:59 pm
+ * @Last modified time: Thursday, 11th October 2018 5:24:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,6 @@
 import { IXyoPeerConnectionDelegate, IXyoBoundWitnessSuccessListener, IXyoCategoryRouter, IXyoBoundWitnessHandlerProvider, IXyoCatalogueResolver } from '../../@types/xyo-node';
 import { XyoPeerConnectionDelegate } from './xyo-peer-connection-provider';
 import { IXyoNetworkProcedureCatalogue, IXyoNetworkProvider } from '../../@types/xyo-network';
-import { XyoPacker } from '../../xyo-serialization/xyo-packer';
 import { IXyoHashProvider } from '../../@types/xyo-hashing';
 import { XyoBoundWitnessPayloadProvider } from '../xyo-bound-witness-payload-provider';
 import { XyoBoundWitnessHandlerProvider } from '../xyo-bound-witness-handler-provider';
@@ -28,7 +27,6 @@ export class XyoPeerConnectionProviderFactory implements IXyoCategoryRouter, IXy
   constructor(
     private readonly network: IXyoNetworkProvider,
     private readonly catalogue: IXyoNetworkProcedureCatalogue,
-    private readonly xyoPacker: XyoPacker,
     private readonly hashingProvider: IXyoHashProvider,
     private readonly originChainStateManager: IXyoOriginChainStateRepository,
     private readonly originChainNavigator: IXyoOriginBlockRepository,
@@ -51,7 +49,6 @@ export class XyoPeerConnectionProviderFactory implements IXyoCategoryRouter, IXy
       switch (catalogueItem) {
         case CatalogueItem.BOUND_WITNESS:
           return new XyoBoundWitnessHandlerProvider(
-            this.xyoPacker,
             this.hashingProvider,
             this.originChainStateManager,
             this.originChainNavigator,
@@ -59,13 +56,12 @@ export class XyoPeerConnectionProviderFactory implements IXyoCategoryRouter, IXy
             this.boundWitnessSuccessListener,
             {
               newInstance: (signers, payload) =>  {
-                return new XyoBoundWitnessStandardServerInteraction(this.xyoPacker, signers, payload);
+                return new XyoBoundWitnessStandardServerInteraction(signers, payload);
               }
             }
           );
         case CatalogueItem.TAKE_ORIGIN_CHAIN:
           return new XyoBoundWitnessHandlerProvider(
-            this.xyoPacker,
             this.hashingProvider,
             this.originChainStateManager,
             this.originChainNavigator,
@@ -73,7 +69,7 @@ export class XyoPeerConnectionProviderFactory implements IXyoCategoryRouter, IXy
             this.boundWitnessSuccessListener,
             {
               newInstance: (signers, payload) =>  {
-                return new XyoBoundWitnessTakeOriginChainServerInteraction(this.xyoPacker, signers, payload);
+                return new XyoBoundWitnessTakeOriginChainServerInteraction(signers, payload);
               }
             }
           );
@@ -85,7 +81,6 @@ export class XyoPeerConnectionProviderFactory implements IXyoCategoryRouter, IXy
     switch (catalogueItem) {
       case CatalogueItem.BOUND_WITNESS:
         return new XyoBoundWitnessHandlerProvider(
-          this.xyoPacker,
           this.hashingProvider,
           this.originChainStateManager,
           this.originChainNavigator,
@@ -93,7 +88,7 @@ export class XyoPeerConnectionProviderFactory implements IXyoCategoryRouter, IXy
           this.boundWitnessSuccessListener,
           {
             newInstance: (signers, payload) =>  {
-              return new XyoBoundWitnessStandardClientInteraction(this.xyoPacker, signers, payload);
+              return new XyoBoundWitnessStandardClientInteraction(signers, payload);
             }
           }
         );

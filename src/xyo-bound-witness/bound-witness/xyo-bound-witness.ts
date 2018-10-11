@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 10:17:56 am
+ * @Last modified time: Thursday, 11th October 2018 5:26:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,13 +12,12 @@
 import { XyoObject } from '../../xyo-core-components/xyo-object';
 import { XyoPayload } from '../components/payload/xyo-payload';
 import { XyoSignatureSet } from '../components/signature-set/xyo-signature-set';
-import { XyoError } from '../../xyo-core-components/xyo-error';
+import { XyoError, XyoErrors } from '../../xyo-core-components/xyo-error';
 import { XyoHash } from '../../xyo-hashing/xyo-hash';
 import { XyoKeySet } from '../components/key-set/xyo-key-set';
-import { XyoPacker } from '../../xyo-serialization/xyo-packer';
 import { XyoSingleTypeArrayShort } from '../../xyo-core-components/arrays/single/xyo-single-type-array-short';
 import { XyoSingleTypeArrayInt } from '../../xyo-core-components/arrays/single/xyo-single-type-array-int';
-import { IXyoSigner, IXyoSignature, IXyoPublicKey } from '../../@types/xyo-signing';
+import { IXyoSigner, IXyoSignature } from '../../@types/xyo-signing';
 import { IXyoHashProvider } from '../../@types/xyo-hashing';
 
 /**
@@ -49,11 +48,9 @@ export abstract class XyoBoundWitness extends XyoObject {
 
   /**
    * Creates a new instance of an XyoBoundWitness
-   *
-   * @param xyoPacker A packer for serializing/deserializing values.
    */
 
-  constructor (private readonly xyoPacker: XyoPacker) {
+  constructor () {
     super(XyoBoundWitness.major, XyoBoundWitness.minor);
   }
 
@@ -79,7 +76,7 @@ export abstract class XyoBoundWitness extends XyoObject {
     const { major, minor } = this.getPublicKeysMajorMinor();
     const publicKeys = new XyoSingleTypeArrayShort(major, minor, this.publicKeys);
 
-    return this.xyoPacker.serialize(publicKeys, false);
+    return publicKeys.serialize(false);
   }
 
   /**
@@ -92,7 +89,7 @@ export abstract class XyoBoundWitness extends XyoObject {
   public makeSignaturesUntyped(): Buffer {
     const { major, minor } =  this.getSignaturesMajorMinor();
     const signatures = new XyoSingleTypeArrayShort(major, minor, this.signatures);
-    return this.xyoPacker.serialize(signatures, false);
+    return signatures.serialize(false);
   }
 
   /**
@@ -106,7 +103,7 @@ export abstract class XyoBoundWitness extends XyoObject {
     const { major, minor } =  this.getPayloadsMajorMinor();
 
     const payloads = new XyoSingleTypeArrayInt(major, minor, this.payloads);
-    return this.xyoPacker.serialize(payloads, false);
+    return payloads.serialize(false);
   }
 
   /**
@@ -121,10 +118,10 @@ export abstract class XyoBoundWitness extends XyoObject {
 
     for (const payload of this.payloads) {
       if (!payload) {
-        throw new XyoError(`Payload can't be null`, XyoError.errorType.ERR_CREATOR_MAPPING);
+        throw new XyoError(`Payload can't be null`, XyoErrors.CREATOR_MAPPING);
       }
       const payloadData = payload.signedPayload;
-      collection.push(this.xyoPacker.serialize(payloadData, false));
+      collection.push(payloadData.serialize(false));
     }
 
     return Buffer.concat(collection);

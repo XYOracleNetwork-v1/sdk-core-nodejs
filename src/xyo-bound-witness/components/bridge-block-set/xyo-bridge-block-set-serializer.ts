@@ -4,14 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bridge-block-set-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 11:10:35 am
+ * @Last modified time: Thursday, 11th October 2018 5:11:34 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoArrayUnpacker } from '../../../xyo-serialization/xyo-array-unpacker';
 import { XyoSerializer } from '../../../xyo-serialization/xyo-serializer';
-import { XyoPacker } from '../../../xyo-serialization/xyo-packer';
 import { XyoBridgeBlockSet } from './xyo-bridge-block-set';
 import { XyoBoundWitness } from '../../bound-witness/xyo-bound-witness';
 
@@ -28,15 +27,15 @@ export class XyoBridgeBlockSetSerializer extends XyoSerializer<XyoBridgeBlockSet
   }
 
   /** Get the object representation from the byte representation for a `XyoBridgeBlockSet`  */
-  public deserialize(buffer: Buffer, xyoPacker: XyoPacker) {
-    const unpackedArray = new XyoArrayUnpacker(xyoPacker, buffer, true, 4);
+  public deserialize(buffer: Buffer) {
+    const unpackedArray = new XyoArrayUnpacker(buffer, true, 4);
     return new XyoBridgeBlockSet(unpackedArray.array as XyoBoundWitness[]);
   }
 
   /** Get the byte representation from the object representation for a `XyoBridgeBlockSet` */
-  public serialize(xyoBridgeBlockSet: XyoBridgeBlockSet, xyoPacker: XyoPacker) {
+  public serialize(xyoBridgeBlockSet: XyoBridgeBlockSet) {
     const buffer = Buffer.concat(xyoBridgeBlockSet.array.map(element =>
-      xyoPacker.serialize(element, false))
+      element.serialize(false))
     );
 
     return Buffer.concat([

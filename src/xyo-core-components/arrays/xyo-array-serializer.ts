@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-single-type-array-byte-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 8th October 2018 4:43:56 pm
+ * @Last modified time: Thursday, 11th October 2018 5:18:24 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,8 +12,8 @@
 import { XyoArrayUnpacker } from '../../xyo-serialization/xyo-array-unpacker';
 import { XyoSerializer } from '../../xyo-serialization/xyo-serializer';
 import { XyoArray } from './xyo-array';
-import { XyoPacker } from '../../xyo-serialization/xyo-packer';
 
+/** A general multi-purpose serializer for `XyoArray` types */
 export class XyoArraySerializer extends XyoSerializer<XyoArray> {
 
   constructor (
@@ -34,9 +34,16 @@ export class XyoArraySerializer extends XyoSerializer<XyoArray> {
     };
   }
 
-  public deserialize(buffer: Buffer, xyoPacker: XyoPacker) {
+  /**
+   * Get Object representation of an `XyoArray` from byte representation
+   *
+   * @param {Buffer} buffer
+   * @returns {XyoArray}
+   * @memberof XyoArraySerializer
+   */
+
+  public deserialize(buffer: Buffer): XyoArray {
     const unpackedArray = new XyoArrayUnpacker(
-      xyoPacker,
       buffer,
       this.typed,
       this.size
@@ -56,9 +63,16 @@ export class XyoArraySerializer extends XyoSerializer<XyoArray> {
     return newArray;
   }
 
-  public serialize(xyoArray: XyoArray, xyoPacker: XyoPacker) {
+  /**
+   * Get byte representation of an `XyoArray` from object representation
+   * @param {XyoArray} xyoArray the value to serialize
+   * @returns {Buffer} The byte representation of an XyoBuffer
+   * @memberof XyoArraySerializer
+   */
+
+  public serialize(xyoArray: XyoArray): Buffer {
     if (!this.typed) {
-      return Buffer.concat(xyoArray.array.map(element => xyoPacker.serialize(element, true)));
+      return Buffer.concat(xyoArray.array.map(element => element.serialize(true)));
     }
 
     const typedBuffer = Buffer.from([
@@ -68,7 +82,7 @@ export class XyoArraySerializer extends XyoSerializer<XyoArray> {
 
     return Buffer.concat([
       typedBuffer,
-      ...xyoArray.array.map(element => xyoPacker.serialize(element, false))
+      ...xyoArray.array.map(element => element.serialize(false))
     ]);
   }
 }

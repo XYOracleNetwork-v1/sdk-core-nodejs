@@ -4,12 +4,11 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 1:19:13 pm
+ * @Last modified time: Thursday, 11th October 2018 5:22:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoPacker } from '../xyo-serialization/xyo-packer';
 import { IXyoNetworkPipe } from '../@types/xyo-network';
 import { XyoBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-bound-witness';
 import { IXyoHashProvider } from '../@types/xyo-hashing';
@@ -21,7 +20,6 @@ import { XyoBase } from '../xyo-core-components/xyo-base';
 export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBoundWitnessHandlerProvider {
 
   constructor (
-    private readonly xyoPacker: XyoPacker,
     private readonly hashingProvider: IXyoHashProvider,
     private readonly originState: IXyoOriginChainStateRepository,
     private readonly originChainNavigator: IXyoOriginBlockRepository,
@@ -54,11 +52,11 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
 
     await this.originState.updateOriginChainState(hashValue);
     await this.originChainNavigator.addOriginBlock(hashValue, boundWitness);
-    const nestedBoundWitnesses = extractNestedBoundWitnesses(boundWitness, this.xyoPacker);
+    const nestedBoundWitnesses = extractNestedBoundWitnesses(boundWitness);
 
     await Promise.all(nestedBoundWitnesses.map(async (nestedBoundWitness) => {
       const nestedHashValue = await nestedBoundWitness.getHash(this.hashingProvider);
-      const nestedHash = this.xyoPacker.serialize(nestedHashValue, true);
+      const nestedHash = nestedHashValue.serialize(true);
       this.logInfo(`Extracted nested block with hash ${nestedHash.toString('hex')}`);
       return this.originChainNavigator.addOriginBlock(nestedHashValue, nestedBoundWitness);
     }));

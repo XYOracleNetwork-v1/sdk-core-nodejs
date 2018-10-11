@@ -4,16 +4,16 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-next-public-key-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 11:26:39 am
+ * @Last modified time: Thursday, 11th October 2018 5:13:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoNextPublicKey } from './xyo-next-public-key';
 import { XyoSerializer } from '../../../xyo-serialization/xyo-serializer';
-import { XyoPacker } from '../../../xyo-serialization/xyo-packer';
-import { XyoError } from '../../../xyo-core-components/xyo-error';
+import { XyoError, XyoErrors } from '../../../xyo-core-components/xyo-error';
 import { IXyoPublicKey } from '../../../@types/xyo-signing';
+import { XyoObject } from '../../../xyo-core-components/xyo-object';
 
 /**
  * A serializer for the `XyoNextPublicKey` object
@@ -31,29 +31,29 @@ export class XyoNextPublicKeySerializer extends XyoSerializer<XyoNextPublicKey> 
   }
 
   /** Get the object representation of a `XyoNextPublicKey` from the bytes representation */
-  public deserialize(buffer: Buffer, xyoPacker: XyoPacker) {
-    return new XyoNextPublicKey(xyoPacker.deserialize(buffer) as IXyoPublicKey);
+  public deserialize(buffer: Buffer) {
+    return new XyoNextPublicKey(XyoObject.deserialize(buffer) as IXyoPublicKey);
   }
 
   /** Get the bytes representation of a `XyoNextPublicKey` from the object representation */
-  public serialize(nextPublicKey: XyoNextPublicKey, xyoPacker: XyoPacker) {
-    return xyoPacker.serialize(nextPublicKey.publicKey, true);
+  public serialize(nextPublicKey: XyoNextPublicKey) {
+    return nextPublicKey.publicKey.serialize(true);
   }
 
   /**
    * Since the nextPublicKey is just a wrapper around an arbitrary publicKey type,
    * we delegate the reading of size to the underlying publicKey
    */
-  public readSize(buffer: Buffer, xyoPacker: XyoPacker) {
-    const publicKeyCreatorValue = xyoPacker.getSerializerByMajorMinor(buffer[0], buffer[1]);
+  public readSize(buffer: Buffer) {
+    const publicKeyCreatorValue = XyoObject.getSerializerByMajorMinor(buffer[0], buffer[1]);
     if (publicKeyCreatorValue === undefined) {
       throw new XyoError(
         `Error reading size in XyoNextPublicKeySerializer`,
-        XyoError.errorType.ERR_CREATOR_MAPPING
+        XyoErrors.CREATOR_MAPPING
       );
     }
 
     const buf = buffer.slice(2, 2 + publicKeyCreatorValue.sizeOfBytesToRead);
-    return publicKeyCreatorValue.readSize(buf, xyoPacker) + 2;
+    return publicKeyCreatorValue.readSize(buf) + 2;
   }
 }

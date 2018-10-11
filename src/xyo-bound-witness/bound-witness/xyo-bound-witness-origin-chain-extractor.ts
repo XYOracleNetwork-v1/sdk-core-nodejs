@@ -4,13 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: bound-witness-origin-chain-extractor.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 9:34:49 am
+ * @Last modified time: Thursday, 11th October 2018 4:50:58 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBoundWitness } from './xyo-bound-witness';
-import { XyoPacker } from '../../xyo-serialization/xyo-packer';
 import { XyoBridgeBlockSet } from '../components/bridge-block-set/xyo-bridge-block-set';
 
 /**
@@ -22,9 +21,9 @@ import { XyoBridgeBlockSet } from '../components/bridge-block-set/xyo-bridge-blo
  * them out.
  */
 
-export function extractNestedBoundWitnesses(boundWitness: XyoBoundWitness, xyoPacker: XyoPacker) {
+export function extractNestedBoundWitnesses(boundWitness: XyoBoundWitness) {
   const nestedBoundWitnesses: XyoBoundWitness[] = [];
-  recursivelyExtractNestedBoundWitnesses(boundWitness, nestedBoundWitnesses, xyoPacker);
+  recursivelyExtractNestedBoundWitnesses(boundWitness, nestedBoundWitnesses);
   return nestedBoundWitnesses;
 }
 
@@ -35,8 +34,7 @@ export function extractNestedBoundWitnesses(boundWitness: XyoBoundWitness, xyoPa
 
 function recursivelyExtractNestedBoundWitnesses(
   boundWitness: XyoBoundWitness,
-  boundWitnessContainer: XyoBoundWitness[],
-  xyoPacker: XyoPacker
+  boundWitnessContainer: XyoBoundWitness[]
 ) {
   boundWitness.payloads.forEach((payload) => {
     payload.unsignedPayload.array.forEach((unsignedPayloadItem) => {
@@ -49,7 +47,7 @@ function recursivelyExtractNestedBoundWitnesses(
         nestedBridgeBlockSet.array.forEach((nestedObj) => {
           const nestedBoundWitness = nestedObj as XyoBoundWitness;
           boundWitnessContainer.push(nestedBoundWitness);
-          recursivelyExtractNestedBoundWitnesses(nestedBoundWitness, boundWitnessContainer, xyoPacker);
+          recursivelyExtractNestedBoundWitnesses(nestedBoundWitness, boundWitnessContainer);
         });
       }
     });

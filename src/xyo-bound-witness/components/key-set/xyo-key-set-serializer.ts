@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-key-set-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 11:19:28 am
+ * @Last modified time: Thursday, 11th October 2018 5:12:09 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,6 @@
 import { XyoArrayUnpacker } from '../../../xyo-serialization/xyo-array-unpacker';
 import { XyoSerializer } from '../../../xyo-serialization/xyo-serializer';
 import { XyoKeySet } from './xyo-key-set';
-import { XyoPacker } from '../../../xyo-serialization/xyo-packer';
 import { IXyoPublicKey } from '../../../@types/xyo-signing';
 
 /**
@@ -30,15 +29,13 @@ export class XyoKeySetSerializer extends XyoSerializer<XyoKeySet> {
   }
 
   /** Get the object representation from the byte representation for a XyoKeySet */
-  public deserialize(buffer: Buffer, xyoPacker: XyoPacker) {
-    const unpackedArray = new XyoArrayUnpacker(xyoPacker, buffer, false, 2);
+  public deserialize(buffer: Buffer) {
+    const unpackedArray = new XyoArrayUnpacker(buffer, false, 2);
     return new XyoKeySet(unpackedArray.array as IXyoPublicKey[]);
   }
 
   /** Get the byte representation from the object representation for a XyoKeySet */
-  public serialize(xyoKeySet: XyoKeySet, xyoPacker: XyoPacker) {
-    return Buffer.concat(xyoKeySet.array.map(element =>
-      xyoPacker.serialize(element, true))
-    );
+  public serialize(xyoKeySet: XyoKeySet) {
+    return Buffer.concat(xyoKeySet.array.map(element => element.serialize(true)));
   }
 }

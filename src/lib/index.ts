@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 10:12:59 am
+ * @Last modified time: Thursday, 11th October 2018 4:08:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,12 +12,8 @@
 /** Xyo Core Component Exports */
 export { XyoBase } from '../xyo-core-components/xyo-base';
 export { XyoObject } from '../xyo-core-components/xyo-object';
-export { XyoError } from '../xyo-core-components/xyo-error';
+export { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
 export { XyoLogger } from '../xyo-core-components/xyo-logger';
-
-/** Xyo Serialization Exports */
-export { XyoPacker }  from "../xyo-serialization/xyo-packer";
-export { XyoDefaultPackerProvider } from "../xyo-serialization/xyo-default-packer-provider";
 
 /** Xyo Hashing Exports */
 export { IXyoHashProvider } from '../@types/xyo-hashing';

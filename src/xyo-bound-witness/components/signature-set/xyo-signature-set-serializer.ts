@@ -12,7 +12,6 @@
 import { XyoArrayUnpacker } from '../../../xyo-serialization/xyo-array-unpacker';
 import { XyoSignatureSet } from './xyo-signature-set';
 import { XyoSerializer } from '../../../xyo-serialization/xyo-serializer';
-import { XyoPacker } from '../../../xyo-serialization/xyo-packer';
 
 /** A serializer for `XyoSignatureSet` */
 export class XyoSignatureSetSerializer extends XyoSerializer<XyoSignatureSet> {
@@ -27,15 +26,15 @@ export class XyoSignatureSetSerializer extends XyoSerializer<XyoSignatureSet> {
   }
 
   /** Get the object representation from the bytes representation of a XyoSignatureSet */
-  public deserialize(buffer: Buffer, xyoPacker: XyoPacker) {
-    const unpackedArray = new XyoArrayUnpacker(xyoPacker, buffer, false, 2);
+  public deserialize(buffer: Buffer) {
+    const unpackedArray = new XyoArrayUnpacker(buffer, false, 2);
     return new XyoSignatureSet(unpackedArray.array);
   }
 
   /** Get the bytes representation from the object representation of a XyoSignatureSet */
-  public serialize(signatureSet: XyoSignatureSet, xyoPacker: XyoPacker) {
+  public serialize(signatureSet: XyoSignatureSet) {
     return Buffer.concat(
-      signatureSet.array.map(element => xyoPacker.serialize(element, true))
+      signatureSet.array.map(element => element.serialize(true))
     );
   }
 }

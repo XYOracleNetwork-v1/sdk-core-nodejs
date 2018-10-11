@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-client-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 10th October 2018 4:17:58 pm
+ * @Last modified time: Thursday, 11th October 2018 1:48:03 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,86 +13,141 @@ import {
   IXyoNetworkProvider,
   IXyoNetworkProcedureCatalogue,
   IXyoNetworkPipe,
-  IXyoNetworkAddressProvider
+  IXyoNetworkAddressProvider,
+  IXyoTCPNetworkAddress
 } from "../../@types/xyo-network";
 
 import net from 'net';
-import { CatalogueItem, catalogueItemsToMask, bufferToCatalogueItems } from "../xyo-catalogue-item";
-import { XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES, XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES, XYO_TCP_CATALOGUE_LENGTH_IN_BYTES } from "./xyo-tcp-network-constants";
-import { writeNumberToBuffer, readNumberFromBuffer } from "../../xyo-core-components/xyo-buffer-utils";
-import { XyoTcpConnectionResult } from "./xyo-tcp-connection-result";
-import { XyoBase } from "../../xyo-core-components/xyo-base";
-import { XyoTcpNetworkPipe } from "./xyo-tcp-network-pipe";
+
+import {
+  CatalogueItem,
+  catalogueItemsToMask,
+  bufferToCatalogueItems
+} from "../xyo-catalogue-item";
+
+import {
+  XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES,
+  XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES,
+  XYO_TCP_CATALOGUE_LENGTH_IN_BYTES
+} from "./xyo-tcp-network-constants";
+
+import {
+  writeNumberToBuffer,
+  readNumberFromBuffer
+} from "../../xyo-core-components/xyo-buffer-utils";
+
+import {
+  XyoTcpConnectionResult
+} from "./xyo-tcp-connection-result";
+
+import {
+  XyoBase
+} from "../../xyo-core-components/xyo-base";
+
+import {
+  XyoTcpNetworkPipe
+} from "./xyo-tcp-network-pipe";
+
+/**
+ * This is not a production-ready TCP client. It was built to test the TCP server.
+ * At any rate, it does reliably meet the tcp client functionality.
+ */
 
 export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider {
 
+  /** A promise that gets called when stopping the run loop */
   private shouldStopPromise: (() => void) | undefined = undefined;
+
+  /** True if looping, false otherwise */
   private isLooping = false;
+
+  /**
+   * Creates an instance of XyoClientTcpNetwork.
+   *
+   * @param {IXyoNetworkAddressProvider} networkAddressProvider Used to discover servers to try gain connections to
+   * @memberof XyoClientTcpNetwork
+   */
 
   constructor (private readonly networkAddressProvider: IXyoNetworkAddressProvider) {
     super();
   }
 
+  /**
+   * Attempts to find tcp-network servers compatible with `catalogue` passed in
+   *
+   * @param {IXyoNetworkProcedureCatalogue} catalogue A catalogue of items the consumer can perform
+   *
+   * @returns {Promise<IXyoNetworkPipe>} The promise will be resolve once a network-pipe is created, which may be never
+   * @memberof XyoClientTcpNetwork
+   */
+
   public async find(catalogue: IXyoNetworkProcedureCatalogue): Promise<IXyoNetworkPipe> {
     this.logInfo(`Attempting to find peers`);
+
+    // Start looping and resolve promise once a network pipe is created
     return new Promise((resolve, reject) => {
       this.loop(catalogue, resolve, reject);
     }) as Promise<IXyoNetworkPipe>;
   }
 
+  /** Stops the client-tcp-network from trying to find peers */
   public stopServer(): Promise<void> {
-    if (this.isLooping) {
+    if (!this.isLooping) {
       return Promise.resolve();
     }
 
     return new Promise((resolve, reject) => {
-      if (this.isLooping) {
+      if (!this.isLooping) {
         return resolve();
       }
 
-      this.shouldStopPromise = resolve;
+      // Set shouldStopPromise so that when the run-loops sees this and calls it
+      this.shouldStopPromise = () => {
+        this.shouldStopPromise = undefined; // unset
+        resolve();
+      };
     }) as Promise<void>;
   }
 
+  /** The primary looping function the client-tcp-network performs to try to find a peer */
   private async loop(
     catalogue: IXyoNetworkProcedureCatalogue,
     resolve: (networkPipe: IXyoNetworkPipe) => void,
     reject: (error?: any) => void
   ) {
     this.logInfo(`Run loop entered`);
-    if (this.shouldStopPromise) {
+
+    if (this.shouldStopPromise) { // If shouldStopPromise is set, exit loop
       this.logInfo(`Run loop will end`);
       this.isLooping = false;
-      reject();
-      return this.shouldStopPromise();
+      reject(); // reject, could not find peer
+      this.shouldStopPromise();
     }
 
     this.logInfo(`Will try to find next address`);
-    const nextAddress = await this.networkAddressProvider.next();
-    this.logInfo(`Found next address ${nextAddress}`);
-    if (!nextAddress) {
+
+    const nextAddress = await this.networkAddressProvider.next(); // get next networkAddress to try
+    if (!nextAddress) { // If no networkWork address is available, pause for 1sec, then loop again
       return setTimeout(() => {
         this.loop(catalogue, resolve, reject);
       }, 1000);
     }
 
     try {
-      this.logInfo(`Trying to get connection`);
+      // Try to get connection, will throw an error if it does not succeed
       const connectionResult = await this.getConnection(nextAddress, catalogue);
-      this.logInfo(`Connection received`);
       return resolve(new XyoTcpNetworkPipe(connectionResult));
     } catch (err) {
       this.logError(`There was an error creating client connection, ${err}`);
+      // Take 1sec break an try again
       return setTimeout(() => {
         this.loop(catalogue, resolve, reject);
       }, 1000);
     }
   }
 
-  private getConnection(
-    nextAddress: {port: number, host: string},
-    catalogue: IXyoNetworkProcedureCatalogue
-  ): Promise<XyoTcpConnectionResult> {
+  /** Try to establish a connection for a given networkAddress */
+  private getConnection(nextAddress: IXyoTCPNetworkAddress, catalogue: IXyoNetworkProcedureCatalogue) {
     return new Promise((resolve, reject) => {
       const client = net.createConnection(nextAddress.port, nextAddress.host, () => {
         this.logInfo(`Client Connection made with ${nextAddress.host}:${nextAddress.port}`);
@@ -203,6 +258,6 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
       }
 
       client.on('data', onData);
-    });
+    }) as Promise<XyoTcpConnectionResult>;
   }
 }

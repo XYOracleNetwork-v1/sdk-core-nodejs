@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: rsa-sha256-serializer.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:12:29 pm
+ * @Last modified time: Thursday, 11th October 2018 4:29:55 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,18 +14,19 @@ import { XyoSha256HashProvider } from '../../xyo-hashing/sha256/xyo-sha256-hash-
 import { XyoEcdsaSignature } from '../../xyo-signing/ecdsa/signature/xyo-ecdsa-signature';
 import { XyoEcdsaSecp256k1Signer } from '../../xyo-signing/ecdsa/secp256k1/signer/xyo-ecdsa-secp256k1-signer';
 import { XyoEcdsaSecp256k1Sha256SignerProvider } from '../../xyo-signing/ecdsa/secp256k1/sha256/xyo-ecdsa-secp256k1-sha256-signer-provider';
+import { XyoObject } from '../../xyo-core-components/xyo-object';
 
 describe('XyoEcdsaSecp256k1SignerSerializer', () => {
   it('Should serialize and deserialize rEcSecp256kS signers', async () => {
-    const packer = new XyoDefaultPackerProvider().getXyoPacker();
+    XyoObject.packer = new XyoDefaultPackerProvider().getXyoPacker();
     const sha256HashProvider = new XyoSha256HashProvider();
     const signerProvider = new XyoEcdsaSecp256k1Sha256SignerProvider(
       sha256HashProvider
     );
     const signer = signerProvider.newInstance();
     const sig1 = (await signer.signData(Buffer.from('hello world'))) as XyoEcdsaSignature;
-    const typedSerialization = packer.serialize(signer, true);
-    const hydratedSigner = packer.deserialize(typedSerialization) as XyoEcdsaSecp256k1Signer;
+    const typedSerialization = signer.serialize(true);
+    const hydratedSigner = XyoObject.deserialize(typedSerialization) as XyoEcdsaSecp256k1Signer;
     expect(signer.publicKey.x.equals(hydratedSigner.publicKey.x)).toBe(true);
     expect(signer.publicKey.y.equals(hydratedSigner.publicKey.y)).toBe(true);
     expect(signer.privateKey === hydratedSigner.privateKey).toBe(true);

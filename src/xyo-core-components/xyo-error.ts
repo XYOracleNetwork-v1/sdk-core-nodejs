@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-error.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 24th September 2018 6:38:08 pm
+ * @Last modified time: Thursday, 11th October 2018 1:15:25 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,11 +15,11 @@ import { XyoBase } from './xyo-base';
  * A list of supported error types
  */
 
-enum XyoErrorType {
-  ERR_CRITICAL = 1,
-  ERR_INVALID_PARAMETERS = 2,
-  ERR_CREATOR_MAPPING = 3,
-  ERR_INVALID_RESULT_ACCESS = 4
+export enum XyoErrors {
+  CRITICAL = 1,
+  INVALID_PARAMETERS = 2,
+  CREATOR_MAPPING = 3,
+  INVALID_RESULT_ACCESS = 4
 }
 
 /**
@@ -28,8 +28,6 @@ enum XyoErrorType {
  * of errors
  */
 export class XyoError extends XyoBase implements Error {
-
-  public static readonly errorType = XyoErrorType;
 
   public readonly isXyoError: boolean = true;
   public readonly stack: string | undefined;
@@ -45,7 +43,7 @@ export class XyoError extends XyoBase implements Error {
 
   constructor(
     public readonly message: string,
-    public readonly code: XyoErrorType,
+    public readonly code: XyoErrors,
     fromOtherError?: Error
   ) {
     super();

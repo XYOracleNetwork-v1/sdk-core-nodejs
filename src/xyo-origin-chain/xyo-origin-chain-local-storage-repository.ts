@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-local-storage-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:12:36 pm
+ * @Last modified time: Thursday, 11th October 2018 4:41:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,16 +17,15 @@ import { XyoNextPublicKey } from '../xyo-bound-witness/components/next-public-ke
 import { XyoHash } from '../xyo-hashing/xyo-hash';
 import { XyoStoragePriority } from '../xyo-storage/xyo-storage-priority';
 import { IXyoStorageProvider } from '../@types/xyo-storage';
-import { XyoPacker } from '../xyo-serialization/xyo-packer';
 import { XyoOriginChainStateInMemoryRepository } from './xyo-origin-chain-state-in-memory-repository';
+import { XyoObject } from '../lib';
 
 export class XyoOriginChainLocalStorageRepository implements IXyoOriginChainStateRepository {
 
   private inMemoryDelegate: XyoOriginChainStateInMemoryRepository | undefined;
 
   constructor (
-    private readonly storageProvider: IXyoStorageProvider,
-    private readonly packer: XyoPacker
+    private readonly storageProvider: IXyoStorageProvider
   ) {}
 
   public async getIndex(): Promise<XyoIndex> {
@@ -114,21 +113,21 @@ export class XyoOriginChainLocalStorageRepository implements IXyoOriginChainStat
 
   private deserializeOriginChainState(jsonString: string): XyoOriginChainStateInMemoryRepository {
     const obj = JSON.parse(jsonString) as ISerializedOriginChainState;
-    const index = this.packer.deserialize(Buffer.from(obj.index, 'hex')) as XyoIndex;
+    const index = XyoObject.deserialize(Buffer.from(obj.index, 'hex')) as XyoIndex;
     const signers = obj.signers.map((signer) => {
-      return this.packer.deserialize(Buffer.from(signer, 'hex'));
+      return XyoObject.deserialize(Buffer.from(signer, 'hex'));
     }) as IXyoSigner[];
 
     const waitingSigners = obj.waitingSigners.map((signer) => {
-      return this.packer.deserialize(Buffer.from(signer, 'hex'));
+      return XyoObject.deserialize(Buffer.from(signer, 'hex'));
     }) as IXyoSigner[];
 
     const previousHash = obj.previousHash ?
-      this.packer.deserialize(Buffer.from(obj.previousHash, 'hex')) as XyoPreviousHash :
+      XyoObject.deserialize(Buffer.from(obj.previousHash, 'hex')) as XyoPreviousHash :
       undefined;
 
     const nextPublicKey = obj.nextPublicKey ?
-      this.packer.deserialize(Buffer.from(obj.nextPublicKey, 'hex')) as XyoNextPublicKey :
+      XyoObject.deserialize(Buffer.from(obj.nextPublicKey, 'hex')) as XyoNextPublicKey :
       undefined;
 
     return new XyoOriginChainStateInMemoryRepository(
@@ -148,23 +147,23 @@ export class XyoOriginChainLocalStorageRepository implements IXyoOriginChainStat
     const waitingSigners = await originChainState.getWaitingSigners();
 
     const payload: ISerializedOriginChainState = {
-      index: this.packer.serialize(index, true).toString('hex'),
+      index: index.serialize(true).toString('hex'),
       signers: signers.map((signer) => {
-        return this.packer.serialize(signer, true).toString('hex');
+        return signer.serialize(true).toString('hex');
       }),
       waitingSigners: waitingSigners.map((signer) => {
-        return this.packer.serialize(signer, true).toString('hex');
+        return signer.serialize(true).toString('hex');
       }),
       nextPublicKey: null,
       previousHash: null,
     };
 
     if (nextPublicKey) {
-      payload.nextPublicKey = this.packer.serialize(nextPublicKey,  true).toString('hex');
+      payload.nextPublicKey = nextPublicKey.serialize(true).toString('hex');
     }
 
     if (previousHash) {
-      payload.previousHash = this.packer.serialize(previousHash, true).toString('hex');
+      payload.previousHash = previousHash.serialize(true).toString('hex');
     }
 
     return JSON.stringify(payload);

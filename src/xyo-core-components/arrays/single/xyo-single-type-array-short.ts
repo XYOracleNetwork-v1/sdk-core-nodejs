@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-single-type-array-short.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 4:37:23 pm
+ * @Last modified time: Thursday, 11th October 2018 11:48:58 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,9 +15,6 @@ import { XyoObject } from '../../xyo-object';
 /**
  * An XyoSingleTypeArrayShort is a collection of homogenous
  * items who's total size should not exceed 2 ^ 16 - 1 bytes when packed
- *
- * @major 0x01
- * @minor 0x02
  */
 
 export class XyoSingleTypeArrayShort extends XyoArray {

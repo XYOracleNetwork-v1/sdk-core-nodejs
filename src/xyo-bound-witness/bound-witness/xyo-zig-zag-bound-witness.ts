@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-zig-zag-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 12:37:08 pm
+ * @Last modified time: Thursday, 11th October 2018 5:11:04 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,9 +14,8 @@ import { XyoPayload } from '../components/payload/xyo-payload';
 import { XyoSignatureSet } from '../components/signature-set/xyo-signature-set';
 import { XyoBoundWitnessTransfer } from './xyo-bound-witness-transfer';
 import { XyoObject } from '../../xyo-core-components/xyo-object';
-import { XyoError } from '../../xyo-core-components/xyo-error';
+import { XyoError, XyoErrors } from '../../xyo-core-components/xyo-error';
 import { XyoKeySet } from '../components/key-set/xyo-key-set';
-import { XyoPacker } from '../../xyo-serialization/xyo-packer';
 import { IXyoSigner, IXyoPublicKey } from '../../@types/xyo-signing';
 
 /**
@@ -64,13 +63,12 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
 
   /**
    * Creates a new instance of an XyoZigZagBoundWitness
-   * @param xyoPacker A packer to serialize / deserialize values
    * @param signers A set of signers to be able sign to provide crypto functionality
    * @param payload The payload that belongs to the party that is to be included in the BoundWitness
    */
 
-  constructor (xyoPacker: XyoPacker, private readonly signers: IXyoSigner[], private readonly payload: XyoPayload) {
-    super(xyoPacker);
+  constructor (private readonly signers: IXyoSigner[], private readonly payload: XyoPayload) {
+    super();
   }
 
   /**
@@ -170,7 +168,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
       if (incomingKeySet) {
         this.dynamicPublicKeys.push(incomingKeySet);
       } else {
-        throw new XyoError(`Error unpacking keyset`, XyoError.errorType.ERR_CRITICAL);
+        throw new XyoError(`Error unpacking keyset`, XyoErrors.CRITICAL);
       }
     }
   }
@@ -185,7 +183,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
       if (incomingPayload) {
         this.dynamicPayloads.push(incomingPayload);
       } else {
-        throw new XyoError(`Error unpacking payload`, XyoError.errorType.ERR_CRITICAL);
+        throw new XyoError(`Error unpacking payload`, XyoErrors.CRITICAL);
       }
     }
   }
@@ -200,7 +198,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
       if (incomingSignatureSet) {
         this.dynamicSignatureSets.unshift(incomingSignatureSet);
       } else {
-        throw new XyoError(`Error unpacking signatureSet`, XyoError.errorType.ERR_CRITICAL);
+        throw new XyoError(`Error unpacking signatureSet`, XyoErrors.CRITICAL);
       }
     }
   }

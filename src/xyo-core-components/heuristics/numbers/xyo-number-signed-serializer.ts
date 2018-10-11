@@ -2,9 +2,9 @@
  * @Author: XY | The Findables Company <ryanxyo>
  * @Date:   Thursday, 13th September 2018 4:17:47 pm
  * @Email:  developer@xyfindables.com
- * @Filename: xyo-rssi-object-creator.ts
+ * @Filename: xyo-number-signed-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:25:00 pm
+ * @Last modified time: Thursday, 11th October 2018 1:20:36 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,15 +12,26 @@
 import { XyoSerializer } from '../../../xyo-serialization/xyo-serializer';
 import { XyoNumberType } from './xyo-number-type';
 import { XyoNumberSigned } from './xyo-number-signed';
-import { XyoError } from '../../xyo-error';
+import { XyoError, XyoErrors } from '../../xyo-error';
 
+/**
+ * A general purpose signed number serializer serializer
+ *
+ * @export
+ * @class XyoNumberSignedSerializer
+ * @extends {XyoSerializer<XyoNumberSigned>}
+ */
 export class XyoNumberSignedSerializer extends XyoSerializer<XyoNumberSigned> {
 
-  constructor(
-    private readonly major: number,
-    private readonly minor: number,
-    private readonly size: XyoNumberType
-  ) {
+  /**
+   * Creates an instance of XyoNumberSignedSerializer
+   * @param {number} major The major value of the number-type
+   * @param {number} minor The minor value of the number-type
+   * @param {XyoNumberType} size The size indicator of the number
+   * @memberof XyoNumberSignedSerializer
+   */
+
+  constructor(private readonly major: number, private readonly minor: number, private readonly size: XyoNumberType) {
     super();
   }
 
@@ -33,7 +44,15 @@ export class XyoNumberSignedSerializer extends XyoSerializer<XyoNumberSigned> {
     };
   }
 
-  public deserialize(buffer: Buffer) {
+  /**
+   * Get object representation of a XyoNumberSigned from the bytes-representation
+   *
+   * @param {Buffer} buffer The byte representation
+   * @returns {XyoNumberSigned} An instance of a `XyoNumberSigned`
+   * @memberof XyoNumberSignedSerializer
+   */
+
+  public deserialize(buffer: Buffer): XyoNumberSigned {
     let number: number | undefined;
 
     switch (this.size) {
@@ -47,15 +66,23 @@ export class XyoNumberSignedSerializer extends XyoSerializer<XyoNumberSigned> {
         number = buffer.readInt32BE(0);
         break;
       case XyoNumberType.LONG:
-        throw new XyoError('This is not yet supported', XyoError.errorType.ERR_CRITICAL);
+        throw new XyoError('This is not yet supported', XyoErrors.CRITICAL);
       default:
-        throw new XyoError('This should never happen', XyoError.errorType.ERR_CRITICAL);
+        throw new XyoError('This should never happen', XyoErrors.CRITICAL);
     }
 
     return new XyoNumberSigned(number, this.major, this.minor, this.size);
   }
 
-  public serialize(signedNumber: XyoNumberSigned) {
+  /**
+   * Get the byte representation of a `XyoNumberSigned`
+   *
+   * @param {XyoNumberSigned} signedNumber The instance to serialize
+   * @returns {Buffer} The byte representation of the the XyoNumberSigned
+   * @memberof XyoNumberSignedSerializer
+   */
+
+  public serialize(signedNumber: XyoNumberSigned): Buffer {
     let buf: Buffer;
 
     switch (this.size) {
@@ -71,9 +98,9 @@ export class XyoNumberSignedSerializer extends XyoSerializer<XyoNumberSigned> {
         buf.writeInt32BE(signedNumber.number, 0);
         break;
       case XyoNumberType.LONG:
-        throw new XyoError('This is not yet supported', XyoError.errorType.ERR_CRITICAL);
+        throw new XyoError('This is not yet supported', XyoErrors.CRITICAL);
       default:
-        throw new XyoError('This should never happen', XyoError.errorType.ERR_CRITICAL);
+        throw new XyoError('This should never happen', XyoErrors.CRITICAL);
     }
 
     return buf;

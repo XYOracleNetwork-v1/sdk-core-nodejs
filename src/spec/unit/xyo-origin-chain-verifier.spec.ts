@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-verifier.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:12:31 pm
+ * @Last modified time: Thursday, 11th October 2018 4:44:08 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -21,8 +21,9 @@ import { XyoOriginChainVerifier } from "../../xyo-origin-chain/xyo-origin-chain-
 import { XyoSha256HashProvider } from "../../xyo-hashing/sha256/xyo-sha256-hash-provider";
 import { XyoPreviousHash } from "../../xyo-bound-witness/components/previous-hash/xyo-previous-hash";
 import { XyoNextPublicKey } from "../../xyo-bound-witness/components/next-public-key/xyo-next-public-key";
+import { XyoObject } from "../../xyo-core-components/xyo-object";
 
-const packer = new XyoDefaultPackerProvider().getXyoPacker();
+XyoObject.packer = new XyoDefaultPackerProvider().getXyoPacker();
 const signerProvider = new XyoRsaSha256SignerProvider();
 const hashProvider = new XyoSha256HashProvider();
 
@@ -42,8 +43,8 @@ describe(`XyoOriginChainVerifier`, () => {
       new XyoMultiTypeArrayInt([new XyoRssi(-10)])
     );
 
-    const aliceBoundWitness = new XyoZigZagBoundWitness(packer, aliceSigners, alicePayload);
-    const bobBoundWitness = new XyoZigZagBoundWitness(packer, bobSigners, bobPayload);
+    const aliceBoundWitness = new XyoZigZagBoundWitness(aliceSigners, alicePayload);
+    const bobBoundWitness = new XyoZigZagBoundWitness(bobSigners, bobPayload);
 
     await doBoundWitness(aliceBoundWitness, bobBoundWitness);
 
@@ -65,8 +66,8 @@ describe(`XyoOriginChainVerifier`, () => {
       new XyoMultiTypeArrayInt([new XyoRssi(-10)])
     );
 
-    const aliceBoundWitness = new XyoZigZagBoundWitness(packer, aliceSigners, alicePayload);
-    const bobBoundWitness = new XyoZigZagBoundWitness(packer, bobSigners, bobPayload);
+    const aliceBoundWitness = new XyoZigZagBoundWitness(aliceSigners, alicePayload);
+    const bobBoundWitness = new XyoZigZagBoundWitness(bobSigners, bobPayload);
 
     await doBoundWitness(aliceBoundWitness, bobBoundWitness);
 
@@ -88,8 +89,8 @@ describe(`XyoOriginChainVerifier`, () => {
       new XyoMultiTypeArrayInt([new XyoRssi(-10)])
     );
 
-    const aliceBoundWitness1 = new XyoZigZagBoundWitness(packer, aliceSigners, alicePayload);
-    const bobBoundWitness1 = new XyoZigZagBoundWitness(packer, bobSigners, bobPayload);
+    const aliceBoundWitness1 = new XyoZigZagBoundWitness(aliceSigners, alicePayload);
+    const bobBoundWitness1 = new XyoZigZagBoundWitness(bobSigners, bobPayload);
 
     await doBoundWitness(aliceBoundWitness1, bobBoundWitness1);
 
@@ -109,8 +110,8 @@ describe(`XyoOriginChainVerifier`, () => {
       new XyoMultiTypeArrayInt([new XyoRssi(-10)])
     );
 
-    const aliceBoundWitness2 = new XyoZigZagBoundWitness(packer, aliceSigners, alicePayload);
-    const bobBoundWitness2 = new XyoZigZagBoundWitness(packer, bobSigners, bobPayload);
+    const aliceBoundWitness2 = new XyoZigZagBoundWitness(aliceSigners, alicePayload);
+    const bobBoundWitness2 = new XyoZigZagBoundWitness(bobSigners, bobPayload);
     await doBoundWitness(aliceBoundWitness2, bobBoundWitness2);
 
     const result = await new XyoOriginChainVerifier().verify([aliceBoundWitness1, aliceBoundWitness2]);
@@ -134,8 +135,8 @@ describe(`XyoOriginChainVerifier`, () => {
       new XyoMultiTypeArrayInt([new XyoRssi(-10)])
     );
 
-    const aliceBoundWitness1 = new XyoZigZagBoundWitness(packer, aliceSigners, alicePayload);
-    const bobBoundWitness1 = new XyoZigZagBoundWitness(packer, bobSigners, bobPayload);
+    const aliceBoundWitness1 = new XyoZigZagBoundWitness(aliceSigners, alicePayload);
+    const bobBoundWitness1 = new XyoZigZagBoundWitness(bobSigners, bobPayload);
 
     await doBoundWitness(aliceBoundWitness1, bobBoundWitness1);
 
@@ -155,8 +156,8 @@ describe(`XyoOriginChainVerifier`, () => {
       new XyoMultiTypeArrayInt([new XyoRssi(-10)])
     );
 
-    const aliceBoundWitness2 = new XyoZigZagBoundWitness(packer, aliceSigners, alicePayload);
-    const bobBoundWitness2 = new XyoZigZagBoundWitness(packer, bobSigners, bobPayload);
+    const aliceBoundWitness2 = new XyoZigZagBoundWitness(aliceSigners, alicePayload);
+    const bobBoundWitness2 = new XyoZigZagBoundWitness(bobSigners, bobPayload);
     await doBoundWitness(aliceBoundWitness2, bobBoundWitness2);
 
     const result = await new XyoOriginChainVerifier().verify([aliceBoundWitness1, aliceBoundWitness2]);
@@ -179,8 +180,8 @@ describe(`XyoOriginChainVerifier`, () => {
       new XyoMultiTypeArrayInt([new XyoRssi(-10)])
     );
 
-    const aliceBoundWitness1 = new XyoZigZagBoundWitness(packer, aliceSigners, alicePayload);
-    const bobBoundWitness1 = new XyoZigZagBoundWitness(packer, bobSigners, bobPayload);
+    const aliceBoundWitness1 = new XyoZigZagBoundWitness(aliceSigners, alicePayload);
+    const bobBoundWitness1 = new XyoZigZagBoundWitness(bobSigners, bobPayload);
 
     await doBoundWitness(aliceBoundWitness1, bobBoundWitness1);
 
@@ -202,8 +203,8 @@ describe(`XyoOriginChainVerifier`, () => {
       new XyoMultiTypeArrayInt([new XyoRssi(-10)])
     );
 
-    const aliceBoundWitness2 = new XyoZigZagBoundWitness(packer, aliceSigners, alicePayload);
-    const bobBoundWitness2 = new XyoZigZagBoundWitness(packer, bobSigners, bobPayload);
+    const aliceBoundWitness2 = new XyoZigZagBoundWitness(aliceSigners, alicePayload);
+    const bobBoundWitness2 = new XyoZigZagBoundWitness(bobSigners, bobPayload);
     await doBoundWitness(aliceBoundWitness2, bobBoundWitness2);
 
     const result = await new XyoOriginChainVerifier().verify([aliceBoundWitness1, aliceBoundWitness2]);
@@ -226,8 +227,8 @@ describe(`XyoOriginChainVerifier`, () => {
       new XyoMultiTypeArrayInt([new XyoRssi(-10)])
     );
 
-    const aliceBoundWitness1 = new XyoZigZagBoundWitness(packer, aliceSigners, alicePayload);
-    const bobBoundWitness1 = new XyoZigZagBoundWitness(packer, bobSigners, bobPayload);
+    const aliceBoundWitness1 = new XyoZigZagBoundWitness(aliceSigners, alicePayload);
+    const bobBoundWitness1 = new XyoZigZagBoundWitness(bobSigners, bobPayload);
 
     await doBoundWitness(aliceBoundWitness1, bobBoundWitness1);
 
@@ -249,8 +250,8 @@ describe(`XyoOriginChainVerifier`, () => {
       new XyoMultiTypeArrayInt([new XyoRssi(-10)])
     );
 
-    const aliceBoundWitness2 = new XyoZigZagBoundWitness(packer, [aliceNextSigner], alicePayload);
-    const bobBoundWitness2 = new XyoZigZagBoundWitness(packer, bobSigners, bobPayload);
+    const aliceBoundWitness2 = new XyoZigZagBoundWitness([aliceNextSigner], alicePayload);
+    const bobBoundWitness2 = new XyoZigZagBoundWitness(bobSigners, bobPayload);
     await doBoundWitness(aliceBoundWitness2, bobBoundWitness2);
 
     const result = await new XyoOriginChainVerifier().verify([aliceBoundWitness1, aliceBoundWitness2]);

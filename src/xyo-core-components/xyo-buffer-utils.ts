@@ -4,18 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: buffer-utils.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 4:22:28 pm
+ * @Last modified time: Thursday, 11th October 2018 1:19:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-/**
- * Poor mans Buffer hashing function
- * @param buffer
- */
+import { XyoError, XyoErrors } from "./xyo-error";
 
-import { XyoError } from "./xyo-error";
-
+/** Returns a pseudo-hash based off the contents of a buffer */
 export function getBufferHash(buffer: Buffer): number {
   if (buffer.length === 0) {
     return 0;
@@ -32,6 +28,7 @@ export function getBufferHash(buffer: Buffer): number {
   return hash;
 }
 
+/** A helper function to write a number to a buffer that supports multiple sizes and signings */
 export function writeNumberToBuffer(
   numberToWrite: number,
   bytes: number,
@@ -54,7 +51,7 @@ export function writeNumberToBuffer(
         buf.writeInt32BE(numberToWrite, bufOffset);
         return buf;
       default:
-        throw new XyoError(`Could not write number to buffer`, XyoError.errorType.ERR_CRITICAL);
+        throw new XyoError(`Could not write number to buffer`, XyoErrors.CRITICAL);
     }
   }
 
@@ -69,10 +66,11 @@ export function writeNumberToBuffer(
       buf.writeUInt32BE(numberToWrite, bufOffset);
       return buf;
     default:
-      throw new XyoError(`Could not write number to buffer`, XyoError.errorType.ERR_CRITICAL);
+      throw new XyoError(`Could not write number to buffer`, XyoErrors.CRITICAL);
   }
 }
 
+/** A helper function to read a number from a buffer based off of sign by */
 export function readNumberFromBuffer(buffer: Buffer, bytes: number, isSigned: boolean, offset?: number) {
   const bufOffset = offset || 0;
 
@@ -85,7 +83,7 @@ export function readNumberFromBuffer(buffer: Buffer, bytes: number, isSigned: bo
       case 4:
         return buffer.readInt32BE(bufOffset);
       default:
-        throw new XyoError(`Could not read number from buffer`, XyoError.errorType.ERR_CRITICAL);
+        throw new XyoError(`Could not read number from buffer`, XyoErrors.CRITICAL);
     }
   }
 
@@ -97,6 +95,6 @@ export function readNumberFromBuffer(buffer: Buffer, bytes: number, isSigned: bo
     case 4:
       return buffer.readUInt32BE(bufOffset);
     default:
-      throw new XyoError(`Could not read number from buffer`, XyoError.errorType.ERR_CRITICAL);
+      throw new XyoError(`Could not read number from buffer`, XyoErrors.CRITICAL);
   }
 }

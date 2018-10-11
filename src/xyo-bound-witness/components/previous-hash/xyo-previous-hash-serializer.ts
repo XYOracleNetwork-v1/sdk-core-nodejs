@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-previous-hash-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 11:36:40 am
+ * @Last modified time: Thursday, 11th October 2018 5:15:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,8 +12,8 @@
 import { XyoPreviousHash } from './xyo-previous-hash';
 import { XyoHash } from '../../../xyo-hashing/xyo-hash';
 import { XyoSerializer } from '../../../xyo-serialization/xyo-serializer';
-import { XyoPacker } from '../../../xyo-serialization/xyo-packer';
-import { XyoError } from '../../../xyo-core-components/xyo-error';
+import { XyoError, XyoErrors } from '../../../xyo-core-components/xyo-error';
+import { XyoObject } from '../../../xyo-core-components/xyo-object';
 
 /** A serializer for the `XyoPreviousHash` object */
 export class XyoPreviousHashSerializer extends XyoSerializer<XyoPreviousHash> {
@@ -28,14 +28,14 @@ export class XyoPreviousHashSerializer extends XyoSerializer<XyoPreviousHash> {
   }
 
   /** Get the object representation from the byte representation for a XyoPreviousHash */
-  public deserialize(buffer: Buffer, xyoPacker: XyoPacker) {
-    const hashCreated = xyoPacker.deserialize(buffer);
+  public deserialize(buffer: Buffer) {
+    const hashCreated = XyoObject.deserialize(buffer);
     return new XyoPreviousHash(hashCreated as XyoHash);
   }
 
   /** Get the byte representation from the object representation for a XyoPreviousHash */
-  public serialize(xyoObject: XyoPreviousHash, xyoPacker: XyoPacker) {
-    return xyoPacker.serialize(xyoObject.hash, true);
+  public serialize(xyoObject: XyoPreviousHash) {
+    return xyoObject.hash.serialize(true);
   }
 
   /**
@@ -43,12 +43,12 @@ export class XyoPreviousHashSerializer extends XyoSerializer<XyoPreviousHash> {
    * As such, we delegate the reading of size to the underlying XyoHash object
    */
 
-  public readSize(buffer: Buffer, xyoPacker: XyoPacker) {
-    const hashCreator = xyoPacker.getSerializerByMajorMinor(buffer[0], buffer[1]);
+  public readSize(buffer: Buffer) {
+    const hashCreator = XyoObject.getSerializerByMajorMinor(buffer[0], buffer[1]);
     if (hashCreator === undefined) {
-      throw new XyoError(`Error reading size in XyoPreviousHashSerializer`, XyoError.errorType.ERR_CREATOR_MAPPING);
+      throw new XyoError(`Error reading size in XyoPreviousHashSerializer`, XyoErrors.CREATOR_MAPPING);
     }
 
-    return hashCreator.readSize(buffer.slice(2, 2 + hashCreator.sizeOfBytesToRead), xyoPacker) + 2;
+    return hashCreator.readSize(buffer.slice(2, 2 + hashCreator.sizeOfBytesToRead)) + 2;
   }
 }
