@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:12:25 pm
+ * @Last modified time: Thursday, 11th October 2018 10:17:56 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,7 +18,7 @@ import { XyoKeySet } from '../components/key-set/xyo-key-set';
 import { XyoPacker } from '../../xyo-serialization/xyo-packer';
 import { XyoSingleTypeArrayShort } from '../../xyo-core-components/arrays/single/xyo-single-type-array-short';
 import { XyoSingleTypeArrayInt } from '../../xyo-core-components/arrays/single/xyo-single-type-array-int';
-import { IXyoSigner, IXyoSignature } from '../../@types/xyo-signing';
+import { IXyoSigner, IXyoSignature, IXyoPublicKey } from '../../@types/xyo-signing';
 import { IXyoHashProvider } from '../../@types/xyo-hashing';
 
 /**
@@ -129,6 +129,10 @@ export abstract class XyoBoundWitness extends XyoObject {
 
     return Buffer.concat(collection);
   }
+
+  /**
+   * Validates the signatures for the signed payloads of the this BoundWitness
+   */
 
   public async validateSignatures() {
     if (this.signatures.length !== this.publicKeys.length) {

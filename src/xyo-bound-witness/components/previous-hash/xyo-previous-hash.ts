@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-previous-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 11:10:27 am
+ * @Last modified time: Thursday, 11th October 2018 11:38:42 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,6 +32,12 @@ export class XyoPreviousHash extends XyoObject {
   constructor (public readonly hash: XyoHash) {
     super(XyoPreviousHash.major, XyoPreviousHash.minor);
   }
+
+  /**
+   * returns true if a previousHash instance is equal to another previousHash instance.
+   *
+   * This is accomplished by comparing the values of the underlying hashes
+   */
 
   public equals(other: any): boolean {
     if (other === this) {

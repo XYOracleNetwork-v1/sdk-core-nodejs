@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bridge-block-set-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 11:02:27 am
+ * @Last modified time: Thursday, 11th October 2018 11:10:35 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,6 +15,7 @@ import { XyoPacker } from '../../../xyo-serialization/xyo-packer';
 import { XyoBridgeBlockSet } from './xyo-bridge-block-set';
 import { XyoBoundWitness } from '../../bound-witness/xyo-bound-witness';
 
+/** A serializer for `XyoBridgeBlockSet` */
 export class XyoBridgeBlockSetSerializer extends XyoSerializer<XyoBridgeBlockSet> {
 
   get description () {
@@ -26,11 +27,13 @@ export class XyoBridgeBlockSetSerializer extends XyoSerializer<XyoBridgeBlockSet
     };
   }
 
+  /** Get the object representation from the byte representation for a `XyoBridgeBlockSet`  */
   public deserialize(buffer: Buffer, xyoPacker: XyoPacker) {
     const unpackedArray = new XyoArrayUnpacker(xyoPacker, buffer, true, 4);
     return new XyoBridgeBlockSet(unpackedArray.array as XyoBoundWitness[]);
   }
 
+  /** Get the byte representation from the object representation for a `XyoBridgeBlockSet` */
   public serialize(xyoBridgeBlockSet: XyoBridgeBlockSet, xyoPacker: XyoPacker) {
     const buffer = Buffer.concat(xyoBridgeBlockSet.array.map(element =>
       xyoPacker.serialize(element, false))

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-key-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 12:12:17 pm
+ * @Last modified time: Thursday, 11th October 2018 11:21:45 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,10 +13,10 @@ import { XyoArray } from '../../../xyo-core-components/arrays/xyo-array';
 import { IXyoPublicKey } from '../../../@types/xyo-signing';
 
 /**
- * A non-homogenous wrapper class for a collections of different keys
+ * A non-homogenous wrapper class for a collections of different public keys
  *
- * @major 0x02
- * @minor 0x02
+ * This is primarily used in bound-witnesses where the two parties share
+ * public keys that they will be using to sign the signed-payload data
  */
 
 export class XyoKeySet extends XyoArray {

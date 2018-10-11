@@ -4,13 +4,24 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bridge-hash-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:12:26 pm
+ * @Last modified time: Thursday, 11th October 2018 11:16:24 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoArray } from "../../../xyo-core-components/arrays/xyo-array";
 import { XyoHash } from "../../../xyo-hashing/xyo-hash";
+
+/**
+ * When a bound-witness occurs that is bridging origin blocks from
+ * one node to another that a `XyoBridgeBlockSet` in the unsigned payload
+ * and a `XyoBridgeHashSet` is passed in the signed payload. This is so
+ * that the `XyoBridgeBlockSet` can be removed and handled accordingly
+ * and the Bound-Witness still remains valid. However, since the the
+ * XyoBridgeHashSet is part of the signatures it may not be removed and
+ * exists as a record for attribution as to how a particular node
+ * got access to a block or blocks.
+ */
 
 export class XyoBridgeHashSet extends XyoArray {
 

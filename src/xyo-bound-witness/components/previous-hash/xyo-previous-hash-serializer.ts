@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-previous-hash-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:12:28 pm
+ * @Last modified time: Thursday, 11th October 2018 11:36:40 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,6 +15,7 @@ import { XyoSerializer } from '../../../xyo-serialization/xyo-serializer';
 import { XyoPacker } from '../../../xyo-serialization/xyo-packer';
 import { XyoError } from '../../../xyo-core-components/xyo-error';
 
+/** A serializer for the `XyoPreviousHash` object */
 export class XyoPreviousHashSerializer extends XyoSerializer<XyoPreviousHash> {
 
   get description () {
@@ -26,14 +27,21 @@ export class XyoPreviousHashSerializer extends XyoSerializer<XyoPreviousHash> {
     };
   }
 
+  /** Get the object representation from the byte representation for a XyoPreviousHash */
   public deserialize(buffer: Buffer, xyoPacker: XyoPacker) {
     const hashCreated = xyoPacker.deserialize(buffer);
     return new XyoPreviousHash(hashCreated as XyoHash);
   }
 
+  /** Get the byte representation from the object representation for a XyoPreviousHash */
   public serialize(xyoObject: XyoPreviousHash, xyoPacker: XyoPacker) {
     return xyoPacker.serialize(xyoObject.hash, true);
   }
+
+  /**
+   * A PreviousHash is wrapper around an arbitrary XyoHash.
+   * As such, we delegate the reading of size to the underlying XyoHash object
+   */
 
   public readSize(buffer: Buffer, xyoPacker: XyoPacker) {
     const hashCreator = xyoPacker.getSerializerByMajorMinor(buffer[0], buffer[1]);

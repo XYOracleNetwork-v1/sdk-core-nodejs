@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bridge-block-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 11:58:45 am
+ * @Last modified time: Thursday, 11th October 2018 11:13:05 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,6 +14,11 @@ import { XyoBoundWitness } from "../../bound-witness/xyo-bound-witness";
 import { IXyoHashProvider } from '../../../@types/xyo-hashing';
 import { XyoBridgeHashSet } from "../bridge-hash-set/xyo-bridge-hash-set";
 
+/**
+ * An `XyoBridgeBlockSet` is the data structure that is used to transfer
+ * blocks through a bound witness. It can generally be found as part on the
+ * unsigned payload of a bound-witness
+ */
 export class XyoBridgeBlockSet extends XyoArray {
 
   public static major = 0x02;
@@ -28,6 +33,11 @@ export class XyoBridgeBlockSet extends XyoArray {
   constructor (public readonly array: XyoBoundWitness[]) {
     super(XyoBoundWitness.major, XyoBoundWitness.minor, XyoBridgeBlockSet.major, XyoBridgeBlockSet.minor, 2, array);
   }
+
+  /**
+   * Given a hashProvider, get a bridge-set containing all the hashes
+   * of the bound-witnesses in the collection
+   */
 
   public async getHashSet(hashProvider: IXyoHashProvider) {
     const hashes = await Promise.all(this.array.map((boundWitness) => {

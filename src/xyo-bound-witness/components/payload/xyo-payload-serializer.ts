@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-payload-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 8th October 2018 4:41:28 pm
+ * @Last modified time: Thursday, 11th October 2018 11:29:23 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,6 +14,7 @@ import { XyoSerializer } from '../../../xyo-serialization/xyo-serializer';
 import { XyoPacker } from '../../../xyo-serialization/xyo-packer';
 import { XyoMultiTypeArrayInt } from '../../../xyo-core-components/arrays/multi/xyo-multi-type-array-int';
 
+/** A serializer for the `XyoPayload` object */
 export class XyoPayloadSerializer extends XyoSerializer<XyoPayload> {
 
   get description () {
@@ -25,6 +26,7 @@ export class XyoPayloadSerializer extends XyoSerializer<XyoPayload> {
     };
   }
 
+  /** Get the byte representation from the object representation for a XyoPayload */
   public serialize(xyoObject: XyoPayload, xyoPacker: XyoPacker) {
     return Buffer.concat([
       xyoPacker.serialize(xyoObject.signedPayload, false),
@@ -32,6 +34,7 @@ export class XyoPayloadSerializer extends XyoSerializer<XyoPayload> {
     ]);
   }
 
+  /** Get the object representation from the byte representation for a XyoPayload */
   public deserialize(buffer: Buffer, xyoPacker: XyoPacker): XyoPayload {
     const signedPayloadSize = buffer.readUInt32BE(4);
     const unsignedPayloadSize = buffer.readUInt32BE(4 + signedPayloadSize);

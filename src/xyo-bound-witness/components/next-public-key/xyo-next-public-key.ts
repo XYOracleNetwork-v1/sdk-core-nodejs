@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-next-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 12:11:44 pm
+ * @Last modified time: Thursday, 11th October 2018 11:28:10 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,11 +14,13 @@ import { IXyoPublicKey } from '../../../@types/xyo-signing';
 
 /**
  * In the XYO protocol, the next public is important for rolling
- * different crypto key/pairs
+ * different crypto key/pairs.
  *
- * @major: 0x02
- * @minor: 0x07
+ * When rolling crypto-key pairs a party in the bound-witness can specify
+ * a `nextPublicKey` field that must be used in the subsequent block for
+ * signing
  */
+
 export class XyoNextPublicKey extends XyoObject {
 
   public static major = 0x02;

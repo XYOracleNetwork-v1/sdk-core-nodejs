@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: bound-witness-origin-chain-extractor.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 11:02:30 am
+ * @Last modified time: Thursday, 11th October 2018 9:34:49 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,6 +12,15 @@
 import { XyoBoundWitness } from './xyo-bound-witness';
 import { XyoPacker } from '../../xyo-serialization/xyo-packer';
 import { XyoBridgeBlockSet } from '../components/bridge-block-set/xyo-bridge-block-set';
+
+/**
+ * Bound witnesses can contain other bound-witnesses within their unsigned payload.
+ * This is the fundamental way to bridge blocks in the Xyo protocol. This nesting
+ * isn't necessarily one layer deep, it can be n-deep.
+ *
+ * This is a helper for recursively extracting the nested bound witnesses and flattening
+ * them out.
+ */
 
 export function extractNestedBoundWitnesses(boundWitness: XyoBoundWitness, xyoPacker: XyoPacker) {
   const nestedBoundWitnesses: XyoBoundWitness[] = [];

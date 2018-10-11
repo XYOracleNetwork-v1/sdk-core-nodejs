@@ -17,15 +17,13 @@ import { IXyoObjectDescriptor } from '../../../@types/xyo-serialization';
 /**
  * An XyoPayload is meant to represent the meaningful data
  * in a bound witness interaction. It is broke into two important
- * subsets, the `signedPayload` and the `unsignedPayload`.
- * The signedPayload contains key/value pairs that the signature
- * will take into consideration. The unsigned payload contains key/values
+ * parts, the `signedPayload` and the `unsignedPayload`.
+ *
+ * The signedPayload contains values that the signature
+ * will take into consideration. The unsigned payload contains values
  * that do not have to be signed. This is useful for sharing data with
  * another node as part of a bound-witness, but that doesn't have to
- * be persisted in the origin chain.
- *
- * @major: 0x02
- * @minor: 0x04
+ * be persisted in the origin chain for it to be considered valid.
  */
 
 export class XyoPayload extends XyoObject {
@@ -53,8 +51,16 @@ export class XyoPayload extends XyoObject {
     return this.getMappingOfElements(this.signedPayload.array);
   }
 
+  /** A helper for plucking a particular value out of the signed payload */
   public extractFromSignedPayload<T>(description: IXyoObjectDescriptor): T | undefined {
     return this.signedPayload.array.find((item) => {
+      return item.major === description.major && item.minor === description.minor;
+    }) as T | undefined;
+  }
+
+  /** A helper for plucking a particular value out of the unsigned payload */
+  public extractFromUnsignedPayload<T>(description: IXyoObjectDescriptor): T | undefined {
+    return this.unsignedPayload.array.find((item) => {
       return item.major === description.major && item.minor === description.minor;
     }) as T | undefined;
   }
