@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: in-memory-storage-provider.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:07:03 pm
+ * @Last modified time: Friday, 12th October 2018 9:43:00 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoInMemoryStorageProvider } from '../../xyo-storage/xyo-in-memory-storage-provider';
-import { XyoStoragePriority } from '../../xyo-storage/xyo-storage-priority';
+import { XyoInMemoryStorageProvider } from '../xyo-in-memory-storage-provider';
+import { XyoStoragePriority } from '../xyo-storage-priority';
 
 describe('Storage', () => {
   it(`Should manage memory`, async () => {

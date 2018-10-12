@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-verifier.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 4:44:08 pm
+ * @Last modified time: Friday, 12th October 2018 9:44:26 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,7 +17,7 @@ import { XyoPayload } from "../../xyo-bound-witness/components/payload/xyo-paylo
 import { XyoMultiTypeArrayInt } from "../../xyo-core-components/arrays/multi/xyo-multi-type-array-int";
 import { XyoRssi } from "../../xyo-core-components/heuristics/numbers/xyo-rssi";
 import { XyoIndex } from "../../xyo-bound-witness/components/index/xyo-index";
-import { XyoOriginChainVerifier } from "../../xyo-origin-chain/xyo-origin-chain-verifier";
+import { XyoOriginChainVerifier } from "../xyo-origin-chain-verifier";
 import { XyoSha256HashProvider } from "../../xyo-hashing/sha256/xyo-sha256-hash-provider";
 import { XyoPreviousHash } from "../../xyo-bound-witness/components/previous-hash/xyo-previous-hash";
 import { XyoNextPublicKey } from "../../xyo-bound-witness/components/next-public-key/xyo-next-public-key";

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 5:07:37 pm
+ * @Last modified time: Friday, 12th October 2018 9:37:34 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,7 +19,6 @@ import { XyoError, XyoErrors } from '../../xyo-core-components/xyo-error';
 import { XyoKeySet } from '../components/key-set/xyo-key-set';
 import { XyoSingleTypeArrayShort } from '../../xyo-core-components/arrays/single/xyo-single-type-array-short';
 import { XyoSingleTypeArrayInt } from '../../xyo-core-components/arrays/single/xyo-single-type-array-int';
-import { XyoObject } from '../../lib';
 
 /**
  * A serializer for BoundWitness objects

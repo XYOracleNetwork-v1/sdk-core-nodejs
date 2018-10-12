@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-local-storage-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 4:41:48 pm
+ * @Last modified time: Friday, 12th October 2018 9:38:06 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,7 +18,7 @@ import { XyoHash } from '../xyo-hashing/xyo-hash';
 import { XyoStoragePriority } from '../xyo-storage/xyo-storage-priority';
 import { IXyoStorageProvider } from '../@types/xyo-storage';
 import { XyoOriginChainStateInMemoryRepository } from './xyo-origin-chain-state-in-memory-repository';
-import { XyoObject } from '../lib';
+import { XyoObject } from '../xyo-core-components/xyo-object';
 
 export class XyoOriginChainLocalStorageRepository implements IXyoOriginChainStateRepository {
 

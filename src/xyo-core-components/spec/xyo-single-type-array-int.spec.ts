@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: scratch.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 4:47:04 pm
+ * @Last modified time: Friday, 12th October 2018 9:47:08 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,8 +12,8 @@
 // tslint:disable:max-line-length
 
 import { XyoDefaultPackerProvider } from '../../xyo-serialization/xyo-default-packer-provider';
-import { XyoSingleTypeArrayInt } from '../../xyo-core-components/arrays/single/xyo-single-type-array-int';
-import { XyoObject } from '../../xyo-core-components/xyo-object';
+import { XyoSingleTypeArrayInt } from '../arrays/single/xyo-single-type-array-int';
+import { XyoObject } from '../xyo-object';
 
 describe('XyoSingleTypeArrayInt', () => {
   it('Should deserialize', () => {
