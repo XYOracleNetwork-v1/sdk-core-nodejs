@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:12:29 pm
+ * @Last modified time: Friday, 12th October 2018 11:23:19 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -42,7 +42,6 @@ import { XyoMultiTypeArrayShort } from '../xyo-core-components/arrays/multi/xyo-
 import { XyoMultiTypeArrayInt } from '../xyo-core-components/arrays/multi/xyo-multi-type-array-int';
 import { XyoPayloadSerializer } from '../xyo-bound-witness/components/payload/xyo-payload-serializer';
 import { XyoMd5Hash } from '../xyo-hashing/md5/xyo-md5-hash';
-import { XyoMd2Hash } from '../xyo-hashing/md2/xyo-md2-hash';
 import { XyoSha1Hash } from '../xyo-hashing/sha1/xyo-sha1-hash';
 import { XyoSha224Hash } from '../xyo-hashing/sha224/xyo-sha224-hash';
 import { XyoSha256Hash } from '../xyo-hashing/sha256/xyo-sha256-hash';
@@ -114,7 +113,6 @@ export class XyoDefaultPackerProvider extends XyoBase {
     add(XyoBoundWitnessTransfer, new XyoBoundWitnessTransferSerializer());
     add(XyoBoundWitness, new XyoBoundWitnessSerializer());
     add(XyoBridgeHashSet, new XyoArraySerializer(XyoBridgeHashSet.major, XyoBridgeHashSet.minor, 2, false));
-    add(XyoMd2Hash, new XyoHashSerializer(XyoMd2Hash.minor, 16, undefined, { newInstance: (hashProvider, hash) => new XyoMd2Hash(hashProvider, hash) }));
     add(XyoMd5Hash, new XyoHashSerializer(XyoMd5Hash.minor, 16, new XyoMd5HashProvider(), { newInstance: (hashProvider, hash) => new XyoMd5Hash(hashProvider, hash) }));
     add(XyoSha1Hash, new XyoHashSerializer(XyoSha1Hash.minor, 20, sha1HashProvider, { newInstance: (hashProvider, hash) => new XyoSha1Hash(hashProvider, hash) }));
     add(XyoSha224Hash, new XyoHashSerializer(XyoSha224Hash.minor, 28, new XyoSha224HashProvider(), { newInstance: (hashProvider, hash) => new XyoSha224Hash(hashProvider, hash) }));

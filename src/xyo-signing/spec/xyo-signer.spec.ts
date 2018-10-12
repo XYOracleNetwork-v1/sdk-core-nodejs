@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signer.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 12th October 2018 11:43:37 am
+ * @Last modified time: Friday, 12th October 2018 11:47:40 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -57,17 +57,11 @@ function signerSpec(signerProvider: IXyoSignerProvider) {
       const data = Buffer.from('hello world');
       const signature = await signer!.signData(data);
       const shouldVerifyResult = await signature.verify(data, signer.publicKey);
-<<<<<<< HEAD
-      expect(shouldVerifyResult === true).toBe(true);
 
-      const shouldNotVerifyResult = await signature.verify(Buffer.from('wrong data'), signer.publicKey);
-      expect(shouldNotVerifyResult === true).toBe(false);
-=======
       expect(shouldVerifyResult).toBe(true);
 
       const shouldNotVerifyResult = await signature.verify(Buffer.from('wrong data'), signer.publicKey);
       expect(shouldNotVerifyResult).toBe(false);
->>>>>>> Wrote dynamic signing spec
     });
   });
 }
