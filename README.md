@@ -3,8 +3,8 @@
 ![logo]
 
 # XYO CORE SDK (sdk-core-nodejs)
-
 [![CircleCI](https://circleci.com/gh/XYOracleNetwork/sdk-core-nodejs.svg?style=svg)](https://circleci.com/gh/XYOracleNetwork/sdk-core-nodejs)
+[![Greenkeeper badge](https://badges.greenkeeper.io/XYOracleNetwork/sdk-core-nodejs.svg)](https://greenkeeper.io/)
 
 Core functionality for the XYO nodejs projects. This repository implements
 the core objects used in the XYO protocol. Additionally it provides core
