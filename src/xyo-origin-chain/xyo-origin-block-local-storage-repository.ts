@@ -4,36 +4,33 @@
  * @Email:  developer@xyfindables.com
  * @Filename: origin-chain-manager.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:12:34 pm
+ * @Last modified time: Thursday, 11th October 2018 5:25:39 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoStoragePriority } from '../xyo-storage/xyo-storage-priority';
-import { XYOStorageProvider } from '../@types/xyo-storage';
-import { XyoBoundWitness } from '../xyo-bound-witness/xyo-bound-witness';
+import { IXyoStorageProvider } from '../@types/xyo-storage';
+import { XyoBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-bound-witness';
 import { XyoOriginBlock } from './xyo-origin-block';
-import { XyoPacker } from '../xyo-serialization/xyo-packer';
-import { XyoOriginBlockRepository } from '../@types/xyo-origin-chain';
+import { IXyoOriginBlockRepository } from '../@types/xyo-origin-chain';
 import { XyoHash } from '../xyo-hashing/xyo-hash';
 
 /**
  * An XyoOriginChainNavigator exposes an api for managing
  * an origin chain
  */
-export class XyoOriginBlockLocalStorageRepository implements XyoOriginBlockRepository {
+export class XyoOriginBlockLocalStorageRepository implements IXyoOriginBlockRepository {
 
   /**
    * Creates an instance of a XyoOriginChainNavigator
    *
-   * @param xyoPacker a packer for serializing / deserializing values
    * @param originBlocksStorageProvider A storage provider for storage management
    */
 
   constructor(
-    private readonly xyoPacker: XyoPacker,
-    private readonly originBlocksStorageProvider: XYOStorageProvider,
-    private readonly originBlockNextHashStorageProvider: XYOStorageProvider
+    private readonly originBlocksStorageProvider: IXyoStorageProvider,
+    private readonly originBlockNextHashStorageProvider: IXyoStorageProvider
   ) {}
 
   /**
@@ -68,10 +65,10 @@ export class XyoOriginBlockLocalStorageRepository implements XyoOriginBlockRepos
    */
 
   public async addOriginBlock(blockHash: XyoHash, originBlock: XyoBoundWitness): Promise<void> {
-    const blockDataValue = this.xyoPacker.serialize(originBlock, false);
-    const blockHashValue = this.xyoPacker.serialize(blockHash, true);
+    const blockDataValue = originBlock.serialize(false);
+    const blockHashValue = blockHash.serialize(true);
 
-    const previousHashes = await new XyoOriginBlock(this.xyoPacker, originBlock).findPreviousBlocks();
+    const previousHashes = await new XyoOriginBlock(originBlock).findPreviousBlocks();
     const promises = previousHashes.map((hash) => {
       if (!hash) {
         return;
@@ -104,8 +101,8 @@ export class XyoOriginBlockLocalStorageRepository implements XyoOriginBlockRepos
         return undefined;
       }
 
-      const serializer = this.xyoPacker.getSerializerByDescriptor(XyoBoundWitness);
-      const boundWitness = serializer.deserialize(result, this.xyoPacker);
+      const serializer = XyoBoundWitness.getSerializer<XyoBoundWitness>();
+      const boundWitness = serializer.deserialize(result);
       return boundWitness;
     } catch (err) {
       return undefined;

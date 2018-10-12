@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:12:29 pm
+ * @Last modified time: Friday, 12th October 2018 11:23:19 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,41 +13,40 @@
 
 import { XyoPacker } from './xyo-packer';
 
-import { XyoKeySetSerializer } from './serializers/xyo-key-set-serializer';
-import { XyoArraySerializer } from './serializers/xyo-array-serializer';
-import { XyoSignatureSetSerializer } from './serializers/xyo-signature-set-serializer';
-import { XyoBoundWitnessTransferSerializer } from './serializers/xyo-bound-witness-transfer-serializer';
-import { XyoBoundWitnessSerializer } from './serializers/xyo-bound-witness-serializer';
-import { XyoHashSerializer } from './serializers/xyo-hash-serializer';
-import { XyoPreviousHashSerializer } from './serializers/xyo-previous-hash-serializer';
-import { XyoNumberUnsignedSerializer } from './serializers/xyo-number-unsigned-serializer';
-import { XyoNumberSignedSerializer } from './serializers/xyo-number-signed-serializer';
-import { XyoEcdsaUncompressedPublicKeySerializer } from './serializers/xyo-ecdsa-uncompressed-public-key-serializer';
-import { XyoRsaPublicKeySerializer } from './serializers/xyo-rsa-public-key-serializer';
-import { XyoNextPublicKeySerializer } from './serializers/xyo-next-public-key-serializer';
-import { XyoKeySet } from '../xyo-signing/xyo-key-set';
-import { XyoIndex } from '../xyo-core-components/heuristics/numbers/xyo-index';
+import { XyoKeySetSerializer } from '../xyo-bound-witness/components/key-set/xyo-key-set-serializer';
+import { XyoArraySerializer } from '../xyo-core-components/arrays/xyo-array-serializer';
+import { XyoSignatureSetSerializer } from '../xyo-bound-witness/components/signature-set/xyo-signature-set-serializer';
+import { XyoBoundWitnessTransferSerializer } from '../xyo-bound-witness/bound-witness/xyo-bound-witness-transfer-serializer';
+import { XyoBoundWitnessSerializer } from '../xyo-bound-witness/bound-witness/xyo-bound-witness-serializer';
+import { XyoHashSerializer } from '../xyo-hashing/xyo-hash-serializer';
+import { XyoPreviousHashSerializer } from '../xyo-bound-witness/components/previous-hash/xyo-previous-hash-serializer';
+import { XyoNumberUnsignedSerializer } from '../xyo-core-components/heuristics/numbers/xyo-number-unsigned-serializer';
+import { XyoNumberSignedSerializer } from '../xyo-core-components/heuristics/numbers/xyo-number-signed-serializer';
+import { XyoEcdsaUncompressedPublicKeySerializer } from '../xyo-signing/ecdsa/uncompressed-public-key/xyo-ecdsa-uncompressed-public-key-serializer';
+import { XyoRsaPublicKeySerializer } from '../xyo-signing/rsa/public-key/xyo-rsa-public-key-serializer';
+import { XyoNextPublicKeySerializer } from '../xyo-bound-witness/components/next-public-key/xyo-next-public-key-serializer';
+import { XyoKeySet } from '../xyo-bound-witness/components/key-set/xyo-key-set';
+import { XyoIndex } from '../xyo-bound-witness/components/index/xyo-index';
 import { XyoRssi } from '../xyo-core-components/heuristics/numbers/xyo-rssi';
-import { XyoSignatureSet } from '../xyo-signing/xyo-signature-set';
-import { XyoRsaPublicKey } from '../xyo-signing/rsa/xyo-rsa-public-key';
-import { XyoNextPublicKey } from '../xyo-signing/xyo-next-public-key';
-import { XyoPayload } from '../xyo-core-components/xyo-payload';
-import { XyoBoundWitnessTransfer } from '../xyo-bound-witness/xyo-bound-witness-transfer';
-import { XyoBoundWitness } from '../xyo-bound-witness/xyo-bound-witness';
-import { XyoSingleTypeArrayByte } from '../xyo-core-components/arrays/xyo-single-type-array-byte';
-import { XyoSingleTypeArrayShort } from '../xyo-core-components/arrays/xyo-single-type-array-short';
-import { XyoSingleTypeArrayInt } from '../xyo-core-components/arrays/xyo-single-type-array-int';
-import { XyoMultiTypeArrayByte } from '../xyo-core-components/arrays/xyo-multi-type-array-byte';
-import { XyoMultiTypeArrayShort } from '../xyo-core-components/arrays/xyo-multi-type-array-short';
-import { XyoMultiTypeArrayInt } from '../xyo-core-components/arrays/xyo-multi-type-array-int';
-import { XyoPayloadSerializer } from './serializers/xyo-payload-serializer';
+import { XyoSignatureSet } from '../xyo-bound-witness/components/signature-set/xyo-signature-set';
+import { XyoRsaPublicKey } from '../xyo-signing/rsa/public-key/xyo-rsa-public-key';
+import { XyoNextPublicKey } from '../xyo-bound-witness/components/next-public-key/xyo-next-public-key';
+import { XyoPayload } from '../xyo-bound-witness/components/payload/xyo-payload';
+import { XyoBoundWitnessTransfer } from '../xyo-bound-witness/bound-witness/xyo-bound-witness-transfer';
+import { XyoBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-bound-witness';
+import { XyoSingleTypeArrayByte } from '../xyo-core-components/arrays/single/xyo-single-type-array-byte';
+import { XyoSingleTypeArrayShort } from '../xyo-core-components/arrays/single/xyo-single-type-array-short';
+import { XyoSingleTypeArrayInt } from '../xyo-core-components/arrays/single/xyo-single-type-array-int';
+import { XyoMultiTypeArrayByte } from '../xyo-core-components/arrays/multi/xyo-multi-type-array-byte';
+import { XyoMultiTypeArrayShort } from '../xyo-core-components/arrays/multi/xyo-multi-type-array-short';
+import { XyoMultiTypeArrayInt } from '../xyo-core-components/arrays/multi/xyo-multi-type-array-int';
+import { XyoPayloadSerializer } from '../xyo-bound-witness/components/payload/xyo-payload-serializer';
 import { XyoMd5Hash } from '../xyo-hashing/md5/xyo-md5-hash';
-import { XyoMd2Hash } from '../xyo-hashing/md2/xyo-md2-hash';
 import { XyoSha1Hash } from '../xyo-hashing/sha1/xyo-sha1-hash';
 import { XyoSha224Hash } from '../xyo-hashing/sha224/xyo-sha224-hash';
 import { XyoSha256Hash } from '../xyo-hashing/sha256/xyo-sha256-hash';
 import { XyoSha512Hash } from '../xyo-hashing/sha512/xyo-sha512-hash';
-import { XyoPreviousHash } from '../xyo-hashing/xyo-previous-hash';
+import { XyoPreviousHash } from '../xyo-bound-witness/components/previous-hash/xyo-previous-hash';
 import { XyoMd5HashProvider } from '../xyo-hashing/md5/xyo-md5-hash-provider';
 import { XyoSha1HashProvider } from '../xyo-hashing/sha1/xyo-sha1-hash-provider';
 import { XyoSha224HashProvider } from '../xyo-hashing/sha224/xyo-sha224-hash-provider';
@@ -55,15 +54,15 @@ import { XyoSha256HashProvider } from '../xyo-hashing/sha256/xyo-sha256-hash-pro
 import { XyoSha512HashProvider } from '../xyo-hashing/sha512/xyo-sha512-hash-provider';
 import { XyoRsaSha256Signature } from '../xyo-signing/rsa/sha256/xyo-rsa-sha256-signature';
 import { XyoRsaSha256SignerProvider } from '../xyo-signing/rsa/sha256/xyo-rsa-sha256-signer-provider';
-import { XyoRsaSignatureSerializer } from './serializers/xyo-rsa-signature-serializer';
-import { XyoRsaShaSignerSerializer } from './serializers/xyo-rsa-sha-signer-serializer';
+import { XyoRsaSignatureSerializer } from '../xyo-signing/rsa/signature/xyo-rsa-signature-serializer';
+import { XyoRsaShaSignerSerializer } from '../xyo-signing/rsa/signer/xyo-rsa-sha-signer-serializer';
 import { XyoRsaSha256Signer } from '../xyo-signing/rsa/sha256/xyo-rsa-sha256-signer';
 import { XyoRsaSha1Signer } from '../xyo-signing/rsa/sha1/xyo-rsa-sha1-signer';
-import { XyoEcdsaSecp256k1SignerSerializer } from './serializers/xyo-ecdsa-secp256k1-serializer';
-import { XyoEcdsaSignatureSerializer } from './serializers/xyo-ecdsa-signature-serializer';
-import { XyoBridgeBlockSet } from '../xyo-core-components/arrays/xyo-bridge-block-set';
-import { XyoBridgeBlockSetSerializer } from './serializers/xyo-bridge-block-set-serializer';
-import { XyoBridgeHashSet } from '../xyo-core-components/arrays/xyo-bridge-hash-set';
+import { XyoEcdsaSecp256k1SignerSerializer } from '../xyo-signing/ecdsa/secp256k1/signer/xyo-ecdsa-secp256k1-signer-serializer';
+import { XyoEcdsaSignatureSerializer } from '../xyo-signing/ecdsa/signature/xyo-ecdsa-signature-serializer';
+import { XyoBridgeBlockSet } from '../xyo-bound-witness/components/bridge-block-set/xyo-bridge-block-set';
+import { XyoBridgeBlockSetSerializer } from '../xyo-bound-witness/components/bridge-block-set/xyo-bridge-block-set-serializer';
+import { XyoBridgeHashSet } from '../xyo-bound-witness/components/bridge-hash-set/xyo-bridge-hash-set';
 import { XyoEcdsaSecp256k1UnCompressedPublicKey } from '../xyo-signing/ecdsa/secp256k1/xyo-ecdsa-secp256k1-uncompressed-public-key';
 import { XyoEcdsaSecp256k1Sha256SignerProvider } from '../xyo-signing/ecdsa/secp256k1/sha256/xyo-ecdsa-secp256k1-sha256-signer-provider';
 import { XyoEcdsaSecp256k1Sha1SignerProvider } from '../xyo-signing/ecdsa/secp256k1/sha1/xyo-ecdsa-secp256k1-sha1-signer-provider';
@@ -76,7 +75,7 @@ import { XyoEcdsaSecp256k1Sha1Signer } from '../xyo-signing/ecdsa/secp256k1/sha1
 import { XyoObject } from '../xyo-core-components/xyo-object';
 import { XyoSerializer } from './xyo-serializer';
 import { XyoBase } from '../xyo-core-components/xyo-base';
-import { XyoObjectDescriptor } from '../@types/xyo-serialization';
+import { IXyoObjectDescriptor } from '../@types/xyo-serialization';
 
 /**
  * A class for configuring the packing, serialization, and deserialization
@@ -114,7 +113,6 @@ export class XyoDefaultPackerProvider extends XyoBase {
     add(XyoBoundWitnessTransfer, new XyoBoundWitnessTransferSerializer());
     add(XyoBoundWitness, new XyoBoundWitnessSerializer());
     add(XyoBridgeHashSet, new XyoArraySerializer(XyoBridgeHashSet.major, XyoBridgeHashSet.minor, 2, false));
-    add(XyoMd2Hash, new XyoHashSerializer(XyoMd2Hash.minor, 16, undefined, { newInstance: (hashProvider, hash) => new XyoMd2Hash(hashProvider, hash) }));
     add(XyoMd5Hash, new XyoHashSerializer(XyoMd5Hash.minor, 16, new XyoMd5HashProvider(), { newInstance: (hashProvider, hash) => new XyoMd5Hash(hashProvider, hash) }));
     add(XyoSha1Hash, new XyoHashSerializer(XyoSha1Hash.minor, 20, sha1HashProvider, { newInstance: (hashProvider, hash) => new XyoSha1Hash(hashProvider, hash) }));
     add(XyoSha224Hash, new XyoHashSerializer(XyoSha224Hash.minor, 28, new XyoSha224HashProvider(), { newInstance: (hashProvider, hash) => new XyoSha224Hash(hashProvider, hash) }));
@@ -134,7 +132,7 @@ export class XyoDefaultPackerProvider extends XyoBase {
   }
 
   private getRegisterFn(packer: XyoPacker) {
-    return <T extends XyoObject>(descriptor: XyoObjectDescriptor, serializer: XyoSerializer<T>) => {
+    return <T extends XyoObject>(descriptor: IXyoObjectDescriptor, serializer: XyoSerializer<T>) => {
       // this.logInfo(`Adding ${descriptor.name} as ${descriptor.major.toString(16)} ${descriptor.minor.toString(16)}`);
       packer.registerSerializerDeserializer(descriptor, serializer);
     };

@@ -4,21 +4,21 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-hash-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 11:58:45 am
+ * @Last modified time: Friday, 12th October 2018 11:20:18 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoHash } from './xyo-hash';
 import crypto from 'crypto';
-import { XyoError } from '../xyo-core-components/xyo-error';
-import { XyoHashProvider, XyoHashFactory } from '../@types/xyo-hashing';
+import { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
+import { IXyoHashProvider, IXyoHashFactory } from '../@types/xyo-hashing';
 
 /**
  * A hash provider that wraps and utilizes the natives nodejs hash functionality
  */
 
-export class XyoNativeBaseHashProvider implements XyoHashProvider {
+export class XyoNativeBaseHashProvider implements IXyoHashProvider {
 
   /**
    * Creates a new instance of a XyoNativeBaseHashProvider
@@ -28,7 +28,7 @@ export class XyoNativeBaseHashProvider implements XyoHashProvider {
 
   constructor (
     private readonly hashAlgorithm: string,
-    private readonly xyoHashFactory: XyoHashFactory
+    private readonly xyoHashFactory: IXyoHashFactory
   ) {}
 
   /**
@@ -55,8 +55,8 @@ export class XyoNativeBaseHashProvider implements XyoHashProvider {
       return hashPromise;
     } catch (err) {
       throw new XyoError(
-        `Could not locate crypto hash-provider ${this.hashAlgorithm}`,
-        XyoError.errorType.ERR_CRITICAL
+        `Could not locate crypto hash-provider ${this.hashAlgorithm}. ${err}`,
+        XyoErrors.CRITICAL
       );
     }
   }

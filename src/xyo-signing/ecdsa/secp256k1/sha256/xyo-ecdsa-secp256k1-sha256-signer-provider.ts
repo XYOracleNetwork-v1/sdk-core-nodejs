@@ -9,11 +9,11 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoEcdsaSecp256k1SignerProvider } from "../xyo-ecdsa-secp256k1-signer-provider";
-import { XyoHashProvider } from '../../../../@types/xyo-hashing';
-import { XyoEcdsaSecp256k1Signer } from "../xyo-ecdsa-secp256k1-signer";
+import { XyoEcdsaSecp256k1SignerProvider } from "../signer/xyo-ecdsa-secp256k1-signer-provider";
+import { IXyoHashProvider } from '../../../../@types/xyo-hashing';
+import { XyoEcdsaSecp256k1Signer } from "../signer/xyo-ecdsa-secp256k1-signer";
 import { XyoEcdsaSecp256k1Sha256Signer } from "./xyo-ecdsa-secp256k1-sha256-signer";
-import { XyoSignature } from '../../../../@types/xyo-signing';
+import { IXyoSignature } from '../../../../@types/xyo-signing';
 import { XyoObject } from "../../../../xyo-core-components/xyo-object";
 
 export class XyoEcdsaSecp256k1Sha256SignerProvider extends XyoEcdsaSecp256k1SignerProvider {
@@ -21,14 +21,14 @@ export class XyoEcdsaSecp256k1Sha256SignerProvider extends XyoEcdsaSecp256k1Sign
   public static major = 0x06;
   public static minor = 0x01;
 
-  constructor(public readonly hashProvider: XyoHashProvider) {
+  constructor(public readonly hashProvider: IXyoHashProvider) {
     super(XyoEcdsaSecp256k1Sha256SignerProvider.major, XyoEcdsaSecp256k1Sha256SignerProvider.minor);
   }
 
   public getSigner(
     sign: (data: Buffer) => Promise<Buffer>,
     getPublicXY: () => {x: Buffer, y: Buffer},
-    verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
+    verifySign: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
     getPrivateKey: () => string
   ): XyoEcdsaSecp256k1Signer {
     return new XyoEcdsaSecp256k1Sha256Signer(sign, getPublicXY, verifySign, getPrivateKey);

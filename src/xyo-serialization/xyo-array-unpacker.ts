@@ -4,14 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-unpacker.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 1:19:15 pm
+ * @Last modified time: Thursday, 11th October 2018 4:50:30 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../xyo-core-components/xyo-object';
-import { XyoError } from '../xyo-core-components/xyo-error';
-import { XyoPacker } from './xyo-packer';
+import { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
 
 /**
  * Unpacks Array value in accordance with the Major/Minor protocol
@@ -36,7 +35,6 @@ export class XyoArrayUnpacker {
    */
 
   constructor (
-    private readonly xyoPacker: XyoPacker,
     private readonly data: Buffer,
     private readonly typed: boolean,
     private readonly sizeOfSize: number
@@ -68,7 +66,7 @@ export class XyoArrayUnpacker {
    */
 
   private readCurrentSize (major: number, minor: number): number | null {
-    const typeObject = this.xyoPacker.getSerializerByMajorMinor(major, minor);
+    const typeObject = XyoObject.getSerializerByMajorMinor(major, minor);
 
     if (typeObject) {
       const sizeOfBytesToRead = typeObject.sizeOfBytesToRead;
@@ -78,8 +76,7 @@ export class XyoArrayUnpacker {
       }
 
       return typeObject.readSize(
-        this.data.slice(this.currentPosition, this.currentPosition + sizeOfBytesToRead),
-        this.xyoPacker
+        this.data.slice(this.currentPosition, this.currentPosition + sizeOfBytesToRead)
       );
     }
 
@@ -108,7 +105,7 @@ export class XyoArrayUnpacker {
         } else {
           throw new XyoError(
             `Can't unpack array, not enough data`,
-            XyoError.errorType.ERR_CREATOR_MAPPING
+            XyoErrors.CREATOR_MAPPING
           );
         }
       }
@@ -130,11 +127,11 @@ export class XyoArrayUnpacker {
           field
         ]);
 
-        items.push(this.xyoPacker.deserialize(merged));
+        items.push(XyoObject.deserialize(merged));
       } else {
         throw new XyoError(
           `Can't find size of element, ${arrayType[0]}, ${arrayType[1]}`,
-          XyoError.errorType.ERR_CRITICAL
+          XyoErrors.CRITICAL
         );
       }
     }

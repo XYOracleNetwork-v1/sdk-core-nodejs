@@ -4,15 +4,9 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-catalogue-item.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 26th September 2018 3:34:28 pm
+ * @Last modified time: Thursday, 11th October 2018 1:49:43 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
- */
-
-/**
- * Before two networked-nodes participate in an operation together,
- * a negotiation must occur where the two nodes agree on which
- * operations each support and which one they will do.
  */
 
 /**
@@ -46,6 +40,7 @@ export function bufferToCatalogueItems(buffer: Buffer): CatalogueItem[] {
   .filter(catalogueItem => catalogueItem !== null) as CatalogueItem[];
 }
 
+/** Returns a number, which is feature-mask representing CatalogueItems */
 export function catalogueItemsToMask(catalogueItems: CatalogueItem[]) {
   return catalogueItems.reduce((sum, item) => sum + item, 0);
 }

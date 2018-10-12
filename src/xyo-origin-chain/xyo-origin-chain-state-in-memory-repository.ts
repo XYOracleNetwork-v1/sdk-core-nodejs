@@ -10,16 +10,16 @@
  */
 
 import { XyoHash } from '../xyo-hashing/xyo-hash';
-import { XyoNextPublicKey } from '../xyo-signing/xyo-next-public-key';
-import { XyoPreviousHash } from '../xyo-hashing/xyo-previous-hash';
-import { XyoIndex } from '../xyo-core-components/heuristics/numbers/xyo-index';
-import { XyoSigner } from '../@types/xyo-signing';
-import { XyoOriginChainStateRepository } from '../@types/xyo-origin-chain';
+import { XyoNextPublicKey } from '../xyo-bound-witness/components/next-public-key/xyo-next-public-key';
+import { XyoPreviousHash } from '../xyo-bound-witness/components/previous-hash/xyo-previous-hash';
+import { XyoIndex } from '../xyo-bound-witness/components/index/xyo-index';
+import { IXyoSigner } from '../@types/xyo-signing';
+import { IXyoOriginChainStateRepository } from '../@types/xyo-origin-chain';
 
 /**
  * Encapsulates the values that go into an origin-chain managements
  */
-export class XyoOriginChainStateInMemoryRepository implements XyoOriginChainStateRepository {
+export class XyoOriginChainStateInMemoryRepository implements IXyoOriginChainStateRepository {
 
   /** The index of the block in the origin chain */
   private idx: number;
@@ -27,9 +27,9 @@ export class XyoOriginChainStateInMemoryRepository implements XyoOriginChainStat
   constructor(
     index: number,
     private latestHash: XyoHash | undefined,
-    private readonly currentSigners: XyoSigner[],
+    private readonly currentSigners: IXyoSigner[],
     private nextPublicKey: XyoNextPublicKey | undefined,
-    private readonly waitingSigners: XyoSigner[],
+    private readonly waitingSigners: IXyoSigner[],
   ) {
     this.idx = index;
   }
@@ -67,7 +67,7 @@ export class XyoOriginChainStateInMemoryRepository implements XyoOriginChainStat
     return this.nextPublicKey;
   }
 
-  public async getWaitingSigners(): Promise<XyoSigner[]> {
+  public async getWaitingSigners(): Promise<IXyoSigner[]> {
     return this.waitingSigners;
   }
 
@@ -87,7 +87,7 @@ export class XyoOriginChainStateInMemoryRepository implements XyoOriginChainStat
    * Adds a signer to be used in the next bound-witness interaction.
    */
 
-  public async addSigner(signer: XyoSigner) {
+  public async addSigner(signer: IXyoSigner) {
     this.nextPublicKey = new XyoNextPublicKey(signer.publicKey);
     this.waitingSigners.push(signer);
   }
@@ -96,7 +96,7 @@ export class XyoOriginChainStateInMemoryRepository implements XyoOriginChainStat
    * Set the current signers
    * @param signers A collection of signers to set for the current block
    */
-  public async setCurrentSigners(signers: XyoSigner[]) {
+  public async setCurrentSigners(signers: IXyoSigner[]) {
     // this.currentSigners is immutable, so we empty then fill up the array
     while (this.currentSigners.length) {
       this.currentSigners.pop();

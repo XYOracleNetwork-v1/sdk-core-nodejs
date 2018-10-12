@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: in-memory.storage-provider.impl.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 12:47:45 pm
+ * @Last modified time: Thursday, 11th October 2018 1:16:26 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoStoragePriority } from './xyo-storage-priority';
-import { XYOStorageProvider } from '../@types/xyo-storage';
-import { XyoError } from '../xyo-core-components/xyo-error';
+import { IXyoStorageProvider } from '../@types/xyo-storage';
+import { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
 
 /**
  * The In-Memory Storage Provider implements the IStorageProvider
@@ -19,7 +19,7 @@ import { XyoError } from '../xyo-core-components/xyo-error';
  * does not persist beyond the lifetime of the application
  */
 
-export class XyoInMemoryStorageProvider implements XYOStorageProvider {
+export class XyoInMemoryStorageProvider implements IXyoStorageProvider {
 
   /** A simple key value map to map addresses to values */
   private readonly data: {[s: string]: Buffer} = {};
@@ -73,7 +73,7 @@ export class XyoInMemoryStorageProvider implements XYOStorageProvider {
   public async delete(key: Buffer): Promise<void> {
     const value = this.data[key.toString()];
     if (!value) {
-      throw new XyoError(`Unable to delete ${key}, does not exist`, XyoError.errorType.ERR_INVALID_PARAMETERS);
+      throw new XyoError(`Unable to delete ${key}, does not exist`, XyoErrors.INVALID_PARAMETERS);
     }
 
     delete this.data[key.toString()];

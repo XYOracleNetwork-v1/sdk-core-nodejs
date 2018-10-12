@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 11:58:43 am
+ * @Last modified time: Thursday, 11th October 2018 1:20:41 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../xyo-core-components/xyo-object';
-import { XyoHashProvider } from '../@types/xyo-hashing';
-import { XyoError } from '../xyo-core-components/xyo-error';
+import { IXyoHashProvider } from '../@types/xyo-hashing';
+import { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
 
 /**
  * Wraps a XyoHash value. Additionally, adds a `verifyHash`
@@ -28,7 +28,7 @@ export class XyoHash extends XyoObject {
    */
 
   constructor(
-    private readonly hashProvider: XyoHashProvider | undefined,
+    private readonly hashProvider: IXyoHashProvider | undefined,
     public readonly hash: Buffer,
     public readonly major: number,
     public readonly minor: number
@@ -44,7 +44,7 @@ export class XyoHash extends XyoObject {
 
   public async verifyHash(data: Buffer): Promise<boolean> {
     if (this.hashProvider === undefined) {
-      throw new XyoError(`Can not verify hash, no hash provider provider`, XyoError.errorType.ERR_CRITICAL);
+      throw new XyoError(`Can not verify hash, no hash provider provider`, XyoErrors.CRITICAL);
     }
 
     const xyoHash = await this.hashProvider.createHash(data);

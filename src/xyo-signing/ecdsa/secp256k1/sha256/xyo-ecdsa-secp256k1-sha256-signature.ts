@@ -9,8 +9,8 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoEcdsaSignature } from "../../xyo-ecdsa-signature";
-import { XyoSignature } from '../../../../@types/xyo-signing';
+import { XyoEcdsaSignature } from "../../signature/xyo-ecdsa-signature";
+import { IXyoSignature } from '../../../../@types/xyo-signing';
 import { XyoObject } from "../../../../xyo-core-components/xyo-object";
 
 export class XyoEcdsaSecp256k1Sha256Signature extends XyoEcdsaSignature {
@@ -20,7 +20,7 @@ export class XyoEcdsaSecp256k1Sha256Signature extends XyoEcdsaSignature {
 
   constructor (
     private readonly signature: Buffer,
-    private readonly verifySignFn: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
+    private readonly verifySignFn: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
   ) {
     super(XyoEcdsaSecp256k1Sha256Signature.major, XyoEcdsaSecp256k1Sha256Signature.minor);
   }
@@ -29,7 +29,7 @@ export class XyoEcdsaSecp256k1Sha256Signature extends XyoEcdsaSignature {
     return this.signature;
   }
 
-  public verifySign(signature: XyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {
+  public verifySign(signature: IXyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {
     return this.verifySignFn(signature, data, publicKey);
   }
 

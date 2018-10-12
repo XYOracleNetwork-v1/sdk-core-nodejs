@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 11:26:09 am
+ * @Last modified time: Thursday, 11th October 2018 1:20:35 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,7 @@
 // tslint:disable:max-classes-per-file
 
 import { XyoObject } from '../xyo-object';
-import { XyoError } from '../xyo-error';
+import { XyoError, XyoErrors } from '../xyo-error';
 
 /**
  * A wrapper for collections / arrays in the XyoNetwork.
@@ -88,7 +88,7 @@ export class XyoArray extends XyoObject {
 
   public addElement(element: XyoObject, index?: number) {
     if (this.typedId !== undefined && element.id[0] !== this.elementMajor || element.id[1] !== this.elementMinor) {
-      throw new XyoError('Can not add element to array, mismatched type', XyoError.errorType.ERR_INVALID_PARAMETERS);
+      throw new XyoError('Can not add element to array, mismatched type', XyoErrors.INVALID_PARAMETERS);
     }
 
     if (index !== undefined && index < this.array.length) {

@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoEcdsaUncompressedPublicKey } from "../xyo-ecdsa-uncompressed-public-key";
+import { XyoEcdsaUncompressedPublicKey } from "../uncompressed-public-key/xyo-ecdsa-uncompressed-public-key";
 
 export class XyoEcdsaSecp256k1UnCompressedPublicKey extends XyoEcdsaUncompressedPublicKey {
 

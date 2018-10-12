@@ -20,7 +20,7 @@
     "max-line-length": [true, {"limit": 120, "ignore-pattern": "^import |^export {(.*?)}"}],
     "object-literal-sort-keys": false,
     "no-implicit-dependencies": [true, "dev"],
-    "interface-name":false,
+    "interface-name":true,
     "no-bitwise": false,
     "quotemark": false
   }

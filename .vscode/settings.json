@@ -18,6 +18,7 @@
     "ryanxyo",
     "secp",
     "serializers",
+    "transpiles",
     "xyfindables"
   ],
   "typescript.tsdk": "node_modules/typescript/lib"

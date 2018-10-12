@@ -4,15 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-block.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:12:33 pm
+ * @Last modified time: Thursday, 11th October 2018 5:25:43 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBoundWitness } from '../xyo-bound-witness/xyo-bound-witness';
-import { getBufferHash } from '../xyo-utils/xyo-buffer-utils';
-import { XyoPreviousHash } from '../xyo-hashing/xyo-previous-hash';
-import { XyoPacker } from '../xyo-serialization/xyo-packer';
+import { XyoBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-bound-witness';
+import { getBufferHash } from '../xyo-core-components/xyo-buffer-utils';
+import { XyoPreviousHash } from '../xyo-bound-witness/components/previous-hash/xyo-previous-hash';
 
 /**
  * An XyoOriginBlock represents a single block in an origin chain belonging to a
@@ -24,11 +23,10 @@ export class XyoOriginBlock {
   /**
    * Creates a new instance of a XyoOriginBlock
    *
-   * @param xyoPacker A packer for serializing and deserializing
    * @param boundWitness The bound witness data that comprises this origin block
    */
 
-  constructor(private readonly xyoPacker: XyoPacker, private readonly boundWitness: XyoBoundWitness) {}
+  constructor(private readonly boundWitness: XyoBoundWitness) {}
 
   /**
    * Given an origin block, this will return the hashes of the origin blocks that came before
@@ -53,7 +51,7 @@ export class XyoOriginBlock {
       /** Retrieve the value, if it exists add it to the previous hash list */
       const signedPayload = signedPayloadValue[idHashValue];
       if (signedPayload) {
-        previousHashes.push(this.xyoPacker.serialize(signedPayload, false));
+        previousHashes.push(signedPayload.serialize(false));
       }
     });
 

@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoPeerConnectionDelegateInterface } from '../@types/xyo-node';
+import { IXyoPeerConnectionDelegate } from '../@types/xyo-node';
 import { XyoBase } from '../xyo-core-components/xyo-base';
 
 /**
@@ -26,7 +26,7 @@ export class XyoNode extends XyoBase {
   private isLooping: boolean = false;
   private shouldStopLooping: boolean = false;
 
-  constructor(private readonly peerConnectionDelegate: XyoPeerConnectionDelegateInterface) {
+  constructor(private readonly peerConnectionDelegate: IXyoPeerConnectionDelegate) {
     super();
   }
 
@@ -52,14 +52,24 @@ export class XyoNode extends XyoBase {
    */
 
   private async loop() {
+    this.logInfo(`new run loop`);
     if (this.isLooping && this.shouldStopLooping) {
+      this.logInfo(`Exiting run loop`);
       return;
     }
 
-    this.logInfo(`Starting XyoArchivist loop`);
+    this.logInfo(`Starting node loop`);
 
-    const networkPipe = await this.peerConnectionDelegate.provideConnection();
-    await this.peerConnectionDelegate.handlePeerConnection(networkPipe);
+    try {
+      const networkPipe = await this.peerConnectionDelegate.provideConnection();
+      this.logInfo(`network pipe received`);
+      await this.peerConnectionDelegate.handlePeerConnection(networkPipe);
+      this.logInfo(`Peer Connection handled`);
+    } catch (err) {
+      this.logError(`There was an uncaught error in the xyo-node loop, ${err}`);
+    }
+
+    this.logInfo(`end loop`);
     setImmediate(this.loop.bind(this));
   }
 }

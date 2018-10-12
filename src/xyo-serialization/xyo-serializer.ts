@@ -4,15 +4,15 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-packer-serializer-deserializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 4th October 2018 1:02:46 pm
+ * @Last modified time: Thursday, 11th October 2018 5:24:36 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../xyo-core-components/xyo-object';
-import { XyoPacker } from './xyo-packer';
-import { XyoError } from '../xyo-core-components/xyo-error';
+import { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
 import { XyoBase } from '../xyo-core-components/xyo-base';
+import { IXyoSerializationDescription } from '../@types/xyo-serialization';
 
 /**
  * An interface for going between serialized and deserialized versions
@@ -26,19 +26,19 @@ export abstract class XyoSerializer<T extends XyoObject> extends XyoBase {
    * according to xyo-packing protocol
    */
 
-  public abstract description: XyoSerializationDescription;
+  public abstract description: IXyoSerializationDescription;
 
   /**
    * Should return a Buffer representation of the
    * the XyoObject in accordance with the xyo-packing protocol
    */
-  public abstract serialize(xyoObject: T, xyoPacker: XyoPacker): Buffer;
+  public abstract serialize(xyoObject: T): Buffer;
 
   /**
    * This method should return an instance of a class that implements
    * XyoObject.
    */
-  public abstract deserialize(buffer: Buffer, xyoPacker: XyoPacker): T;
+  public abstract deserialize(buffer: Buffer): T;
 
   get sizeOfBytesToRead (): number {
 
@@ -53,7 +53,7 @@ export abstract class XyoSerializer<T extends XyoObject> extends XyoBase {
       }
     }
 
-    throw new XyoError(`XyoSerialization misconfiguration error`, XyoError.errorType.ERR_CREATOR_MAPPING);
+    throw new XyoError(`XyoSerialization misconfiguration error`, XyoErrors.CREATOR_MAPPING);
   }
 
   get sizeIdentifierSize () {
@@ -70,7 +70,7 @@ export abstract class XyoSerializer<T extends XyoObject> extends XyoBase {
   /**
    * Consider over-writing in subclasses
    */
-  public readSize(buffer: Buffer, xyoPacker: XyoPacker) {
+  public readSize(buffer: Buffer) {
     if (this.description.staticSize !== undefined) {
       return this.description.staticSize;
     }
@@ -87,14 +87,6 @@ export abstract class XyoSerializer<T extends XyoObject> extends XyoBase {
       return buffer.readUInt32BE(0);
     }
 
-    throw new XyoError(`XyoSerialization misconfiguration error`, XyoError.errorType.ERR_CREATOR_MAPPING);
+    throw new XyoError(`XyoSerialization misconfiguration error`, XyoErrors.CREATOR_MAPPING);
   }
-}
-
-export interface XyoSerializationDescription {
-  major: number;
-  minor: number;
-  staticSize?: number;
-  sizeOfBytesToGetSize?: number;
-  sizeIdentifierSize: number;
 }

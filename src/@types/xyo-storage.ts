@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-storage.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:07:01 pm
+ * @Last modified time: Wednesday, 10th October 2018 6:00:32 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,7 +17,8 @@ import { XyoStoragePriority } from "../xyo-storage/xyo-storage-priority";
  * abstraction over a key/value store.
  */
 
-export interface XYOStorageProvider {
+export interface IXyoStorageProvider {
+  /** Should persist the value for the corresponding key */
   write(
     key: Buffer,
     value: Buffer,
@@ -26,11 +27,15 @@ export interface XYOStorageProvider {
     timeout: number
   ): Promise<XyoError | undefined>;
 
+  /** Attempts to the read the value for key, returns `undefined` if it does not exist */
   read(key: Buffer, timeout: number): Promise<Buffer | undefined>;
 
+  /** Returns a list of all the keys in storage */
   getAllKeys(): Promise<Buffer[]>;
 
+  /** Removes a key from storage */
   delete(key: Buffer): Promise<void>;
 
+  /** Returns true if the key exists in storage, false otherwise */
   containsKey(key: Buffer): Promise<boolean>;
 }

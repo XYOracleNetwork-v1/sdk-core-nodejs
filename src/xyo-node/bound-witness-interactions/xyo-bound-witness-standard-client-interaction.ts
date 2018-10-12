@@ -4,32 +4,30 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-client-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 1:18:07 pm
+ * @Last modified time: Thursday, 11th October 2018 5:21:35 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoZigZagBoundWitness } from '../../xyo-bound-witness/xyo-zig-zag-bound-witness';
-import { XyoBoundWitnessTransfer } from '../../xyo-bound-witness/xyo-bound-witness-transfer';
-import { XyoBoundWitness } from '../../xyo-bound-witness/xyo-bound-witness';
-import { XyoError } from '../../xyo-core-components/xyo-error';
-import { XyoNodeInteraction } from '../../@types/xyo-node';
-import { XyoNetworkPipe } from '../../@types/xyo-network';
+import { XyoZigZagBoundWitness } from '../../xyo-bound-witness/bound-witness/xyo-zig-zag-bound-witness';
+import { XyoBoundWitnessTransfer } from '../../xyo-bound-witness/bound-witness/xyo-bound-witness-transfer';
+import { XyoBoundWitness } from '../../xyo-bound-witness/bound-witness/xyo-bound-witness';
+import { XyoError, XyoErrors } from '../../xyo-core-components/xyo-error';
+import { IXyoNodeInteraction } from '../../@types/xyo-node';
+import { IXyoNetworkPipe } from '../../@types/xyo-network';
 import { XyoBase } from '../../xyo-core-components/xyo-base';
-import { XyoPacker } from '../../xyo-serialization/xyo-packer';
-import { XyoSigner } from '../../@types/xyo-signing';
-import { XyoPayload } from '../../xyo-core-components/xyo-payload';
+import { IXyoSigner } from '../../@types/xyo-signing';
+import { XyoPayload } from '../../xyo-bound-witness/components/payload/xyo-payload';
 
 /**
  * An `XyoBoundWitnessClientInteraction` manages a "session"
  * between two networked nodes.
  */
 
-export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements XyoNodeInteraction<XyoBoundWitness> {
+export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements IXyoNodeInteraction<XyoBoundWitness> {
 
   constructor (
-    private readonly packer: XyoPacker,
-    private readonly signers: XyoSigner[],
+    private readonly signers: IXyoSigner[],
     private readonly payload: XyoPayload
   ) {
     super();
@@ -39,7 +37,7 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements
    * Does a bound witness with another node
    */
 
-  public async run(networkPipe: XyoNetworkPipe): Promise<XyoBoundWitness> {
+  public async run(networkPipe: IXyoNetworkPipe): Promise<XyoBoundWitness> {
     let disconnected = false;
 
     return new Promise(async (resolve, reject) => {
@@ -58,15 +56,13 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements
         const boundWitness = await this.startBoundWitness();
         if (!disconnected) {
           /** Do step 1 of the bound witness */
-          const boundWitnessTransferSerializer = this.packer.getSerializerByDescriptor(XyoBoundWitnessTransfer);
-          const boundWitnessTransfer1 = boundWitnessTransferSerializer.deserialize(
-            networkPipe.initiationData!, this.packer
-          );
+          const boundWitnessTransferSerializer = XyoBoundWitnessTransfer.getSerializer<XyoBoundWitnessTransfer>();
+          const boundWitnessTransfer1 = boundWitnessTransferSerializer.deserialize(networkPipe.initiationData!);
 
           const boundWitnessTransfer2 = await boundWitness.incomingData(boundWitnessTransfer1, true);
 
           /** Serialize the transfer value */
-          const bytes = this.packer.serialize(boundWitnessTransfer2, false);
+          const bytes = boundWitnessTransfer2.serialize(false);
 
           if (!disconnected) {
             /* Send the message and wait for reply */
@@ -75,7 +71,7 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements
             this.logInfo(`Received bound witness response`);
 
             /** Deserialize bytes into bound witness  */
-            const transferObj = boundWitnessTransferSerializer.deserialize(response!, this.packer);
+            const transferObj = boundWitnessTransferSerializer.deserialize(response!);
 
             /** Add transfer to bound witness */
             await boundWitness.incomingData(transferObj, false);
@@ -93,12 +89,12 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements
       }
 
       return reject(
-        new XyoError(`Peer disconnected in xyo-bound-witness-interaction`, XyoError.errorType.ERR_CRITICAL)
+        new XyoError(`Peer disconnected in xyo-bound-witness-interaction`, XyoErrors.CRITICAL)
       );
     }) as Promise<XyoBoundWitness>;
   }
 
   private async startBoundWitness(): Promise<XyoZigZagBoundWitness> {
-    return new XyoZigZagBoundWitness(this.packer, this.signers, this.payload);
+    return new XyoZigZagBoundWitness(this.signers, this.payload);
   }
 }

@@ -10,7 +10,7 @@
  */
 
 import { XyoHash } from '../xyo-hash';
-import { XyoHashProvider } from '../../@types/xyo-hashing';
+import { IXyoHashProvider } from '../../@types/xyo-hashing';
 
 /**
  * An md5 hash data object
@@ -27,7 +27,7 @@ export class XyoMd5Hash extends XyoHash {
    * @param md5Hash The binary representation of the hash itself
    */
 
-  constructor(md5HashProvider: XyoHashProvider | undefined, md5Hash: Buffer) {
+  constructor(md5HashProvider: IXyoHashProvider | undefined, md5Hash: Buffer) {
     super(md5HashProvider, md5Hash, XyoMd5Hash.major, XyoMd5Hash.minor);
   }
 }

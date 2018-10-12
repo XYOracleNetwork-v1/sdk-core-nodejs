@@ -4,29 +4,41 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signing.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:08:14 pm
+ * @Last modified time: Friday, 12th October 2018 10:00:46 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from "../xyo-core-components/xyo-object";
-import { XyoSignature } from './xyo-signing';
-import { XyoRsaShaSigner } from "../xyo-signing/rsa/xyo-rsa-sha-signer";
+import { IXyoSignature } from './xyo-signing';
+import { XyoRsaShaSigner } from "../xyo-signing/rsa/signer/xyo-rsa-sha-signer";
 
-export interface XyoPublicKey extends XyoObject {
+/**
+ * A universal public key interface
+ */
+export interface IXyoPublicKey extends XyoObject {
+
+  /** Returns the raw bytes of the public-key */
   getRawPublicKey(): Buffer;
 }
 
-export interface XyoRsaShaSignerFactory {
+/**
+ * A factory for producing new instance of RSA-SHA-X signers
+ */
+export interface IXyoRsaShaSignerFactory {
+
+  /** Returns a new instance of a signer */
   newInstance(
     getSignature: (data: Buffer) => Buffer,
     getModulus: () => Buffer,
-    verifySign: (signature: XyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
+    verifySign: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
     getPrivateKey: () => any
   ): XyoRsaShaSigner;
 }
 
-export interface XyoSignature extends XyoObject {
+/** A universal interface for XyoSignatures */
+
+export interface IXyoSignature extends XyoObject {
 
   /**
    * Subclasses will return a binary-representation of the signature
@@ -43,11 +55,12 @@ export interface XyoSignature extends XyoObject {
   verify (data: Buffer, publicKey: XyoObject): Promise<boolean>;
 }
 
-export interface XyoSignerProvider {
+/** Provides new instances of xyo-signers */
+export interface IXyoSignerProvider {
   /**
    * Returns a new instance of a signer
    */
-  newInstance(fromPrivateKey?: any): XyoSigner;
+  newInstance(fromPrivateKey?: any): IXyoSigner;
 
   /**
    * Verifies a a signature given the data that was signed, and a public key
@@ -56,16 +69,17 @@ export interface XyoSignerProvider {
    * @param data The data that was signed
    * @param publicKey The corresponding publicKey of public cryptography key-pair
    */
-  verifySign(signature: XyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean>;
+  verifySign(signature: IXyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean>;
 }
 
-export interface XyoSigner extends XyoObject {
+/** A signer can be used to create signatures in the xyo system */
+export interface IXyoSigner extends XyoObject {
 
   /**
    * Subclasses will return the publicKey of the crypto key pair
    */
 
-  publicKey: XyoPublicKey;
+  publicKey: IXyoPublicKey;
 
   /**
    * This should return the private key
@@ -80,25 +94,5 @@ export interface XyoSigner extends XyoObject {
    * @returns An xyo signature
    */
 
-  signData(data: Buffer): Promise<XyoObject>;
-}
-
-/**
- * A factory for creating new XyoSigners and a service for verifying signatures
- */
-
-export interface XyoSignerProvider {
-  /**
-   * Returns a new instance of a signer
-   */
-  newInstance(fromPrivateKey?: any): XyoSigner;
-
-  /**
-   * Verifies a a signature given the data that was signed, and a public key
-   *
-   * @param signature The signature to verify
-   * @param data The data that was signed
-   * @param publicKey The corresponding publicKey of public cryptography key-pair
-   */
-  verifySign(signature: XyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean>;
+  signData(data: Buffer): Promise<IXyoSignature>;
 }

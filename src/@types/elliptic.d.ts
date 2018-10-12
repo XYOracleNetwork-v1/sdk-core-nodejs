@@ -9,6 +9,13 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
+/**
+ * Elliptic library does not supply types. This is partial implementation
+ * of the types that are required for this project to use. If, however,
+ * more elliptic functionality is required that is specified in this file,
+ * it can be extended.
+ */
+
 declare module 'elliptic' {
   type CurvePreset = 'secp256k1'
     | 'p192'
