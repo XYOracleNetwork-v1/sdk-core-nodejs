@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-hash-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 1:19:06 pm
+ * @Last modified time: Friday, 12th October 2018 11:20:18 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -55,7 +55,7 @@ export class XyoNativeBaseHashProvider implements IXyoHashProvider {
       return hashPromise;
     } catch (err) {
       throw new XyoError(
-        `Could not locate crypto hash-provider ${this.hashAlgorithm}`,
+        `Could not locate crypto hash-provider ${this.hashAlgorithm}. ${err}`,
         XyoErrors.CRITICAL
       );
     }
