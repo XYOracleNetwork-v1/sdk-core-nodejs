@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha256-signer-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 12:38:37 pm
+ * @Last modified time: Friday, 12th October 2018 10:44:55 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -58,7 +58,7 @@ export abstract class XyoEcdsaSecp256k1SignerProvider extends XyoObject implemen
           y: publicKey.y.toBuffer(),
         };
       },
-      () => this.verifySign.bind(this),
+      this.verifySign.bind(this),
       () => {
         return key.getPrivate('hex');
       }
@@ -74,12 +74,13 @@ export abstract class XyoEcdsaSecp256k1SignerProvider extends XyoObject implemen
    */
 
   public async verifySign(signature: IXyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {
+    const hashedData = await this.hashProvider.createHash(data);
     const uncompressedEcPublicKey = publicKey as XyoEcdsaUncompressedPublicKey;
     const x = uncompressedEcPublicKey.x.toString('hex');
     const y = uncompressedEcPublicKey.y.toString('hex');
     const hexKey = ['04', x, y].join('');
     const key = ec.keyFromPublic(hexKey, 'hex');
-    return key.verify(data, this.buildDER(signature.encodedSignature));
+    return key.verify(hashedData.hash, this.buildDER(signature.encodedSignature));
   }
 
   private getSignFn(key: EllipticKey) {

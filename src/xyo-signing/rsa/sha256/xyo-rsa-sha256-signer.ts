@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha256-signer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 12:30:57 pm
+ * @Last modified time: Friday, 12th October 2018 10:10:07 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -28,7 +28,7 @@ export class XyoRsaSha256Signer extends XyoRsaShaSigner {
     super(XyoRsaSha256Signer.major, XyoRsaSha256Signer.minor);
   }
 
-  public async signData(data: Buffer): Promise<XyoObject> {
+  public async signData(data: Buffer): Promise<IXyoSignature> {
     const rawSignature = this.getSignature(data);
     return new XyoRsaSha256Signature(rawSignature, this.verifySign);
   }

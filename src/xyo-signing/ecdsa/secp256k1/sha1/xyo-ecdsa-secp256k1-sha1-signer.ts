@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ec-secp-256k-sha1-signer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 12:30:13 pm
+ * @Last modified time: Friday, 12th October 2018 10:10:46 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -28,7 +28,7 @@ export class XyoEcdsaSecp256k1Sha1Signer extends XyoEcdsaSecp256k1Signer {
     super(XyoEcdsaSecp256k1Sha1Signer.major, XyoEcdsaSecp256k1Sha1Signer.minor);
   }
 
-  public async signData(data: Buffer): Promise<XyoObject> {
+  public async signData(data: Buffer): Promise<IXyoSignature> {
     const rawSignature = await this.getSignature(data);
     return new XyoEcdsaSecp256k1Sha1Signature(rawSignature, this.verifySign);
   }

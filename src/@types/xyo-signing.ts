@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signing.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 10th October 2018 5:58:27 pm
+ * @Last modified time: Friday, 12th October 2018 10:00:46 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -94,5 +94,5 @@ export interface IXyoSigner extends XyoObject {
    * @returns An xyo signature
    */
 
-  signData(data: Buffer): Promise<XyoObject>;
+  signData(data: Buffer): Promise<IXyoSignature>;
 }

@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha-signer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 12:37:47 pm
+ * @Last modified time: Friday, 12th October 2018 10:03:02 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../../../xyo-core-components/xyo-object';
 import { XyoRsaPublicKey } from '../public-key/xyo-rsa-public-key';
-import { IXyoSigner } from '../../../@types/xyo-signing';
+import { IXyoSigner, IXyoSignature } from '../../../@types/xyo-signing';
 
 /**
  * A service for signing using RSASha. This particular class
@@ -32,7 +32,7 @@ export abstract class XyoRsaShaSigner extends XyoObject implements IXyoSigner {
    * @param data An arbitrary data blob
    */
 
-  public abstract signData(data: Buffer): Promise<XyoObject>;
+  public abstract signData(data: Buffer): Promise<IXyoSignature>;
 
   /**
    * Returns the publicKey for this crypto-key-pair. In RSA
