@@ -4,10 +4,16 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 4:08:51 pm
+ * @Last modified time: Friday, 12th October 2018 1:46:11 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
+
+import { XyoObject } from '../xyo-core-components/xyo-object';
+import { XyoDefaultPackerProvider } from '../xyo-serialization/xyo-default-packer-provider';
+
+/** Initializes the library runtime with serialization/deserialization set */
+XyoObject.packer = new XyoDefaultPackerProvider().getXyoPacker();
 
 /** Xyo Core Component Exports */
 export { XyoBase } from '../xyo-core-components/xyo-base';
