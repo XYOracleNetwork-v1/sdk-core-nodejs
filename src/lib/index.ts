@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 12th October 2018 1:46:11 pm
+ * @Last modified time: Tuesday, 16th October 2018 9:22:15 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -60,3 +60,6 @@ export { XyoPreviousHash } from '../xyo-bound-witness/components/previous-hash/x
 export { IXyoSignerProvider } from '../@types/xyo-signing';
 export { XyoEcdsaSecp256k1Sha256SignerProvider } from '../xyo-signing/ecdsa/secp256k1/sha256/xyo-ecdsa-secp256k1-sha256-signer-provider';
 export { IXyoPublicKey } from '../@types/xyo-signing';
+
+/** Some core ip services for determining the public and external ip addresses */
+export { XyoIpService, IXyoIp } from '../xyo-ip-service/xyo-ip-service';
