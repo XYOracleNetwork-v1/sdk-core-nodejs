@@ -4,15 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ip-service.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 16th October 2018 9:21:35 am
+ * @Last modified time: Tuesday, 16th October 2018 9:28:55 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 // tslint:disable:no-reference
-
-/// <reference path="../@types/external-ip.d.ts" />
-/// <reference path="../@types/network.d.ts" />
 
 import { v4 as publicIpV4 } from 'public-ip';
 import externalIp from 'external-ip';
