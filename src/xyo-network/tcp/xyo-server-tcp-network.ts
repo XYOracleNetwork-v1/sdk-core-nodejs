@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 10th October 2018 4:17:58 pm
+ * @Last modified time: Wednesday, 17th October 2018 3:17:52 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -39,6 +39,7 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
    */
 
   private connection: net.Socket | undefined;
+  private disconnectTimeout: NodeJS.Timeout | undefined;
 
   /**
    * Creates an instance of a XyoServerTcpNetwork
@@ -126,10 +127,11 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
         }
 
         this.connection = c;
+        this.scheduleDisconnect(c);
 
         // tslint:disable-next-line:ter-prefer-arrow-callback
         const onConnectionClose = (hasError: boolean) => {
-          this.logInfo(this, hasError);
+          this.cancelDisconnect();
           this.connection = undefined;
         };
 
@@ -142,6 +144,7 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
         let validCatalogueItems: CatalogueItem[] | undefined;
 
         const onData = (chunk: Buffer) => {
+          this.scheduleDisconnect(c);
           data = Buffer.concat([
             data || Buffer.alloc(0),
             chunk
@@ -175,6 +178,7 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
             );
             if (otherCatalogueItems.length < 1) {
               this.connection = undefined;
+              this.cancelDisconnect();
               c.end();
               return;
             }
@@ -183,12 +187,14 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
 
             if (validCatalogueItems.length === 0) { // exit early if it its not in the catalogue
               this.connection = undefined;
+              this.cancelDisconnect();
               c.end();
               return;
             }
           }
 
           if (sizeOfPayload === data.length) {
+            this.cancelDisconnect();
             c.removeListener('data', onData);
             c.removeListener('close', onConnectionClose);
             server.removeListener('connection', onConnection);
@@ -215,5 +221,21 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
 
       server.on('connection', onConnection);
     });
+  }
+
+  private cancelDisconnect() {
+    if (this.disconnectTimeout) {
+      clearTimeout(this.disconnectTimeout);
+      this.disconnectTimeout = undefined;
+    }
+  }
+
+  private scheduleDisconnect(c: net.Socket) {
+    this.cancelDisconnect();
+    this.disconnectTimeout = setTimeout(() => {
+      this.logInfo(`Connection timed out`);
+      this.connection = undefined;
+      c.end();
+    }, 3000);
   }
 }
