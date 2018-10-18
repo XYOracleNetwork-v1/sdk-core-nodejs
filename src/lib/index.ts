@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 17th October 2018 5:42:54 pm
+ * @Last modified time: Wednesday, 17th October 2018 6:04:21 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -56,6 +56,7 @@ export { XyoNextPublicKey } from '../xyo-bound-witness/components/next-public-ke
 export { XyoKeySet } from '../xyo-bound-witness/components/key-set/xyo-key-set';
 export { XyoPreviousHash } from '../xyo-bound-witness/components/previous-hash/xyo-previous-hash';
 export { XyoPayload } from '../xyo-bound-witness/components/payload/xyo-payload';
+export { XyoSignatureSet } from '../xyo-bound-witness/components/signature-set/xyo-signature-set';
 
 /** Xyo Signing Exports */
 export { IXyoSignerProvider } from '../@types/xyo-signing';
