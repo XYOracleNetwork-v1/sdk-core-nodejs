@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 18th October 2018 5:05:38 pm
+ * @Last modified time: Friday, 19th October 2018 12:55:07 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,6 +20,8 @@ export { XyoBase } from '../xyo-core-components/xyo-base';
 export { XyoObject } from '../xyo-core-components/xyo-object';
 export { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
 export { XyoLogger } from '../xyo-core-components/xyo-logger';
+
+export { XyoMultiTypeArrayInt } from '../xyo-core-components/arrays/multi/xyo-multi-type-array-int';
 
 /** Xyo Hashing Exports */
 export { IXyoHashProvider } from '../@types/xyo-hashing';
@@ -52,6 +54,7 @@ export { IXyoNetworkAddressProvider } from '../@types/xyo-network';
 
 /** Xyo Bound Witness Exports */
 export { XyoBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-bound-witness';
+export { XyoGenesisBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-genesis-bound-witness';
 export { XyoNextPublicKey } from '../xyo-bound-witness/components/next-public-key/xyo-next-public-key';
 export { XyoKeySet } from '../xyo-bound-witness/components/key-set/xyo-key-set';
 export { XyoPreviousHash } from '../xyo-bound-witness/components/previous-hash/xyo-previous-hash';
