@@ -4,16 +4,16 @@
  * @Email:  developer@xyfindables.com
  * @Filename: origin-chain-manager.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 5:25:39 pm
+ * @Last modified time: Thursday, 18th October 2018 5:08:47 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoStoragePriority } from '../xyo-storage/xyo-storage-priority';
-import { IXyoStorageProvider } from '../@types/xyo-storage';
+import { IXyoStorageProvider, IXyoIterableStorageProvider } from '../@types/xyo-storage';
 import { XyoBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-bound-witness';
 import { XyoOriginBlock } from './xyo-origin-block';
-import { IXyoOriginBlockRepository } from '../@types/xyo-origin-chain';
+import { IXyoOriginBlockRepository, IOriginBlockQueryResult } from '../@types/xyo-origin-chain';
 import { XyoHash } from '../xyo-hashing/xyo-hash';
 
 /**
@@ -50,6 +50,50 @@ export class XyoOriginBlockLocalStorageRepository implements IXyoOriginBlockRepo
 
   public async containsOriginBlock (originBlockHash: Buffer) {
     return this.originBlocksStorageProvider.containsKey(originBlockHash);
+  }
+
+  public async getOriginBlocks(limit: number, offsetHash?: Buffer): Promise<IOriginBlockQueryResult> {
+    const hashes = await this.getAllOriginBlockHashes();
+
+    // If this is an iterable storage-provider, answer question that way
+    if (instanceOfIterableStorageProvider(this.originBlocksStorageProvider)) {
+      const result = await this.originBlocksStorageProvider.iterate({ limit, offsetKey: offsetHash });
+      const serializer = XyoBoundWitness.getSerializer<XyoBoundWitness>();
+      const blocks = result.items.map(keyPair => serializer.deserialize(keyPair.value));
+
+      return {
+        list: blocks,
+        totalSize: hashes.length,
+        hasNextPage: result.hasMoreItems
+      };
+    }
+
+    const offsetIndex = offsetHash ? hashes.findIndex(hash => hash.equals(offsetHash)) : 0;
+
+    if (offsetIndex === -1) {
+      return {
+        list: [],
+        totalSize: hashes.length,
+        hasNextPage: false
+      };
+    }
+
+    const promises: Array<Promise<XyoBoundWitness>> = []; // tslint:disable-line:prefer-array-literal
+    let index = 0;
+
+    while (index < limit && ((index + offsetIndex) < hashes.length)) {
+      promises.push(
+        this.getOriginBlockByHash(hashes[index + offsetIndex]) as Promise<XyoBoundWitness>
+      );
+      index += 1;
+    }
+
+    const boundWitnesses = await Promise.all(promises);
+    return {
+      list: boundWitnesses,
+      totalSize: hashes.length,
+      hasNextPage: (index + offsetIndex) < hashes.length
+    };
   }
 
   /**
@@ -108,4 +152,10 @@ export class XyoOriginBlockLocalStorageRepository implements IXyoOriginBlockRepo
       return undefined;
     }
   }
+}
+
+function instanceOfIterableStorageProvider(
+  storageProvider: IXyoStorageProvider
+): storageProvider is IXyoIterableStorageProvider {
+  return 'iterate' in storageProvider;
 }

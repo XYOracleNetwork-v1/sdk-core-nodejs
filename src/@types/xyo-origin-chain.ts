@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 10th October 2018 5:38:16 pm
+ * @Last modified time: Thursday, 18th October 2018 3:17:24 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -52,6 +52,22 @@ export interface IXyoOriginBlockRepository {
    */
 
   getOriginBlockByHash(hash: Buffer): Promise<XyoBoundWitness | undefined>;
+
+  /**
+   * Gets a list of Origin Blocks with pagination and cursor parameter
+   *
+   * @param {number} limit
+   * @param {Buffer} [offsetHash]
+   * @returns {Promise<IOriginBlockQueryResult>}
+   * @memberof IXyoOriginBlockRepository
+   */
+  getOriginBlocks(limit: number, offsetHash?: Buffer): Promise<IOriginBlockQueryResult>;
+}
+
+export interface IOriginBlockQueryResult {
+  list: XyoBoundWitness[];
+  totalSize: number;
+  hasNextPage: boolean;
 }
 
 /**

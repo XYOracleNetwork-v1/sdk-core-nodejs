@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-storage.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 10th October 2018 6:00:32 pm
+ * @Last modified time: Thursday, 18th October 2018 5:09:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -38,4 +38,17 @@ export interface IXyoStorageProvider {
 
   /** Returns true if the key exists in storage, false otherwise */
   containsKey(key: Buffer): Promise<boolean>;
+}
+
+export interface IXyoIterableStorageProvider extends IXyoStorageProvider {
+  iterate(options: { offsetKey?: Buffer, limit?: number }): Promise<IXyoStorageIterationResult>;
+}
+
+export interface IXyoStorageIterationResult {
+  items: IXyoBufferKeyValuePair[];
+  hasMoreItems: boolean;
+}
+export interface IXyoBufferKeyValuePair {
+  key: Buffer;
+  value: Buffer;
 }
