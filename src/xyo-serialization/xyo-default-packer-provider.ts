@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 12th October 2018 11:23:19 am
+ * @Last modified time: Monday, 22nd October 2018 9:48:17 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -76,6 +76,8 @@ import { XyoObject } from '../xyo-core-components/xyo-object';
 import { XyoSerializer } from './xyo-serializer';
 import { XyoBase } from '../xyo-core-components/xyo-base';
 import { IXyoObjectDescriptor } from '../@types/xyo-serialization';
+import { XyoMillisecondTime } from '../xyo-core-components/heuristics/numbers/xyo-millisecond-time';
+import { XyoMillisecondTimeSerializer } from '../xyo-core-components/heuristics/numbers/xyo-millisecond-time-serializer';
 
 /**
  * A class for configuring the packing, serialization, and deserialization
@@ -127,6 +129,7 @@ export class XyoDefaultPackerProvider extends XyoBase {
     add(XyoEcdsaSecp256k1Sha1Signer, new XyoEcdsaSecp256k1SignerSerializer(XyoEcdsaSecp256k1Sha1Signer.minor, ecdsaSecp256k1Sha1SignerProvider));
     add(XyoEcdsaSecp256k1Sha256Signature, new XyoEcdsaSignatureSerializer(XyoEcdsaSecp256k1Sha256Signature.minor, ecdsaSecp256k1Sha256SignerProvider.verifySign.bind(ecdsaSecp256k1Sha256SignerProvider), { newInstance: (signature, verify) => new XyoEcdsaSecp256k1Sha256Signature(signature, verify) }));
     add(XyoEcdsaSecp256k1Sha1Signature, new XyoEcdsaSignatureSerializer(XyoEcdsaSecp256k1Sha1Signature.minor, ecdsaSecp256k1Sha1SignerProvider.verifySign.bind(ecdsaSecp256k1Sha256SignerProvider), { newInstance: (signature, verify) => new XyoEcdsaSecp256k1Sha1Signature(signature, verify) }));
+    add(XyoMillisecondTime, new XyoMillisecondTimeSerializer());
 
     return packer;
   }
