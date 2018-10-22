@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-client-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 5:21:35 pm
+ * @Last modified time: Monday, 22nd October 2018 12:03:01 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -67,7 +67,14 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements
           if (!disconnected) {
             /* Send the message and wait for reply */
             this.logInfo(`Sending bound witness message`);
-            const response = await networkPipe.send(bytes);
+            let response: Buffer | undefined;
+            try {
+              response = await networkPipe.send(bytes);
+            } catch (err) {
+              this.logError(`Failing to send bound witness message`);
+              return reject(err);
+            }
+
             this.logInfo(`Received bound witness response`);
 
             /** Deserialize bytes into bound witness  */
@@ -88,9 +95,7 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements
         }
       }
 
-      return reject(
-        new XyoError(`Peer disconnected in xyo-bound-witness-interaction`, XyoErrors.CRITICAL)
-      );
+      return reject(new XyoError(`Peer disconnected in xyo-bound-witness-interaction`, XyoErrors.CRITICAL));
     }) as Promise<XyoBoundWitness>;
   }
 

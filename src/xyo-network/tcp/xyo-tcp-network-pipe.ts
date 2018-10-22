@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network-pipe.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 1:19:07 pm
+ * @Last modified time: Monday, 22nd October 2018 11:58:50 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -86,7 +86,22 @@ export class XyoTcpNetworkPipe implements IXyoNetworkPipe {
     }
 
     return new Promise((resolve, reject) => {
-      this.connectionResult.socket.on('data', this.onSendOnDataFn(resolve, reject));
+      let timeout: NodeJS.Timeout;
+      const listener = this.onSendOnDataFn((data) => {
+        if (timeout) clearTimeout(timeout);
+        return resolve(data);
+      }, (err: any) => {
+        if (timeout) clearTimeout(timeout);
+        reject(err);
+      });
+
+      timeout = setTimeout(async () => {
+        this.connectionResult.socket.removeListener('data', listener);
+        await this.close();
+        reject(new XyoError('Connection timed out', XyoErrors.CRITICAL));
+      }, 3000);
+
+      this.connectionResult.socket.on('data', listener);
     }) as Promise<Buffer>;
   }
 

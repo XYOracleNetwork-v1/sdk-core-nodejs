@@ -2383,15 +2383,15 @@ micromatch@^3.1.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.2"
 
-mime-db@~1.36.0:
-  version "1.36.0"
-  resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.36.0.tgz#5020478db3c7fe93aad7bbcc4dcf869c43363397"
+mime-db@~1.37.0:
+  version "1.37.0"
+  resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.37.0.tgz#0b6a0ce6fdbe9576e25f1f2d2fde8830dc0ad0d8"
 
 mime-types@^2.1.12, mime-types@~2.1.19:
-  version "2.1.20"
-  resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.20.tgz#930cb719d571e903738520f8470911548ca2cc19"
+  version "2.1.21"
+  resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.21.tgz#28995aa1ecb770742fe6ae7e58f9181c744b3f96"
   dependencies:
-    mime-db "~1.36.0"
+    mime-db "~1.37.0"
 
 mimic-fn@^1.0.0:
   version "1.2.0"
@@ -2820,7 +2820,7 @@ performance-now@^2.1.0:
 
 pify@^2.0.0:
   version "2.3.0"
-  resolved "https://registry.yarnpkg.com/pify/-/pify-2.3.0.tgz#ed141a6ac043a849ea588498e7dca8b15330e90c"
+  resolved "http://registry.npmjs.org/pify/-/pify-2.3.0.tgz#ed141a6ac043a849ea588498e7dca8b15330e90c"
 
 pify@^3.0.0:
   version "3.0.0"
@@ -3630,8 +3630,8 @@ tsutils@^2.24.0, tsutils@^2.27.0, tsutils@^2.27.2:
     tslib "^1.8.1"
 
 tsutils@^3.0.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-3.1.0.tgz#9136fdbc347799941db4eb326af4dcb81454820e"
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-3.2.0.tgz#bb2a7e2f34331f1dbd9fbe04ac0886524ae11e36"
   dependencies:
     tslib "^1.8.1"
 

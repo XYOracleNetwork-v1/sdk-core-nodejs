@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 5:19:54 pm
+ * @Last modified time: Monday, 22nd October 2018 12:02:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -80,8 +80,14 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
           if (!disconnected) {
             /* Send the message and wait for reply */
             this.logInfo(`Sending BoundWitnessTransfer 1`);
-            const response = await networkPipe.send(bytesToSend);
-            this.logInfo(`Received BoundWitnessTransfer 2`, response!.toString('hex'));
+            let response: Buffer | undefined;
+
+            try {
+              response = await networkPipe.send(bytesToSend);
+            } catch (err) {
+              this.logError(`Failed BoundWitnessTransfer on step 1`);
+              return reject(err);
+            }
 
             /** Deserialize bytes into bound witness  */
             const transferObj = XyoBoundWitnessTransfer.getSerializer<XyoBoundWitnessTransfer>().deserialize(response!);
@@ -93,9 +99,12 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
               /** serialize the bound witness transfer */
               const transferBytes = transfer.serialize(false);
 
-              /** Send transfer data, but dont wait for reply */
-              this.logInfo(`Sending final Transfer 3. Will disconnect`);
-              await networkPipe.send(transferBytes, false);
+              try {
+                await networkPipe.send(transferBytes, false);
+              } catch (err) {
+                this.logError(`Failed BoundWitnessTransfer on step 3`);
+                return reject(err);
+              }
 
               /** Stop listening for disconnect events */
               unregister();
