@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-local-storage-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 12th October 2018 9:38:06 am
+ * @Last modified time: Monday, 22nd October 2018 5:30:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -80,7 +80,7 @@ export class XyoOriginChainLocalStorageRepository implements IXyoOriginChainStat
     }
 
     try {
-      const stored = await this.storageProvider.read(Buffer.from('current-state.json'), 60000);
+      const stored = await this.storageProvider.read(Buffer.from('current-state'), 60000);
       if (stored) {
         this.inMemoryDelegate = this.deserializeOriginChainState(stored.toString());
         return this.inMemoryDelegate;
@@ -97,13 +97,13 @@ export class XyoOriginChainLocalStorageRepository implements IXyoOriginChainStat
   private async saveOriginChainState(originState: XyoOriginChainStateInMemoryRepository) {
     const jsonString = await this.serializeOriginChainState(originState);
     try {
-      await this.storageProvider.delete(Buffer.from('current-state.json'));
+      await this.storageProvider.delete(Buffer.from('current-state'));
     } catch (err) {
       // expected error
     }
 
     await this.storageProvider.write(
-      Buffer.from('current-state.json'),
+      Buffer.from('current-state'),
       Buffer.from(jsonString),
       XyoStoragePriority.PRIORITY_HIGH,
       true,

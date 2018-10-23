@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: in-memory.storage-provider.impl.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 1:16:26 pm
+ * @Last modified time: Monday, 22nd October 2018 4:14:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -21,8 +21,7 @@ import { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
 
 export class XyoInMemoryStorageProvider implements IXyoStorageProvider {
 
-  /** A simple key value map to map addresses to values */
-  private readonly data: {[s: string]: Buffer} = {};
+  constructor(protected readonly data: {[s: string]: Buffer} = {}) {}
 
   /**
    * Attempts to save value `value` for key `key`
@@ -51,6 +50,10 @@ export class XyoInMemoryStorageProvider implements IXyoStorageProvider {
 
   public async read(key: Buffer, timeout: number): Promise<Buffer | undefined> {
     const result = this.data[key.toString()];
+    if (!result) {
+      throw new Error('Key does not exist');
+    }
+
     return result;
   }
 
@@ -71,11 +74,6 @@ export class XyoInMemoryStorageProvider implements IXyoStorageProvider {
    */
 
   public async delete(key: Buffer): Promise<void> {
-    const value = this.data[key.toString()];
-    if (!value) {
-      throw new XyoError(`Unable to delete ${key}, does not exist`, XyoErrors.INVALID_PARAMETERS);
-    }
-
     delete this.data[key.toString()];
   }
 

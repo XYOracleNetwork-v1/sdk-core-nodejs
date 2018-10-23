@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 19th October 2018 12:55:07 pm
+ * @Last modified time: Monday, 22nd October 2018 5:11:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -31,6 +31,7 @@ export { XyoSha256HashProvider } from "../xyo-hashing/sha256/xyo-sha256-hash-pro
 /** Xyo Origin Block Exports */
 export { IXyoStorageProvider, IXyoIterableStorageProvider, IXyoStorageIterationResult, IXyoBufferKeyValuePair } from '../@types/xyo-storage';
 export { XyoStoragePriority } from "../xyo-storage/xyo-storage-priority";
+export { XyoBasicKeyValueStorageProvider } from '../xyo-storage/xyo-basic-key-value-storage-provider';
 
 /** Xyo Origin Block Exports */
 export { XyoOriginBlockLocalStorageRepository } from "../xyo-origin-chain/xyo-origin-block-local-storage-repository";
@@ -68,3 +69,5 @@ export { IXyoPublicKey } from '../@types/xyo-signing';
 
 /** Some core ip services for determining the public and external ip addresses */
 export { XyoIpService, IXyoIp } from '../xyo-ip-service/xyo-ip-service';
+
+export { XyoKvDb } from '../xyo-kvdb/xyo-kvdb';
