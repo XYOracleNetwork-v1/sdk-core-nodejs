@@ -1,17 +1,13 @@
 {
   "name": "@xyo-network/sdk-core-nodejs",
-  "version": "0.1.94",
+  "version": "0.1.95",
   "description": "A core library of nodejs tools to power the nodejs implementation of the XYO network",
   "main": "dist/lib/index.js",
   "types": "dist/lib/index.d.ts",
   "scripts": {
     "test": "export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose --detectOpenHandles",
-    "build": "tsc -p tsconfig.build.json",
-    "build-ci": "tsc -p tsconfig.json",
-    "tslint": "tslint -c tslint.json -p tsconfig.json",
-    "prepare": "yarn build",
-    "prepublishOnly": "yarn test && yarn tslint",
-    "preversion": "yarn tslint"
+    "build": "tsc",
+    "prepublishOnly": "tsc -b ."    
   },
   "husky": {
     "hooks": {
