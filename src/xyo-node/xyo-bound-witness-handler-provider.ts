@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 5:22:51 pm
+ * @Last modified time: Friday, 26th October 2018 3:52:05 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -58,7 +58,10 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
       const nestedHashValue = await nestedBoundWitness.getHash(this.hashingProvider);
       const nestedHash = nestedHashValue.serialize(true);
       this.logInfo(`Extracted nested block with hash ${nestedHash.toString('hex')}`);
-      return this.originChainNavigator.addOriginBlock(nestedHashValue, nestedBoundWitness);
+      const containsBlock = await this.originChainNavigator.containsOriginBlock(nestedHash);
+      if (!containsBlock) {
+        return this.originChainNavigator.addOriginBlock(nestedHashValue, nestedBoundWitness);
+      }
     }));
 
     if (this.boundWitnessSuccessListener) {
