@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-kvdb.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 22nd October 2018 5:00:51 pm
+ * @Last modified time: Tuesday, 23rd October 2018 4:33:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -84,8 +84,17 @@ class XyoNamespacedStorageProvider implements IXyoStorageProvider {
   public async getAllKeys(): Promise<Buffer[]> {
     const allKeys = await this.proxyStorageProvider.getAllKeys();
     return allKeys.map((key) => {
+      if (key.length < this.namespace.length) {
+        return undefined;
+      }
+
+      if (!key.slice(0, this.namespace.length).equals(this.namespace)) {
+        return undefined;
+      }
+
       return key.slice(this.namespace.length);
-    });
+    })
+    .filter(v => v) as Buffer[];
   }
 
   /** Removes a key from storage */

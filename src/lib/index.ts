@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 22nd October 2018 5:11:53 pm
+ * @Last modified time: Thursday, 25th October 2018 5:29:32 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,6 +20,7 @@ export { XyoBase } from '../xyo-core-components/xyo-base';
 export { XyoObject } from '../xyo-core-components/xyo-object';
 export { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
 export { XyoLogger } from '../xyo-core-components/xyo-logger';
+export { XyoRssi } from '../xyo-core-components/heuristics/numbers/xyo-rssi';
 
 export { XyoMultiTypeArrayInt } from '../xyo-core-components/arrays/multi/xyo-multi-type-array-int';
 
@@ -61,11 +62,16 @@ export { XyoKeySet } from '../xyo-bound-witness/components/key-set/xyo-key-set';
 export { XyoPreviousHash } from '../xyo-bound-witness/components/previous-hash/xyo-previous-hash';
 export { XyoPayload } from '../xyo-bound-witness/components/payload/xyo-payload';
 export { XyoSignatureSet } from '../xyo-bound-witness/components/signature-set/xyo-signature-set';
+export { XyoZigZagBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-zig-zag-bound-witness';
+export { XyoBridgeHashSet } from '../xyo-bound-witness/components/bridge-hash-set/xyo-bridge-hash-set';
+export { XyoIndex } from '../xyo-bound-witness/components/index/xyo-index';
 
 /** Xyo Signing Exports */
 export { IXyoSignerProvider } from '../@types/xyo-signing';
 export { XyoEcdsaSecp256k1Sha256SignerProvider } from '../xyo-signing/ecdsa/secp256k1/sha256/xyo-ecdsa-secp256k1-sha256-signer-provider';
 export { IXyoPublicKey } from '../@types/xyo-signing';
+export { XyoRsaSha256SignerProvider } from '../xyo-signing/rsa/sha256/xyo-rsa-sha256-signer-provider';
+export { IXyoSignature, IXyoSigner } from '../@types/xyo-signing';
 
 /** Some core ip services for determining the public and external ip addresses */
 export { XyoIpService, IXyoIp } from '../xyo-ip-service/xyo-ip-service';
