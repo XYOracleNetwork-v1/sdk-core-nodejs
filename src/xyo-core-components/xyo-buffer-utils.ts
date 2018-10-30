@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: buffer-utils.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 1:19:23 pm
+ * @Last modified time: Tuesday, 30th October 2018 12:50:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -97,4 +97,20 @@ export function readNumberFromBuffer(buffer: Buffer, bytes: number, isSigned: bo
     default:
       throw new XyoError(`Could not read number from buffer`, XyoErrors.CRITICAL);
   }
+}
+
+export function writePointTo32ByteBuffer(point: Buffer) {
+  if (point.length === 32) {
+    return point;
+  }
+  const dest = Buffer.alloc(32);
+  const offset = dest.length - point.length;
+  let index = 0;
+
+  while (index < point.length) {
+    dest[offset + index] = point[index];
+    index += 1;
+  }
+
+  return dest;
 }

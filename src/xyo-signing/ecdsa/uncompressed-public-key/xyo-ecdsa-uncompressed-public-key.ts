@@ -4,13 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-uncompressed-ec-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 12:12:07 pm
+ * @Last modified time: Tuesday, 30th October 2018 12:51:09 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoObject } from '../../../xyo-core-components/xyo-object';
 import { IXyoPublicKey } from '../../../@types/xyo-signing';
+import { writePointTo32ByteBuffer } from '../../../xyo-core-components/xyo-buffer-utils';
 
 /**
  * Sharing public keys is an integral part of the Xyo protocol
@@ -24,8 +25,8 @@ export abstract class XyoEcdsaUncompressedPublicKey extends XyoObject implements
 
   public getRawPublicKey() {
     return Buffer.from([
-      this.x,
-      this.y
+      writePointTo32ByteBuffer(this.x),
+      writePointTo32ByteBuffer(this.y)
     ]);
   }
 }

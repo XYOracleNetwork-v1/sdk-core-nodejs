@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: rsa-sha256-serializer.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 30th October 2018 10:42:07 am
+ * @Last modified time: Tuesday, 30th October 2018 12:07:07 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,6 +15,7 @@ import { XyoEcdsaSignature } from '../ecdsa/signature/xyo-ecdsa-signature';
 import { XyoEcdsaSecp256k1Signer } from '../ecdsa/secp256k1/signer/xyo-ecdsa-secp256k1-signer';
 import { XyoEcdsaSecp256k1Sha256SignerProvider } from '../ecdsa/secp256k1/sha256/xyo-ecdsa-secp256k1-sha256-signer-provider';
 import { XyoObject } from '../../xyo-core-components/xyo-object';
+import { XyoEcdsaSecp256k1Sha256Signature } from '../ecdsa/secp256k1/sha256/xyo-ecdsa-secp256k1-sha256-signature';
 
 XyoObject.packer = new XyoDefaultPackerProvider().getXyoPacker();
 const sha256HashProvider = new XyoSha256HashProvider();
@@ -48,5 +49,9 @@ describe('XyoEcdsaSecp256k1SignerSerializer', () => {
     const sig = await ec.signData(dataToSign);
     expect(assertedPublic.equals(ec.publicKey.serialize(false))).toBe(true);
     expect(await sig.verify(dataToSign, ec.publicKey)).toBe(true);
+    // tslint:disable-next-line:max-line-length
+    const otherSig = '05014320130D240CB066E19283AE1F49A13EAB1F88518777020FE9039FDBDAE50011B89520420D2B3F511D60EC69425E872171A3897B620141CA0F7F3FFBCD7F75E6B62DAF';
+    const deserializedOtherSig = XyoObject.deserialize<XyoEcdsaSecp256k1Sha256Signature>(Buffer.from(otherSig, 'hex'));
+    expect(await deserializedOtherSig.verify(dataToSign, ec.publicKey)).toBe(true);
   });
 });

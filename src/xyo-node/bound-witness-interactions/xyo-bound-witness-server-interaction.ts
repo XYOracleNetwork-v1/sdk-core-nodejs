@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 22nd October 2018 12:02:33 pm
+ * @Last modified time: Tuesday, 30th October 2018 12:40:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,6 +20,7 @@ import { IXyoNetworkPipe } from '../../@types/xyo-network';
 import { XyoBase } from '../../xyo-core-components/xyo-base';
 import { IXyoSigner } from '../../@types/xyo-signing';
 import { XyoPayload } from '../../xyo-bound-witness/components/payload/xyo-payload';
+import { XyoEcdsaUncompressedPublicKey } from '../../xyo-signing/ecdsa/uncompressed-public-key/xyo-ecdsa-uncompressed-public-key';
 
 /**
  * An `XyoBoundWitnessInteraction` manages a "session"
@@ -113,6 +114,17 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
               await networkPipe.close();
 
               /** Return the resulting bound-witness */
+
+              boundWitness.publicKeys.forEach((pks, outerIndex) => {
+                pks.array.forEach((pk, innerIndex) => {
+                  // tslint:disable-next-line:max-line-length
+                  const npk = pk as XyoEcdsaUncompressedPublicKey;
+                  this.logInfo(`[${outerIndex}][${innerIndex}] x:  ${npk.x.toString('hex')}`);
+
+                  // tslint:disable-next-line:max-line-length
+                  this.logInfo(`[${outerIndex}][${innerIndex}] y:  ${npk.y.toString('hex')}`);
+                });
+              });
               return resolve(boundWitness);
             }
           }
