@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-local-storage-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 22nd October 2018 5:30:51 pm
+ * @Last modified time: Tuesday, 30th October 2018 4:00:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -34,6 +34,10 @@ export class XyoOriginChainLocalStorageRepository implements IXyoOriginChainStat
 
   public async getPreviousHash(): Promise<XyoPreviousHash | undefined> {
     return (await this.getOrCreateInMemoryDelegate()).getPreviousHash();
+  }
+
+  public async getGenesisSigner(): Promise<IXyoSigner | undefined> {
+    return (await this.getOrCreateInMemoryDelegate()).getGenesisSigner();
   }
 
   public async getSigners(): Promise<IXyoSigner[]> {
@@ -70,6 +74,12 @@ export class XyoOriginChainLocalStorageRepository implements IXyoOriginChainStat
   public async setCurrentSigners(signers: IXyoSigner[]): Promise<void> {
     const delegate = await this.getOrCreateInMemoryDelegate();
     await delegate.setCurrentSigners(signers);
+    const currentIndex = await delegate.getIndex();
+
+    if (currentIndex.number === 0 && signers.length > 0) {
+      delegate.genesisSigner = signers[0];
+    }
+
     await this.saveOriginChainState(delegate);
     return;
   }
@@ -130,12 +140,17 @@ export class XyoOriginChainLocalStorageRepository implements IXyoOriginChainStat
       XyoObject.deserialize(Buffer.from(obj.nextPublicKey, 'hex')) as XyoNextPublicKey :
       undefined;
 
+    const genesisSigner = obj.genesisSigner ?
+      XyoObject.deserialize(Buffer.from(obj.genesisSigner, 'hex')) as IXyoSigner :
+      undefined;
+
     return new XyoOriginChainStateInMemoryRepository(
       index.number,
       (previousHash && previousHash.hash) || undefined,
       signers,
       nextPublicKey,
-      waitingSigners
+      waitingSigners,
+      genesisSigner
     );
   }
 
@@ -145,6 +160,7 @@ export class XyoOriginChainLocalStorageRepository implements IXyoOriginChainStat
     const previousHash = await originChainState.getPreviousHash();
     const signers = await originChainState.getSigners();
     const waitingSigners = await originChainState.getWaitingSigners();
+    const genesisSigner = await originChainState.getGenesisSigner();
 
     const payload: ISerializedOriginChainState = {
       index: index.serialize(true).toString('hex'),
@@ -156,6 +172,7 @@ export class XyoOriginChainLocalStorageRepository implements IXyoOriginChainStat
       }),
       nextPublicKey: null,
       previousHash: null,
+      genesisSigner: genesisSigner && genesisSigner.serialize(true).toString('hex') || null
     };
 
     if (nextPublicKey) {
@@ -176,4 +193,5 @@ interface ISerializedOriginChainState {
   waitingSigners: string[];
   nextPublicKey: string | null;
   previousHash: string | null;
+  genesisSigner: string | null;
 }

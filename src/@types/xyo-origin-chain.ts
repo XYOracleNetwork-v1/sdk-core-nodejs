@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 18th October 2018 3:17:24 pm
+ * @Last modified time: Tuesday, 30th October 2018 3:53:26 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -113,4 +113,7 @@ export interface IXyoOriginChainStateRepository {
    * and sets the passed in signers as the current signers
    */
   setCurrentSigners(signers: IXyoSigner[]): Promise<void>;
+
+  /** Returns the first xyo-signer for the origin chain */
+  getGenesisSigner(): Promise<IXyoSigner | undefined>;
 }

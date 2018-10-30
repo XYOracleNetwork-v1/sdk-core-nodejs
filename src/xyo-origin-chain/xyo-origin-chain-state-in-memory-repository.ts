@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-state-manager.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:12:35 pm
+ * @Last modified time: Tuesday, 30th October 2018 4:29:37 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -30,6 +30,7 @@ export class XyoOriginChainStateInMemoryRepository implements IXyoOriginChainSta
     private readonly currentSigners: IXyoSigner[],
     private nextPublicKey: XyoNextPublicKey | undefined,
     private readonly waitingSigners: IXyoSigner[],
+    public genesisSigner?: IXyoSigner
   ) {
     this.idx = index;
   }
@@ -102,9 +103,7 @@ export class XyoOriginChainStateInMemoryRepository implements IXyoOriginChainSta
       this.currentSigners.pop();
     }
 
-    while (signers.length) {
-      this.currentSigners.push(signers.pop()!);
-    }
+    this.currentSigners.push(...signers);
   }
 
   /**
@@ -117,6 +116,10 @@ export class XyoOriginChainStateInMemoryRepository implements IXyoOriginChainSta
     if (this.currentSigners.length > 0) {
       this.currentSigners.splice(0, 1);
     }
+  }
+
+  public async getGenesisSigner(): Promise<IXyoSigner | undefined > {
+    return this.genesisSigner;
   }
 
   /**
