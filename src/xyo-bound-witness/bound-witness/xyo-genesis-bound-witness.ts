@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-genesis-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 19th October 2018 12:46:11 pm
+ * @Last modified time: Monday, 29th October 2018 4:51:46 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -33,14 +33,18 @@ export class XyoGenesisBoundWitness extends XyoBoundWitness {
 
   public async createGenesisBlock() {
     const publicKeys: IXyoPublicKey[] = [];
-    const promises = this.signers.map(async (signer) => {
+    this.signers.forEach((signer) => {
       publicKeys.push(signer.publicKey);
+    });
+
+    this.publicKeys.push(new XyoKeySet(publicKeys));
+
+    const promises = this.signers.map(async (signer) => {
       const signature = await this.signCurrent(signer);
       return signature;
     }) as Promise<XyoObject>[]; // tslint:disable-line:array-type
 
     const signersCollection = await Promise.all(promises);
-    this.publicKeys.push(new XyoKeySet(publicKeys));
     this.signatures.push(new XyoSignatureSet(signersCollection));
   }
 }

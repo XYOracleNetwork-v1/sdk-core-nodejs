@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 25th October 2018 5:29:32 pm
+ * @Last modified time: Monday, 29th October 2018 5:05:45 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -39,6 +39,7 @@ export { XyoOriginBlockLocalStorageRepository } from "../xyo-origin-chain/xyo-or
 export { IXyoOriginBlockRepository, IOriginBlockQueryResult } from '../@types/xyo-origin-chain';
 export { IXyoOriginChainStateRepository } from '../@types/xyo-origin-chain';
 export { XyoOriginChainLocalStorageRepository, } from '../xyo-origin-chain/xyo-origin-chain-local-storage-repository';
+export { XyoOriginBlockValidator } from '../xyo-origin-chain/xyo-origin-block-validator';
 
 /** Xyo Node Exports */
 export { XyoNode } from '../xyo-node/xyo-node';

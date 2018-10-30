@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 26th October 2018 3:52:05 pm
+ * @Last modified time: Monday, 29th October 2018 5:22:39 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -16,6 +16,7 @@ import { extractNestedBoundWitnesses } from '../xyo-bound-witness/bound-witness/
 import { IXyoBoundWitnessHandlerProvider, IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessSuccessListener, IXyoBoundWitnessInteractionFactory } from '../@types/xyo-node';
 import { IXyoOriginBlockRepository, IXyoOriginChainStateRepository } from '../@types/xyo-origin-chain';
 import { XyoBase } from '../xyo-core-components/xyo-base';
+import { XyoOriginBlockValidator } from '../xyo-origin-chain/xyo-origin-block-validator';
 
 export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBoundWitnessHandlerProvider {
 
@@ -25,7 +26,8 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
     private readonly originChainNavigator: IXyoOriginBlockRepository,
     private readonly boundWitnessPayloadProvider: IXyoBoundWitnessPayloadProvider,
     private readonly boundWitnessSuccessListener: IXyoBoundWitnessSuccessListener,
-    private readonly boundWitnessInteractionFactory: IXyoBoundWitnessInteractionFactory
+    private readonly boundWitnessInteractionFactory: IXyoBoundWitnessInteractionFactory,
+    private readonly originBlockValidator: XyoOriginBlockValidator
   ) {
     super();
   }
@@ -49,6 +51,12 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
 
   private async handleBoundWitnessSuccess(boundWitness: XyoBoundWitness): Promise<void> {
     const hashValue = await boundWitness.getHash(this.hashingProvider);
+    try {
+      await this.originBlockValidator.validateOriginBlock(hashValue, boundWitness);
+    } catch (err) {
+      this.logError(`Origin block failed validation. Will not add. ${err}`);
+      throw err;
+    }
 
     await this.originState.updateOriginChainState(hashValue);
     await this.originChainNavigator.addOriginBlock(hashValue, boundWitness);
@@ -60,6 +68,13 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
       this.logInfo(`Extracted nested block with hash ${nestedHash.toString('hex')}`);
       const containsBlock = await this.originChainNavigator.containsOriginBlock(nestedHash);
       if (!containsBlock) {
+        try {
+          await this.originBlockValidator.validateOriginBlock(nestedHashValue, nestedBoundWitness);
+        } catch (err) {
+          this.logError(`Origin block failed validation. Will not add. ${err}`);
+          throw err;
+        }
+
         return this.originChainNavigator.addOriginBlock(nestedHashValue, nestedBoundWitness);
       }
     }));

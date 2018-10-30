@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-peer-connection-provider-builder.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 5:24:10 pm
+ * @Last modified time: Monday, 29th October 2018 5:16:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -21,6 +21,7 @@ import { XyoBoundWitnessStandardServerInteraction } from '../bound-witness-inter
 import { CatalogueItem } from '../../xyo-network/xyo-catalogue-item';
 import { XyoBoundWitnessStandardClientInteraction } from '../bound-witness-interactions/xyo-bound-witness-standard-client-interaction';
 import { XyoBoundWitnessTakeOriginChainServerInteraction } from '../bound-witness-interactions/xyo-bound-witness-take-origin-chain-server-interaction';
+import { XyoOriginBlockValidator } from '../../xyo-origin-chain/xyo-origin-block-validator';
 
 export class XyoPeerConnectionProviderFactory implements IXyoCategoryRouter, IXyoCatalogueResolver {
 
@@ -33,7 +34,8 @@ export class XyoPeerConnectionProviderFactory implements IXyoCategoryRouter, IXy
     private readonly boundWitnessPayloadProvider: XyoBoundWitnessPayloadProvider,
     private readonly boundWitnessSuccessListener: IXyoBoundWitnessSuccessListener,
     private readonly isServer: boolean,
-    private readonly catalogueResolver?: IXyoCatalogueResolver
+    private readonly originBlockValidator: XyoOriginBlockValidator,
+    private readonly catalogueResolver?: IXyoCatalogueResolver,
   ) {}
 
   public newInstance(): IXyoPeerConnectionDelegate {
@@ -58,7 +60,8 @@ export class XyoPeerConnectionProviderFactory implements IXyoCategoryRouter, IXy
               newInstance: (signers, payload) =>  {
                 return new XyoBoundWitnessStandardServerInteraction(signers, payload);
               }
-            }
+            },
+            this.originBlockValidator
           );
         case CatalogueItem.TAKE_ORIGIN_CHAIN:
           return new XyoBoundWitnessHandlerProvider(
@@ -71,7 +74,8 @@ export class XyoPeerConnectionProviderFactory implements IXyoCategoryRouter, IXy
               newInstance: (signers, payload) =>  {
                 return new XyoBoundWitnessTakeOriginChainServerInteraction(signers, payload);
               }
-            }
+            },
+            this.originBlockValidator
           );
         default:
           return undefined;
@@ -90,7 +94,8 @@ export class XyoPeerConnectionProviderFactory implements IXyoCategoryRouter, IXy
             newInstance: (signers, payload) =>  {
               return new XyoBoundWitnessStandardClientInteraction(signers, payload);
             }
-          }
+          },
+          this.originBlockValidator
         );
       case CatalogueItem.GIVE_ORIGIN_CHAIN:
         return undefined;
