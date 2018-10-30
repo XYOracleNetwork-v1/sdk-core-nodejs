@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: launch.json
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th September 2018 10:35:57 am
+ * @Last modified time: Tuesday, 30th October 2018 11:01:19 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -27,40 +27,13 @@
       "type": "node",
       "request": "launch",
       "name": "Test Open File",
-      "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+      "program": "${workspaceFolder}/../../node_modules/jest/bin/jest",
       "args": ["${relativeFile}"],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "env": {
         "NODE_ENV": "test"
       }
-    },    
-    {
-      "type": "node",
-      "request": "attach",
-      "name": "Attach by Process ID",
-      "processId": "${command:PickProcess}"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Manage",
-      "runtimeArgs": [
-          "-r",
-          "ts-node/register"
-      ],
-      "console": "integratedTerminal",      
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Current File",
-      "args": ["${relativeFile}"],
-      "runtimeArgs": [
-          "-r",
-          "ts-node/register"
-      ],
-      "console": "integratedTerminal",      
-    }    
+    }  
   ]
 }
