@@ -7,7 +7,7 @@
   "scripts": {
     "test": "export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose --detectOpenHandles",
     "build": "tsc",
-    "prepublishOnly": "tsc -b ."    
+    "prepublishOnly": "tsc -b ."
   },
   "husky": {
     "hooks": {
@@ -37,7 +37,8 @@
     "network": "^0.4.1",
     "node-rsa": "^1.0.1",
     "public-ip": "^2.4.0",
-    "winston": "^3.1.0"
+    "winston": "^3.1.0",
+    "winston-daily-rotate-file": "^3.4.1"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
