@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 17th October 2018 3:17:52 pm
+ * @Last modified time: Wednesday, 31st October 2018 10:12:00 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -233,7 +233,7 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
   private scheduleDisconnect(c: net.Socket) {
     this.cancelDisconnect();
     this.disconnectTimeout = setTimeout(() => {
-      this.logInfo(`Connection timed out`);
+      this.logInfo(`Connection timed out while negotiating`);
       this.connection = undefined;
       c.end();
     }, 3000);

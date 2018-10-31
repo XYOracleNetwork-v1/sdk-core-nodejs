@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network-pipe.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 22nd October 2018 11:58:50 am
+ * @Last modified time: Wednesday, 31st October 2018 11:00:50 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,11 +13,12 @@ import { IXyoNetworkPipe } from '../../@types/xyo-network';
 import { XyoTcpConnectionResult } from './xyo-tcp-connection-result';
 import { XyoError, XyoErrors } from '../../xyo-core-components/xyo-error';
 import { CatalogueItem } from '../xyo-catalogue-item';
+import { XyoBase } from '../../xyo-core-components/xyo-base';
 
 /**
  * A communication pipe using tcp/ip stack
  */
-export class XyoTcpNetworkPipe implements IXyoNetworkPipe {
+export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
 
   /**
    * Creates an instance of a XyoTcpNetworkPipe
@@ -25,7 +26,9 @@ export class XyoTcpNetworkPipe implements IXyoNetworkPipe {
    * @param connectionResult The resulting connection from the initial tcp/ip exchange
    */
 
-  constructor (private readonly connectionResult: XyoTcpConnectionResult) {}
+  constructor (private readonly connectionResult: XyoTcpConnectionResult) {
+    super();
+  }
 
   /**
    * Returns the peer from the other end of the pipe
@@ -98,7 +101,7 @@ export class XyoTcpNetworkPipe implements IXyoNetworkPipe {
       timeout = setTimeout(async () => {
         this.connectionResult.socket.removeListener('data', listener);
         await this.close();
-        reject(new XyoError('Connection timed out', XyoErrors.CRITICAL));
+        reject(new XyoError('Connection timed out after sending message', XyoErrors.CRITICAL));
       }, 3000);
 
       this.connectionResult.socket.on('data', listener);
@@ -110,7 +113,9 @@ export class XyoTcpNetworkPipe implements IXyoNetworkPipe {
    */
 
   public close(): Promise<void> {
+    this.logInfo(`Closing Connection`);
     this.connectionResult.socket.end();
+    this.connectionResult.socket.destroy();
     return Promise.resolve(undefined);
   }
 
