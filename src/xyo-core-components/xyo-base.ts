@@ -4,12 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 3:54:53 pm
+ * @Last modified time: Thursday, 1st November 2018 11:08:21 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoLogger } from "./xyo-logger";
+import safeStringify from 'fast-safe-stringify';
 
 /**
  * A general purpose base class that can be used to incorporate
@@ -26,6 +27,16 @@ export abstract class XyoBase {
 
   /** Exposes a logger instance that can be used to log to central output stream */
   public static logger: XyoLogger;
+
+  public static stringify(value: any): string {
+    return safeStringify(value, (key, v) => {
+      if (v === '[Circular]') {
+        return;
+      }
+
+      return v;
+    }, 2);
+  }
 
   /** Logs to the `info` level */
   protected logInfo(message?: any, ...optionalParams: any[]) {

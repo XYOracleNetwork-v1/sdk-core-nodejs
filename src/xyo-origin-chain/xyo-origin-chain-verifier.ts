@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-verifier.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:12:30 pm
+ * @Last modified time: Thursday, 1st November 2018 12:13:57 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,7 +32,7 @@ export class XyoOriginChainVerifier extends XyoBase {
         return this.validateBlockReducer(originBlock, await promiseChain, currentIndex === 0);
       }, Promise.resolve() as Promise<IPreviousBlockInfo | undefined>);
     } catch (err) {
-      this.logError(`Could not validate origin-blocks with error ${err.message}`);
+      this.logError(`Could not validate origin-blocks.`, err);
 
       return {
         isValid: false,

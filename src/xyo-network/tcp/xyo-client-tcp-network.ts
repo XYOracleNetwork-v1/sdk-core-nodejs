@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-client-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 1:48:03 pm
+ * @Last modified time: Thursday, 1st November 2018 12:12:49 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -138,7 +138,7 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
       const connectionResult = await this.getConnection(nextAddress, catalogue);
       return resolve(new XyoTcpNetworkPipe(connectionResult));
     } catch (err) {
-      this.logError(`There was an error creating client connection, ${err}`);
+      this.logError(`There was an error creating client connection`, err);
       // Take 1sec break an try again
       return setTimeout(() => {
         this.loop(catalogue, resolve, reject);
@@ -178,7 +178,7 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
       });
 
       const onError = (err: any) => {
-        this.logError(`An error occurred while getting connection`);
+        this.logError(`An error occurred while getting connection`, err);
         reject(err);
       };
 

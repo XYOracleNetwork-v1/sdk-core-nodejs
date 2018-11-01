@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-client-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 22nd October 2018 12:03:01 pm
+ * @Last modified time: Thursday, 1st November 2018 12:13:21 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -71,7 +71,7 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements
             try {
               response = await networkPipe.send(bytes);
             } catch (err) {
-              this.logError(`Failing to send bound witness message`);
+              this.logError(`Failing to send bound witness message`, err);
               return reject(err);
             }
 

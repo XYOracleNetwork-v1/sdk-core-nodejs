@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-archivist.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 12:05:44 pm
+ * @Last modified time: Thursday, 1st November 2018 11:45:36 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -66,7 +66,7 @@ export class XyoNode extends XyoBase {
       await this.peerConnectionDelegate.handlePeerConnection(networkPipe);
       this.logInfo(`Peer Connection handled`);
     } catch (err) {
-      this.logError(`There was an uncaught error in the xyo-node loop, ${err}`);
+      this.logError(`There was an uncaught error in the xyo-node loop`, err);
     }
 
     this.logInfo(`end loop`);

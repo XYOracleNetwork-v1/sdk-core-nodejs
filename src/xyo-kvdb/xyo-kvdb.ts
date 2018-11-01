@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-kvdb.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 23rd October 2018 4:33:50 pm
+ * @Last modified time: Thursday, 1st November 2018 11:30:52 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,11 +12,14 @@
 import { IXyoStorageProvider } from "../@types/xyo-storage";
 import { XyoStoragePriority } from "../xyo-storage/xyo-storage-priority";
 import { XyoError } from "../xyo-core-components/xyo-error";
+import { XyoBase } from "../xyo-core-components/xyo-base";
 
-export class XyoKvDb {
+export class XyoKvDb extends XyoBase {
   private readonly namespaceKey = Buffer.from('namespaces');
 
-  constructor(private readonly storageProvider: IXyoStorageProvider) {}
+  constructor(private readonly storageProvider: IXyoStorageProvider) {
+    super();
+  }
 
   public async getOrCreateNamespace(namespace: string) {
     const namespaceExists = await this.storageProvider.containsKey(this.namespaceKey);
@@ -39,7 +42,7 @@ export class XyoKvDb {
     if (shouldUpdateNamespaceList) {
       await this.storageProvider.write(
         this.namespaceKey,
-        Buffer.from(JSON.stringify(namespaceValue)),
+        Buffer.from(XyoBase.stringify(namespaceValue)),
         XyoStoragePriority.PRIORITY_HIGH,
         true,
         60000

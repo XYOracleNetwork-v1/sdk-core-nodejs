@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-basic-key-value-storage-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 22nd October 2018 5:02:40 pm
+ * @Last modified time: Thursday, 1st November 2018 11:27:09 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,6 +14,7 @@ import { XyoInMemoryStorageProvider } from "./xyo-in-memory-storage-provider";
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { XyoError } from "../xyo-core-components/xyo-error";
 import { XyoStoragePriority } from "./xyo-storage-priority";
+import { XyoBase } from "../xyo-core-components/xyo-base";
 
 export class XyoBasicKeyValueStorageProvider extends XyoInMemoryStorageProvider implements IXyoStorageProvider {
 
@@ -51,7 +52,7 @@ function getOrCreateDb(dataFile: string): {[s: string]: Buffer} {
     }, {});
   }
 
-  writeFileSync(dataFile, JSON.stringify({}), 'utf8');
+  writeFileSync(dataFile, XyoBase.stringify({}), 'utf8');
   return {};
 }
 
@@ -60,5 +61,5 @@ function persist(dataFile: string, data: {[s: string]: Buffer}) {
     memo[key] = data[key].toString();
     return memo;
   }, {});
-  writeFileSync(dataFile, JSON.stringify(transform), 'utf8');
+  writeFileSync(dataFile, XyoBase.stringify(transform), 'utf8');
 }

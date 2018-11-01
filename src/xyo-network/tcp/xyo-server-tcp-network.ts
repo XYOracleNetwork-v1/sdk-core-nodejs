@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 31st October 2018 10:12:00 am
+ * @Last modified time: Thursday, 1st November 2018 12:27:13 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -73,10 +73,21 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
     });
 
     /** Clears state so this tcp-network instance can be used again */
-    connectionResult.socket.on('close', () => {
+    const onConnectionClose = () => {
       this.logInfo(`Xyo TCP Connection closed`);
+      connectionResult.socket.removeListener('close', onConnectionClose);
+      connectionResult.socket.removeListener('error', onConnectionError);
       this.connection = undefined;
-    });
+    };
+
+    const onConnectionError = (err: Error) => {
+      this.logInfo(`An error occurred on an open TCP connection`, err);
+      this.connection = undefined;
+    };
+
+    connectionResult.socket.on('close', onConnectionClose);
+
+    connectionResult.socket.on('error', onConnectionError);
 
     return new XyoTcpNetworkPipe(connectionResult);
   }
@@ -135,7 +146,15 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
           this.connection = undefined;
         };
 
+        // tslint:disable-next-line:ter-prefer-arrow-callback
+        const onError = (err: Error) => {
+          this.logError(`An error error getting a connection`, err);
+          this.cancelDisconnect();
+          this.connection = undefined;
+        };
+
         c.on('close', onConnectionClose);
+        c.on('error', onError);
 
         let data: Buffer | undefined;
         let sizeOfPayload: number | undefined;
@@ -197,6 +216,7 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
             this.cancelDisconnect();
             c.removeListener('data', onData);
             c.removeListener('close', onConnectionClose);
+            c.removeListener('error', onError);
             server.removeListener('connection', onConnection);
             this.connection = undefined;
             const appDataIndex = readNumberFromBuffer(

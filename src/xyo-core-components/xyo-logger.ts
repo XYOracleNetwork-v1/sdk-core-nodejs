@@ -15,7 +15,7 @@ import { MESSAGE } from 'triple-beam';
 export class XyoLogger {
   private readonly logger = (() => {
     const infoTransport = new DailyRotateFile({
-      filename: 'logs/info/%DATE%.log',
+      dirname: 'logs/info',
       datePattern: 'YYYY-MM-DD-HH',
       zippedArchive: true,
       maxSize: '20m',
@@ -24,7 +24,7 @@ export class XyoLogger {
     });
 
     const errorTransport = new DailyRotateFile({
-      filename: 'logs/error/%DATE%.log',
+      dirname: 'logs/error',
       datePattern: 'YYYY-MM-DD-HH',
       zippedArchive: true,
       maxSize: '20m',
@@ -47,31 +47,36 @@ export class XyoLogger {
   })();
 
   /** Log to `info` level */
-  public info(message: string, ...meta: any[]) {
-    if (meta.length) {
-      this.logger.info(message, meta);
-    } else {
-      this.logger.info(message);
-    }
+  public info(message: string, meta?: any[]) {
+    this.logger.info(this.metaReducer(message, meta));
   }
 
   /** Log to `error` level */
-  public error(message: string, ...meta: any[]) {
-    if (meta.length) {
-      this.logger.error(message, meta);
-    } else {
-      this.logger.error(message);
-    }
+  public error(message: string, meta?: any[]) {
+    this.logger.error(this.metaReducer(message, meta));
   }
 
   /** Log to `warn` level */
-  public warn(message: string, ...meta: any[]) {
-    if (meta.length) {
-      this.logger.warn(message, meta);
-    } else {
-      this.logger.warn(message);
-    }
+  public warn(message: string, meta?: any[]) {
+    this.logger.warn(this.metaReducer(message, meta));
   }
+
+  private metaReducer(message: string, meta?: any[]) {
+    if (meta && meta.length) {
+      const metaMsg = meta.reduce((memo, item) => {
+        return ([] as any[]).concat(memo, [
+          item instanceof Error ?
+            `${item.stack || item.message}` :
+            item.toString()
+        ]);
+      }, []).join('\n');
+
+      return `${message}\n${metaMsg}`;
+    }
+
+    return message;
+  }
+
 }
 
 const xyoLogFormat = winston.format((info, opts) => {

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 5:29:03 pm
+ * @Last modified time: Thursday, 1st November 2018 12:14:12 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -118,7 +118,7 @@ export class XyoPacker extends XyoBase {
           } catch (err) {
             const errorMessage = `An error occurred deserializing an object with major ${major}, minor ${minor}.
             \n\nHexBuffer: ${srcBuffer.toString('hex')}`;
-            this.logError(errorMessage);
+            this.logError(errorMessage, err);
             throw err;
           }
         }

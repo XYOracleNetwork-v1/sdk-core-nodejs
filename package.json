@@ -34,6 +34,7 @@
     "bn.js": "^4.11.8",
     "elliptic": "^6.4.1",
     "external-ip": "^2.0.3",
+    "fast-safe-stringify": "^2.0.6",
     "network": "^0.4.1",
     "node-rsa": "^1.0.1",
     "public-ip": "^2.4.0",

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-hash-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 12th October 2018 11:20:18 am
+ * @Last modified time: Thursday, 1st November 2018 11:24:36 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 30th October 2018 12:40:10 pm
+ * @Last modified time: Thursday, 1st November 2018 12:13:09 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -86,7 +86,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
             try {
               response = await networkPipe.send(bytesToSend);
             } catch (err) {
-              this.logError(`Failed BoundWitnessTransfer on step 1`);
+              this.logError(`Failed BoundWitnessTransfer on step 1`, err);
               return reject(err);
             }
 
@@ -103,7 +103,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
               try {
                 await networkPipe.send(transferBytes, false);
               } catch (err) {
-                this.logError(`Failed BoundWitnessTransfer on step 3`);
+                this.logError(`Failed BoundWitnessTransfer on step 3`, err);
                 return reject(err);
               }
 
@@ -114,17 +114,6 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
               await networkPipe.close();
 
               /** Return the resulting bound-witness */
-
-              boundWitness.publicKeys.forEach((pks, outerIndex) => {
-                pks.array.forEach((pk, innerIndex) => {
-                  // tslint:disable-next-line:max-line-length
-                  const npk = pk as XyoEcdsaUncompressedPublicKey;
-                  this.logInfo(`[${outerIndex}][${innerIndex}] x:  ${npk.x.toString('hex')}`);
-
-                  // tslint:disable-next-line:max-line-length
-                  this.logInfo(`[${outerIndex}][${innerIndex}] y:  ${npk.y.toString('hex')}`);
-                });
-              });
               return resolve(boundWitness);
             }
           }
