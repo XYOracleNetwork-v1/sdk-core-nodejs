@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 29th October 2018 5:05:45 pm
+ * @Last modified time: Monday, 5th November 2018 12:30:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -54,6 +54,7 @@ export { XyoClientTcpNetwork } from '../xyo-network/tcp/xyo-client-tcp-network';
 export { CatalogueItem } from '../xyo-network/xyo-catalogue-item';
 export { IXyoNetworkProcedureCatalogue } from '../@types/xyo-network';
 export { IXyoNetworkAddressProvider } from '../@types/xyo-network';
+export { XyoPeerDiscoveryService, IPeerCandidate, IPeerDescription, IPeerDescriptionWithPeers } from '../xyo-network/xyo-peer-discovery-service';
 
 /** Xyo Bound Witness Exports */
 export { XyoBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-bound-witness';
