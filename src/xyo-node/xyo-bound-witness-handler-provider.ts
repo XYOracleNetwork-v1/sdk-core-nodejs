@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 1st November 2018 12:13:37 pm
+ * @Last modified time: Tuesday, 6th November 2018 12:37:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -62,7 +62,8 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
     await this.originChainNavigator.addOriginBlock(hashValue, boundWitness);
     const nestedBoundWitnesses = extractNestedBoundWitnesses(boundWitness);
 
-    await Promise.all(nestedBoundWitnesses.map(async (nestedBoundWitness) => {
+    await nestedBoundWitnesses.reduce(async (promiseChain, nestedBoundWitness) => {
+      await promiseChain;
       const nestedHashValue = await nestedBoundWitness.getHash(this.hashingProvider);
       const nestedHash = nestedHashValue.serialize(true);
       this.logInfo(`Extracted nested block with hash ${nestedHash.toString('hex')}`);
@@ -75,9 +76,9 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
           throw err;
         }
 
-        return this.originChainNavigator.addOriginBlock(nestedHashValue, nestedBoundWitness);
+        await this.originChainNavigator.addOriginBlock(nestedHashValue, nestedBoundWitness);
       }
-    }));
+    }, Promise.resolve() as Promise<void>);
 
     if (this.boundWitnessSuccessListener) {
       await this.boundWitnessSuccessListener.onBoundWitnessSuccess(boundWitness);

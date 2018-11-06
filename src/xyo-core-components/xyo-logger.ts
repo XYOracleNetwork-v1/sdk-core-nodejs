@@ -2,9 +2,6 @@ import winston from 'winston';
 
 import DailyRotateFile from "winston-daily-rotate-file";
 
-// @ts-ignore
-import { MESSAGE } from 'triple-beam';
-
 /**
  * A central logger for the Xyo core
  *
