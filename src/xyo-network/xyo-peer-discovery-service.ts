@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-peer-discovery-service.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 5th November 2018 2:12:20 pm
+ * @Last modified time: Tuesday, 6th November 2018 9:30:06 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -263,15 +263,8 @@ export class XyoPeerDiscoveryService extends XyoBase {
             const body = Buffer.concat(chunks);
 
             if (res.statusCode !== 200) {
-              try {
-                const msg = `HTTP Status: ${res.statusCode} Body: ${body.toString()}`;
-                this.logError(`There was an error resolving peer information. ${msg}`);
-              } catch (e) {
-                this.logError(`There was an error resolving peer information`);
-              } finally {
-                resolve(undefined);
-              }
-              return;
+              this.logError(`There was an error resolving peer information`);
+              return resolve(undefined);
             }
 
             try {
