@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/sdk-core-nodejs",
-  "version": "0.1.96",
+  "version": "0.1.97",
   "description": "A core library of nodejs tools to power the nodejs implementation of the XYO network",
   "main": "dist/lib/index.js",
   "types": "dist/lib/index.d.ts",
@@ -53,6 +53,6 @@
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
     "tslint-config-airbnb": "^5.9.2",
-    "typescript": "^3.1.2"
+    "typescript": "^3.1.6"
   }
 }
