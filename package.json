@@ -31,7 +31,6 @@
   },
   "homepage": "https://github.com/XYOracleNetwork/sdk-core-nodejs#readme",
   "dependencies": {
-    "@types/bn.js": "^4.11.2",
     "bn.js": "^4.11.8",
     "elliptic": "^6.4.1",
     "external-ip": "^2.0.3",
@@ -43,6 +42,7 @@
     "winston-daily-rotate-file": "^3.4.1"
   },
   "devDependencies": {
+    "@types/bn.js": "^4.11.2",    
     "@types/jest": "^23.3.1",
     "@types/node": "^10.7.1",
     "@types/node-rsa": "^0.4.3",
