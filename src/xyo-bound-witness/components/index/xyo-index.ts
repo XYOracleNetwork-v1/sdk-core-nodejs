@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 11:18:30 am
+ * @Last modified time: Thursday, 8th November 2018 2:53:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -29,5 +29,13 @@ export class XyoIndex extends XyoNumberUnsigned {
 
   constructor(index: number) {
     super(index, XyoIndex.major, XyoIndex.minor, XyoNumberType.INT);
+  }
+
+  public getReadableName(): string {
+    return 'index';
+  }
+
+  public getReadableValue() {
+    return this.number;
   }
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-md5-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 11:58:53 am
+ * @Last modified time: Thursday, 8th November 2018 12:54:13 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -29,5 +29,13 @@ export class XyoMd5Hash extends XyoHash {
 
   constructor(md5HashProvider: IXyoHashProvider | undefined, md5Hash: Buffer) {
     super(md5HashProvider, md5Hash, XyoMd5Hash.major, XyoMd5Hash.minor);
+  }
+
+  public getReadableName(): string {
+    return 'md5-hash';
+  }
+
+  public getReadableValue() {
+    return this.hash;
   }
 }

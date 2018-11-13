@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-single-type-array-byte-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 5:18:24 pm
+ * @Last modified time: Thursday, 8th November 2018 3:33:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,6 +12,7 @@
 import { XyoArrayUnpacker } from '../../xyo-serialization/xyo-array-unpacker';
 import { XyoSerializer } from '../../xyo-serialization/xyo-serializer';
 import { XyoArray } from './xyo-array';
+import { XyoObject } from '../../lib';
 
 /** A general multi-purpose serializer for `XyoArray` types */
 export class XyoArraySerializer extends XyoSerializer<XyoArray> {
@@ -20,7 +21,11 @@ export class XyoArraySerializer extends XyoSerializer<XyoArray> {
     private readonly major: number,
     private readonly minor: number,
     private readonly size: number,
-    private readonly typed: boolean
+    private readonly typed: boolean,
+    private readonly ctor?: {
+      typed?: { new(elementMajor: number, elementMinor: number, array: XyoObject[]): XyoArray },
+      untyped?: { new(array: XyoObject[]): XyoArray }
+    }
   ) {
     super();
   }
@@ -50,6 +55,20 @@ export class XyoArraySerializer extends XyoSerializer<XyoArray> {
     );
 
     const array = unpackedArray.array;
+
+    if (
+      this.typed &&
+      unpackedArray.majorType &&
+      unpackedArray.minorType &&
+      this.ctor &&
+      this.ctor.typed
+    ) {
+      return new this.ctor.typed(unpackedArray.majorType, unpackedArray.minorType, array);
+    }
+
+    if (!this.typed && this.ctor && this.ctor.untyped) {
+      return new this.ctor.untyped(array);
+    }
 
     const newArray = new XyoArray(
       unpackedArray.majorType || undefined,

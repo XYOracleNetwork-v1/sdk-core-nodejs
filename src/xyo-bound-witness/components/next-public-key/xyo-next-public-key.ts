@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-next-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 11:28:10 am
+ * @Last modified time: Thursday, 8th November 2018 12:51:56 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -34,5 +34,13 @@ export class XyoNextPublicKey extends XyoObject {
 
   constructor (public readonly publicKey: IXyoPublicKey) {
     super(XyoNextPublicKey.major, XyoNextPublicKey.minor);
+  }
+
+  public getReadableName(): string {
+    return 'next-public-key';
+  }
+
+  public getReadableValue() {
+    return this.publicKey;
   }
 }

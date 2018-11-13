@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-single-type-array-byte.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 11:48:48 am
+ * @Last modified time: Thursday, 8th November 2018 12:50:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,5 +32,13 @@ export class XyoSingleTypeArrayByte extends XyoArray {
 
   constructor(elementMajor: number, elementMinor: number, array: XyoObject[]) {
     super(elementMajor, elementMinor, XyoSingleTypeArrayByte.major, XyoSingleTypeArrayByte.minor, 1, array);
+  }
+
+  public getReadableName(): string {
+    return 'single-type-array-byte';
+  }
+
+  public getReadableValue() {
+    return this.array;
   }
 }

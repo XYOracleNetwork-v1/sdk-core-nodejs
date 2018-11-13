@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-single-type-array-int.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 11:48:53 am
+ * @Last modified time: Thursday, 8th November 2018 12:50:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,5 +32,13 @@ export class XyoSingleTypeArrayInt extends XyoArray {
 
   constructor(elementMajor: number, elementMinor: number, array: XyoObject[]) {
     super(elementMajor, elementMinor, XyoSingleTypeArrayInt.major, XyoSingleTypeArrayInt.minor, 4, array);
+  }
+
+  public getReadableName(): string {
+    return 'single-type-array-int';
+  }
+
+  public getReadableValue() {
+    return this.array;
   }
 }

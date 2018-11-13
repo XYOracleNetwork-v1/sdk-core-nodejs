@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-multi-type-array-byte.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 11:48:20 am
+ * @Last modified time: Thursday, 8th November 2018 12:50:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -30,5 +30,13 @@ export class XyoMultiTypeArrayByte extends XyoArray {
 
   constructor(array: XyoObject[]) {
     super(undefined, undefined, XyoMultiTypeArrayByte.major, XyoMultiTypeArrayByte.minor, 1, array);
+  }
+
+  public getReadableName(): string {
+    return 'multi-type-array-byte';
+  }
+
+  public getReadableValue() {
+    return this.array;
   }
 }

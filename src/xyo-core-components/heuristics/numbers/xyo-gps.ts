@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-gps.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 29th October 2018 2:14:26 pm
+ * @Last modified time: Thursday, 8th November 2018 12:50:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,5 +18,16 @@ export class XyoGps extends XyoObject {
 
   constructor(public readonly lat: number, public readonly long: number) {
     super(XyoGps.major, XyoGps.minor);
+  }
+
+  public getReadableName(): string {
+    return 'gps';
+  }
+
+  public getReadableValue() {
+    return {
+      lat: this.lat,
+      long: this.long
+    };
   }
 }

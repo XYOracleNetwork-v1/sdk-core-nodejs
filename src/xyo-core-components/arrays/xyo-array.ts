@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 1:20:35 pm
+ * @Last modified time: Thursday, 8th November 2018 12:50:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -39,6 +39,14 @@ export class XyoArray extends XyoObject {
     public readonly array: XyoObject[]
   ) {
     super(major, minor);
+  }
+
+  public getReadableName(): string {
+    return 'array';
+  }
+
+  public getReadableValue() {
+    return this.array;
   }
 
   /**

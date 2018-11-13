@@ -4,13 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bridge-hash-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 11:16:24 am
+ * @Last modified time: Thursday, 8th November 2018 3:36:30 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoArray } from "../../../xyo-core-components/arrays/xyo-array";
 import { XyoHash } from "../../../xyo-hashing/xyo-hash";
+import { XyoObject } from "../../../lib";
 
 /**
  * When a bound-witness occurs that is bridging origin blocks from
@@ -33,7 +34,15 @@ export class XyoBridgeHashSet extends XyoArray {
    * @param array The collection of hashes to wrap
    */
 
-  constructor (public readonly array: XyoHash[]) {
+  constructor (public readonly array: XyoObject[]) {
     super(undefined, undefined, XyoBridgeHashSet.major, XyoBridgeHashSet.minor, 2, array);
+  }
+
+  public getReadableName(): string {
+    return 'bridgeHashSet';
+  }
+
+  public getReadableValue() {
+    return this.array;
   }
 }

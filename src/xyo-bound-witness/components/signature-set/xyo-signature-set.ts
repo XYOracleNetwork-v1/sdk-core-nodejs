@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signature-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 11:47:12 am
+ * @Last modified time: Thursday, 8th November 2018 2:25:52 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -33,5 +33,13 @@ export class XyoSignatureSet extends XyoArray {
 
   constructor (public readonly array: XyoObject[]) {
     super(undefined, undefined, XyoSignatureSet.major, XyoSignatureSet.minor, 2, array);
+  }
+
+  public getReadableName(): string {
+    return 'signatureSet';
+  }
+
+  public getReadableValue() {
+    return this.array;
   }
 }

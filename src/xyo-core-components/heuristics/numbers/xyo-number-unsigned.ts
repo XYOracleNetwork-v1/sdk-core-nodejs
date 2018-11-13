@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-number-unsigned.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th September 2018 12:47:33 pm
+ * @Last modified time: Thursday, 8th November 2018 12:50:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -33,5 +33,13 @@ export class XyoNumberUnsigned extends XyoObject {
     public readonly size: XyoNumberType
   ) {
     super(major, minor);
+  }
+
+  public getReadableName(): string {
+    return 'number-unsigned';
+  }
+
+  public getReadableValue() {
+    return this.number;
   }
 }

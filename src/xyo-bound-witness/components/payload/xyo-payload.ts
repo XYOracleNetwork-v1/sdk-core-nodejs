@@ -42,6 +42,17 @@ export class XyoPayload extends XyoObject {
     super(XyoPayload.major, XyoPayload.minor);
   }
 
+  public getReadableName(): string {
+    return 'payload';
+  }
+
+  public getReadableValue() {
+    return {
+      signedPayload: this.signedPayload,
+      unsignedPayload: this.unsignedPayload
+    };
+  }
+
   /**
    * Returns a map where the keys are hash values and values are the values that hash to their
    * corresponding type id. This only takes into account the elements in the signed payload

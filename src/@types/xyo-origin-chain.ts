@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 30th October 2018 3:53:26 pm
+ * @Last modified time: Thursday, 8th November 2018 4:30:36 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -44,7 +44,7 @@ export interface IXyoOriginBlockRepository {
    * Adds an origin-block to the repository and indexes to by the hash passed in
    */
 
-  addOriginBlock(hash: XyoHash, originBlock: XyoBoundWitness): Promise<void>;
+  addOriginBlock(hash: XyoHash, originBlock: XyoBoundWitness, bridgedFromBlock?: XyoHash): Promise<void>;
 
   /**
    * Returns the origin block by the hash passed in. Otherwise, it returns `undefined`

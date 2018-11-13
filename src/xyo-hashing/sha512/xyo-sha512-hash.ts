@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-sha512-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 11:58:57 am
+ * @Last modified time: Thursday, 8th November 2018 12:56:39 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -29,5 +29,13 @@ export class XyoSha512Hash extends XyoHash {
 
   constructor(sha512HashProvider: IXyoHashProvider | undefined, sha512Hash: Buffer) {
     super(sha512HashProvider, sha512Hash, XyoSha512Hash.major, XyoSha512Hash.minor);
+  }
+
+  public getReadableName(): string {
+    return 'sha512-hash';
+  }
+
+  public getReadableValue() {
+    return this.hash;
   }
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-m
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 11:58:54 am
+ * @Last modified time: Thursday, 8th November 2018 12:54:35 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -29,5 +29,13 @@ export class XyoSha1Hash extends XyoHash {
 
   constructor(sha1HashProvider: IXyoHashProvider | undefined, sha1Hash: Buffer) {
     super(sha1HashProvider, sha1Hash, XyoSha1Hash.major, XyoSha1Hash.minor);
+  }
+
+  public getReadableName(): string {
+    return 'sha1-hash';
+  }
+
+  public getReadableValue() {
+    return this.hash;
   }
 }

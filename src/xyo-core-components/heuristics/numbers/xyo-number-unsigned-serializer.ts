@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-number-unsigned-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 1:19:34 pm
+ * @Last modified time: Thursday, 8th November 2018 3:25:09 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,7 +32,12 @@ export class XyoNumberUnsignedSerializer extends XyoSerializer<XyoNumberUnsigned
    * @memberof XyoNumberUnsignedSerializer
    */
 
-  constructor(private readonly major: number, private readonly minor: number, private readonly size: XyoNumberType) {
+  constructor(
+    private readonly major: number,
+    private readonly minor: number,
+    private readonly size: XyoNumberType,
+    private readonly ctor?: { new(number: number): XyoNumberUnsigned}
+  ) {
     super();
   }
 
@@ -70,6 +75,10 @@ export class XyoNumberUnsignedSerializer extends XyoSerializer<XyoNumberUnsigned
         throw new XyoError('This is not yet supported', XyoErrors.CRITICAL);
       default:
         throw new XyoError('This should never happen', XyoErrors.CRITICAL);
+    }
+
+    if (this.ctor) {
+      return new this.ctor(number);
     }
 
     return new XyoNumberUnsigned(number, this.major, this.minor, this.size);

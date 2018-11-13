@@ -32,6 +32,14 @@ export class XyoRsaPublicKey extends XyoObject implements IXyoPublicKey {
     super(XyoRsaPublicKey.major, XyoRsaPublicKey.minor);
   }
 
+  public getReadableName(): string {
+    return 'rsa-public-key';
+  }
+
+  public getReadableValue() {
+    return this.getRawPublicKey();
+  }
+
   /**
    * The public exponent in the RSA crypto algorithm. Returns
    * the conventional (2 ^ 16) + (2^0) value used in many RSA configurations.

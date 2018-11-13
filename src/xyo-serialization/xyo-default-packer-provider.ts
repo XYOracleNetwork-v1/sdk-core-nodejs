@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 29th October 2018 2:10:30 pm
+ * @Last modified time: Thursday, 8th November 2018 3:36:34 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -102,21 +102,21 @@ export class XyoDefaultPackerProvider extends XyoBase {
     add(XyoKeySet, new XyoKeySetSerializer());
     add(XyoSignatureSet, new XyoSignatureSetSerializer());
     add(XyoPreviousHash, new XyoPreviousHashSerializer());
-    add(XyoRssi, new XyoNumberSignedSerializer(XyoRssi.major, XyoRssi.minor, 1));
-    add(XyoIndex, new XyoNumberUnsignedSerializer(XyoIndex.major, XyoIndex.minor, 4));
+    add(XyoRssi, new XyoNumberSignedSerializer(XyoRssi.major, XyoRssi.minor, 1, XyoRssi));
+    add(XyoIndex, new XyoNumberUnsignedSerializer(XyoIndex.major, XyoIndex.minor, 4, XyoIndex));
     add(XyoEcdsaSecp256k1UnCompressedPublicKey, new XyoEcdsaUncompressedPublicKeySerializer(XyoEcdsaSecp256k1UnCompressedPublicKey.minor, { newInstance: (x, y) => new XyoEcdsaSecp256k1UnCompressedPublicKey(x, y) }));
     add(XyoRsaPublicKey, new XyoRsaPublicKeySerializer());
     add(XyoNextPublicKey, new XyoNextPublicKeySerializer());
     add(XyoPayload, new XyoPayloadSerializer());
-    add(XyoSingleTypeArrayByte, new XyoArraySerializer(XyoSingleTypeArrayByte.major, XyoSingleTypeArrayByte.minor, 1, true));
-    add(XyoSingleTypeArrayShort, new XyoArraySerializer(XyoSingleTypeArrayShort.major, XyoSingleTypeArrayShort.minor, 2, true));
-    add(XyoSingleTypeArrayInt, new XyoArraySerializer(XyoSingleTypeArrayInt.major, XyoSingleTypeArrayInt.minor, 4, true));
-    add(XyoMultiTypeArrayByte, new XyoArraySerializer(XyoMultiTypeArrayByte.major, XyoMultiTypeArrayByte.minor, 1, false));
-    add(XyoMultiTypeArrayShort, new XyoArraySerializer(XyoMultiTypeArrayShort.major, XyoMultiTypeArrayShort.minor, 2, false));
-    add(XyoMultiTypeArrayInt, new XyoArraySerializer(XyoMultiTypeArrayInt.major, XyoMultiTypeArrayInt.minor, 4, false));
+    add(XyoSingleTypeArrayByte, new XyoArraySerializer(XyoSingleTypeArrayByte.major, XyoSingleTypeArrayByte.minor, 1, true, { typed: XyoSingleTypeArrayByte }));
+    add(XyoSingleTypeArrayShort, new XyoArraySerializer(XyoSingleTypeArrayShort.major, XyoSingleTypeArrayShort.minor, 2, true, { typed: XyoSingleTypeArrayShort }));
+    add(XyoSingleTypeArrayInt, new XyoArraySerializer(XyoSingleTypeArrayInt.major, XyoSingleTypeArrayInt.minor, 4, true, { typed: XyoSingleTypeArrayInt }));
+    add(XyoMultiTypeArrayByte, new XyoArraySerializer(XyoMultiTypeArrayByte.major, XyoMultiTypeArrayByte.minor, 1, false, { untyped: XyoMultiTypeArrayByte }));
+    add(XyoMultiTypeArrayShort, new XyoArraySerializer(XyoMultiTypeArrayShort.major, XyoMultiTypeArrayShort.minor, 2, false, { untyped: XyoMultiTypeArrayShort }));
+    add(XyoMultiTypeArrayInt, new XyoArraySerializer(XyoMultiTypeArrayInt.major, XyoMultiTypeArrayInt.minor, 4, false, { untyped: XyoMultiTypeArrayInt }));
     add(XyoBoundWitnessTransfer, new XyoBoundWitnessTransferSerializer());
     add(XyoBoundWitness, new XyoBoundWitnessSerializer());
-    add(XyoBridgeHashSet, new XyoArraySerializer(XyoBridgeHashSet.major, XyoBridgeHashSet.minor, 2, false));
+    add(XyoBridgeHashSet, new XyoArraySerializer(XyoBridgeHashSet.major, XyoBridgeHashSet.minor, 2, false, { untyped: XyoBridgeHashSet }));
     add(XyoMd5Hash, new XyoHashSerializer(XyoMd5Hash.minor, 16, new XyoMd5HashProvider(), { newInstance: (hashProvider, hash) => new XyoMd5Hash(hashProvider, hash) }));
     add(XyoSha1Hash, new XyoHashSerializer(XyoSha1Hash.minor, 20, sha1HashProvider, { newInstance: (hashProvider, hash) => new XyoSha1Hash(hashProvider, hash) }));
     add(XyoSha224Hash, new XyoHashSerializer(XyoSha224Hash.minor, 28, new XyoSha224HashProvider(), { newInstance: (hashProvider, hash) => new XyoSha224Hash(hashProvider, hash) }));

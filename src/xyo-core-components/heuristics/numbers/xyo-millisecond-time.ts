@@ -5,7 +5,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-millisecond-time.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 19th October 2018 3:57:39 pm
+ * @Last modified time: Thursday, 8th November 2018 2:59:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -26,5 +26,14 @@ export class XyoMillisecondTime extends XyoNumberUnsigned {
 
   constructor(time?: number) {
     super(time || new Date().valueOf(), XyoMillisecondTime.major, XyoMillisecondTime.minor, XyoNumberType.LONG);
+  }
+
+  public getReadableName(): string {
+    return 'time';
+  }
+
+  // @ts-ignore
+  public getReadableValue() {
+    return new Date(this.number).toISOString();
   }
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 1:20:41 pm
+ * @Last modified time: Thursday, 8th November 2018 12:55:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -34,6 +34,14 @@ export class XyoHash extends XyoObject {
     public readonly minor: number
   ) {
     super(major, minor);
+  }
+
+  public getReadableName(): string {
+    return 'hash';
+  }
+
+  public getReadableValue() {
+    return this.hash;
   }
 
   /**

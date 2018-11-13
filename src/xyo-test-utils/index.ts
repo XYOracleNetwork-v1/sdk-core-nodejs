@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 12th October 2018 9:48:23 am
+ * @Last modified time: Thursday, 8th November 2018 1:11:14 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -23,6 +23,14 @@ export class TestXyoObject extends XyoObject {
 
   constructor (public readonly value: string) {
     super(TestXyoObject.major, TestXyoObject.minor);
+  }
+
+  public getReadableName(): string {
+    return 'test-object';
+  }
+
+  public getReadableValue() {
+    return this.value;
   }
 }
 

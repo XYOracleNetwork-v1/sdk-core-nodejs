@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-sha-224-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 11:58:55 am
+ * @Last modified time: Thursday, 8th November 2018 12:55:00 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -29,5 +29,13 @@ export class XyoSha224Hash extends XyoHash {
 
   constructor(sha224HashProvider: IXyoHashProvider | undefined, sha224Hash: Buffer) {
     super(sha224HashProvider, sha224Hash, XyoSha224Hash.major, XyoSha224Hash.minor);
+  }
+
+  public getReadableName(): string {
+    return 'sha-224';
+  }
+
+  public getReadableValue() {
+    return this.hash;
   }
 }

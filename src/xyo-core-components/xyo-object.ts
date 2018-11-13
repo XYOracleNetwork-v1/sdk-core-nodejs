@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 5:31:15 pm
+ * @Last modified time: Thursday, 8th November 2018 2:23:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,6 +18,7 @@ import { XyoBase } from './xyo-base';
 import { XyoPacker } from '../xyo-serialization/xyo-packer';
 import { XyoError, XyoErrors } from './xyo-error';
 import { XyoSerializer } from '../xyo-serialization/xyo-serializer';
+import { read } from 'fs';
 
 export abstract class XyoObject extends XyoBase {
 
@@ -89,6 +90,9 @@ export abstract class XyoObject extends XyoBase {
     return XyoObject.packer.serialize(this, typed);
   }
 
+  public abstract getReadableName(): string;
+  public abstract getReadableValue(): any;
+
   /**
    * @returns The id of the `XyoObject`, which is concatenation of the major & minor values
    */
@@ -107,5 +111,55 @@ export abstract class XyoObject extends XyoBase {
     }
 
     return XyoObject.packer.serialize(this, true).equals(XyoObject.packer.serialize(other, true));
+  }
+
+  public getReadableJSON() {
+    return XyoBase.stringify({
+      [this.getReadableName()]: this.recursivelyGetReadableValue(this.getReadableValue())
+    });
+  }
+
+  private recursivelyGetReadableValue(readableValue: any): any {
+    if (readableValue === null || readableValue === undefined) {
+      return readableValue;
+    }
+
+    const type = typeof readableValue;
+
+    switch (type) {
+      case 'string':
+        return readableValue;
+      case 'number':
+        return readableValue;
+      case 'boolean':
+        return readableValue;
+      case 'symbol':
+        return readableValue;
+      case 'function':
+        return readableValue.toString();
+      case 'object':
+        if (readableValue instanceof XyoObject) {
+          const nestedReadValue = readableValue as XyoObject;
+          return {
+            [nestedReadValue.getReadableName()]: this.recursivelyGetReadableValue(nestedReadValue.getReadableValue())
+          };
+        }
+
+        if (readableValue instanceof Buffer) {
+          return readableValue.toString('hex');
+        }
+
+        if (Array.isArray(readableValue)) {
+          return readableValue.map(i => this.recursivelyGetReadableValue(i));
+        }
+
+        // must be object
+        return Object.keys(readableValue).reduce((memo: {[s: string]: any}, objKey) => {
+          memo[objKey] = this.recursivelyGetReadableValue(readableValue[objKey]);
+          return memo;
+        }, {});
+    }
+
+    throw new XyoError(`Could not serialize type ${type}`, XyoErrors.CRITICAL);
   }
 }

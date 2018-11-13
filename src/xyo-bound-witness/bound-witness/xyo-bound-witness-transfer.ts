@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-transfer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 11:02:36 am
+ * @Last modified time: Thursday, 8th November 2018 12:50:36 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -37,6 +37,19 @@ export class XyoBoundWitnessTransfer extends XyoObject {
     public readonly signatureToSend: XyoObject[]
   ) {
     super(XyoBoundWitnessTransfer.major, XyoBoundWitnessTransfer.minor);
+  }
+
+  public getReadableName(): string {
+    return 'bound-witness-transfer';
+  }
+
+  public getReadableValue() {
+    return {
+      stage: this.stage,
+      keysToSend: this.keysToSend,
+      payloadsToSend: this.payloadsToSend,
+      signatureToSend: this.signatureToSend
+    };
   }
 
   /**

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 1st November 2018 12:27:13 pm
+ * @Last modified time: Thursday, 8th November 2018 3:55:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -61,7 +61,7 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
   public async find(catalogue: IXyoNetworkProcedureCatalogue): Promise<IXyoNetworkPipe> {
     /** Create a server and listen on port */
     this.server = net.createServer();
-    this.server.listen(this.port);
+    this.server.listen(this.port, '0.0.0.0');
     this.logInfo(`Listening on port ${this.port} for incoming connections`);
 
     /** Wait for a single XYO connection */

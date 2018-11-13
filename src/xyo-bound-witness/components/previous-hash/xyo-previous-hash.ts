@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-previous-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 11:38:42 am
+ * @Last modified time: Thursday, 8th November 2018 12:53:38 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -31,6 +31,14 @@ export class XyoPreviousHash extends XyoObject {
 
   constructor (public readonly hash: XyoHash) {
     super(XyoPreviousHash.major, XyoPreviousHash.minor);
+  }
+
+  public getReadableName(): string {
+    return 'previous-hash';
+  }
+
+  public getReadableValue() {
+    return this.hash;
   }
 
   /**

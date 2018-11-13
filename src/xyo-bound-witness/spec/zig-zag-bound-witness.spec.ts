@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: zig-zag-bound-witness.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 12th October 2018 9:34:39 am
+ * @Last modified time: Thursday, 8th November 2018 2:28:19 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -52,7 +52,6 @@ describe(`ZigZagBoundWitness`, () => {
     const transfer4 = await aliceBoundWitness.incomingData(transfer3, false);
     assertSerializationDeserializationSpec(transfer4);
     expect(bobBoundWitness.isEqual(aliceBoundWitness)).toBe(true);
-
   });
 });
 

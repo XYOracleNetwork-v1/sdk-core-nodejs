@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha1-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 12:31:02 pm
+ * @Last modified time: Thursday, 8th November 2018 1:06:59 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -37,6 +37,14 @@ export class XyoRsaSha1Signature extends XyoRsaSignature {
     public readonly verifyFn: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
   ) {
     super(XyoRsaSha1Signature.major, XyoRsaSha1Signature.minor);
+  }
+
+  public getReadableName(): string {
+    return 'rsa-sha1-signature';
+  }
+
+  public getReadableValue() {
+    return this.rawSignature;
   }
 
   public verifySign(signature: IXyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {

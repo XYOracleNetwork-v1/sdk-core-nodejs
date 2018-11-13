@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rssi.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 3rd October 2018 6:17:23 pm
+ * @Last modified time: Thursday, 8th November 2018 12:50:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -34,5 +34,13 @@ export class XyoRssi extends XyoNumberSigned {
 
   constructor(rssi: number) {
     super(rssi, XyoRssi.major, XyoRssi.minor, XyoNumberType.BYTE);
+  }
+
+  public getReadableName(): string {
+    return 'rssi';
+  }
+
+  public getReadableValue() {
+    return this.number;
   }
 }

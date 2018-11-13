@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 5:26:48 pm
+ * @Last modified time: Thursday, 8th November 2018 12:50:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -52,6 +52,18 @@ export abstract class XyoBoundWitness extends XyoObject {
 
   constructor () {
     super(XyoBoundWitness.major, XyoBoundWitness.minor);
+  }
+
+  public getReadableName(): string {
+    return 'boundWitness';
+  }
+
+  public getReadableValue() {
+    return {
+      publicKeys: this.publicKeys,
+      payloads: this.payloads,
+      signatures: this.signatures
+    };
   }
 
   /**
