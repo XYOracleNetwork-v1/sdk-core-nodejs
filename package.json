@@ -7,7 +7,8 @@
   "scripts": {
     "test": "export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose --detectOpenHandles",
     "build": "tsc",
-    "prepublishOnly": "tsc -b ."
+    "prepublishOnly": "tsc -b .",
+    "tslint": "tslint -c tslint.json -p tsconfig.json"
   },
   "husky": {
     "hooks": {

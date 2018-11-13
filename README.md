@@ -28,12 +28,7 @@ an index of major/minor values to their respective objects.
 
 ## Getting started
 
-Since this project is meant to function as a library there is no application to be run. There are number of tests
-that can be run from the command-line using.
 
-```sh
-  yarn test
-```
 
 ### Install dependencies
 
@@ -41,9 +36,8 @@ that can be run from the command-line using.
   yarn install
 ```
 
-### Run tests
-
-Run all tests:
+Since this project is meant to function as a library there is no application to be run. There are number of tests
+that can be run from the command-line using.
 
 ```sh
   yarn test
