@@ -14,6 +14,7 @@ The XYO protocol for creating origin-blocks is specified [here](https://docs.xyo
 In it, it specifies the behavior of how a node on the XYO network should create
 bound-witnesses. Importantly, the behavior does not specify any technology
 constraints around transport layers, cryptographic algorithms, or hashing algorithms.
+
 As such, the design of the system is aimed at trying to abstract these concepts
 so that the concrete implementations of these components can be swapped out so long
 as conform to the correct interfaces.
