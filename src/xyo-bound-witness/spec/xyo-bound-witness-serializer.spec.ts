@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-serializer.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 5:17:29 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:19:59 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -21,6 +21,7 @@ import { XyoRsaPublicKey } from '../../xyo-signing/rsa/public-key/xyo-rsa-public
 import { XyoRssi } from '../../xyo-core-components/heuristics/numbers/xyo-rssi';
 import { XyoRsaSha256Signature } from '../../xyo-signing/rsa/sha256/xyo-rsa-sha256-signature';
 import { XyoObject } from '../../xyo-core-components/xyo-object';
+import { IXyoPayload } from '../../@types/xyo-node';
 
 XyoObject.packer = new XyoDefaultPackerProvider().getXyoPacker();
 
@@ -127,7 +128,7 @@ class XyoTestBoundWitness extends XyoBoundWitness {
 
   constructor(
     public publicKeys: XyoKeySet[],
-    public payloads: XyoPayload[],
+    public payloads: IXyoPayload[],
     public signatures: XyoSignatureSet[]
   ) {
     super();

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-verifier.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 1st November 2018 12:13:57 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:10:07 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,6 +18,7 @@ import { XyoBase } from "../xyo-core-components/xyo-base";
 import { XyoKeySet } from "../xyo-bound-witness/components/key-set/xyo-key-set";
 import { XyoNextPublicKey } from "../xyo-bound-witness/components/next-public-key/xyo-next-public-key";
 import { IXyoPublicKey } from '../@types/xyo-signing';
+import { IXyoPayload } from "../@types/xyo-node";
 
 export class XyoOriginChainVerifier extends XyoBase {
 
@@ -88,7 +89,7 @@ export class XyoOriginChainVerifier extends XyoBase {
   }
 
   private async validatePayloadReducer(
-    payload: XyoPayload,
+    payload: IXyoPayload,
     matchesForPreviousHash: number[],
     parties: IPreviousBlockParty[],
     previousBlockInfo: IPreviousBlockInfo | undefined,
@@ -153,7 +154,7 @@ export class XyoOriginChainVerifier extends XyoBase {
     return matchesForPreviousHash;
   }
 
-  private validatePreviousHash(payload: XyoPayload, previousSigningData: Buffer) {
+  private validatePreviousHash(payload: IXyoPayload, previousSigningData: Buffer) {
     const previousHash = payload.extractFromSignedPayload<XyoPreviousHash>(XyoPreviousHash);
     if (!previousHash)  {
       return false;
@@ -162,7 +163,7 @@ export class XyoOriginChainVerifier extends XyoBase {
     return previousHash.hash.verifyHash(previousSigningData);
   }
 
-  private validateIndex(payload: XyoPayload) {
+  private validateIndex(payload: IXyoPayload) {
     const index = payload.extractFromSignedPayload<XyoIndex>(XyoIndex);
     if (!index) {
       throw new Error('Could not find index in payload');

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 12th October 2018 9:37:34 am
+ * @Last modified time: Wednesday, 14th November 2018 4:18:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,6 +19,7 @@ import { XyoError, XyoErrors } from '../../xyo-core-components/xyo-error';
 import { XyoKeySet } from '../components/key-set/xyo-key-set';
 import { XyoSingleTypeArrayShort } from '../../xyo-core-components/arrays/single/xyo-single-type-array-short';
 import { XyoSingleTypeArrayInt } from '../../xyo-core-components/arrays/single/xyo-single-type-array-int';
+import { IXyoPayload } from '../../@types/xyo-node';
 
 /**
  * A serializer for BoundWitness objects
@@ -109,13 +110,13 @@ export class XyoBoundWitnessSerializer extends XyoSerializer<XyoBoundWitness> {
   /** A helper function to build an XyoBoundWitness from its component parts */
   private unpackFromArrays(
     keysetArray: XyoKeySet[],
-    payloadArray: XyoPayload[],
+    payloadArray: IXyoPayload[],
     signatureArray: XyoSignatureSet[]
   ) {
     return new class XyoBoundWitnessData extends XyoBoundWitness {
       constructor(
         public readonly publicKeys: XyoKeySet[],
-        public readonly payloads: XyoPayload[],
+        public readonly payloads: IXyoPayload[],
         public readonly signatures: XyoSignatureSet[]
       ) {
         super();
@@ -136,7 +137,7 @@ export class XyoBoundWitnessSerializer extends XyoSerializer<XyoBoundWitness> {
   }
 
   /** Extract the payloads from the buffer */
-  private getPayloadsArray(bytes: Buffer): XyoPayload[] {
+  private getPayloadsArray(bytes: Buffer): IXyoPayload[] {
     const payloadArrayValue = XyoSingleTypeArrayInt.getSerializer<XyoSingleTypeArrayInt>().deserialize(bytes);
 
     if (payloadArrayValue !== null) {

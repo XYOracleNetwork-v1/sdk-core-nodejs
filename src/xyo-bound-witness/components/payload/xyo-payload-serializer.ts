@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-payload-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 5:14:44 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:19:47 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,10 +12,10 @@
 import { XyoPayload } from './xyo-payload';
 import { XyoSerializer } from '../../../xyo-serialization/xyo-serializer';
 import { XyoMultiTypeArrayInt } from '../../../xyo-core-components/arrays/multi/xyo-multi-type-array-int';
-import { XyoObject } from '../../../xyo-core-components/xyo-object';
+import { IXyoPayload } from '../../../@types/xyo-node';
 
 /** A serializer for the `XyoPayload` object */
-export class XyoPayloadSerializer extends XyoSerializer<XyoPayload> {
+export class XyoPayloadSerializer extends XyoSerializer<IXyoPayload> {
 
   get description () {
     return {
@@ -27,7 +27,7 @@ export class XyoPayloadSerializer extends XyoSerializer<XyoPayload> {
   }
 
   /** Get the byte representation from the object representation for a XyoPayload */
-  public serialize(xyoObject: XyoPayload) {
+  public serialize(xyoObject: IXyoPayload) {
     return Buffer.concat([
       xyoObject.signedPayload.serialize(false),
       xyoObject.unsignedPayload.serialize(false)
@@ -35,7 +35,7 @@ export class XyoPayloadSerializer extends XyoSerializer<XyoPayload> {
   }
 
   /** Get the object representation from the byte representation for a XyoPayload */
-  public deserialize(buffer: Buffer): XyoPayload {
+  public deserialize(buffer: Buffer): IXyoPayload {
     const signedPayloadSize = buffer.readUInt32BE(4);
     const unsignedPayloadSize = buffer.readUInt32BE(4 + signedPayloadSize);
     const signedPayload = buffer.slice(4, 4 + signedPayloadSize);

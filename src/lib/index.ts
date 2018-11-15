@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 5th November 2018 12:30:15 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:23:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,70 +12,89 @@
 import { XyoObject } from '../xyo-core-components/xyo-object';
 import { XyoDefaultPackerProvider } from '../xyo-serialization/xyo-default-packer-provider';
 
-/** Initializes the library runtime with serialization/deserialization set */
+/**
+ * Initializes the library runtime with serialization/deserialization set
+ */
+
 XyoObject.packer = new XyoDefaultPackerProvider().getXyoPacker();
 
-/** Xyo Core Component Exports */
-export { XyoBase } from '../xyo-core-components/xyo-base';
-export { XyoObject } from '../xyo-core-components/xyo-object';
-export { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
-export { XyoLogger } from '../xyo-core-components/xyo-logger';
-export { XyoRssi } from '../xyo-core-components/heuristics/numbers/xyo-rssi';
+// re-export everything that is in the exports file
+export * from './exports';
 
-export { XyoMultiTypeArrayInt } from '../xyo-core-components/arrays/multi/xyo-multi-type-array-int';
+import { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
+import { XyoSha256HashProvider } from '../xyo-hashing/sha256/xyo-sha256-hash-provider';
+import { XyoSha512HashProvider } from '../xyo-hashing/sha512/xyo-sha512-hash-provider';
+import { XyoMd5HashProvider } from '../xyo-hashing/md5/xyo-md5-hash-provider';
+import { XyoSha1HashProvider } from '../xyo-hashing/sha1/xyo-sha1-hash-provider';
+import { XyoSha224HashProvider } from '../xyo-hashing/sha224/xyo-sha224-hash-provider';
+import { XyoPayload } from '../xyo-bound-witness/components/payload/xyo-payload';
+import { XyoMultiTypeArrayInt } from '../xyo-core-components/arrays/multi/xyo-multi-type-array-int';
+import { IXyoPayload } from '../@types/xyo-node';
+import { IXyoHashProvider } from '../@types/xyo-hashing';
 
-/** Xyo Hashing Exports */
-export { IXyoHashProvider } from '../@types/xyo-hashing';
-export { XyoHash } from '../xyo-hashing/xyo-hash';
-export { XyoSha256HashProvider } from "../xyo-hashing/sha256/xyo-sha256-hash-provider";
+/**
+ * The currently natively supported hash-types in the XYO protocol
+ */
+export type HASH_TYPE = 'sha256' | 'sha512' | 'md5' | 'sha1' | 'sha224';
 
-/** Xyo Origin Block Exports */
-export { IXyoStorageProvider, IXyoIterableStorageProvider, IXyoStorageIterationResult, IXyoBufferKeyValuePair } from '../@types/xyo-storage';
-export { XyoStoragePriority } from "../xyo-storage/xyo-storage-priority";
-export { XyoBasicKeyValueStorageProvider } from '../xyo-storage/xyo-basic-key-value-storage-provider';
+/** A cache fro the hash-providers */
+const hashProvidersByType: {[h: string]: IXyoHashProvider } = {};
 
-/** Xyo Origin Block Exports */
-export { XyoOriginBlockLocalStorageRepository } from "../xyo-origin-chain/xyo-origin-block-local-storage-repository";
-export { IXyoOriginBlockRepository, IOriginBlockQueryResult } from '../@types/xyo-origin-chain';
-export { IXyoOriginChainStateRepository } from '../@types/xyo-origin-chain';
-export { XyoOriginChainLocalStorageRepository, } from '../xyo-origin-chain/xyo-origin-chain-local-storage-repository';
-export { XyoOriginBlockValidator } from '../xyo-origin-chain/xyo-origin-block-validator';
+/**
+ * Gets a HashProvider given a hashType
+ *
+ * @export
+ * @param {HASH_TYPE} hashType 'sha256' | 'sha512' | 'md5' | 'sha1' | 'sha224'
+ * @returns {IXyoHashProvider} An instance of a `IXyoHashProvider`
+ */
 
-/** Xyo Node Exports */
-export { XyoNode } from '../xyo-node/xyo-node';
-export { XyoPeerConnectionProviderFactory } from '../xyo-node/peer-connection/xyo-peer-connection-provider-factory';
-export { XyoBoundWitnessPayloadProvider } from '../xyo-node/xyo-bound-witness-payload-provider';
-export { IXyoBoundWitnessSuccessListener } from '../@types/xyo-node';
-export { IXyoPeerConnectionDelegate } from '../@types/xyo-node';
+export function getHashingProvider(hashType: HASH_TYPE): IXyoHashProvider {
+  if (['sha256', 'sha512', 'md5', 'sha1', 'sha224'].indexOf(hashType) === -1) {
+    throw new XyoError(`Unsupported hash type ${hashType}`, XyoErrors.CRITICAL);
+  }
 
-/** Xyo Network Exports */
-export { XyoServerTcpNetwork } from '../xyo-network/tcp/xyo-server-tcp-network';
-export { XyoClientTcpNetwork } from '../xyo-network/tcp/xyo-client-tcp-network';
-export { CatalogueItem } from '../xyo-network/xyo-catalogue-item';
-export { IXyoNetworkProcedureCatalogue } from '../@types/xyo-network';
-export { IXyoNetworkAddressProvider } from '../@types/xyo-network';
-export { XyoPeerDiscoveryService, IPeerCandidate, IPeerDescription, IPeerDescriptionWithPeers } from '../xyo-network/xyo-peer-discovery-service';
+  if (hashProvidersByType[hashType]) {
+    return hashProvidersByType[hashType];
+  }
 
-/** Xyo Bound Witness Exports */
-export { XyoBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-bound-witness';
-export { XyoGenesisBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-genesis-bound-witness';
-export { XyoNextPublicKey } from '../xyo-bound-witness/components/next-public-key/xyo-next-public-key';
-export { XyoKeySet } from '../xyo-bound-witness/components/key-set/xyo-key-set';
-export { XyoPreviousHash } from '../xyo-bound-witness/components/previous-hash/xyo-previous-hash';
-export { XyoPayload } from '../xyo-bound-witness/components/payload/xyo-payload';
-export { XyoSignatureSet } from '../xyo-bound-witness/components/signature-set/xyo-signature-set';
-export { XyoZigZagBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-zig-zag-bound-witness';
-export { XyoBridgeHashSet } from '../xyo-bound-witness/components/bridge-hash-set/xyo-bridge-hash-set';
-export { XyoIndex } from '../xyo-bound-witness/components/index/xyo-index';
+  let hashProvider: IXyoHashProvider | undefined;
+  switch (hashType) {
+    case "sha256":
+      hashProvider = new XyoSha256HashProvider();
+      break;
+    case "sha512":
+      hashProvider = new XyoSha512HashProvider();
+      break;
+    case "md5":
+      hashProvider = new XyoMd5HashProvider();
+      break;
+    case "sha1":
+      hashProvider = new XyoSha1HashProvider();
+      break;
+    case "sha224":
+      hashProvider = new XyoSha224HashProvider();
+      break;
+    default:
+      throw new XyoError(`This should never happen`, XyoErrors.CRITICAL);
+  }
 
-/** Xyo Signing Exports */
-export { IXyoSignerProvider } from '../@types/xyo-signing';
-export { XyoEcdsaSecp256k1Sha256SignerProvider } from '../xyo-signing/ecdsa/secp256k1/sha256/xyo-ecdsa-secp256k1-sha256-signer-provider';
-export { IXyoPublicKey } from '../@types/xyo-signing';
-export { XyoRsaSha256SignerProvider } from '../xyo-signing/rsa/sha256/xyo-rsa-sha256-signer-provider';
-export { IXyoSignature, IXyoSigner } from '../@types/xyo-signing';
+  hashProvidersByType[hashType] = hashProvider;
 
-/** Some core ip services for determining the public and external ip addresses */
-export { XyoIpService, IXyoIp } from '../xyo-ip-service/xyo-ip-service';
+  return hashProvider;
+}
 
-export { XyoKvDb } from '../xyo-kvdb/xyo-kvdb';
+/**
+ * A helper function to create an IXyoPayload
+ *
+ * @export
+ * @param {XyoObject[]} signedPayload The values that will be going into the signed-payload
+ * @param {XyoObject[]} unsignedPayload  The values that will be going into the unsigned-payload
+ * @returns An instance of an XyoPayload
+ */
+
+export function createPayload(signedPayload: XyoObject[], unsignedPayload: XyoObject[]): IXyoPayload {
+  return new XyoPayload(
+    new XyoMultiTypeArrayInt(signedPayload),
+    new XyoMultiTypeArrayInt(unsignedPayload),
+  );
+}

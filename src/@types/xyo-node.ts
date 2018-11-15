@@ -4,17 +4,19 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 10th October 2018 4:45:52 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:14:12 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoNetworkPipe } from './xyo-network';
-import { XyoPayload } from '../xyo-bound-witness/components/payload/xyo-payload';
 import { XyoBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-bound-witness';
 import { IXyoOriginChainStateRepository } from './xyo-origin-chain';
 import { CatalogueItem } from '../xyo-network/xyo-catalogue-item';
 import { IXyoSigner } from './xyo-signing';
+import { XyoObject } from '../xyo-core-components/xyo-object';
+import { IXyoObjectDescriptor } from './xyo-serialization';
+import { XyoArray } from '../xyo-core-components/arrays/xyo-array';
 
 /**
  * An interface to abstract what goes into a payload of a bound-witness
@@ -22,7 +24,7 @@ import { IXyoSigner } from './xyo-signing';
 export interface IXyoBoundWitnessPayloadProvider {
 
   /** Returns the payload for the bound-witness given the origin-state of the current chain */
-  getPayload(originState: IXyoOriginChainStateRepository): Promise<XyoPayload>;
+  getPayload(originState: IXyoOriginChainStateRepository): Promise<IXyoPayload>;
 }
 
 /**
@@ -100,5 +102,13 @@ export interface IXyoCategoryRouter {
 
 /** A factory for providing instance of bound-witness interactions */
 export interface IXyoBoundWitnessInteractionFactory {
-  newInstance: (signers: IXyoSigner[], payload: XyoPayload) => IXyoNodeInteraction<XyoBoundWitness>;
+  newInstance: (signers: IXyoSigner[], payload: IXyoPayload) => IXyoNodeInteraction<XyoBoundWitness>;
+}
+
+export interface IXyoPayload extends XyoObject {
+  readonly signedPayload: XyoArray;
+  readonly unsignedPayload: XyoArray;
+  readonly signedPayloadMapping: { [s: string]: XyoObject; };
+  extractFromUnsignedPayload<T>(description: IXyoObjectDescriptor): T | undefined;
+  extractFromSignedPayload<T>(description: IXyoObjectDescriptor): T | undefined;
 }

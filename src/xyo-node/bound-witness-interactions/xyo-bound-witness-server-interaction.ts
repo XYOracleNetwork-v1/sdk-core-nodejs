@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 1st November 2018 12:13:09 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:15:05 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,12 +15,10 @@ import { XyoBoundWitnessTransfer } from '../../xyo-bound-witness/bound-witness/x
 import { XyoBoundWitness } from '../../xyo-bound-witness/bound-witness/xyo-bound-witness';
 import { XYO_TCP_CATALOGUE_LENGTH_IN_BYTES, XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES } from '../../xyo-network/tcp/xyo-tcp-network-constants';
 import { XyoError, XyoErrors } from '../../xyo-core-components/xyo-error';
-import { IXyoNodeInteraction } from '../../@types/xyo-node';
+import { IXyoNodeInteraction, IXyoPayload } from '../../@types/xyo-node';
 import { IXyoNetworkPipe } from '../../@types/xyo-network';
 import { XyoBase } from '../../xyo-core-components/xyo-base';
 import { IXyoSigner } from '../../@types/xyo-signing';
-import { XyoPayload } from '../../xyo-bound-witness/components/payload/xyo-payload';
-import { XyoEcdsaUncompressedPublicKey } from '../../xyo-signing/ecdsa/uncompressed-public-key/xyo-ecdsa-uncompressed-public-key';
 
 /**
  * An `XyoBoundWitnessInteraction` manages a "session"
@@ -32,7 +30,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
 
   constructor(
     private readonly signers: IXyoSigner[],
-    private readonly payload: XyoPayload
+    private readonly payload: IXyoPayload
   ) {
     super();
   }

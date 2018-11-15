@@ -4,19 +4,19 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-zig-zag-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 5:11:04 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:13:03 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBoundWitness } from './xyo-bound-witness';
-import { XyoPayload } from '../components/payload/xyo-payload';
 import { XyoSignatureSet } from '../components/signature-set/xyo-signature-set';
 import { XyoBoundWitnessTransfer } from './xyo-bound-witness-transfer';
 import { XyoObject } from '../../xyo-core-components/xyo-object';
 import { XyoError, XyoErrors } from '../../xyo-core-components/xyo-error';
 import { XyoKeySet } from '../components/key-set/xyo-key-set';
 import { IXyoSigner, IXyoPublicKey } from '../../@types/xyo-signing';
+import { IXyoPayload } from '../../@types/xyo-node';
 
 /**
  * A `XyoZigZagBoundWitness` is a particular type of way of creating a
@@ -40,7 +40,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
    * The collection of payloads for all parties. One per party
    */
 
-  private readonly dynamicPayloads: XyoPayload[] = [];
+  private readonly dynamicPayloads: IXyoPayload[] = [];
 
   /**
    * The set of public key sets for all parties. One per party.
@@ -67,7 +67,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
    * @param payload The payload that belongs to the party that is to be included in the BoundWitness
    */
 
-  constructor (private readonly signers: IXyoSigner[], private readonly payload: XyoPayload) {
+  constructor (private readonly signers: IXyoSigner[], private readonly payload: IXyoPayload) {
     super();
   }
 
@@ -179,7 +179,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
 
   private addIncomingPayload(incomingPayloads: XyoObject[]) {
     for (const obj of incomingPayloads) {
-      const incomingPayload = obj as XyoPayload;
+      const incomingPayload = obj as IXyoPayload;
       if (incomingPayload) {
         this.dynamicPayloads.push(incomingPayload);
       } else {

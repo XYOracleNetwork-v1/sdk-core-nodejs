@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-client-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 1st November 2018 12:13:21 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:18:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,11 +13,10 @@ import { XyoZigZagBoundWitness } from '../../xyo-bound-witness/bound-witness/xyo
 import { XyoBoundWitnessTransfer } from '../../xyo-bound-witness/bound-witness/xyo-bound-witness-transfer';
 import { XyoBoundWitness } from '../../xyo-bound-witness/bound-witness/xyo-bound-witness';
 import { XyoError, XyoErrors } from '../../xyo-core-components/xyo-error';
-import { IXyoNodeInteraction } from '../../@types/xyo-node';
+import { IXyoNodeInteraction, IXyoPayload } from '../../@types/xyo-node';
 import { IXyoNetworkPipe } from '../../@types/xyo-network';
 import { XyoBase } from '../../xyo-core-components/xyo-base';
 import { IXyoSigner } from '../../@types/xyo-signing';
-import { XyoPayload } from '../../xyo-bound-witness/components/payload/xyo-payload';
 
 /**
  * An `XyoBoundWitnessClientInteraction` manages a "session"
@@ -28,7 +27,7 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements
 
   constructor (
     private readonly signers: IXyoSigner[],
-    private readonly payload: XyoPayload
+    private readonly payload: IXyoPayload
   ) {
     super();
   }

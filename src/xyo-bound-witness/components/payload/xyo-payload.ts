@@ -13,6 +13,7 @@ import { XyoObject } from '../../../xyo-core-components/xyo-object';
 import { getBufferHash } from '../../../xyo-core-components/xyo-buffer-utils';
 import { XyoArray } from '../../../xyo-core-components/arrays/xyo-array';
 import { IXyoObjectDescriptor } from '../../../@types/xyo-serialization';
+import { IXyoPayload } from '../../../@types/xyo-node';
 
 /**
  * An XyoPayload is meant to represent the meaningful data
@@ -26,7 +27,7 @@ import { IXyoObjectDescriptor } from '../../../@types/xyo-serialization';
  * be persisted in the origin chain for it to be considered valid.
  */
 
-export class XyoPayload extends XyoObject {
+export class XyoPayload extends XyoObject implements IXyoPayload {
 
   public static major = 0x02;
   public static minor = 0x04;

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-genesis-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 29th October 2018 4:51:46 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:09:22 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,18 +15,19 @@ import { XyoKeySet } from "../components/key-set/xyo-key-set";
 import { XyoSignatureSet } from "../components/signature-set/xyo-signature-set";
 import { XyoObject } from "../../xyo-core-components/xyo-object";
 import { IXyoSigner, IXyoPublicKey } from "../../@types/xyo-signing";
+import { IXyoPayload } from "../../@types/xyo-node";
 
 export class XyoGenesisBoundWitness extends XyoBoundWitness {
   /** The public keys that are part of the bound-witness */
   public readonly publicKeys: XyoKeySet[] = [];
 
   /** The payloads, broken into signed and unsigned that is part of the bound witness */
-  public readonly payloads: XyoPayload[];
+  public readonly payloads: IXyoPayload[];
 
   /** The signatures from the parties involved that are part of the bound witness */
   public readonly signatures: XyoSignatureSet[] = [];
 
-  constructor(private readonly signers: IXyoSigner[], payload: XyoPayload) {
+  constructor(private readonly signers: IXyoSigner[], payload: IXyoPayload) {
     super();
     this.payloads = [payload];
   }

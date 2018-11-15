@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 8th November 2018 2:23:16 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:25:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,7 +18,6 @@ import { XyoBase } from './xyo-base';
 import { XyoPacker } from '../xyo-serialization/xyo-packer';
 import { XyoError, XyoErrors } from './xyo-error';
 import { XyoSerializer } from '../xyo-serialization/xyo-serializer';
-import { read } from 'fs';
 
 export abstract class XyoObject extends XyoBase {
 

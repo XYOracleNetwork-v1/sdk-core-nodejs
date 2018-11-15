@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 8th November 2018 12:50:53 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:09:19 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,6 +19,7 @@ import { XyoSingleTypeArrayShort } from '../../xyo-core-components/arrays/single
 import { XyoSingleTypeArrayInt } from '../../xyo-core-components/arrays/single/xyo-single-type-array-int';
 import { IXyoSigner, IXyoSignature } from '../../@types/xyo-signing';
 import { IXyoHashProvider } from '../../@types/xyo-hashing';
+import { IXyoPayload } from '../../@types/xyo-node';
 
 /**
  * An XyoBoundWitness is one of the core pieces in the XYO protocol.
@@ -41,7 +42,7 @@ export abstract class XyoBoundWitness extends XyoObject {
   public abstract publicKeys: XyoKeySet[];
 
   /** The payloads, broken into signed and unsigned that is part of the bound witness */
-  public abstract payloads: XyoPayload[];
+  public abstract payloads: IXyoPayload[];
 
   /** The signatures from the parties involved that are part of the bound witness */
   public abstract signatures: XyoSignatureSet[];
