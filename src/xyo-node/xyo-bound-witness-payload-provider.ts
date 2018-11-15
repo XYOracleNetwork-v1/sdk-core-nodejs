@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-payload-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 22nd October 2018 10:02:42 am
+ * @Last modified time: Wednesday, 14th November 2018 4:55:14 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoObject } from '../xyo-core-components/xyo-object';
+import { XyoObject, IXyoObject } from '../xyo-core-components/xyo-object';
 import { XyoPayload } from '../xyo-bound-witness/components/payload/xyo-payload';
 import { XyoMultiTypeArrayInt } from '../xyo-core-components/arrays/multi/xyo-multi-type-array-int';
 import { IXyoBoundWitnessPayloadProvider } from '../@types/xyo-node';
@@ -33,10 +33,10 @@ export class XyoBoundWitnessPayloadProvider implements IXyoBoundWitnessPayloadPr
     const signedHeuristics = await this.getHeuristics(true);
     const unsignedHeuristics = await this.getHeuristics(false);
 
-    const unsignedPayloads: XyoObject[] = ([] as XyoObject[]).concat(unsignedHeuristics);
+    const unsignedPayloads: IXyoObject[] = ([] as IXyoObject[]).concat(unsignedHeuristics);
     unsignedPayloads.push(new XyoMillisecondTime()); // add timestamp to unsigned heuristics
 
-    const signedPayloads: XyoObject[] = ([] as XyoObject[]).concat(signedHeuristics);
+    const signedPayloads: IXyoObject[] = ([] as XyoObject[]).concat(signedHeuristics);
     const previousHash = await originState.getPreviousHash();
     const index = await originState.getIndex();
     const nextPublicKey = await originState.getNextPublicKey();

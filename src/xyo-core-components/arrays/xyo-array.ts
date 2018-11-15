@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 8th November 2018 12:50:53 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:52:29 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 // tslint:disable:max-classes-per-file
 
-import { XyoObject } from '../xyo-object';
+import { XyoObject, IXyoObject } from '../xyo-object';
 import { XyoError, XyoErrors } from '../xyo-error';
 
 /**
@@ -36,7 +36,7 @@ export class XyoArray extends XyoObject {
     public readonly major: number,
     public readonly minor: number,
     public readonly sizeIdentifierSize: number,
-    public readonly array: XyoObject[]
+    public readonly array: IXyoObject[]
   ) {
     super(major, minor);
   }
@@ -78,7 +78,7 @@ export class XyoArray extends XyoObject {
    * @returns Returns the element at the index if it exists. Otherwise, undefined
    */
 
-  public getElement(index: number): XyoObject | undefined {
+  public getElement(index: number): IXyoObject | undefined {
     if (index < this.array.length) {
       return this.array[index];
     }
@@ -94,7 +94,7 @@ export class XyoArray extends XyoObject {
    *              Otherwise it push the element into the back of the collection
    */
 
-  public addElement(element: XyoObject, index?: number) {
+  public addElement(element: IXyoObject, index?: number) {
     if (this.typedId !== undefined && element.id[0] !== this.elementMajor || element.id[1] !== this.elementMinor) {
       throw new XyoError('Can not add element to array, mismatched type', XyoErrors.INVALID_PARAMETERS);
     }

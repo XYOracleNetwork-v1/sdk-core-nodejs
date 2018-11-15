@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-multi-type-array-int.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 8th November 2018 12:50:53 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:14:49 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoArray } from '../xyo-array';
-import { XyoObject } from '../../xyo-object';
+import { IXyoObject } from '../../xyo-object';
 
 /**
  * An XyoMultiTypeArrayInt is a collection of non-homogenous
@@ -28,7 +28,7 @@ export class XyoMultiTypeArrayInt extends XyoArray {
    * @param array The underlying collection or array
    */
 
-  constructor(array: XyoObject[]) {
+  constructor(array: IXyoObject[]) {
     super(undefined, undefined, XyoMultiTypeArrayInt.major, XyoMultiTypeArrayInt.minor, 4, array);
   }
 

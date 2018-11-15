@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 14th November 2018 4:25:23 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:03:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,7 +19,7 @@ import { XyoPacker } from '../xyo-serialization/xyo-packer';
 import { XyoError, XyoErrors } from './xyo-error';
 import { XyoSerializer } from '../xyo-serialization/xyo-serializer';
 
-export abstract class XyoObject extends XyoBase {
+export abstract class XyoObject extends XyoBase implements IXyoObject {
 
   public static major: number; // Should be overridden by subclasses
   public static minor: number;
@@ -50,7 +50,7 @@ export abstract class XyoObject extends XyoBase {
    * @memberof XyoObject
    */
 
-  public static deserialize<T extends XyoObject>(buffer: Buffer): T {
+  public static deserialize<T extends IXyoObject>(buffer: Buffer): T {
     return XyoObject.packer.deserialize(buffer);
   }
 
@@ -100,7 +100,7 @@ export abstract class XyoObject extends XyoBase {
     return Buffer.from([this.major, this.minor]);
   }
 
-  public isEqual(other: XyoObject) {
+  public isEqual(other: IXyoObject): boolean {
     if (!this.id.equals(other.id)) {
       return false;
     }
@@ -161,4 +161,21 @@ export abstract class XyoObject extends XyoBase {
 
     throw new XyoError(`Could not serialize type ${type}`, XyoErrors.CRITICAL);
   }
+}
+
+export interface IXyoSerializable {
+  readonly major: number;
+  readonly minor: number;
+  readonly id: Buffer;
+  serialize(typed?: boolean): Buffer;
+}
+
+export interface IXyoReadable {
+  getReadableName(): string;
+  getReadableValue(): any;
+  getReadableJSON(): string;
+}
+
+export interface IXyoObject extends XyoBase, IXyoSerializable, IXyoReadable {
+  isEqual(other: IXyoObject): boolean;
 }

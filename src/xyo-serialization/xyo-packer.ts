@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 1st November 2018 12:14:12 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:20:25 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoSerializer } from './xyo-serializer';
-import { XyoObject } from '../xyo-core-components/xyo-object';
+import { IXyoObject } from '../xyo-core-components/xyo-object';
 import { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
 import { XyoBase } from '../xyo-core-components/xyo-base';
 import { IXyoObjectDescriptor } from '../@types/xyo-serialization';
@@ -36,7 +36,7 @@ export class XyoPacker extends XyoBase {
    * @param serializerDeserializer An instance of a `XYOPackerSerializerDeserializer`
    */
 
-  public registerSerializerDeserializer<T extends XyoObject>(
+  public registerSerializerDeserializer<T extends IXyoObject>(
     descriptor: IXyoObjectDescriptor,
     serializerDeserializer: XyoSerializer<T>
   ) {
@@ -62,7 +62,7 @@ export class XyoPacker extends XyoBase {
    * @throws Will throw an `XyoError` of type `ERR_CREATOR_MAPPING` if a serializer can not be located
    */
 
-  public serialize(object: XyoObject, typed?: boolean): Buffer {
+  public serialize(object: IXyoObject, typed?: boolean): Buffer {
     if (this.serializerDeserializerMajorMinorIndex[object.major]) { // See if a major record exist
 
       // Check to see if a minor record exists. Assert typeof number since `0` is a valid value
@@ -95,7 +95,7 @@ export class XyoPacker extends XyoBase {
     );
   }
 
-  public deserialize<T extends XyoObject>(buffer: Buffer): T {
+  public deserialize<T extends IXyoObject>(buffer: Buffer): T {
     if (!buffer || buffer.length < 2) {
       throw new XyoError(`Unable to deserialize buffer`, XyoErrors.CREATOR_MAPPING);
     }
@@ -128,7 +128,7 @@ export class XyoPacker extends XyoBase {
     throw new XyoError(`Could not find serializer for major ${major} and minor ${minor}`, XyoErrors.CREATOR_MAPPING);
   }
 
-  public getSerializerByMajorMinor<T extends XyoObject>(major: number, minor: number): XyoSerializer<T> | undefined {
+  public getSerializerByMajorMinor<T extends IXyoObject>(major: number, minor: number): XyoSerializer<T> | undefined {
     const index = this.serializerDeserializerMajorMinorIndex[major][minor];
     if (index < this.serializerDeserializersCollection.length) {
       return this.serializerDeserializersCollection[index];
@@ -150,7 +150,7 @@ export class XyoPacker extends XyoBase {
     return this.serializerDeserializersCollection[serializerIndex];
   }
 
-  private makeTyped(data: Buffer, config: XyoSerializer<XyoObject>) {
+  private makeTyped(data: Buffer, config: XyoSerializer<IXyoObject>) {
     const encodedSizeBuffer = this.encodedSize(data.length, config);
     const dataBuffer = data || Buffer.alloc(0);
 
@@ -165,7 +165,7 @@ export class XyoPacker extends XyoBase {
     return typedBuffer;
   }
 
-  private makeUntyped(data: Buffer, config: XyoSerializer<XyoObject>) {
+  private makeUntyped(data: Buffer, config: XyoSerializer<IXyoObject>) {
     const encodedSizeBuffer = this.encodedSize(data.length, config);
     const dataBuffer = data || Buffer.alloc(0);
     const typedBufferSize = encodedSizeBuffer.length + dataBuffer.length;
@@ -178,7 +178,7 @@ export class XyoPacker extends XyoBase {
     return unTypedBuffer;
   }
 
-  private encodedSize(sizeOfData: number, config: XyoSerializer<XyoObject>) {
+  private encodedSize(sizeOfData: number, config: XyoSerializer<IXyoObject>) {
     if (!config.sizeIdentifierSize) {
       return Buffer.alloc(0);
     }

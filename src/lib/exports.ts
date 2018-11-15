@@ -4,15 +4,15 @@
  * @Email:  developer@xyfindables.com
  * @Filename: exports.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 14th November 2018 4:00:22 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:24:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
  /** Xyo Core Component Exports */
 export { XyoBase } from '../xyo-core-components/xyo-base';
-export { XyoObject } from '../xyo-core-components/xyo-object';
 export { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
+export { IXyoObject } from '../xyo-core-components/xyo-object';
 export { XyoRssi } from '../xyo-core-components/heuristics/numbers/xyo-rssi';
 
 /** Xyo Hashing Exports */

@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signature-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 8th November 2018 2:25:52 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:20:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoObject } from '../../../xyo-core-components/xyo-object';
+import { IXyoObject } from '../../../xyo-core-components/xyo-object';
 import { XyoArray } from '../../../xyo-core-components/arrays/xyo-array';
 
 /**
@@ -31,7 +31,7 @@ export class XyoSignatureSet extends XyoArray {
    * @param array A collection of signatures
    */
 
-  constructor (public readonly array: XyoObject[]) {
+  constructor (public readonly array: IXyoObject[]) {
     super(undefined, undefined, XyoSignatureSet.major, XyoSignatureSet.minor, 2, array);
   }
 

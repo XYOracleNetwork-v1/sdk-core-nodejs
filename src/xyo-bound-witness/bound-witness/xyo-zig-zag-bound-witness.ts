@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-zig-zag-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 14th November 2018 4:13:03 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:53:24 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,7 @@
 import { XyoBoundWitness } from './xyo-bound-witness';
 import { XyoSignatureSet } from '../components/signature-set/xyo-signature-set';
 import { XyoBoundWitnessTransfer } from './xyo-bound-witness-transfer';
-import { XyoObject } from '../../xyo-core-components/xyo-object';
+import { XyoObject, IXyoObject } from '../../xyo-core-components/xyo-object';
 import { XyoError, XyoErrors } from '../../xyo-core-components/xyo-error';
 import { XyoKeySet } from '../components/key-set/xyo-key-set';
 import { IXyoSigner, IXyoPublicKey } from '../../@types/xyo-signing';
@@ -109,9 +109,9 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
    */
 
   public async incomingData(transfer: XyoBoundWitnessTransfer | undefined, endPoint: boolean) {
-    const keysToSend: XyoObject[] = [];
-    const payloadsToSend: XyoObject[] = [];
-    const signatureToSend: XyoObject[] = [];
+    const keysToSend: IXyoObject[] = [];
+    const payloadsToSend: IXyoObject[] = [];
+    const signatureToSend: IXyoObject[] = [];
     const signatureReceivedSize = (transfer && transfer.signatureToSend && transfer.signatureToSend.length) || 0;
 
     if (transfer) {
@@ -162,7 +162,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
    * Adds other parties public keys into the bound-witness
    */
 
-  private addIncomingKeys(incomingKeySets: XyoObject[]) {
+  private addIncomingKeys(incomingKeySets: IXyoObject[]) {
     for (const obj of incomingKeySets) {
       const incomingKeySet = obj as XyoKeySet;
       if (incomingKeySet) {
@@ -177,7 +177,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
    * Adds other parties payloads into the bound-witness
    */
 
-  private addIncomingPayload(incomingPayloads: XyoObject[]) {
+  private addIncomingPayload(incomingPayloads: IXyoObject[]) {
     for (const obj of incomingPayloads) {
       const incomingPayload = obj as IXyoPayload;
       if (incomingPayload) {
@@ -192,7 +192,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
    * Adds other parties signatures into the bound-witness
    */
 
-  private addIncomingSignatures(incomingSignatures: XyoObject[]) {
+  private addIncomingSignatures(incomingSignatures: IXyoObject[]) {
     for (const obj of incomingSignatures) {
       const incomingSignatureSet = obj as XyoSignatureSet;
       if (incomingSignatureSet) {

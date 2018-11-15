@@ -4,15 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-verifier.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 14th November 2018 4:10:07 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:20:12 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBoundWitness } from "../xyo-bound-witness/bound-witness/xyo-bound-witness";
 import { XyoIndex } from "../xyo-bound-witness/components/index/xyo-index";
-import { XyoObject } from "../xyo-core-components/xyo-object";
-import { XyoPayload } from "../xyo-bound-witness/components/payload/xyo-payload";
+import { IXyoObject } from "../xyo-core-components/xyo-object";
 import { XyoPreviousHash } from "../xyo-bound-witness/components/previous-hash/xyo-previous-hash";
 import { XyoBase } from "../xyo-core-components/xyo-base";
 import { XyoKeySet } from "../xyo-bound-witness/components/key-set/xyo-key-set";
@@ -179,7 +178,7 @@ interface IPreviousBlockInfo {
 interface IPreviousBlockParty { // block-party lol
   index?: XyoIndex;
   publicKeys?: XyoKeySet;
-  nextPublicKey?: XyoObject;
+  nextPublicKey?: IXyoObject;
   isAssigned?: boolean;
 }
 

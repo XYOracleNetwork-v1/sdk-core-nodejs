@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: zig-zag-bound-witness.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 8th November 2018 2:28:19 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:54:01 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,7 +15,7 @@ import { XyoRsaSha256SignerProvider } from '../../xyo-signing/rsa/sha256/xyo-rsa
 import { XyoPayload } from '../components/payload/xyo-payload';
 import { XyoMultiTypeArrayInt } from '../../xyo-core-components/arrays/multi/xyo-multi-type-array-int';
 import { XyoRssi } from '../../xyo-core-components/heuristics/numbers/xyo-rssi';
-import { XyoObject } from '../../xyo-core-components/xyo-object';
+import { XyoObject, IXyoObject } from '../../xyo-core-components/xyo-object';
 
 describe(`ZigZagBoundWitness`, () => {
 
@@ -55,7 +55,7 @@ describe(`ZigZagBoundWitness`, () => {
   });
 });
 
-function assertSerializationDeserializationSpec(obj: XyoObject) {
+function assertSerializationDeserializationSpec(obj: IXyoObject) {
   const obj1Serialized = obj.serialize(true);
   const obj1Deserialized = XyoObject.deserialize(obj1Serialized);
   expect(obj.isEqual(obj1Deserialized)).toBe(true);

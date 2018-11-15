@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-transfer-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 5:10:47 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:09:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBoundWitnessTransfer } from './xyo-bound-witness-transfer';
-import { XyoObject } from '../../xyo-core-components/xyo-object';
+import { IXyoObject } from '../../xyo-core-components/xyo-object';
 import { XyoSerializer } from '../../xyo-serialization/xyo-serializer';
 import { XyoPayload } from '../components/payload/xyo-payload';
 import { XyoSignatureSet } from '../components/signature-set/xyo-signature-set';
@@ -85,9 +85,9 @@ export class XyoBoundWitnessTransferSerializer extends XyoSerializer<XyoBoundWit
       currentOffset += signatureArraySizeValue;
     }
 
-    const keySetArrayValue: XyoObject[] = keySetArray && keySetArray.array || [];
-    const payloadArrayValue: XyoObject[] = payloadArray && payloadArray.array || [];
-    const signatureArrayValue: XyoObject[] = signatureArray && signatureArray.array || [];
+    const keySetArrayValue: IXyoObject[] = keySetArray && keySetArray.array || [];
+    const payloadArrayValue: IXyoObject[] = payloadArray && payloadArray.array || [];
+    const signatureArrayValue: IXyoObject[] = signatureArray && signatureArray.array || [];
 
     return new XyoBoundWitnessTransfer(keySetArrayValue, payloadArrayValue, signatureArrayValue);
   }

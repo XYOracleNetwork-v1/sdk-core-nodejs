@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 14th November 2018 4:23:50 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:33:29 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoObject } from '../xyo-core-components/xyo-object';
+import { XyoObject, IXyoObject } from '../xyo-core-components/xyo-object';
 import { XyoDefaultPackerProvider } from '../xyo-serialization/xyo-default-packer-provider';
 
 /**
@@ -87,14 +87,27 @@ export function getHashingProvider(hashType: HASH_TYPE): IXyoHashProvider {
  * A helper function to create an IXyoPayload
  *
  * @export
- * @param {XyoObject[]} signedPayload The values that will be going into the signed-payload
- * @param {XyoObject[]} unsignedPayload  The values that will be going into the unsigned-payload
+ * @param {IXyoObject[]} signedPayload The values that will be going into the signed-payload
+ * @param {IXyoObject[]} unsignedPayload  The values that will be going into the unsigned-payload
  * @returns An instance of an XyoPayload
  */
 
-export function createPayload(signedPayload: XyoObject[], unsignedPayload: XyoObject[]): IXyoPayload {
+export function createPayload(signedPayload: IXyoObject[], unsignedPayload: IXyoObject[]): IXyoPayload {
   return new XyoPayload(
     new XyoMultiTypeArrayInt(signedPayload),
     new XyoMultiTypeArrayInt(unsignedPayload),
   );
+}
+
+/**
+ * Returns the object representation of a buffer
+ *
+ * @export
+ * @template T
+ * @param {Buffer} buffer
+ * @returns {T}
+ */
+
+export function deserialize<T extends IXyoObject>(buffer: Buffer): T {
+  return XyoObject.deserialize<T>(buffer);
 }

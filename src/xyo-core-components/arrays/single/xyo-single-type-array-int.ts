@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-single-type-array-int.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 8th November 2018 12:50:53 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:15:04 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoArray } from '../xyo-array';
-import { XyoObject } from '../../xyo-object';
+import { IXyoObject } from '../../xyo-object';
 
 /**
  * An XyoSingleTypeArrayInt is a collection of homogenous
@@ -30,7 +30,7 @@ export class XyoSingleTypeArrayInt extends XyoArray {
    * @param array The underlying collection of homogenous items
    */
 
-  constructor(elementMajor: number, elementMinor: number, array: XyoObject[]) {
+  constructor(elementMajor: number, elementMinor: number, array: IXyoObject[]) {
     super(elementMajor, elementMinor, XyoSingleTypeArrayInt.major, XyoSingleTypeArrayInt.minor, 4, array);
   }
 

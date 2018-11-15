@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoObject } from '../../../xyo-core-components/xyo-object';
+import { XyoObject, IXyoObject } from '../../../xyo-core-components/xyo-object';
 import { getBufferHash } from '../../../xyo-core-components/xyo-buffer-utils';
 import { XyoArray } from '../../../xyo-core-components/arrays/xyo-array';
 import { IXyoObjectDescriptor } from '../../../@types/xyo-serialization';
@@ -83,8 +83,8 @@ export class XyoPayload extends XyoObject implements IXyoPayload {
    * and the elements are the element themselves
    */
 
-  private getMappingOfElements (objects: XyoObject[]): {[s: string]: XyoObject} {
-    const mapping: {[s: string]: XyoObject} = {};
+  private getMappingOfElements (objects: IXyoObject[]): {[s: string]: IXyoObject} {
+    const mapping: {[s: string]: IXyoObject} = {};
 
     objects.forEach((element) => {
       const bufferHash = getBufferHash(element.id);

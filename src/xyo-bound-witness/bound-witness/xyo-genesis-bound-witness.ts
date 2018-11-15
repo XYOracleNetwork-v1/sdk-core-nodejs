@@ -4,16 +4,15 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-genesis-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 14th November 2018 4:09:22 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:09:58 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBoundWitness } from "./xyo-bound-witness";
-import { XyoPayload } from "../components/payload/xyo-payload";
 import { XyoKeySet } from "../components/key-set/xyo-key-set";
 import { XyoSignatureSet } from "../components/signature-set/xyo-signature-set";
-import { XyoObject } from "../../xyo-core-components/xyo-object";
+import { IXyoObject } from "../../xyo-core-components/xyo-object";
 import { IXyoSigner, IXyoPublicKey } from "../../@types/xyo-signing";
 import { IXyoPayload } from "../../@types/xyo-node";
 
@@ -43,7 +42,7 @@ export class XyoGenesisBoundWitness extends XyoBoundWitness {
     const promises = this.signers.map(async (signer) => {
       const signature = await this.signCurrent(signer);
       return signature;
-    }) as Promise<XyoObject>[]; // tslint:disable-line:array-type
+    }) as Promise<IXyoObject>[]; // tslint:disable-line:array-type
 
     const signersCollection = await Promise.all(promises);
     this.signatures.push(new XyoSignatureSet(signersCollection));

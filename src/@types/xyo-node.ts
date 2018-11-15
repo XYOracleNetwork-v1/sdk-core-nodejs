@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 14th November 2018 4:14:12 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:50:20 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,7 +14,7 @@ import { XyoBoundWitness } from '../xyo-bound-witness/bound-witness/xyo-bound-wi
 import { IXyoOriginChainStateRepository } from './xyo-origin-chain';
 import { CatalogueItem } from '../xyo-network/xyo-catalogue-item';
 import { IXyoSigner } from './xyo-signing';
-import { XyoObject } from '../xyo-core-components/xyo-object';
+import { IXyoObject } from '../xyo-core-components/xyo-object';
 import { IXyoObjectDescriptor } from './xyo-serialization';
 import { XyoArray } from '../xyo-core-components/arrays/xyo-array';
 
@@ -105,10 +105,10 @@ export interface IXyoBoundWitnessInteractionFactory {
   newInstance: (signers: IXyoSigner[], payload: IXyoPayload) => IXyoNodeInteraction<XyoBoundWitness>;
 }
 
-export interface IXyoPayload extends XyoObject {
+export interface IXyoPayload extends IXyoObject {
   readonly signedPayload: XyoArray;
   readonly unsignedPayload: XyoArray;
-  readonly signedPayloadMapping: { [s: string]: XyoObject; };
+  readonly signedPayloadMapping: { [s: string]: IXyoObject; };
   extractFromUnsignedPayload<T>(description: IXyoObjectDescriptor): T | undefined;
   extractFromSignedPayload<T>(description: IXyoObjectDescriptor): T | undefined;
 }

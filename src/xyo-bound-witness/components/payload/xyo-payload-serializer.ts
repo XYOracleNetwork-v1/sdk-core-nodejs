@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-payload-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 14th November 2018 4:19:47 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:13:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -27,10 +27,10 @@ export class XyoPayloadSerializer extends XyoSerializer<IXyoPayload> {
   }
 
   /** Get the byte representation from the object representation for a XyoPayload */
-  public serialize(xyoObject: IXyoPayload) {
+  public serialize(payload: IXyoPayload) {
     return Buffer.concat([
-      xyoObject.signedPayload.serialize(false),
-      xyoObject.unsignedPayload.serialize(false)
+      payload.signedPayload.serialize(false),
+      payload.unsignedPayload.serialize(false)
     ]);
   }
 

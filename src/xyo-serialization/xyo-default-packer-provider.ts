@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 8th November 2018 3:36:34 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:20:21 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -72,7 +72,7 @@ import { XyoEcdsaSecp256k1Sha256Signature } from '../xyo-signing/ecdsa/secp256k1
 import { XyoEcdsaSecp256k1Sha1Signature } from '../xyo-signing/ecdsa/secp256k1/sha1/xyo-ecdsa-secp256k1-sha1-signature';
 import { XyoEcdsaSecp256k1Sha256Signer } from '../xyo-signing/ecdsa/secp256k1/sha256/xyo-ecdsa-secp256k1-sha256-signer';
 import { XyoEcdsaSecp256k1Sha1Signer } from '../xyo-signing/ecdsa/secp256k1/sha1/xyo-ecdsa-secp256k1-sha1-signer';
-import { XyoObject } from '../xyo-core-components/xyo-object';
+import { IXyoObject } from '../xyo-core-components/xyo-object';
 import { XyoSerializer } from './xyo-serializer';
 import { XyoBase } from '../xyo-core-components/xyo-base';
 import { IXyoObjectDescriptor } from '../@types/xyo-serialization';
@@ -138,7 +138,7 @@ export class XyoDefaultPackerProvider extends XyoBase {
   }
 
   private getRegisterFn(packer: XyoPacker) {
-    return <T extends XyoObject>(descriptor: IXyoObjectDescriptor, serializer: XyoSerializer<T>) => {
+    return <T extends IXyoObject>(descriptor: IXyoObjectDescriptor, serializer: XyoSerializer<T>) => {
       // this.logInfo(`Adding ${descriptor.name} as ${descriptor.major.toString(16)} ${descriptor.minor.toString(16)}`);
       packer.registerSerializerDeserializer(descriptor, serializer);
     };

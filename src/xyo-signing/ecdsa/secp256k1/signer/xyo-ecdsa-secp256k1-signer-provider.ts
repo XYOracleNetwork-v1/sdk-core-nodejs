@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha256-signer-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 12th October 2018 10:44:55 am
+ * @Last modified time: Wednesday, 14th November 2018 4:56:24 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoObject } from '../../../../xyo-core-components/xyo-object';
+import { XyoObject, IXyoObject } from '../../../../xyo-core-components/xyo-object';
 import { IXyoSignerProvider, IXyoSignature } from '../../../../@types/xyo-signing';
 import { ec as EC, EllipticKey } from 'elliptic';
 import { XyoEcdsaSecp256k1Signer } from './xyo-ecdsa-secp256k1-signer';
@@ -29,7 +29,7 @@ export abstract class XyoEcdsaSecp256k1SignerProvider extends XyoObject implemen
   public abstract getSigner(
     sign: (data: Buffer) => Promise<Buffer>,
     getPublicXY: () => {x: Buffer, y: Buffer},
-    verifySign: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
+    verifySign: (signature: IXyoSignature, data: Buffer, publicKey: IXyoObject) => Promise<boolean>,
     getPrivateKey: () => string
   ): XyoEcdsaSecp256k1Signer;
 
@@ -73,7 +73,7 @@ export abstract class XyoEcdsaSecp256k1SignerProvider extends XyoObject implemen
    * @param publicKey The corresponding publicKey of public cryptography key-pair
    */
 
-  public async verifySign(signature: IXyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {
+  public async verifySign(signature: IXyoSignature, data: Buffer, publicKey: IXyoObject): Promise<boolean> {
     const hashedData = await this.hashProvider.createHash(data);
     const uncompressedEcPublicKey = publicKey as XyoEcdsaUncompressedPublicKey;
     const x = uncompressedEcPublicKey.x.toString('hex');

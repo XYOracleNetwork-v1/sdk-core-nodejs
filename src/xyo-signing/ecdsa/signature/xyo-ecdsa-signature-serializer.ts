@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-signature-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:08:23 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:57:32 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,13 +12,13 @@
 import { XyoEcdsaSignature } from './xyo-ecdsa-signature';
 import { XyoSerializer } from '../../../xyo-serialization/xyo-serializer';
 import { IXyoSignature } from '../../../@types/xyo-signing';
-import { XyoObject } from '../../../xyo-core-components/xyo-object';
+import { IXyoObject } from '../../../xyo-core-components/xyo-object';
 
 export class XyoEcdsaSignatureSerializer extends XyoSerializer<XyoEcdsaSignature> {
 
   constructor(
     private readonly minor: number,
-    private readonly verifySign: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
+    private readonly verifySign: (signature: IXyoSignature, data: Buffer, publicKey: IXyoObject) => Promise<boolean>,
     private readonly ecdsaSignatureFactory: IXyoEcdsaSignatureFactory
   ) {
     super();
@@ -45,6 +45,6 @@ export class XyoEcdsaSignatureSerializer extends XyoSerializer<XyoEcdsaSignature
 export interface IXyoEcdsaSignatureFactory {
   newInstance(
     signature: Buffer,
-    verify: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
+    verify: (signature: IXyoSignature, data: Buffer, publicKey: IXyoObject) => Promise<boolean>
   ): XyoEcdsaSignature;
 }

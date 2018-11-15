@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: in-memory.storage-provider.impl.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 22nd October 2018 4:14:16 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:20:59 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoStoragePriority } from './xyo-storage-priority';
 import { IXyoStorageProvider } from '../@types/xyo-storage';
-import { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
+import { XyoError } from '../xyo-core-components/xyo-error';
 
 /**
  * The In-Memory Storage Provider implements the IStorageProvider

@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-array-unpacker.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 4:50:30 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:03:01 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoObject } from '../xyo-core-components/xyo-object';
+import { XyoObject, IXyoObject } from '../xyo-core-components/xyo-object';
 import { XyoError, XyoErrors } from '../xyo-core-components/xyo-error';
 
 /**
@@ -86,10 +86,10 @@ export class XyoArrayUnpacker {
   /**
    * A helper function to convert a Buffer into a collection.
    */
-  private unpack(): XyoObject[] {
+  private unpack(): IXyoObject[] {
     this.getSize(this.sizeOfSize);
 
-    const items: XyoObject[] = [];
+    const items: IXyoObject[] = [];
     let arrayType = Buffer.alloc(0);
 
     if (this.typed) {

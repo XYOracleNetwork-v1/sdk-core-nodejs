@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-transfer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 8th November 2018 12:50:36 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:52:52 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoObject } from '../../xyo-core-components/xyo-object';
+import { XyoObject, IXyoObject } from '../../xyo-core-components/xyo-object';
 
 /**
  * This class is a simple data class meant to wrap the
@@ -32,9 +32,9 @@ export class XyoBoundWitnessTransfer extends XyoObject {
    */
 
   constructor(
-    public readonly keysToSend: XyoObject[],
-    public readonly payloadsToSend: XyoObject[],
-    public readonly signatureToSend: XyoObject[]
+    public readonly keysToSend: IXyoObject[],
+    public readonly payloadsToSend: IXyoObject[],
+    public readonly signatureToSend: IXyoObject[]
   ) {
     super(XyoBoundWitnessTransfer.major, XyoBoundWitnessTransfer.minor);
   }

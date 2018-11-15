@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha-signer-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 12:38:21 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:20:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoObject } from '../../../xyo-core-components/xyo-object';
+import { IXyoObject } from '../../../xyo-core-components/xyo-object';
 import NodeRSA from 'node-rsa';
 import { IXyoSignerProvider, IXyoRsaShaSignerFactory, IXyoSignature } from '../../../@types/xyo-signing';
 import { XyoRsaPublicKey } from '../public-key/xyo-rsa-public-key';
@@ -67,7 +67,7 @@ export abstract class XyoRsaShaSignerProvider extends XyoBase implements IXyoSig
    * @param publicKey The corresponding publicKey of public cryptography key-pair
    */
 
-  public async verifySign(signature: IXyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {
+  public async verifySign(signature: IXyoSignature, data: Buffer, publicKey: IXyoObject): Promise<boolean> {
     const rsaPubKey = publicKey as XyoRsaPublicKey;
     const key = new NodeRSA();
     key.setOptions({ signingScheme: this.signingScheme });

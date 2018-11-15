@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-secp256k1-sha256-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 8th November 2018 1:02:04 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:17:31 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoEcdsaSignature } from "../../signature/xyo-ecdsa-signature";
 import { IXyoSignature } from '../../../../@types/xyo-signing';
-import { XyoObject } from "../../../../xyo-core-components/xyo-object";
+import { IXyoObject } from "../../../../xyo-core-components/xyo-object";
 
 export class XyoEcdsaSecp256k1Sha256Signature extends XyoEcdsaSignature {
 
@@ -20,7 +20,7 @@ export class XyoEcdsaSecp256k1Sha256Signature extends XyoEcdsaSignature {
 
   constructor (
     private readonly signature: Buffer,
-    private readonly verifySignFn: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
+    private readonly verifySignFn: (signature: IXyoSignature, data: Buffer, publicKey: IXyoObject) => Promise<boolean>
   ) {
     super(XyoEcdsaSecp256k1Sha256Signature.major, XyoEcdsaSecp256k1Sha256Signature.minor);
   }
@@ -37,7 +37,7 @@ export class XyoEcdsaSecp256k1Sha256Signature extends XyoEcdsaSignature {
     return this.signature;
   }
 
-  public verifySign(signature: IXyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean> {
+  public verifySign(signature: IXyoSignature, data: Buffer, publicKey: IXyoObject): Promise<boolean> {
     return this.verifySignFn(signature, data, publicKey);
   }
 

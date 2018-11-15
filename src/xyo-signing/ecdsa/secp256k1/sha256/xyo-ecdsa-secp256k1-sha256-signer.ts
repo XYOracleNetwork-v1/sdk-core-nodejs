@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ec-secp-256k-sha256-signer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 8th November 2018 1:10:32 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:57:14 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,7 @@
 import { XyoEcdsaSecp256k1Signer } from "../signer/xyo-ecdsa-secp256k1-signer";
 import { XyoEcdsaSecp256k1Sha256Signature } from "./xyo-ecdsa-secp256k1-sha256-signature";
 import { IXyoSignature } from '../../../../@types/xyo-signing';
-import { XyoObject } from "../../../../xyo-core-components/xyo-object";
+import { IXyoObject } from "../../../../xyo-core-components/xyo-object";
 
 export class XyoEcdsaSecp256k1Sha256Signer extends XyoEcdsaSecp256k1Signer {
 
@@ -22,7 +22,7 @@ export class XyoEcdsaSecp256k1Sha256Signer extends XyoEcdsaSecp256k1Signer {
   constructor(
     private readonly getSignature: (data: Buffer) => Promise<Buffer>,
     public readonly getPublicXY: () => {x: Buffer, y: Buffer},
-    private readonly verifySign: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
+    private readonly verifySign: (signature: IXyoSignature, data: Buffer, publicKey: IXyoObject) => Promise<boolean>,
     public readonly getPrivateKey: () => string
   ) {
     super(XyoEcdsaSecp256k1Sha256Signer.major, XyoEcdsaSecp256k1Sha256Signer.minor);

@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-signature-serializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 9th October 2018 3:08:20 pm
+ * @Last modified time: Wednesday, 14th November 2018 4:58:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoRsaSignature } from './xyo-rsa-signature';
 import { XyoSerializer } from '../../../xyo-serialization/xyo-serializer';
-import { XyoObject } from '../../../xyo-core-components/xyo-object';
+import { IXyoObject } from '../../../xyo-core-components/xyo-object';
 import { IXyoSignerProvider, IXyoSignature } from '../../../@types/xyo-signing';
 
 export class XyoRsaSignatureSerializer extends XyoSerializer<XyoRsaSignature> {
@@ -22,7 +22,7 @@ export class XyoRsaSignatureSerializer extends XyoSerializer<XyoRsaSignature> {
     private readonly xyoRsaSignatureClass: {
       new (
         signature: Buffer,
-        verifySign: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>
+        verifySign: (signature: IXyoSignature, data: Buffer, publicKey: IXyoObject) => Promise<boolean>
       ): XyoRsaSignature
     }
   ) {

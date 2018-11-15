@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signing.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 12th October 2018 10:00:46 am
+ * @Last modified time: Wednesday, 14th November 2018 4:51:26 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoObject } from "../xyo-core-components/xyo-object";
+import { XyoObject, IXyoObject } from "../xyo-core-components/xyo-object";
 import { IXyoSignature } from './xyo-signing';
 import { XyoRsaShaSigner } from "../xyo-signing/rsa/signer/xyo-rsa-sha-signer";
 
@@ -31,7 +31,7 @@ export interface IXyoRsaShaSignerFactory {
   newInstance(
     getSignature: (data: Buffer) => Buffer,
     getModulus: () => Buffer,
-    verifySign: (signature: IXyoSignature, data: Buffer, publicKey: XyoObject) => Promise<boolean>,
+    verifySign: (signature: IXyoSignature, data: Buffer, publicKey: IXyoObject) => Promise<boolean>,
     getPrivateKey: () => any
   ): XyoRsaShaSigner;
 }
@@ -52,7 +52,7 @@ export interface IXyoSignature extends XyoObject {
    * @param data The data that was signed
    * @param publicKey The public key associated with the crypto key-pair
    */
-  verify (data: Buffer, publicKey: XyoObject): Promise<boolean>;
+  verify (data: Buffer, publicKey: IXyoObject): Promise<boolean>;
 }
 
 /** Provides new instances of xyo-signers */
@@ -69,7 +69,7 @@ export interface IXyoSignerProvider {
    * @param data The data that was signed
    * @param publicKey The corresponding publicKey of public cryptography key-pair
    */
-  verifySign(signature: IXyoSignature, data: Buffer, publicKey: XyoObject): Promise<boolean>;
+  verifySign(signature: IXyoSignature, data: Buffer, publicKey: IXyoObject): Promise<boolean>;
 }
 
 /** A signer can be used to create signatures in the xyo system */

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-single-type-array-byte-creator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 8th November 2018 3:33:10 pm
+ * @Last modified time: Wednesday, 14th November 2018 5:15:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,7 @@
 import { XyoArrayUnpacker } from '../../xyo-serialization/xyo-array-unpacker';
 import { XyoSerializer } from '../../xyo-serialization/xyo-serializer';
 import { XyoArray } from './xyo-array';
-import { XyoObject } from '../../lib';
+import { IXyoObject } from '../xyo-object';
 
 /** A general multi-purpose serializer for `XyoArray` types */
 export class XyoArraySerializer extends XyoSerializer<XyoArray> {
@@ -23,8 +23,8 @@ export class XyoArraySerializer extends XyoSerializer<XyoArray> {
     private readonly size: number,
     private readonly typed: boolean,
     private readonly ctor?: {
-      typed?: { new(elementMajor: number, elementMinor: number, array: XyoObject[]): XyoArray },
-      untyped?: { new(array: XyoObject[]): XyoArray }
+      typed?: { new(elementMajor: number, elementMinor: number, array: IXyoObject[]): XyoArray },
+      untyped?: { new(array: IXyoObject[]): XyoArray }
     }
   ) {
     super();
