@@ -10,38 +10,45 @@ import DailyRotateFile from "winston-daily-rotate-file";
  */
 
 export class XyoLogger {
-  private readonly logger = (() => {
-    const infoTransport = new DailyRotateFile({
-      dirname: 'logs/info',
-      datePattern: 'YYYY-MM-DD-HH',
-      zippedArchive: true,
-      maxSize: '20m',
-      maxFiles: '14d',
-      level: 'info'
-    });
+  private readonly logger: winston.Logger;
 
-    const errorTransport = new DailyRotateFile({
-      dirname: 'logs/error',
-      datePattern: 'YYYY-MM-DD-HH',
-      zippedArchive: true,
-      maxSize: '20m',
-      maxFiles: '14d',
-      level: 'error'
-    });
+  constructor (dailyRotateInfoLogs: boolean, dailyRotateErrorLogs: boolean) {
+    this.logger = (() => {
+      const transports = [];
+      if (dailyRotateInfoLogs) {
+        transports.push(new DailyRotateFile({
+          dirname: 'logs/info',
+          datePattern: 'YYYY-MM-DD-HH',
+          zippedArchive: true,
+          maxSize: '20m',
+          maxFiles: '14d',
+          level: 'info'
+        }));
+      }
 
-    return winston.createLogger({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        xyoLogFormat(),
-        winston.format.simple(),
-      ),
-      transports: [
-        infoTransport,
-        errorTransport,
-        new winston.transports.Console()
-      ]
-    });
-  })();
+      if (dailyRotateErrorLogs) {
+        transports.push(new DailyRotateFile({
+          dirname: 'logs/error',
+          datePattern: 'YYYY-MM-DD-HH',
+          zippedArchive: true,
+          maxSize: '20m',
+          maxFiles: '14d',
+          level: 'error'
+        }));
+      }
+
+      transports.push(new winston.transports.Console());
+
+      return winston.createLogger({
+        format: winston.format.combine(
+          winston.format.colorize(),
+          xyoLogFormat(),
+          winston.format.simple(),
+        ),
+        transports
+      });
+    })();
+  }
 
   /** Log to `info` level */
   public info(message: string, meta?: any[]) {

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 1st November 2018 11:08:21 am
+ * @Last modified time: Thursday, 15th November 2018 10:25:03 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -69,4 +69,4 @@ export abstract class XyoBase {
   }
 }
 
-XyoBase.logger = new XyoLogger();
+XyoBase.logger = new XyoLogger(process.env.NODE_ENV !== 'test', process.env.NODE_ENV !== 'test');
