@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: jest.config.js
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 11th October 2018 2:50:58 pm
+ * @Last modified time: Monday, 19th November 2018 12:09:45 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,7 @@
 module.exports = {
   globals: {
     "ts-jest": {
-      tsConfig: "tsconfig.json"
+      tsConfig: "./packages/tsconfig.json"
     }
   },
   moduleFileExtensions: ["ts", "js"],

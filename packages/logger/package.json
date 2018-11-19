@@ -1,0 +1,17 @@
+{
+  "name": "@xyo-network/logger",
+  "version": "0.2.0",
+  "description": "A shared Xyo Logging implementation for the Xyo NodeJS libraries",
+  "main": "dist/xyo-logger.js",
+  "types": "dist/xyo-logger.d.ts",
+  "author": "Ryan Pillsbury",
+  "license": "MIT",
+  "dependencies": {
+    "winston": "^3.1.0",
+    "winston-daily-rotate-file": "^3.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^10.7.1",
+    "typescript": "^3.1.6"
+  }
+}

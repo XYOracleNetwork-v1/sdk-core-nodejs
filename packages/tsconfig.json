@@ -1,0 +1,26 @@
+{
+  "files": [],
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["esnext"],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "strict": true,
+    "composite": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node"
+  },  
+  "references": [
+      { "path": "base" },
+      { "path": "logger" },
+      { "path": "object-schema" },
+      { "path": "hashing" },
+      { "path": "signing" },
+      { "path": "bound-witness" },
+      { "path": "zig-zag-bound-witness-builder" },
+      { "path": "errors" }
+  ]
+}

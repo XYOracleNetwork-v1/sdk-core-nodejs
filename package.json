@@ -1,59 +1,20 @@
 {
-  "name": "@xyo-network/sdk-core-nodejs",
-  "version": "0.1.106",
-  "description": "A core library of nodejs tools to power the nodejs implementation of the XYO network",
-  "main": "dist/lib/index.js",
-  "types": "dist/lib/index.d.ts",
-  "scripts": {
-    "test": "export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose --detectOpenHandles",
-    "build": "tsc",
-    "prepublishOnly": "tsc -b .",
-    "tslint": "tslint -c tslint.json -p tsconfig.json"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "echo \"Build must pass before committing\" && yarn build && yarn tslint"
-    }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/XYOracleNetwork/sdk-core-nodejs.git"
-  },
-  "keywords": [
-    "xyo",
-    "xyo-core",
-    "xyo-nodejs"
-  ],
+  "name": "xyo-core",
+  "version": "0.2.0",
+  "description": "A workspace to aggregated nodejs XYO projects",
+  "main": "index.js",
   "author": "Ryan Pillsbury",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/XYOracleNetwork/sdk-core-nodejs/issues"
-  },
-  "homepage": "https://github.com/XYOracleNetwork/sdk-core-nodejs#readme",
-  "dependencies": {
-    "bn.js": "^4.11.8",
-    "elliptic": "^6.4.1",
-    "external-ip": "^2.0.3",
-    "fast-safe-stringify": "^2.0.6",
-    "network": "^0.4.1",
-    "node-rsa": "^1.0.1",
-    "public-ip": "^2.4.0",
-    "winston": "^3.1.0",
-    "winston-daily-rotate-file": "^3.4.1"
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "tsc -b packages",
+    "test": "export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose --detectOpenHandles"
   },
   "devDependencies": {
-    "@types/bn.js": "^4.11.2",
-    "@types/jest": "^23.3.1",
-    "@types/node": "^10.7.1",
-    "@types/node-rsa": "^0.4.3",
-    "@types/public-ip": "^2.3.0",
-    "husky": "^1.1.1",
-    "jest": "^23.6.0",
-    "ts-jest": "^23.1.3",
-    "ts-node": "^7.0.1",
-    "tslint": "^5.11.0",
-    "tslint-config-airbnb": "^5.9.2",
+    "lerna": "3.4.3",
     "typescript": "^3.1.6"
   },
-  "gitHead": "5326ed67182f211129f77581f0bd61d252702721"
+  "workspaces": [
+    "packages/*"
+  ]
 }
