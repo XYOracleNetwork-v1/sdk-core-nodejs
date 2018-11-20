@@ -8,12 +8,14 @@
   "private": true,
   "scripts": {
     "build": "tsc -b packages",
-    "test": "export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose --detectOpenHandles"
+    "test": "export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose --detectOpenHandles",
+    "tslint": "tslint -c tslint.json -p packages/tsconfig.json"
   },
   "devDependencies": {
     "lerna": "3.4.3",
     "typescript": "^3.1.6",
-    "husky": "^1.1.1"
+    "husky": "^1.1.1",
+    "@xyo-network/config-tslint": "0.1.6"
   },
   "husky": {
     "hooks": {
