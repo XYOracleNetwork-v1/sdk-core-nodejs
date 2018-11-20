@@ -22,7 +22,8 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    {"path": "../base"},
-    {"path": "../peer-connections"}
+    { "path": "../network"},
+    { "path": "../base"},
+    { "path": "../bound-witness"}
   ]
 }

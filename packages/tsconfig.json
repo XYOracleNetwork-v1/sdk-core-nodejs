@@ -26,6 +26,7 @@
       { "path": "buffer-utils" },
       { "path": "tcp-network" },
       { "path": "node" },
+      { "path": "peer-connections" },
   ],
   "include": [
     "logger/src/**/*.ts",
@@ -40,6 +41,6 @@
     "buffer-utils/src/**/*.ts",
     "tcp-network/src/**/*.ts",
     "node/src/**/*.ts",
-    
+    "peer-connections/src/**/*.ts"
   ]
 }

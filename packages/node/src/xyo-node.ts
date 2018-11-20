@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 10:47:56 am
+ * @Last modified time: Tuesday, 20th November 2018 11:25:50 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoPeerConnectionDelegate } from './@types'
+import { IXyoPeerConnectionDelegate } from '@xyo-network/peer-connections'
 import { XyoBase } from '@xyo-network/base'
 
 /**
