@@ -25,6 +25,7 @@
       { "path": "network" },
       { "path": "buffer-utils" },
       { "path": "tcp-network" },
+      { "path": "node" },
   ],
   "include": [
     "logger/src/**/*.ts",
@@ -37,6 +38,8 @@
     "errors/src/**/*.ts",
     "network/src/**/*.ts",
     "buffer-utils/src/**/*.ts",
-    "tcp-network/src/**/*.ts"
+    "tcp-network/src/**/*.ts",
+    "node/src/**/*.ts",
+    
   ]
 }
