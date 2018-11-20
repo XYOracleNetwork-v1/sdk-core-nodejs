@@ -28,7 +28,8 @@
       { "path": "node" },
       { "path": "peer-connections" },
       { "path": "storage" },
-      { "path": "ecdsa-signing" }
+      { "path": "ecdsa-signing" },
+      { "path": "rsa-signing" },
   ],
   "include": [
     "logger/src/**/*.ts",
@@ -45,6 +46,7 @@
     "node/src/**/*.ts",
     "peer-connections/src/**/*.ts",
     "storage/src/**/*.ts",
-    "ecdsa-signing/src/**/*.ts"
+    "ecdsa-signing/src/**/*.ts",
+    "rsa-signing/src/**/*.ts"
   ]
 }
