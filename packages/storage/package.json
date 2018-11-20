@@ -1,7 +1,7 @@
 {
-  "name": "@xyo-network/hashing",
+  "name": "@xyo-network/storage",
   "version": "0.2.0",
-  "description": "Hashing Types and Services for the Xyo Network",
+  "description": "An abstraction around persistence in the Xyo Network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",

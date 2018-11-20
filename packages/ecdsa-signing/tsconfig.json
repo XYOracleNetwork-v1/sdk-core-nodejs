@@ -21,9 +21,11 @@
     "src/**/*.spec.ts"
   ],
   "include": ["src/**/*"],
-  "references": [{
-    "path": "../errors",
-  }, {
-    "path": "../base",
-  }]
+  "references": [
+    {"path": "../base"},
+    {"path": "../errors"},
+    {"path": "../hashing"},
+    {"path": "../signing"},
+    {"path": "../buffer-utils"}
+  ]
 }

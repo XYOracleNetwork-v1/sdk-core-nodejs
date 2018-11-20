@@ -11,6 +11,7 @@
     "deserialize",
     "deserialized",
     "deserializing",
+    "ecdsa",
     "hasher",
     "pojo",
     "promisify",

@@ -27,6 +27,8 @@
       { "path": "tcp-network" },
       { "path": "node" },
       { "path": "peer-connections" },
+      { "path": "storage" },
+      { "path": "ecdsa-signing" }
   ],
   "include": [
     "logger/src/**/*.ts",
@@ -41,6 +43,8 @@
     "buffer-utils/src/**/*.ts",
     "tcp-network/src/**/*.ts",
     "node/src/**/*.ts",
-    "peer-connections/src/**/*.ts"
+    "peer-connections/src/**/*.ts",
+    "storage/src/**/*.ts",
+    "ecdsa-signing/src/**/*.ts"
   ]
 }

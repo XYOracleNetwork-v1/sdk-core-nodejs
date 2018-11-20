@@ -1,14 +1,18 @@
 {
-  "name": "@xyo-network/hashing",
+  "name": "@xyo-network/ecdsa-signing",
   "version": "0.2.0",
-  "description": "Hashing Types and Services for the Xyo Network",
+  "description": "Implements ecdsa crypto functionality",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
+    "elliptic": "^6.4.1",
+    "@xyo-network/signing": "^0.2.0",
+    "@xyo-network/base": "^0.2.0",
     "@xyo-network/errors": "^0.2.0",
-    "@xyo-network/base": "^0.2.0"
+    "@xyo-network/hashing": "^0.2.0",
+    "@xyo-network/buffer-utils": "^0.2.0"
   },
   "devDependencies": {
     "@types/node": "^10.7.1",
