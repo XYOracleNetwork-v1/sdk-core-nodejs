@@ -4,14 +4,14 @@
     "target": "es6",
     "module": "commonjs",
     "lib": ["esnext"],
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
     "strict": true,
-    "composite": true,
     "esModuleInterop": true,
     "noImplicitAny": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "outDir": "dist"
   },  
   "references": [
       { "path": "base" },
@@ -26,11 +26,11 @@
   "include": [
     "logger/src/**/*.ts",
     "base/src/**/*.ts",
-    "object/src/**/*.ts",
+    "object-schema/src/**/*.ts",
     "hashing/src/**/*.ts",
     "signing/src/**/*.ts",
-    "bound/src/**/*.ts",
-    "zig/src/**/*.ts",
+    "bound-witness/src/**/*.ts",
+    "zig-zag-bound-witness-builder/src/**/*.ts",
     "errors/src/**/*.ts"
   ]
 }

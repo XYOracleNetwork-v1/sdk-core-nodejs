@@ -9,15 +9,15 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBase } from '@xyo-network/base';
-import { IXyoSigner, IXyoPublicKey, IXyoSignature } from '@xyo-network/signing';
+import { XyoBase } from '@xyo-network/base'
+import { IXyoSigner, IXyoPublicKey, IXyoSignature } from '@xyo-network/signing'
 import { IXyoPayload, XyoBoundWitnessSigningService, IXyoBoundWitness } from '@xyo-network/bound-witness'
-import { XyoBoundWitnessTransfer } from './xyo-bound-witness-transfer';
-import { XyoError, XyoErrors } from '@xyo-network/errors';
+import { XyoBoundWitnessTransfer } from './xyo-bound-witness-transfer'
+import { XyoError, XyoErrors } from '@xyo-network/errors'
 
 export class XyoZigZagBoundWitnessBuilder extends XyoBase {
 
-  private readonly dynamicPayloads: IXyoPayload[] = [];
+  private readonly dynamicPayloads: IXyoPayload[] = []
 
   /**
    * The set of public key sets for all parties. One per party.
@@ -25,7 +25,7 @@ export class XyoZigZagBoundWitnessBuilder extends XyoBase {
    * includes multiple public-key / signatures
    */
 
-  private readonly dynamicPublicKeys: IXyoPublicKey[][] = [];
+  private readonly dynamicPublicKeys: IXyoPublicKey[][] = []
 
   /**
    * The set of signatures for all parties.
@@ -33,17 +33,17 @@ export class XyoZigZagBoundWitnessBuilder extends XyoBase {
    * a signature within a set should correspond to the index of same public key
    */
 
-  private readonly dynamicSignatureSets: IXyoSignature[][] = [];  
+  private readonly dynamicSignatureSets: IXyoSignature[][] = []
 
   /** True if the key and payloads of this party have been added to the bound-witness */
-  private hasSentKeysAndPayload = false;
+  private hasSentKeysAndPayload = false
 
   constructor (
     private readonly signers: IXyoSigner[],
     private readonly payload: IXyoPayload,
-    private readonly boundWitnessSigningService: XyoBoundWitnessSigningService    
+    private readonly boundWitnessSigningService: XyoBoundWitnessSigningService
   ) {
-    super();
+    super()
   }
 
   /**
@@ -51,7 +51,7 @@ export class XyoZigZagBoundWitnessBuilder extends XyoBase {
    */
 
   get signatures() {
-    return this.dynamicSignatureSets;
+    return this.dynamicSignatureSets
   }
 
   /**
@@ -59,7 +59,7 @@ export class XyoZigZagBoundWitnessBuilder extends XyoBase {
    */
 
   get publicKeys() {
-    return this.dynamicPublicKeys;
+    return this.dynamicPublicKeys
   }
 
   /**
@@ -67,63 +67,63 @@ export class XyoZigZagBoundWitnessBuilder extends XyoBase {
    */
 
   get payloads () {
-    return this.dynamicPayloads;
-  }  
+    return this.dynamicPayloads
+  }
 
   public async incomingData(transfer: XyoBoundWitnessTransfer | undefined, endPoint: boolean) {
-    const keysToSend: IXyoPublicKey[][] = [];
-    const payloadsToSend: IXyoPayload[] = [];
-    const signatureToSend: IXyoSignature[][] = [];
-    const signatureReceivedSize = (transfer && transfer.signatureToSend && transfer.signatureToSend.length) || 0;
+    const keysToSend: IXyoPublicKey[][] = []
+    const payloadsToSend: IXyoPayload[] = []
+    const signatureToSend: IXyoSignature[][] = []
+    const signatureReceivedSize = (transfer && transfer.signatureToSend && transfer.signatureToSend.length) || 0
 
     if (transfer) {
-      this.addTransfer(transfer);
+      this.addTransfer(transfer)
     }
 
     if (!this.hasSentKeysAndPayload) {
-      this.dynamicPublicKeys.push(this.makeSelfKeySet());
-      this.dynamicPayloads.push(this.payload);
-      this.hasSentKeysAndPayload = true;
+      this.dynamicPublicKeys.push(this.makeSelfKeySet())
+      this.dynamicPayloads.push(this.payload)
+      this.hasSentKeysAndPayload = true
     }
 
     if (this.signatures.length !== this.publicKeys.length) {
       if (this.signatures.length === 0 && !endPoint) {
-        this.publicKeys.forEach(key => keysToSend.push(key));
-        this.payloads.forEach(payload => payloadsToSend.push(payload));
+        this.publicKeys.forEach(key => keysToSend.push(key))
+        this.payloads.forEach(payload => payloadsToSend.push(payload))
       } else {
-        await this.signForSelf();
+        await this.signForSelf()
 
         for (let i = signatureReceivedSize + 1; i < this.publicKeys.length; i += 1) {
-          keysToSend.push(this.publicKeys[i]);
+          keysToSend.push(this.publicKeys[i])
         }
 
         for (let i = signatureReceivedSize + 1; i < this.payloads.length; i += 1) {
-          payloadsToSend.push(this.payloads[i]);
+          payloadsToSend.push(this.payloads[i])
         }
 
         for (let i = (this.signatures.length - signatureReceivedSize) - 1; i >= 0; i -= 1) {
-          signatureToSend.push(this.signatures[i]);
+          signatureToSend.push(this.signatures[i])
         }
       }
     }
 
-    return new XyoBoundWitnessTransfer(keysToSend, payloadsToSend, signatureToSend);
+    return new XyoBoundWitnessTransfer(keysToSend, payloadsToSend, signatureToSend)
   }
 
   private makeSelfKeySet(): IXyoPublicKey[] {
-    const publicKeys: IXyoPublicKey[] = [];
+    const publicKeys: IXyoPublicKey[] = []
 
     this.signers.forEach((signer) => {
-      const publicKey = signer.publicKey;
+      const publicKey = signer.publicKey
 
-      const publicKeyValue = publicKey;
+      const publicKeyValue = publicKey
 
       if (publicKeyValue) {
-        publicKeys.push(publicKeyValue);
+        publicKeys.push(publicKeyValue)
       }
-    });
+    })
 
-    return publicKeys;
+    return publicKeys
   }
 
   /**
@@ -132,10 +132,9 @@ export class XyoZigZagBoundWitnessBuilder extends XyoBase {
    */
 
   private async signForSelf() {
-    const signatureSet = await this.signBoundWitness();
-    this.dynamicSignatureSets.unshift(signatureSet);
+    const signatureSet = await this.signBoundWitness()
+    this.dynamicSignatureSets.unshift(signatureSet)
   }
-
 
   /**
    * For each signer that belongs to the owner of this bound-witness, this
@@ -145,8 +144,8 @@ export class XyoZigZagBoundWitnessBuilder extends XyoBase {
   private async signBoundWitness(): Promise<IXyoSignature[]> {
     return Promise.all(this.signers.map(async (signer) => {
       const signature = await this.boundWitnessSigningService.sign(this as IXyoBoundWitness, signer)
-      return signature;
-    }));
+      return signature
+    }))
   }
 
   /**
@@ -154,9 +153,9 @@ export class XyoZigZagBoundWitnessBuilder extends XyoBase {
    */
 
   private addTransfer(transfer: XyoBoundWitnessTransfer) {
-    this.addIncomingKeys(transfer.keysToSend);
-    this.addIncomingPayload(transfer.payloadsToSend);
-    this.addIncomingSignatures(transfer.signatureToSend);
+    this.addIncomingKeys(transfer.keysToSend)
+    this.addIncomingPayload(transfer.payloadsToSend)
+    this.addIncomingSignatures(transfer.signatureToSend)
   }
 
   /**
@@ -166,9 +165,9 @@ export class XyoZigZagBoundWitnessBuilder extends XyoBase {
   private addIncomingKeys(incomingKeySets: IXyoPublicKey[][]) {
     for (const incomingKeySet of incomingKeySets) {
       if (incomingKeySet) {
-        this.dynamicPublicKeys.push(incomingKeySet);
+        this.dynamicPublicKeys.push(incomingKeySet)
       } else {
-        throw new XyoError(`Error unpacking keyset`, XyoErrors.CRITICAL);
+        throw new XyoError(`Error unpacking keyset`, XyoErrors.CRITICAL)
       }
     }
   }
@@ -180,9 +179,9 @@ export class XyoZigZagBoundWitnessBuilder extends XyoBase {
   private addIncomingPayload(incomingPayloads: IXyoPayload[]) {
     for (const incomingPayload of incomingPayloads) {
       if (incomingPayload) {
-        this.dynamicPayloads.push(incomingPayload);
+        this.dynamicPayloads.push(incomingPayload)
       } else {
-        throw new XyoError(`Error unpacking payload`, XyoErrors.CRITICAL);
+        throw new XyoError(`Error unpacking payload`, XyoErrors.CRITICAL)
       }
     }
   }
@@ -194,9 +193,9 @@ export class XyoZigZagBoundWitnessBuilder extends XyoBase {
   private addIncomingSignatures(incomingSignatures: IXyoSignature[][]) {
     for (const incomingSignatureSet of incomingSignatures) {
       if (incomingSignatureSet) {
-        this.dynamicSignatureSets.unshift(incomingSignatureSet);
+        this.dynamicSignatureSets.unshift(incomingSignatureSet)
       } else {
-        throw new XyoError(`Error unpacking signatureSet`, XyoErrors.CRITICAL);
+        throw new XyoError(`Error unpacking signatureSet`, XyoErrors.CRITICAL)
       }
     }
   }

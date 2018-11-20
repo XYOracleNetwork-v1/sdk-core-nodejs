@@ -9,9 +9,9 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBase } from "@xyo-network/base";
-import { IXyoPublicKey, IXyoSignature } from "@xyo-network/signing";
-import { IXyoPayload } from '@xyo-network/bound-witness';
+import { XyoBase } from "@xyo-network/base"
+import { IXyoPublicKey, IXyoSignature } from "@xyo-network/signing"
+import { IXyoPayload } from '@xyo-network/bound-witness'
 
 export class XyoBoundWitnessTransfer extends XyoBase {
 
@@ -28,11 +28,11 @@ export class XyoBoundWitnessTransfer extends XyoBase {
     public readonly payloadsToSend: IXyoPayload[],
     public readonly signatureToSend: IXyoSignature[][]
   ) {
-    super();
+    super()
   }
 
   public getReadableName(): string {
-    return 'bound-witness-transfer';
+    return 'bound-witness-transfer'
   }
 
   public getReadableValue() {
@@ -41,7 +41,7 @@ export class XyoBoundWitnessTransfer extends XyoBase {
       keysToSend: this.keysToSend,
       payloadsToSend: this.payloadsToSend,
       signatureToSend: this.signatureToSend
-    };
+    }
   }
 
   /**
@@ -50,17 +50,17 @@ export class XyoBoundWitnessTransfer extends XyoBase {
 
   public get stage() {
     if (this.keysToSend.length > 0 && this.payloadsToSend.length > 0 && this.signatureToSend.length === 0) {
-      return 0x01;
+      return 0x01
     }
 
     if (this.keysToSend.length > 0 && this.payloadsToSend.length > 0 && this.signatureToSend.length > 0) {
-      return 0x02;
+      return 0x02
     }
 
     if (this.keysToSend.length === 0 && this.payloadsToSend.length === 0 && this.signatureToSend.length > 0) {
-      return 0x03;
+      return 0x03
     }
 
-    return 0x01;
+    return 0x01
   }
 }

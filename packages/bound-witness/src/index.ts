@@ -9,14 +9,14 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBase } from '@xyo-network/base';
+import { XyoBase } from '@xyo-network/base'
 
-import { IXyoSigner, IXyoSignature, IXyoPublicKey } from '@xyo-network/signing';
+import { IXyoSigner, IXyoSignature, IXyoPublicKey } from '@xyo-network/signing'
 
 /**
  * A payload encapsulates the meta data being shared between parties
  * in a bound witness.
- * 
+ *
  * It is broken up between signed and unsigned portions
  */
 export interface IXyoPayload {
@@ -27,7 +27,7 @@ export interface IXyoPayload {
    * @type {any[]}
    * @memberof IXyoPayload
    */
-  readonly signedPayload: any[];
+  readonly signedPayload: any[]
 
   /**
    * The unsigned portion of the payload
@@ -35,7 +35,7 @@ export interface IXyoPayload {
    * @type {any[]}
    * @memberof IXyoPayload
    */
-  readonly unsignedPayload: any[];
+  readonly unsignedPayload: any[]
 
   /**
    * A helper function for getting a mapping of object ids to their values
@@ -43,7 +43,7 @@ export interface IXyoPayload {
    * @type {{ [s: string]: any; }}
    * @memberof IXyoPayload
    */
-  readonly signedPayloadMapping: { [s: string]: any; };
+  readonly signedPayloadMapping: { [s: string]: any; }
 
   /**
    * A helper function for extracting a value from the unsigned payload
@@ -53,7 +53,7 @@ export interface IXyoPayload {
    * @returns {(T | undefined)} Will return `T` if it exists, undefined otherwise
    * @memberof IXyoPayload
    */
-  extractFromUnsignedPayload<T>(id: number): T | undefined;
+  extractFromUnsignedPayload<T>(id: number): T | undefined
 
   /**
    * A helper function for extracting a value from the signed payload
@@ -62,8 +62,8 @@ export interface IXyoPayload {
    * @param {number} id The id of the object type to be extracted
    * @returns {(T | undefined)} Will return `T` if it exists, undefined otherwise
    * @memberof IXyoPayload
-   */  
-  extractFromSignedPayload<T>(id: number): T | undefined;
+   */
+  extractFromSignedPayload<T>(id: number): T | undefined
 }
 
 /**
@@ -71,23 +71,23 @@ export interface IXyoPayload {
  * XYO network. The structure provides a cryptographically secure way that ensures,
  * through public-key cryptography, that two nodes interacted and agreed upon a
  * particular payload
- * 
+ *
  * This particular structure is forward looking in that it may accommodate a future
  * situation where more than two nodes interacted. As such, there exists a positional
- * coupling across the fields of the `IXyoBoundWitness`. That is, a party in the 
- * bound-witness corresponds to a particular index of the fields 
- * 
+ * coupling across the fields of the `IXyoBoundWitness`. That is, a party in the
+ * bound-witness corresponds to a particular index of the fields
+ *
  * - publicKeys
  * - signatures
  * - payloads
- * 
+ *
  * @export
  * @interface IXyoBoundWitness
  */
 export interface IXyoBoundWitness {
 
   /**
-   * A collection of publicKey collections associated with the 
+   * A collection of publicKey collections associated with the
    * bound-witness. The outer-index represents the party. The inner-index
    * corresponds to a public-key entry. Parties are allowed to sign with
    * multiple key-pairs. The 2-dimensional index of each element corresponds
@@ -96,10 +96,10 @@ export interface IXyoBoundWitness {
    * @type {IXyoPublicKey[][]}
    * @memberof IXyoBoundWitness
    */
-  readonly publicKeys: IXyoPublicKey[][];
+  readonly publicKeys: IXyoPublicKey[][]
 
   /**
-   * A collection of signatures collections associated with the 
+   * A collection of signatures collections associated with the
    * bound-witness. The outer-index represents the party. The inner-index
    * corresponds to a signature entry. Parties are allowed to sign with
    * multiple key-pairs. The 2-dimensional index of each element corresponds
@@ -107,37 +107,37 @@ export interface IXyoBoundWitness {
    *
    * @type {IXyoPublicKey[][]}
    * @memberof IXyoBoundWitness
-   */  
-  readonly signatures: IXyoSignature[][];
+   */
+  readonly signatures: IXyoSignature[][]
 
   /**
    * Each party in a bound-witness contributes a payload. The index of
    * the payload corresponds to the party-member.
-   * 
+   *
    * @type {IXyoPayload[]}
    * @memberof IXyoBoundWitness
    */
-  readonly payloads: IXyoPayload[];
+  readonly payloads: IXyoPayload[]
 }
 
 export interface IXyoBoundWitnessSigningDataProducer {
-  getSigningData (boundWitness: IXyoBoundWitness): Buffer;
+  getSigningData (boundWitness: IXyoBoundWitness): Buffer
 }
 
 export class XyoBoundWitnessSigningService extends XyoBase {
 
   constructor (private readonly boundWitnessSigningDataProducer: IXyoBoundWitnessSigningDataProducer) {
-    super();
+    super()
   }
 
   /**
    * Signs the signable portion of a BoundWitness, returns a signature
-   * 
+   *
    * @param boundWitness The bound witness to be signed
    * @param signer A signer to sign the bound-witness with
    */
   public sign(boundWitness: IXyoBoundWitness, signer: IXyoSigner): Promise<IXyoSignature> {
-    return signer.signData(this.boundWitnessSigningDataProducer.getSigningData(boundWitness));
+    return signer.signData(this.boundWitnessSigningDataProducer.getSigningData(boundWitness))
   }
 
   /**
@@ -150,25 +150,25 @@ export class XyoBoundWitnessSigningService extends XyoBase {
    */
   public async tryValidateSignatures(boundWitness: IXyoBoundWitness): Promise<void> {
     if (boundWitness.signatures.length !== boundWitness.publicKeys.length) {
-      throw new Error(`Public key and signature set length mismatch`);
+      throw new Error(`Public key and signature set length mismatch`)
     }
 
-    const signingData = this.boundWitnessSigningDataProducer.getSigningData(boundWitness);
+    const signingData = this.boundWitnessSigningDataProducer.getSigningData(boundWitness)
 
     await Promise.all(boundWitness.signatures.map(async (sigSet, index) => {
       if (sigSet.length !== boundWitness.publicKeys[index].length) {
-        throw new Error(`Public key and signature set length mismatch`);
+        throw new Error(`Public key and signature set length mismatch`)
       }
 
       return Promise.all(sigSet.map(async (sig, sigIndex) => {
-        const signature = (sig as IXyoSignature);
-        const publicKey = boundWitness.publicKeys[index][sigIndex];
-        const isValid = await signature.verify(signingData, publicKey);
+        const signature = (sig as IXyoSignature)
+        const publicKey = boundWitness.publicKeys[index][sigIndex]
+        const isValid = await signature.verify(signingData, publicKey)
 
         if (!isValid) {
-          throw new Error(`Signature [${index}][${sigIndex}] ${signature.encodedSignature.toString('hex')} is invalid`);
+          throw new Error(`Signature [${index}][${sigIndex}] ${signature.encodedSignature.toString('hex')} is invalid`)
         }
-      }));
-    }));
+      }))
+    }))
   }
 }
