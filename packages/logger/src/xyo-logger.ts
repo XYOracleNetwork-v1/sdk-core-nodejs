@@ -9,8 +9,8 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import winston from 'winston';
-import DailyRotateFile from "winston-daily-rotate-file";
+import winston from 'winston'
+import DailyRotateFile from "winston-daily-rotate-file"
 
 /**
  * A central logger for the Xyo core
@@ -20,11 +20,11 @@ import DailyRotateFile from "winston-daily-rotate-file";
  */
 
 export class XyoLogger {
-  private readonly logger: winston.Logger;
+  private readonly logger: winston.Logger
 
   constructor (dailyRotateInfoLogs: boolean, dailyRotateErrorLogs: boolean) {
     this.logger = (() => {
-      const transports = [];
+      const transports = []
 
       if (dailyRotateInfoLogs) {
         transports.push(new DailyRotateFile({
@@ -34,7 +34,7 @@ export class XyoLogger {
           maxSize: '20m',
           maxFiles: '14d',
           level: 'info'
-        }));
+        }))
       }
 
       if (dailyRotateErrorLogs) {
@@ -45,10 +45,10 @@ export class XyoLogger {
           maxSize: '20m',
           maxFiles: '14d',
           level: 'error'
-        }));
+        }))
       }
 
-      transports.push(new winston.transports.Console());
+      transports.push(new winston.transports.Console())
 
       return winston.createLogger({
         format: winston.format.combine(
@@ -57,23 +57,23 @@ export class XyoLogger {
           winston.format.simple(),
         ),
         transports
-      });
-    })();
+      })
+    })()
   }
 
   /** Log to `info` level */
   public info(message: string, meta?: any[]) {
-    this.logger.info(this.metaReducer(message, meta));
+    this.logger.info(this.metaReducer(message, meta))
   }
 
   /** Log to `error` level */
   public error(message: string, meta?: any[]) {
-    this.logger.error(this.metaReducer(message, meta));
+    this.logger.error(this.metaReducer(message, meta))
   }
 
   /** Log to `warn` level */
   public warn(message: string, meta?: any[]) {
-    this.logger.warn(this.metaReducer(message, meta));
+    this.logger.warn(this.metaReducer(message, meta))
   }
 
   private metaReducer(message: string, meta?: any[]) {
@@ -83,18 +83,18 @@ export class XyoLogger {
           item instanceof Error ?
             `${item.stack || item.message}` :
             item.toString()
-        ]);
-      }, []).join('\n');
+        ])
+      }, []).join('\n')
 
-      return `${message}\n${metaMsg}`;
+      return `${message}\n${metaMsg}`
     }
 
-    return message;
+    return message
   }
 
 }
 
 const xyoLogFormat = winston.format((info, opts) => {
-  info.message = `${new Date().toISOString()} ${info.message}`;
-  return info;
-});
+  info.message = `${new Date().toISOString()} ${info.message}`
+  return info
+})

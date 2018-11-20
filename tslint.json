@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: tslint.json
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 19th November 2018 5:44:55 pm
+ * @Last modified time: Monday, 19th November 2018 5:50:38 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
  {
-  "extends": ["tslint:latest", "tslint-config-airbnb"],
+  "extends": ["tslint:latest", "@xyo-network/config-tslint"],
   "rules": {
     "trailing-comma": false,
     "ordered-imports": false,

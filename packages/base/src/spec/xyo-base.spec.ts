@@ -9,30 +9,30 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBase } from '../xyo-base';
+import { XyoBase } from '../xyo-base'
 
 describe('XyoBase', () => {
 
   it('Should be able to access logger', () => {
-    const example = new TestExample();
-    TestExample.logger.info('hello world');
+    const example = new TestExample()
+    TestExample.logger.info('hello world')
 
-    example.info(`Log to info channel`);
-    example.error(`Log to error channel`);
-    example.warn(`Log to warn channel`);
-  });
-});
+    example.info(`Log to info channel`)
+    example.error(`Log to error channel`)
+    example.warn(`Log to warn channel`)
+  })
+})
 
 class TestExample extends XyoBase {
   public info(msg: string) {
-    this.logInfo(msg);
+    this.logInfo(msg)
   }
 
   public error(msg: string) {
-    this.logError(msg);
+    this.logError(msg)
   }
 
   public warn(msg: string) {
-    this.logWarn(msg);
+    this.logWarn(msg)
   }
 }

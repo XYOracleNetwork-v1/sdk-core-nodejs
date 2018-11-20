@@ -15,7 +15,7 @@
 export interface IXyoPublicKey {
 
   /** Returns the raw bytes of the public-key */
-  getRawPublicKey(): Buffer;
+  getRawPublicKey(): Buffer
 }
 
 /**
@@ -26,7 +26,7 @@ export interface IXyoSignature {
   /**
    * Subclasses will return a binary-representation of the signature
    */
-  encodedSignature: Buffer;
+  encodedSignature: Buffer
 
   /**
    * Verifies that this signature is valid
@@ -34,7 +34,7 @@ export interface IXyoSignature {
    * @param data The data that was signed
    * @param publicKey The public key associated with the crypto key-pair
    */
-  verify (data: Buffer, publicKey: IXyoPublicKey): Promise<boolean>;
+  verify (data: Buffer, publicKey: IXyoPublicKey): Promise<boolean>
 }
 
 /**
@@ -45,12 +45,12 @@ export interface IXyoSigner {
   /**
    * Subclasses will return the publicKey of the crypto key pair
    */
-  publicKey: IXyoPublicKey;
+  publicKey: IXyoPublicKey
 
   /**
    * This should return the private key
    */
-  privateKey: any;
+  privateKey: any
 
   /**
    * Signs an arbitrary data blob
@@ -58,7 +58,7 @@ export interface IXyoSigner {
    * @param data An arbitrary data blob to sign
    * @returns An xyo signature
    */
-  signData(data: Buffer): Promise<IXyoSignature>;
+  signData(data: Buffer): Promise<IXyoSignature>
 }
 
 /**
@@ -68,7 +68,7 @@ export interface IXyoSignerProvider {
   /**
    * Returns a new instance of a signer
    */
-  newInstance(fromPrivateKey?: any): IXyoSigner;
+  newInstance(fromPrivateKey?: any): IXyoSigner
 
   /**
    * Verifies a a signature given the data that was signed, and a public key
@@ -78,5 +78,5 @@ export interface IXyoSignerProvider {
    * @param publicKey The corresponding publicKey of public cryptography key-pair
    * @returns Will return true if the signature/public-key matches that data passed in
    */
-  verifySign(signature: IXyoSignature, data: Buffer, publicKey: IXyoPublicKey): Promise<boolean>;
+  verifySign(signature: IXyoSignature, data: Buffer, publicKey: IXyoPublicKey): Promise<boolean>
 }

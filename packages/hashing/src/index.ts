@@ -10,8 +10,8 @@
  */
 
 export interface IXyoHash {
-  getHash(): Buffer;
-  verifyHash(data: Buffer): Promise<boolean>;
+  getHash(): Buffer
+  verifyHash(data: Buffer): Promise<boolean>
 }
 
 export interface IXyoHashProvider {
@@ -21,7 +21,7 @@ export interface IXyoHashProvider {
    * Returns an instance of an XyoHash asynchronously
    */
 
-  createHash(data: Buffer): Promise<IXyoHash>;
+  createHash(data: Buffer): Promise<IXyoHash>
 
   /**
    * Given a raw piece of data and the raw hash, will return
@@ -29,5 +29,5 @@ export interface IXyoHashProvider {
    * corresponds to the data for this hash-provider
    */
 
-  verifyHash(data: Buffer, hash: Buffer): Promise<boolean>;
+  verifyHash(data: Buffer, hash: Buffer): Promise<boolean>
 }

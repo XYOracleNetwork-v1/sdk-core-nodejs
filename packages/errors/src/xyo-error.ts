@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBase } from '@xyo-network/base';
+import { XyoBase } from '@xyo-network/base'
 
 /**
  * A list of supported error types
@@ -29,9 +29,9 @@ export enum XyoErrors {
  */
 export class XyoError extends XyoBase implements Error {
 
-  public readonly isXyoError: boolean = true;
-  public readonly stack: string | undefined;
-  public readonly name: string = 'XyoError';
+  public readonly isXyoError: boolean = true
+  public readonly stack: string | undefined
+  public readonly name: string = 'XyoError'
 
   /**
    * Creates a new instance of an XyoError
@@ -46,12 +46,12 @@ export class XyoError extends XyoBase implements Error {
     public readonly code: XyoErrors,
     fromOtherError?: Error
   ) {
-    super();
-    this.stack = (fromOtherError && fromOtherError.stack) || new Error().stack;
-    this.logError(`An XyoError was thrown`, this);
+    super()
+    this.stack = (fromOtherError && fromOtherError.stack) || new Error().stack
+    this.logError(`An XyoError was thrown`, this)
   }
 
   public toString(): string {
-    return `XyoError: ${this.message}.${this.stack ? `\n${this.stack}` : ''}`;
+    return `XyoError: ${this.message}.${this.stack ? `\n${this.stack}` : ''}`
   }
 }
