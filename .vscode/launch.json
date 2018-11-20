@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: launch.json
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 30th October 2018 11:01:19 am
+ * @Last modified time: Tuesday, 20th November 2018 9:08:37 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -27,7 +27,7 @@
       "type": "node",
       "request": "launch",
       "name": "Test Open File",
-      "program": "${workspaceFolder}/../../node_modules/jest/bin/jest",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest",
       "args": ["${relativeFile}"],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-schema.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 19th November 2018 6:06:09 pm
+ * @Last modified time: Tuesday, 20th November 2018 9:33:18 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -212,9 +212,9 @@ export function serialize(bytes: Buffer, scheme: IXyoObjectSchema): Buffer {
     }
   })()
 
-  const byte0Top2Bits = numberToEncode << 2
+  const nibbleTop2Bits = numberToEncode << 2
 
-  const byte0Bottom2Bits = (() => {
+  const nibbleBottom2Bits = (() => {
     switch (scheme.iterableType) {
       case 'iterable-typed':
         return 3
@@ -230,7 +230,8 @@ export function serialize(bytes: Buffer, scheme: IXyoObjectSchema): Buffer {
   })()
 
   const byte0 = Buffer.alloc(1)
-  byte0.writeUInt8(byte0Top2Bits + byte0Bottom2Bits, 0)
+  const nibble = (nibbleTop2Bits + nibbleBottom2Bits) << 4
+  byte0.writeUInt8(nibble, 0)
 
   const byte1 = (() => {
     const b1 = Buffer.alloc(1)

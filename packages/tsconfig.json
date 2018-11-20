@@ -21,7 +21,10 @@
       { "path": "signing" },
       { "path": "bound-witness" },
       { "path": "zig-zag-bound-witness-builder" },
-      { "path": "errors" }
+      { "path": "errors" },
+      { "path": "network" },
+      { "path": "buffer-utils" },
+      { "path": "tcp-network" },
   ],
   "include": [
     "logger/src/**/*.ts",
@@ -31,6 +34,9 @@
     "signing/src/**/*.ts",
     "bound-witness/src/**/*.ts",
     "zig-zag-bound-witness-builder/src/**/*.ts",
-    "errors/src/**/*.ts"
+    "errors/src/**/*.ts",
+    "network/src/**/*.ts",
+    "buffer-utils/src/**/*.ts",
+    "tcp-network/src/**/*.ts"
   ]
 }
