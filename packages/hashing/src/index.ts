@@ -14,7 +14,6 @@ export interface IXyoHash {
   verifyHash(data: Buffer): Promise<boolean>;
 }
 
-
 export interface IXyoHashProvider {
 
   /**

@@ -4,18 +4,18 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 19th November 2018 12:52:54 pm
+ * @Last modified time: Monday, 19th November 2018 5:47:39 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBase } from '../xyo-base'
+import { XyoBase } from '../xyo-base';
 
 describe('XyoBase', () => {
 
   it('Should be able to access logger', () => {
     const example = new TestExample();
-    TestExample.logger.info('hello world')
+    TestExample.logger.info('hello world');
 
     example.info(`Log to info channel`);
     example.error(`Log to error channel`);
@@ -24,16 +24,15 @@ describe('XyoBase', () => {
 });
 
 class TestExample extends XyoBase {
-  info(msg: string) {
-    this.logInfo(msg)
+  public info(msg: string) {
+    this.logInfo(msg);
   }
 
-  error(msg: string) {
-    this.logError(msg)
+  public error(msg: string) {
+    this.logError(msg);
   }
 
-  warn(msg: string) {
-    this.logWarn(msg)
+  public warn(msg: string) {
+    this.logWarn(msg);
   }
-
 }

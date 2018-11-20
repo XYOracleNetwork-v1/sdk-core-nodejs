@@ -22,5 +22,15 @@
       { "path": "bound-witness" },
       { "path": "zig-zag-bound-witness-builder" },
       { "path": "errors" }
+  ],
+  "include": [
+    "logger/src/**/*.ts",
+    "base/src/**/*.ts",
+    "object/src/**/*.ts",
+    "hashing/src/**/*.ts",
+    "signing/src/**/*.ts",
+    "bound/src/**/*.ts",
+    "zig/src/**/*.ts",
+    "errors/src/**/*.ts"
   ]
 }

@@ -7,7 +7,8 @@
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/logger": "^0.2.0"
+    "@xyo-network/logger": "^0.2.0",
+    "fast-safe-stringify": "^2.0.6"    
   },
   "devDependencies": {
     "@types/node": "^10.7.1",

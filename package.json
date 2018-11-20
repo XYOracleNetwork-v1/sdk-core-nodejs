@@ -15,7 +15,7 @@
     "lerna": "3.4.3",
     "typescript": "^3.1.6",
     "husky": "^1.1.1",
-    "@xyo-network/config-tslint": "0.1.6"
+    "tslint-config-airbnb": "^5.9.2"
   },
   "husky": {
     "hooks": {

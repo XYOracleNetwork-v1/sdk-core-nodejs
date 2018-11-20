@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-logger.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 19th November 2018 11:31:17 am
+ * @Last modified time: Monday, 19th November 2018 5:41:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -25,6 +25,7 @@ export class XyoLogger {
   constructor (dailyRotateInfoLogs: boolean, dailyRotateErrorLogs: boolean) {
     this.logger = (() => {
       const transports = [];
+
       if (dailyRotateInfoLogs) {
         transports.push(new DailyRotateFile({
           dirname: 'logs/info',

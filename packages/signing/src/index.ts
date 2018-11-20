@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 19th November 2018 1:13:47 pm
+ * @Last modified time: Monday, 19th November 2018 5:48:19 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 /**
-* Xyo Public key wrapper
-*/
+ * Xyo Public key wrapper
+ */
 export interface IXyoPublicKey {
 
   /** Returns the raw bytes of the public-key */
@@ -19,8 +19,8 @@ export interface IXyoPublicKey {
 }
 
 /**
-* Xyo Signature Wrapper
-*/
+ * Xyo Signature Wrapper
+ */
 export interface IXyoSignature {
 
   /**
