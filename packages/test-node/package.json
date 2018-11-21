@@ -8,7 +8,19 @@
   "license": "MIT",
   "dependencies": {
     "@xyo-network/base": "^0.2.0",
-    "@xyo-network/network.tcp": "^0.2.0"
+    "@xyo-network/node": "^0.2.0",
+    "@xyo-network/network": "^0.2.0",
+    "@xyo-network/network.tcp": "^0.2.0",
+    "@xyo-network/peer-interaction": "^0.2.0",
+    "@xyo-network/peer-interaction-router": "^0.2.0",
+    "@xyo-network/hashing": "^0.2.0",
+    "@xyo-network/bound-witness": "^0.2.0",
+    "@xyo-network/serialization": "^0.2.0",
+    "@xyo-network/origin-chain": "^0.2.0",
+    "@xyo-network/origin-block-repository": "^0.2.0",
+    "@xyo-network/peer-interaction-handlers": "^0.2.0",
+    "@xyo-network/peer-connections": "^0.2.0",
+    "@xyo-network/storage": "^0.2.0"
   },
   "devDependencies": {
     "@types/node": "^10.7.1",

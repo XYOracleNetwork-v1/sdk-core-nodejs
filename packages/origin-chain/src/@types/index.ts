@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 9:34:30 am
+ * @Last modified time: Wednesday, 21st November 2018 1:37:24 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,7 +18,7 @@ import { IXyoSigner, IXyoPublicKey } from '@xyo-network/signing'
  * block in the origin-chain
  */
 
-export interface IXyoOriginChainStateRepository {
+export interface IXyoOriginChainRepository {
   /** Returns the index value that will go into the next block */
   getIndex(): Promise<number>
 

@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 5:41:48 pm
+ * @Last modified time: Wednesday, 21st November 2018 1:37:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoNetworkPipe } from '@xyo-network/network'
 import { IXyoBoundWitness, IXyoPayload } from '@xyo-network/bound-witness'
-import { IXyoOriginChainStateRepository } from '@xyo-network/origin-chain'
+import { IXyoOriginChainRepository } from '@xyo-network/origin-chain'
 import { IXyoSigner } from '@xyo-network/signing'
 
 /**
@@ -32,7 +32,7 @@ export interface IXyoBoundWitnessHandlerProvider {
 export interface IXyoBoundWitnessPayloadProvider {
 
   /** Returns the payload for the bound-witness given the origin-state of the current chain */
-  getPayload(originState: IXyoOriginChainStateRepository): Promise<IXyoPayload>
+  getPayload(originState: IXyoOriginChainRepository): Promise<IXyoPayload>
 }
 
 /**

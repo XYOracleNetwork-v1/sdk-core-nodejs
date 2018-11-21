@@ -23,6 +23,8 @@
   "include": ["src/**/*"],
   "references": [
     { "path": "../bound-witness"},
-    { "path": "../hashing"}
+    { "path": "../storage"},
+    { "path": "../hashing"},
+    { "path": "../serialization"}
   ]
 }

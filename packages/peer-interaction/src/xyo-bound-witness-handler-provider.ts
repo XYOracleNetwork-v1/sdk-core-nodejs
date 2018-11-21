@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 9:39:14 am
+ * @Last modified time: Wednesday, 21st November 2018 1:37:29 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,7 @@
 import { IXyoNetworkPipe } from '@xyo-network/network'
 import { IXyoBoundWitness, XyoBoundWitnessValidator, IXyoBoundWitnessSigningDataProducer } from '@xyo-network/bound-witness'
 import { IXyoHashProvider } from '@xyo-network/hashing'
-import { IXyoOriginChainStateRepository } from '@xyo-network/origin-chain'
+import { IXyoOriginChainRepository } from '@xyo-network/origin-chain'
 import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoSerializationService } from '@xyo-network/serialization'
@@ -29,7 +29,7 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
 
   constructor (
     private readonly hashingProvider: IXyoHashProvider,
-    private readonly originStateRepository: IXyoOriginChainStateRepository,
+    private readonly originStateRepository: IXyoOriginChainRepository,
     private readonly originBlockRepository: IXyoOriginBlockRepository,
     private readonly boundWitnessPayloadProvider: IXyoBoundWitnessPayloadProvider,
     private readonly boundWitnessSuccessListener: IXyoBoundWitnessSuccessListener,

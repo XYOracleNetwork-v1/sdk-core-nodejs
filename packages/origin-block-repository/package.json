@@ -8,7 +8,9 @@
   "license": "MIT",
   "dependencies": {
     "@xyo-network/bound-witness": "^0.2.0",
-    "@xyo-network/hashing": "^0.2.0"
+    "@xyo-network/hashing": "^0.2.0",
+    "@xyo-network/storage": "^0.2.0",
+    "@xyo-network/serialization": "^0.2.0"
   },
   "devDependencies": {
     "@types/node": "^10.7.1",

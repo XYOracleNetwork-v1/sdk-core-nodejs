@@ -1,5 +1,5 @@
 {
-  "name": "@xyo-network/peer-connection-router",
+  "name": "@xyo-network/peer-interaction-router",
   "version": "0.2.0",
   "description": "A router for register catalogue items to handlers",
   "main": "dist/index.js",

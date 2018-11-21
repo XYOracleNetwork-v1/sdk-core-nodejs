@@ -36,6 +36,7 @@
       { "path": "origin-block-repository" },
       { "path": "peer-interaction-router" },
       { "path": "origin-chain" },
+      { "path": "test-node" }
   ],
   "include": [
     "logger/src/**/*.ts",
@@ -60,5 +61,6 @@
     "origin-chain/src/**/*.ts",
     "peer-interaction-router/src/**/*.ts",
     "peer-interaction-handlers/src/**/*.ts",
+    "test-node/src/**/*.ts"
   ]
 }

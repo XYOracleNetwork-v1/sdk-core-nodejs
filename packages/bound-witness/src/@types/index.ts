@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 5:14:11 pm
+ * @Last modified time: Wednesday, 21st November 2018 1:30:39 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -34,34 +34,6 @@ export interface IXyoPayload {
    * @memberof IXyoPayload
    */
   readonly unsignedPayload: any[]
-
-  /**
-   * A helper function for getting a mapping of object ids to their values
-   *
-   * @type {{ [s: string]: any; }}
-   * @memberof IXyoPayload
-   */
-  readonly signedPayloadMapping: { [s: string]: any; }
-
-  /**
-   * A helper function for extracting a value from the unsigned payload
-   *
-   * @template T
-   * @param {number} id The id of the object type to be extracted
-   * @returns {(T | undefined)} Will return `T` if it exists, undefined otherwise
-   * @memberof IXyoPayload
-   */
-  extractFromUnsignedPayload<T>(id: number): T | undefined
-
-  /**
-   * A helper function for extracting a value from the signed payload
-   *
-   * @template T
-   * @param {number} id The id of the object type to be extracted
-   * @returns {(T | undefined)} Will return `T` if it exists, undefined otherwise
-   * @memberof IXyoPayload
-   */
-  extractFromSignedPayload<T>(id: number): T | undefined
 }
 
 /**
