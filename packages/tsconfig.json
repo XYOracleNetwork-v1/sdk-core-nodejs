@@ -30,7 +30,8 @@
       { "path": "storage" },
       { "path": "signing-ecdsa" },
       { "path": "signing-rsa" },
-      { "path": "peer-interactions" },
+      { "path": "peer-interaction" },
+      { "path": "peer-interaction-handlers" },
       { "path": "serialization" },
       { "path": "origin-block-repository" },
       { "path": "origin-chain" },
@@ -52,9 +53,10 @@
     "storage/src/**/*.ts",
     "signing-ecdsa/src/**/*.ts",
     "signing-rsa/src/**/*.ts",
-    "peer-interactions/src/**/*.ts",
+    "peer-interaction/src/**/*.ts",
     "serialization/src/**/*.ts",
     "origin-block-repository/src/**/*.ts",
     "origin-chain/src/**/*.ts",
+    "peer-interaction-handlers/src/**/*.ts",
   ]
 }

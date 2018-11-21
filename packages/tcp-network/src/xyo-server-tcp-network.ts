@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 10:36:22 am
+ * @Last modified time: Wednesday, 21st November 2018 10:13:23 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,12 +14,13 @@ import {
   IXyoNetworkProcedureCatalogue,
   IXyoNetworkPipe,
   CatalogueItem,
-  bufferToCatalogueItems
+  bufferToCatalogueItems,
+  CATALOGUE_SIZE_OF_SIZE_BYTES,
+  CATALOGUE_SIZE_OF_PAYLOAD_BYTES
 } from '@xyo-network/network'
 
 import { XyoTcpConnectionResult } from './xyo-tcp-connection-result'
 import { XyoTcpNetworkPipe } from './xyo-tcp-network-pipe'
-import { XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES, XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES } from './xyo-tcp-network-constants'
 
 import net from 'net'
 import { XyoBase } from '@xyo-network/base'
@@ -175,7 +176,7 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
             chunk
           ])
 
-          if (data.length < XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES) {
+          if (data.length < CATALOGUE_SIZE_OF_PAYLOAD_BYTES) {
             return
           }
 
@@ -183,22 +184,22 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
             sizeOfPayload = data.readUInt32BE(0)
           }
 
-          if (data.length < XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES + XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES) {
+          if (data.length < CATALOGUE_SIZE_OF_PAYLOAD_BYTES + CATALOGUE_SIZE_OF_SIZE_BYTES) {
             return
           }
 
           if (sizeOfCatalogue === undefined) {
-            sizeOfCatalogue = data.readUInt8(XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES)
+            sizeOfCatalogue = data.readUInt8(CATALOGUE_SIZE_OF_PAYLOAD_BYTES)
           }
 
           if (
             otherCatalogueItems === undefined &&
-            data.length >= (XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES + sizeOfCatalogue)
+            data.length >= (CATALOGUE_SIZE_OF_PAYLOAD_BYTES + sizeOfCatalogue)
           ) {
             otherCatalogueItems = bufferToCatalogueItems(
               data.slice(
-                XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES + XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES,
-                XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES + XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES + sizeOfCatalogue
+                CATALOGUE_SIZE_OF_PAYLOAD_BYTES + CATALOGUE_SIZE_OF_SIZE_BYTES,
+                CATALOGUE_SIZE_OF_PAYLOAD_BYTES + CATALOGUE_SIZE_OF_SIZE_BYTES + sizeOfCatalogue
               )
             )
             if (otherCatalogueItems.length < 1) {
@@ -227,14 +228,14 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
             this.connection = undefined
             const appDataIndex = readNumberFromBuffer(
               data,
-              XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES,
+              CATALOGUE_SIZE_OF_SIZE_BYTES,
               false,
-              XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES + XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES
+              CATALOGUE_SIZE_OF_PAYLOAD_BYTES + CATALOGUE_SIZE_OF_SIZE_BYTES
             )
 
             const trimmedData: Buffer = data.slice(
-              XYO_TCP_SIZE_OF_TCP_PAYLOAD_BYTES +
-              XYO_TCP_CATALOGUE_SIZE_OF_SIZE_BYTES +
+              CATALOGUE_SIZE_OF_PAYLOAD_BYTES +
+              CATALOGUE_SIZE_OF_SIZE_BYTES +
               appDataIndex
             )
 

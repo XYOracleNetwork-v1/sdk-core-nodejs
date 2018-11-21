@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 6:15:53 pm
+ * @Last modified time: Wednesday, 21st November 2018 10:20:44 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,7 +13,7 @@
 export type SerializationType = 'buffer' | 'hex'
 
 /** The type that can be returned */
-export type SerializationValueType = Buffer | string
+export type BufferOrString = Buffer | string
 
 export interface IXyoSerializationService {
 
@@ -23,18 +23,18 @@ export interface IXyoSerializationService {
    *
    * @param {*} serializable
    * @param {SerializationType} [serializationType] Optional, defaults to Buffer
-   * @returns {SerializationValueType} Will return a Buffer or an hex-string based off of `serializationType`
+   * @returns {BufferOrString} Will return a Buffer or an hex-string based off of `serializationType`
    * @memberof IXyoSerializationService
    */
-  serialize(serializable: any, serializationType?: SerializationType): SerializationValueType
+  serialize(serializable: any, serializationType?: SerializationType): BufferOrString
 
   /**
    * Will deserialize an xyo object from a buffer or hex-string to the object representation
    *
    * @template T
-   * @param {SerializationValueType} deserializable
+   * @param {BufferOrString} deserializable
    * @returns {T}
    * @memberof IXyoSerializationService
    */
-  deserialize<T>(deserializable: SerializationValueType): T
+  deserialize<T>(deserializable: BufferOrString): T
 }

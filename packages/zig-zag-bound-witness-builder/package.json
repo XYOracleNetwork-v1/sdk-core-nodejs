@@ -2,8 +2,8 @@
   "name": "@xyo-network/zig-zag-bound-witness-builder",
   "version": "0.2.0",
   "description": "Provider Bound Witness building services",
-  "main": "dist/xyo-zig-zag-bound-witness-builder.js",
-  "types": "dist/xyo-zig-zag-bound-witness-builder.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {

@@ -1,19 +1,19 @@
 {
-  "name": "@xyo-network/peer-interactions",
+  "name": "@xyo-network/peer-interaction-handlers",
   "version": "0.2.0",
-  "description": "Abstraction utilities for implementing interactions between nodes",
+  "description": "A number of handlers for bound-witness interactions with peers in the xyo network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/network": "^0.2.0",
-    "@xyo-network/base": "^0.2.0",
+    "@xyo-network/peer-interaction": "^0.2.0",
+    "@xyo-network/zig-zag-bound-witness-builder": "^0.2.0",
     "@xyo-network/bound-witness": "^0.2.0",
-    "@xyo-network/hashing": "^0.2.0",
-    "@xyo-network/origin-chain": "^0.2.0",
+    "@xyo-network/base": "^0.2.0",
+    "@xyo-network/errors": "^0.2.0",
     "@xyo-network/signing": "^0.2.0",
-    "@xyo-network/origin-block-repository": "^0.2.0",
+    "@xyo-network/network": "^0.2.0",
     "@xyo-network/serialization": "^0.2.0"
   },
   "devDependencies": {

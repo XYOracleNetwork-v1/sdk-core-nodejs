@@ -4,10 +4,26 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 10:22:16 am
+ * @Last modified time: Wednesday, 21st November 2018 10:06:05 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
+
+/**
+ * Some very important numbers that factor into the catalogue negotiation protocol
+ */
+
+/** The current number of bytes that encode the length if the catalogue */
+export const CATALOGUE_LENGTH_IN_BYTES = 4
+
+/** This number of bytes allowed to encode how big the catalogue can be */
+export const CATALOGUE_SIZE_OF_SIZE_BYTES = 1
+
+/**
+ * When a payload is passed it is padded with the length of bytes of the payload.
+ * It gets 4 bytes to do so
+ */
+export const CATALOGUE_SIZE_OF_PAYLOAD_BYTES = 4
 
 /**
  * The catalogue items this node knows about
