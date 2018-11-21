@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 9:36:26 am
+ * @Last modified time: Wednesday, 21st November 2018 9:39:14 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -29,12 +29,12 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
 
   constructor (
     private readonly hashingProvider: IXyoHashProvider,
-    private readonly originState: IXyoOriginChainStateRepository,
-    private readonly originChainNavigator: IXyoOriginBlockRepository,
+    private readonly originStateRepository: IXyoOriginChainStateRepository,
+    private readonly originBlockRepository: IXyoOriginBlockRepository,
     private readonly boundWitnessPayloadProvider: IXyoBoundWitnessPayloadProvider,
     private readonly boundWitnessSuccessListener: IXyoBoundWitnessSuccessListener,
     private readonly boundWitnessInteractionFactory: IXyoBoundWitnessInteractionFactory,
-    private readonly originBlockValidator: XyoBoundWitnessValidator,
+    private readonly boundWitnessValidator: XyoBoundWitnessValidator,
     private readonly boundWitnessSigningDataProducer: IXyoBoundWitnessSigningDataProducer,
     private readonly nestedBoundWitnessExtractor: XyoNestedBoundWitnessExtractor,
     private readonly serializationService: IXyoSerializationService
@@ -44,8 +44,8 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
 
   public async handle(networkPipe: IXyoNetworkPipe): Promise<IXyoBoundWitness> {
     const [payload, signers] = await Promise.all([
-      this.boundWitnessPayloadProvider.getPayload(this.originState),
-      this.originState.getSigners()
+      this.boundWitnessPayloadProvider.getPayload(this.originStateRepository),
+      this.originStateRepository.getSigners()
     ])
 
     const interaction = this.boundWitnessInteractionFactory.newInstance(signers, payload)
@@ -65,14 +65,14 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
     )
 
     try {
-      await this.originBlockValidator.validateBoundWitness(hashValue, boundWitness)
+      await this.boundWitnessValidator.validateBoundWitness(hashValue, boundWitness)
     } catch (err) {
       this.logError(`Origin block failed validation. Will not add.`, err)
       throw err
     }
 
-    await this.originState.updateOriginChainState(hashValue)
-    await this.originChainNavigator.addOriginBlock(hashValue, boundWitness)
+    await this.originStateRepository.updateOriginChainState(hashValue)
+    await this.originBlockRepository.addOriginBlock(hashValue, boundWitness)
     const nestedBoundWitnesses = this.nestedBoundWitnessExtractor.extractNestedBoundWitnesses(boundWitness)
 
     await nestedBoundWitnesses.reduce(async (promiseChain, nestedBoundWitness) => {
@@ -82,16 +82,16 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
       )
       const nestedHash = this.serializationService.serialize(nestedHashValue, 'buffer') as Buffer
       this.logInfo(`Extracted nested block with hash ${nestedHash.toString('hex')}`)
-      const containsBlock = await this.originChainNavigator.containsOriginBlock(nestedHash)
+      const containsBlock = await this.originBlockRepository.containsOriginBlock(nestedHash)
       if (!containsBlock) {
         try {
-          await this.originBlockValidator.validateBoundWitness(nestedHashValue, nestedBoundWitness)
+          await this.boundWitnessValidator.validateBoundWitness(nestedHashValue, nestedBoundWitness)
         } catch (err) {
           this.logError(`Origin block failed validation. Will not add.`, err)
           throw err
         }
 
-        await this.originChainNavigator.addOriginBlock(nestedHashValue, nestedBoundWitness, hashValue)
+        await this.originBlockRepository.addOriginBlock(nestedHashValue, nestedBoundWitness, hashValue)
       }
     }, Promise.resolve() as Promise<void>)
 

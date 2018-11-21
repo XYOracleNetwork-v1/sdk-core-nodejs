@@ -4,13 +4,19 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-nested-bound-witness-extractor-utils.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 4:58:13 pm
+ * @Last modified time: Wednesday, 21st November 2018 9:42:42 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoBoundWitness } from '@xyo-network/bound-witness'
 
+/**
+ *  This class is useful for extracting out bridged blocks nested inside of bound-witnesses
+ *
+ * @export
+ * @class XyoNestedBoundWitnessExtractor
+ */
 export class XyoNestedBoundWitnessExtractor {
   constructor(private readonly isBridgeBlockSetFn: (obj: any) => boolean) {}
 
