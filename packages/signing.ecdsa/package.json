@@ -1,5 +1,5 @@
 {
-  "name": "@xyo-network/signing-ecdsa",
+  "name": "@xyo-network/signing.ecdsa",
   "version": "0.2.0",
   "description": "Implements ecdsa crypto functionality",
   "main": "dist/index.js",

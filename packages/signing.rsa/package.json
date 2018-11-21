@@ -1,5 +1,5 @@
 {
-  "name": "@xyo-network/signing-rsa",
+  "name": "@xyo-network/signing.rsa",
   "version": "0.2.0",
   "description": "Provides RSA signing services",
   "main": "dist/index.js",

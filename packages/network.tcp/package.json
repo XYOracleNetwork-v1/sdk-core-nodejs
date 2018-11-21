@@ -1,5 +1,5 @@
 {
-  "name": "@xyo-network/tcp-network",
+  "name": "@xyo-network/network.tcp",
   "version": "0.2.0",
   "description": "A TCP implementation of a network over TCP",
   "main": "dist/index.js",
