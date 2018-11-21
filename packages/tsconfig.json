@@ -34,6 +34,7 @@
       { "path": "peer-interaction-handlers" },
       { "path": "serialization" },
       { "path": "origin-block-repository" },
+      { "path": "peer-interaction-router" },
       { "path": "origin-chain" },
   ],
   "include": [
@@ -57,6 +58,7 @@
     "serialization/src/**/*.ts",
     "origin-block-repository/src/**/*.ts",
     "origin-chain/src/**/*.ts",
+    "peer-interaction-router/src/**/*.ts",
     "peer-interaction-handlers/src/**/*.ts",
   ]
 }
