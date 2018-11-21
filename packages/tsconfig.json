@@ -32,6 +32,7 @@
       { "path": "signing-rsa" },
       { "path": "peer-interactions" },
       { "path": "serialization" },
+      { "path": "origin-block-repository" },
       { "path": "origin-chain" },
   ],
   "include": [
@@ -53,6 +54,7 @@
     "signing-rsa/src/**/*.ts",
     "peer-interactions/src/**/*.ts",
     "serialization/src/**/*.ts",
+    "origin-block-repository/src/**/*.ts",
     "origin-chain/src/**/*.ts",
   ]
 }

@@ -4,13 +4,11 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 5:09:01 pm
+ * @Last modified time: Wednesday, 21st November 2018 9:34:37 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 export {
-  IOriginBlockQueryResult,
-  IXyoOriginBlockRepository,
   IXyoOriginChainStateRepository
 } from './@types'

@@ -22,9 +22,7 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    { "path": "../base"},
     { "path": "../hashing"},
-    { "path": "../bound-witness"},
     { "path": "../signing"}
   ]
 }

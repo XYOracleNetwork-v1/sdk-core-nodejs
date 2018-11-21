@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 6:17:26 pm
+ * @Last modified time: Wednesday, 21st November 2018 9:36:26 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,8 @@
 import { IXyoNetworkPipe } from '@xyo-network/network'
 import { IXyoBoundWitness, XyoBoundWitnessValidator, IXyoBoundWitnessSigningDataProducer } from '@xyo-network/bound-witness'
 import { IXyoHashProvider } from '@xyo-network/hashing'
-import { IXyoOriginChainStateRepository, IXyoOriginBlockRepository } from '@xyo-network/origin-chain'
+import { IXyoOriginChainStateRepository } from '@xyo-network/origin-chain'
+import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoSerializationService } from '@xyo-network/serialization'
 import {
