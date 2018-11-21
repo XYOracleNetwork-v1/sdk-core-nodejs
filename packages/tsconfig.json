@@ -30,6 +30,9 @@
       { "path": "storage" },
       { "path": "signing-ecdsa" },
       { "path": "signing-rsa" },
+      { "path": "peer-interactions" },
+      { "path": "serialization" },
+      { "path": "origin-chain" },
   ],
   "include": [
     "logger/src/**/*.ts",
@@ -47,6 +50,9 @@
     "peer-connections/src/**/*.ts",
     "storage/src/**/*.ts",
     "signing-ecdsa/src/**/*.ts",
-    "signing-rsa/src/**/*.ts"
+    "signing-rsa/src/**/*.ts",
+    "peer-interactions/src/**/*.ts",
+    "serialization/src/**/*.ts",
+    "origin-chain/src/**/*.ts",
   ]
 }

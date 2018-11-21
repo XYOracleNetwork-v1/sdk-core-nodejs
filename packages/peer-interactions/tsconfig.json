@@ -22,9 +22,12 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    { "path": "../signing" },
-    { "path": "../base" },
-    { "path": "../errors" },
-    { "path": "../hashing" },
+    { "path": "../network"},
+    { "path": "../base"},
+    { "path": "../bound-witness"},
+    { "path": "../hashing"},
+    { "path": "../serialization"},
+    { "path": "../signing"},
+    { "path": "../origin-chain"}
   ]
 }

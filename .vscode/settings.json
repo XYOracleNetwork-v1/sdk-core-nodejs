@@ -7,6 +7,7 @@
     "Truthy",
     "blockchain",
     "cryptographically",
+    "deserializable",
     "deserialization",
     "deserialize",
     "deserialized",
@@ -18,6 +19,7 @@
     "rssi",
     "ryanxyo",
     "secp",
+    "serializable",
     "serializers",
     "transpiles",
     "xyfindables"
