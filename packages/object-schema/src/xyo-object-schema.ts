@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-schema.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 9:33:18 am
+ * @Last modified time: Wednesday, 21st November 2018 5:52:11 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,7 @@
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import BN from 'bn.js'
 
-export interface IXyoObjectSchema {
+export interface IXyoObjectPartialSchema {
 
   /**
    * How many bytes necessary to encode size of object
@@ -38,7 +38,11 @@ export interface IXyoReadable {
   getReadableJSON(): string
 }
 
-export const schema: { [s: string]: IXyoObjectSchema } = {
+export interface IXyoObjectSchema {
+  [s: string]: IXyoObjectPartialSchema
+}
+
+export const schema: IXyoObjectSchema = {
   rssi: {
     sizeIdentifierSize: 1,
     iterableType: 'not-iterable',
@@ -181,10 +185,25 @@ export const schema: { [s: string]: IXyoObjectSchema } = {
  *
  * @export
  * @param {Buffer} bytes The bytes to serialize
- * @param {IXyoObjectSchema} scheme The schema used to serialize it with
+ * @param {IXyoObjectPartialSchema} scheme The schema used to serialize it with
  * @returns {Buffer} Returns the serialized Buffer
  */
-export function serialize(bytes: Buffer, scheme: IXyoObjectSchema): Buffer {
+export function serialize(bytes: Buffer, scheme: IXyoObjectPartialSchema): Buffer {
+  return Buffer.concat([
+    getHeader(bytes.length, scheme),
+    bytes
+  ])
+}
+
+/**
+ * Builds a dynamic header based on the size of bytes for a schema
+ *
+ * @export
+ * @param {number} byteLength The number of bytes to serialize
+ * @param {IXyoObjectPartialSchema} scheme The schema used to serialize it with
+ * @returns {Buffer} Returns the header
+ */
+export function getHeader(byteLength: number, scheme: IXyoObjectPartialSchema): Buffer {
   const { numberToEncode, bytesRequired } = (() => {
     switch (scheme.sizeIdentifierSize) {
       case 1:
@@ -196,7 +215,7 @@ export function serialize(bytes: Buffer, scheme: IXyoObjectSchema): Buffer {
       case 8:
         return { numberToEncode: 3, bytesRequired: 8 }
       case null:
-        const numberOfBytesRequired = getLeastNumberOfBytesToEncodeSize(bytes.length)
+        const numberOfBytesRequired = getLeastNumberOfBytesToEncodeSize(byteLength)
         switch (numberOfBytesRequired) {
           case 1:
             return { numberToEncode: 0, bytesRequired: 1 }
@@ -243,16 +262,16 @@ export function serialize(bytes: Buffer, scheme: IXyoObjectSchema): Buffer {
 
   switch (bytesRequired) {
     case 1:
-      sizeBuffer.writeUInt8(bytes.length + 1, 0)
+      sizeBuffer.writeUInt8(byteLength + 1, 0)
       break
     case 2:
-      sizeBuffer.writeUInt16BE(bytes.length + 2, 0)
+      sizeBuffer.writeUInt16BE(byteLength + 2, 0)
       break
     case 4:
-      sizeBuffer.writeUInt32BE(bytes.length + 4, 0)
+      sizeBuffer.writeUInt32BE(byteLength + 4, 0)
       break
     case 8:
-      sizeBuffer = new BN(bytes.length + 8).toBuffer('be', 8)
+      sizeBuffer = new BN(byteLength + 8).toBuffer('be', 8)
       break
     default:
       throw new XyoError(`Could not serialize because size ${bytesRequired}`, XyoErrors.INVALID_PARAMETERS)
@@ -261,8 +280,7 @@ export function serialize(bytes: Buffer, scheme: IXyoObjectSchema): Buffer {
   return Buffer.concat([
     byte0,
     byte1,
-    sizeBuffer,
-    bytes
+    sizeBuffer
   ])
 }
 

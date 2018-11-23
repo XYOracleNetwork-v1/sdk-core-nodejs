@@ -4,18 +4,18 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 1:37:29 pm
+ * @Last modified time: Wednesday, 21st November 2018 4:02:56 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoNetworkPipe } from '@xyo-network/network'
 import { IXyoBoundWitness, XyoBoundWitnessValidator, IXyoBoundWitnessSigningDataProducer } from '@xyo-network/bound-witness'
-import { IXyoHashProvider } from '@xyo-network/hashing'
+import { IXyoHashProvider, IXyoHash } from '@xyo-network/hashing'
 import { IXyoOriginChainRepository } from '@xyo-network/origin-chain'
 import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { XyoBase } from '@xyo-network/base'
-import { IXyoSerializationService } from '@xyo-network/serialization'
+import { IXyoTypeSerializer } from '@xyo-network/serialization'
 import {
   IXyoBoundWitnessHandlerProvider,
   IXyoBoundWitnessPayloadProvider,
@@ -37,7 +37,7 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
     private readonly boundWitnessValidator: XyoBoundWitnessValidator,
     private readonly boundWitnessSigningDataProducer: IXyoBoundWitnessSigningDataProducer,
     private readonly nestedBoundWitnessExtractor: XyoNestedBoundWitnessExtractor,
-    private readonly serializationService: IXyoSerializationService
+    private readonly hashSerializer: IXyoTypeSerializer<IXyoHash>
   ) {
     super()
   }
@@ -80,7 +80,7 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
       const nestedHashValue = await this.hashingProvider.createHash(
         this.boundWitnessSigningDataProducer.getSigningData(nestedBoundWitness)
       )
-      const nestedHash = this.serializationService.serialize(nestedHashValue, 'buffer') as Buffer
+      const nestedHash = this.hashSerializer.serialize(nestedHashValue, 'buffer') as Buffer
       this.logInfo(`Extracted nested block with hash ${nestedHash.toString('hex')}`)
       const containsBlock = await this.originBlockRepository.containsOriginBlock(nestedHash)
       if (!containsBlock) {

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 2:17:26 pm
+ * @Last modified time: Wednesday, 21st November 2018 4:13:59 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -16,7 +16,7 @@ import { XyoServerTcpNetwork } from '@xyo-network/network.tcp'
 import { XyoSimplePeerConnectionDelegate, IXyoPeerConnectionDelegate, IXyoPeerConnectionHandler, XyoPeerConnectionHandler } from '@xyo-network/peer-connections'
 import { XyoPeerInteractionRouter } from '@xyo-network/peer-interaction-router'
 import { XyoBoundWitnessStandardServerInteraction, XyoBoundWitnessTakeOriginChainServerInteraction } from '@xyo-network/peer-interaction-handlers'
-import { IXyoHashProvider, getHashingProvider } from '@xyo-network/hashing'
+import { IXyoHashProvider, getHashingProvider, IXyoHash } from '@xyo-network/hashing'
 import {
   XyoBoundWitnessHandlerProvider,
   IXyoBoundWitnessPayloadProvider,
@@ -27,8 +27,9 @@ import {
 import { IXyoOriginChainRepository, XyoOriginChainStateInMemoryRepository } from '@xyo-network/origin-chain'
 import { IXyoOriginBlockRepository, XyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { XyoBoundWitnessValidator, IXyoBoundWitnessSigningDataProducer, XyoBoundWitnessSigningService, IXyoBoundWitness, IXyoPayload } from '@xyo-network/bound-witness'
-import { IXyoSerializationService } from '@xyo-network/serialization'
+import { IXyoSerializationService, IXyoTypeSerializer } from '@xyo-network/serialization'
 import { XyoInMemoryStorageProvider } from '@xyo-network/storage'
+import { XyoBoundWitnessTransfer } from '@xyo-network/zig-zag-bound-witness-builder'
 
 export class XyoTestNode extends XyoBase {
 
@@ -104,14 +105,14 @@ export class XyoTestNode extends XyoBase {
             signers,
             payload,
             this.getBoundWitnessSigningService(),
-            this.getSerializationService()
+            this.getBoundWitnessTransferSerializer()
           )
         }
       },
       this.getBoundWitnessValidator(),
       this.getBoundWitnessSigningDataProducer(),
       this.getNestedBoundWitnessExtractor(),
-      this.getSerializationService()
+      this.getHashSerializer()
     )
   }
 
@@ -128,14 +129,14 @@ export class XyoTestNode extends XyoBase {
             signers,
             payload,
             this.getBoundWitnessSigningService(),
-            this.getSerializationService()
+            this.getBoundWitnessTransferSerializer()
           )
         }
       },
       this.getBoundWitnessValidator(),
       this.getBoundWitnessSigningDataProducer(),
       this.getNestedBoundWitnessExtractor(),
-      this.getSerializationService()
+      this.getHashSerializer()
     )
   }
 
@@ -163,7 +164,8 @@ export class XyoTestNode extends XyoBase {
   private getOriginBlockRepository(): IXyoOriginBlockRepository {
     return new XyoOriginBlockRepository(
       new XyoInMemoryStorageProvider(),
-      this.getSerializationService()
+      this.getBoundWitnessSerializer(),
+      this.getHashSerializer()
     )
   }
 
@@ -206,6 +208,18 @@ export class XyoTestNode extends XyoBase {
   }
 
   private getSerializationService(): IXyoSerializationService  {
+    throw new Error(`Not implemented yet`)
+  }
+
+  private getBoundWitnessSerializer(): IXyoTypeSerializer<IXyoBoundWitness>  {
+    throw new Error(`Not implemented yet`)
+  }
+
+  private getBoundWitnessTransferSerializer(): IXyoTypeSerializer<XyoBoundWitnessTransfer>  {
+    throw new Error(`Not implemented yet`)
+  }
+
+  private getHashSerializer(): IXyoTypeSerializer<IXyoHash>  {
     throw new Error(`Not implemented yet`)
   }
 }

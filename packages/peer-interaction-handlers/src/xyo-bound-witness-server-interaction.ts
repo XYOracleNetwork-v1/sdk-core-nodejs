@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-server-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 10:23:37 am
+ * @Last modified time: Wednesday, 21st November 2018 4:04:30 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -26,7 +26,7 @@ import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { IXyoNodeInteraction } from '@xyo-network/peer-interaction'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoSigner } from '@xyo-network/signing'
-import { IXyoSerializationService } from '@xyo-network/serialization'
+import { IXyoTypeSerializer } from '@xyo-network/serialization'
 
 /**
  * An `XyoBoundWitnessInteraction` manages a "session"
@@ -42,7 +42,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
     private readonly signers: IXyoSigner[],
     private readonly payload: IXyoPayload,
     private readonly boundWitnessSigningService: XyoBoundWitnessSigningService,
-    private readonly serializationService: IXyoSerializationService
+    private readonly boundWitnessTransferSerializer: IXyoTypeSerializer<XyoBoundWitnessTransfer>
   ) {
     super()
   }
@@ -73,7 +73,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
           const boundWitnessTransfer1 = await boundWitness.incomingData(undefined, false)
 
           /** Serialize the transfer value */
-          const bytes = this.serializationService.serialize(boundWitnessTransfer1, 'buffer') as Buffer
+          const bytes = this.boundWitnessTransferSerializer.serialize(boundWitnessTransfer1, 'buffer') as Buffer
 
           /** Tell the other node this is the catalogue item you chose */
           const catalogueBuffer = Buffer.alloc(CATALOGUE_LENGTH_IN_BYTES)
@@ -104,14 +104,14 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
             }
 
             /** Deserialize bytes into bound witness  */
-            const transferObj = this.serializationService.deserialize<XyoBoundWitnessTransfer>(response)
+            const transferObj = this.boundWitnessTransferSerializer.deserialize(response)
 
             /** Add transfer to bound witness */
             const transfer = await boundWitness.incomingData(transferObj, false)
 
             if (!disconnected) {
               /** serialize the bound witness transfer */
-              const transferBytes = this.serializationService.serialize(transfer, 'buffer') as Buffer
+              const transferBytes = this.boundWitnessTransferSerializer.serialize(transfer, 'buffer') as Buffer
 
               try {
                 await networkPipe.send(transferBytes, false)

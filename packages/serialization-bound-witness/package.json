@@ -1,12 +1,15 @@
 {
-  "name": "@xyo-network/serialization",
+  "name": "@xyo-network/serialization-bound-witness",
   "version": "0.2.0",
-  "description": "Serialization services in the xyo network",
+  "description": "A base class for the Xyo Network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
+    "@xyo-network/bound-witness": "^0.2.0",
+    "@xyo-network/serialization": "^0.2.0",
+    "@xyo-network/signing": "^0.2.0",
     "@xyo-network/base": "^0.2.0",
     "@xyo-network/object-schema": "^0.2.0"
   },

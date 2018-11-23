@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-block-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 2:08:14 pm
+ * @Last modified time: Wednesday, 21st November 2018 4:01:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,7 +13,7 @@ import { XyoStoragePriority, IXyoStorageProvider, IXyoIterableStorageProvider } 
 import { IXyoBoundWitness } from '@xyo-network/bound-witness'
 import { IXyoOriginBlockRepository, IOriginBlockQueryResult } from './@types'
 import { IXyoHash } from '@xyo-network/hashing'
-import { IXyoSerializationService } from '@xyo-network/serialization'
+import { IXyoTypeSerializer } from '@xyo-network/serialization'
 
 /**
  * An XyoOriginChainNavigator exposes an api for managing
@@ -30,7 +30,8 @@ export class XyoOriginBlockRepository implements IXyoOriginBlockRepository {
 
   constructor(
     private readonly originBlocksStorageProvider: IXyoStorageProvider,
-    private readonly serializationService: IXyoSerializationService
+    private readonly boundWitnessSerializer: IXyoTypeSerializer<IXyoBoundWitness>,
+    private readonly hashSerializer: IXyoTypeSerializer<IXyoHash>,
   ) {}
 
   /**
@@ -58,7 +59,7 @@ export class XyoOriginBlockRepository implements IXyoOriginBlockRepository {
     // If this is an iterable storage-provider, answer question that way
     if (instanceOfIterableStorageProvider(this.originBlocksStorageProvider)) {
       const result = await this.originBlocksStorageProvider.iterate({ limit, offsetKey: offsetHash })
-      const blocks = result.items.map(keyPair => this.serializationService.deserialize<IXyoBoundWitness>(keyPair.value))
+      const blocks = result.items.map(keyPair => this.boundWitnessSerializer.deserialize(keyPair.value))
 
       return {
         list: blocks,
@@ -108,8 +109,8 @@ export class XyoOriginBlockRepository implements IXyoOriginBlockRepository {
    */
 
   public async addOriginBlock(blockHash: IXyoHash, originBlock: IXyoBoundWitness): Promise<void> {
-    const blockDataValue = this.serializationService.serialize(originBlock, 'buffer') as Buffer
-    const blockHashValue = this.serializationService.serialize(blockHash, 'buffer') as Buffer
+    const blockDataValue = this.boundWitnessSerializer.serialize(originBlock, 'buffer') as Buffer
+    const blockHashValue = this.hashSerializer.serialize(blockHash, 'buffer') as Buffer
 
     await this.originBlocksStorageProvider.write(
       blockHashValue,
@@ -127,7 +128,7 @@ export class XyoOriginBlockRepository implements IXyoOriginBlockRepository {
         return undefined
       }
 
-      return this.serializationService.deserialize<IXyoBoundWitness>(result)
+      return this.boundWitnessSerializer.deserialize(result)
     } catch (err) {
       return undefined
     }

@@ -20,5 +20,9 @@
     "src/**/spec",
     "src/**/*.spec.ts"
   ],
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../base" },
+    { "path": "../object-schema" }
+  ]
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-standard-client-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 10:41:41 am
+ * @Last modified time: Wednesday, 21st November 2018 4:06:08 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,7 +19,7 @@ import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { IXyoNodeInteraction } from '@xyo-network/peer-interaction'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoSigner } from '@xyo-network/signing'
-import { IXyoSerializationService } from '@xyo-network/serialization'
+import { IXyoTypeSerializer } from '@xyo-network/serialization'
 
 import {
   IXyoNetworkPipe
@@ -36,7 +36,7 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements
     private readonly signers: IXyoSigner[],
     private readonly payload: IXyoPayload,
     private readonly boundWitnessSigningService: XyoBoundWitnessSigningService,
-    private readonly serializationService: IXyoSerializationService
+    private readonly boundWitnessTransferSerializer: IXyoTypeSerializer<XyoBoundWitnessTransfer>
   ) {
     super()
   }
@@ -68,13 +68,11 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements
             throw new XyoError(`No initiation data found`, XyoErrors.CRITICAL)
           }
 
-          const boundWitnessTransfer1 = this.serializationService
-            .deserialize<XyoBoundWitnessTransfer>(networkPipe.initiationData)
-
+          const boundWitnessTransfer1 = this.boundWitnessTransferSerializer.deserialize(networkPipe.initiationData)
           const boundWitnessTransfer2 = await boundWitness.incomingData(boundWitnessTransfer1, true)
 
           /** Serialize the transfer value */
-          const bytes = this.serializationService.serialize(boundWitnessTransfer2, 'buffer') as Buffer
+          const bytes = this.boundWitnessTransferSerializer.serialize(boundWitnessTransfer2, 'buffer') as Buffer
 
           if (!disconnected) {
             /* Send the message and wait for reply */
@@ -93,7 +91,7 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements
             this.logInfo(`Received bound witness response`)
 
             /** Deserialize bytes into bound witness transfer  */
-            const transferObj = this.serializationService.deserialize<XyoBoundWitnessTransfer>(response)
+            const transferObj = this.boundWitnessTransferSerializer.deserialize(response)
 
             /** Add transfer to bound witness */
             await boundWitness.incomingData(transferObj, false)
