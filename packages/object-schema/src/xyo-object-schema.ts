@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-schema.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 5:52:11 pm
+ * @Last modified time: Monday, 26th November 2018 1:10:07 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -22,7 +22,7 @@ export interface IXyoObjectPartialSchema {
   /**
    * Is the value that is being encoded iterable and if so is it typed
    */
-  iterableType: IIterableType
+  iterableType: IIterableType | null
 
   /**
    * What is the id of the schema
@@ -195,6 +195,63 @@ export function serialize(bytes: Buffer, scheme: IXyoObjectPartialSchema): Buffe
   ])
 }
 
+export function getNumberOfBytesRequiredForSizeBuffer(
+  byteLength: number,
+  sizeIdentifierSize: 1 | 2 | 4 | 8 | null = null
+): 1 | 2 | 4 | 8  {
+  const { bytesRequired } = (() => {
+    switch (sizeIdentifierSize) {
+      case 1:
+        return { numberToEncode: 0, bytesRequired: 1 }
+      case 2:
+        return { numberToEncode: 1, bytesRequired: 2 }
+      case 4:
+        return { numberToEncode: 2, bytesRequired: 4 }
+      case 8:
+        return { numberToEncode: 3, bytesRequired: 8 }
+      case null:
+        const numberOfBytesRequired = getLeastNumberOfBytesToEncodeSize(byteLength)
+        switch (numberOfBytesRequired) {
+          case 1:
+            return { numberToEncode: 0, bytesRequired: 1 }
+          case 2:
+            return { numberToEncode: 1, bytesRequired: 2 }
+          case 4:
+            return { numberToEncode: 2, bytesRequired: 4 }
+          case 8:
+            return { numberToEncode: 3, bytesRequired: 8 }
+        }
+      default:
+        throw new XyoError(`This should never happen exception`, XyoErrors.CRITICAL)
+    }
+  })()
+
+  return bytesRequired as 1 | 2 | 4 | 8
+}
+
+export function getSizeHeader(byteLength: number, bytesRequired: number) {
+  let sizeBuffer = Buffer.alloc(bytesRequired)
+
+  switch (bytesRequired) {
+    case 1:
+      sizeBuffer.writeUInt8(byteLength + 1, 0)
+      break
+    case 2:
+      sizeBuffer.writeUInt16BE(byteLength + 2, 0)
+      break
+    case 4:
+      sizeBuffer.writeUInt32BE(byteLength + 4, 0)
+      break
+    case 8:
+      sizeBuffer = new BN(byteLength + 8).toBuffer('be', 8)
+      break
+    default:
+      throw new XyoError(`Could not serialize because size ${bytesRequired}`, XyoErrors.INVALID_PARAMETERS)
+  }
+
+  return sizeBuffer
+}
+
 /**
  * Builds a dynamic header based on the size of bytes for a schema
  *
@@ -203,7 +260,7 @@ export function serialize(bytes: Buffer, scheme: IXyoObjectPartialSchema): Buffe
  * @param {IXyoObjectPartialSchema} scheme The schema used to serialize it with
  * @returns {Buffer} Returns the header
  */
-export function getHeader(byteLength: number, scheme: IXyoObjectPartialSchema): Buffer {
+export function getHeader(byteLength: number, scheme: IXyoObjectPartialSchema, withoutSize: boolean = false): Buffer {
   const { numberToEncode, bytesRequired } = (() => {
     switch (scheme.sizeIdentifierSize) {
       case 1:
@@ -258,24 +315,14 @@ export function getHeader(byteLength: number, scheme: IXyoObjectPartialSchema): 
     return b1
   })()
 
-  let sizeBuffer = Buffer.alloc(bytesRequired)
-
-  switch (bytesRequired) {
-    case 1:
-      sizeBuffer.writeUInt8(byteLength + 1, 0)
-      break
-    case 2:
-      sizeBuffer.writeUInt16BE(byteLength + 2, 0)
-      break
-    case 4:
-      sizeBuffer.writeUInt32BE(byteLength + 4, 0)
-      break
-    case 8:
-      sizeBuffer = new BN(byteLength + 8).toBuffer('be', 8)
-      break
-    default:
-      throw new XyoError(`Could not serialize because size ${bytesRequired}`, XyoErrors.INVALID_PARAMETERS)
+  if (withoutSize) {
+    return Buffer.concat([
+      byte0,
+      byte1
+    ])
   }
+
+  const sizeBuffer = getSizeHeader(byteLength, bytesRequired)
 
   return Buffer.concat([
     byte0,
