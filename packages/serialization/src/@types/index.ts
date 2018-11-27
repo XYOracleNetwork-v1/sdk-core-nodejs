@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 27th November 2018 9:33:57 am
+ * @Last modified time: Tuesday, 27th November 2018 9:46:24 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -39,6 +39,15 @@ export interface IXyoSerializationService {
    * @memberof IXyoSerializationService
    */
   deserialize<T extends IXyoSerializableObject>(deserializable: BufferOrString): T
+
+  /**
+   * Creates a typed serializer
+   *
+   * @template T
+   * @returns {IXyoTypeSerializer<T>}
+   * @memberof IXyoSerializationService
+   */
+  getInstanceOfTypeSerializer<T extends IXyoSerializableObject>(): IXyoTypeSerializer<T>
 }
 
 export interface IXyoSerializationProvider<T> {
@@ -55,9 +64,6 @@ export interface IXyoSerializable<T> {
 export interface IXyoTypeSerializer<T> {
   serialize(object: T, serializationType?: SerializationType): BufferOrString
   deserialize(deserializable: BufferOrString): T
-  // getData(object: T): Buffer
-  // getHeader(size: number, t?: T): Buffer
-  // getId(t?: T): number
 }
 
 export interface IXyoSerializableObject {

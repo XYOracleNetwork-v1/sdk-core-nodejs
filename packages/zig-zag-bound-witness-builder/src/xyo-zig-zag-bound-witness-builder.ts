@@ -4,15 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-zig-zag-bound-witness-builder.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 26th November 2018 3:18:33 pm
+ * @Last modified time: Tuesday, 27th November 2018 10:36:12 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoSigner, IXyoPublicKey, IXyoSignature } from '@xyo-network/signing'
 import { IXyoPayload, XyoBoundWitnessSigningService, IXyoBoundWitness, XyoBaseBoundWitness } from '@xyo-network/bound-witness'
-import { XyoBoundWitnessTransfer } from './xyo-bound-witness-transfer'
-import { XyoError, XyoErrors } from '@xyo-network/errors'
 
 export class XyoZigZagBoundWitnessBuilder extends XyoBaseBoundWitness {
 
@@ -34,7 +32,6 @@ export class XyoZigZagBoundWitnessBuilder extends XyoBaseBoundWitness {
 
   private readonly dynamicSignatureSets: IXyoSignature[][] = []
 
-  /** True if the key and payloads of this party have been added to the bound-witness */
   private hasSentKeysAndPayload = false
 
   constructor (
@@ -69,12 +66,7 @@ export class XyoZigZagBoundWitnessBuilder extends XyoBaseBoundWitness {
     return this.dynamicPayloads
   }
 
-  public async incomingData(transfer: XyoBoundWitnessTransfer | undefined, endPoint: boolean) {
-    const keysToSend: IXyoPublicKey[][] = []
-    const payloadsToSend: IXyoPayload[] = []
-    const signatureToSend: IXyoSignature[][] = []
-    const signatureReceivedSize = (transfer && transfer.signatureToSend && transfer.signatureToSend.length) || 0
-
+  public async incomingData(transfer: IXyoBoundWitness | undefined, endPoint: boolean): Promise<IXyoBoundWitness> {
     if (transfer) {
       this.addTransfer(transfer)
     }
@@ -86,116 +78,74 @@ export class XyoZigZagBoundWitnessBuilder extends XyoBaseBoundWitness {
     }
 
     if (this.signatures.length !== this.publicKeys.length) {
-      if (this.signatures.length === 0 && !endPoint) {
-        this.publicKeys.forEach(key => keysToSend.push(key))
-        this.payloads.forEach(payload => payloadsToSend.push(payload))
-      } else {
-        await this.signForSelf()
-
-        for (let i = signatureReceivedSize + 1; i < this.publicKeys.length; i += 1) {
-          keysToSend.push(this.publicKeys[i])
-        }
-
-        for (let i = signatureReceivedSize + 1; i < this.payloads.length; i += 1) {
-          payloadsToSend.push(this.payloads[i])
-        }
-
-        for (let i = (this.signatures.length - signatureReceivedSize) - 1; i >= 0; i -= 1) {
-          signatureToSend.push(this.signatures[i])
-        }
-      }
+      return this.getReturnFromIncoming(transfer ? transfer.signatures.length : 0, endPoint)
     }
 
-    return new XyoBoundWitnessTransfer(keysToSend, payloadsToSend, signatureToSend)
+    return new InnerBoundWitness([], [], [])
   }
 
-  private makeSelfKeySet(): IXyoPublicKey[] {
-    const publicKeys: IXyoPublicKey[] = []
-
-    this.signers.forEach((signer) => {
-      const publicKey = signer.publicKey
-
-      const publicKeyValue = publicKey
-
-      if (publicKeyValue) {
-        publicKeys.push(publicKeyValue)
-      }
-    })
-
-    return publicKeys
+  private makeSelfKeySet() {
+    return this.signers.map(signer => signer.publicKey)
   }
 
-  /**
-   * Creates the signature set for this party and adds its to the bound-witness's
-   * signatures
-   */
+  private addTransfer(transfer: IXyoBoundWitness) {
+    transfer.publicKeys.forEach(pks => this.dynamicPublicKeys.push(pks))
+    transfer.payloads.forEach(pks => this.dynamicPayloads.push(pks))
+    transfer.signatures.forEach(pks => this.dynamicSignatureSets.push(pks))
+  }
+
+  private async getReturnFromIncoming (
+    signatureReceivedSize: number,
+    endPoint: boolean
+  ): Promise<IXyoBoundWitness> {
+
+    if (this.signatures.length === 0 && !endPoint) {
+      return this
+    }
+
+    return this.passAndSign(signatureReceivedSize)
+  }
+
+  private async passAndSign (signatureReceivedSize: number): Promise<IXyoBoundWitness> {
+    const keysToSend: IXyoPublicKey[][] = []
+    const payloadsToSend: IXyoPayload[] = []
+    const signatureToSend: IXyoSignature[][] = []
+
+    await this.signForSelf()
+
+    for (let i = signatureReceivedSize + 1; i < this.publicKeys.length; i += 1) {
+      keysToSend.push(this.publicKeys[i])
+    }
+
+    for (let i = signatureReceivedSize + 1; i < this.payloads.length; i += 1) {
+      payloadsToSend.push(this.payloads[i])
+    }
+
+    for (let i = (this.signatures.length - signatureReceivedSize) - 1; i >= 0; i -= 1) {
+      signatureToSend.push(this.signatures[i])
+    }
+
+    return new InnerBoundWitness(keysToSend, signatureToSend, payloadsToSend)
+  }
 
   private async signForSelf() {
     const signatureSet = await this.signBoundWitness()
     this.dynamicSignatureSets.unshift(signatureSet)
   }
 
-  /**
-   * For each signer that belongs to the owner of this bound-witness, this
-   * will create a signature for the particular signing algorithm.
-   */
-
   private async signBoundWitness(): Promise<IXyoSignature[]> {
-    return Promise.all(this.signers.map(async (signer) => {
-      const signature = await this.boundWitnessSigningService.sign(this as IXyoBoundWitness, signer)
-      return signature
-    }))
+    return Promise.all(this.signers.map(signer => this.boundWitnessSigningService.sign(this, signer)))
   }
+}
 
-  /**
-   * A helper function to integrate existing transfer data into the bound-witness
-   */
+    // tslint:disable-next-line:max-classes-per-file
+class InnerBoundWitness extends XyoBaseBoundWitness {
 
-  private addTransfer(transfer: XyoBoundWitnessTransfer) {
-    this.addIncomingKeys(transfer.keysToSend)
-    this.addIncomingPayload(transfer.payloadsToSend)
-    this.addIncomingSignatures(transfer.signatureToSend)
-  }
-
-  /**
-   * Adds other parties public keys into the bound-witness
-   */
-
-  private addIncomingKeys(incomingKeySets: IXyoPublicKey[][]) {
-    for (const incomingKeySet of incomingKeySets) {
-      if (incomingKeySet) {
-        this.dynamicPublicKeys.push(incomingKeySet)
-      } else {
-        throw new XyoError(`Error unpacking keyset`, XyoErrors.CRITICAL)
-      }
-    }
-  }
-
-  /**
-   * Adds other parties payloads into the bound-witness
-   */
-
-  private addIncomingPayload(incomingPayloads: IXyoPayload[]) {
-    for (const incomingPayload of incomingPayloads) {
-      if (incomingPayload) {
-        this.dynamicPayloads.push(incomingPayload)
-      } else {
-        throw new XyoError(`Error unpacking payload`, XyoErrors.CRITICAL)
-      }
-    }
-  }
-
-  /**
-   * Adds other parties signatures into the bound-witness
-   */
-
-  private addIncomingSignatures(incomingSignatures: IXyoSignature[][]) {
-    for (const incomingSignatureSet of incomingSignatures) {
-      if (incomingSignatureSet) {
-        this.dynamicSignatureSets.unshift(incomingSignatureSet)
-      } else {
-        throw new XyoError(`Error unpacking signatureSet`, XyoErrors.CRITICAL)
-      }
-    }
+  constructor (
+    public readonly publicKeys: IXyoPublicKey[][],
+    public readonly signatures: IXyoSignature[][],
+    public readonly payloads: IXyoPayload[]
+  ) {
+    super()
   }
 }

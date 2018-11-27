@@ -4,14 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-standard-client-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 4:06:08 pm
+ * @Last modified time: Tuesday, 27th November 2018 10:38:23 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import {
-  XyoZigZagBoundWitnessBuilder,
-  XyoBoundWitnessTransfer
+  XyoZigZagBoundWitnessBuilder
 } from '@xyo-network/zig-zag-bound-witness-builder'
 
 import { IXyoBoundWitness, IXyoPayload, XyoBoundWitnessSigningService } from '@xyo-network/bound-witness'
@@ -36,7 +35,7 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements
     private readonly signers: IXyoSigner[],
     private readonly payload: IXyoPayload,
     private readonly boundWitnessSigningService: XyoBoundWitnessSigningService,
-    private readonly boundWitnessTransferSerializer: IXyoTypeSerializer<XyoBoundWitnessTransfer>
+    private readonly boundWitnessSerializer: IXyoTypeSerializer<IXyoBoundWitness>
   ) {
     super()
   }
@@ -68,11 +67,11 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements
             throw new XyoError(`No initiation data found`, XyoErrors.CRITICAL)
           }
 
-          const boundWitnessTransfer1 = this.boundWitnessTransferSerializer.deserialize(networkPipe.initiationData)
+          const boundWitnessTransfer1 = this.boundWitnessSerializer.deserialize(networkPipe.initiationData)
           const boundWitnessTransfer2 = await boundWitness.incomingData(boundWitnessTransfer1, true)
 
           /** Serialize the transfer value */
-          const bytes = this.boundWitnessTransferSerializer.serialize(boundWitnessTransfer2, 'buffer') as Buffer
+          const bytes = this.boundWitnessSerializer.serialize(boundWitnessTransfer2, 'buffer') as Buffer
 
           if (!disconnected) {
             /* Send the message and wait for reply */
@@ -91,7 +90,7 @@ export class XyoBoundWitnessStandardClientInteraction extends XyoBase implements
             this.logInfo(`Received bound witness response`)
 
             /** Deserialize bytes into bound witness transfer  */
-            const transferObj = this.boundWitnessTransferSerializer.deserialize(response)
+            const transferObj = this.boundWitnessSerializer.deserialize(response)
 
             /** Add transfer to bound witness */
             await boundWitness.incomingData(transferObj, false)
