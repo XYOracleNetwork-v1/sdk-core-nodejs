@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-secp256k1-signer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 2:59:48 pm
+ * @Last modified time: Monday, 26th November 2018 3:45:43 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,7 +18,8 @@ export class XyoEcdsaSecp256k1Signer extends XyoBase implements IXyoSigner {
   constructor (
     private readonly sign: (data: Buffer) => Promise<IXyoSignature>,
     private readonly getPublicXY: () => {x: Buffer, y: Buffer},
-    private readonly getPrivateKey: () => string
+    private readonly getPrivateKey: () => string,
+    private readonly ecdsaSecp256k1UnCompressedPublicKeyObjectSchemaId: number
   ) {
     super()
   }
@@ -39,7 +40,7 @@ export class XyoEcdsaSecp256k1Signer extends XyoBase implements IXyoSigner {
 
   get publicKey (): XyoEcdsaSecp256k1UnCompressedPublicKey {
     const { x, y } = this.getPublicXY()
-    return new XyoEcdsaSecp256k1UnCompressedPublicKey(x, y)
+    return new XyoEcdsaSecp256k1UnCompressedPublicKey(x, y, this.ecdsaSecp256k1UnCompressedPublicKeyObjectSchemaId)
   }
 
   /**

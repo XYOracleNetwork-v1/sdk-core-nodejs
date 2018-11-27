@@ -20,5 +20,8 @@
     "src/**/spec",
     "src/**/*.spec.ts"
   ],
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "references": [
+    {"path": "../serialization"}
+  ]
 }

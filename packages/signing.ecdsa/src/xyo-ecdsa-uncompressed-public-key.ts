@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-uncompressed-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 2:13:06 pm
+ * @Last modified time: Monday, 26th November 2018 3:43:58 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,6 +20,8 @@ import { writePointTo32ByteBuffer } from '@xyo-network/buffer-utils'
  */
 
 export abstract class XyoEcdsaUncompressedPublicKey extends XyoBase implements IXyoPublicKey {
+
+  public abstract schemaObjectId: number
   public abstract x: Buffer
   public abstract y: Buffer
 
@@ -28,5 +30,9 @@ export abstract class XyoEcdsaUncompressedPublicKey extends XyoBase implements I
       writePointTo32ByteBuffer(this.x),
       writePointTo32ByteBuffer(this.y)
     ])
+  }
+
+  public serialize(): Buffer {
+    return this.getRawPublicKey()
   }
 }

@@ -4,13 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: rsa-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 3:38:37 pm
+ * @Last modified time: Monday, 26th November 2018 3:35:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoSignature, IXyoPublicKey } from '@xyo-network/signing'
 import { XyoBase } from '@xyo-network/base'
+import { IXyoSerializableObject } from '@xyo-network/serialization'
 
 /**
  * An RSA signature
@@ -19,9 +20,14 @@ export class XyoRsaSignature  extends XyoBase implements IXyoSignature {
 
   constructor (
     public readonly rawSignature: Buffer,
-    public readonly verifySign: (signature: IXyoSignature, data: Buffer, publicKey: IXyoPublicKey) => Promise<boolean>
+    public readonly verifySign: (signature: IXyoSignature, data: Buffer, publicKey: IXyoPublicKey) => Promise<boolean>,
+    public readonly schemaObjectId: number
   ) {
     super()
+  }
+
+  public serialize(): Buffer | IXyoSerializableObject[] {
+    return this.rawSignature
   }
 
   /**

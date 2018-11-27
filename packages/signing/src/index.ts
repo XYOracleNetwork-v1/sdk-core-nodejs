@@ -4,15 +4,17 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 19th November 2018 5:48:19 pm
+ * @Last modified time: Monday, 26th November 2018 3:09:03 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
+import { IXyoSerializableObject } from '@xyo-network/serialization'
+
 /**
  * Xyo Public key wrapper
  */
-export interface IXyoPublicKey {
+export interface IXyoPublicKey extends IXyoSerializableObject {
 
   /** Returns the raw bytes of the public-key */
   getRawPublicKey(): Buffer
@@ -21,7 +23,7 @@ export interface IXyoPublicKey {
 /**
  * Xyo Signature Wrapper
  */
-export interface IXyoSignature {
+export interface IXyoSignature extends IXyoSerializableObject {
 
   /**
    * Subclasses will return a binary-representation of the signature

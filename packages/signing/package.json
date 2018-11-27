@@ -6,6 +6,9 @@
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
+  "dependencies": {
+    "@xyo-network/serialization": "^0.2.0"
+  },
   "devDependencies": {
     "@types/node": "^10.7.1",
     "@types/jest": "^23.3.1",

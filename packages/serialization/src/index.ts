@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 26th November 2018 2:16:49 pm
+ * @Last modified time: Monday, 26th November 2018 4:32:24 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -134,6 +134,26 @@ export function findSchemaById(schemaId: number, objectSchema: IXyoObjectSchema)
   }
 
   return objectSchema[key]
+}
+
+export function typedArrayOf<T extends IXyoSerializableObject>(tCollection: T[]): IXyoSerializableObject {
+  // TODO
+  throw new Error(`Not yet implemented`)
+}
+
+export function untypedArrayOf<T extends IXyoSerializableObject>(tCollection: T[]): IXyoSerializableObject {
+  // TODO
+  throw new Error(`Not yet implemented`)
+}
+
+export function fromArray<T extends IXyoSerializableObject>(s: IXyoSerializableObject): T[] {
+  // TODO
+  throw new Error(`Not yet implemented`)
+}
+
+export function unSignedNumberToBuffer(num: number): Buffer {
+  // TODO
+  throw new Error(`Not yet implemented`)
 }
 
 interface IBufferIdPair {

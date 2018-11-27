@@ -4,12 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 2:00:12 pm
+ * @Last modified time: Monday, 26th November 2018 4:20:32 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-export interface IXyoHash {
+import { IXyoSerializableObject } from '@xyo-network/serialization'
+
+export interface IXyoHash extends IXyoSerializableObject {
   getHash(): Buffer
   verifyHash(data: Buffer): Promise<boolean>
 }

@@ -21,9 +21,10 @@
     "src/**/*.spec.ts"
   ],
   "include": ["src/**/*"],
-  "references": [{
-    "path": "../errors",
-  }, {
-    "path": "../base",
-  }]
+  "references": [
+    { "path": "../errors"}, 
+    { "path": "../serialization"}, 
+    { "path": "../object-schema"}, 
+    { "path": "../base"}
+  ]
 }

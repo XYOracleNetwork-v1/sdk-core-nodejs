@@ -5,7 +5,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-wit
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 1:37:31 pm
+ * @Last modified time: Monday, 26th November 2018 4:32:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,15 +13,17 @@
 import { XyoBase } from "@xyo-network/base"
 import { IXyoOriginChainRepository } from "@xyo-network/origin-chain"
 import { IXyoBoundWitnessPayloadProvider } from "./@types"
-import { IXyoPayload } from "@xyo-network/bound-witness"
+import { XyoBasePayload, IXyoPayload } from "@xyo-network/bound-witness"
+import { IXyoSerializableObject, unSignedNumberToBuffer } from "@xyo-network/serialization"
+import { schema } from "@xyo-network/object-schema"
 
 export class XyoBoundWitnessPayloadProvider extends XyoBase implements IXyoBoundWitnessPayloadProvider {
 
   /** A mapping of name to unsigned-heuristic-providers */
-  private readonly unsignedHeuristicsProviders: {[s: string]: () => Promise<any>} = {}
+  private readonly unsignedHeuristicsProviders: {[s: string]: () => Promise<IXyoSerializableObject>} = {}
 
   /** A mapping of name to signed-heuristic-providers */
-  private readonly signedHeuristicsProviders: {[s: string]: () => Promise<any>} = {}
+  private readonly signedHeuristicsProviders: {[s: string]: () => Promise<IXyoSerializableObject>} = {}
 
   /**
    * A helper function for composing the payload values that will go
@@ -32,8 +34,8 @@ export class XyoBoundWitnessPayloadProvider extends XyoBase implements IXyoBound
 
     const signedHeuristics = await this.getHeuristics(true)
     const unsignedHeuristics = await this.getHeuristics(false)
-    const unsignedPayload = ([] as any[]).concat(unsignedHeuristics)
-    const signedPayload: any[] = ([] as any[]).concat(signedHeuristics)
+    const unsignedPayload = ([] as IXyoSerializableObject[]).concat(unsignedHeuristics)
+    const signedPayload: IXyoSerializableObject[] = ([] as IXyoSerializableObject[]).concat(signedHeuristics)
     const previousHash = await originState.getPreviousHash()
     const index = await originState.getIndex()
     const nextPublicKey = await originState.getNextPublicKey()
@@ -46,12 +48,18 @@ export class XyoBoundWitnessPayloadProvider extends XyoBase implements IXyoBound
       signedPayload.push(nextPublicKey)
     }
 
-    signedPayload.push(index)
-    const payload: IXyoPayload = {
-      signedPayload,
-      unsignedPayload
+    signedPayload.push({
+      schemaObjectId: schema.index.id,
+      serialize: () => unSignedNumberToBuffer(index)
+    })
+
+    // tslint:disable-next-line:max-classes-per-file
+    class OnTheFlyPayload extends XyoBasePayload {
+      public readonly signedPayload = signedPayload
+      public readonly unsignedPayload = unsignedPayload
     }
-    return payload
+
+    return new OnTheFlyPayload()
   }
 
   /**
@@ -63,7 +71,7 @@ export class XyoBoundWitnessPayloadProvider extends XyoBase implements IXyoBound
    * @param providerFn A callback function that asynchronously returns a value
    */
 
-  public addHeuristicsProvider(name: string, signed: boolean, providerFn: () => Promise<any>) {
+  public addHeuristicsProvider(name: string, signed: boolean, providerFn: () => Promise<IXyoSerializableObject>) {
     if (signed) {
       this.signedHeuristicsProviders[name] = providerFn
     } else {
@@ -90,7 +98,7 @@ export class XyoBoundWitnessPayloadProvider extends XyoBase implements IXyoBound
    * their values
    */
 
-  private async getHeuristics(signed: boolean): Promise<any[]> {
+  private async getHeuristics(signed: boolean): Promise<IXyoSerializableObject[]> {
     const heuristicsProvider = signed ? this.signedHeuristicsProviders : this.unsignedHeuristicsProviders
 
     if (Object.keys(heuristicsProvider).length === 0) {

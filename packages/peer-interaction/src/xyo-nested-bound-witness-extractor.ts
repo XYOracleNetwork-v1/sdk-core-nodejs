@@ -4,12 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-nested-bound-witness-extractor-utils.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 9:42:42 am
+ * @Last modified time: Monday, 26th November 2018 4:13:37 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoBoundWitness } from '@xyo-network/bound-witness'
+import { fromArray } from '@xyo-network/serialization'
 
 /**
  *  This class is useful for extracting out bridged blocks nested inside of bound-witnesses
@@ -50,7 +51,7 @@ export class XyoNestedBoundWitnessExtractor {
           return
         }
 
-        const nestedBridgeBlockSet = unsignedPayloadItem as IXyoBoundWitness[]
+        const nestedBridgeBlockSet = fromArray<IXyoBoundWitness>(unsignedPayloadItem)
         nestedBridgeBlockSet.forEach((nestedBoundWitness) => {
           boundWitnessContainer.push(nestedBoundWitness)
           this.recursivelyExtractNestedBoundWitnesses(nestedBoundWitness, boundWitnessContainer)

@@ -4,12 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 1:30:39 pm
+ * @Last modified time: Monday, 26th November 2018 3:13:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoSignature, IXyoPublicKey } from '@xyo-network/signing'
+import { IXyoSerializableObject } from '@xyo-network/serialization'
 
 /**
  * A payload encapsulates the meta data being shared between parties
@@ -17,23 +18,23 @@ import { IXyoSignature, IXyoPublicKey } from '@xyo-network/signing'
  *
  * It is broken up between signed and unsigned portions
  */
-export interface IXyoPayload {
+export interface IXyoPayload extends IXyoSerializableObject {
 
   /**
    * The signed portion of the payload
    *
-   * @type {any[]}
+   * @type {IXyoSerializableObject[]}
    * @memberof IXyoPayload
    */
-  readonly signedPayload: any[]
+  readonly signedPayload: IXyoSerializableObject[]
 
   /**
    * The unsigned portion of the payload
    *
-   * @type {any[]}
+   * @type {IXyoSerializableObject[]}
    * @memberof IXyoPayload
    */
-  readonly unsignedPayload: any[]
+  readonly unsignedPayload: IXyoSerializableObject[]
 }
 
 /**
@@ -54,7 +55,7 @@ export interface IXyoPayload {
  * @export
  * @interface IXyoBoundWitness
  */
-export interface IXyoBoundWitness {
+export interface IXyoBoundWitness extends IXyoSerializableObject {
 
   /**
    * A collection of publicKey collections associated with the

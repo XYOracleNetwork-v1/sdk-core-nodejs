@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 3:24:34 pm
+ * @Last modified time: Monday, 26th November 2018 3:41:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,6 +14,8 @@ import { XyoBase } from '@xyo-network/base'
 
 export class XyoRsaPublicKey extends XyoBase implements IXyoPublicKey {
 
+  public static schemaObjectId = 0x11
+
   /**
    * Creates a new instance of a XyoRsaPublicKey
    *
@@ -22,6 +24,14 @@ export class XyoRsaPublicKey extends XyoBase implements IXyoPublicKey {
 
   constructor(public readonly modulus: Buffer) {
     super()
+  }
+
+  public get schemaObjectId (): number {
+    return XyoRsaPublicKey.schemaObjectId
+  }
+
+  public serialize() {
+    return this.modulus
   }
 
   public getReadableName(): string {

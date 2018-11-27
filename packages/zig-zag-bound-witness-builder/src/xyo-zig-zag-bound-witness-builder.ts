@@ -4,18 +4,17 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-zig-zag-bound-witness-builder.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 19th November 2018 3:29:53 pm
+ * @Last modified time: Monday, 26th November 2018 3:18:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBase } from '@xyo-network/base'
 import { IXyoSigner, IXyoPublicKey, IXyoSignature } from '@xyo-network/signing'
-import { IXyoPayload, XyoBoundWitnessSigningService, IXyoBoundWitness } from '@xyo-network/bound-witness'
+import { IXyoPayload, XyoBoundWitnessSigningService, IXyoBoundWitness, XyoBaseBoundWitness } from '@xyo-network/bound-witness'
 import { XyoBoundWitnessTransfer } from './xyo-bound-witness-transfer'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 
-export class XyoZigZagBoundWitnessBuilder extends XyoBase {
+export class XyoZigZagBoundWitnessBuilder extends XyoBaseBoundWitness {
 
   private readonly dynamicPayloads: IXyoPayload[] = []
 

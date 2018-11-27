@@ -26,6 +26,7 @@
     {"path": "../errors"},
     {"path": "../hashing"},
     {"path": "../signing"},
-    {"path": "../buffer-utils"}
+    {"path": "../buffer-utils"},
+    {"path": "../object-schema"}
   ]
 }

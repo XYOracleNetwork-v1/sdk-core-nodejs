@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 3:44:03 pm
+ * @Last modified time: Monday, 26th November 2018 3:37:31 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -22,7 +22,10 @@ import { XyoBase } from '@xyo-network/base'
 
 export class XyoRsaShaSignerProvider extends XyoBase implements IXyoSignerProvider {
 
-  constructor (private readonly signingScheme: 'pkcs1-sha1' | 'pkcs1-sha256') {
+  constructor (
+    private readonly signingScheme: 'pkcs1-sha1' | 'pkcs1-sha256',
+    private readonly rsaSignatureObjectSchemaId: number
+  ) {
     super()
   }
 
@@ -52,7 +55,10 @@ export class XyoRsaShaSignerProvider extends XyoBase implements IXyoSignerProvid
       () => key.exportKey('pkcs8-private-pem'),
 
       // verify signature
-      this.verifySign.bind(this)
+      this.verifySign.bind(this),
+
+      // The id of the schema
+      this.rsaSignatureObjectSchemaId
     )
   }
 

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-secp256k1-signer-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 2:57:52 pm
+ * @Last modified time: Monday, 26th November 2018 3:50:35 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -31,7 +31,10 @@ export class XyoEcdsaSecp256k1SignerProvider extends XyoBase implements IXyoSign
    * @param {IXyoHashProvider} [hashProvider] An optional HashProvider
    * @memberof XyoEcdsaSecp256k1SignerProvider
    */
-  constructor(public hashProvider?: IXyoHashProvider) {
+  constructor(
+    public hashProvider: IXyoHashProvider | undefined,
+    private readonly ecdsaSecp256k1UnCompressedPublicKeyObjectSchemaId: number
+  ) {
     super()
   }
 
@@ -62,7 +65,8 @@ export class XyoEcdsaSecp256k1SignerProvider extends XyoBase implements IXyoSign
       },
       () => {
         return key.getPrivate('hex')
-      }
+      },
+      this.ecdsaSecp256k1UnCompressedPublicKeyObjectSchemaId
     )
   }
 

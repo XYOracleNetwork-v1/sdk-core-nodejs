@@ -24,6 +24,8 @@
   "references": [
     { "path": "../base"},
     { "path": "../errors"},
-    { "path": "../signing"}
+    { "path": "../signing"},
+    { "path": "../serialization"},
+    { "path": "../object-schema"}
   ]
 }

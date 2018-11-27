@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha-signer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 3:40:39 pm
+ * @Last modified time: Monday, 26th November 2018 3:36:01 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -25,7 +25,8 @@ export class XyoRsaShaSigner extends XyoBase implements IXyoSigner {
     public readonly getSignature: (data: Buffer) => Buffer,
     public readonly getModulus: () => Buffer,
     public readonly getPrivateKey: () => string,
-    public readonly verifySign: (signature: IXyoSignature, data: Buffer, publicKey: IXyoPublicKey) => Promise<boolean>
+    public readonly verifySign: (signature: IXyoSignature, data: Buffer, publicKey: IXyoPublicKey) => Promise<boolean>,
+    private readonly rsaSignatureSchemaId: number
   ) {
     super()
   }
@@ -38,7 +39,7 @@ export class XyoRsaShaSigner extends XyoBase implements IXyoSigner {
 
   public async signData(data: Buffer): Promise <IXyoSignature> {
     const rawSignature = this.getSignature(data)
-    return new XyoRsaSignature(rawSignature, this.verifySign.bind(this))
+    return new XyoRsaSignature(rawSignature, this.verifySign.bind(this), this.rsaSignatureSchemaId)
   }
 
   /**

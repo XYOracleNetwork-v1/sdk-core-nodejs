@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 2:01:50 pm
+ * @Last modified time: Monday, 26th November 2018 4:28:03 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,9 @@
 import { IXyoHashProvider } from './@types'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { XyoNativeBaseHashProvider } from './xyo-native-base-hash-provider'
+import { schema } from '@xyo-network/object-schema'
 
+export { XyoBaseHash } from './xyo-base-hash'
 export { IXyoHash, IXyoHashProvider } from './@types'
 
 /**
@@ -44,19 +46,10 @@ export function getHashingProvider(hashType: HASH_TYPE): IXyoHashProvider {
 
   switch (hashType) {
     case "sha256":
-      hashProvider = new XyoNativeBaseHashProvider('sha256')
+      hashProvider = new XyoNativeBaseHashProvider('sha256', schema.sha256Hash.id)
       break
     case "sha512":
-      hashProvider = new XyoNativeBaseHashProvider('sha512')
-      break
-    case "md5":
-      hashProvider = new XyoNativeBaseHashProvider('md5')
-      break
-    case "sha1":
-      hashProvider = new XyoNativeBaseHashProvider('sha1')
-      break
-    case "sha224":
-      hashProvider = new XyoNativeBaseHashProvider('sha224')
+      hashProvider = new XyoNativeBaseHashProvider('sha512', schema.sha512Hash.id)
       break
     default:
       throw new XyoError(`This should never happen`, XyoErrors.CRITICAL)

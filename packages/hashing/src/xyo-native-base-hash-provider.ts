@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-native-base-hash-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 2:00:06 pm
+ * @Last modified time: Monday, 26th November 2018 4:25:36 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,6 +12,7 @@
 import crypto from 'crypto'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { IXyoHashProvider, IXyoHash } from './@types'
+import { XyoBaseHash } from './xyo-base-hash'
 
 /**
  * A hash provider that wraps and utilizes the natives nodejs hash functionality
@@ -26,7 +27,8 @@ export class XyoNativeBaseHashProvider implements IXyoHashProvider {
    */
 
   constructor (
-    private readonly hashAlgorithm: string
+    private readonly hashAlgorithm: string,
+    private readonly hashObjectSchemaId: number
   ) {}
 
   /**
@@ -41,7 +43,7 @@ export class XyoNativeBaseHashProvider implements IXyoHashProvider {
       const hashPromise = new Promise((resolve, reject) => {
         hash.on('readable', () => {
           const hashOfData = hash.read()
-          resolve(new XyoHash(hashOfData as Buffer, this))
+          resolve(new XyoHash(hashOfData as Buffer, this, this.hashObjectSchemaId))
         })
       }) as Promise<IXyoHash>
 
@@ -69,11 +71,15 @@ export class XyoNativeBaseHashProvider implements IXyoHashProvider {
 }
 
 // tslint:disable-next-line:max-classes-per-file
-class XyoHash implements IXyoHash {
+class XyoHash extends XyoBaseHash implements IXyoHash {
+
   constructor(
     private readonly hash: Buffer,
-    private readonly hashProvider: IXyoHashProvider
-  ) {}
+    private readonly hashProvider: IXyoHashProvider,
+    public readonly schemaObjectId: number
+  ) {
+    super()
+  }
 
   public getHash() {
     return this.hash
