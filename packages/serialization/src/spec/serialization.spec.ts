@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: serialization.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 26th November 2018 2:48:20 pm
+ * @Last modified time: Tuesday, 27th November 2018 12:30:36 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -52,7 +52,6 @@ describe(`Serialization`, () => {
       }
     }, xCollection.serialize())
 
-    console.log(result.toString('hex'))
     expect(Buffer.from([
       0x00, // size bits with reserved bits
       0x01, // x-id
@@ -145,6 +144,30 @@ describe(`Serialization`, () => {
       0x02, // size of second element
       0x02 // value of second element
     ]).equals(result)).toBe(true)
+  })
+
+  it(`Should serialize a collection of untyped collections with 0 objects`, () => {
+    const xCollectionSet = new XCollectionSet([])
+    const result = resolveSerializablesToBuffer(3, {
+      x: {
+        id: 1,
+        sizeIdentifierSize: null,
+        iterableType: 'not-iterable'
+      },
+      xCollection: {
+        id: 2,
+        sizeIdentifierSize: null,
+        iterableType: 'iterable-untyped'
+      },
+      xCollectionSet: {
+        id: 3,
+        sizeIdentifierSize: null,
+        iterableType: 'iterable-typed'
+      }
+    }, xCollectionSet.serialize())
+
+    console.log(result.toString('hex'))
+    expect(Buffer.from([]).equals(result)).toBe(true)
   })
 
   it(`Should serialize a collection of untyped collections 2 objects`, () => {

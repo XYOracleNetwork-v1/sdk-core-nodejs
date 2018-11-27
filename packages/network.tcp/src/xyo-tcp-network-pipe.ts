@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network-pipe.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 10:37:00 am
+ * @Last modified time: Tuesday, 27th November 2018 12:36:34 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -81,6 +81,8 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
 
   public send(message: Buffer, awaitResponse?: boolean | undefined): Promise<Buffer | undefined> {
     const networkMessage = this.padBufferWithSize(message)
+    this.logInfo(`SENDING MESSAGE ${message.toString('hex')}`)
+    this.logInfo(`SENDING NETWORK MESSAGE ${networkMessage.toString('hex')}`)
     this.connectionResult.socket.write(networkMessage)
 
     if (typeof awaitResponse === 'boolean' && !awaitResponse) {

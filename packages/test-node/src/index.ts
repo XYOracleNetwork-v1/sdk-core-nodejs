@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 27th November 2018 10:57:23 am
+ * @Last modified time: Tuesday, 27th November 2018 11:08:55 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -275,6 +275,7 @@ export class XyoTestNode extends XyoBase {
 }
 
 if (require.main === module) {
+  console.log('got here')
   const testNode = new XyoTestNode()
   testNode.start()
 }

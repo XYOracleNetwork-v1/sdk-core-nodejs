@@ -37,6 +37,7 @@
     { "path": "../hashing"},
     { "path": "../zig-zag-bound-witness-builder"},
     { "path": "../object-schema"},
+    { "path": "../signing"},
     { "path": "../storage"},
   ]
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 26th November 2018 5:06:07 pm
+ * @Last modified time: Tuesday, 27th November 2018 12:25:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -29,6 +29,10 @@ export function resolveSerializablesToBuffer(
   schemaId: number,
   objectSchema: IXyoObjectSchema,
   serializables: IXyoSerializableObject[]): Buffer {
+
+  if (serializables.length === 0) {
+    return Buffer.alloc(0)
+  }
 
   const partialSchema = findSchemaById(schemaId, objectSchema)
   if (partialSchema.iterableType === 'not-iterable') {
@@ -128,6 +132,9 @@ export function typedArrayOf<T extends IXyoSerializableObject>(tCollection: T[])
   return {
     schemaObjectId: schema.typedSet.id,
     serialize: () => {
+      if (tCollection.length === 0) {
+        return Buffer.alloc(0)
+      }
       return tCollection
     }
   }
@@ -137,6 +144,9 @@ export function untypedArrayOf<T extends IXyoSerializableObject>(tCollection: T[
   return {
     schemaObjectId: schema.untypedSet.id,
     serialize: () => {
+      if (tCollection.length === 0) {
+        return Buffer.alloc(0)
+      }
       return tCollection
     }
   }

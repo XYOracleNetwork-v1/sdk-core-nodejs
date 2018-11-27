@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-server-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 27th November 2018 10:37:46 am
+ * @Last modified time: Tuesday, 27th November 2018 1:12:59 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -73,7 +73,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
 
           /** Serialize the transfer value */
           const bytes = this.boundWitnessSerializer.serialize(boundWitnessTransfer1, 'buffer') as Buffer
-
+          this.logInfo(`BoundWitness Step 1: ${bytes.toString('hex')}`)
           /** Tell the other node this is the catalogue item you chose */
           const catalogueBuffer = Buffer.alloc(CATALOGUE_LENGTH_IN_BYTES)
           catalogueBuffer.writeUInt32BE(this.catalogueItem, 0)
