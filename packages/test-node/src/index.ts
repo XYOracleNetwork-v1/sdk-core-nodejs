@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 4:13:59 pm
+ * @Last modified time: Tuesday, 27th November 2018 9:34:04 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -26,10 +26,11 @@ import {
 } from '@xyo-network/peer-interaction'
 import { IXyoOriginChainRepository, XyoOriginChainStateInMemoryRepository } from '@xyo-network/origin-chain'
 import { IXyoOriginBlockRepository, XyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
-import { XyoBoundWitnessValidator, IXyoBoundWitnessSigningDataProducer, XyoBoundWitnessSigningService, IXyoBoundWitness, IXyoPayload } from '@xyo-network/bound-witness'
-import { IXyoSerializationService, IXyoTypeSerializer } from '@xyo-network/serialization'
+import { XyoBoundWitnessValidator, IXyoBoundWitnessSigningDataProducer, XyoBoundWitnessSigningService, IXyoBoundWitness, IXyoPayload, XyoBoundWitnessSigningDataProducer } from '@xyo-network/bound-witness'
+import { IXyoSerializationService, IXyoTypeSerializer, XyoSerializationService } from '@xyo-network/serialization'
 import { XyoInMemoryStorageProvider } from '@xyo-network/storage'
 import { XyoBoundWitnessTransfer } from '@xyo-network/zig-zag-bound-witness-builder'
+import { schema } from '@xyo-network/object-schema'
 
 export class XyoTestNode extends XyoBase {
 
@@ -196,19 +197,21 @@ export class XyoTestNode extends XyoBase {
   }
 
   private getExtractIndexFromPayloadFn(): (payload: IXyoPayload) => number | undefined {
-    throw new Error(`Not yet implemented`)
+    return (payload: IXyoPayload) => {
+      throw new Error(`Not yet implemented`)
+    }
   }
 
   private getBoundWitnessSigningDataProducer(): IXyoBoundWitnessSigningDataProducer {
-    throw new Error(`Not implemented yet`)
+    return new XyoBoundWitnessSigningDataProducer(schema)
   }
 
   private getNestedBoundWitnessExtractor(): XyoNestedBoundWitnessExtractor {
-    throw new Error(`Not implemented yet`)
+    return new XyoNestedBoundWitnessExtractor(() => false) // TODO
   }
 
   private getSerializationService(): IXyoSerializationService  {
-    throw new Error(`Not implemented yet`)
+    return new XyoSerializationService()
   }
 
   private getBoundWitnessSerializer(): IXyoTypeSerializer<IXyoBoundWitness>  {

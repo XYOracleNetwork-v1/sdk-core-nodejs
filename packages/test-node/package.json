@@ -21,6 +21,7 @@
     "@xyo-network/peer-interaction-handlers": "^0.2.0",
     "@xyo-network/peer-connections": "^0.2.0",
     "@xyo-network/zig-zag-bound-witness-builder": "^0.2.0",
+    "@xyo-network/object-schema": "^0.2.0",
     "@xyo-network/storage": "^0.2.0"
   },
   "devDependencies": {

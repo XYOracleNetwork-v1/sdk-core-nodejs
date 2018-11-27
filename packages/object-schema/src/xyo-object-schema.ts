@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-schema.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 26th November 2018 1:10:07 pm
+ * @Last modified time: Monday, 26th November 2018 5:04:08 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -345,4 +345,16 @@ export function getLeastNumberOfBytesToEncodeSize(sizeOfObject: number): 1 | 2 |
   }
 
   return 8
+}
+
+export function findSchemaById(schemaId: number, objectSchema: IXyoObjectSchema) {
+  const key = Object.keys(objectSchema).find((schemaKey) => {
+    return objectSchema[schemaKey].id === schemaId
+  })
+
+  if (!key) {
+    throw new XyoError(`Could not find a serializer with id ${schemaId}`, XyoErrors.CRITICAL)
+  }
+
+  return objectSchema[key]
 }

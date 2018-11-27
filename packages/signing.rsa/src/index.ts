@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 26th November 2018 4:00:24 pm
+ * @Last modified time: Monday, 26th November 2018 4:56:17 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,9 +15,6 @@ import { schema } from '@xyo-network/object-schema'
 
 /** The types of signing algorithm supported */
 export type SignerProviderType = (
-
-  /** Will hash the data using sha1 before signing */
-  'rsa-sha1' |
 
   /** Will hash the data using sha256 before signing */
   'rsa-sha256'
@@ -39,8 +36,6 @@ export function getSignerProvider(signerProviderType: SignerProviderType): XyoRs
 
   let signerProvider: XyoRsaShaSignerProvider
   switch (signerProviderType) {
-    case 'rsa-sha1':
-      throw new Error(`Not yet supported`)
     case 'rsa-sha256':
       signerProvider = new XyoRsaShaSignerProvider("pkcs1-sha256", schema.rsaWithSha256Signature.id)
       break

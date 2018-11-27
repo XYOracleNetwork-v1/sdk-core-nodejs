@@ -26,6 +26,7 @@
     { "path": "../base" },
     { "path": "../errors" },
     { "path": "../hashing" },
+    { "path": "../object-schema" },
     { "path": "../serialization" }
   ]
 }

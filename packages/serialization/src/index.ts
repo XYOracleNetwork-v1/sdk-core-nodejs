@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 26th November 2018 4:32:24 pm
+ * @Last modified time: Monday, 26th November 2018 5:06:07 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoSerializableObject } from './@types'
-import { IXyoObjectSchema, IIterableType, getNumberOfBytesRequiredForSizeBuffer, getSizeHeader, getHeader } from '@xyo-network/object-schema'
+import { IXyoObjectSchema, IIterableType, getNumberOfBytesRequiredForSizeBuffer, getSizeHeader, getHeader, schema, findSchemaById } from '@xyo-network/object-schema'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 
 export {
@@ -27,10 +27,10 @@ export { XyoSerializationService } from './xyo-serialization-service'
 
 export function resolveSerializablesToBuffer(
   schemaId: number,
-  schema: IXyoObjectSchema,
+  objectSchema: IXyoObjectSchema,
   serializables: IXyoSerializableObject[]): Buffer {
 
-  const partialSchema = findSchemaById(schemaId, schema)
+  const partialSchema = findSchemaById(schemaId, objectSchema)
   if (partialSchema.iterableType === 'not-iterable') {
     throw new XyoError(`Incorrect schema iterable type for ${schemaId}`, XyoErrors.CRITICAL)
   }
@@ -72,7 +72,7 @@ export function resolveSerializablesToBuffer(
       return bufferCollection
     }
 
-    const resolveBuffer = resolveSerializablesToBuffer(serializable.schemaObjectId, schema, result)
+    const resolveBuffer = resolveSerializablesToBuffer(serializable.schemaObjectId, objectSchema, result)
     highestByteAmount = Math.max(resolveBuffer.length, highestByteAmount)
     bufferCollection.push({
       id: serializable.schemaObjectId,
@@ -90,7 +90,7 @@ export function resolveSerializablesToBuffer(
       collection.push(component.buffer)
       return collection
     }, [] as Buffer[])
-    const innerSchema = findSchemaById(components[0].id, schema)
+    const innerSchema = findSchemaById(components[0].id, objectSchema)
     return Buffer.concat([
       getHeader(
         highestByteAmount,
@@ -107,7 +107,7 @@ export function resolveSerializablesToBuffer(
 
   // 'iterable-untyped'
   const componentsWithHeaders = components.reduce((collection, component) => {
-    const innerSchema = findSchemaById(components[0].id, schema)
+    const innerSchema = findSchemaById(components[0].id, objectSchema)
     const componentHeader = getHeader(
       component.buffer.length,
       {
@@ -124,36 +124,68 @@ export function resolveSerializablesToBuffer(
   return Buffer.concat(componentsWithHeaders)
 }
 
-export function findSchemaById(schemaId: number, objectSchema: IXyoObjectSchema) {
-  const key = Object.keys(objectSchema).find((schemaKey) => {
-    return objectSchema[schemaKey].id === schemaId
-  })
-
-  if (!key) {
-    throw new XyoError(`Could not find a serializer with id ${schemaId}`, XyoErrors.CRITICAL)
-  }
-
-  return objectSchema[key]
-}
-
 export function typedArrayOf<T extends IXyoSerializableObject>(tCollection: T[]): IXyoSerializableObject {
-  // TODO
-  throw new Error(`Not yet implemented`)
+  return {
+    schemaObjectId: schema.typedSet.id,
+    serialize: () => {
+      return tCollection
+    }
+  }
 }
 
 export function untypedArrayOf<T extends IXyoSerializableObject>(tCollection: T[]): IXyoSerializableObject {
-  // TODO
-  throw new Error(`Not yet implemented`)
+  return {
+    schemaObjectId: schema.untypedSet.id,
+    serialize: () => {
+      return tCollection
+    }
+  }
 }
 
 export function fromArray<T extends IXyoSerializableObject>(s: IXyoSerializableObject): T[] {
-  // TODO
-  throw new Error(`Not yet implemented`)
+  return s.serialize() as T[]
 }
 
 export function unSignedNumberToBuffer(num: number): Buffer {
-  // TODO
-  throw new Error(`Not yet implemented`)
+  let buf: Buffer
+
+  if (num <= Math.pow(2, 8) - 1) {
+    buf = Buffer.alloc(1)
+    buf.writeUInt8(num, 0)
+  } else if (num <= Math.pow(2, 16) - 1) {
+    buf = Buffer.alloc(2)
+    buf.writeUInt16BE(num, 0)
+  } else if (num <= Math.pow(2, 32) - 1) {
+    buf = Buffer.alloc(4)
+    buf.writeUInt32BE(num, 0)
+  } else if (num > Math.pow(2, 32)) {
+    throw new XyoError('This is not yet supported', XyoErrors.CRITICAL)
+  } else {
+    throw new XyoError('This should never happen', XyoErrors.CRITICAL)
+  }
+
+  return buf
+}
+
+export function signedNumberToBuffer(num: number): Buffer {
+  let buf: Buffer
+
+  if (num <= Math.pow(2, 7) - 1) {
+    buf = Buffer.alloc(1)
+    buf.writeInt8(num, 0)
+  } else if (num <= Math.pow(2, 15) - 1) {
+    buf = Buffer.alloc(2)
+    buf.writeInt16BE(num, 0)
+  } else if (num <= Math.pow(2, 31) - 1) {
+    buf = Buffer.alloc(4)
+    buf.writeInt32BE(num, 0)
+  } else if (num > Math.pow(2, 31)) {
+    throw new XyoError('This is not yet supported', XyoErrors.CRITICAL)
+  } else {
+    throw new XyoError('This should never happen', XyoErrors.CRITICAL)
+  }
+
+  return buf
 }
 
 interface IBufferIdPair {

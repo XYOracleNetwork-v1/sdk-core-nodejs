@@ -4,22 +4,37 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serialization-service.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 3:25:16 pm
+ * @Last modified time: Monday, 26th November 2018 5:07:35 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { BufferOrString, IXyoSerializationService } from "./@types"
+import { BufferOrString, IXyoSerializationService, IXyoSerializableObject } from "./@types"
 
 import { XyoBase } from '@xyo-network/base'
+import { resolveSerializablesToBuffer } from "."
+import { schema, getHeader, serialize, findSchemaById } from '@xyo-network/object-schema'
 
 export class XyoSerializationService extends XyoBase implements IXyoSerializationService {
 
-  public serialize(serializable: any, serializationType?: "buffer" | "hex" | undefined): BufferOrString {
-    throw new Error("Method not implemented.")
+  public serialize(
+    serializable: IXyoSerializableObject,
+    serializationType?: "buffer" | "hex" | undefined
+  ): BufferOrString {
+    const result = serializable.serialize()
+    const buf = result instanceof Buffer ?
+      result :
+      resolveSerializablesToBuffer(serializable.schemaObjectId, schema, result)
+
+    const b = serialize(buf, findSchemaById(serializable.schemaObjectId, schema))
+    if (serializationType === 'hex') {
+      return b.toString('hex')
+    }
+
+    return b
   }
 
-  public deserialize<T>(deserializable: BufferOrString): T {
+  public deserialize<T extends IXyoSerializableObject>(deserializable: BufferOrString): T {
     throw new Error("Method not implemented.")
   }
 }
