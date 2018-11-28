@@ -4,18 +4,23 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serialization-service.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 27th November 2018 9:44:54 am
+ * @Last modified time: Tuesday, 27th November 2018 4:16:42 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { BufferOrString, IXyoSerializationService, IXyoSerializableObject, IXyoTypeSerializer, SerializationType } from "./@types"
+import { BufferOrString, IXyoSerializationService, IXyoSerializableObject, IXyoTypeSerializer, SerializationType, IXyoDeserializer } from "./@types"
 
 import { XyoBase } from '@xyo-network/base'
 import { resolveSerializablesToBuffer } from "."
-import { schema, serialize, findSchemaById } from '@xyo-network/object-schema'
+import { schema, serialize, findSchemaById, readHeader, getDataBytes } from '@xyo-network/object-schema'
+import { XyoError, XyoErrors } from '@xyo-network/errors'
 
 export class XyoSerializationService extends XyoBase implements IXyoSerializationService {
+
+  constructor (private readonly recipes: { [s: string]: IXyoDeserializer<IXyoSerializableObject>}) {
+    super()
+  }
 
   public serialize(
     serializable: IXyoSerializableObject,
@@ -35,7 +40,15 @@ export class XyoSerializationService extends XyoBase implements IXyoSerializatio
   }
 
   public deserialize<T extends IXyoSerializableObject>(deserializable: BufferOrString): T {
-    throw new Error("Method not implemented.")
+    const src = deserializable instanceof Buffer ? deserializable : Buffer.from(deserializable, 'hex')
+    const srcSchema = readHeader(src)
+    const recipe = this.recipes[srcSchema.id]
+    if (!recipe) {
+      throw new XyoError(`Could not find a recipe for id ${srcSchema.id}`, XyoErrors.CRITICAL)
+    }
+
+    const dataBytes = getDataBytes(src, srcSchema)
+    return recipe.deserialize(dataBytes) as T
   }
 
   public getInstanceOfTypeSerializer<T extends IXyoSerializableObject>(): IXyoTypeSerializer<T> {

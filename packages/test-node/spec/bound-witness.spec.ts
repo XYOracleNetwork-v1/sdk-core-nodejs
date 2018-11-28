@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: bound-witness.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 27th November 2018 3:10:48 pm
+ * @Last modified time: Tuesday, 27th November 2018 5:33:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,22 +14,26 @@ import { IXyoSigner, IXyoPublicKey, IXyoSignature } from '@xyo-network/signing'
 import { XyoBasePayload, XyoBoundWitnessSigningService, IXyoBoundWitness, XyoBaseBoundWitness, IXyoPayload } from '@xyo-network/bound-witness'
 import { IXyoSerializableObject, XyoSerializationService, BufferOrString } from '@xyo-network/serialization'
 import { IXyoNetworkPipe, IXyoNetworkPeer, CatalogueItem } from '@xyo-network/network'
+import { schema } from '@xyo-network/object-schema'
+import { XyoBoundWitnessDeserializer } from '@xyo-network/serializers'
 
 describe(`Bound Witness Interaction`, () => {
   it(`Should leave two parties with the same bound-witness data`, async () => {
-    const serverSigners = [
-      new MockSigner(
-        new MockPublicKey('00000000'),
-        new MockSignature('11111111')
-      )
-    ]
+    const serverMockPublicKey = new MockPublicKey('00000000')
+    const serverMockSignature = new MockSignature('11111111')
+    const serverMockSigner = new MockSigner(
+      serverMockPublicKey,
+      serverMockSignature
+    )
+    const serverSigners = [serverMockSigner]
 
-    const clientSigners = [
-      new MockSigner(
-        new MockPublicKey('22222222'),
-        new MockSignature('33333333')
-      )
-    ]
+    const clientMockPublicKey = new MockPublicKey('22222222')
+    const clientMockSignature = new MockSignature('33333333')
+    const clientMockSigner = new MockSigner(
+      clientMockPublicKey,
+      clientMockSignature
+    )
+    const clientSigners = [clientMockSigner]
 
     const serverPayload = new MockPayload(
       [
@@ -79,28 +83,30 @@ describe(`Bound Witness Interaction`, () => {
       }
     })
 
-    const boundWitnessSerializer = new XyoSerializationService()
-      .getInstanceOfTypeSerializer<IXyoBoundWitness>()
+    const serializationService = new XyoSerializationService({
+      [schema.boundWitness.id]: new XyoBoundWitnessDeserializer()
+    })
+    const boundWitnessSerializer = serializationService.getInstanceOfTypeSerializer<IXyoBoundWitness>()
 
-    let step = 0
-    boundWitnessSerializer.deserialize = (deserializable: BufferOrString) => {
-      step += 1
-      if (step === 1) {
-        return new MockBoundWitness(
-          [
-            clientSigners.map(signer => signer.publicKey)
-          ],
-          [
-            [new MockSignature('33333333')]
-          ],
-          [
-            clientPayload
-          ]
-        )
-      }
+    // let step = 0
+    // boundWitnessSerializer.deserialize = (deserializable: BufferOrString) => {
+    //   step += 1
+    //   if (step === 1) {
+    //     return new MockBoundWitness(
+    //       [
+    //         clientSigners.map(signer => signer.publicKey)
+    //       ],
+    //       [
+    //         [clientMockSignature]
+    //       ],
+    //       [
+    //         clientPayload
+    //       ]
+    //     )
+    //   }
 
-      return new MockBoundWitness([], [], [])
-    }
+    //   return new MockBoundWitness([], [], [])
+    // }
 
     const interaction = new XyoBoundWitnessStandardServerInteraction(
       serverSigners,
@@ -109,7 +115,12 @@ describe(`Bound Witness Interaction`, () => {
       boundWitnessSerializer
     )
 
-    const createdBoundWitness = await interaction.run(new MockNetworkPipe([
+    const createdBoundWitness = await interaction.run(new MockNetworkPipe(
+      clientSigners,
+      clientMockSignature,
+      clientPayload,
+      serializationService,
+      [
         // tslint:disable:ter-indent
       Buffer.from([
         0x04, 0x00, 0x00, 0x00, 0x01, // category headers
@@ -182,16 +193,17 @@ describe(`Bound Witness Interaction`, () => {
     const createdBytes = boundWitnessSerializer.serialize(createdBoundWitness, 'hex') as string
     const expectedBw = new MockBoundWitness(
       [
-        [new MockPublicKey('00000000')], [new MockPublicKey('22222222')]
+        [serverMockPublicKey], [clientMockPublicKey]
       ],
       [
-        [new MockSignature('11111111')], [new MockSignature('33333333')]
+        [serverMockSignature], [clientMockSignature]
       ],
       [
         serverPayload, clientPayload
       ],
     )
     const expectedBoundWitnessBytes = boundWitnessSerializer.serialize(expectedBw, 'hex') as string
+    console.log(expectedBoundWitnessBytes)
     expect(createdBytes === expectedBoundWitnessBytes).toBe(true)
   })
 })
@@ -218,7 +230,13 @@ class MockNetworkPipe implements IXyoNetworkPipe {
   // @ts-ignore
   public initiationData: Buffer
 
-  constructor(private readonly expectedMessages: Buffer[]) {
+  constructor(
+    private readonly clientSigners: IXyoSigner[],
+    private readonly mockSignature: MockSignature,
+    private readonly clientPayload: MockPayload,
+    private readonly serializationService: XyoSerializationService,
+    private readonly expectedMessages: Buffer[]
+  ) {
 
   }
 
@@ -236,6 +254,21 @@ class MockNetworkPipe implements IXyoNetworkPipe {
     }
 
     this.sendCount += 1
+
+    if (this.sendCount === 1) {
+      return this.serializationService.serialize(new MockBoundWitness(
+        [
+          this.clientSigners.map(signer => signer.publicKey)
+        ],
+        [
+          [this.mockSignature]
+        ],
+        [
+          this.clientPayload
+        ]
+      ), 'buffer') as Buffer
+    }
+
     return Buffer.alloc(0)
   }
 

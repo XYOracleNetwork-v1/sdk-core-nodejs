@@ -22,23 +22,10 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    { "path": "../base"},
-    { "path": "../node"},
-    { "path": "../network"},
-    { "path": "../network.tcp"},
-    { "path": "../peer-interaction"},
-    { "path": "../peer-interaction-router"},
-    { "path": "../peer-connections"},
-    { "path": "../origin-chain"},
-    { "path": "../bound-witness"},
     { "path": "../serialization"},
-    { "path": "../serializers"},
-    { "path": "../origin-block-repository"},
-    { "path": "../peer-interaction-handlers"},
-    { "path": "../hashing"},
-    { "path": "../zig-zag-bound-witness-builder"},
     { "path": "../object-schema"},
-    { "path": "../signing"},
-    { "path": "../storage"},
+    { "path": "../bound-witness"},
+    { "path": "../base"},
+    { "path": "../signing"}
   ]
 }

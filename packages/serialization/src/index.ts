@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 27th November 2018 12:25:54 pm
+ * @Last modified time: Tuesday, 27th November 2018 4:22:32 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,7 +20,8 @@ export {
   BufferOrString,
   SerializationType,
   IXyoTypeSerializer,
-  IXyoSerializableObject
+  IXyoSerializableObject,
+  IXyoDeserializer
 } from './@types'
 
 export { XyoSerializationService } from './xyo-serialization-service'

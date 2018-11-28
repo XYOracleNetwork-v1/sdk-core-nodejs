@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 27th November 2018 9:46:24 am
+ * @Last modified time: Tuesday, 27th November 2018 4:15:45 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -71,4 +71,9 @@ export interface IXyoSerializableObject {
 
   // tslint:disable-next-line:prefer-array-literal
   serialize(): Buffer | IXyoSerializableObject[]
+}
+
+export interface IXyoDeserializer<T extends IXyoSerializableObject> {
+  schemaObjectId: number
+  deserialize(data: Buffer): T
 }

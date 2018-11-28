@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 27th November 2018 11:08:55 am
+ * @Last modified time: Tuesday, 27th November 2018 4:12:06 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -257,7 +257,7 @@ export class XyoTestNode extends XyoBase {
 
   private getSerializationService(): IXyoSerializationService  {
     return this.serviceCache.getOrCreate('IXyoSerializationService', () => {
-      return new XyoSerializationService()
+      return new XyoSerializationService({})
     })
   }
 

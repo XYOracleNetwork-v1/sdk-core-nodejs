@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-schema.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 26th November 2018 5:04:08 pm
+ * @Last modified time: Tuesday, 27th November 2018 5:52:47 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -357,4 +357,117 @@ export function findSchemaById(schemaId: number, objectSchema: IXyoObjectSchema)
   }
 
   return objectSchema[key]
+}
+
+export function readHeader(header: Buffer): IXyoObjectPartialSchema {
+  if (header.length < 2) {
+    throw new XyoError(`The minimum size of a header is 2 bytes`, XyoErrors.CREATOR_MAPPING)
+  }
+
+  const topByte = header.readUInt8(0)
+  const id = header.readUInt8(1)
+
+  const topBit = (topByte & 128) > 0
+  const bottomBit = (topByte & 64) > 0
+  const isIterable = (topByte & 32) > 0
+  const isTyped = (topByte & 16) > 0
+
+  return {
+    id,
+    sizeIdentifierSize: (() => {
+      if (!topBit && !bottomBit) { // 0b00
+        return 1
+      }
+
+      if (!topBit && bottomBit) { // 0b01
+        return 2
+      }
+
+      if (topBit && !bottomBit) { // 0b10
+        return 4
+      }
+
+      if (topBit && bottomBit) { // 0b11
+        return 8
+      }
+      throw new Error(`This should never happen`)
+    })(),
+
+    iterableType: (() => {
+      if (!isIterable && !isTyped) {
+        return 'not-iterable'
+      }
+
+      if (!isIterable && isTyped) { // 0b01
+        throw new XyoError(`Impossible state for serialization`, XyoErrors.CRITICAL)
+      }
+
+      if (isIterable && !isTyped) { // 0b10
+        return 'iterable-untyped'
+      }
+
+      if (isIterable && isTyped) { // 0b10
+        return 'iterable-typed'
+      }
+
+      throw new Error(`This should never happen`)
+    })()
+  }
+}
+
+export function sliceItem(
+  src: Buffer,
+  offset: number,
+  partialSchema: IXyoObjectPartialSchema,
+) {
+  const partialSlice = src.slice(offset)
+  const slice = getDataBytes(partialSlice, partialSchema)
+  return slice
+}
+
+export function getDataBytes(src: Buffer, partialSchema: IXyoObjectPartialSchema) {
+  if (partialSchema.sizeIdentifierSize === null) {
+    throw new XyoError(`sizeIdentifierSize is null`, XyoErrors.CRITICAL)
+  }
+
+  let numberOfBytesIncludingSize: number
+
+  switch (partialSchema.sizeIdentifierSize) {
+    case 1:
+      if (src.length < 3) {
+        throw new XyoError(`sizeIdentifierSize could not be read`, XyoErrors.CRITICAL)
+      }
+      numberOfBytesIncludingSize = src.readUInt8(2)
+      break
+    case 2:
+      if (src.length < 4) {
+        throw new XyoError(`sizeIdentifierSize could not be read`, XyoErrors.CRITICAL)
+      }
+      numberOfBytesIncludingSize = src.readUInt16BE(2)
+      break
+    case 4:
+      if (src.length < 6) {
+        throw new XyoError(`sizeIdentifierSize could not be read`, XyoErrors.CRITICAL)
+      }
+      numberOfBytesIncludingSize = src.readUInt32BE(2)
+      break
+    case 8:
+      if (src.length < 10) {
+        throw new XyoError(`sizeIdentifierSize could not be read`, XyoErrors.CRITICAL)
+      }
+      numberOfBytesIncludingSize = new BN(src.slice(2, 10).toString('hex'), 16).toNumber()
+      break
+    default:
+      throw new XyoError(`sizeIdentifierSize could not be resolved`, XyoErrors.CRITICAL)
+  }
+
+  const expectedBufferSize = 2 + numberOfBytesIncludingSize
+  const dataStart = partialSchema.sizeIdentifierSize + 2
+  const dataEnd = (numberOfBytesIncludingSize - partialSchema.sizeIdentifierSize) + dataStart
+
+  if (src.length < dataEnd) {
+    throw new XyoError(`Could not get data bytes, wrong buffer size`, XyoErrors.CRITICAL)
+  }
+
+  return src.slice(dataStart, dataEnd)
 }
