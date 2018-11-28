@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: bound-witness.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 27th November 2018 5:33:18 pm
+ * @Last modified time: Wednesday, 28th November 2018 3:38:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -27,13 +27,20 @@ describe(`Bound Witness Interaction`, () => {
     )
     const serverSigners = [serverMockSigner]
 
-    const clientMockPublicKey = new MockPublicKey('22222222')
-    const clientMockSignature = new MockSignature('33333333')
-    const clientMockSigner = new MockSigner(
-      clientMockPublicKey,
-      clientMockSignature
+    const clientMockPublicKey1 = new MockPublicKey('22222222')
+    const clientMockPublicKey2 = new MockPublicKey('44444444')
+    const clientMockSignature1 = new MockSignature('33333333')
+    const clientMockSignature2 = new MockSignature('55555555')
+    const clientMockSigner1 = new MockSigner(
+      clientMockPublicKey1,
+      clientMockSignature1
     )
-    const clientSigners = [clientMockSigner]
+
+    const clientMockSigner2 = new MockSigner(
+      clientMockPublicKey2,
+      clientMockSignature2
+    )
+    const clientSigners = [clientMockSigner1, clientMockSigner2]
 
     const serverPayload = new MockPayload(
       [
@@ -86,6 +93,7 @@ describe(`Bound Witness Interaction`, () => {
     const serializationService = new XyoSerializationService({
       [schema.boundWitness.id]: new XyoBoundWitnessDeserializer()
     })
+
     const boundWitnessSerializer = serializationService.getInstanceOfTypeSerializer<IXyoBoundWitness>()
 
     // let step = 0
@@ -117,86 +125,86 @@ describe(`Bound Witness Interaction`, () => {
 
     const createdBoundWitness = await interaction.run(new MockNetworkPipe(
       clientSigners,
-      clientMockSignature,
+      [clientMockSignature1, clientMockSignature1],
       clientPayload,
       serializationService,
       [
         // tslint:disable:ter-indent
-      Buffer.from([
-        0x04, 0x00, 0x00, 0x00, 0x01, // category headers
-        0x20, // iterable-typed
-        0x00, // bound-witness id
-        0x23, // 35 elements
-          0x30, // iterable-typed
-          0x14, // typed-set
-          0x0b, // 11 bytes
-            0x20, // iterable-untyped
-            0x15, // untypedSet
-            0x08, // 8 bytes
-              0x00, // not-iterable
-              0x10, // stubPublicKey
-              0x05, // 5 elements
-                0x00,
-                0x00,
-                0x00,
-                0x00,
+      // Buffer.from([
+      //   0x04, 0x00, 0x00, 0x00, 0x01, // category headers
+      //   0x20, // iterable-typed
+      //   0x00, // bound-witness id
+      //   0x23, // 35 elements
+      //     0x30, // iterable-typed
+      //     0x14, // typed-set
+      //     0x0b, // 11 bytes
+      //       0x20, // iterable-untyped
+      //       0x15, // untypedSet
+      //       0x08, // 8 bytes
+      //         0x00, // not-iterable
+      //         0x10, // stubPublicKey
+      //         0x05, // 5 elements
+      //           0x00,
+      //           0x00,
+      //           0x00,
+      //           0x00,
 
-            0x30, // iterable-untyped
-            0x14, // typed-set
-            0x10, // size 16
-              0x30, // iterable-untyped
-              0x03, // payload
-              0x0d, // 13 elements
-                0x20, // iterable-untyped
-                0x15, // untypedSet
-                0x05, // 5 elements
-                  0x00,
-                  0x04,
-                  0x02,
-                  0x00,
-                0x05,
-                  0x00,
-                  0x16,
-                  0x02,
-                  0xf6,
-            0x30, // iterable-untyped
-            0x14, // typed-set
-            0x01 // 1 element-self
-      ]),
+      //       0x30, // iterable-untyped
+      //       0x14, // typed-set
+      //       0x10, // size 16
+      //         0x30, // iterable-untyped
+      //         0x03, // payload
+      //         0x0d, // 13 elements
+      //           0x20, // iterable-untyped
+      //           0x15, // untypedSet
+      //           0x05, // 5 elements
+      //             0x00,
+      //             0x04,
+      //             0x02,
+      //             0x00,
+      //           0x05,
+      //             0x00,
+      //             0x16,
+      //             0x02,
+      //             0xf6,
+      //       0x30, // iterable-untyped
+      //       0x14, // typed-set
+      //       0x01 // 1 element-self
+      // ]),
 
-      Buffer.from([
-        0x20,
-        0x00,
-        0x14,
-          0x30,
-          0x14,
-          0x01,
-          0x30,
-          0x14,
-          0x01,
-          0x30,
-          0x14,
-          0x0b,
-            0x20,
-            0x15,
-            0x08,
-              0x00,
-              0x1b,
-              0x05,
-              0x11,
-              0x11,
-              0x11,
-              0x11
-      ])
+      // Buffer.from([
+      //   0x20,
+      //   0x00,
+      //   0x14,
+      //     0x30,
+      //     0x14,
+      //     0x01,
+      //     0x30,
+      //     0x14,
+      //     0x01,
+      //     0x30,
+      //     0x14,
+      //     0x0b,
+      //       0x20,
+      //       0x15,
+      //       0x08,
+      //         0x00,
+      //         0x1b,
+      //         0x05,
+      //         0x11,
+      //         0x11,
+      //         0x11,
+      //         0x11
+      // ])
     ]))
 
     const createdBytes = boundWitnessSerializer.serialize(createdBoundWitness, 'hex') as string
     const expectedBw = new MockBoundWitness(
       [
-        [serverMockPublicKey], [clientMockPublicKey]
+        [serverMockPublicKey], [clientMockPublicKey1]
       ],
       [
-        [serverMockSignature], [clientMockSignature]
+        [serverMockSignature], [clientMockSignature1]
       ],
       [
         serverPayload, clientPayload
@@ -232,7 +240,7 @@ class MockNetworkPipe implements IXyoNetworkPipe {
 
   constructor(
     private readonly clientSigners: IXyoSigner[],
-    private readonly mockSignature: MockSignature,
+    private readonly mockSignatures: MockSignature[],
     private readonly clientPayload: MockPayload,
     private readonly serializationService: XyoSerializationService,
     private readonly expectedMessages: Buffer[]
@@ -261,7 +269,7 @@ class MockNetworkPipe implements IXyoNetworkPipe {
           this.clientSigners.map(signer => signer.publicKey)
         ],
         [
-          [this.mockSignature]
+          this.mockSignatures
         ],
         [
           this.clientPayload

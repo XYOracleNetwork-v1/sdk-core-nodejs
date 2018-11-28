@@ -4,45 +4,45 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-deserializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 27th November 2018 5:12:36 pm
+ * @Last modified time: Wednesday, 28th November 2018 3:32:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoBoundWitness, XyoBaseBoundWitness, IXyoPayload } from "@xyo-network/bound-witness"
-import { IXyoDeserializer } from "@xyo-network/serialization"
+import { IXyoDeserializer, parse, ParseQuery, IXyoSerializationService } from "@xyo-network/serialization"
 import { IXyoPublicKey, IXyoSignature } from "@xyo-network/signing"
-import { readHeader, sliceItem } from "@xyo-network/object-schema"
 
 export class XyoBoundWitnessDeserializer implements IXyoDeserializer<IXyoBoundWitness> {
 
   public schemaObjectId = XyoBaseBoundWitness.schemaObjectId
 
-  public deserialize(data: Buffer): IXyoBoundWitness {
-    let offset = 0
-    const publicKeySchema = readHeader(data)
-    const publicKeysData = sliceItem(data, offset, publicKeySchema)
+  public deserialize(data: Buffer, serializationService: IXyoSerializationService): IXyoBoundWitness {
+    const parseResult = parse(data)
+    const query = new ParseQuery(parseResult)
+    const publicKeysSets = query.query([0])
+    const payloads = query.query([1])
+    const signaturesSet = query.query([2])
 
-    offset += publicKeysData.length
+    const publicKeysValue = publicKeysSets.mapChildren((pQuery) => {
+      return pQuery.mapChildren(pkQuery => serializationService.deserialize<IXyoPublicKey>(pkQuery.readData(true)))
+    })
 
-    const payloadsSchema = readHeader(data.slice(offset, data.length))
-    const payloadsData = sliceItem(data, offset, payloadsSchema)
+    const payloadValue = payloads.mapChildren((pQuery) => {
+      return serializationService.deserialize<IXyoPayload>(pQuery.readData(true))
+    })
 
-    offset += payloadsData.length
-    const signaturesSchema = readHeader(data.slice(offset, data.length))
-    const signaturesData = sliceItem(data, offset, signaturesSchema)
+    const signaturesValue = signaturesSet.mapChildren((sQuery) => {
+      return sQuery.mapChildren(sigQuery => serializationService.deserialize<IXyoSignature>(sigQuery.readData(true)))
+    })
 
-    return new BufferBoundWitness(
-      // @ts-ignore
-      publicKeysData,
-      signaturesData,
-      payloadsData
-    )
+    return new OnTheFlyBoundWitness(publicKeysValue, signaturesValue, payloadValue)
   }
 }
 
 // tslint:disable-next-line:max-classes-per-file
-class BufferBoundWitness extends XyoBaseBoundWitness {
+class OnTheFlyBoundWitness extends XyoBaseBoundWitness {
+
   constructor (
     public publicKeys: IXyoPublicKey[][],
     public signatures: IXyoSignature[][],

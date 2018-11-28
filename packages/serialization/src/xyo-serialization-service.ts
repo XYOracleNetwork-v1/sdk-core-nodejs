@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serialization-service.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 27th November 2018 4:16:42 pm
+ * @Last modified time: Wednesday, 28th November 2018 2:44:46 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,7 +13,7 @@ import { BufferOrString, IXyoSerializationService, IXyoSerializableObject, IXyoT
 
 import { XyoBase } from '@xyo-network/base'
 import { resolveSerializablesToBuffer } from "."
-import { schema, serialize, findSchemaById, readHeader, getDataBytes } from '@xyo-network/object-schema'
+import { schema, serialize, findSchemaById, readHeader } from '@xyo-network/object-schema'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 
 export class XyoSerializationService extends XyoBase implements IXyoSerializationService {
@@ -47,8 +47,7 @@ export class XyoSerializationService extends XyoBase implements IXyoSerializatio
       throw new XyoError(`Could not find a recipe for id ${srcSchema.id}`, XyoErrors.CRITICAL)
     }
 
-    const dataBytes = getDataBytes(src, srcSchema)
-    return recipe.deserialize(dataBytes) as T
+    return recipe.deserialize(src, this) as T
   }
 
   public getInstanceOfTypeSerializer<T extends IXyoSerializableObject>(): IXyoTypeSerializer<T> {

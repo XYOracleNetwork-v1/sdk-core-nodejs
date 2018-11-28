@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 27th November 2018 4:22:32 pm
+ * @Last modified time: Wednesday, 28th November 2018 3:32:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoSerializableObject } from './@types'
-import { IXyoObjectSchema, IIterableType, getNumberOfBytesRequiredForSizeBuffer, getSizeHeader, getHeader, schema, findSchemaById } from '@xyo-network/object-schema'
+import { IXyoObjectSchema, IIterableType, getNumberOfBytesRequiredForSizeBuffer, getSizeHeader, getHeader, schema, findSchemaById, readHeader, sliceItem, serialize } from '@xyo-network/object-schema'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 
 export {
@@ -202,4 +202,119 @@ export function signedNumberToBuffer(num: number): Buffer {
 interface IBufferIdPair {
   id: number
   buffer: Buffer
+}
+
+export interface IParseResult {
+  data: Buffer | IParseResult[]
+  id: number
+  sizeIdentifierSize: 1 | 2 | 4 | 8
+  iterableType: 'iterable-typed' | 'iterable-untyped' | 'not-iterable'
+}
+
+export function parse(src: Buffer): IParseResult {
+  const partialSchema = readHeader(src)
+  const data = sliceItem(src, 0, partialSchema, true)
+
+  if (partialSchema.iterableType === 'not-iterable') {
+    return {
+      data,
+      id: partialSchema.id,
+      sizeIdentifierSize: partialSchema.sizeIdentifierSize!,
+      iterableType: 'not-iterable'
+    }
+  }
+
+  const items: IParseResult[] = []
+  let innerHeader = readHeader(data)
+  let innerHeaderBytes = data.slice(0, 2)
+  let offset = 2
+  let sizeBytes = data.slice(offset, offset + innerHeader.sizeIdentifierSize!)
+
+  while (offset < data.length) {
+    // tslint:disable-next-line:prefer-conditional-expression
+    if (partialSchema.iterableType === 'iterable-untyped') {
+      if (offset !== 2) {
+        innerHeaderBytes = data.slice(offset, offset + 2)
+        innerHeader = readHeader(innerHeaderBytes)
+        offset += 2
+      }
+    }
+
+    if (offset !== 2) {
+      sizeBytes = data.slice(offset, offset + innerHeader.sizeIdentifierSize!)
+    }
+
+    let latestResult: Buffer | IParseResult = sliceItem(data, offset, innerHeader, false)
+
+    offset += latestResult.length + innerHeader.sizeIdentifierSize!
+    if (innerHeader.iterableType !== 'not-iterable') {
+      latestResult = parse(Buffer.concat([innerHeaderBytes, sizeBytes, latestResult]))
+      items.push(latestResult)
+    } else {
+      items.push({
+        id: innerHeader.id,
+        sizeIdentifierSize: innerHeader.sizeIdentifierSize!,
+        iterableType: innerHeader.iterableType!,
+        data: latestResult
+      })
+    }
+
+  }
+
+  return {
+    data: items,
+    id: partialSchema.id,
+    sizeIdentifierSize: partialSchema.sizeIdentifierSize!,
+    iterableType: partialSchema.iterableType!
+  }
+}
+
+export class ParseQuery {
+  constructor(private readonly parseResult: IParseResult) {}
+
+  public query(queryIndexes: number[]) {
+    const queriedParseResult = queryIndexes.reduce((parseResult, indexToQuery, indexInArray) => {
+      if (Array.isArray(parseResult.data)) {
+        const childParseResults = parseResult.data as IParseResult[]
+        if (childParseResults.length > indexToQuery) {
+          return childParseResults[indexToQuery]
+        }
+        throw new XyoError(`Data can not be queried. Index out of bounds ${indexInArray}`, XyoErrors.CRITICAL)
+      }
+
+      throw new XyoError(`Data can not be queried at index ${indexInArray}`, XyoErrors.CRITICAL)
+    }, this.parseResult)
+
+    return new ParseQuery(queriedParseResult)
+  }
+
+  public mapChildren<T>(callbackfn: (value: ParseQuery, index?: number) => T) {
+    if (this.isReadable()) {
+      throw new XyoError(`No children to map`, XyoErrors.CRITICAL)
+    }
+
+    return (this.parseResult.data as IParseResult[]).map((item, index) => {
+      return callbackfn(new ParseQuery(item), index)
+    })
+  }
+
+  public readData(withHeader: boolean = false): Buffer {
+    if (!(this.parseResult.data instanceof Buffer)) {
+      throw new XyoError(`Data is not readable`, XyoErrors.CRITICAL)
+    }
+
+    if (!withHeader) {
+      return this.parseResult.data
+    }
+
+    return serialize(this.parseResult.data, {
+      sizeIdentifierSize: this.parseResult.sizeIdentifierSize,
+      id: this.parseResult.id,
+      iterableType: this.parseResult.iterableType
+    })
+  }
+
+  public isReadable(): boolean {
+    return this.parseResult.data instanceof Buffer
+  }
 }

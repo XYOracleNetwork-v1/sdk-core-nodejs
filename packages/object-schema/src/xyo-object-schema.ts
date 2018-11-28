@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-object-schema.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 27th November 2018 5:52:47 pm
+ * @Last modified time: Wednesday, 28th November 2018 11:58:05 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -419,50 +419,48 @@ export function sliceItem(
   src: Buffer,
   offset: number,
   partialSchema: IXyoObjectPartialSchema,
+  includesHeader: boolean
 ) {
-  const partialSlice = src.slice(offset)
-  const slice = getDataBytes(partialSlice, partialSchema)
+  const partialSlice = offset !== 0 ? src.slice(offset) : src
+  const slice = getDataBytes(partialSlice, partialSchema, includesHeader)
   return slice
 }
 
-export function getDataBytes(src: Buffer, partialSchema: IXyoObjectPartialSchema) {
+function getNumberOfBytesIncludingSize(src: Buffer, offset: number, sizeIdentifierSize: number) {
+  switch (sizeIdentifierSize) {
+    case 1:
+      if (src.length < (offset + 1)) {
+        throw new XyoError(`sizeIdentifierSize could not be read`, XyoErrors.CRITICAL)
+      }
+      return src.readUInt8(offset)
+    case 2:
+      if (src.length < (offset + 2)) {
+        throw new XyoError(`sizeIdentifierSize could not be read`, XyoErrors.CRITICAL)
+      }
+      return src.readUInt16BE(offset)
+    case 4:
+      if (src.length < (offset + 4)) {
+        throw new XyoError(`sizeIdentifierSize could not be read`, XyoErrors.CRITICAL)
+      }
+      return src.readUInt32BE(offset)
+    case 8:
+      if (src.length < (offset + 8)) {
+        throw new XyoError(`sizeIdentifierSize could not be read`, XyoErrors.CRITICAL)
+      }
+      return new BN(src.slice(offset, offset + 8).toString('hex'), 16).toNumber()
+    default:
+      throw new XyoError(`sizeIdentifierSize could not be resolved`, XyoErrors.CRITICAL)
+  }
+}
+
+export function getDataBytes(src: Buffer, partialSchema: IXyoObjectPartialSchema, srcIncludesHeader: boolean) {
+  const headerOffset = srcIncludesHeader ? 2 : 0
   if (partialSchema.sizeIdentifierSize === null) {
     throw new XyoError(`sizeIdentifierSize is null`, XyoErrors.CRITICAL)
   }
 
-  let numberOfBytesIncludingSize: number
-
-  switch (partialSchema.sizeIdentifierSize) {
-    case 1:
-      if (src.length < 3) {
-        throw new XyoError(`sizeIdentifierSize could not be read`, XyoErrors.CRITICAL)
-      }
-      numberOfBytesIncludingSize = src.readUInt8(2)
-      break
-    case 2:
-      if (src.length < 4) {
-        throw new XyoError(`sizeIdentifierSize could not be read`, XyoErrors.CRITICAL)
-      }
-      numberOfBytesIncludingSize = src.readUInt16BE(2)
-      break
-    case 4:
-      if (src.length < 6) {
-        throw new XyoError(`sizeIdentifierSize could not be read`, XyoErrors.CRITICAL)
-      }
-      numberOfBytesIncludingSize = src.readUInt32BE(2)
-      break
-    case 8:
-      if (src.length < 10) {
-        throw new XyoError(`sizeIdentifierSize could not be read`, XyoErrors.CRITICAL)
-      }
-      numberOfBytesIncludingSize = new BN(src.slice(2, 10).toString('hex'), 16).toNumber()
-      break
-    default:
-      throw new XyoError(`sizeIdentifierSize could not be resolved`, XyoErrors.CRITICAL)
-  }
-
-  const expectedBufferSize = 2 + numberOfBytesIncludingSize
-  const dataStart = partialSchema.sizeIdentifierSize + 2
+  const numberOfBytesIncludingSize = getNumberOfBytesIncludingSize(src, headerOffset, partialSchema.sizeIdentifierSize)
+  const dataStart = partialSchema.sizeIdentifierSize + headerOffset
   const dataEnd = (numberOfBytesIncludingSize - partialSchema.sizeIdentifierSize) + dataStart
 
   if (src.length < dataEnd) {
