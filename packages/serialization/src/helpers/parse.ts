@@ -8,7 +8,7 @@ import { IParseResult } from "../@types"
  * @Email:  developer@xyfindables.com
  * @Filename: parse.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 12:56:58 pm
+ * @Last modified time: Thursday, 29th November 2018 3:16:12 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,6 +20,16 @@ export function parse(src: Buffer): IParseResult {
   if (partialSchema.iterableType === 'not-iterable') {
     return {
       data,
+      id: partialSchema.id,
+      sizeIdentifierSize: partialSchema.sizeIdentifierSize!,
+      iterableType: 'not-iterable',
+      bytes: data
+    }
+  }
+
+  if (data.length === 0) {
+    return {
+      data: [],
       id: partialSchema.id,
       sizeIdentifierSize: partialSchema.sizeIdentifierSize!,
       iterableType: 'not-iterable',

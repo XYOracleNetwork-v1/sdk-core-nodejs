@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 28th November 2018 5:33:56 pm
+ * @Last modified time: Thursday, 29th November 2018 2:13:00 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -16,13 +16,12 @@ import { XyoNativeBaseHashProvider } from './xyo-native-base-hash-provider'
 export { XyoBaseHash } from './xyo-base-hash'
 export { IXyoHash, IXyoHashProvider } from './@types'
 
-const SCHEMA_ID_SHA256 = 0x09
-const SCHEMA_ID_SHA512 = 0x0a
+const SCHEMA_ID_SHA256 = 0x10
 
 /**
  * The currently natively supported hash-types in the XYO protocol
  */
-export type HASH_TYPE = 'sha256' | 'sha512' | 'md5' | 'sha1' | 'sha224'
+export type HASH_TYPE = 'sha256'
 
 /** A cache fro the hash-providers */
 const hashProvidersByType: {[h: string]: IXyoHashProvider } = {}
@@ -31,12 +30,12 @@ const hashProvidersByType: {[h: string]: IXyoHashProvider } = {}
  * Gets a HashProvider given a hashType
  *
  * @export
- * @param {HASH_TYPE} hashType 'sha256' | 'sha512' | 'md5' | 'sha1' | 'sha224'
+ * @param {HASH_TYPE} hashType 'sha256'
  * @returns {IXyoHashProvider} An instance of a `IXyoHashProvider`
  */
 
 export function getHashingProvider(hashType: HASH_TYPE): IXyoHashProvider {
-  if (['sha256', 'sha512', 'md5', 'sha1', 'sha224'].indexOf(hashType) === -1) {
+  if (['sha256'].indexOf(hashType) === -1) {
     throw new XyoError(`Unsupported hash type ${hashType}`, XyoErrors.CRITICAL)
   }
 
@@ -49,9 +48,6 @@ export function getHashingProvider(hashType: HASH_TYPE): IXyoHashProvider {
   switch (hashType) {
     case "sha256":
       hashProvider = new XyoNativeBaseHashProvider('sha256', SCHEMA_ID_SHA256)
-      break
-    case "sha512":
-      hashProvider = new XyoNativeBaseHashProvider('sha512', SCHEMA_ID_SHA512)
       break
     default:
       throw new XyoError(`This should never happen`, XyoErrors.CRITICAL)

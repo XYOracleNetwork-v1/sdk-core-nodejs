@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: typedArrayOf.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 9:19:11 am
+ * @Last modified time: Thursday, 29th November 2018 2:02:36 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoSerializableObject } from "../@types"
 
-const SCHEMA_ID_TYPED_SET = 0x14
+const SCHEMA_ID_TYPED_SET = 0xCC
 
 export function typedArrayOf<T extends IXyoSerializableObject>(tCollection: T[]): IXyoSerializableObject {
   return {

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 28th November 2018 5:37:38 pm
+ * @Last modified time: Thursday, 29th November 2018 2:14:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,7 @@
 import { XyoRsaShaSignerProvider } from "./xyo-rsa-sha-signer-provider"
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 
-const SCHEMA_ID_RSA_WITH_SHA256_SIGNATURE = 0x13
+const SCHEMA_ID_RSA_WITH_SHA256_SIGNATURE = 0x0A
 
 /** The types of signing algorithm supported */
 export type SignerProviderType = (

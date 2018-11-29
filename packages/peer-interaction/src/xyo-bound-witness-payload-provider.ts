@@ -5,7 +5,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-wit
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 9:27:13 am
+ * @Last modified time: Thursday, 29th November 2018 2:06:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,7 +17,7 @@ import { XyoBasePayload, IXyoPayload } from "@xyo-network/bound-witness"
 import { IXyoSerializableObject } from "@xyo-network/serialization"
 import { unsignedNumberToBuffer } from "@xyo-network/buffer-utils"
 
-const SCHEMA_ID_INDEX = 0x04
+const SCHEMA_ID_INDEX = 0x03
 
 export class XyoBoundWitnessPayloadProvider extends XyoBase implements IXyoBoundWitnessPayloadProvider {
 

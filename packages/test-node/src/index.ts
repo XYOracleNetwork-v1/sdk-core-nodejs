@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 1:11:21 pm
+ * @Last modified time: Thursday, 29th November 2018 3:19:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,10 +12,10 @@
 import { XyoBase } from '@xyo-network/base'
 import { XyoNode } from '@xyo-network/node'
 import { IXyoNetworkProvider, IXyoNetworkProcedureCatalogue, CatalogueItem } from '@xyo-network/network'
-import { XyoServerTcpNetwork } from '@xyo-network/network.tcp'
+import { XyoServerTcpNetwork, XyoClientTcpNetwork, IXyoNetworkAddressProvider } from '@xyo-network/network.tcp'
 import { XyoSimplePeerConnectionDelegate, IXyoPeerConnectionDelegate, IXyoPeerConnectionHandler, XyoPeerConnectionHandler } from '@xyo-network/peer-connections'
 import { XyoPeerInteractionRouter } from '@xyo-network/peer-interaction-router'
-import { XyoBoundWitnessStandardServerInteraction, XyoBoundWitnessTakeOriginChainServerInteraction } from '@xyo-network/peer-interaction-handlers'
+import { XyoBoundWitnessStandardServerInteraction, XyoBoundWitnessTakeOriginChainServerInteraction, XyoBoundWitnessStandardClientInteraction } from '@xyo-network/peer-interaction-handlers'
 import { IXyoHashProvider, getHashingProvider, IXyoHash } from '@xyo-network/hashing'
 
 import {
@@ -32,7 +32,8 @@ import { XyoBoundWitnessValidator, IXyoBoundWitnessSigningDataProducer, XyoBound
 import { IXyoSerializationService, IXyoTypeSerializer, XyoSerializationService } from '@xyo-network/serialization'
 import { XyoInMemoryStorageProvider } from '@xyo-network/storage'
 import { schema } from '@xyo-network/serialization-schema'
-import { XyoNumberDeserializer, XyoBoundWitnessDeserializer, XyoNotYetImplementedSerializer } from '@xyo-network/serializers'
+import { IXyoPublicKey, IXyoSignature, IXyoSigner } from '@xyo-network/signing'
+import { recipes } from './xyo-serialization-recipes'
 
 class SimpleCache implements ISimpleCache {
   private readonly cache: {[s: string]: any} = {}
@@ -70,7 +71,25 @@ export class XyoTestNode extends XyoBase {
 
   private getNetwork(): IXyoNetworkProvider {
     return this.serviceCache.getOrCreate('IXyoNetworkProvider', () => {
+      if (process.env.XYO_CLIENT) {
+        this.logInfo(`Running in client mode`)
+        return new XyoClientTcpNetwork(this.getNetworkAddressProvider())
+      }
+      this.logInfo(`Running in server mode`)
       return new XyoServerTcpNetwork(11000)
+    })
+  }
+
+  private getNetworkAddressProvider(): IXyoNetworkAddressProvider {
+    return this.serviceCache.getOrCreate('IXyoNetworkAddressProvider', () => {
+      return {
+        next: async () => {
+          return {
+            host: '127.0.0.1',
+            port: 11000
+          }
+        }
+      }
     })
   }
 
@@ -131,6 +150,14 @@ export class XyoTestNode extends XyoBase {
         this.getBoundWitnessSuccessListener(),
         {
           newInstance: (signers, payload) =>  {
+            if (process.env.XYO_CLIENT) {
+              return new XyoBoundWitnessStandardClientInteraction(
+                signers,
+                payload,
+                this.getBoundWitnessSigningService(),
+                this.getBoundWitnessSerializer()
+              )
+            }
             return new XyoBoundWitnessStandardServerInteraction(
               signers,
               payload,
@@ -190,7 +217,9 @@ export class XyoTestNode extends XyoBase {
       return new XyoOriginChainStateInMemoryRepository(
         0,
         undefined,
-        [],
+        [
+          new MockSigner(new MockPublicKey('EEEEEEEE'), new MockSignature('DDDDDDDD'))
+        ],
         undefined,
         [],
         undefined
@@ -260,57 +289,26 @@ export class XyoTestNode extends XyoBase {
 
   private getSerializationService(): IXyoSerializationService  {
     return this.serviceCache.getOrCreate('IXyoSerializationService', () => {
-      return new XyoSerializationService(schema, {
-
-      })
+      return new XyoSerializationService(schema, this.getRecipes())
     })
   }
 
-  private getBoundWitnessSerializer(): IXyoTypeSerializer<IXyoBoundWitness>  {
+  private getBoundWitnessSerializer(): IXyoTypeSerializer < IXyoBoundWitness >  {
     return this.serviceCache.getOrCreate('XyoBoundWitnessSerializer', () => {
       return this.getSerializationService().getInstanceOfTypeSerializer<IXyoBoundWitness>()
     })
   }
 
-  private getHashSerializer(): IXyoTypeSerializer<IXyoHash>  {
+  private getHashSerializer(): IXyoTypeSerializer < IXyoHash >  {
     return this.serviceCache.getOrCreate('XyoHashSerializer', () => {
       return this.getSerializationService().getInstanceOfTypeSerializer<IXyoHash>()
     })
   }
 
   private getRecipes() {
-    return {
-      [schema.rssi.id]: new XyoNumberDeserializer(false, schema.rssi.id),
-      [schema.gps.id]: new XyoNotYetImplementedSerializer(schema.gps.id),
-      [schema.lat.id]: new XyoNotYetImplementedSerializer(schema.lat.id),
-      [schema.lng.id]: new XyoNotYetImplementedSerializer(schema.lng.id),
-      [schema.time.id]: new XyoNotYetImplementedSerializer(schema.time.id),
-      [schema.blob.id]: new XyoNotYetImplementedSerializer(schema.blob.id),
-      [schema.typedSet.id]: new XyoNotYetImplementedSerializer(schema.typedSet.id),
-      [schema.untypedSet.id]: new XyoNotYetImplementedSerializer(schema.untypedSet.id),
-      [schema.hashStub.id]: new XyoNotYetImplementedSerializer(schema.hashStub.id),
-      [schema.sha256Hash.id]: new XyoNotYetImplementedSerializer(schema.sha256Hash.id),
-      [schema.sha3Hash.id]: new XyoNotYetImplementedSerializer(schema.sha3Hash.id),
-      [schema.sha512Hash.id]: new XyoNotYetImplementedSerializer(schema.sha512Hash.id),
-      // tslint:disable-next-line:max-line-length
-      [schema.ecSecp256k1UncompressedPublicKey.id]: new XyoNotYetImplementedSerializer(schema.ecSecp256k1UncompressedPublicKey.id),
-      [schema.rsaPublicKey.id]: new XyoNotYetImplementedSerializer(schema.rsaPublicKey.id),
-      [schema.stubPublicKey.id]: new XyoNotYetImplementedSerializer(schema.stubPublicKey.id),
-
-      // tslint:disable-next-line:max-line-length
-      [schema.ecdsaSecp256k1WithSha256Signature.id]: new XyoNotYetImplementedSerializer(schema.ecdsaSecp256k1WithSha256Signature.id),
-      [schema.rsaWithSha256Signature.id]: new XyoNotYetImplementedSerializer(schema.rsaWithSha256Signature.id),
-      [schema.stubSignature.id]: new XyoNotYetImplementedSerializer(schema.stubSignature.id),
-      [schema.index.id]: new XyoNumberDeserializer(false, schema.index.id),
-      [schema.keySet.id]: new XyoNotYetImplementedSerializer(schema.keySet.id),
-      [schema.nextPublicKey.id]: new XyoNotYetImplementedSerializer(schema.nextPublicKey.id),
-      [schema.originBlockHashSet.id]: new XyoNotYetImplementedSerializer(schema.originBlockHashSet.id),
-      [schema.originBlockSet.id]: new XyoNotYetImplementedSerializer(schema.originBlockSet.id),
-      [schema.payload.id]: new XyoNotYetImplementedSerializer(schema.payload.id),
-      [schema.previousHash.id]: new XyoNotYetImplementedSerializer(schema.previousHash.id),
-      [schema.signatureSet.id]: new XyoNotYetImplementedSerializer(schema.signatureSet.id),
-      [schema.boundWitness.id]: new XyoBoundWitnessDeserializer()
-    }
+    return this.serviceCache.getOrCreate('XyoRecipes', () => {
+      return recipes
+    })
   }
 }
 
@@ -322,4 +320,56 @@ if (require.main === module) {
 
 interface ISimpleCache {
   getOrCreate<T>(name: string, initializer: () => T): T
+}
+
+// tslint:disable-next-line:max-classes-per-file
+class MockSigner implements IXyoSigner {
+
+  constructor (
+    public readonly publicKey: MockPublicKey,
+    public readonly signature: MockSignature
+  ) {}
+
+  get privateKey () {
+    return 'abc'
+  }
+
+  public async signData(data: Buffer): Promise<IXyoSignature> {
+    return this.signature
+  }
+}
+
+// tslint:disable-next-line:max-classes-per-file
+class MockPublicKey implements IXyoPublicKey {
+  public schemaObjectId = 0x10
+
+  constructor(private readonly publicKeyHexString: string) {}
+
+  public getRawPublicKey(): Buffer {
+    return Buffer.from(this.publicKeyHexString, 'hex')
+  }
+
+  public serialize(): Buffer {
+    return this.getRawPublicKey()
+  }
+}
+
+// tslint:disable-next-line:max-classes-per-file
+class MockSignature implements IXyoSignature {
+
+  public schemaObjectId = schema.stubSignature.id
+
+  constructor (private readonly desiredSignatureHexString: string) {}
+
+  public async verify(data: Buffer, publicKey: IXyoPublicKey): Promise<boolean> {
+    return data.toString('hex') === this.desiredSignatureHexString
+  }
+
+  public get encodedSignature (): Buffer {
+    return Buffer.from(this.desiredSignatureHexString, 'hex')
+  }
+
+  public serialize(): Buffer {
+    return this.encodedSignature
+  }
 }
