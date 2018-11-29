@@ -32,12 +32,12 @@
     { "path": "../origin-chain"},
     { "path": "../bound-witness"},
     { "path": "../serialization"},
+    { "path": "../serialization-schema"},
     { "path": "../serializers"},
     { "path": "../origin-block-repository"},
     { "path": "../peer-interaction-handlers"},
     { "path": "../hashing"},
     { "path": "../zig-zag-bound-witness-builder"},
-    { "path": "../object-schema"},
     { "path": "../signing"},
     { "path": "../storage"},
   ]

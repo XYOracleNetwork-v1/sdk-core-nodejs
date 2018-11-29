@@ -4,21 +4,25 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serialization-service.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 28th November 2018 2:44:46 pm
+ * @Last modified time: Thursday, 29th November 2018 9:23:02 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { BufferOrString, IXyoSerializationService, IXyoSerializableObject, IXyoTypeSerializer, SerializationType, IXyoDeserializer } from "./@types"
+import { BufferOrString, IXyoSerializationService, IXyoSerializableObject, IXyoTypeSerializer, SerializationType, IXyoDeserializer, IXyoObjectSchema } from "./@types"
 
 import { XyoBase } from '@xyo-network/base'
-import { resolveSerializablesToBuffer } from "."
-import { schema, serialize, findSchemaById, readHeader } from '@xyo-network/object-schema'
+import { resolveSerializablesToBuffer } from "./helpers/resolveSerializablesToBuffer"
 import { XyoError, XyoErrors } from '@xyo-network/errors'
+import { serialize } from './helpers/serialize'
+import { findSchemaById } from './helpers/findSchemaById'
+import { readHeader } from './helpers/readHeader'
 
 export class XyoSerializationService extends XyoBase implements IXyoSerializationService {
 
-  constructor (private readonly recipes: { [s: string]: IXyoDeserializer<IXyoSerializableObject>}) {
+  constructor (
+    private readonly schema: IXyoObjectSchema,
+    private readonly recipes: { [s: string]: IXyoDeserializer<IXyoSerializableObject>}) {
     super()
   }
 
@@ -29,9 +33,9 @@ export class XyoSerializationService extends XyoBase implements IXyoSerializatio
     const result = serializable.serialize()
     const buf = result instanceof Buffer ?
       result :
-      resolveSerializablesToBuffer(serializable.schemaObjectId, schema, result)
+      resolveSerializablesToBuffer(serializable.schemaObjectId, this.schema, result)
 
-    const b = serialize(buf, findSchemaById(serializable.schemaObjectId, schema))
+    const b = serialize(buf, findSchemaById(serializable.schemaObjectId, this.schema))
     if (serializationType === 'hex') {
       return b.toString('hex')
     }

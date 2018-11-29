@@ -1,18 +1,14 @@
 /*
  * @Author: XY | The Findables Company <ryanxyo>
- * @Date:   Tuesday, 20th November 2018 9:00:33 am
+ * @Date:   Wednesday, 28th November 2018 5:28:12 pm
  * @Email:  developer@xyfindables.com
- * @Filename: xyo-object-schema.spec.ts
+ * @Filename: serialize.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 9:37:17 am
+ * @Last modified time: Wednesday, 28th November 2018 5:28:37 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
-
-import {
-  serialize
-} from '../xyo-object-schema'
-
+import { serialize } from '../helpers/serialize'
 describe('XyoObjectSchema', () => {
   it('Should serialize value with specified sizeIdentifierSize', () => {
     const buf = Buffer.alloc(1)

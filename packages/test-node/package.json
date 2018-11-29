@@ -16,12 +16,12 @@
     "@xyo-network/hashing": "^0.2.0",
     "@xyo-network/bound-witness": "^0.2.0",
     "@xyo-network/serialization": "^0.2.0",
+    "@xyo-network/serialization-schema": "^0.2.0",
     "@xyo-network/origin-chain": "^0.2.0",
     "@xyo-network/origin-block-repository": "^0.2.0",
     "@xyo-network/peer-interaction-handlers": "^0.2.0",
     "@xyo-network/peer-connections": "^0.2.0",
     "@xyo-network/zig-zag-bound-witness-builder": "^0.2.0",
-    "@xyo-network/object-schema": "^0.2.0",
     "@xyo-network/signing": "^0.2.0",
     "@xyo-network/serializers": "^0.2.0",
     "@xyo-network/storage": "^0.2.0"

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 10:06:02 am
+ * @Last modified time: Wednesday, 28th November 2018 5:50:00 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -113,4 +113,46 @@ export function writePointTo32ByteBuffer(point: Buffer) {
   }
 
   return dest
+}
+
+export function unsignedNumberToBuffer(num: number): Buffer {
+  let buf: Buffer
+
+  if (num <= Math.pow(2, 8) - 1) {
+    buf = Buffer.alloc(1)
+    buf.writeUInt8(num, 0)
+  } else if (num <= Math.pow(2, 16) - 1) {
+    buf = Buffer.alloc(2)
+    buf.writeUInt16BE(num, 0)
+  } else if (num <= Math.pow(2, 32) - 1) {
+    buf = Buffer.alloc(4)
+    buf.writeUInt32BE(num, 0)
+  } else if (num > Math.pow(2, 32)) {
+    throw new XyoError('This is not yet supported', XyoErrors.CRITICAL)
+  } else {
+    throw new XyoError('This should never happen', XyoErrors.CRITICAL)
+  }
+
+  return buf
+}
+
+export function signedNumberToBuffer(num: number): Buffer {
+  let buf: Buffer
+
+  if (num <= Math.pow(2, 7) - 1) {
+    buf = Buffer.alloc(1)
+    buf.writeInt8(num, 0)
+  } else if (num <= Math.pow(2, 15) - 1) {
+    buf = Buffer.alloc(2)
+    buf.writeInt16BE(num, 0)
+  } else if (num <= Math.pow(2, 31) - 1) {
+    buf = Buffer.alloc(4)
+    buf.writeInt32BE(num, 0)
+  } else if (num > Math.pow(2, 31)) {
+    throw new XyoError('This is not yet supported', XyoErrors.CRITICAL)
+  } else {
+    throw new XyoError('This should never happen', XyoErrors.CRITICAL)
+  }
+
+  return buf
 }

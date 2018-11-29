@@ -23,9 +23,9 @@
   "include": ["src/**/*"],
   "references": [
     { "path": "../serialization"},
-    { "path": "../object-schema"},
     { "path": "../bound-witness"},
     { "path": "../base"},
+    { "path": "../buffer-utils"},
     { "path": "../signing"}
   ]
 }

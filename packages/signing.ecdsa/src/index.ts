@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 26th November 2018 3:50:13 pm
+ * @Last modified time: Wednesday, 28th November 2018 5:40:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,8 @@
 import { XyoEcdsaSecp256k1SignerProvider } from './xyo-ecdsa-secp256k1-signer-provider'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { getHashingProvider } from '@xyo-network/hashing'
-import { schema } from '@xyo-network/object-schema'
+
+const SCHEMA_ID_EC_SECP256K1_UNCOMPRESSED_PUBLIC_KEY = 0x0d
 
 /** The types of signing algorithm supported */
 export type SignerProviderType = (
@@ -45,21 +46,21 @@ export function getSignerProvider(signerProviderType: SignerProviderType): XyoEc
     case 'secp256k1':
       signerProvider = new XyoEcdsaSecp256k1SignerProvider(
         undefined,
-        schema.ecSecp256k1UncompressedPublicKey.id
+        SCHEMA_ID_EC_SECP256K1_UNCOMPRESSED_PUBLIC_KEY
       )
       break
     case 'secp256k1-sha1':
       const sha1HashingProvider = getHashingProvider('sha1')
       signerProvider = new XyoEcdsaSecp256k1SignerProvider(
         sha1HashingProvider,
-        schema.ecSecp256k1UncompressedPublicKey.id
+        SCHEMA_ID_EC_SECP256K1_UNCOMPRESSED_PUBLIC_KEY
       )
       break
     case 'secp256k1-sha256':
       const sha256HashingProvider = getHashingProvider('sha256')
       signerProvider = new XyoEcdsaSecp256k1SignerProvider(
         sha256HashingProvider,
-        schema.ecSecp256k1UncompressedPublicKey.id
+        SCHEMA_ID_EC_SECP256K1_UNCOMPRESSED_PUBLIC_KEY
       )
       break
     default:

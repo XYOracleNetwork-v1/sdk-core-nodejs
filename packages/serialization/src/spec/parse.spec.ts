@@ -4,12 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: parse.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 28th November 2018 12:53:22 pm
+ * @Last modified time: Thursday, 29th November 2018 10:32:05 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { parse, IParseResult } from ".."
+import { parse } from "../helpers/parse"
+import { IParseResult } from "../@types"
 
 describe('Parsing', () => {
 

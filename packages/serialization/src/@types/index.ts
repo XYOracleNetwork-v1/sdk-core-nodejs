@@ -4,12 +4,40 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 28th November 2018 3:27:17 pm
+ * @Last modified time: Thursday, 29th November 2018 12:53:20 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoObjectSchema } from '@xyo-network/object-schema'
+export interface IXyoObjectPartialSchema {
+
+  /**
+   * How many bytes necessary to encode size of object
+   */
+  sizeIdentifierSize: 1 | 2 | 4 | 8 | null
+
+  /**
+   * Is the value that is being encoded iterable and if so is it typed
+   */
+  iterableType: IIterableType | null
+
+  /**
+   * What is the id of the schema
+   */
+  id: number
+}
+
+export type IIterableType = 'not-iterable' | 'iterable-typed' | 'iterable-untyped'
+
+export interface IXyoReadable {
+  getReadableName(): string
+  getReadableValue(): any
+  getReadableJSON(): string
+}
+
+export interface IXyoObjectSchema {
+  [s: string]: IXyoObjectPartialSchema
+}
 
 /** Either a Buffer or a hex-string */
 export type SerializationType = 'buffer' | 'hex'
@@ -76,4 +104,12 @@ export interface IXyoSerializableObject {
 export interface IXyoDeserializer<T extends IXyoSerializableObject> {
   schemaObjectId: number
   deserialize(data: Buffer, serializationService: IXyoSerializationService): T
+}
+
+export interface IParseResult {
+  data: Buffer | IParseResult[]
+  id: number
+  sizeIdentifierSize: 1 | 2 | 4 | 8
+  iterableType: 'iterable-typed' | 'iterable-untyped' | 'not-iterable',
+  bytes: Buffer
 }

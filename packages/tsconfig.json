@@ -16,7 +16,6 @@
   "references": [
       { "path": "base" },
       { "path": "logger" },
-      { "path": "object-schema" },
       { "path": "hashing" },
       { "path": "signing" },
       { "path": "bound-witness" },
@@ -33,6 +32,7 @@
       { "path": "peer-interaction" },
       { "path": "peer-interaction-handlers" },
       { "path": "serialization" },
+      { "path": "serialization-schema" },
       { "path": "origin-block-repository" },
       { "path": "peer-interaction-router" },
       { "path": "origin-chain" },
@@ -41,7 +41,6 @@
   "include": [
     "logger/src/**/*.ts",
     "base/src/**/*.ts",
-    "object-schema/src/**/*.ts",
     "hashing/src/**/*.ts",
     "signing/src/**/*.ts",
     "bound-witness/src/**/*.ts",
@@ -61,6 +60,7 @@
     "origin-chain/src/**/*.ts",
     "peer-interaction-router/src/**/*.ts",
     "peer-interaction-handlers/src/**/*.ts",
+    "serialization-schema/src/**/*.ts",
     "test-node/src/**/*.ts"
   ]
 }

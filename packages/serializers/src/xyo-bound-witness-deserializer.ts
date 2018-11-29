@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-deserializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 28th November 2018 3:32:53 pm
+ * @Last modified time: Thursday, 29th November 2018 11:05:16 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoBoundWitness, XyoBaseBoundWitness, IXyoPayload } from "@xyo-network/bound-witness"
-import { IXyoDeserializer, parse, ParseQuery, IXyoSerializationService } from "@xyo-network/serialization"
+import { IXyoBoundWitness, XyoBaseBoundWitness, IXyoPayload, XyoBasePayload } from "@xyo-network/bound-witness"
+import { IXyoDeserializer, parse, ParseQuery, IXyoSerializationService, IXyoSerializable, IXyoSerializableObject } from "@xyo-network/serialization"
 import { IXyoPublicKey, IXyoSignature } from "@xyo-network/signing"
 
 export class XyoBoundWitnessDeserializer implements IXyoDeserializer<IXyoBoundWitness> {
@@ -29,7 +29,17 @@ export class XyoBoundWitnessDeserializer implements IXyoDeserializer<IXyoBoundWi
     })
 
     const payloadValue = payloads.mapChildren((pQuery) => {
-      return serializationService.deserialize<IXyoPayload>(pQuery.readData(true))
+      const signedPayload = pQuery.query([0])
+      const unsignedPayload = pQuery.query([1])
+      const signedPayloadValue = signedPayload.mapChildren((signedPayloadChild) => {
+        return serializationService.deserialize(signedPayloadChild.readData(true))
+      })
+
+      const unsignedPayloadValue = unsignedPayload.mapChildren((unsignedPayloadChild) => {
+        return serializationService.deserialize(unsignedPayloadChild.readData(true))
+      })
+
+      return new OnTheFlyPayload(signedPayloadValue, unsignedPayloadValue)
     })
 
     const signaturesValue = signaturesSet.mapChildren((sQuery) => {
@@ -47,6 +57,17 @@ class OnTheFlyBoundWitness extends XyoBaseBoundWitness {
     public publicKeys: IXyoPublicKey[][],
     public signatures: IXyoSignature[][],
     public payloads: IXyoPayload[]
+  ) {
+    super()
+  }
+}
+
+// tslint:disable-next-line:max-classes-per-file
+class OnTheFlyPayload extends XyoBasePayload {
+
+  constructor (
+    public signedPayload: IXyoSerializableObject[],
+    public unsignedPayload: IXyoSerializableObject[]
   ) {
     super()
   }

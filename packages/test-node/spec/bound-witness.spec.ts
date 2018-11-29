@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: bound-witness.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 28th November 2018 3:38:23 pm
+ * @Last modified time: Thursday, 29th November 2018 12:03:12 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,10 +12,10 @@
 import { XyoBoundWitnessStandardServerInteraction } from '@xyo-network/peer-interaction-handlers'
 import { IXyoSigner, IXyoPublicKey, IXyoSignature } from '@xyo-network/signing'
 import { XyoBasePayload, XyoBoundWitnessSigningService, IXyoBoundWitness, XyoBaseBoundWitness, IXyoPayload } from '@xyo-network/bound-witness'
-import { IXyoSerializableObject, XyoSerializationService, BufferOrString } from '@xyo-network/serialization'
+import { IXyoSerializableObject, XyoSerializationService, BufferOrString, IXyoDeserializer, IXyoSerializationService, parse, ParseQuery } from '@xyo-network/serialization'
 import { IXyoNetworkPipe, IXyoNetworkPeer, CatalogueItem } from '@xyo-network/network'
-import { schema } from '@xyo-network/object-schema'
-import { XyoBoundWitnessDeserializer } from '@xyo-network/serializers'
+import { schema } from '@xyo-network/serialization-schema'
+import { XyoBoundWitnessDeserializer, XyoSerializableNumber, XyoNumberDeserializer, XyoBlobDeserializer } from '@xyo-network/serializers'
 
 describe(`Bound Witness Interaction`, () => {
   it(`Should leave two parties with the same bound-witness data`, async () => {
@@ -31,6 +31,7 @@ describe(`Bound Witness Interaction`, () => {
     const clientMockPublicKey2 = new MockPublicKey('44444444')
     const clientMockSignature1 = new MockSignature('33333333')
     const clientMockSignature2 = new MockSignature('55555555')
+
     const clientMockSigner1 = new MockSigner(
       clientMockPublicKey1,
       clientMockSignature1
@@ -44,43 +45,19 @@ describe(`Bound Witness Interaction`, () => {
 
     const serverPayload = new MockPayload(
       [
-        {
-          schemaObjectId: 0x04,
-          serialize: () => {
-            return Buffer.alloc(1)
-          }
-        }
+        new XyoSerializableNumber(0, false, schema.index.id)
       ],
       [
-        {
-          schemaObjectId: 0x16,
-          serialize: () => {
-            const b = Buffer.alloc(1)
-            b.writeInt8(-10, 0)
-            return b
-          }
-        }
+        new XyoSerializableNumber(-10, true, schema.rssi.id)
       ]
     )
 
     const clientPayload = new MockPayload(
       [
-        {
-          schemaObjectId: 0x04,
-          serialize: () => {
-            return Buffer.alloc(1)
-          }
-        }
+        new XyoSerializableNumber(0, false, schema.index.id)
       ],
       [
-        {
-          schemaObjectId: 0x16,
-          serialize: () => {
-            const b = Buffer.alloc(1)
-            b.writeInt8(-10, 0)
-            return b
-          }
-        }
+        new XyoSerializableNumber(-10, true, schema.rssi.id)
       ]
     )
 
@@ -90,8 +67,14 @@ describe(`Bound Witness Interaction`, () => {
       }
     })
 
-    const serializationService = new XyoSerializationService({
-      [schema.boundWitness.id]: new XyoBoundWitnessDeserializer()
+    const serializationService = new XyoSerializationService(schema, {
+      [schema.boundWitness.id]: new XyoBoundWitnessDeserializer(),
+      [schema.stubPublicKey.id]: new MockPublicKeyDeserializer(),
+      [schema.index.id]: new XyoNumberDeserializer(false, schema.index.id),
+      [schema.rssi.id]: new XyoNumberDeserializer(true, schema.rssi.id),
+      [schema.stubSignature.id]: new XyoBlobDeserializer(schema.stubSignature.id, (blob) => {
+        return new MockSignature(blob.toString('hex'))
+      })
     })
 
     const boundWitnessSerializer = serializationService.getInstanceOfTypeSerializer<IXyoBoundWitness>()
@@ -125,7 +108,7 @@ describe(`Bound Witness Interaction`, () => {
 
     const createdBoundWitness = await interaction.run(new MockNetworkPipe(
       clientSigners,
-      [clientMockSignature1, clientMockSignature1],
+      [clientMockSignature1, clientMockSignature2],
       clientPayload,
       serializationService,
       [
@@ -201,10 +184,10 @@ describe(`Bound Witness Interaction`, () => {
     const createdBytes = boundWitnessSerializer.serialize(createdBoundWitness, 'hex') as string
     const expectedBw = new MockBoundWitness(
       [
-        [serverMockPublicKey], [clientMockPublicKey1]
+        [serverMockPublicKey], [clientMockPublicKey1, clientMockPublicKey2]
       ],
       [
-        [serverMockSignature], [clientMockSignature1]
+        [serverMockSignature], [clientMockSignature1, clientMockSignature2]
       ],
       [
         serverPayload, clientPayload
@@ -325,6 +308,17 @@ class MockPublicKey implements IXyoPublicKey {
 
   public serialize(): Buffer {
     return this.getRawPublicKey()
+  }
+}
+
+// tslint:disable-next-line:max-classes-per-file
+class MockPublicKeyDeserializer implements IXyoDeserializer<MockPublicKey> {
+  public schemaObjectId =  0x10
+  public deserialize(data: Buffer, serializationService: IXyoSerializationService): MockPublicKey {
+    const parseResult = parse(data)
+    const q = new ParseQuery(parseResult)
+    const dataBuffer = q.readData(false)
+    return new MockPublicKey(dataBuffer.toString('hex'))
   }
 }
 

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 26th November 2018 4:28:03 pm
+ * @Last modified time: Wednesday, 28th November 2018 5:33:56 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,10 +12,12 @@
 import { IXyoHashProvider } from './@types'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { XyoNativeBaseHashProvider } from './xyo-native-base-hash-provider'
-import { schema } from '@xyo-network/object-schema'
 
 export { XyoBaseHash } from './xyo-base-hash'
 export { IXyoHash, IXyoHashProvider } from './@types'
+
+const SCHEMA_ID_SHA256 = 0x09
+const SCHEMA_ID_SHA512 = 0x0a
 
 /**
  * The currently natively supported hash-types in the XYO protocol
@@ -46,10 +48,10 @@ export function getHashingProvider(hashType: HASH_TYPE): IXyoHashProvider {
 
   switch (hashType) {
     case "sha256":
-      hashProvider = new XyoNativeBaseHashProvider('sha256', schema.sha256Hash.id)
+      hashProvider = new XyoNativeBaseHashProvider('sha256', SCHEMA_ID_SHA256)
       break
     case "sha512":
-      hashProvider = new XyoNativeBaseHashProvider('sha512', schema.sha512Hash.id)
+      hashProvider = new XyoNativeBaseHashProvider('sha512', SCHEMA_ID_SHA512)
       break
     default:
       throw new XyoError(`This should never happen`, XyoErrors.CRITICAL)

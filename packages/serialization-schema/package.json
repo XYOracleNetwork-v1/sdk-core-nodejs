@@ -1,14 +1,12 @@
 {
-  "name": "@xyo-network/hashing",
+  "name": "@xyo-network/serialization-schema",
   "version": "0.2.0",
-  "description": "Hashing Types and Services for the Xyo Network",
+  "description": "The schema being used to serialize objects in Xyo",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/errors": "^0.2.0",
-    "@xyo-network/base": "^0.2.0",
     "@xyo-network/serialization": "^0.2.0"
   },
   "devDependencies": {

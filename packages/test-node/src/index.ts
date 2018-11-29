@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 27th November 2018 4:12:06 pm
+ * @Last modified time: Thursday, 29th November 2018 1:11:21 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,6 +17,7 @@ import { XyoSimplePeerConnectionDelegate, IXyoPeerConnectionDelegate, IXyoPeerCo
 import { XyoPeerInteractionRouter } from '@xyo-network/peer-interaction-router'
 import { XyoBoundWitnessStandardServerInteraction, XyoBoundWitnessTakeOriginChainServerInteraction } from '@xyo-network/peer-interaction-handlers'
 import { IXyoHashProvider, getHashingProvider, IXyoHash } from '@xyo-network/hashing'
+
 import {
   XyoBoundWitnessHandlerProvider,
   IXyoBoundWitnessPayloadProvider,
@@ -24,12 +25,14 @@ import {
   XyoNestedBoundWitnessExtractor,
   XyoBoundWitnessPayloadProvider
 } from '@xyo-network/peer-interaction'
+
 import { IXyoOriginChainRepository, XyoOriginChainStateInMemoryRepository } from '@xyo-network/origin-chain'
 import { IXyoOriginBlockRepository, XyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { XyoBoundWitnessValidator, IXyoBoundWitnessSigningDataProducer, XyoBoundWitnessSigningService, IXyoBoundWitness, IXyoPayload, XyoBoundWitnessSigningDataProducer } from '@xyo-network/bound-witness'
 import { IXyoSerializationService, IXyoTypeSerializer, XyoSerializationService } from '@xyo-network/serialization'
 import { XyoInMemoryStorageProvider } from '@xyo-network/storage'
-import { schema } from '@xyo-network/object-schema'
+import { schema } from '@xyo-network/serialization-schema'
+import { XyoNumberDeserializer, XyoBoundWitnessDeserializer, XyoNotYetImplementedSerializer } from '@xyo-network/serializers'
 
 class SimpleCache implements ISimpleCache {
   private readonly cache: {[s: string]: any} = {}
@@ -257,7 +260,9 @@ export class XyoTestNode extends XyoBase {
 
   private getSerializationService(): IXyoSerializationService  {
     return this.serviceCache.getOrCreate('IXyoSerializationService', () => {
-      return new XyoSerializationService({})
+      return new XyoSerializationService(schema, {
+
+      })
     })
   }
 
@@ -271,6 +276,41 @@ export class XyoTestNode extends XyoBase {
     return this.serviceCache.getOrCreate('XyoHashSerializer', () => {
       return this.getSerializationService().getInstanceOfTypeSerializer<IXyoHash>()
     })
+  }
+
+  private getRecipes() {
+    return {
+      [schema.rssi.id]: new XyoNumberDeserializer(false, schema.rssi.id),
+      [schema.gps.id]: new XyoNotYetImplementedSerializer(schema.gps.id),
+      [schema.lat.id]: new XyoNotYetImplementedSerializer(schema.lat.id),
+      [schema.lng.id]: new XyoNotYetImplementedSerializer(schema.lng.id),
+      [schema.time.id]: new XyoNotYetImplementedSerializer(schema.time.id),
+      [schema.blob.id]: new XyoNotYetImplementedSerializer(schema.blob.id),
+      [schema.typedSet.id]: new XyoNotYetImplementedSerializer(schema.typedSet.id),
+      [schema.untypedSet.id]: new XyoNotYetImplementedSerializer(schema.untypedSet.id),
+      [schema.hashStub.id]: new XyoNotYetImplementedSerializer(schema.hashStub.id),
+      [schema.sha256Hash.id]: new XyoNotYetImplementedSerializer(schema.sha256Hash.id),
+      [schema.sha3Hash.id]: new XyoNotYetImplementedSerializer(schema.sha3Hash.id),
+      [schema.sha512Hash.id]: new XyoNotYetImplementedSerializer(schema.sha512Hash.id),
+      // tslint:disable-next-line:max-line-length
+      [schema.ecSecp256k1UncompressedPublicKey.id]: new XyoNotYetImplementedSerializer(schema.ecSecp256k1UncompressedPublicKey.id),
+      [schema.rsaPublicKey.id]: new XyoNotYetImplementedSerializer(schema.rsaPublicKey.id),
+      [schema.stubPublicKey.id]: new XyoNotYetImplementedSerializer(schema.stubPublicKey.id),
+
+      // tslint:disable-next-line:max-line-length
+      [schema.ecdsaSecp256k1WithSha256Signature.id]: new XyoNotYetImplementedSerializer(schema.ecdsaSecp256k1WithSha256Signature.id),
+      [schema.rsaWithSha256Signature.id]: new XyoNotYetImplementedSerializer(schema.rsaWithSha256Signature.id),
+      [schema.stubSignature.id]: new XyoNotYetImplementedSerializer(schema.stubSignature.id),
+      [schema.index.id]: new XyoNumberDeserializer(false, schema.index.id),
+      [schema.keySet.id]: new XyoNotYetImplementedSerializer(schema.keySet.id),
+      [schema.nextPublicKey.id]: new XyoNotYetImplementedSerializer(schema.nextPublicKey.id),
+      [schema.originBlockHashSet.id]: new XyoNotYetImplementedSerializer(schema.originBlockHashSet.id),
+      [schema.originBlockSet.id]: new XyoNotYetImplementedSerializer(schema.originBlockSet.id),
+      [schema.payload.id]: new XyoNotYetImplementedSerializer(schema.payload.id),
+      [schema.previousHash.id]: new XyoNotYetImplementedSerializer(schema.previousHash.id),
+      [schema.signatureSet.id]: new XyoNotYetImplementedSerializer(schema.signatureSet.id),
+      [schema.boundWitness.id]: new XyoBoundWitnessDeserializer()
+    }
   }
 }
 

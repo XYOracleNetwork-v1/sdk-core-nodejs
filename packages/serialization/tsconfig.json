@@ -22,7 +22,6 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    { "path": "../base" },
-    { "path": "../object-schema" }
+    { "path": "../base" }
   ]
 }
