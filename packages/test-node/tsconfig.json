@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+      "target": "es6",
+      "module": "commonjs",
+      "lib": ["esnext"],
+      "declaration": true,
+      "declarationMap": true,
+      "sourceMap": true,
+      "strict": true,
+      "composite": true,
+      "esModuleInterop": true,
+      "noImplicitAny": true,
+      "moduleResolution": "node",
+      "outDir": "dist",
+      "rootDir": "src"
+  },
+  "exclude": [
+    "node_modules",
+    "src/**/test/*",
+    "src/**/spec",
+    "src/**/*.spec.ts"
+  ],
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../base"},
+    { "path": "../node"},
+    { "path": "../network"},
+    { "path": "../network.tcp"},
+    { "path": "../peer-interaction"},
+    { "path": "../peer-interaction-router"},
+    { "path": "../peer-connections"},
+    { "path": "../origin-chain"},
+    { "path": "../bound-witness"},
+    { "path": "../serialization"},
+    { "path": "../serialization-schema"},
+    { "path": "../serializers"},
+    { "path": "../origin-block-repository"},
+    { "path": "../peer-interaction-handlers"},
+    { "path": "../hashing"},
+    { "path": "../zig-zag-bound-witness-builder"},
+    { "path": "../signing"},
+    { "path": "../test-utils"},
+    { "path": "../storage"},
+  ]
+}
