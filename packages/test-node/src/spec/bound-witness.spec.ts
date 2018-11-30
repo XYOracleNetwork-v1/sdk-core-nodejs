@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: bound-witness.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 11:36:15 am
+ * @Last modified time: Friday, 30th November 2018 1:19:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,7 +15,7 @@ import { XyoSerializationService } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
 import { XyoSerializableNumber } from '@xyo-network/serializers'
 import { XyoMockNetworkPipe, XyoMockBoundWitness, XyoMockPayload, XyoMockSigner, XyoMockPublicKey, XyoMockSignature } from '@xyo-network/test-utils'
-import { recipes } from '../xyo-serialization-recipes'
+import { XyoRecipes } from '../xyo-serialization-recipes'
 
 describe(`Bound Witness Interaction`, () => {
   it(`Should leave two parties with the same bound-witness data`, async () => {
@@ -67,7 +67,11 @@ describe(`Bound Witness Interaction`, () => {
       }
     })
 
-    const serializationService = new XyoSerializationService(schema, recipes)
+    const serializationService = new XyoSerializationService(
+      schema,
+      // @ts-ignore
+      new XyoRecipes(undefined).getRecipes()
+    )
 
     const boundWitnessSerializer = serializationService.getInstanceOfTypeSerializer<IXyoBoundWitness>()
 

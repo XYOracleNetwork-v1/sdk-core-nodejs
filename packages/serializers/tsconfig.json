@@ -26,6 +26,7 @@
     { "path": "../bound-witness"},
     { "path": "../base"},
     { "path": "../buffer-utils"},
-    { "path": "../signing"}
+    { "path": "../signing"},
+    { "path": "../hashing"}
   ]
 }

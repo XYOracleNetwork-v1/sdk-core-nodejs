@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 4:02:56 pm
+ * @Last modified time: Friday, 30th November 2018 12:25:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -66,6 +66,7 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
 
     try {
       await this.boundWitnessValidator.validateBoundWitness(hashValue, boundWitness)
+      this.logInfo(`Bound Witness Validated`)
     } catch (err) {
       this.logError(`Origin block failed validation. Will not add.`, err)
       throw err

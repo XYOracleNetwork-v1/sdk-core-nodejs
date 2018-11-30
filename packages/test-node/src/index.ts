@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 10:21:58 am
+ * @Last modified time: Friday, 30th November 2018 1:16:52 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -33,7 +33,7 @@ import { XyoBoundWitnessValidator, IXyoBoundWitnessSigningDataProducer, XyoBound
 import { IXyoSerializationService, IXyoTypeSerializer, XyoSerializationService } from '@xyo-network/serialization'
 import { XyoInMemoryStorageProvider } from '@xyo-network/storage'
 import { schema } from '@xyo-network/serialization-schema'
-import { recipes } from './xyo-serialization-recipes'
+import { XyoRecipes } from './xyo-serialization-recipes'
 import { XyoMockSigner, XyoMockPublicKey, XyoMockSignature } from '@xyo-network/test-utils'
 import { IXyoSigner } from '@xyo-network/signing'
 import { XyoSerializableNumber } from '../../serializers/dist'
@@ -331,7 +331,9 @@ export class XyoTestNode extends XyoBase {
 
   private getRecipes() {
     return this.serviceCache.getOrCreate('XyoRecipes', () => {
-      return recipes
+      return new XyoRecipes(
+        getHashingProvider('sha256')
+      ).getRecipes()
     })
   }
 }

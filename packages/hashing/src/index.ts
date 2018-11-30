@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 2:13:00 pm
+ * @Last modified time: Friday, 30th November 2018 1:11:19 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,6 +15,7 @@ import { XyoNativeBaseHashProvider } from './xyo-native-base-hash-provider'
 
 export { XyoBaseHash } from './xyo-base-hash'
 export { IXyoHash, IXyoHashProvider } from './@types'
+export { XyoHash } from './xyo-native-base-hash-provider'
 
 const SCHEMA_ID_SHA256 = 0x10
 

@@ -25,6 +25,7 @@
     { "path": "../network"},
     { "path": "../bound-witness"},
     { "path": "../serialization"},
+    { "path": "../hashing"},
     { "path": "../signing"}
   ]
 }

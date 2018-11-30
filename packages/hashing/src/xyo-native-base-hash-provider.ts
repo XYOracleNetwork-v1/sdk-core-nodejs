@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-native-base-hash-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 26th November 2018 4:25:36 pm
+ * @Last modified time: Friday, 30th November 2018 1:09:52 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -71,7 +71,7 @@ export class XyoNativeBaseHashProvider implements IXyoHashProvider {
 }
 
 // tslint:disable-next-line:max-classes-per-file
-class XyoHash extends XyoBaseHash implements IXyoHash {
+export class XyoHash extends XyoBaseHash implements IXyoHash {
 
   constructor(
     private readonly hash: Buffer,
