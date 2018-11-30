@@ -4,19 +4,21 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-mock-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 10:38:24 am
+ * @Last modified time: Friday, 30th November 2018 12:20:59 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoSignature, IXyoPublicKey } from "@xyo-network/signing"
+import { parse } from "@xyo-network/serialization"
 
 export class XyoMockSignature implements IXyoSignature {
 
   public static schemaObjectId = 0x0B
 
   public static deserialize(data: Buffer): XyoMockSignature {
-    return new XyoMockSignature(data.toString('hex'))
+    const parsed = parse(data)
+    return new XyoMockSignature((parsed.data as Buffer).toString('hex'))
   }
 
   public schemaObjectId = XyoMockSignature.schemaObjectId

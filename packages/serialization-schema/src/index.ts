@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 11:21:36 am
+ * @Last modified time: Friday, 30th November 2018 11:54:08 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -26,11 +26,6 @@ export const schema: IXyoObjectSchema = {
     sizeIdentifierSize: 1,
     iterableType: 'not-iterable',
     id: 0x03
-  },
-  rssi: {
-    sizeIdentifierSize: 1,
-    iterableType: 'not-iterable',
-    id: 0x13
   },
   nextPublicKey: {
     sizeIdentifierSize: null,
@@ -106,6 +101,11 @@ export const schema: IXyoObjectSchema = {
     sizeIdentifierSize: 1,
     iterableType: 'not-iterable',
     id: 0x12
+  },
+  rssi: {
+    sizeIdentifierSize: 1,
+    iterableType: 'not-iterable',
+    id: 0x13
   },
   time: {
     sizeIdentifierSize: 1,

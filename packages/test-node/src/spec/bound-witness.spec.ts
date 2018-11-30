@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: bound-witness.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 4:47:41 pm
+ * @Last modified time: Friday, 30th November 2018 11:36:15 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -111,6 +111,6 @@ describe(`Bound Witness Interaction`, () => {
     )
     const expectedBoundWitnessBytes = boundWitnessSerializer.serialize(expectedBw, 'hex') as string
     console.log(expectedBoundWitnessBytes)
-    expect(createdBytes === expectedBoundWitnessBytes).toBe(true)
+    expect(createdBytes).toEqual(expectedBoundWitnessBytes)
   })
 })
