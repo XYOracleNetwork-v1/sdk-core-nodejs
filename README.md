@@ -78,5 +78,4 @@ Only for internal XY Company use at this time
 
 ## Credits
 
-Made with ❤️
-by [XYO](https://xyo.network)
+<br><br><p align="center">Made with  ❤️  by [**XY - The Persistent Company**] (https://xy.company)</p>
