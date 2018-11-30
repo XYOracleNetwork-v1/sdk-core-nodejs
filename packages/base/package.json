@@ -2,8 +2,8 @@
   "name": "@xyo-network/base",
   "version": "0.2.0",
   "description": "A base class for the Xyo Network",
-  "main": "dist/xyo-base.js",
-  "types": "dist/xyo-base.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
