@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network-pipe.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 1:42:46 pm
+ * @Last modified time: Friday, 30th November 2018 10:57:06 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -151,6 +151,7 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
     let sizeOfPayload: number | undefined
 
     const onSendOnData = (chunk: Buffer) => {
+      this.logInfo(`Chunk received`)
       if (data === undefined) {
         if (chunk.length < 4) {
           this.connectionResult.socket.end()

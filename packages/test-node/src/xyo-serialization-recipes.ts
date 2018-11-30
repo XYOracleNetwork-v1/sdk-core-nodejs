@@ -4,13 +4,15 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serialization-recipes.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 3:07:10 pm
+ * @Last modified time: Friday, 30th November 2018 10:38:41 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { schema } from '@xyo-network/serialization-schema'
 import { XyoNumberDeserializer, XyoNotYetImplementedSerializer, XyoBoundWitnessDeserializer } from '@xyo-network/serializers'
+import { XyoMockSignature } from '@xyo-network/test-utils'
+import { IXyoDeserializer } from '@xyo-network/serialization'
 
 export const recipes = {
   [schema.rssi.id]: new XyoNumberDeserializer(false, schema.rssi.id),
@@ -33,7 +35,7 @@ export const recipes = {
   // tslint:disable-next-line:max-line-length
   [schema.ecdsaSecp256k1WithSha256Signature.id]: new XyoNotYetImplementedSerializer(schema.ecdsaSecp256k1WithSha256Signature.id),
   [schema.rsaWithSha256Signature.id]: new XyoNotYetImplementedSerializer(schema.rsaWithSha256Signature.id),
-  [schema.stubSignature.id]: new XyoNotYetImplementedSerializer(schema.stubSignature.id),
+  [schema.stubSignature.id]: XyoMockSignature as IXyoDeserializer<XyoMockSignature>,
   [schema.index.id]: new XyoNumberDeserializer(false, schema.index.id),
   // [schema.keySet.id]: new XyoNotYetImplementedSerializer(schema.keySet.id),
   [schema.nextPublicKey.id]: new XyoNotYetImplementedSerializer(schema.nextPublicKey.id),
