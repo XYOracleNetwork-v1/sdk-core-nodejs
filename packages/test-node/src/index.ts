@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 3:19:48 pm
+ * @Last modified time: Friday, 30th November 2018 9:24:02 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,8 +32,9 @@ import { XyoBoundWitnessValidator, IXyoBoundWitnessSigningDataProducer, XyoBound
 import { IXyoSerializationService, IXyoTypeSerializer, XyoSerializationService } from '@xyo-network/serialization'
 import { XyoInMemoryStorageProvider } from '@xyo-network/storage'
 import { schema } from '@xyo-network/serialization-schema'
-import { IXyoPublicKey, IXyoSignature, IXyoSigner } from '@xyo-network/signing'
 import { recipes } from './xyo-serialization-recipes'
+import { XyoMockSigner, XyoMockPublicKey, XyoMockSignature } from '@xyo-network/test-utils'
+import { IXyoSigner } from '@xyo-network/signing'
 
 class SimpleCache implements ISimpleCache {
   private readonly cache: {[s: string]: any} = {}
@@ -217,9 +218,7 @@ export class XyoTestNode extends XyoBase {
       return new XyoOriginChainStateInMemoryRepository(
         0,
         undefined,
-        [
-          new MockSigner(new MockPublicKey('EEEEEEEE'), new MockSignature('DDDDDDDD'))
-        ],
+        this.getSigners(),
         undefined,
         [],
         undefined
@@ -227,6 +226,13 @@ export class XyoTestNode extends XyoBase {
     })
   }
 
+  private getSigners(): IXyoSigner[] {
+    return this.serviceCache.getOrCreate('IXyoSigners', () => {
+      return [
+        new XyoMockSigner(new XyoMockPublicKey('EEEEEEEE'), new XyoMockSignature('DDDDDDDD'))
+      ]
+    })
+  }
   private getOriginBlockRepository(): IXyoOriginBlockRepository {
     return this.serviceCache.getOrCreate('IXyoOriginBlockRepository', () => {
       return new XyoOriginBlockRepository(
@@ -313,63 +319,10 @@ export class XyoTestNode extends XyoBase {
 }
 
 if (require.main === module) {
-  console.log('got here')
   const testNode = new XyoTestNode()
   testNode.start()
 }
 
 interface ISimpleCache {
   getOrCreate<T>(name: string, initializer: () => T): T
-}
-
-// tslint:disable-next-line:max-classes-per-file
-class MockSigner implements IXyoSigner {
-
-  constructor (
-    public readonly publicKey: MockPublicKey,
-    public readonly signature: MockSignature
-  ) {}
-
-  get privateKey () {
-    return 'abc'
-  }
-
-  public async signData(data: Buffer): Promise<IXyoSignature> {
-    return this.signature
-  }
-}
-
-// tslint:disable-next-line:max-classes-per-file
-class MockPublicKey implements IXyoPublicKey {
-  public schemaObjectId = 0x10
-
-  constructor(private readonly publicKeyHexString: string) {}
-
-  public getRawPublicKey(): Buffer {
-    return Buffer.from(this.publicKeyHexString, 'hex')
-  }
-
-  public serialize(): Buffer {
-    return this.getRawPublicKey()
-  }
-}
-
-// tslint:disable-next-line:max-classes-per-file
-class MockSignature implements IXyoSignature {
-
-  public schemaObjectId = schema.stubSignature.id
-
-  constructor (private readonly desiredSignatureHexString: string) {}
-
-  public async verify(data: Buffer, publicKey: IXyoPublicKey): Promise<boolean> {
-    return data.toString('hex') === this.desiredSignatureHexString
-  }
-
-  public get encodedSignature (): Buffer {
-    return Buffer.from(this.desiredSignatureHexString, 'hex')
-  }
-
-  public serialize(): Buffer {
-    return this.encodedSignature
-  }
 }
