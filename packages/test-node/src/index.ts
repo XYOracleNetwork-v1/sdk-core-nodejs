@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 9:24:02 am
+ * @Last modified time: Friday, 30th November 2018 10:21:58 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,6 +17,7 @@ import { XyoSimplePeerConnectionDelegate, IXyoPeerConnectionDelegate, IXyoPeerCo
 import { XyoPeerInteractionRouter } from '@xyo-network/peer-interaction-router'
 import { XyoBoundWitnessStandardServerInteraction, XyoBoundWitnessTakeOriginChainServerInteraction, XyoBoundWitnessStandardClientInteraction } from '@xyo-network/peer-interaction-handlers'
 import { IXyoHashProvider, getHashingProvider, IXyoHash } from '@xyo-network/hashing'
+import { readNumberFromBuffer } from '@xyo-network/buffer-utils'
 
 import {
   XyoBoundWitnessHandlerProvider,
@@ -35,6 +36,7 @@ import { schema } from '@xyo-network/serialization-schema'
 import { recipes } from './xyo-serialization-recipes'
 import { XyoMockSigner, XyoMockPublicKey, XyoMockSignature } from '@xyo-network/test-utils'
 import { IXyoSigner } from '@xyo-network/signing'
+import { XyoSerializableNumber } from '../../serializers/dist'
 
 class SimpleCache implements ISimpleCache {
   private readonly cache: {[s: string]: any} = {}
@@ -263,11 +265,11 @@ export class XyoTestNode extends XyoBase {
         this.getBoundWitnessSigningDataProducer(),
         this.getExtractIndexFromPayloadFn(),
         {
-          checkPartyLengths: false,
-          checkIndexExists: false,
-          checkCountOfSignaturesMatchPublicKeysCount: false,
-          validateSignatures: false,
-          validateHash: false
+          checkPartyLengths: true,
+          checkIndexExists: true,
+          checkCountOfSignaturesMatchPublicKeysCount: true,
+          validateSignatures: true,
+          validateHash: true
         }
       )
     })
@@ -276,7 +278,23 @@ export class XyoTestNode extends XyoBase {
   private getExtractIndexFromPayloadFn(): (payload: IXyoPayload) => number | undefined {
     return this.serviceCache.getOrCreate('XyoExtractIndexFromPayloadFn', () => {
       return (payload: IXyoPayload) => {
-        throw new Error(`Not yet implemented`)
+        const indexItem = payload.signedPayload.find(
+          signedPayloadItem => signedPayloadItem.schemaObjectId === schema.index.id
+        )
+        if (!indexItem) {
+          return undefined
+        }
+
+        if (indexItem instanceof XyoSerializableNumber) {
+          return indexItem.number
+        }
+
+        const serializedIndex = indexItem.serialize()
+        if (serializedIndex instanceof Buffer) {
+          return readNumberFromBuffer(serializedIndex, serializedIndex.length, false)
+        }
+
+        return undefined
       }
     })
   }

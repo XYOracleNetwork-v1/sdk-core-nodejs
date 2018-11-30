@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: bound-witness-deserializer.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 3:17:32 pm
+ * @Last modified time: Friday, 30th November 2018 9:56:29 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,6 +20,7 @@ describe(`BoundWitness Deserialization`, () => {
     const bytes = Buffer.from(hex, 'hex')
     const serializationService = new XyoSerializationService(schema, recipes)
     const result = serializationService.deserialize(bytes)
+    console.log(result)
   })
   // it(`Should deserialize without error`, () => {
   //   const bytes = Buffer.from([0xa0, 0x01, 0x00, 0x00, 0x00, 0x04])

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-validator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 5:27:10 pm
+ * @Last modified time: Friday, 30th November 2018 10:23:23 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -53,7 +53,7 @@ export class XyoBoundWitnessValidator extends XyoBase {
     if (this.options.checkIndexExists) {
       originBlock.payloads.forEach((payload, currentIndex) => {
         const index = this.extractIndexFromPayloadFn(payload)
-        if (!index) {
+        if (index === undefined) {
           throw new XyoError(`Each Party must have an index in their signed payload`, XyoErrors.INVALID_PARAMETERS)
         }
       })
