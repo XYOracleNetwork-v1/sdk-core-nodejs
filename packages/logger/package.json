@@ -2,8 +2,8 @@
   "name": "@xyo-network/logger",
   "version": "0.2.0",
   "description": "A shared Xyo Logging implementation for the Xyo NodeJS libraries",
-  "main": "dist/xyo-logger.js",
-  "types": "dist/xyo-logger.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
