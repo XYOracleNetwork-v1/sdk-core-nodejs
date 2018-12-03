@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/logger",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A shared Xyo Logging implementation for the Xyo NodeJS libraries",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
