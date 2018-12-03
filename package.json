@@ -12,18 +12,18 @@
     "tslint": "tslint -c tslint.json -p packages/tsconfig.json"
   },
   "devDependencies": {
-    "lerna": "3.4.3",
-    "typescript": "^3.1.6",
-    "husky": "^1.1.1",
-    "tslint" : "^5.1.0",
     "@xyo-network/config-tslint": "^0.1.6",
-    "tslint-config-airbnb": "^5.11.1"
+    "husky": "^1.1.1",
+    "lerna": "^3.4.3",
+    "tslint": "^5.1.0",
+    "tslint-config-airbnb": "^5.11.1",
+    "typescript": "^3.1.6"
   },
   "husky": {
     "hooks": {
       "pre-commit": "echo \"Build must pass before committing\" && yarn build && yarn tslint"
     }
-  },  
+  },
   "workspaces": [
     "packages/*"
   ]
