@@ -22,9 +22,7 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    { "path": "../errors"}, 
     { "path": "../serialization"},
-    { "path": "../serialization-schema"},
-    { "path": "../base"}
+    { "path": "../serialization-schema"}
   ]
 }

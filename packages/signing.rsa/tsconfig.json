@@ -25,6 +25,7 @@
     { "path": "../base"},
     { "path": "../errors"},
     { "path": "../signing"},
+    { "path": "../serialization-schema"},
     { "path": "../serialization"}
   ]
 }

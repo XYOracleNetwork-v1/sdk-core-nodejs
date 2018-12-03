@@ -4,14 +4,15 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-signing-data-producer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 1:13:21 pm
+ * @Last modified time: Friday, 30th November 2018 3:30:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoBoundWitnessSigningDataProducer, IXyoBoundWitness } from "./@types"
-import { typedArrayOf, untypedArrayOf, resolveSerializablesToBuffer, IXyoSerializableObject, IXyoObjectSchema } from '@xyo-network/serialization'
+import { resolveSerializablesToBuffer, IXyoSerializableObject, IXyoObjectSchema } from '@xyo-network/serialization'
 import { XyoError, XyoErrors } from "@xyo-network/errors"
+import { typedArrayOf, untypedArrayOf,  } from "@xyo-network/serialization-utils"
 
 export class XyoBoundWitnessSigningDataProducer implements IXyoBoundWitnessSigningDataProducer {
 

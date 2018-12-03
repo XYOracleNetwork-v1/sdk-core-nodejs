@@ -4,19 +4,19 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-payload.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 2:21:51 pm
+ * @Last modified time: Friday, 30th November 2018 3:28:30 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBase } from "@xyo-network/base"
 import { IXyoPayload } from "./@types"
-import { IXyoSerializableObject, untypedArrayOf } from '@xyo-network/serialization'
-
-const SCHEMA_OBJECT_ID_PAYLOAD = 0x07
+import { IXyoSerializableObject } from '@xyo-network/serialization'
+import { untypedArrayOf } from '@xyo-network/serialization-utils'
+import { schema } from '@xyo-network/serialization-schema'
 export abstract class XyoBasePayload extends XyoBase implements IXyoPayload {
 
-  public static schemaObjectId = SCHEMA_OBJECT_ID_PAYLOAD
+  public static schemaObjectId = schema.payload.id
 
   public abstract signedPayload: IXyoSerializableObject[]
   public abstract unsignedPayload: IXyoSerializableObject[]

@@ -4,18 +4,17 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-mock-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 1:05:10 pm
+ * @Last modified time: Monday, 3rd December 2018 9:26:43 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBaseHash } from "@xyo-network/hashing"
-
-const SCHEMA_ID_STUB_HASH = 0x0F
+import { schema } from "@xyo-network/serialization-schema"
 
 export class XyoMockHash extends XyoBaseHash {
 
-  public schemaObjectId = SCHEMA_ID_STUB_HASH
+  public schemaObjectId = schema.stubHash.id
 
   constructor (private readonly hash: Buffer) {
     super()

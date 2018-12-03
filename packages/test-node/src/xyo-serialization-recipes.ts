@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serialization-recipes.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 1:15:28 pm
+ * @Last modified time: Monday, 3rd December 2018 9:27:07 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -35,7 +35,7 @@ export class XyoRecipes {
       // [schema.blob.id]: new XyoNotYetImplementedSerializer(schema.blob.id),
       [schema.typedSet.id]: new XyoNotYetImplementedSerializer(schema.typedSet.id),
       [schema.untypedSet.id]: new XyoNotYetImplementedSerializer(schema.untypedSet.id),
-      [schema.hashStub.id]: new XyoHashDeserializer(schema.hashStub.id, hashBuffer => new XyoMockHash(hashBuffer)),
+      [schema.stubHash.id]: new XyoHashDeserializer(schema.stubHash.id, hashBuffer => new XyoMockHash(hashBuffer)),
       [schema.sha256Hash.id]: sha256HashDeserializer,
       [schema.sha3Hash.id]: new XyoNotYetImplementedSerializer(schema.sha3Hash.id),
       // [schema.sha512Hash.id]: new XyoNotYetImplementedSerializer(schema.sha512Hash.id),

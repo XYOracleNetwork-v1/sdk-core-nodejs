@@ -27,6 +27,7 @@
     {"path": "../hashing"},
     {"path": "../signing"},
     {"path": "../buffer-utils"},
+    {"path": "../serialization-schema"},
     {"path": "../serialization"}
   ]
 }

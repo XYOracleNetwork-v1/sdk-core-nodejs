@@ -4,15 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 2:14:23 pm
+ * @Last modified time: Monday, 3rd December 2018 9:25:21 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoRsaShaSignerProvider } from "./xyo-rsa-sha-signer-provider"
 import { XyoError, XyoErrors } from '@xyo-network/errors'
-
-const SCHEMA_ID_RSA_WITH_SHA256_SIGNATURE = 0x0A
+import { schema } from '@xyo-network/serialization-schema'
 
 /** The types of signing algorithm supported */
 export type SignerProviderType = (
@@ -38,7 +37,7 @@ export function getSignerProvider(signerProviderType: SignerProviderType): XyoRs
   let signerProvider: XyoRsaShaSignerProvider
   switch (signerProviderType) {
     case 'rsa-sha256':
-      signerProvider = new XyoRsaShaSignerProvider("pkcs1-sha256", SCHEMA_ID_RSA_WITH_SHA256_SIGNATURE)
+      signerProvider = new XyoRsaShaSignerProvider("pkcs1-sha256", schema.rsaWithSha256Signature.id)
       break
     default:
       throw new XyoError(`Could not resolve signer provider type ${signerProviderType}`, XyoErrors.INVALID_PARAMETERS)

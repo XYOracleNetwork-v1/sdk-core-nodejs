@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 11:54:08 am
+ * @Last modified time: Monday, 3rd December 2018 9:26:27 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -82,7 +82,7 @@ export const schema: IXyoObjectSchema = {
     iterableType: 'not-iterable',
     id: 0x0E
   },
-  hashStub: {
+  stubHash: {
     sizeIdentifierSize: 1,
     iterableType: 'not-iterable',
     id: 0x0F
