@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-index-deserializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 12:41:09 pm
+ * @Last modified time: Friday, 30th November 2018 9:44:14 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,6 +19,10 @@ export class XyoSerializableNumber implements IXyoSerializableObject {
     public readonly isSigned: boolean,
     public readonly schemaObjectId: number
   ) {}
+
+  public get val (): number {
+    return this.number
+  }
 
   public serialize() {
     if (this.isSigned) {

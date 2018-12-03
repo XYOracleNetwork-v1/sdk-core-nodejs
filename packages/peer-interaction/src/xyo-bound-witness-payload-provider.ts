@@ -5,7 +5,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-wit
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 2:06:53 pm
+ * @Last modified time: Friday, 30th November 2018 3:10:26 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,9 +15,8 @@ import { IXyoOriginChainRepository } from "@xyo-network/origin-chain"
 import { IXyoBoundWitnessPayloadProvider } from "./@types"
 import { XyoBasePayload, IXyoPayload } from "@xyo-network/bound-witness"
 import { IXyoSerializableObject } from "@xyo-network/serialization"
-import { unsignedNumberToBuffer } from "@xyo-network/buffer-utils"
-
-const SCHEMA_ID_INDEX = 0x03
+import { XyoSerializableNumber } from "@xyo-network/serializers"
+import { schema } from '@xyo-network/serialization-schema'
 
 export class XyoBoundWitnessPayloadProvider extends XyoBase implements IXyoBoundWitnessPayloadProvider {
 
@@ -50,10 +49,7 @@ export class XyoBoundWitnessPayloadProvider extends XyoBase implements IXyoBound
       signedPayload.push(nextPublicKey)
     }
 
-    signedPayload.push({
-      schemaObjectId: SCHEMA_ID_INDEX,
-      serialize: () => unsignedNumberToBuffer(index)
-    })
+    signedPayload.push(new XyoSerializableNumber(index, false, schema.index.id))
 
     // tslint:disable-next-line:max-classes-per-file
     class OnTheFlyPayload extends XyoBasePayload {

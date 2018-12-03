@@ -1,21 +1,16 @@
 {
-  "name": "@xyo-network/signing.rsa",
+  "name": "@xyo-network/serialization-utils",
   "version": "0.2.0",
-  "description": "Provides RSA signing services",
+  "description": "Some helpers for serialization in the xyo network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.2.0",
-    "@xyo-network/signing": "^0.2.0",
-    "@xyo-network/errors": "^0.2.0",
     "@xyo-network/serialization": "^0.2.0",
-    "@xyo-network/serialization-schema": "^0.2.0",
-    "node-rsa": "^1.0.1"
+    "@xyo-network/serialization-schema": "^0.2.0"
   },
   "devDependencies": {
-    "@types/node-rsa": "^0.4.3",
     "@types/node": "^10.7.1",
     "@types/jest": "^23.3.1",
     "typescript": "^3.1.6",

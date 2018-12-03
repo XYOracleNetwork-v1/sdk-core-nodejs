@@ -27,9 +27,11 @@
     { "path": "../bound-witness"},
     { "path": "../hashing"},
     { "path": "../serialization"},
+    { "path": "../serialization-schema"},
     { "path": "../signing"},
     { "path": "../origin-block-repository"},
     { "path": "../buffer-utils"},
+    { "path": "../serializers"},
     { "path": "../origin-chain"}
   ]
 }

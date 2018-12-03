@@ -10,6 +10,8 @@
     "@xyo-network/network": "^0.2.0",
     "@xyo-network/bound-witness": "^0.2.0",
     "@xyo-network/serialization": "^0.2.0",
+    "@xyo-network/serialization-schema": "^0.2.0",
+    "@xyo-network/hashing": "^0.2.0",
     "@xyo-network/signing": "^0.2.0"
   },
   "devDependencies": {

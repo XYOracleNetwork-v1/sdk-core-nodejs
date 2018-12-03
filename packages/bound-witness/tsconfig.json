@@ -26,6 +26,8 @@
     { "path": "../base" },
     { "path": "../errors" },
     { "path": "../hashing" },
+    { "path": "../serialization-schema" },
+    { "path": "../serialization-utils" },
     { "path": "../serialization" }
   ]
 }

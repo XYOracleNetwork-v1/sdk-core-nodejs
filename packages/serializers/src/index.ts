@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 12:59:31 pm
+ * @Last modified time: Friday, 30th November 2018 3:24:42 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,9 @@
 export { XyoBoundWitnessDeserializer } from './xyo-bound-witness-deserializer'
 export { XyoNumberDeserializer, XyoSerializableNumber } from './xyo-number-deserializer'
 export { XyoBlobDeserializer, XyoSerializableBlob } from './xyo-blob-deserializer'
-import { IXyoSerializableObject, IXyoDeserializer, IXyoSerializationService, parse, ParseQuery, IParseResult } from '@xyo-network/serialization'
+export { XyoHashDeserializer } from './xyo-hash-deserializer'
+
+import { IXyoSerializableObject, IXyoDeserializer, parse, ParseQuery, IParseResult } from '@xyo-network/serialization'
 
 export class XyoAnonymousSerializableObject implements IXyoSerializableObject {
 

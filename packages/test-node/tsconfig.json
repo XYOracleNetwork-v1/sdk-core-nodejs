@@ -40,6 +40,7 @@
     { "path": "../zig-zag-bound-witness-builder"},
     { "path": "../signing"},
     { "path": "../test-utils"},
+    { "path": "../buffer-utils"},
     { "path": "../storage"},
   ]
 }

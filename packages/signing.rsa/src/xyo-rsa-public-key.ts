@@ -4,17 +4,18 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 26th November 2018 3:41:33 pm
+ * @Last modified time: Monday, 3rd December 2018 9:30:07 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoPublicKey } from '@xyo-network/signing'
 import { XyoBase } from '@xyo-network/base'
+import { schema } from '@xyo-network/serialization-schema'
 
 export class XyoRsaPublicKey extends XyoBase implements IXyoPublicKey {
 
-  public static schemaObjectId = 0x11
+  public static schemaObjectId = schema.rsaPublicKey.id
 
   /**
    * Creates a new instance of a XyoRsaPublicKey
