@@ -1,15 +1,15 @@
 {
   "name": "@xyo-network/heuristics",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Helper utility for creating heuristics that are serializable / deserializable",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/serialization": "^0.2.1",
-    "@xyo-network/buffer-utils": "^0.2.1",
-    "@xyo-network/errors": "^0.2.1"
+    "@xyo-network/buffer-utils": "^0.3.0",
+    "@xyo-network/errors": "^0.3.0",
+    "@xyo-network/serialization": "^0.3.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

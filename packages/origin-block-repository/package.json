@@ -1,16 +1,16 @@
 {
   "name": "@xyo-network/origin-block-repository",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "An abstraction over a collection of origin blocks",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/bound-witness": "^0.2.1",
-    "@xyo-network/hashing": "^0.2.1",
-    "@xyo-network/serialization": "^0.2.1",
-    "@xyo-network/storage": "^0.2.1"
+    "@xyo-network/bound-witness": "^0.3.0",
+    "@xyo-network/hashing": "^0.3.0",
+    "@xyo-network/serialization": "^0.3.0",
+    "@xyo-network/storage": "^0.3.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

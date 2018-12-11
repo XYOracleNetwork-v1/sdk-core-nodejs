@@ -1,15 +1,15 @@
 {
   "name": "@xyo-network/ip-service",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Provides core IP services useful in the Xyo network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "public-ip": "^2.4.0",
     "external-ip": "^2.0.3",
-    "network": "^0.4.1"
+    "network": "^0.4.1",
+    "public-ip": "^2.4.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

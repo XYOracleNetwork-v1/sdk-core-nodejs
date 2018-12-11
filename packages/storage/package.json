@@ -1,14 +1,14 @@
 {
   "name": "@xyo-network/storage",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "An abstraction around persistence in the Xyo Network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.2.1",
-    "@xyo-network/errors": "^0.2.1"
+    "@xyo-network/base": "^0.3.0",
+    "@xyo-network/errors": "^0.3.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
