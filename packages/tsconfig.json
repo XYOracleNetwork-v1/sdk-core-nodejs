@@ -38,8 +38,6 @@
       { "path": "test-node" },
       { "path": "ip-service" },
       { "path": "peer-discovery" },
-      // { "path": "archivist-repository" },
-      // { "path": "archivist-repository.sql" },
       { "path": "heuristics" },
       { "path": "heuristics-common" },
       { "path": "about-me" }
@@ -70,8 +68,6 @@
     "about-me/src/**/*.ts",
     "ip-service/src/**/*.ts",
     "peer-discovery/src/**/*.ts",
-    // "archivist-repository.sql/src/**/*.ts",
-    // "archivist-repository/src/**/*.ts",
     "heuristics/src/**/*.ts",
     "heuristics-common/src/**/*.ts"
   ]
