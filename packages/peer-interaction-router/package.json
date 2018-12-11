@@ -1,7 +1,7 @@
 {
   "name": "@xyo-network/peer-interaction-router",
   "version": "0.3.0",
-  "description": "A router for register catalogue items to handlers",
+  "description": "A router for registering catalogue items to handlers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",

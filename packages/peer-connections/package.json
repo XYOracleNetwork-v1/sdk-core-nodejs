@@ -1,7 +1,7 @@
 {
   "name": "@xyo-network/peer-connections",
   "version": "0.3.0",
-  "description": "Some utility classes for connecting with other peers",
+  "description": "A number of utility classes for connecting with other peers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",

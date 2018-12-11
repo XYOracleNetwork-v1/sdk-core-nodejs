@@ -1,7 +1,7 @@
 {
   "name": "@xyo-network/errors",
   "version": "0.3.0",
-  "description": "A base class for the Xyo Network",
+  "description": "Provides a basic error class to be used by XYO services",
   "main": "dist/xyo-error.js",
   "types": "dist/xyo-error.d.ts",
   "author": "Ryan Pillsbury",

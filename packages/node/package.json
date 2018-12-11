@@ -1,7 +1,7 @@
 {
   "name": "@xyo-network/node",
   "version": "0.3.0",
-  "description": "A generic node on the XYO network",
+  "description": "Implements a node life-cycle loop that can be used / extended to manage how a node in the XYO network behaves in different scenarios.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",

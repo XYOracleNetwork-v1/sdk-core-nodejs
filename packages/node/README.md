@@ -4,7 +4,7 @@
 
 # Node
 
-Implement a node life-cycle loop that can be used / extended to manage how a node in the XYO network behaves in different scenarios.
+Implements a node life-cycle loop that can be used / extended to manage how a node in the XYO network behaves in different scenarios.
 
 ## Install
 

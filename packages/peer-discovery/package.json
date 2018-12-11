@@ -1,7 +1,7 @@
 {
   "name": "@xyo-network/peer-discovery",
   "version": "0.3.0",
-  "description": "Peer Discovery in the xyo network",
+  "description": "Peer Discovery in the XYO network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",

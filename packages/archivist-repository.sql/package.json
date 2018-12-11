@@ -1,7 +1,7 @@
 {
   "name": "@xyo-network/archivist-repository.sql",
   "version": "0.3.0",
-  "description": "A base class for the Xyo Network",
+  "description": "A data-layer abstraction for archivist responsibilities using SQL",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",

@@ -1,7 +1,7 @@
 {
   "name": "@xyo-network/bound-witness",
   "version": "0.3.0",
-  "description": "BoundWitness description and services for Xyo Network",
+  "description": "BoundWitness description, interfaces and services for XYO Network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
