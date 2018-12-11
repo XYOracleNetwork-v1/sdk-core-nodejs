@@ -1,7 +1,7 @@
 {
   "name": "@xyo-network/network.tcp",
   "version": "0.3.0",
-  "description": "A TCP implementation of a network over TCP",
+  "description": "A TCP implementation of a network as defined in @xyo-network/network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",

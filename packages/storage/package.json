@@ -1,7 +1,7 @@
 {
   "name": "@xyo-network/storage",
   "version": "0.3.0",
-  "description": "An abstraction around persistence in the Xyo Network",
+  "description": "An abstraction for persistence of key value pairs in the XYO Network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",

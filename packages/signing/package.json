@@ -1,7 +1,7 @@
 {
   "name": "@xyo-network/signing",
   "version": "0.3.0",
-  "description": "Signing Types and Services for the Xyo Network",
+  "description": "Signing Types and Services for the XYO Network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",

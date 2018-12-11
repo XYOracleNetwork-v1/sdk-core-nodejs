@@ -1,7 +1,7 @@
 {
   "name": "@xyo-network/logger",
   "version": "0.3.0",
-  "description": "A shared Xyo Logging implementation for the Xyo NodeJS libraries",
+  "description": "A shared Xyo Logging implementation for the XYO services",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",

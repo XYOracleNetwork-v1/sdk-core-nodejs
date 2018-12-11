@@ -1,7 +1,7 @@
 {
   "name": "@xyo-network/buffer-utils",
   "version": "0.3.0",
-  "description": "Buffer Utilities",
+  "description": "Utilities for dealing with buffers in the XYO network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
