@@ -4,7 +4,7 @@
 
 # IP Service
 
-Provides some core ip service functionality. In particular it provides the service of determining the public facing ip addresses for a particular node
+Provides some core ip service functionality. In particular it provides the service of determining the public facing ip addresses for a particular node.
 
 ## Install
 
