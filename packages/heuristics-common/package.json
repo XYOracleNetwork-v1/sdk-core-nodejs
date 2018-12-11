@@ -1,15 +1,15 @@
 {
   "name": "@xyo-network/heuristics-common",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "A number of common heuristics used in the XYO protocol",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/heuristics": "^0.3.1",
-    "@xyo-network/serialization": "^0.3.1",
-    "@xyo-network/serialization-schema": "^0.3.1"
+    "@xyo-network/heuristics": "^0.4.0",
+    "@xyo-network/serialization": "^0.4.0",
+    "@xyo-network/serialization-schema": "^0.4.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
