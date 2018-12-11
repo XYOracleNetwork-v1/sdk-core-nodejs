@@ -27,6 +27,58 @@ If you're favorite crypto signing algorithm is not yet supported, we welcome pul
 
 [Here](https://github.com/XYOracleNetwork/spec-coreobjectmodel-tex) is a link to the core object model that contains an index of major/minor values and their respective objects.
 
+## Getting started
+
+### Clone repository
+
+```sh
+git clone https://github.com/XYOracleNetwork/sdk-core-nodejs
+```
+
+### Install dependencies
+
+After cloning the repository, change directory to the folder that houses the repository.
+
+```sh
+  cd sdk-core-nodejs
+```
+
+Once you've switched to the repository directory, install the dependencies. We prefer `yarn` but `npm` works just as well.
+
+```sh
+  yarn install
+```
+
+Once the dependencies are installed run
+
+```sh
+  yarn build
+```
+
+This will transpile the TypeScript into javascript and link the local packages together.
+
+To start a reference implementation of a test-node that can perform bound-witnesses as a server run
+
+```sh
+  node packages/test-node
+```
+
+This will start a node on port 11000 and accept incoming bound-witness requests
+
+Since this project is meant to function as a library there is no application to be run. There are number of tests that can be run from the command-line using.
+
+```sh
+  yarn test
+```
+
+Run a set of tests in a particular file:
+
+i.e. Where the test file is `test/integration/lib.spec.ts`
+
+```sh
+  NODE_ENV=test && node ./node_modules/jest/bin/jest test/integration/lib.spec.ts
+```
+
 ## Additional Documentation
 
 - [about-me](packages/about-me/README.md)
@@ -58,42 +110,6 @@ If you're favorite crypto signing algorithm is not yet supported, we welcome pul
 - [signing.rsa](packages/signing.rsa/README.md)
 - [storage](packages/storage/README.md)
 - [test-node](packages/test-node/README.md)
-
-## Getting started
-
-### Clone repository
-
-```sh
-git clone https://github.com/XYOracleNetwork/sdk-core-nodejs
-```
-
-### Install dependencies
-
-After cloning the repository, change directory to the folder that houses the repository.
-
-```sh
-  cd sdk-core-nodejs
-```
-
-Once you've switched to the repository directory, install the dependencies. We prefer `yarn` but `npm` works just as well.
-
-```sh
-  yarn install
-```
-
-Since this project is meant to function as a library there is no application to be run. There are number of tests that can be run from the command-line using.
-
-```sh
-  yarn test
-```
-
-Run a set of tests in a particular file:
-
-i.e. Where the test file is `test/integration/lib.spec.ts`
-
-```sh
-  NODE_ENV=test && node ./node_modules/jest/bin/jest test/integration/lib.spec.ts
-```
 
 ## Developer Guide
 
