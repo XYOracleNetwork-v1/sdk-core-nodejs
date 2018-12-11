@@ -4,13 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-key-value-database.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 1:32:55 pm
+ * @Last modified time: Tuesday, 11th December 2018 9:58:22 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoStorageProvider } from "./@types"
-import { XyoStoragePriority } from "./xyo-storage-priority"
 import { XyoError } from '@xyo-network/errors'
 import { XyoBase } from "@xyo-network/base"
 
@@ -48,7 +47,7 @@ export class XyoKeyValueDatabase extends XyoBase {
     let shouldUpdateNamespaceList = false
 
     if (namespaceExists) {
-      const namespaceBufferValue = await this.storageProvider.read(this.namespaceKey, 60000)
+      const namespaceBufferValue = await this.storageProvider.read(this.namespaceKey)
       namespaceValue = JSON.parse(namespaceBufferValue!.toString()) as string[]
       const index = namespaceValue.indexOf(namespace)
       if (index === -1) { // does not ext
@@ -63,10 +62,7 @@ export class XyoKeyValueDatabase extends XyoBase {
     if (shouldUpdateNamespaceList) {
       await this.storageProvider.write(
         this.namespaceKey,
-        Buffer.from(XyoBase.stringify(namespaceValue)),
-        XyoStoragePriority.PRIORITY_HIGH,
-        true,
-        60000
+        Buffer.from(XyoBase.stringify(namespaceValue))
       )
     }
 
@@ -83,25 +79,13 @@ class XyoNamespacedStorageProvider implements IXyoStorageProvider {
   }
 
   /** Should persist the value for the corresponding key */
-  public write(
-    key: Buffer,
-    value: Buffer,
-    priority: XyoStoragePriority,
-    cache: boolean,
-    timeout: number
-  ): Promise<XyoError | undefined> {
-    return this.proxyStorageProvider.write(
-      this.getProxyKey(key),
-      value,
-      priority,
-      cache,
-      timeout
-    )
+  public write(key: Buffer, value: Buffer): Promise<XyoError | undefined> {
+    return this.proxyStorageProvider.write(this.getProxyKey(key), value)
   }
 
   /** Attempts to the read the value for key, returns `undefined` if it does not exist */
-  public async read(key: Buffer, timeout: number): Promise<Buffer | undefined> {
-    return this.proxyStorageProvider.read(this.getProxyKey(key), timeout)
+  public async read(key: Buffer): Promise<Buffer | undefined> {
+    return this.proxyStorageProvider.read(this.getProxyKey(key))
   }
 
   /** Returns a list of all the keys in storage */

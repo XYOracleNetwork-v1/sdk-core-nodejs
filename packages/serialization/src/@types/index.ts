@@ -4,11 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 9:43:20 am
+ * @Last modified time: Monday, 10th December 2018 5:04:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
+import { XyoTreeIterator } from "../helpers/tree-iterator"
 export interface IXyoObjectPartialSchema {
 
   /**
@@ -29,12 +30,6 @@ export interface IXyoObjectPartialSchema {
 
 export type IIterableType = 'not-iterable' | 'iterable-typed' | 'iterable-untyped'
 
-export interface IXyoReadable {
-  getReadableName(): string
-  getReadableValue(): any
-  getReadableJSON(): string
-}
-
 export interface IXyoObjectSchema {
   [s: string]: IXyoObjectPartialSchema
 }
@@ -47,6 +42,8 @@ export type BufferOrString = Buffer | string
 
 export interface IXyoSerializationService {
 
+  schema: IXyoObjectSchema
+
   /**
    * Will serialize an xyo object. If serialization type is hex, will return the hex-string
    * representation of the object in question
@@ -56,7 +53,10 @@ export interface IXyoSerializationService {
    * @returns {BufferOrString} Will return a Buffer or an hex-string based off of `serializationType`
    * @memberof IXyoSerializationService
    */
-  serialize(serializable: IXyoSerializableObject, serializationType?: SerializationType): BufferOrString
+  serialize(
+    serializable: IXyoSerializableObject | IXyoSerializableObject[],
+    serializationType?: SerializationType
+  ): BufferOrString
 
   /**
    * Will deserialize an xyo object from a buffer or hex-string to the object representation
@@ -66,40 +66,24 @@ export interface IXyoSerializationService {
    * @returns {T}
    * @memberof IXyoSerializationService
    */
-  deserialize<T extends IXyoSerializableObject>(deserializable: BufferOrString): T
+  deserialize(deserializable: BufferOrString): XyoTreeIterator
 
-  /**
-   * Creates a typed serializer
-   *
-   * @template T
-   * @returns {IXyoTypeSerializer<T>}
-   * @memberof IXyoSerializationService
-   */
-  getInstanceOfTypeSerializer<T extends IXyoSerializableObject>(): IXyoTypeSerializer<T>
-}
+  hydrate<T extends IXyoSerializableObject>(deserializable: IParseResult): T
 
-export interface IXyoSerializationProvider<T> {
-  toBytes(object: T): Buffer
-  fromBytes(bytes: Buffer): T
-}
-
-export interface IXyoSerializable<T> {
-  schemaObjectId: number
-  schema: IXyoObjectSchema
-  value: T
-}
-
-export interface IXyoTypeSerializer<T> {
-  serialize(object: T, serializationType?: SerializationType): BufferOrString
-  deserialize(deserializable: BufferOrString): T
+  arrayOf<T extends IXyoSerializableObject>(tCollection: T[]): IXyoSerializableObject
+  typedArrayOf<T extends IXyoSerializableObject>(tCollection: T[]): IXyoSerializableObject
+  untypedArrayOf<T extends IXyoSerializableObject>(tCollection: T[]): IXyoSerializableObject
+  findFirstElement<T extends IXyoSerializableObject>(
+    collection: IXyoSerializableObject[], schemaObjectId: number
+  ): T | undefined
 }
 
 export interface IXyoSerializableObject {
   schemaObjectId: number
-  val?: any
-
-  // tslint:disable-next-line:prefer-array-literal
-  serialize(): Buffer | IXyoSerializableObject[]
+  srcBuffer: Buffer | null
+  getData(): Buffer | IXyoSerializableObject | IXyoSerializableObject[]
+  serialize(): Buffer
+  serializeHex(): string
 }
 
 export interface IXyoDeserializer<T extends IXyoSerializableObject> {
@@ -112,5 +96,14 @@ export interface IParseResult {
   id: number
   sizeIdentifierSize: 1 | 2 | 4 | 8
   iterableType: 'iterable-typed' | 'iterable-untyped' | 'not-iterable',
-  bytes: Buffer
+  dataBytes: Buffer
+  headerBytes: Buffer
+  toSerializable(): IXyoSerializableObject
+}
+
+export interface IOnTheFlyGetDataOptions {
+  buffer?: Buffer,
+  object?: IXyoSerializableObject
+  array?: IXyoSerializableObject[]
+  fn?: () => Buffer | IXyoSerializableObject | IXyoSerializableObject[]
 }

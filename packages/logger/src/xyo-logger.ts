@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-logger.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 19th November 2018 5:41:44 pm
+ * @Last modified time: Friday, 7th December 2018 11:50:59 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -51,12 +51,12 @@ export class XyoLogger {
       transports.push(new winston.transports.Console())
 
       return winston.createLogger({
+        transports,
         format: winston.format.combine(
           winston.format.colorize(),
           xyoLogFormat(),
           winston.format.simple(),
         ),
-        transports
       })
     })()
   }

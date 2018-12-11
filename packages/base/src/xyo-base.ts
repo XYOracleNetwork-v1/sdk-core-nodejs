@@ -4,13 +4,15 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 19th November 2018 11:35:28 am
+ * @Last modified time: Monday, 10th December 2018 1:26:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoLogger } from "@xyo-network/logger"
 import safeStringify from 'fast-safe-stringify'
+import { ISimpleCache } from "./@types"
+import { XyoSimpleCache } from "./xyo-simple-cache"
 
 /**
  * A general purpose base class that can be used to incorporate
@@ -36,6 +38,16 @@ export abstract class XyoBase {
 
       return v
     }, 2)
+  }
+
+  private cache: ISimpleCache | undefined
+
+  protected getOrCreate<T>(name: string, initializer: () => T): T {
+    if (!this.cache) {
+      this.cache = new XyoSimpleCache()
+    }
+
+    return this.cache.getOrCreate(name, initializer)
   }
 
   /** Logs to the `info` level */

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-local-file-storage-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 1:24:22 pm
+ * @Last modified time: Tuesday, 11th December 2018 9:58:50 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,6 @@ import { IXyoStorageProvider } from "./@types"
 import { XyoInMemoryStorageProvider } from "./xyo-in-memory-storage-provider"
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { XyoError } from "@xyo-network/errors"
-import { XyoStoragePriority } from "./xyo-storage-priority"
 import { XyoBase } from "@xyo-network/base"
 
 /**
@@ -32,8 +31,8 @@ export class XyoLocalFileStorageProvider extends XyoBase implements IXyoStorageP
     this.delegate = new XyoInMemoryStorageProvider(getOrCreateDb(dataFile))
   }
 
-  public read(key: Buffer, timeout: number): Promise<Buffer | undefined> {
-    return this.delegate.read(key, timeout)
+  public read(key: Buffer): Promise<Buffer | undefined> {
+    return this.delegate.read(key)
   }
 
   public getAllKeys(): Promise<Buffer[]> {
@@ -46,12 +45,9 @@ export class XyoLocalFileStorageProvider extends XyoBase implements IXyoStorageP
 
   public async write(
     key: Buffer,
-    value: Buffer,
-    priority: XyoStoragePriority,
-    cache: boolean,
-    timeout: number
+    value: Buffer
   ): Promise<XyoError | undefined> {
-    await this.delegate.write(key, value, priority, cache, timeout)
+    await this.delegate.write(key, value)
     await persist(this.dataFile, this.delegate.data)
     return
   }

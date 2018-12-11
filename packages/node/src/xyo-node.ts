@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 11:25:50 am
+ * @Last modified time: Friday, 7th December 2018 11:45:18 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -52,24 +52,17 @@ export class XyoNode extends XyoBase {
    */
 
   private async loop() {
-    this.logInfo(`new run loop`)
     if (this.isLooping && this.shouldStopLooping) {
-      this.logInfo(`Exiting run loop`)
       return
     }
 
-    this.logInfo(`Starting node loop`)
-
     try {
       const networkPipe = await this.peerConnectionDelegate.provideConnection()
-      this.logInfo(`network pipe received`)
       await this.peerConnectionDelegate.handlePeerConnection(networkPipe)
-      this.logInfo(`Peer Connection handled`)
     } catch (err) {
       this.logError(`There was an uncaught error in the xyo-node loop`, err)
     }
 
-    this.logInfo(`end loop`)
     setImmediate(this.loop.bind(this))
   }
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 3rd December 2018 9:25:21 am
+ * @Last modified time: Tuesday, 11th December 2018 9:54:50 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,9 +12,11 @@
 import { XyoRsaShaSignerProvider } from "./xyo-rsa-sha-signer-provider"
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { schema } from '@xyo-network/serialization-schema'
+import { IXyoDeserializer, parse } from "@xyo-network/serialization"
+import { XyoRsaSignature } from "./rsa-signature"
 
 /** The types of signing algorithm supported */
-export type SignerProviderType = (
+type SignerProviderType = (
 
   /** Will hash the data using sha256 before signing */
   'rsa-sha256'
@@ -45,3 +47,21 @@ export function getSignerProvider(signerProviderType: SignerProviderType): XyoRs
 
   return signerProvider
 }
+
+class XyoRsaWithSha256Signature implements IXyoDeserializer<XyoRsaSignature> {
+  public schemaObjectId = schema.rsaWithSha256Signature.id
+
+  public deserialize(data: Buffer): XyoRsaSignature {
+    const parseResult = parse(data)
+    const signerProvider = getSignerProvider('rsa-sha256')
+    return new XyoRsaSignature(
+      parseResult.data as Buffer,
+      signerProvider.verifySign.bind(signerProvider),
+      this.schemaObjectId
+    )
+  }
+}
+
+export const rsaWithSha256SignatureDeserializer = new XyoRsaWithSha256Signature()
+
+export { XyoRsaPublicKey } from './xyo-rsa-public-key'

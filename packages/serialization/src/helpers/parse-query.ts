@@ -4,17 +4,19 @@
  * @Email:  developer@xyfindables.com
  * @Filename: parse-query.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 28th November 2018 5:52:56 pm
+ * @Last modified time: Friday, 7th December 2018 4:27:29 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IParseResult } from "../@types"
+import { IParseResult, IXyoSerializableObject } from "../@types"
 import { XyoError, XyoErrors } from "@xyo-network/errors"
-import { serialize } from "./serialize"
 
 export class ParseQuery {
-  constructor(private readonly parseResult: IParseResult) {}
+
+  constructor(private readonly parseResult: IParseResult) {
+
+  }
 
   public query(queryIndexes: number[]) {
     const queriedParseResult = queryIndexes.reduce((parseResult, indexToQuery, indexInArray) => {
@@ -42,23 +44,50 @@ export class ParseQuery {
     })
   }
 
+  public getChildAt(index: number): ParseQuery {
+    if (this.isReadable()) {
+      throw new XyoError(`No children to map`, XyoErrors.CRITICAL)
+    }
+
+    if (index > (this.parseResult.data as IParseResult[]).length) {
+      throw new XyoError(`Index out of range`, XyoErrors.CRITICAL)
+    }
+
+    return new ParseQuery((this.parseResult.data as IParseResult[])[index])
+  }
+
+  public reduceChildren<T>(reducer: (aggregator: T, item: IParseResult, index: number) => T, startingValue: T) {
+    if (this.isReadable()) {
+      throw new XyoError(`No children to map`, XyoErrors.CRITICAL)
+    }
+
+    return (this.parseResult.data as IParseResult[]).reduce(reducer, startingValue)
+  }
+
+  public getChildrenCount(): number {
+    if (this.parseResult.data instanceof Buffer) {
+      return -1
+    }
+
+    return this.parseResult.data.length
+  }
+
   public readData(withHeader: boolean = false): Buffer {
-    if (!(this.parseResult.data instanceof Buffer)) {
-      throw new XyoError(`Data is not readable`, XyoErrors.CRITICAL)
-    }
-
     if (!withHeader) {
-      return this.parseResult.data
+      return this.parseResult.dataBytes
     }
 
-    return serialize(this.parseResult.data, {
-      sizeIdentifierSize: this.parseResult.sizeIdentifierSize,
-      id: this.parseResult.id,
-      iterableType: this.parseResult.iterableType
-    })
+    return Buffer.concat([
+      this.parseResult.headerBytes,
+      this.parseResult.dataBytes,
+    ])
   }
 
   public isReadable(): boolean {
     return this.parseResult.data instanceof Buffer
+  }
+
+  public toSerializable(): IXyoSerializableObject {
+    return this.parseResult.toSerializable()
   }
 }

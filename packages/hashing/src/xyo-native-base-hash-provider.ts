@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-native-base-hash-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 1:09:52 pm
+ * @Last modified time: Monday, 10th December 2018 10:00:39 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,7 @@
 import crypto from 'crypto'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { IXyoHashProvider, IXyoHash } from './@types'
-import { XyoBaseHash } from './xyo-base-hash'
+import { XyoHash } from './xyo-hash'
 
 /**
  * A hash provider that wraps and utilizes the natives nodejs hash functionality
@@ -67,26 +67,5 @@ export class XyoNativeBaseHashProvider implements IXyoHashProvider {
   public async verifyHash(data: Buffer, hash: Buffer): Promise<boolean> {
     const hashOfData = await this.createHash(data)
     return hashOfData.getHash().equals(hash)
-  }
-}
-
-// tslint:disable-next-line:max-classes-per-file
-export class XyoHash extends XyoBaseHash implements IXyoHash {
-
-  constructor(
-    private readonly hash: Buffer,
-    private readonly hashProvider: IXyoHashProvider,
-    public readonly schemaObjectId: number
-  ) {
-    super()
-  }
-
-  public getHash() {
-    return this.hash
-  }
-
-  public async verifyHash(data: Buffer): Promise<boolean> {
-    const dataHash = await this.hashProvider.createHash(data)
-    return dataHash.getHash().equals(this.hash)
   }
 }

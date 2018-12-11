@@ -1,39 +1,52 @@
-import { readHeader } from "./readHeader"
-import { sliceItem } from "./sliceItem"
-import { IParseResult } from "../@types"
-
 /*
  * @Author: XY | The Findables Company <ryanxyo>
  * @Date:   Wednesday, 28th November 2018 5:51:34 pm
  * @Email:  developer@xyfindables.com
  * @Filename: parse.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 3:16:12 pm
+ * @Last modified time: Friday, 7th December 2018 11:51:32 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
+import { readHeader } from "./readHeader"
+import { sliceItem } from "./sliceItem"
+import { IParseResult } from "../@types"
+import { XyoOnTheFlySerializable } from "./on-the-fly-serializable"
+
 export function parse(src: Buffer): IParseResult {
   const partialSchema = readHeader(src)
   const data = sliceItem(src, 0, partialSchema, true)
-
+  const headerBytes = src.slice(0, 2 + partialSchema.sizeIdentifierSize!)
   if (partialSchema.iterableType === 'not-iterable') {
     return {
       data,
+      headerBytes,
       id: partialSchema.id,
       sizeIdentifierSize: partialSchema.sizeIdentifierSize!,
+      dataBytes: data,
       iterableType: 'not-iterable',
-      bytes: data
+      toSerializable: () => {
+        return new XyoOnTheFlySerializable(partialSchema.id, {
+          buffer: data
+        })
+      }
     }
   }
 
   if (data.length === 0) {
     return {
+      headerBytes,
       data: [],
       id: partialSchema.id,
       sizeIdentifierSize: partialSchema.sizeIdentifierSize!,
       iterableType: 'not-iterable',
-      bytes: data
+      dataBytes: data,
+      toSerializable: () => {
+        return new XyoOnTheFlySerializable(partialSchema.id, {
+          buffer: data
+        })
+      }
     }
   }
 
@@ -68,17 +81,29 @@ export function parse(src: Buffer): IParseResult {
         sizeIdentifierSize: innerHeader.sizeIdentifierSize!,
         iterableType: innerHeader.iterableType!,
         data: bytes,
-        bytes: data
+        dataBytes: bytes,
+        headerBytes: Buffer.concat([innerHeaderBytes, sizeBytes]),
+        toSerializable: () => {
+          return new XyoOnTheFlySerializable(innerHeader.id, {
+            buffer: bytes
+          })
+        }
       })
     }
 
   }
 
   return {
+    headerBytes,
     data: items,
     id: partialSchema.id,
     sizeIdentifierSize: partialSchema.sizeIdentifierSize!,
     iterableType: partialSchema.iterableType!,
-    bytes: data
+    dataBytes: data,
+    toSerializable: () => {
+      return new XyoOnTheFlySerializable(partialSchema.id, {
+        buffer: data
+      })
+    }
   }
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: readHeader.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 28th November 2018 5:18:32 pm
+ * @Last modified time: Tuesday, 11th December 2018 9:15:53 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,7 +14,7 @@ import { XyoError, XyoErrors } from "@xyo-network/errors"
 
 export function readHeader(header: Buffer): IXyoObjectPartialSchema {
   if (header.length < 2) {
-    throw new XyoError(`The minimum size of a header is 2 bytes`, XyoErrors.CREATOR_MAPPING)
+    throw new XyoError(`The minimum size of a header is 2 bytes`, XyoErrors.CRITICAL)
   }
 
   const topByte = header.readUInt8(0)

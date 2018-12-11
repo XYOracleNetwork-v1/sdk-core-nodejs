@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: resolveSerializablesToBuffer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 28th November 2018 5:46:28 pm
+ * @Last modified time: Thursday, 6th December 2018 11:36:07 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -57,12 +57,22 @@ export function resolveSerializablesToBuffer(
 
   let highestByteAmount = 0
   const components = serializables.reduce((bufferCollection, serializable) => {
-    const result = serializable.serialize()
+    const result = serializable.getData()
     if (result instanceof Buffer) {
       highestByteAmount = Math.max(result.length, highestByteAmount)
       bufferCollection.push({
         id: serializable.schemaObjectId,
         buffer: result
+      })
+      return bufferCollection
+    }
+
+    if (!Array.isArray(result)) {
+      const resultBuffer = result.serialize()
+      highestByteAmount = Math.max(resultBuffer.length, highestByteAmount)
+      bufferCollection.push({
+        id: serializable.schemaObjectId,
+        buffer: resultBuffer
       })
       return bufferCollection
     }
@@ -102,7 +112,7 @@ export function resolveSerializablesToBuffer(
 
   // 'iterable-untyped'
   const componentsWithHeaders = components.reduce((collection, component) => {
-    const innerSchema = findSchemaById(components[0].id, objectSchema)
+    const innerSchema = findSchemaById(component.id, objectSchema)
     const componentHeader = getHeader(
       component.buffer.length,
       {

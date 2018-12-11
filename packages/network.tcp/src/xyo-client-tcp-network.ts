@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-client-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 11:32:29 am
+ * @Last modified time: Friday, 7th December 2018 3:40:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -29,8 +29,8 @@ import {
 } from "@xyo-network/network"
 
 import {
-  writeNumberToBuffer,
-  readNumberFromBuffer
+  writeIntegerToBuffer,
+  readIntegerFromBuffer
 } from "@xyo-network/buffer-utils"
 
 import {
@@ -153,13 +153,13 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
 
         maskBuffer.writeUInt32BE(mask, 0)
 
-        const catalogueSizeBuffer = writeNumberToBuffer(
+        const catalogueSizeBuffer = writeIntegerToBuffer(
           CATALOGUE_LENGTH_IN_BYTES,
           CATALOGUE_SIZE_OF_SIZE_BYTES,
           false
         )
 
-        const tcpSizeBuffer = writeNumberToBuffer(
+        const tcpSizeBuffer = writeIntegerToBuffer(
           CATALOGUE_SIZE_OF_PAYLOAD_BYTES + CATALOGUE_SIZE_OF_SIZE_BYTES + maskBuffer.length,
           CATALOGUE_SIZE_OF_PAYLOAD_BYTES,
           false
@@ -237,7 +237,7 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
           client.removeListener('data', onData)
           client.removeListener('err', onData)
 
-          const appDataIndex = readNumberFromBuffer(
+          const appDataIndex = readIntegerFromBuffer(
             data,
             CATALOGUE_SIZE_OF_SIZE_BYTES,
             false,

@@ -4,24 +4,26 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 3:09:04 pm
+ * @Last modified time: Tuesday, 11th December 2018 9:40:03 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoHashProvider } from './@types'
+import { IXyoHashProvider, IXyoHash } from './@types'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { XyoNativeBaseHashProvider } from './xyo-native-base-hash-provider'
 import { schema } from '@xyo-network/serialization-schema'
+import { IXyoDeserializer, parse } from '@xyo-network/serialization'
+import { XyoHash } from './xyo-hash'
 
-export { XyoBaseHash } from './xyo-base-hash'
 export { IXyoHash, IXyoHashProvider } from './@types'
-export { XyoHash } from './xyo-native-base-hash-provider'
+export { XyoHash } from './xyo-hash'
+export { XyoStubHash } from './xyo-stub-hash'
 
 /**
  * The currently natively supported hash-types in the XYO protocol
  */
-export type HASH_TYPE = 'sha256'
+type HASH_TYPE = 'sha256'
 
 /** A cache fro the hash-providers */
 const hashProvidersByType: {[h: string]: IXyoHashProvider } = {}
@@ -57,3 +59,19 @@ export function getHashingProvider(hashType: HASH_TYPE): IXyoHashProvider {
 
   return hashProvider
 }
+
+class XyoSha256HashDeserializer implements IXyoDeserializer<IXyoHash> {
+  public schemaObjectId = schema.sha256Hash.id
+
+  public deserialize(data: Buffer): IXyoHash {
+    const parseResult = parse(data)
+    const hashProvider = getHashingProvider('sha256')
+    return new XyoHash(
+      parseResult.data as Buffer,
+      hashProvider,
+      this.schemaObjectId
+    )
+  }
+}
+
+export const sha256HashDeserializer = new XyoSha256HashDeserializer()

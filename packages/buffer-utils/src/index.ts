@@ -4,32 +4,16 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 28th November 2018 5:50:00 pm
+ * @Last modified time: Tuesday, 11th December 2018 9:14:17 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoError, XyoErrors } from "@xyo-network/errors"
-
-/** Returns a pseudo-hash based off the contents of a buffer */
-export function getBufferHash(buffer: Buffer): number {
-  if (buffer.length === 0) {
-    return 0
-  }
-
-  let hash = buffer.length
-
-  buffer.forEach((byte: number, index: number) => {
-    hash += index
-    hash += byte
-    return hash * 31 * (index + byte)
-  })
-
-  return hash
-}
+import BN from 'bn.js'
 
 /** A helper function to write a number to a buffer that supports multiple sizes and signings */
-export function writeNumberToBuffer(
+export function writeIntegerToBuffer(
   numberToWrite: number,
   bytes: number,
   isSigned: boolean,
@@ -65,13 +49,21 @@ export function writeNumberToBuffer(
     case 4:
       buf.writeUInt32BE(numberToWrite, bufOffset)
       return buf
+    case 8:
+      const bigNumberBuffer = new BN(numberToWrite).toBuffer('be', 8)
+      let i = 0
+      while (i < 8) {
+        buf[i + bufOffset] = bigNumberBuffer[i]
+        i += 1
+      }
+      return buf
     default:
       throw new XyoError(`Could not write number to buffer`, XyoErrors.CRITICAL)
   }
 }
 
 /** A helper function to read a number from a buffer based off of sign by */
-export function readNumberFromBuffer(buffer: Buffer, bytes: number, isSigned: boolean, offset?: number) {
+export function readIntegerFromBuffer(buffer: Buffer, bytes: number, isSigned: boolean, offset?: number) {
   const bufOffset = offset || 0
 
   if (isSigned) {
@@ -94,6 +86,8 @@ export function readNumberFromBuffer(buffer: Buffer, bytes: number, isSigned: bo
       return buffer.readUInt16BE(bufOffset)
     case 4:
       return buffer.readUInt32BE(bufOffset)
+    case 8:
+      return new BN(buffer.slice(bufOffset || 0, bufOffset + bytes)).toNumber()
     default:
       throw new XyoError(`Could not read number from buffer`, XyoErrors.CRITICAL)
   }
@@ -115,7 +109,7 @@ export function writePointTo32ByteBuffer(point: Buffer) {
   return dest
 }
 
-export function unsignedNumberToBuffer(num: number): Buffer {
+export function unsignedIntegerToBuffer(num: number): Buffer {
   let buf: Buffer
 
   if (num <= Math.pow(2, 8) - 1) {
@@ -128,7 +122,7 @@ export function unsignedNumberToBuffer(num: number): Buffer {
     buf = Buffer.alloc(4)
     buf.writeUInt32BE(num, 0)
   } else if (num > Math.pow(2, 32)) {
-    throw new XyoError('This is not yet supported', XyoErrors.CRITICAL)
+    buf = new BN(num).toBuffer('be')
   } else {
     throw new XyoError('This should never happen', XyoErrors.CRITICAL)
   }
@@ -136,7 +130,7 @@ export function unsignedNumberToBuffer(num: number): Buffer {
   return buf
 }
 
-export function signedNumberToBuffer(num: number): Buffer {
+export function signedIntegerToBuffer(num: number): Buffer {
   let buf: Buffer
 
   if (num <= Math.pow(2, 7) - 1) {
@@ -155,4 +149,24 @@ export function signedNumberToBuffer(num: number): Buffer {
   }
 
   return buf
+}
+
+export function doubleToBuffer(num: number): Buffer {
+  const b = Buffer.alloc(8)
+  b.writeDoubleBE(num, 0)
+  return b
+}
+
+export function floatToBuffer(num: number): Buffer {
+  const b = Buffer.alloc(4)
+  b.writeFloatBE(num, 0)
+  return b
+}
+
+export function readDoubleFromBuffer(buffer: Buffer, offset: number = 0): number {
+  return buffer.readDoubleBE(offset)
+}
+
+export function readFloatFromBuffer(buffer: Buffer, offset: number = 0): number {
+  return buffer.readFloatBE(offset)
 }

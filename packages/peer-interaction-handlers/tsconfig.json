@@ -23,12 +23,12 @@
   "include": ["src/**/*"],
   "references": [
     { "path": "../peer-interaction"},
-    { "path": "../zig-zag-bound-witness-builder"},
     { "path": "../bound-witness"},
     { "path": "../base"},
     { "path": "../errors"},
     { "path": "../signing"},
     { "path": "../serialization"},
+    { "path": "../serialization-schema"},
     { "path": "../network"},
   ]
 }

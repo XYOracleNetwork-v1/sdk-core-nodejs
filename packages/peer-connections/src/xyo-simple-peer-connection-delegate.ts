@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-simple-peer-connection-delegate.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 11:30:35 am
+ * @Last modified time: Friday, 7th December 2018 11:44:25 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -24,10 +24,7 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
   }
 
   public async provideConnection() {
-    this.logInfo(`Attempting to provide connection`)
-    const pipe = await this.network.find(this.catalogue)
-    this.logInfo(`Found peer`)
-    return pipe
+    return this.network.find(this.catalogue)
   }
 
   public stopProvidingConnections() {

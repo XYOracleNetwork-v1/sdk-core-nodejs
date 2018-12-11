@@ -22,11 +22,11 @@
     "@xyo-network/peer-interaction-router": "^0.2.1",
     "@xyo-network/serialization": "^0.2.1",
     "@xyo-network/serialization-schema": "^0.2.1",
-    "@xyo-network/serializers": "^0.2.1",
     "@xyo-network/signing": "^0.2.1",
     "@xyo-network/storage": "^0.2.1",
-    "@xyo-network/test-utils": "^0.2.1",
-    "@xyo-network/zig-zag-bound-witness-builder": "^0.2.1"
+    "@xyo-network/heuristics-common": "^0.2.1",
+    "@xyo-network/signing.ecdsa": "^0.2.1",
+    "@xyo-network/signing.rsa": "^0.2.1"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

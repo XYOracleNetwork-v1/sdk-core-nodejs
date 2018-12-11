@@ -31,7 +31,6 @@
     { "path": "../signing"},
     { "path": "../origin-block-repository"},
     { "path": "../buffer-utils"},
-    { "path": "../serializers"},
     { "path": "../origin-chain"}
   ]
 }

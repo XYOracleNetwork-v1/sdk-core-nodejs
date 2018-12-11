@@ -27,7 +27,7 @@
     { "path": "../errors" },
     { "path": "../hashing" },
     { "path": "../serialization-schema" },
-    { "path": "../serialization-utils" },
+    { "path": "../buffer-utils" },
     { "path": "../serialization" }
   ]
 }

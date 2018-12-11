@@ -1,0 +1,60 @@
+/*
+ * @Author: XY | The Findables Company <ryanxyo>
+ * @Date:   Monday, 10th December 2018 10:43:28 am
+ * @Email:  developer@xyfindables.com
+ * @Filename: xyo-fetter.ts
+ * @Last modified by: ryanxyo
+ * @Last modified time: Monday, 10th December 2018 10:57:02 am
+ * @License: All Rights Reserved
+ * @Copyright: Copyright XY | The Findables Company
+ */
+
+import { IXyoFetter, IXyoKeySet } from "./@types"
+import { XyoBaseSerializable, IXyoSerializableObject, IXyoDeserializer, parse, ParseQuery, IXyoSerializationService } from "@xyo-network/serialization"
+import { schema } from '@xyo-network/serialization-schema'
+
+export class XyoFetter extends XyoBaseSerializable  implements IXyoFetter {
+
+  public static deserializer: IXyoDeserializer<IXyoFetter>
+
+  public readonly schemaObjectId = schema.fetter.id
+
+  public constructor (
+    public keySet: IXyoKeySet,
+    public heuristics: IXyoSerializableObject[]
+  ) {
+    super()
+  }
+
+  public getData(): IXyoSerializableObject | IXyoSerializableObject[] | Buffer {
+    return [
+      this.keySet,
+      ...this.heuristics
+    ]
+  }
+}
+
+// tslint:disable-next-line:max-classes-per-file
+class XyoFetterDeserializer implements IXyoDeserializer<IXyoFetter> {
+  public readonly schemaObjectId = schema.fetter.id
+
+  public deserialize(data: Buffer, serializationService: IXyoSerializationService): IXyoFetter {
+    const parseResult = parse(data)
+    const query = new ParseQuery(parseResult)
+    const keySetItem = query.getChildAt(0)
+    const keySet = serializationService.deserialize(keySetItem.readData(true)).hydrate<IXyoKeySet>()
+    const childrenCount = query.getChildrenCount()
+    let childIndex = 1
+    const heuristics: IXyoSerializableObject[] = []
+    while (childIndex < childrenCount) {
+      const heuristicChild = query.getChildAt(childIndex)
+      const heuristic = serializationService.deserialize(heuristicChild.readData(true)).hydrate()
+      heuristics.push(heuristic)
+      childIndex += 1
+    }
+
+    return new XyoFetter(keySet, heuristics)
+  }
+}
+
+XyoFetter.deserializer = new XyoFetterDeserializer()

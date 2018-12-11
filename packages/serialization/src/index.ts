@@ -4,18 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 3:14:32 pm
+ * @Last modified time: Tuesday, 11th December 2018 9:53:24 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 export {
-  IXyoSerializable,
-  IXyoSerializationProvider,
   IXyoSerializationService,
-  BufferOrString,
-  SerializationType,
-  IXyoTypeSerializer,
   IXyoSerializableObject,
   IXyoDeserializer,
   IXyoObjectSchema,
@@ -23,7 +18,6 @@ export {
 } from './@types'
 
 export { XyoSerializationService } from './xyo-serialization-service'
-export { resolveSerializablesToBuffer } from './helpers/resolveSerializablesToBuffer'
-export { fromArray } from './helpers/fromArray'
 export { parse } from './helpers/parse'
 export { ParseQuery } from './helpers/parse-query'
+export { XyoBaseSerializable } from './helpers/base-serializable'

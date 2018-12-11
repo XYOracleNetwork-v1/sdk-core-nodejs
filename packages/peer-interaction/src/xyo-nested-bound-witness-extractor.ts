@@ -4,13 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-nested-bound-witness-extractor-utils.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 26th November 2018 4:13:37 pm
+ * @Last modified time: Wednesday, 5th December 2018 10:28:43 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoBoundWitness } from '@xyo-network/bound-witness'
-import { fromArray } from '@xyo-network/serialization'
 
 /**
  *  This class is useful for extracting out bridged blocks nested inside of bound-witnesses
@@ -45,18 +44,21 @@ export class XyoNestedBoundWitnessExtractor {
     boundWitness: IXyoBoundWitness,
     boundWitnessContainer: IXyoBoundWitness[]
   ) {
-    boundWitness.payloads.forEach((payload) => {
-      payload.unsignedPayload.forEach((unsignedPayloadItem) => {
-        if (!this.isBridgeBlockSetFn(unsignedPayloadItem)) {
-          return
-        }
 
-        const nestedBridgeBlockSet = fromArray<IXyoBoundWitness>(unsignedPayloadItem)
-        nestedBridgeBlockSet.forEach((nestedBoundWitness) => {
-          boundWitnessContainer.push(nestedBoundWitness)
-          this.recursivelyExtractNestedBoundWitnesses(nestedBoundWitness, boundWitnessContainer)
-        })
-      })
-    })
+    // TODO
+
+    // boundWitness.payloads.forEach((payload) => {
+    //   payload.unsignedPayload.forEach((unsignedPayloadItem) => {
+    //     if (!this.isBridgeBlockSetFn(unsignedPayloadItem)) {
+    //       return
+    //     }
+
+    //     const nestedBridgeBlockSet = fromArray<IXyoBoundWitness>(unsignedPayloadItem)
+    //     nestedBridgeBlockSet.forEach((nestedBoundWitness) => {
+    //       boundWitnessContainer.push(nestedBoundWitness)
+    //       this.recursivelyExtractNestedBoundWitnesses(nestedBoundWitness, boundWitnessContainer)
+    //     })
+    //   })
+    // })
   }
 }
