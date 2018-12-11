@@ -27,6 +27,38 @@ If you're favorite crypto signing algorithm is not yet supported, we welcome pul
 
 [Here](https://github.com/XYOracleNetwork/spec-coreobjectmodel-tex) is a link to the core object model that contains an index of major/minor values and their respective objects.
 
+## Additional Documentation
+
+- [about-me](packages/about-me/README.md)
+- [archivist-repository](packages/archivist-repository/README.md)
+- [archivist-repository.sql](packages/archivist-repository.sql/README.md)
+- [base](packages/base/README.md)
+- [bound-witness](packages/bound-witness/README.md)
+- [buffer-utils](packages/buffer-utils/README.md)
+- [errors](packages/errors/README.md)
+- [hashing](packages/hashing/README.md)
+- [heuristics](packages/heuristics/README.md)
+- [heuristics-common](packages/heuristics-common/README.md)
+- [ip-service](packages/ip-service/README.md)
+- [logger](packages/logger/README.md)
+- [network](packages/network/README.md)
+- [network.tcp](packages/network.tcp/README.md)
+- [node](packages/node/README.md)
+- [origin-block-repository](packages/origin-block-repository/README.md)
+- [origin-chain](packages/origin-chain/README.md)
+- [peer-connections](packages/peer-connections/README.md)
+- [peer-discovery](packages/peer-discovery/README.md)
+- [peer-interaction](packages/peer-interaction/README.md)
+- [peer-interaction-handlers](packages/peer-interaction-handlers/README.md)
+- [peer-interaction-router](packages/peer-interaction-router/README.md)
+- [serialization](packages/serialization/README.md)
+- [serialization-schema](packages/serialization-schema/README.md)
+- [signing](packages/signing/README.md)
+- [signing.ecdsa](packages/signing.ecdsa/README.md)
+- [signing.rsa](packages/signing.rsa/README.md)
+- [storage](packages/storage/README.md)
+- [test-node](packages/test-node/README.md)
+
 ## Getting started
 
 ### Clone repository
