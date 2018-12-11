@@ -4,18 +4,17 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 12:25:40 pm
+ * @Last modified time: Thursday, 6th December 2018 3:44:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoNetworkPipe } from '@xyo-network/network'
-import { IXyoBoundWitness, XyoBoundWitnessValidator, IXyoBoundWitnessSigningDataProducer } from '@xyo-network/bound-witness'
-import { IXyoHashProvider, IXyoHash } from '@xyo-network/hashing'
+import { IXyoBoundWitness, XyoBoundWitnessValidator } from '@xyo-network/bound-witness'
+import { IXyoHashProvider } from '@xyo-network/hashing'
 import { IXyoOriginChainRepository } from '@xyo-network/origin-chain'
 import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { XyoBase } from '@xyo-network/base'
-import { IXyoTypeSerializer } from '@xyo-network/serialization'
 import {
   IXyoBoundWitnessHandlerProvider,
   IXyoBoundWitnessPayloadProvider,
@@ -35,9 +34,7 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
     private readonly boundWitnessSuccessListener: IXyoBoundWitnessSuccessListener,
     private readonly boundWitnessInteractionFactory: IXyoBoundWitnessInteractionFactory,
     private readonly boundWitnessValidator: XyoBoundWitnessValidator,
-    private readonly boundWitnessSigningDataProducer: IXyoBoundWitnessSigningDataProducer,
-    private readonly nestedBoundWitnessExtractor: XyoNestedBoundWitnessExtractor,
-    private readonly hashSerializer: IXyoTypeSerializer<IXyoHash>
+    private readonly nestedBoundWitnessExtractor: XyoNestedBoundWitnessExtractor
   ) {
     super()
   }
@@ -60,9 +57,7 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
    */
 
   private async handleBoundWitnessSuccess(boundWitness: IXyoBoundWitness): Promise<void> {
-    const hashValue = await this.hashingProvider.createHash(
-      this.boundWitnessSigningDataProducer.getSigningData(boundWitness)
-    )
+    const hashValue = await this.hashingProvider.createHash(boundWitness.getSigningData())
 
     try {
       await this.boundWitnessValidator.validateBoundWitness(hashValue, boundWitness)
@@ -78,10 +73,8 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
 
     await nestedBoundWitnesses.reduce(async (promiseChain, nestedBoundWitness) => {
       await promiseChain
-      const nestedHashValue = await this.hashingProvider.createHash(
-        this.boundWitnessSigningDataProducer.getSigningData(nestedBoundWitness)
-      )
-      const nestedHash = this.hashSerializer.serialize(nestedHashValue, 'buffer') as Buffer
+      const nestedHashValue = await this.hashingProvider.createHash(nestedBoundWitness.getSigningData())
+      const nestedHash = nestedHashValue.serialize() as Buffer
       this.logInfo(`Extracted nested block with hash ${nestedHash.toString('hex')}`)
       const containsBlock = await this.originBlockRepository.containsOriginBlock(nestedHash)
       if (!containsBlock) {

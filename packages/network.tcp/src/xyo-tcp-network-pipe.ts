@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network-pipe.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 10:57:06 am
+ * @Last modified time: Friday, 7th December 2018 11:42:41 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -81,8 +81,6 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
 
   public send(message: Buffer, awaitResponse?: boolean | undefined): Promise<Buffer | undefined> {
     const networkMessage = this.padBufferWithSize(message)
-    this.logInfo(`SENDING MESSAGE ${message.toString('hex')}`)
-    this.logInfo(`SENDING NETWORK MESSAGE ${networkMessage.toString('hex')}`)
     this.connectionResult.socket.write(networkMessage)
 
     if (typeof awaitResponse === 'boolean' && !awaitResponse) {
@@ -93,9 +91,6 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
       let timeout: NodeJS.Timeout
       const listener = this.onSendOnDataFn((data) => {
         if (timeout) clearTimeout(timeout)
-        if (data instanceof Buffer) {
-          this.logInfo(`RECEIVED MESSAGE ${data.toString('hex')}`)
-        }
 
         return resolve(data)
       }, (err: any) => {
@@ -118,7 +113,6 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
    */
 
   public close(): Promise<void> {
-    this.logInfo(`Closing Connection`)
     this.connectionResult.socket.end()
     this.connectionResult.socket.destroy()
     return Promise.resolve(undefined)
@@ -151,7 +145,6 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
     let sizeOfPayload: number | undefined
 
     const onSendOnData = (chunk: Buffer) => {
-      this.logInfo(`Chunk received`)
       if (data === undefined) {
         if (chunk.length < 4) {
           this.connectionResult.socket.end()

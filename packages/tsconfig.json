@@ -19,7 +19,6 @@
       { "path": "hashing" },
       { "path": "signing" },
       { "path": "bound-witness" },
-      { "path": "zig-zag-bound-witness-builder" },
       { "path": "errors" },
       { "path": "network" },
       { "path": "buffer-utils" },
@@ -35,10 +34,15 @@
       { "path": "serialization-schema" },
       { "path": "origin-block-repository" },
       { "path": "peer-interaction-router" },
-      { "path": "serialization-utils" },
       { "path": "origin-chain" },
-      { "path": "test-utils" },
-      { "path": "test-node" }
+      { "path": "test-node" },
+      { "path": "ip-service" },
+      { "path": "peer-discovery" },
+      // { "path": "archivist-repository" },
+      // { "path": "archivist-repository.sql" },
+      { "path": "heuristics" },
+      { "path": "heuristics-common" },
+      { "path": "about-me" }
   ],
   "include": [
     "logger/src/**/*.ts",
@@ -46,7 +50,6 @@
     "hashing/src/**/*.ts",
     "signing/src/**/*.ts",
     "bound-witness/src/**/*.ts",
-    "zig-zag-bound-witness-builder/src/**/*.ts",
     "errors/src/**/*.ts",
     "network/src/**/*.ts",
     "buffer-utils/src/**/*.ts",
@@ -63,8 +66,13 @@
     "peer-interaction-router/src/**/*.ts",
     "peer-interaction-handlers/src/**/*.ts",
     "serialization-schema/src/**/*.ts",
-    "test-utils/src/**/*.ts",
     "test-node/src/**/*.ts",
-    "serialization-utils/src/**/*.ts"
+    "about-me/src/**/*.ts",
+    "ip-service/src/**/*.ts",
+    "peer-discovery/src/**/*.ts",
+    // "archivist-repository.sql/src/**/*.ts",
+    // "archivist-repository/src/**/*.ts",
+    "heuristics/src/**/*.ts",
+    "heuristics-common/src/**/*.ts"
   ]
 }

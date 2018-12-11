@@ -4,14 +4,10 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-server-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 27th November 2018 1:12:59 pm
+ * @Last modified time: Monday, 10th December 2018 4:52:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
-
-import {
-  XyoZigZagBoundWitnessBuilder
-} from '@xyo-network/zig-zag-bound-witness-builder'
 
 import {
   CatalogueItem,
@@ -20,12 +16,12 @@ import {
   CATALOGUE_SIZE_OF_SIZE_BYTES
 } from '@xyo-network/network'
 
-import { IXyoBoundWitness, IXyoPayload, XyoBoundWitnessSigningService } from '@xyo-network/bound-witness'
+import { IXyoBoundWitness, IXyoPayload, XyoBoundWitness, FetterOrWitness, XyoKeySet, XyoFetter, XyoFetterSet, XyoSignatureSet, XyoWitness, XyoWitnessSet } from '@xyo-network/bound-witness'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { IXyoNodeInteraction } from '@xyo-network/peer-interaction'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoSigner } from '@xyo-network/signing'
-import { IXyoTypeSerializer } from '@xyo-network/serialization'
+import { IXyoSerializationService, ParseQuery } from '@xyo-network/serialization'
 
 /**
  * An `XyoBoundWitnessInteraction` manages a "session"
@@ -40,8 +36,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
   constructor(
     private readonly signers: IXyoSigner[],
     private readonly payload: IXyoPayload,
-    private readonly boundWitnessSigningService: XyoBoundWitnessSigningService,
-    private readonly boundWitnessSerializer: IXyoTypeSerializer<IXyoBoundWitness>
+    private readonly serializationService: IXyoSerializationService
   ) {
     super()
   }
@@ -65,15 +60,11 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
       this.logInfo(`Starting bound witness`)
 
       if (!disconnected) {
-        // Create the bound witness
-        const boundWitness = await this.startBoundWitness()
         if (!disconnected) {
-          /** Do step 1 of the bound witness */
-          const boundWitnessTransfer1 = await boundWitness.incomingData(undefined, false)
+          const keySet = new XyoKeySet(this.signers.map(s => s.publicKey))
+          const fetter = new XyoFetter(keySet, this.payload.heuristics)
+          const fetterSet = new XyoFetterSet([fetter])
 
-          /** Serialize the transfer value */
-          const bytes = this.boundWitnessSerializer.serialize(boundWitnessTransfer1, 'buffer') as Buffer
-          this.logInfo(`BoundWitness Step 1: ${bytes.toString('hex')}`)
           /** Tell the other node this is the catalogue item you chose */
           const catalogueBuffer = Buffer.alloc(CATALOGUE_LENGTH_IN_BYTES)
           catalogueBuffer.writeUInt32BE(this.catalogueItem, 0)
@@ -84,12 +75,10 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
           const bytesToSend = Buffer.concat([
             sizeOfCatalogueInBytesBuffers,
             catalogueBuffer,
-            bytes
+            fetterSet.serialize()
           ])
 
           if (!disconnected) {
-            /* Send the message and wait for reply */
-            this.logInfo(`Sending BoundWitnessTransfer 1`)
             let response: Buffer | undefined
 
             try {
@@ -102,18 +91,36 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
               return reject(err)
             }
 
-            /** Deserialize bytes into bound witness  */
-            const transferObj = this.boundWitnessSerializer.deserialize(response)
+            const transferObject = this.serializationService.deserialize(response)
+            this.logInfo('Transfer Object', transferObject.serializeHex())
 
-            /** Add transfer to bound witness */
-            const transfer = await boundWitness.incomingData(transferObj, false)
+            const transferQuery = this.serializationService.deserialize(response).query()
+
+            const numberOfItemsInTransfer = transferQuery.getChildrenCount()
+            if (numberOfItemsInTransfer < 2 || numberOfItemsInTransfer % 2 !== 0) {
+              this.logError(`Invalid Bound Witness Fragments`)
+              return reject()
+            }
+
+            const aggregator: Buffer[] = [fetter.serialize()]
+            aggregator.push(transferQuery.query([0]).readData(true))
+            const signingData = Buffer.concat(aggregator)
+            this.logInfo(`Signing Data`, signingData.toString('hex'))
+            const signatures = await Promise.all(this.signers.map(async (signer) => {
+              const sig = await signer.signData(signingData)
+
+              this.logInfo(`signer public key`, signer.publicKey.serializeHex())
+              this.logInfo(`signer sig`, sig.serializeHex())
+              return sig
+            }))
 
             if (!disconnected) {
-              /** serialize the bound witness transfer */
-              const transferBytes = this.boundWitnessSerializer.serialize(transfer, 'buffer') as Buffer
+              const signatureSet = new XyoSignatureSet(signatures)
+              const witness = new XyoWitness(signatureSet, this.payload.metadata)
+              const witnessSet = new XyoWitnessSet([witness])
 
               try {
-                await networkPipe.send(transferBytes, false)
+                await networkPipe.send(witnessSet.serialize(), false)
               } catch (err) {
                 this.logError(`Failed BoundWitnessTransfer on step 3`, err)
                 return reject(err)
@@ -125,20 +132,23 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
               /** Close the connection */
               await networkPipe.close()
 
-              /** Return the resulting bound-witness */
-              return resolve(boundWitness)
+              const fragmentParts = transferQuery
+                .reduceChildren((memo, parseResult, index) => {
+                  memo.push(
+                    this.serializationService
+                      .deserialize(new ParseQuery(parseResult).readData(true))
+                      .hydrate<FetterOrWitness>()
+                  )
+                  return memo
+                }, [fetter] as FetterOrWitness[])
+              fragmentParts.push(witness)
+              return resolve(new XyoBoundWitness(fragmentParts))
             }
           }
         }
       }
 
-      return reject(
-        new XyoError(`Peer disconnected in xyo-bound-witness-interaction`, XyoErrors.CRITICAL)
-      )
+      return reject(new XyoError(`Peer disconnected in xyo-bound-witness-interaction`, XyoErrors.CRITICAL))
     }) as Promise<IXyoBoundWitness>
-  }
-
-  private async startBoundWitness(): Promise<XyoZigZagBoundWitnessBuilder> {
-    return new XyoZigZagBoundWitnessBuilder(this.signers, this.payload, this.boundWitnessSigningService)
   }
 }

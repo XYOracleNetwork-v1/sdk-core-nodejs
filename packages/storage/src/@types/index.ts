@@ -4,13 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 1:13:48 pm
+ * @Last modified time: Tuesday, 11th December 2018 9:56:53 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoError } from "@xyo-network/errors"
-import { XyoStoragePriority } from "../xyo-storage-priority"
 
 /**
  * The interface for storage in the system. Provides a simple
@@ -19,16 +18,10 @@ import { XyoStoragePriority } from "../xyo-storage-priority"
 
 export interface IXyoStorageProvider {
   /** Should persist the value for the corresponding key */
-  write(
-    key: Buffer,
-    value: Buffer,
-    priority: XyoStoragePriority,
-    cache: boolean,
-    timeout: number
-  ): Promise<XyoError | undefined>
+  write(key: Buffer, value: Buffer): Promise<XyoError | undefined>
 
   /** Attempts to the read the value for key, returns `undefined` if it does not exist */
-  read(key: Buffer, timeout: number): Promise<Buffer | undefined>
+  read(key: Buffer): Promise<Buffer | undefined>
 
   /** Returns a list of all the keys in storage */
   getAllKeys(): Promise<Buffer[]>

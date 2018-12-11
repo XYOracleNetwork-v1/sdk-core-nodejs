@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-error.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 19th November 2018 3:24:29 pm
+ * @Last modified time: Tuesday, 11th December 2018 9:16:21 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,9 +17,7 @@ import { XyoBase } from '@xyo-network/base'
 
 export enum XyoErrors {
   CRITICAL = 1,
-  INVALID_PARAMETERS = 2,
-  CREATOR_MAPPING = 3,
-  INVALID_RESULT_ACCESS = 4
+  INVALID_PARAMETERS = 2
 }
 
 /**

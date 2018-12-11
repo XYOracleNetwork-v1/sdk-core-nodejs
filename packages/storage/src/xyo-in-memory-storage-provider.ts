@@ -4,12 +4,11 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-in-memory-storage-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 20th November 2018 1:21:17 pm
+ * @Last modified time: Tuesday, 11th December 2018 9:57:22 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoStoragePriority } from './xyo-storage-priority'
 import { IXyoStorageProvider } from './@types'
 import { XyoError } from '@xyo-network/errors'
 
@@ -31,13 +30,7 @@ export class XyoInMemoryStorageProvider implements IXyoStorageProvider {
    * @returns Will return if the value is stored successfully
    */
 
-  public async write(
-    key: Buffer,
-    value: Buffer,
-    priority: XyoStoragePriority,
-    cache: boolean,
-    timeout: number
-  ): Promise<XyoError | undefined> {
+  public async write(key: Buffer, value: Buffer): Promise<XyoError | undefined> {
     this.data[key.toString()] = value
     return
   }
@@ -48,7 +41,7 @@ export class XyoInMemoryStorageProvider implements IXyoStorageProvider {
    * @return Will return the value if it can be located, `undefined` otherwise
    */
 
-  public async read(key: Buffer, timeout: number): Promise<Buffer | undefined> {
+  public async read(key: Buffer): Promise<Buffer | undefined> {
     const result = this.data[key.toString()]
     if (!result) {
       throw new Error('Key does not exist')

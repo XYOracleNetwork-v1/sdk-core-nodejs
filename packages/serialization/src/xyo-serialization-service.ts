@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serialization-service.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 9:23:02 am
+ * @Last modified time: Monday, 10th December 2018 5:13:43 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { BufferOrString, IXyoSerializationService, IXyoSerializableObject, IXyoTypeSerializer, SerializationType, IXyoDeserializer, IXyoObjectSchema } from "./@types"
+import { BufferOrString, IXyoSerializationService, IXyoSerializableObject, IXyoDeserializer, IXyoObjectSchema, IParseResult, IOnTheFlyGetDataOptions } from "./@types"
 
 import { XyoBase } from '@xyo-network/base'
 import { resolveSerializablesToBuffer } from "./helpers/resolveSerializablesToBuffer"
@@ -17,12 +17,16 @@ import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { serialize } from './helpers/serialize'
 import { findSchemaById } from './helpers/findSchemaById'
 import { readHeader } from './helpers/readHeader'
+import { parse } from "./helpers/parse"
+import { XyoTreeIterator } from "./helpers/tree-iterator"
+import { XyoOnTheFlySerializable } from "./helpers/on-the-fly-serializable"
 
 export class XyoSerializationService extends XyoBase implements IXyoSerializationService {
 
+  private recipes: { [s: string]: IXyoDeserializer<IXyoSerializableObject>} = {}
+
   constructor (
-    private readonly schema: IXyoObjectSchema,
-    private readonly recipes: { [s: string]: IXyoDeserializer<IXyoSerializableObject>}) {
+    public readonly schema: IXyoObjectSchema) {
     super()
   }
 
@@ -43,27 +47,75 @@ export class XyoSerializationService extends XyoBase implements IXyoSerializatio
     return b
   }
 
-  public deserialize<T extends IXyoSerializableObject>(deserializable: BufferOrString): T {
+  public addDeserializer(deserializer: IXyoDeserializer<IXyoSerializableObject>) {
+    if (Boolean(this.recipes[deserializer.schemaObjectId])) {
+      throw new XyoError(`There already exist a deserializer for ${deserializer.schemaObjectId}`, XyoErrors.CRITICAL)
+    }
+
+    this.recipes[deserializer.schemaObjectId] = deserializer
+  }
+
+  public deserialize(deserializable: BufferOrString): XyoTreeIterator {
     const src = deserializable instanceof Buffer ? deserializable : Buffer.from(deserializable, 'hex')
+    const parseResult = parse(src)
+    return new XyoTreeIterator(parseResult)
+  }
+
+  public hydrate<T extends IXyoSerializableObject>(deserializable: IParseResult): T {
+    const src = Buffer.concat([
+      deserializable.headerBytes,
+      deserializable.dataBytes
+    ])
+
     const srcSchema = readHeader(src)
     const recipe = this.recipes[srcSchema.id]
     if (!recipe) {
-      throw new XyoError(`Could not find a recipe for id ${srcSchema.id}`, XyoErrors.CRITICAL)
+      throw new XyoError(`No recipe exists for ${srcSchema.id}`, XyoErrors.CRITICAL)
     }
 
-    return recipe.deserialize(src, this) as T
+    const deserializationResult = recipe.deserialize(src, this) as T
+    deserializationResult.srcBuffer = src
+    return deserializationResult
   }
 
-  public getInstanceOfTypeSerializer<T extends IXyoSerializableObject>(): IXyoTypeSerializer<T> {
-    const s: IXyoTypeSerializer<T > = {
-      serialize: (object: T, serializationType?: SerializationType) => {
-        return this.serialize(object, serializationType)
-      },
-      deserialize: (deserializable: BufferOrString) => {
-        return this.deserialize<T>(deserializable)
+  public arrayOf<T extends IXyoSerializableObject>(tCollection: T[]): IXyoSerializableObject {
+    const typeAccumulator: {[s: string]: number} = {}
+
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < tCollection.length; i++) {
+      typeAccumulator[tCollection[i].schemaObjectId] = (typeAccumulator[tCollection[i].schemaObjectId] || 0) + 1
+      if (Object.keys(typeAccumulator).length > 1) {
+        return this.untypedArrayOf(tCollection)
       }
     }
 
-    return s
+    return this.typedArrayOf(tCollection)
+  }
+
+  public typedArrayOf<T extends IXyoSerializableObject>(tCollection: T[]): IXyoSerializableObject {
+    const options: IOnTheFlyGetDataOptions = {}
+    if (tCollection.length === 0) {
+      options.buffer = Buffer.alloc(0)
+    } else  {
+      options.array = tCollection
+    }
+    return new XyoOnTheFlySerializable(this.schema.typedSet.id, options)
+  }
+
+  public untypedArrayOf<T extends IXyoSerializableObject>(tCollection: T[]): IXyoSerializableObject {
+    const options: IOnTheFlyGetDataOptions = {}
+    if (tCollection.length === 0) {
+      options.buffer = Buffer.alloc(0)
+    } else  {
+      options.array = tCollection
+    }
+    return new XyoOnTheFlySerializable(this.schema.untypedSet.id, options)
+  }
+
+  public findFirstElement<T extends IXyoSerializableObject>(
+    collection: IXyoSerializableObject[],
+    schemaObjectId: number
+  ): T | undefined {
+    return collection.find(item => item.schemaObjectId === schemaObjectId) as T | undefined
   }
 }

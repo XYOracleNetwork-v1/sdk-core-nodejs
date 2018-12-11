@@ -4,15 +4,18 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-secp256k1-uncompressed-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 26th November 2018 3:44:47 pm
+ * @Last modified time: Friday, 7th December 2018 11:08:28 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoEcdsaUncompressedPublicKey } from "./xyo-ecdsa-uncompressed-public-key"
 import { writePointTo32ByteBuffer } from "@xyo-network/buffer-utils"
+import { IXyoDeserializer } from "@xyo-network/serialization"
 
 export class XyoEcdsaSecp256k1UnCompressedPublicKey extends XyoEcdsaUncompressedPublicKey {
+
+  public static deserializer: IXyoDeserializer<XyoEcdsaSecp256k1UnCompressedPublicKey>
 
   constructor (
     private readonly xCoordinate: Buffer,

@@ -23,6 +23,10 @@
   "include": ["src/**/*"],
   "references": [
     { "path": "../hashing"},
-    { "path": "../signing"}
+    { "path": "../signing"},
+    { "path": "../buffer-utils"},
+    { "path": "../serialization-schema"},
+    { "path": "../bound-witness"},
+    { "path": "../serialization"}
   ]
 }

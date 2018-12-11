@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 3:34:41 pm
+ * @Last modified time: Tuesday, 11th December 2018 9:54:21 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,13 +13,13 @@ import { XyoEcdsaSecp256k1SignerProvider } from './xyo-ecdsa-secp256k1-signer-pr
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { getHashingProvider } from '@xyo-network/hashing'
 import { schema } from '@xyo-network/serialization-schema'
+import { XyoEcdsaSignature } from './xyo-ecdsa-signature'
+import { XyoEcdsaSignatureDeserializer } from './xyo-ecdsa-signature-deserializer'
+import { XyoEcdsaUncompressedPublicKeyDeserializer } from './xyo-ecdsa-uncompressed-public-key-deserializer'
+import { XyoEcdsaSecp256k1UnCompressedPublicKey } from './xyo-ecdsa-secp256k1-uncompressed-public-key'
 
 /** The types of signing algorithm supported */
-export type SignerProviderType = (
-
-  /** Will not hash the data before signing */
-  'secp256k1' |
-
+type SignerProviderType = (
   /** Will hash the data using sha256 before signing */
   'secp256k1-sha256'
 )
@@ -39,17 +39,12 @@ export function getSignerProvider(signerProviderType: SignerProviderType): XyoEc
 
   let signerProvider: XyoEcdsaSecp256k1SignerProvider
   switch (signerProviderType) {
-    case 'secp256k1':
-      signerProvider = new XyoEcdsaSecp256k1SignerProvider(
-        undefined,
-        schema.ecSecp256k1UncompressedPublicKey.id
-      )
-      break
     case 'secp256k1-sha256':
       const sha256HashingProvider = getHashingProvider('sha256')
       signerProvider = new XyoEcdsaSecp256k1SignerProvider(
         sha256HashingProvider,
-        schema.ecSecp256k1UncompressedPublicKey.id
+        schema.ecSecp256k1UncompressedPublicKey.id,
+        schema.ecdsaSecp256k1WithSha256Signature.id
       )
       break
     default:
@@ -58,3 +53,15 @@ export function getSignerProvider(signerProviderType: SignerProviderType): XyoEc
 
   return signerProvider
 }
+
+export { XyoEcdsaSignature } from './xyo-ecdsa-signature'
+export { XyoEcdsaSecp256k1UnCompressedPublicKey } from './xyo-ecdsa-secp256k1-uncompressed-public-key'
+
+XyoEcdsaSignature.deserializer = new XyoEcdsaSignatureDeserializer(
+  schema.ecdsaSecp256k1WithSha256Signature.id,
+  getSignerProvider('secp256k1-sha256')
+)
+
+XyoEcdsaSecp256k1UnCompressedPublicKey.deserializer = new XyoEcdsaUncompressedPublicKeyDeserializer(
+  schema.ecSecp256k1UncompressedPublicKey.id
+)

@@ -5,18 +5,16 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-wit
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 3:10:26 pm
+ * @Last modified time: Monday, 10th December 2018 2:26:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBase } from "@xyo-network/base"
-import { IXyoOriginChainRepository } from "@xyo-network/origin-chain"
+import { IXyoOriginChainRepository, XyoIndex, XyoNextPublicKey, XyoPreviousHash } from "@xyo-network/origin-chain"
 import { IXyoBoundWitnessPayloadProvider } from "./@types"
-import { XyoBasePayload, IXyoPayload } from "@xyo-network/bound-witness"
-import { IXyoSerializableObject } from "@xyo-network/serialization"
-import { XyoSerializableNumber } from "@xyo-network/serializers"
-import { schema } from '@xyo-network/serialization-schema'
+import { IXyoPayload } from "@xyo-network/bound-witness"
+import { IXyoSerializableObject } from '@xyo-network/serialization'
 
 export class XyoBoundWitnessPayloadProvider extends XyoBase implements IXyoBoundWitnessPayloadProvider {
 
@@ -32,7 +30,6 @@ export class XyoBoundWitnessPayloadProvider extends XyoBase implements IXyoBound
    */
 
   public async getPayload(originState: IXyoOriginChainRepository): Promise<IXyoPayload> {
-
     const signedHeuristics = await this.getHeuristics(true)
     const unsignedHeuristics = await this.getHeuristics(false)
     const unsignedPayload = ([] as IXyoSerializableObject[]).concat(unsignedHeuristics)
@@ -42,22 +39,19 @@ export class XyoBoundWitnessPayloadProvider extends XyoBase implements IXyoBound
     const nextPublicKey = await originState.getNextPublicKey()
 
     if (previousHash) {
-      signedPayload.push(previousHash)
+      signedPayload.push(new XyoPreviousHash(previousHash))
     }
 
     if (nextPublicKey) {
-      signedPayload.push(nextPublicKey)
+      signedPayload.push(new XyoNextPublicKey(nextPublicKey))
     }
 
-    signedPayload.push(new XyoSerializableNumber(index, false, schema.index.id))
+    signedPayload.push(new XyoIndex(index))
 
-    // tslint:disable-next-line:max-classes-per-file
-    class OnTheFlyPayload extends XyoBasePayload {
-      public readonly signedPayload = signedPayload
-      public readonly unsignedPayload = unsignedPayload
+    return {
+      heuristics: signedPayload,
+      metadata: unsignedPayload,
     }
-
-    return new OnTheFlyPayload()
   }
 
   /**

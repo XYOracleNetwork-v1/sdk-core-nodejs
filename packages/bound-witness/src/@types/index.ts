@@ -4,13 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 26th November 2018 3:13:33 pm
+ * @Last modified time: Monday, 10th December 2018 2:27:42 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoSignature, IXyoPublicKey } from '@xyo-network/signing'
 import { IXyoSerializableObject } from '@xyo-network/serialization'
+import { IXyoHash } from '@xyo-network/hashing'
 
 /**
  * A payload encapsulates the meta data being shared between parties
@@ -18,79 +19,76 @@ import { IXyoSerializableObject } from '@xyo-network/serialization'
  *
  * It is broken up between signed and unsigned portions
  */
-export interface IXyoPayload extends IXyoSerializableObject {
-
-  /**
-   * The signed portion of the payload
-   *
-   * @type {IXyoSerializableObject[]}
-   * @memberof IXyoPayload
-   */
-  readonly signedPayload: IXyoSerializableObject[]
-
-  /**
-   * The unsigned portion of the payload
-   *
-   * @type {IXyoSerializableObject[]}
-   * @memberof IXyoPayload
-   */
-  readonly unsignedPayload: IXyoSerializableObject[]
+export interface IXyoPayload {
+  readonly heuristics: IXyoSerializableObject[]
+  readonly metadata: IXyoSerializableObject[]
 }
 
-/**
- * A bound-witness is the central data type used to communicate between nodes in the
- * XYO network. The structure provides a cryptographically secure way that ensures,
- * through public-key cryptography, that two nodes interacted and agreed upon a
- * particular payload
- *
- * This particular structure is forward looking in that it may accommodate a future
- * situation where more than two nodes interacted. As such, there exists a positional
- * coupling across the fields of the `IXyoBoundWitness`. That is, a party in the
- * bound-witness corresponds to a particular index of the fields
- *
- * - publicKeys
- * - signatures
- * - payloads
- *
- * @export
- * @interface IXyoBoundWitness
- */
-export interface IXyoBoundWitness extends IXyoSerializableObject {
-
-  /**
-   * A collection of publicKey collections associated with the
-   * bound-witness. The outer-index represents the party. The inner-index
-   * corresponds to a public-key entry. Parties are allowed to sign with
-   * multiple key-pairs. The 2-dimensional index of each element corresponds
-   * directly to the 2-dimensional index of the corresponding signature
-   *
-   * @type {IXyoPublicKey[][]}
-   * @memberof IXyoBoundWitness
-   */
-  readonly publicKeys: IXyoPublicKey[][]
-
-  /**
-   * A collection of signatures collections associated with the
-   * bound-witness. The outer-index represents the party. The inner-index
-   * corresponds to a signature entry. Parties are allowed to sign with
-   * multiple key-pairs. The 2-dimensional index of each element corresponds
-   * directly to the 2-dimensional index of the corresponding publicKey
-   *
-   * @type {IXyoPublicKey[][]}
-   * @memberof IXyoBoundWitness
-   */
-  readonly signatures: IXyoSignature[][]
-
-  /**
-   * Each party in a bound-witness contributes a payload. The index of
-   * the payload corresponds to the party-member.
-   *
-   * @type {IXyoPayload[]}
-   * @memberof IXyoBoundWitness
-   */
-  readonly payloads: IXyoPayload[]
+export interface IXyoKeySet extends IXyoSerializableObject {
+  readonly keys: IXyoPublicKey[]
 }
 
-export interface IXyoBoundWitnessSigningDataProducer {
-  getSigningData (boundWitness: IXyoBoundWitness): Buffer
+export interface IXyoSignatureSet extends IXyoSerializableObject {
+  readonly signatures: IXyoSignature[]
+}
+
+export interface IXyoFetter extends IXyoSerializableObject {
+  readonly keySet: IXyoKeySet
+  readonly heuristics: IXyoSerializableObject[]
+}
+
+export interface IXyoFetterSet extends IXyoSerializableObject {
+  readonly fetters: IXyoFetter[]
+}
+
+export interface IXyoWitness extends IXyoSerializableObject {
+  readonly signatureSet: IXyoSignatureSet
+  readonly metadata: IXyoSerializableObject[]
+}
+export interface IXyoWitnessSet extends IXyoSerializableObject {
+  readonly witnesses: IXyoWitness[]
+}
+
+export type FetterOrWitness = IXyoFetter | IXyoWitness
+
+export interface IXyoBoundWitnessFragment extends IXyoSerializableObject {
+  fetterWitnesses: FetterOrWitness[]
+}
+
+export interface IXyoPayloadDataExtractionService {
+  getIndex(payload: IXyoPayload): number | undefined
+  getPreviousHash(payload: IXyoPayload): IXyoHash | undefined
+  getNextPublicKey(payload: IXyoPayload): IXyoPublicKey | undefined
+  getBridgeHashSet(payload: IXyoPayload): IXyoHash[] | undefined
+  getBridgeBlockSet(payload: IXyoPayload): IXyoBoundWitness[] | undefined
+
+  findElementInSignedPayload<T extends IXyoSerializableObject>(
+    payload: IXyoPayload,
+    schemaObjectId: number
+  ): T | undefined
+
+  findElementInUnsignedPayload<T extends IXyoSerializableObject>(
+    payload: IXyoPayload,
+    schemaObjectId: number
+  ): T | undefined
+}
+
+export interface IXyoBoundWitnessParty {
+  partyIndex: number
+  keySet: IXyoKeySet
+  signatureSet: IXyoSignatureSet
+  heuristics: IXyoSerializableObject[]
+  metadata: IXyoSerializableObject[]
+}
+
+export interface IXyoBoundWitness extends IXyoSerializableObject, IXyoBoundWitnessFragment {
+  readonly publicKeys: IXyoKeySet[]
+  readonly signatures: IXyoSignatureSet[]
+  readonly heuristics: IXyoSerializableObject[][]
+  readonly metadata: IXyoSerializableObject[][]
+
+  readonly numberOfParties: number
+  readonly parties: IXyoBoundWitnessParty[]
+
+  getSigningData(): Buffer
 }

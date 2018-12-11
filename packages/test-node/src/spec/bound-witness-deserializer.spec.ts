@@ -4,29 +4,246 @@
  * @Email:  developer@xyfindables.com
  * @Filename: bound-witness-deserializer.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 30th November 2018 1:19:17 pm
+ * @Last modified time: Tuesday, 11th December 2018 9:04:11 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoSerializationService } from '@xyo-network/serialization'
-import { schema } from '@xyo-network/serialization-schema'
-import { XyoRecipes } from '../xyo-serialization-recipes'
+// tslint:disable:max-line-length
+// tslint:disable:ter-indent
 
-// tslint:disable-next-line:max-line-length
-const hex = `a0020000004aa00100000011a0010000000b800e0000000500b0cc0000001eb00700000018a0010000000e8003000000080000000000000004a00100000011a0010000000b800b0000000500`
+import { parse, ParseQuery } from '@xyo-network/serialization'
+
+const fetterSetA = Buffer.from([
+  0x30,
+  0x16,
+    0x12,
+      0x20,
+      0x15,
+        0x0F,
+          0x20,
+          0x19,
+            0x08,
+              0x00,
+              0x0E,
+                0x05,
+                  0xAA,
+                  0xBB,
+                  0xCC,
+                  0xDD,
+          0x00,
+          0x13,
+            0x02,
+              0x01
+])
+
+const witnessSetB = Buffer.from([
+  0x30, // typed iterable
+  0x18, // witness set
+    0x19, // 22 size
+      0x20, // untyped iterable
+      0x17, // witness
+        0x16, // 22 size
+          0x20,
+          0x1A,
+            0x08,
+              0x00, // leaf
+              0x0B, // stub sig
+                0x05, // 5 size
+                  0x44, // sig
+                  0x33,
+                  0x22,
+                  0x11,
+          0x00,
+          0x14,
+            0x09,
+              0x00,
+              0x00,
+              0x01,
+              0x67,
+              0x7a,
+              0xbd,
+              0x29,
+              0x38
+])
+
 describe(`BoundWitness Deserialization`, () => {
-  it(`Should deserialize without error`, () => {
 
-    const bytes = Buffer.from(hex, 'hex')
-    // @ts-ignore
-    const serializationService = new XyoSerializationService(schema, new XyoRecipes(undefined).getRecipes())
-    const result = serializationService.deserialize(bytes)
-    console.log(result)
+  it(`Should parse a stub public key`, () => {
+    const src = Buffer.from([
+      0x00,
+      0x0E,
+        0x05,
+          0xAA,
+          0xBB,
+          0xCC,
+          0xDD,
+    ])
+
+    const result = parse(src)
+    expect(result.headerBytes).toEqual(src.slice(0, 3))
+    expect(result.dataBytes).toEqual(src.slice(3))
+    const query = new ParseQuery(result)
+    expect(query.readData()).toEqual(src.slice(3))
+    expect(query.readData(true)).toEqual(src)
   })
-  // it(`Should deserialize without error`, () => {
-  //   const bytes = Buffer.from([0xa0, 0x01, 0x00, 0x00, 0x00, 0x04])
-  //   const serializationService = new XyoSerializationService(schema, recipes)
-  //   const result = serializationService.deserialize(bytes)
-  // })
+
+  it(`Should parse a typed keyset`, () => {
+    const src = Buffer.from([
+      0x30,
+      0x0F,
+        0x08,
+          0x00,
+          0x0E,
+            0x05,
+              0xAA,
+              0xBB,
+              0xCC,
+              0xDD,
+    ])
+
+    const result = parse(src)
+    expect(result.headerBytes).toEqual(src.slice(0, 3))
+    expect(result.dataBytes).toEqual(src.slice(3))
+    const query = new ParseQuery(result)
+    expect(query.readData()).toEqual(src.slice(3))
+    expect(query.readData(true)).toEqual(src)
+
+    expect(query.query([0]).readData()).toEqual(src.slice(6))
+    expect(query.query([0]).readData(true)).toEqual((src.slice(3)))
+  })
+
+  it(`Should parse a typed keyset with two items`, () => {
+    const src = Buffer.from([
+      0x30,
+      0x0F,
+        0x0D,
+          0x00,
+          0x0E,
+            0x05,
+              0xAA,
+              0xBB,
+              0xCC,
+              0xDD,
+            0x05,
+              0xDD,
+              0xCC,
+              0xBB,
+              0xAA,
+    ])
+
+    const result = parse(src)
+    expect(result.headerBytes).toEqual(src.slice(0, 3))
+    expect(result.dataBytes).toEqual(src.slice(3))
+    const query = new ParseQuery(result)
+    expect(query.readData()).toEqual(src.slice(3))
+    expect(query.readData(true)).toEqual(src)
+
+    expect(query.query([0]).readData()).toEqual(src.slice(6, 10))
+    expect(query.query([0]).readData(true)).toEqual((src.slice(3, 10)))
+
+    expect(query.query([1]).readData()).toEqual(src.slice(11))
+    expect(query.query([1]).readData(true)).toEqual(
+      Buffer.concat([
+        Buffer.from([0x00, 0x0E]),
+        src.slice(10)
+      ]),
+    )
+  })
+
+  it(`Should parse an untyped keyset`, () => {
+    const src = Buffer.from([
+      0x20,
+      0x0F,
+        0x08,
+          0x00,
+          0x0E,
+            0x05,
+              0xAA,
+              0xBB,
+              0xCC,
+              0xDD,
+    ])
+
+    const result = parse(src)
+    expect(result.headerBytes).toEqual(src.slice(0, 3))
+    expect(result.dataBytes).toEqual(src.slice(3))
+    const query = new ParseQuery(result)
+    expect(query.readData()).toEqual(src.slice(3))
+    expect(query.readData(true)).toEqual(src)
+
+    expect(query.query([0]).readData()).toEqual(src.slice(6))
+    expect(query.query([0]).readData(true)).toEqual((src.slice(3)))
+  })
+
+  it(`Should parse a typed keyset with two items`, () => {
+    const src = Buffer.from([
+      0x20,
+      0x0F,
+        0x0F,
+          0x00,
+          0x0E,
+            0x05,
+              0xAA,
+              0xBB,
+              0xCC,
+              0xDD,
+          0x00,
+          0x0E,
+            0x05,
+              0xDD,
+              0xCC,
+              0xBB,
+              0xAA
+    ])
+
+    const result = parse(src)
+    expect(result.headerBytes).toEqual(src.slice(0, 3))
+    expect(result.dataBytes).toEqual(src.slice(3))
+    const query = new ParseQuery(result)
+    expect(query.readData()).toEqual(src.slice(3))
+    expect(query.readData(true)).toEqual(src)
+
+    expect(query.query([0]).readData()).toEqual(src.slice(6, 10))
+    expect(query.query([0]).readData(true)).toEqual((src.slice(3, 10)))
+
+    expect(query.query([1]).readData()).toEqual(src.slice(13))
+    expect(query.query([1]).readData(true)).toEqual(src.slice(10))
+  })
+
+  it(`Should parse a fetter`, () => {
+    const src = Buffer.from([
+      0x20,
+      0x15,
+        0x0F,
+          0x20,
+          0x19,
+            0x08,
+              0x00,
+              0x0E,
+                0x05,
+                  0xAA,
+                  0xBB,
+                  0xCC,
+                  0xDD,
+          0x00,
+          0x13,
+            0x02,
+              0x01
+    ])
+
+    const result = parse(src)
+    const pQuery = new ParseQuery(result)
+
+    expect(pQuery.query([0, 0]).readData()).toEqual(
+      Buffer.from([
+        0xAA,
+        0xBB,
+        0xCC,
+        0xDD
+      ])
+    )
+
+    expect(pQuery.query([1]).readData()).toEqual(Buffer.from([0x01]))
+  })
 })

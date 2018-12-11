@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 10:13:23 am
+ * @Last modified time: Friday, 7th December 2018 3:40:25 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -24,7 +24,7 @@ import { XyoTcpNetworkPipe } from './xyo-tcp-network-pipe'
 
 import net from 'net'
 import { XyoBase } from '@xyo-network/base'
-import { readNumberFromBuffer } from '@xyo-network/buffer-utils'
+import { readIntegerFromBuffer } from '@xyo-network/buffer-utils'
 
 /**
  * A network provider build on top of the TCP/IP stack.
@@ -69,19 +69,15 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
     /** Create a server and listen on port */
     this.server = net.createServer()
     this.server.listen(this.port, '0.0.0.0')
-    this.logInfo(`Listening on port ${this.port} for incoming connections`)
 
     /** Wait for a single XYO connection */
     const connectionResult = await this.getConnection(this.server, catalogue)
 
     /** Close the server to new connections while this one is handled */
-    this.server.close(() => {
-      this.logInfo(`Server closed`)
-    })
+    this.server.close()
 
     /** Clears state so this tcp-network instance can be used again */
     const onConnectionClose = () => {
-      this.logInfo(`Xyo TCP Connection closed`)
       connectionResult.socket.removeListener('close', onConnectionClose)
       connectionResult.socket.removeListener('error', onConnectionError)
       this.connection = undefined
@@ -219,6 +215,14 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
             }
           }
 
+          if (data.length > sizeOfPayload) { // too many, corrupt payload
+            this.logInfo(`Hanging up, payload too big ${data.length}`)
+            this.connection = undefined
+            this.cancelDisconnect()
+            c.destroy() // destroy because this might be an attack
+            return
+          }
+
           if (sizeOfPayload === data.length) {
             this.cancelDisconnect()
             c.removeListener('data', onData)
@@ -226,7 +230,7 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
             c.removeListener('error', onError)
             server.removeListener('connection', onConnection)
             this.connection = undefined
-            const appDataIndex = readNumberFromBuffer(
+            const appDataIndex = readIntegerFromBuffer(
               data,
               CATALOGUE_SIZE_OF_SIZE_BYTES,
               false,

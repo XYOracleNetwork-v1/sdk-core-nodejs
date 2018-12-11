@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 3rd December 2018 9:26:27 am
+ * @Last modified time: Friday, 7th December 2018 4:19:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,6 +15,11 @@ export const schema: IXyoObjectSchema = {
   untypedSet: {
     sizeIdentifierSize: null,
     iterableType: 'iterable-untyped',
+    id: 0x01
+  },
+  typedSet: {
+    sizeIdentifierSize: null,
+    iterableType: 'iterable-typed',
     id: 0x01
   },
   boundWitness: {
@@ -32,12 +37,12 @@ export const schema: IXyoObjectSchema = {
     iterableType: 'iterable-untyped',
     id: 0x04
   },
-  originBlockSet: {
+  bridgeBlockSet: {
     sizeIdentifierSize: null,
     iterableType: 'iterable-typed',
     id: 0x05
   },
-  originBlockHashSet: {
+  bridgeHashSet: {
     sizeIdentifierSize: null,
     iterableType: 'iterable-typed',
     id: 0x06
@@ -54,7 +59,7 @@ export const schema: IXyoObjectSchema = {
   },
   ecdsaSecp256k1WithSha256Signature: {
     sizeIdentifierSize: 1,
-    iterableType: 'iterable-untyped',
+    iterableType: 'not-iterable',
     id: 0x09
   },
   rsaWithSha256Signature: {
@@ -69,7 +74,7 @@ export const schema: IXyoObjectSchema = {
   },
   ecSecp256k1UncompressedPublicKey: {
     sizeIdentifierSize: 1,
-    iterableType: 'iterable-untyped',
+    iterableType: 'not-iterable',
     id: 0x0C
   },
   rsaPublicKey: {
@@ -99,7 +104,7 @@ export const schema: IXyoObjectSchema = {
   },
   gps: {
     sizeIdentifierSize: 1,
-    iterableType: 'not-iterable',
+    iterableType: 'iterable-untyped',
     id: 0x12
   },
   rssi: {
@@ -112,14 +117,49 @@ export const schema: IXyoObjectSchema = {
     iterableType: 'not-iterable',
     id: 0x14
   },
-  // blob: {
-  //   sizeIdentifierSize: null,
-  //   iterableType: 'not-iterable',
-  //   id: 0xff
-  // },
-  typedSet: {
+  fetter: {
+    sizeIdentifierSize: null,
+    iterableType: 'iterable-untyped',
+    id: 0x15
+  },
+  fetterSet: {
     sizeIdentifierSize: null,
     iterableType: 'iterable-typed',
-    id: 0xCC
+    id: 0x16
   },
+  witness: {
+    sizeIdentifierSize: null,
+    iterableType: 'iterable-untyped',
+    id: 0x17
+  },
+  witnessSet: {
+    sizeIdentifierSize: null,
+    iterableType: 'iterable-typed',
+    id: 0x18
+  },
+  keySet: {
+    sizeIdentifierSize: null,
+    iterableType: 'iterable-untyped',
+    id: 0x19
+  },
+  signatureSet: {
+    sizeIdentifierSize: null,
+    iterableType: 'iterable-untyped',
+    id: 0x1A
+  },
+  boundWitnessFragment: {
+    sizeIdentifierSize: null,
+    iterableType: 'iterable-untyped',
+    id: 0x1B
+  },
+  latitude: {
+    sizeIdentifierSize: null,
+    iterableType: 'not-iterable',
+    id: 0x1C
+  },
+  longitude: {
+    sizeIdentifierSize: null,
+    iterableType: 'not-iterable',
+    id: 0x1D
+  }
 }

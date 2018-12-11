@@ -4,13 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: serialization.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 27th November 2018 12:30:36 pm
+ * @Last modified time: Tuesday, 11th December 2018 9:03:54 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { resolveSerializablesToBuffer } from '../'
+import { resolveSerializablesToBuffer } from '../helpers/resolveSerializablesToBuffer'
 import { IXyoSerializableObject } from '../@types'
+import { XyoBaseSerializable } from '../helpers/base-serializable'
 
 describe(`Serialization`, () => {
 
@@ -27,7 +28,7 @@ describe(`Serialization`, () => {
         sizeIdentifierSize: null,
         iterableType: 'iterable-typed'
       }
-    }, xCollection.serialize())
+    }, xCollection.getData())
 
     expect(Buffer.from([
       0x00, // size bits with reserved bits
@@ -50,7 +51,7 @@ describe(`Serialization`, () => {
         sizeIdentifierSize: null,
         iterableType: 'iterable-typed'
       }
-    }, xCollection.serialize())
+    }, xCollection.getData())
 
     expect(Buffer.from([
       0x00, // size bits with reserved bits
@@ -84,7 +85,7 @@ describe(`Serialization`, () => {
         sizeIdentifierSize: null,
         iterableType: 'iterable-untyped'
       }
-    }, xCollection.serialize())
+    }, xCollection.getData())
 
     expect(Buffer.from([
       0x00, // size bits with reserved bits
@@ -107,7 +108,7 @@ describe(`Serialization`, () => {
         sizeIdentifierSize: null,
         iterableType: 'iterable-typed'
       }
-    }, xCollection.serialize())
+    }, xCollection.getData())
 
     expect(Buffer.from([
       0x00, // size bits with reserved bits
@@ -132,7 +133,7 @@ describe(`Serialization`, () => {
         sizeIdentifierSize: null,
         iterableType: 'iterable-untyped'
       }
-    }, xCollection.serialize())
+    }, xCollection.getData())
 
     expect(Buffer.from([
       0x00, // size bits with reserved bits
@@ -164,9 +165,8 @@ describe(`Serialization`, () => {
         sizeIdentifierSize: null,
         iterableType: 'iterable-typed'
       }
-    }, xCollectionSet.serialize())
+    }, xCollectionSet.getData())
 
-    console.log(result.toString('hex'))
     expect(Buffer.from([]).equals(result)).toBe(true)
   })
 
@@ -189,7 +189,7 @@ describe(`Serialization`, () => {
         sizeIdentifierSize: null,
         iterableType: 'iterable-typed'
       }
-    }, xCollectionSet.serialize())
+    }, xCollectionSet.getData())
 
     expect(Buffer.from([
       0x20, // size bits with reserved bits
@@ -225,7 +225,7 @@ describe(`Serialization`, () => {
         sizeIdentifierSize: null,
         iterableType: 'iterable-untyped'
       }
-    }, xCollectionSet.serialize())
+    }, xCollectionSet.getData())
 
     expect(Buffer.from([
       0x30, // size bits with reserved bits
@@ -241,12 +241,12 @@ describe(`Serialization`, () => {
   })
 })
 
-class X implements IXyoSerializableObject {
+class X extends XyoBaseSerializable implements IXyoSerializableObject {
   public readonly schemaObjectId: number = 1
 
-  constructor(private readonly value: number) {}
+  constructor(private readonly value: number) { super() }
 
-  public serialize(): Buffer | IXyoSerializableObject[] {
+  public getData(): Buffer {
     if (this.value <= 255) {
       const b = Buffer.alloc(1)
       b.writeUInt8(this.value, 0)
@@ -266,12 +266,12 @@ class X implements IXyoSerializableObject {
 }
 
 // tslint:disable-next-line:max-classes-per-file
-class DynamicX implements IXyoSerializableObject {
+class DynamicX extends XyoBaseSerializable implements IXyoSerializableObject {
   public readonly schemaObjectId: number = 1
 
-  constructor(private readonly value: number) {}
+  constructor(private readonly value: number) { super() }
 
-  public serialize(): Buffer | IXyoSerializableObject[] {
+  public getData(): Buffer | IXyoSerializableObject[] {
     const b = Buffer.alloc(1)
     b.writeUInt8(this.value, 0)
     return b
@@ -279,23 +279,23 @@ class DynamicX implements IXyoSerializableObject {
 }
 
 // tslint:disable-next-line:max-classes-per-file
-class XCollection implements IXyoSerializableObject {
+class XCollection extends XyoBaseSerializable implements IXyoSerializableObject {
   public readonly schemaObjectId: number = 2
 
-  constructor(private readonly collection: X[]) {}
+  constructor(private readonly collection: X[]) { super() }
 
-  public serialize(): IXyoSerializableObject[] {
+  public getData(): IXyoSerializableObject[] {
     return this.collection
   }
 }
 
 // tslint:disable-next-line:max-classes-per-file
-class XCollectionSet implements IXyoSerializableObject {
+class XCollectionSet extends XyoBaseSerializable implements IXyoSerializableObject {
   public readonly schemaObjectId: number = 3
 
-  constructor(private readonly collection: XCollection[]) {}
+  constructor(private readonly collection: XCollection[]) { super() }
 
-  public serialize(): IXyoSerializableObject[] {
+  public getData(): IXyoSerializableObject[] {
     return this.collection
   }
 }

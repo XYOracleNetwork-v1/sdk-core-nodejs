@@ -4,14 +4,29 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 29th November 2018 9:29:08 am
+ * @Last modified time: Monday, 10th December 2018 2:24:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-export { IXyoBoundWitness, IXyoBoundWitnessSigningDataProducer, IXyoPayload } from './@types'
-export { XyoBoundWitnessSigningService } from './xyo-bound-witness-signing-service'
+export {
+  IXyoBoundWitness,
+  IXyoFetter,
+  IXyoFetterSet,
+  IXyoWitness,
+  IXyoWitnessSet,
+  IXyoBoundWitnessFragment,
+  IXyoKeySet,
+  IXyoSignatureSet,
+  FetterOrWitness,
+  IXyoPayload
+} from './@types'
 export { XyoBoundWitnessValidator } from './xyo-bound-witness-validator'
-export { XyoBaseBoundWitness } from './xyo-base-bound-witness'
-export { XyoBasePayload } from './xyo-base-payload'
-export { XyoBoundWitnessSigningDataProducer } from './xyo-bound-witness-signing-data-producer'
+export { XyoBoundWitness } from './xyo-bound-witness'
+export { XyoKeySet } from './xyo-keyset'
+export { XyoSignatureSet } from './xyo-signature-set'
+export { XyoFetter } from './xyo-fetter'
+export { XyoWitness } from './xyo-witness'
+export { XyoFetterSet } from './xyo-fetter-set'
+export { XyoWitnessSet } from './xyo-witness-set'
+export { XyoBoundWitnessFragment } from './xyo-bound-witness-fragment'
