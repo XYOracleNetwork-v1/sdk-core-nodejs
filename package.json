@@ -8,6 +8,7 @@
   "private": true,
   "scripts": {
     "build": "tsc -b packages",
+    "release": "lerna publish",
     "test": "export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose --detectOpenHandles",
     "tslint": "tslint -c tslint.json -p packages/tsconfig.json"
   },
