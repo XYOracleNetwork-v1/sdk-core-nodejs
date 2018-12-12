@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-fragment.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 11:27:11 am
+ * @Last modified time: Wednesday, 12th December 2018 12:24:52 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoBoundWitnessFragment, FetterOrWitness, IXyoFetter, IXyoWitness } from './@types'
-import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, parse, ParseQuery } from '@xyo-network/serialization'
+import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, ParseQuery } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
 
 export class XyoBoundWitnessFragment extends XyoBaseSerializable implements IXyoBoundWitnessFragment {
@@ -34,12 +34,12 @@ class XyoBoundWitnessFragmentDeserializer implements IXyoDeserializer<IXyoBoundW
   public readonly schemaObjectId = schema.boundWitnessFragment.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): IXyoBoundWitnessFragment {
-    const parseResult = parse(data, serializationService.schema)
+    const parseResult = serializationService.parse(data)
     const query = new ParseQuery(parseResult)
     const fetterWitnesses = query.mapChildren((fetterOrWitness) => {
       return serializationService
         .deserialize(fetterOrWitness.readData(true))
-        .hydrate<IXyoFetter | IXyoWitness>(serializationService)
+        .hydrate<IXyoFetter | IXyoWitness>()
     })
 
     return new XyoBoundWitnessFragment(fetterWitnesses)

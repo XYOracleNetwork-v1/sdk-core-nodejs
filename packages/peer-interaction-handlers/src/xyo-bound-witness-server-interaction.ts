@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-server-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 10:53:50 am
+ * @Last modified time: Wednesday, 12th December 2018 12:13:13 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -137,7 +137,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
                   memo.push(
                     this.serializationService
                       .deserialize(new ParseQuery(parseResult).readData(true))
-                      .hydrate<FetterOrWitness>(this.serializationService)
+                      .hydrate<FetterOrWitness>()
                   )
                   return memo
                 }, [fetter] as FetterOrWitness[])

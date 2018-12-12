@@ -4,21 +4,21 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-stub-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 11:05:40 am
+ * @Last modified time: Wednesday, 12th December 2018 12:19:30 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBaseHash } from "./xyo-base-hash"
 import { schema } from "@xyo-network/serialization-schema"
-import { parse, IXyoSerializationService } from "@xyo-network/serialization"
+import { IXyoSerializationService } from "@xyo-network/serialization"
 
 export class XyoStubHash extends XyoBaseHash {
 
   public static schemaObjectId = schema.stubHash.id
 
   public static deserialize(data: Buffer, serializationService: IXyoSerializationService) {
-    const parseResult = parse(data, serializationService.schema)
+    const parseResult = serializationService.parse(data)
     return new XyoStubHash(parseResult.data as Buffer)
   }
 

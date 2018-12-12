@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 11:04:16 am
+ * @Last modified time: Wednesday, 12th December 2018 12:19:49 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,7 +13,7 @@ import { IXyoHashProvider, IXyoHash } from './@types'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { XyoNativeBaseHashProvider } from './xyo-native-base-hash-provider'
 import { schema } from '@xyo-network/serialization-schema'
-import { IXyoDeserializer, parse, IXyoSerializationService } from '@xyo-network/serialization'
+import { IXyoDeserializer, IXyoSerializationService } from '@xyo-network/serialization'
 import { XyoHash } from './xyo-hash'
 
 export { IXyoHash, IXyoHashProvider } from './@types'
@@ -64,7 +64,7 @@ class XyoSha256HashDeserializer implements IXyoDeserializer<IXyoHash> {
   public schemaObjectId = schema.sha256Hash.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): IXyoHash {
-    const parseResult = parse(data, serializationService.schema)
+    const parseResult = serializationService.parse(data)
     const hashProvider = getHashingProvider('sha256')
     return new XyoHash(
       parseResult.data as Buffer,

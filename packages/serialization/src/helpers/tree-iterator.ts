@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: tree-iterator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 11:01:51 am
+ * @Last modified time: Wednesday, 12th December 2018 12:11:30 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,8 +15,11 @@ import { ParseQuery } from './parse-query'
 
 export class XyoTreeIterator extends XyoBaseSerializable implements IXyoSerializableObject {
 
-  constructor (schema: IXyoObjectSchema, private readonly parseResult: IParseResult) {
-    super(schema)
+  constructor (
+    private readonly serializationService: IXyoSerializationService,
+    private readonly parseResult: IParseResult
+  ) {
+    super(serializationService.schema)
   }
 
   get schemaObjectId (): number {
@@ -31,7 +34,7 @@ export class XyoTreeIterator extends XyoBaseSerializable implements IXyoSerializ
     return new ParseQuery(this.parseResult)
   }
 
-  public hydrate<T extends IXyoSerializableObject>(serializationService: IXyoSerializationService): T {
-    return serializationService.hydrate<T>(this.parseResult) as T
+  public hydrate<T extends IXyoSerializableObject>(): T {
+    return this.serializationService.hydrate<T>(this.parseResult) as T
   }
 }

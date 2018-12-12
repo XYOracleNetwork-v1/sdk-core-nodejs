@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-stub-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 11:07:08 am
+ * @Last modified time: Wednesday, 12th December 2018 12:18:43 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoSignature, IXyoPublicKey } from "./@types"
-import { parse, XyoBaseSerializable, IXyoSerializationService } from '@xyo-network/serialization'
+import { XyoBaseSerializable, IXyoSerializationService } from '@xyo-network/serialization'
 import { schema } from "@xyo-network/serialization-schema"
 
 export class XyoStubSignature extends XyoBaseSerializable  implements IXyoSignature {
@@ -18,7 +18,7 @@ export class XyoStubSignature extends XyoBaseSerializable  implements IXyoSignat
   public static schemaObjectId = schema.stubSignature.id
 
   public static deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoStubSignature {
-    const parsed = parse(data, serializationService.schema)
+    const parsed = serializationService.parse(data)
     return new XyoStubSignature((parsed.data as Buffer).toString('hex'))
   }
 

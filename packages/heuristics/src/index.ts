@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 11:19:16 am
+ * @Last modified time: Wednesday, 12th December 2018 12:18:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBaseSerializable, IXyoDeserializer, parse, IXyoSerializationService, IXyoObjectSchema  } from '@xyo-network/serialization'
+import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, IXyoObjectSchema  } from '@xyo-network/serialization'
 import { signedIntegerToBuffer, unsignedIntegerToBuffer, readIntegerFromBuffer, doubleToBuffer, floatToBuffer, readFloatFromBuffer, readDoubleFromBuffer } from '@xyo-network/buffer-utils'
 import { XyoError, XyoErrors  } from '@xyo-network/errors'
 
@@ -55,7 +55,7 @@ export class XyoNumberDeserializer implements IXyoDeserializer<XyoSerializableNu
   ) {}
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoSerializableNumber {
-    const parseResult = parse(data, serializationService.schema)
+    const parseResult = serializationService.parse(data)
     let number: number
 
     if (this.numberType === 'unsigned-integer') {

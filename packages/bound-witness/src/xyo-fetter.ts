@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-fetter.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 11:26:41 am
+ * @Last modified time: Wednesday, 12th December 2018 12:24:43 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoFetter, IXyoKeySet } from "./@types"
-import { XyoBaseSerializable, IXyoSerializableObject, IXyoDeserializer, parse, ParseQuery, IXyoSerializationService } from "@xyo-network/serialization"
+import { XyoBaseSerializable, IXyoSerializableObject, IXyoDeserializer, ParseQuery, IXyoSerializationService } from "@xyo-network/serialization"
 import { schema } from '@xyo-network/serialization-schema'
 
 export class XyoFetter extends XyoBaseSerializable  implements IXyoFetter {
@@ -39,16 +39,16 @@ class XyoFetterDeserializer implements IXyoDeserializer<IXyoFetter> {
   public readonly schemaObjectId = schema.fetter.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): IXyoFetter {
-    const parseResult = parse(data, serializationService.schema)
+    const parseResult = serializationService.parse(data)
     const query = new ParseQuery(parseResult)
     const keySetItem = query.getChildAt(0)
-    const keySet = serializationService.deserialize(keySetItem.readData(true)).hydrate<IXyoKeySet>(serializationService)
+    const keySet = serializationService.deserialize(keySetItem.readData(true)).hydrate<IXyoKeySet>()
     const childrenCount = query.getChildrenCount()
     let childIndex = 1
     const heuristics: IXyoSerializableObject[] = []
     while (childIndex < childrenCount) {
       const heuristicChild = query.getChildAt(childIndex)
-      const heuristic = serializationService.deserialize(heuristicChild.readData(true)).hydrate(serializationService)
+      const heuristic = serializationService.deserialize(heuristicChild.readData(true)).hydrate()
       heuristics.push(heuristic)
       childIndex += 1
     }

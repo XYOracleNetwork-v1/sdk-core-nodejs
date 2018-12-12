@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 11:20:08 am
+ * @Last modified time: Wednesday, 12th December 2018 12:20:20 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { getUnsignedIntegerSerializer, getSignedIntegerSerializer, getDoubleSerializer, XyoSerializableNumber } from '@xyo-network/heuristics'
 import { schema } from '@xyo-network/serialization-schema'
-import { XyoBaseSerializable, IXyoDeserializer, parse, ParseQuery, IXyoSerializationService } from '@xyo-network/serialization'
+import { XyoBaseSerializable, IXyoDeserializer, ParseQuery, IXyoSerializationService } from '@xyo-network/serialization'
 
 export const rssiSerializationProvider = getSignedIntegerSerializer(schema, schema.rssi.id)
 export const unixTimeSerializationProvider = getUnsignedIntegerSerializer(schema, schema.time.id)
@@ -40,15 +40,15 @@ class XyoGpsDeserializer implements IXyoDeserializer<XyoGps> {
   public schemaObjectId = schema.gps.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoGps {
-    const parseResult = parse(data, serializationService.schema)
+    const parseResult = serializationService.parse(data)
     const parseQuery = new ParseQuery(parseResult)
 
     return new XyoGps(
       serializationService
         .deserialize(parseQuery.getChildAt(0).readData(true))
-        .hydrate<XyoSerializableNumber>(serializationService).number,
+        .hydrate<XyoSerializableNumber>().number,
       serializationService.deserialize(parseQuery.getChildAt(1).readData(true))
-        .hydrate<XyoSerializableNumber>(serializationService).number
+        .hydrate<XyoSerializableNumber>().number
     )
   }
 }

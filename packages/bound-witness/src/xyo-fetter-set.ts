@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-fetter-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 11:26:54 am
+ * @Last modified time: Wednesday, 12th December 2018 12:25:00 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoFetterSet, IXyoFetter } from './@types'
-import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, parse, ParseQuery } from '@xyo-network/serialization'
+import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, ParseQuery } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
 
 export class XyoFetterSet extends XyoBaseSerializable implements IXyoFetterSet {
@@ -34,13 +34,13 @@ export class XyoFetterSetDeserializer implements IXyoDeserializer<IXyoFetterSet>
   public schemaObjectId = schema.fetterSet.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): IXyoFetterSet {
-    const parseResult = parse(data, serializationService.schema)
+    const parseResult = serializationService.parse(data)
     const query = new ParseQuery(parseResult)
     const fetters = query
       .mapChildren(
         fetter => serializationService
           .deserialize(fetter.readData(true))
-          .hydrate<IXyoFetter>(serializationService)
+          .hydrate<IXyoFetter>()
       )
 
     return new XyoFetterSet(fetters)

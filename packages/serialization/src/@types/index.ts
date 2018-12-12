@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 5:04:28 pm
+ * @Last modified time: Wednesday, 12th December 2018 12:17:05 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -69,6 +69,7 @@ export interface IXyoSerializationService {
   deserialize(deserializable: BufferOrString): XyoTreeIterator
 
   hydrate<T extends IXyoSerializableObject>(deserializable: IParseResult): T
+  parse(src: Buffer): IParseResult
 
   arrayOf<T extends IXyoSerializableObject>(tCollection: T[]): IXyoSerializableObject
   typedArrayOf<T extends IXyoSerializableObject>(tCollection: T[]): IXyoSerializableObject

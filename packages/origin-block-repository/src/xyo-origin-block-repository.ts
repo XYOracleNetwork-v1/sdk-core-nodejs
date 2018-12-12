@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-block-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 10:54:30 am
+ * @Last modified time: Wednesday, 12th December 2018 12:14:41 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -59,7 +59,7 @@ export class XyoOriginBlockRepository implements IXyoOriginBlockRepository {
     if (instanceOfIterableStorageProvider(this.originBlocksStorageProvider)) {
       const result = await this.originBlocksStorageProvider.iterate({ limit, offsetKey: offsetHash })
       const blocks = result.items.map((keyPair) => {
-        return this.serializationService.deserialize(keyPair.value).hydrate<IXyoBoundWitness>(this.serializationService)
+        return this.serializationService.deserialize(keyPair.value).hydrate<IXyoBoundWitness>()
       })
 
       return {

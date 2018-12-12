@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-witness-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 11:25:51 am
+ * @Last modified time: Wednesday, 12th December 2018 12:24:08 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoWitness, IXyoWitnessSet } from './@types'
-import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, parse, ParseQuery } from '@xyo-network/serialization'
+import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, ParseQuery } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
 
 export class XyoWitnessSet extends XyoBaseSerializable implements IXyoWitnessSet {
@@ -34,13 +34,13 @@ export class XyoWitnessSetDeserializer implements IXyoDeserializer<IXyoWitnessSe
   public schemaObjectId = schema.witnessSet.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): IXyoWitnessSet {
-    const parseResult = parse(data, serializationService.schema)
+    const parseResult = serializationService.parse(data)
     const query = new ParseQuery(parseResult)
     const witnesses = query
       .mapChildren(
         fetter => serializationService
           .deserialize(fetter.readData(true))
-          .hydrate<IXyoWitness>(serializationService)
+          .hydrate<IXyoWitness>()
       )
 
     return new XyoWitnessSet(witnesses)
