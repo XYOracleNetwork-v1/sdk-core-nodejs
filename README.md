@@ -57,10 +57,10 @@ Once the dependencies are installed run
 
 This will transpile the TypeScript into javascript and link the local packages together.
 
-To start a reference implementation of a test-node that can perform bound-witnesses as a server run
+To start a reference implementation of a base-node that can perform bound-witnesses as a server run
 
 ```sh
-  node packages/test-node
+  node packages/base-node
 ```
 
 This will start a node on port 11000 and accept incoming bound-witness requests
@@ -109,7 +109,7 @@ i.e. Where the test file is `test/integration/lib.spec.ts`
 - [signing.ecdsa](packages/signing.ecdsa/README.md)
 - [signing.rsa](packages/signing.rsa/README.md)
 - [storage](packages/storage/README.md)
-- [test-node](packages/test-node/README.md)
+- [base-node](packages/base-node/README.md)
 
 ## Developer Guide
 

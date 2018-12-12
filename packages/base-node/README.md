@@ -11,11 +11,11 @@ Brings together the different modules and abstractions in the sdk-core-nodejs re
 Using yarn
 
 ```sh
-  yarn add @xyo-network/test-node
+  yarn add @xyo-network/base-node
 ```
 
 Using npm
 
 ```sh
-  npm install @xyo-network/test-node --save
+  npm install @xyo-network/base-node --save
 ```

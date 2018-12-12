@@ -1,5 +1,5 @@
 {
-  "name": "@xyo-network/node",
+  "name": "@xyo-network/node-runner",
   "version": "0.4.0",
   "description": "Implements a node life-cycle loop that can be used / extended to manage how a node in the XYO network behaves in different scenarios.",
   "main": "dist/index.js",

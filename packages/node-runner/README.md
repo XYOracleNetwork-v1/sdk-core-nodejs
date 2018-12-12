@@ -11,11 +11,11 @@ Implements a node life-cycle loop that can be used / extended to manage how a no
 Using yarn
 
 ```sh
-  yarn add @xyo-network/node
+  yarn add @xyo-network/node-runner
 ```
 
 Using npm
 
 ```sh
-  npm install @xyo-network/node --save
+  npm install @xyo-network/node-runner --save
 ```

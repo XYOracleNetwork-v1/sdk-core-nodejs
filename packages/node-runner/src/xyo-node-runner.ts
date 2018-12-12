@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 7th December 2018 11:45:18 am
+ * @Last modified time: Tuesday, 11th December 2018 4:22:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,14 +13,14 @@ import { IXyoPeerConnectionDelegate } from '@xyo-network/peer-connections'
 import { XyoBase } from '@xyo-network/base'
 
 /**
- * An XyoNode represents a node in the xyo-network system.
+ * An XyoNodeRunner represents a node in the xyo-network system.
  * A node can communicate with other nodes, in general, through
  * bound-witness interactions. What differentiates a sentinel
  * from a bridge from an archivist is their role in the system
  * and what their prerogative is at any given time.
  */
 
-export class XyoNode extends XyoBase {
+export class XyoNodeRunner extends XyoBase {
 
   /** Some instance variables for managing the xyo-node loop */
   private isLooping = false

@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 2:56:07 pm
+ * @Last modified time: Tuesday, 11th December 2018 4:25:32 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBase } from '@xyo-network/base'
-import { XyoNode } from '@xyo-network/node'
+import { XyoNodeRunner } from '@xyo-network/node-runner'
 import { IXyoNetworkProvider, IXyoNetworkProcedureCatalogue, CatalogueItem } from '@xyo-network/network'
 import { XyoServerTcpNetwork } from '@xyo-network/network.tcp'
 import { XyoSimplePeerConnectionDelegate, IXyoPeerConnectionDelegate, IXyoPeerConnectionHandler, XyoPeerConnectionHandler } from '@xyo-network/peer-connections'
@@ -44,14 +44,14 @@ import { XyoInMemoryStorageProvider } from '@xyo-network/storage'
 import { IXyoSigner } from '@xyo-network/signing'
 
 // tslint:disable-next-line:max-classes-per-file
-export class XyoTestNode extends XyoBase {
+export class XyoBaseNode extends XyoBase {
 
   public start() {
-    const node = new XyoNode(this.getPeerConnectionDelegate())
-    node.start()
+    const nodeRunner = new XyoNodeRunner(this.getPeerConnectionDelegate())
+    nodeRunner.start()
   }
 
-  private getPeerConnectionDelegate(): IXyoPeerConnectionDelegate {
+  protected getPeerConnectionDelegate(): IXyoPeerConnectionDelegate {
     return this.getOrCreate('IXyoPeerConnectionDelegate', () => {
       return new XyoSimplePeerConnectionDelegate(
         this.getNetwork(),
@@ -61,13 +61,13 @@ export class XyoTestNode extends XyoBase {
     })
   }
 
-  private getNetwork(): IXyoNetworkProvider {
+  protected getNetwork(): IXyoNetworkProvider {
     return this.getOrCreate('IXyoNetworkProvider', () => {
       return new XyoServerTcpNetwork(11000)
     })
   }
 
-  private getCatalogue(): IXyoNetworkProcedureCatalogue {
+  protected getCatalogue(): IXyoNetworkProcedureCatalogue {
     return this.getOrCreate('IXyoNetworkProcedureCatalogue', () => {
       return {
         canDo(catalogueItem: CatalogueItem) {
@@ -83,7 +83,7 @@ export class XyoTestNode extends XyoBase {
     })
   }
 
-  private getPeerConnectionHandler(): IXyoPeerConnectionHandler {
+  protected getPeerConnectionHandler(): IXyoPeerConnectionHandler {
     return this.getOrCreate('IXyoPeerConnectionHandler', () => {
       return new XyoPeerConnectionHandler(
         this.getPeerInteractionRouter(),
@@ -92,7 +92,7 @@ export class XyoTestNode extends XyoBase {
     })
   }
 
-  private getPeerInteractionRouter(): XyoPeerInteractionRouter {
+  protected getPeerInteractionRouter(): XyoPeerInteractionRouter {
     return this.getOrCreate('XyoPeerInteractionRouter', () => {
       const peerInteractionRouter = new XyoPeerInteractionRouter()
 
@@ -114,7 +114,7 @@ export class XyoTestNode extends XyoBase {
     })
   }
 
-  private getStandardBoundWitnessHandlerProvider(): XyoBoundWitnessHandlerProvider {
+  protected getStandardBoundWitnessHandlerProvider(): XyoBoundWitnessHandlerProvider {
     return this.getOrCreate('XyoStandardBoundWitnessHandlerProvider', () => {
       return new XyoBoundWitnessHandlerProvider(
         this.getHashingProvider(),
@@ -137,7 +137,7 @@ export class XyoTestNode extends XyoBase {
     })
   }
 
-  private getTakeOriginChainBoundWitnessHandlerProvider(): XyoBoundWitnessHandlerProvider {
+  protected getTakeOriginChainBoundWitnessHandlerProvider(): XyoBoundWitnessHandlerProvider {
     return this.getOrCreate('XyoTakeOriginChainBoundWitnessHandlerProvider', () => {
       return new XyoBoundWitnessHandlerProvider(
         this.getHashingProvider(),
@@ -160,13 +160,13 @@ export class XyoTestNode extends XyoBase {
     })
   }
 
-  private getHashingProvider(): IXyoHashProvider {
+  protected getHashingProvider(): IXyoHashProvider {
     return this.getOrCreate('IXyoHashProvider', () => {
       return getHashingProvider('sha256')
     })
   }
 
-  private getOriginStateRepository(): IXyoOriginChainRepository {
+  protected getOriginStateRepository(): IXyoOriginChainRepository {
     return this.getOrCreate('IXyoOriginChainRepository', () => {
       return new XyoOriginChainStateInMemoryRepository(
         0,
@@ -179,22 +179,22 @@ export class XyoTestNode extends XyoBase {
     })
   }
 
-  private getSigners(): IXyoSigner[] {
+  protected getSigners(): IXyoSigner[] {
     return this.getOrCreate('IXyoSigners', () => {
       return [getSignerProvider('secp256k1-sha256').newInstance()]
     })
   }
-  private getOriginBlockRepository(): IXyoOriginBlockRepository {
+  protected getOriginBlockRepository(): IXyoOriginBlockRepository {
     return this.getOrCreate('IXyoOriginBlockRepository', () => {
       return new XyoOriginBlockRepository(new XyoInMemoryStorageProvider(), this.getSerializationService())
     })
   }
 
-  private getBoundWitnessPayloadProvider(): IXyoBoundWitnessPayloadProvider {
+  protected getBoundWitnessPayloadProvider(): IXyoBoundWitnessPayloadProvider {
     return new XyoBoundWitnessPayloadProvider()
   }
 
-  private getBoundWitnessSuccessListener(): IXyoBoundWitnessSuccessListener {
+  protected getBoundWitnessSuccessListener(): IXyoBoundWitnessSuccessListener {
     return this.getOrCreate('IXyoBoundWitnessSuccessListener', () => {
       return {
         onBoundWitnessSuccess: async (boundWitness: IXyoBoundWitness) => {
@@ -204,7 +204,7 @@ export class XyoTestNode extends XyoBase {
     })
   }
 
-  private getBoundWitnessValidator(): XyoBoundWitnessValidator {
+  protected getBoundWitnessValidator(): XyoBoundWitnessValidator {
     return this.getOrCreate('XyoBoundWitnessValidator', () => {
       return new XyoBoundWitnessValidator(
         {
@@ -218,13 +218,13 @@ export class XyoTestNode extends XyoBase {
     })
   }
 
-  private getNestedBoundWitnessExtractor(): XyoNestedBoundWitnessExtractor {
+  protected getNestedBoundWitnessExtractor(): XyoNestedBoundWitnessExtractor {
     return this.getOrCreate('XyoNestedBoundWitnessExtractor', () => {
       return new XyoNestedBoundWitnessExtractor(() => false) // TODO
     })
   }
 
-  private getSerializationService(): IXyoSerializationService  {
+  protected getSerializationService(): IXyoSerializationService  {
     return this.getOrCreate('IXyoSerializationService', () => {
       return createSerializer()
     })
@@ -232,6 +232,6 @@ export class XyoTestNode extends XyoBase {
 }
 
 if (require.main === module) {
-  const testNode = new XyoTestNode()
+  const testNode = new XyoBaseNode()
   testNode.start()
 }
