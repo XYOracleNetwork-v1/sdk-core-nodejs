@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-secp256k1-uncompressed-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 2:12:57 pm
+ * @Last modified time: Wednesday, 12th December 2018 2:28:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -27,7 +27,7 @@ export class XyoEcdsaSecp256k1UnCompressedPublicKey extends XyoEcdsaUncompressed
   }
 
   public getReadableValue() {
-    return this.getRawPublicKey()
+    return this.getRawPublicKey().toString('hex')
   }
 
   get x (): Buffer {

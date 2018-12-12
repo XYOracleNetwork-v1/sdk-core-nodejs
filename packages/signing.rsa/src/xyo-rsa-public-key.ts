@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:23:24 pm
+ * @Last modified time: Wednesday, 12th December 2018 2:29:35 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -45,7 +45,7 @@ export class XyoRsaPublicKey extends XyoBaseSerializable implements IXyoPublicKe
   }
 
   public getReadableValue() {
-    return this.getRawPublicKey()
+    return this.getRawPublicKey().toString('hex')
   }
 
   /**
