@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/signing.ecdsa",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Implements ecdsa crypto functionality",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,10 +10,10 @@
     "@xyo-network/base": "^0.8.0",
     "@xyo-network/buffer-utils": "^0.8.0",
     "@xyo-network/errors": "^0.8.0",
-    "@xyo-network/hashing": "^0.8.0",
-    "@xyo-network/serialization": "^0.8.0",
-    "@xyo-network/serialization-schema": "^0.8.0",
-    "@xyo-network/signing": "^0.8.0",
+    "@xyo-network/hashing": "^0.8.2",
+    "@xyo-network/serialization": "^0.8.2",
+    "@xyo-network/serialization-schema": "^0.8.2",
+    "@xyo-network/signing": "^0.8.2",
     "elliptic": "^6.4.1"
   },
   "devDependencies": {

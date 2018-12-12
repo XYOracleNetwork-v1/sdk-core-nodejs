@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/origin-chain",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Utilities for managing an origin chain in the xyo network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,12 +8,12 @@
   "license": "MIT",
   "dependencies": {
     "@xyo-network/base": "^0.8.0",
-    "@xyo-network/bound-witness": "^0.8.1",
+    "@xyo-network/bound-witness": "^0.8.2",
     "@xyo-network/buffer-utils": "^0.8.0",
-    "@xyo-network/hashing": "^0.8.0",
-    "@xyo-network/serialization": "^0.8.0",
-    "@xyo-network/serialization-schema": "^0.8.0",
-    "@xyo-network/signing": "^0.8.0"
+    "@xyo-network/hashing": "^0.8.2",
+    "@xyo-network/serialization": "^0.8.2",
+    "@xyo-network/serialization-schema": "^0.8.2",
+    "@xyo-network/signing": "^0.8.2"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

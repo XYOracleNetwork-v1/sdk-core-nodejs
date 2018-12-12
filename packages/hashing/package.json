@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/hashing",
-  "version": "0.8.0",
+  "version": "0.8.2",
   "description": "Hashing Types and Services for the Xyo Network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,8 +9,8 @@
   "dependencies": {
     "@xyo-network/base": "^0.8.0",
     "@xyo-network/errors": "^0.8.0",
-    "@xyo-network/serialization": "^0.8.0",
-    "@xyo-network/serialization-schema": "^0.8.0"
+    "@xyo-network/serialization": "^0.8.2",
+    "@xyo-network/serialization-schema": "^0.8.2"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
