@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-next-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:22:38 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:56:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -24,6 +24,10 @@ export class XyoNextPublicKey extends XyoBaseSerializable {
 
   public getData(): IXyoSerializableObject {
     return this.publicKey
+  }
+
+  public getReadableValue () {
+    return this.publicKey.getReadableValue()
   }
 }
 

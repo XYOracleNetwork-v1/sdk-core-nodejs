@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-fetter.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:24:43 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:50:19 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -31,6 +31,18 @@ export class XyoFetter extends XyoBaseSerializable  implements IXyoFetter {
       this.keySet,
       ...this.heuristics
     ]
+  }
+
+  public getReadableValue() {
+    return {
+      keySet: this.keySet.getReadableValue(),
+      heuristics: this.heuristics.map((h) => {
+        return {
+          name: h.getReadableName(),
+          value: h.getReadableValue()
+        }
+      })
+    }
   }
 }
 

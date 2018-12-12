@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-fragment.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:24:52 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:42:34 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -27,6 +27,11 @@ export class XyoBoundWitnessFragment extends XyoBaseSerializable implements IXyo
     return this.fetterWitnesses
   }
 
+  public getReadableValue() {
+    return this.fetterWitnesses.map((fetterOrWitness) => {
+      return fetterOrWitness.getReadableValue()
+    })
+  }
 }
 
 // tslint:disable-next-line:max-classes-per-file

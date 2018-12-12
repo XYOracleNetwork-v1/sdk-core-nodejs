@@ -5,7 +5,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bridge-hash-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:22:59 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:55:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -25,6 +25,10 @@ export class XyoBridgeHashSet extends XyoBaseSerializable {
 
   public getData(): IXyoSerializableObject | Buffer | IXyoSerializableObject[] {
     return this.hashSet
+  }
+
+  public getReadableValue() {
+    return this.hashSet.map(hash => hash.getReadableValue())
   }
 }
 

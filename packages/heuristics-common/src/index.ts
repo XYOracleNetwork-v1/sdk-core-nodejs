@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:20:20 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:48:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,6 +32,13 @@ export class XyoGps extends XyoBaseSerializable {
       latitudeSerializationProvider.newInstance(this.latitude),
       longitudeSerializationProvider.newInstance(this.longitude)
     ]
+  }
+
+  public getReadableValue() {
+    return {
+      latitude: this.latitude,
+      longitude: this.longitude
+    }
   }
 }
 

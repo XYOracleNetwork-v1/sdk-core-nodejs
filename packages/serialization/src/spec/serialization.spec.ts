@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: serialization.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 11:14:43 am
+ * @Last modified time: Wednesday, 12th December 2018 1:58:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -271,6 +271,10 @@ class X extends XyoBaseSerializable implements IXyoSerializableObject {
     b3.writeUInt32BE(this.value, 0)
     return b3
   }
+
+  public getReadableValue () {
+    return this.value
+  }
 }
 
 // tslint:disable-next-line:max-classes-per-file
@@ -284,6 +288,10 @@ class DynamicX extends XyoBaseSerializable implements IXyoSerializableObject {
     b.writeUInt8(this.value, 0)
     return b
   }
+
+  public getReadableValue () {
+    return this.value
+  }
 }
 
 // tslint:disable-next-line:max-classes-per-file
@@ -295,6 +303,10 @@ class XCollection extends XyoBaseSerializable implements IXyoSerializableObject 
   public getData(): IXyoSerializableObject[] {
     return this.collection
   }
+
+  public getReadableValue () {
+    return this.collection.map(i => i.getReadableValue())
+  }
 }
 
 // tslint:disable-next-line:max-classes-per-file
@@ -305,5 +317,9 @@ class XCollectionSet extends XyoBaseSerializable implements IXyoSerializableObje
 
   public getData(): IXyoSerializableObject[] {
     return this.collection
+  }
+
+  public getReadableValue () {
+    return this.collection.map(i => i.getReadableValue())
   }
 }

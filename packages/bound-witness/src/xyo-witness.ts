@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:23:43 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:53:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -31,6 +31,18 @@ export class XyoWitness extends XyoBaseSerializable  implements IXyoWitness {
       this.signatureSet,
       ...this.metadata
     ]
+  }
+
+  public getReadableValue() {
+    return {
+      signatureSet: this.signatureSet.signatures.map(signature => signature.getReadableValue()),
+      metadata: this.metadata.map((metadataItem) => {
+        return {
+          name: metadataItem.getReadableName(),
+          value: metadataItem.getReadableValue(),
+        }
+      }),
+    }
   }
 }
 

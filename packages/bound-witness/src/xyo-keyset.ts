@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-keyset.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:24:28 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:50:46 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -25,6 +25,9 @@ export class XyoKeySet extends XyoBaseSerializable {
     return this.keys
   }
 
+  public getReadableValue() {
+    return this.keys.map(key => key.getReadableValue())
+  }
 }
 
 // tslint:disable-next-line:max-classes-per-file

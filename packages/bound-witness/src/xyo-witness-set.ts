@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-witness-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:24:08 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:51:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -25,6 +25,10 @@ export class XyoWitnessSet extends XyoBaseSerializable implements IXyoWitnessSet
 
   public getData() {
     return this.witnesses
+  }
+
+  public getReadableValue() {
+    return this.witnesses.map(witness => witness.getReadableValue())
   }
 }
 

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:18:23 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:47:24 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -43,6 +43,10 @@ export class XyoSerializableNumber extends XyoBaseSerializable  {
     }
 
     throw new XyoError(`Unsupported number typed ${this.numberType || 'undefined'}`, XyoErrors.CRITICAL)
+  }
+
+  public getReadableValue() {
+    return this.number
   }
 }
 

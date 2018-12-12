@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: parse.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 11:00:53 am
+ * @Last modified time: Wednesday, 12th December 2018 1:23:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -25,12 +25,7 @@ export function parse(src: Buffer, schema: IXyoObjectSchema): IParseResult {
       id: partialSchema.id,
       sizeIdentifierSize: partialSchema.sizeIdentifierSize!,
       dataBytes: data,
-      iterableType: 'not-iterable',
-      toSerializable: () => {
-        return new XyoOnTheFlySerializable(schema, partialSchema.id, {
-          buffer: data
-        })
-      }
+      iterableType: 'not-iterable'
     }
   }
 
@@ -41,12 +36,7 @@ export function parse(src: Buffer, schema: IXyoObjectSchema): IParseResult {
       id: partialSchema.id,
       sizeIdentifierSize: partialSchema.sizeIdentifierSize!,
       iterableType: 'not-iterable',
-      dataBytes: data,
-      toSerializable: () => {
-        return new XyoOnTheFlySerializable(schema, partialSchema.id, {
-          buffer: data
-        })
-      }
+      dataBytes: data
     }
   }
 
@@ -82,12 +72,7 @@ export function parse(src: Buffer, schema: IXyoObjectSchema): IParseResult {
         iterableType: innerHeader.iterableType!,
         data: bytes,
         dataBytes: bytes,
-        headerBytes: Buffer.concat([innerHeaderBytes, sizeBytes]),
-        toSerializable: () => {
-          return new XyoOnTheFlySerializable(schema, innerHeader.id, {
-            buffer: bytes
-          })
-        }
+        headerBytes: Buffer.concat([innerHeaderBytes, sizeBytes])
       })
     }
 
@@ -99,11 +84,6 @@ export function parse(src: Buffer, schema: IXyoObjectSchema): IParseResult {
     id: partialSchema.id,
     sizeIdentifierSize: partialSchema.sizeIdentifierSize!,
     iterableType: partialSchema.iterableType!,
-    dataBytes: data,
-    toSerializable: () => {
-      return new XyoOnTheFlySerializable(schema, partialSchema.id, {
-        buffer: data
-      })
-    }
+    dataBytes: data
   }
 }

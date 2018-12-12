@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: base-serializable.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 10:58:12 am
+ * @Last modified time: Wednesday, 12th December 2018 1:36:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,12 +19,17 @@ import { XyoError, XyoErrors } from "@xyo-network/errors"
 export abstract class XyoBaseSerializable extends XyoBase implements IXyoSerializableObject {
 
   public abstract schemaObjectId: number
-
   public srcBuffer: Buffer | null = null
 
   constructor(private readonly schema: IXyoObjectSchema) {
     super()
   }
+
+  public getReadableName(): string {
+    return Object.keys(this.schema).find(k => this.schema[k].id === this.schemaObjectId) || String(this.schemaObjectId)
+  }
+
+  public abstract getReadableValue(): any
 
   // tslint:disable-next-line:max-line-length
   public abstract getData(): Buffer | IXyoSerializableObject | IXyoSerializableObject[]

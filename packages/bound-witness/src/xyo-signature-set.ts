@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signature-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:24:19 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:51:09 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -23,6 +23,10 @@ export class XyoSignatureSet extends XyoBaseSerializable {
 
   public getData(): IXyoSerializableObject[] {
     return this.signatures
+  }
+
+  public getReadableValue() {
+    return this.signatures.map(signature => signature.getReadableValue())
   }
 }
 

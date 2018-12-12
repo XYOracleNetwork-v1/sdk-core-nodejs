@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serialization-service.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:16:41 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:32:39 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -58,7 +58,8 @@ export class XyoSerializationService extends XyoBase implements IXyoSerializatio
   public deserialize(deserializable: BufferOrString): XyoTreeIterator {
     const src = deserializable instanceof Buffer ? deserializable : Buffer.from(deserializable, 'hex')
     const parseResult = this.parse(src)
-    return new XyoTreeIterator(this, parseResult)
+    const schemaKey = Object.keys(this.schema).find(key => this.schema[key].id === parseResult.id)
+    return new XyoTreeIterator(this, parseResult, schemaKey || 'unknown')
   }
 
   public parse(src: Buffer): IParseResult {
@@ -103,7 +104,7 @@ export class XyoSerializationService extends XyoBase implements IXyoSerializatio
     } else  {
       options.array = tCollection
     }
-    return new XyoOnTheFlySerializable(this.schema, this.schema.typedSet.id, options)
+    return new XyoOnTheFlySerializable(this.schema, this.schema.typedSet.id, options, 'typedSet', tCollection)
   }
 
   public untypedArrayOf<T extends IXyoSerializableObject>(tCollection: T[]): IXyoSerializableObject {
@@ -113,7 +114,7 @@ export class XyoSerializationService extends XyoBase implements IXyoSerializatio
     } else  {
       options.array = tCollection
     }
-    return new XyoOnTheFlySerializable(this.schema, this.schema.untypedSet.id, options)
+    return new XyoOnTheFlySerializable(this.schema, this.schema.untypedSet.id, options, 'untypedSet', tCollection)
   }
 
   public findFirstElement<T extends IXyoSerializableObject>(

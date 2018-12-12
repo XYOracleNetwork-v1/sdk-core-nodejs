@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-stub-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:19:14 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:37:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -33,5 +33,9 @@ export class XyoStubPublicKey extends XyoBaseSerializable implements IXyoPublicK
 
   public getData(): Buffer {
     return this.getRawPublicKey()
+  }
+
+  public getReadableValue() {
+    return this.getRawPublicKey().toString('hex')
   }
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: rsa-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 11:24:11 am
+ * @Last modified time: Wednesday, 12th December 2018 1:54:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -47,5 +47,9 @@ export class XyoRsaSignature extends XyoBaseSerializable implements IXyoSignatur
 
   public async verify (data: Buffer, publicKey: IXyoPublicKey): Promise<boolean> {
     return this.verifySign(this, data, publicKey)
+  }
+
+  public getReadableValue() {
+    return this.encodedSignature.toString('hex')
   }
 }

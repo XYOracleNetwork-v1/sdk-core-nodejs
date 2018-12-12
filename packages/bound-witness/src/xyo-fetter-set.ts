@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-fetter-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:25:00 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:49:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -25,6 +25,10 @@ export class XyoFetterSet extends XyoBaseSerializable implements IXyoFetterSet {
 
   public getData() {
     return this.fetters
+  }
+
+  public getReadableValue() {
+    return this.fetters.map(fetter => fetter.getReadableValue())
   }
 }
 

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-previous-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:22:28 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:57:09 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -24,6 +24,10 @@ export class XyoPreviousHash extends XyoBaseSerializable {
 
   public getData(): IXyoSerializableObject {
     return this.hash
+  }
+
+  public getReadableValue () {
+    return this.hash.getReadableValue()
   }
 }
 

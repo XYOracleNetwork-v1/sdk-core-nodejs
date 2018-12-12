@@ -5,7 +5,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 11:24:59 am
+ * @Last modified time: Wednesday, 12th December 2018 1:54:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,5 +32,9 @@ export class XyoEcdsaSignature extends XyoBaseSerializable implements IXyoSignat
 
   public verify(data: Buffer, publicKey: IXyoPublicKey): Promise<boolean> {
     return this.verifyFn(this, data, publicKey)
+  }
+
+  public getReadableValue() {
+    return this.encodedSignature.toString('hex')
   }
 }

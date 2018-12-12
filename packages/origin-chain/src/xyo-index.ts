@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:22:47 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:56:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -25,6 +25,10 @@ export class XyoIndex extends XyoBaseSerializable {
 
   public getData(): Buffer {
     return unsignedIntegerToBuffer(this.number)
+  }
+
+  public getReadableValue () {
+    return this.number
   }
 }
 

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: tree-iterator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:11:30 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:28:00 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,13 +17,22 @@ export class XyoTreeIterator extends XyoBaseSerializable implements IXyoSerializ
 
   constructor (
     private readonly serializationService: IXyoSerializationService,
-    private readonly parseResult: IParseResult
+    private readonly parseResult: IParseResult,
+    private readonly readableName: string
   ) {
     super(serializationService.schema)
   }
 
   get schemaObjectId (): number {
     return this.parseResult.id
+  }
+
+  public getReadableName(): string {
+    return this.readableName
+  }
+
+  public getReadableValue() {
+    return Buffer.concat([this.parseResult.headerBytes, this.parseResult.dataBytes]).toString('hex')
   }
 
   public getData(): Buffer {

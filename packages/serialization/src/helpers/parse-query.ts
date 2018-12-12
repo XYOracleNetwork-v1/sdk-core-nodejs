@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: parse-query.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 7th December 2018 4:27:29 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:23:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -85,9 +85,5 @@ export class ParseQuery {
 
   public isReadable(): boolean {
     return this.parseResult.data instanceof Buffer
-  }
-
-  public toSerializable(): IXyoSerializableObject {
-    return this.parseResult.toSerializable()
   }
 }

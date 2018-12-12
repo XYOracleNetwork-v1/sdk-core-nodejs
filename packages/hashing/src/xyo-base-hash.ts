@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 5th December 2018 11:06:36 am
+ * @Last modified time: Wednesday, 12th December 2018 1:37:19 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,6 +15,10 @@ import { XyoBaseSerializable } from '@xyo-network/serialization'
 export abstract class XyoBaseHash extends XyoBaseSerializable implements IXyoHash {
   public abstract getHash(): Buffer
   public abstract verifyHash(data: Buffer): Promise<boolean>
+
+  public getReadableValue() {
+    return this.getHash().toString('hex')
+  }
 
   public getData(): Buffer {
     return this.getHash()

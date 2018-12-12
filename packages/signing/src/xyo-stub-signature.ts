@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-stub-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:18:43 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:38:11 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -38,5 +38,9 @@ export class XyoStubSignature extends XyoBaseSerializable  implements IXyoSignat
 
   public getData(): Buffer {
     return this.encodedSignature
+  }
+
+  public getReadableValue() {
+    return this.encodedSignature.toString('hex')
   }
 }
