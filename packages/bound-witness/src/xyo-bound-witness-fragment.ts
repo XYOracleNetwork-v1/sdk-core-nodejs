@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-fragment.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 11:39:31 am
+ * @Last modified time: Wednesday, 12th December 2018 11:27:11 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,7 +20,7 @@ export class XyoBoundWitnessFragment extends XyoBaseSerializable implements IXyo
   public readonly schemaObjectId = schema.boundWitnessFragment.id
 
   constructor (public readonly fetterWitnesses: FetterOrWitness[]) {
-    super()
+    super(schema)
   }
 
   public getData() {
@@ -34,12 +34,12 @@ class XyoBoundWitnessFragmentDeserializer implements IXyoDeserializer<IXyoBoundW
   public readonly schemaObjectId = schema.boundWitnessFragment.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): IXyoBoundWitnessFragment {
-    const parseResult = parse(data)
+    const parseResult = parse(data, serializationService.schema)
     const query = new ParseQuery(parseResult)
     const fetterWitnesses = query.mapChildren((fetterOrWitness) => {
       return serializationService
         .deserialize(fetterOrWitness.readData(true))
-        .hydrate<IXyoFetter | IXyoWitness>()
+        .hydrate<IXyoFetter | IXyoWitness>(serializationService)
     })
 
     return new XyoBoundWitnessFragment(fetterWitnesses)

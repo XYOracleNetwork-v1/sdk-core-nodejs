@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 7th December 2018 4:35:30 pm
+ * @Last modified time: Wednesday, 12th December 2018 11:20:08 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,10 +13,10 @@ import { getUnsignedIntegerSerializer, getSignedIntegerSerializer, getDoubleSeri
 import { schema } from '@xyo-network/serialization-schema'
 import { XyoBaseSerializable, IXyoDeserializer, parse, ParseQuery, IXyoSerializationService } from '@xyo-network/serialization'
 
-export const rssiSerializationProvider = getSignedIntegerSerializer(schema.rssi.id)
-export const unixTimeSerializationProvider = getUnsignedIntegerSerializer(schema.time.id)
-export const latitudeSerializationProvider = getDoubleSerializer(schema.latitude.id)
-export const longitudeSerializationProvider = getDoubleSerializer(schema.longitude.id)
+export const rssiSerializationProvider = getSignedIntegerSerializer(schema, schema.rssi.id)
+export const unixTimeSerializationProvider = getUnsignedIntegerSerializer(schema, schema.time.id)
+export const latitudeSerializationProvider = getDoubleSerializer(schema, schema.latitude.id)
+export const longitudeSerializationProvider = getDoubleSerializer(schema, schema.longitude.id)
 
 export class XyoGps extends XyoBaseSerializable {
   public static deserializer: IXyoDeserializer<XyoGps>
@@ -24,7 +24,7 @@ export class XyoGps extends XyoBaseSerializable {
   public readonly schemaObjectId = schema.gps.id
 
   constructor (public readonly latitude: number, public readonly longitude: number) {
-    super()
+    super(schema)
   }
 
   public getData() {
@@ -40,15 +40,15 @@ class XyoGpsDeserializer implements IXyoDeserializer<XyoGps> {
   public schemaObjectId = schema.gps.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoGps {
-    const parseResult = parse(data)
+    const parseResult = parse(data, serializationService.schema)
     const parseQuery = new ParseQuery(parseResult)
 
     return new XyoGps(
       serializationService
         .deserialize(parseQuery.getChildAt(0).readData(true))
-        .hydrate<XyoSerializableNumber>().number,
+        .hydrate<XyoSerializableNumber>(serializationService).number,
       serializationService.deserialize(parseQuery.getChildAt(1).readData(true))
-        .hydrate<XyoSerializableNumber>().number
+        .hydrate<XyoSerializableNumber>(serializationService).number
     )
   }
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: parse.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 7th December 2018 11:41:24 am
+ * @Last modified time: Wednesday, 12th December 2018 11:16:10 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -22,7 +22,7 @@ describe('Parsing', () => {
       0x01 // value
     ])
 
-    const result = parse(src)
+    const result = parse(src, {})
     if (!result) {
       throw new Error(`Result should be defined`)
     }
@@ -44,7 +44,7 @@ describe('Parsing', () => {
       0x01 // value
     ])
 
-    const result = parse(src)
+    const result = parse(src, {})
     if (!result) {
       throw new Error(`Result should be defined`)
     }
@@ -72,7 +72,7 @@ describe('Parsing', () => {
       0x01 // value
     ])
 
-    const result = parse(src)
+    const result = parse(src, {})
     if (!result) {
       throw new Error(`Result should be defined`)
     }
@@ -104,7 +104,7 @@ describe('Parsing', () => {
       0x04 // value
     ])
 
-    const result = parse(src)
+    const result = parse(src, {})
     if (!result) {
       throw new Error(`Result should be defined`)
     }
@@ -152,7 +152,7 @@ describe('Parsing', () => {
       0x04 // value
     ])
 
-    const result = parse(src)
+    const result = parse(src, {})
     if (!result) {
       throw new Error(`Result should be defined`)
     }
@@ -202,7 +202,7 @@ describe('Parsing', () => {
       0x02, // 2 bytes
       0x04 // value
     ])
-    const result = parse(src)
+    const result = parse(src, {})
     if (!result) {
       throw new Error(`Result should be defined`)
     }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-fetter-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 11:28:00 am
+ * @Last modified time: Wednesday, 12th December 2018 11:26:54 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,7 +20,7 @@ export class XyoFetterSet extends XyoBaseSerializable implements IXyoFetterSet {
   public schemaObjectId = schema.fetterSet.id
 
   constructor (public readonly fetters: IXyoFetter[]) {
-    super()
+    super(schema)
   }
 
   public getData() {
@@ -34,13 +34,13 @@ export class XyoFetterSetDeserializer implements IXyoDeserializer<IXyoFetterSet>
   public schemaObjectId = schema.fetterSet.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): IXyoFetterSet {
-    const parseResult = parse(data)
+    const parseResult = parse(data, serializationService.schema)
     const query = new ParseQuery(parseResult)
     const fetters = query
       .mapChildren(
         fetter => serializationService
           .deserialize(fetter.readData(true))
-          .hydrate<IXyoFetter>()
+          .hydrate<IXyoFetter>(serializationService)
       )
 
     return new XyoFetterSet(fetters)

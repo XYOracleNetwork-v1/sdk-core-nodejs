@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serialization-config.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:28:46 am
+ * @Last modified time: Wednesday, 12th December 2018 11:21:18 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -38,7 +38,6 @@ import { rssiSerializationProvider, unixTimeSerializationProvider, latitudeSeria
 
 export function createSerializer(): IXyoSerializationService {
   const serializationService = new XyoSerializationService(schema)
-  XyoBaseSerializable.serializationService = serializationService
 
   serializationService.addDeserializer(XyoEcdsaSignature.deserializer)
   serializationService.addDeserializer(XyoStubSignature)

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bridge-block-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 12:20:37 pm
+ * @Last modified time: Wednesday, 12th December 2018 11:23:12 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,7 +20,7 @@ export class XyoBridgeBlockSet extends XyoBaseSerializable {
   public readonly schemaObjectId = schema.bridgeBlockSet.id
 
   constructor (public readonly boundWitnesses: IXyoBoundWitness[]) {
-    super()
+    super(schema)
   }
 
   public getData() {
@@ -33,12 +33,12 @@ class XyoBridgeBlockSetDeserializer implements IXyoDeserializer<XyoBridgeBlockSe
   public readonly schemaObjectId = schema.bridgeBlockSet.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoBridgeBlockSet {
-    const parseResult = parse(data)
+    const parseResult = parse(data, serializationService.schema)
     const query = new ParseQuery(parseResult)
     const boundWitnesses = query.mapChildren((boundWitness) => {
       return serializationService
         .deserialize(boundWitness.readData(true))
-        .hydrate<IXyoBoundWitness>()
+        .hydrate<IXyoBoundWitness>(serializationService)
     })
     return new XyoBridgeBlockSet(boundWitnesses)
   }

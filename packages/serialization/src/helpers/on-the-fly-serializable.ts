@@ -4,21 +4,22 @@
  * @Email:  developer@xyfindables.com
  * @Filename: on-the-fly-serializable.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 6th December 2018 11:32:59 am
+ * @Last modified time: Wednesday, 12th December 2018 10:59:24 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 import { XyoBaseSerializable } from "./base-serializable"
-import { IXyoSerializableObject, IOnTheFlyGetDataOptions } from "../@types"
+import { IXyoSerializableObject, IOnTheFlyGetDataOptions, IXyoObjectSchema } from "../@types"
 import { XyoError, XyoErrors } from "@xyo-network/errors"
 
 export class XyoOnTheFlySerializable extends XyoBaseSerializable {
 
   constructor (
+    schema: IXyoObjectSchema,
     public readonly schemaObjectId: number,
     private readonly dataOptions: IOnTheFlyGetDataOptions
   ) {
-    super()
+    super(schema)
   }
 
   public getData(): Buffer | IXyoSerializableObject | IXyoSerializableObject[] {

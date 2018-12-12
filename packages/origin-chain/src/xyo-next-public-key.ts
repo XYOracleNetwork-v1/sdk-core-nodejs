@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-next-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 7th December 2018 1:16:49 pm
+ * @Last modified time: Wednesday, 12th December 2018 11:22:03 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,7 +19,7 @@ export class XyoNextPublicKey extends XyoBaseSerializable {
   public readonly schemaObjectId = schema.nextPublicKey.id
 
   constructor (public readonly publicKey: IXyoPublicKey) {
-    super()
+    super(schema)
   }
 
   public getData(): IXyoSerializableObject {
@@ -32,8 +32,10 @@ class XyoNextPublicKeyDeserializer implements IXyoDeserializer<XyoNextPublicKey>
   public readonly schemaObjectId = schema.nextPublicKey.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoNextPublicKey {
-    const parseResult = parse(data)
-    return new XyoNextPublicKey(serializationService.deserialize(parseResult.dataBytes).hydrate<IXyoPublicKey>())
+    const parseResult = parse(data, serializationService.schema)
+    return new XyoNextPublicKey(
+      serializationService.deserialize(parseResult.dataBytes).hydrate<IXyoPublicKey>(serializationService)
+    )
   }
 }
 

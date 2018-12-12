@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-previous-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 7th December 2018 1:18:09 pm
+ * @Last modified time: Wednesday, 12th December 2018 11:22:51 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,7 +19,7 @@ export class XyoPreviousHash extends XyoBaseSerializable {
   public readonly schemaObjectId = schema.previousHash.id
 
   constructor (public readonly hash: IXyoHash) {
-    super()
+    super(schema)
   }
 
   public getData(): IXyoSerializableObject {
@@ -32,8 +32,10 @@ class XyoNextPublicKeyDeserializer implements IXyoDeserializer<XyoPreviousHash> 
   public readonly schemaObjectId = schema.previousHash.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoPreviousHash {
-    const parseResult = parse(data)
-    return new XyoPreviousHash(serializationService.deserialize(parseResult.dataBytes).hydrate<IXyoHash>())
+    const parseResult = parse(data, serializationService.schema)
+    return new XyoPreviousHash(
+      serializationService.deserialize(parseResult.dataBytes).hydrate<IXyoHash>(serializationService)
+    )
   }
 }
 

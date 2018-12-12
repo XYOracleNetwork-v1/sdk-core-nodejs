@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-secp256k1-uncompressed-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 7th December 2018 11:08:28 am
+ * @Last modified time: Wednesday, 12th December 2018 11:07:51 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,6 +12,7 @@
 import { XyoEcdsaUncompressedPublicKey } from "./xyo-ecdsa-uncompressed-public-key"
 import { writePointTo32ByteBuffer } from "@xyo-network/buffer-utils"
 import { IXyoDeserializer } from "@xyo-network/serialization"
+import { schema } from "@xyo-network/serialization-schema"
 
 export class XyoEcdsaSecp256k1UnCompressedPublicKey extends XyoEcdsaUncompressedPublicKey {
 
@@ -22,7 +23,7 @@ export class XyoEcdsaSecp256k1UnCompressedPublicKey extends XyoEcdsaUncompressed
     private readonly yCoordinate: Buffer,
     public readonly schemaObjectId: number
   ) {
-    super()
+    super(schema)
   }
 
   public getReadableName(): string {

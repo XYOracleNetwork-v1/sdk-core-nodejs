@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:45:05 am
+ * @Last modified time: Wednesday, 12th December 2018 11:19:16 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBaseSerializable, IXyoDeserializer, parse  } from '@xyo-network/serialization'
+import { XyoBaseSerializable, IXyoDeserializer, parse, IXyoSerializationService, IXyoObjectSchema  } from '@xyo-network/serialization'
 import { signedIntegerToBuffer, unsignedIntegerToBuffer, readIntegerFromBuffer, doubleToBuffer, floatToBuffer, readFloatFromBuffer, readDoubleFromBuffer } from '@xyo-network/buffer-utils'
 import { XyoError, XyoErrors  } from '@xyo-network/errors'
 
@@ -18,10 +18,11 @@ export class XyoSerializableNumber extends XyoBaseSerializable  {
 
   constructor (
     public readonly number: number,
+    schema: IXyoObjectSchema,
     public schemaObjectId: number,
     public readonly numberType: NumberType
   ) {
-    super()
+    super(schema)
   }
 
   public getData(): Buffer {
@@ -53,8 +54,8 @@ export class XyoNumberDeserializer implements IXyoDeserializer<XyoSerializableNu
     public readonly numberType: NumberType
   ) {}
 
-  public deserialize(data: Buffer): XyoSerializableNumber {
-    const parseResult = parse(data)
+  public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoSerializableNumber {
+    const parseResult = parse(data, serializationService.schema)
     let number: number
 
     if (this.numberType === 'unsigned-integer') {
@@ -69,32 +70,32 @@ export class XyoNumberDeserializer implements IXyoDeserializer<XyoSerializableNu
       throw new XyoError(`Unsupported number typed ${this.numberType || 'undefined'}`, XyoErrors.CRITICAL)
     }
 
-    return new XyoSerializableNumber(number, this.schemaObjectId, this.numberType)
+    return new XyoSerializableNumber(number, serializationService.schema, this.schemaObjectId, this.numberType)
   }
 }
 
-function getNumberSerializer(schemaObjectId: number, numberType: NumberType) {
+function getNumberSerializer(schemaObjectId: number, numberType: NumberType, schema: IXyoObjectSchema) {
   const deserializer = new XyoNumberDeserializer(schemaObjectId, numberType)
   return {
     deserializer,
     newInstance: (number: number) => {
-      return new XyoSerializableNumber(number, schemaObjectId, numberType)
+      return new XyoSerializableNumber(number, schema, schemaObjectId, numberType)
     }
   }
 }
 
-export function getUnsignedIntegerSerializer(schemaObjectId: number) {
-  return getNumberSerializer(schemaObjectId, 'unsigned-integer')
+export function getUnsignedIntegerSerializer(schema: IXyoObjectSchema, schemaObjectId: number) {
+  return getNumberSerializer(schemaObjectId, 'unsigned-integer', schema)
 }
 
-export function getSignedIntegerSerializer(schemaObjectId: number) {
-  return getNumberSerializer(schemaObjectId, 'signed-integer')
+export function getSignedIntegerSerializer(schema: IXyoObjectSchema, schemaObjectId: number) {
+  return getNumberSerializer(schemaObjectId, 'signed-integer', schema)
 }
 
-export function getFloatSerializer(schemaObjectId: number) {
-  return getNumberSerializer(schemaObjectId, 'float')
+export function getFloatSerializer(schema: IXyoObjectSchema, schemaObjectId: number) {
+  return getNumberSerializer(schemaObjectId, 'float', schema)
 }
 
-export function getDoubleSerializer(schemaObjectId: number) {
-  return getNumberSerializer(schemaObjectId, 'double')
+export function getDoubleSerializer(schema: IXyoObjectSchema, schemaObjectId: number) {
+  return getNumberSerializer(schemaObjectId, 'double', schema)
 }

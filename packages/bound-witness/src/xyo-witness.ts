@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 11:07:03 am
+ * @Last modified time: Wednesday, 12th December 2018 11:25:37 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -23,7 +23,7 @@ export class XyoWitness extends XyoBaseSerializable  implements IXyoWitness {
     public signatureSet: IXyoSignatureSet,
     public metadata: IXyoSerializableObject[]
   ) {
-    super()
+    super(schema)
   }
 
   public getData(): IXyoSerializableObject | IXyoSerializableObject[] | Buffer {
@@ -39,16 +39,18 @@ class XyoWitnessDeserializer implements IXyoDeserializer<IXyoWitness> {
   public readonly schemaObjectId = schema.witness.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): IXyoWitness {
-    const parseResult = parse(data)
+    const parseResult = parse(data, serializationService.schema)
     const query = new ParseQuery(parseResult)
     const signatureSetItem = query.getChildAt(0)
-    const signatureSet = serializationService.deserialize(signatureSetItem.readData(true)).hydrate<IXyoSignatureSet>()
+    const signatureSet = serializationService
+      .deserialize(signatureSetItem.readData(true))
+      .hydrate<IXyoSignatureSet>(serializationService)
     const childrenCount = query.getChildrenCount()
     let childIndex = 1
     const metadata: IXyoSerializableObject[] = []
     while (childIndex < childrenCount) {
       const metadataChild = query.getChildAt(childIndex)
-      const heuristic = serializationService.deserialize(metadataChild.readData(true)).hydrate()
+      const heuristic = serializationService.deserialize(metadataChild.readData(true)).hydrate(serializationService)
       metadata.push(heuristic)
       childIndex += 1
     }

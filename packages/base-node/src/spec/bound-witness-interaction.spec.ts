@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: bound-witness-interaction.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:36:42 am
+ * @Last modified time: Wednesday, 12th December 2018 10:55:13 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -307,8 +307,8 @@ describe('Server interaction', () => {
     const signatureHex = `000943209e5bddcac71e63797f3d3208ce7aa4105c202b7828fd4475482f92c815e2b1242003883b375725e37481792958ba529a91692b84a408952bc470b68c81de2428cf`
     const publicKeyHex = `000c41d49f7ea7330a6997ba8be61f1f9578fd0ee509f4102f00a0b12c1e2171b176d8f69f18779477c6a94bfb36dd5035e2d04415bfcb193e34674cbe1f461ada99f1`
     const signingDataHex = `201571201944000c41d49f7ea7330a6997ba8be61f1f9578fd0ee509f4102f00a0b12c1e2171b176d8f69f18779477c6a94bfb36dd5035e2d04415bfcb193e34674cbe1f461ada99f1200824001021146717735d97eff0078951c9eab1e3c07e353c4e74bbc265636d1188f5e0474c000302366015007a60190046400c004230226f7ebb2f8ffc9e2d1ad366f27ea63603e358d162463ff043c861c3c45e86e24876eb15a9c11fcdadb334b9b0d8169e7a38c82867cc7c6e5fe4a8d2384c047008002640100022146717735d97eff0078951c9eab1e3c07e353c4e74bbc265636d1188f5e0474c4003000600000036`
-    const ecdsaSignature = serializationService.deserialize(Buffer.from(signatureHex, 'hex')).hydrate<XyoEcdsaSignature>()
-    const ecdsaUnCompressedPublicKey = serializationService.deserialize(Buffer.from(publicKeyHex, 'hex')).hydrate<XyoEcdsaSecp256k1UnCompressedPublicKey>()
+    const ecdsaSignature = serializationService.deserialize(Buffer.from(signatureHex, 'hex')).hydrate<XyoEcdsaSignature>(serializationService)
+    const ecdsaUnCompressedPublicKey = serializationService.deserialize(Buffer.from(publicKeyHex, 'hex')).hydrate<XyoEcdsaSecp256k1UnCompressedPublicKey>(serializationService)
     const signingData = Buffer.from(signingDataHex, 'hex')
     const signerProvider = getSignerProvider('secp256k1-sha256')
     const result = await signerProvider.verifySign(ecdsaSignature, signingData, ecdsaUnCompressedPublicKey)

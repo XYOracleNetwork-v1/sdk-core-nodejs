@@ -5,7 +5,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bridge-hash-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 9:29:08 am
+ * @Last modified time: Wednesday, 12th December 2018 11:23:02 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,7 +20,7 @@ export class XyoBridgeHashSet extends XyoBaseSerializable {
   public schemaObjectId = schema.bridgeHashSet.id
 
   constructor (private readonly hashSet: IXyoHash[]) {
-    super()
+    super(schema)
   }
 
   public getData(): IXyoSerializableObject | Buffer | IXyoSerializableObject[] {
@@ -33,13 +33,13 @@ class XyoBridgeHashSetDeserializer implements IXyoDeserializer<XyoBridgeHashSet>
   public readonly schemaObjectId = schema.bridgeHashSet.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoBridgeHashSet {
-    const parseResult = parse(data)
+    const parseResult = parse(data, serializationService.schema)
     const query = new ParseQuery(parseResult)
     return new XyoBridgeHashSet(
       query.mapChildren(
         hash => serializationService
           .deserialize(hash.readData(true))
-          .hydrate<IXyoHash>())
+          .hydrate<IXyoHash>(serializationService))
     )
   }
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: bound-witness-deserializer.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:04:11 am
+ * @Last modified time: Wednesday, 12th December 2018 11:21:00 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -80,7 +80,7 @@ describe(`BoundWitness Deserialization`, () => {
           0xDD,
     ])
 
-    const result = parse(src)
+    const result = parse(src, {})
     expect(result.headerBytes).toEqual(src.slice(0, 3))
     expect(result.dataBytes).toEqual(src.slice(3))
     const query = new ParseQuery(result)
@@ -102,7 +102,7 @@ describe(`BoundWitness Deserialization`, () => {
               0xDD,
     ])
 
-    const result = parse(src)
+    const result = parse(src, {})
     expect(result.headerBytes).toEqual(src.slice(0, 3))
     expect(result.dataBytes).toEqual(src.slice(3))
     const query = new ParseQuery(result)
@@ -132,7 +132,7 @@ describe(`BoundWitness Deserialization`, () => {
               0xAA,
     ])
 
-    const result = parse(src)
+    const result = parse(src, {})
     expect(result.headerBytes).toEqual(src.slice(0, 3))
     expect(result.dataBytes).toEqual(src.slice(3))
     const query = new ParseQuery(result)
@@ -165,7 +165,7 @@ describe(`BoundWitness Deserialization`, () => {
               0xDD,
     ])
 
-    const result = parse(src)
+    const result = parse(src, {})
     expect(result.headerBytes).toEqual(src.slice(0, 3))
     expect(result.dataBytes).toEqual(src.slice(3))
     const query = new ParseQuery(result)
@@ -197,7 +197,7 @@ describe(`BoundWitness Deserialization`, () => {
               0xAA
     ])
 
-    const result = parse(src)
+    const result = parse(src, {})
     expect(result.headerBytes).toEqual(src.slice(0, 3))
     expect(result.dataBytes).toEqual(src.slice(3))
     const query = new ParseQuery(result)
@@ -232,7 +232,7 @@ describe(`BoundWitness Deserialization`, () => {
               0x01
     ])
 
-    const result = parse(src)
+    const result = parse(src, {})
     const pQuery = new ParseQuery(result)
 
     expect(pQuery.query([0, 0]).readData()).toEqual(

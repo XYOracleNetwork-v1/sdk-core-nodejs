@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signature-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 10:17:04 am
+ * @Last modified time: Wednesday, 12th December 2018 11:26:02 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,7 +18,7 @@ export class XyoSignatureSet extends XyoBaseSerializable {
   public schemaObjectId = schema.signatureSet.id
 
   constructor (public readonly signatures: IXyoSignature[]) {
-    super()
+    super(schema)
   }
 
   public getData(): IXyoSerializableObject[] {
@@ -31,10 +31,10 @@ class XyoSignatureSetDeserializer implements IXyoDeserializer<XyoSignatureSet> {
   public schemaObjectId = schema.signatureSet.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoSignatureSet {
-    const parseResult = parse(data)
+    const parseResult = parse(data, serializationService.schema)
     const query = new ParseQuery(parseResult)
     const signatures = query.mapChildren(
-      sig => serializationService.deserialize(sig.readData(true)).hydrate<IXyoSignature>()
+      sig => serializationService.deserialize(sig.readData(true)).hydrate<IXyoSignature>(serializationService)
     )
     return new XyoSignatureSet(signatures)
   }

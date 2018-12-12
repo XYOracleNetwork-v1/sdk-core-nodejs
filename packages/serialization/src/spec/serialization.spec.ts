@@ -4,20 +4,19 @@
  * @Email:  developer@xyfindables.com
  * @Filename: serialization.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:03:54 am
+ * @Last modified time: Wednesday, 12th December 2018 11:14:43 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { resolveSerializablesToBuffer } from '../helpers/resolveSerializablesToBuffer'
-import { IXyoSerializableObject } from '../@types'
+import { IXyoSerializableObject, IXyoObjectSchema } from '../@types'
 import { XyoBaseSerializable } from '../helpers/base-serializable'
 
 describe(`Serialization`, () => {
 
   it(`Should serialize typed simple collection`, () => {
-    const xCollection = new XCollection([new X(1)])
-    const result = resolveSerializablesToBuffer(2, {
+    const schema: IXyoObjectSchema = {
       x: {
         id: 1,
         sizeIdentifierSize: null,
@@ -28,7 +27,9 @@ describe(`Serialization`, () => {
         sizeIdentifierSize: null,
         iterableType: 'iterable-typed'
       }
-    }, xCollection.getData())
+    }
+    const xCollection = new XCollection(schema, [new X(schema, 1)])
+    const result = resolveSerializablesToBuffer(2, schema, xCollection.getData())
 
     expect(Buffer.from([
       0x00, // size bits with reserved bits
@@ -39,8 +40,7 @@ describe(`Serialization`, () => {
   })
 
   it(`Should serialize typed simple collection using high watermark for size encoding`, () => {
-    const xCollection = new XCollection([new X(1), new X(256), new X(65536)])
-    const result = resolveSerializablesToBuffer(2, {
+    const schema: IXyoObjectSchema = {
       x: {
         id: 1,
         sizeIdentifierSize: null,
@@ -51,7 +51,9 @@ describe(`Serialization`, () => {
         sizeIdentifierSize: null,
         iterableType: 'iterable-typed'
       }
-    }, xCollection.getData())
+    }
+    const xCollection = new XCollection(schema, [new X(schema, 1), new X(schema, 256), new X(schema, 65536)])
+    const result = resolveSerializablesToBuffer(2, schema, xCollection.getData())
 
     expect(Buffer.from([
       0x00, // size bits with reserved bits
@@ -73,8 +75,7 @@ describe(`Serialization`, () => {
   })
 
   it(`Should serialize untyped simple collection`, () => {
-    const xCollection = new XCollection([new X(1)])
-    const result = resolveSerializablesToBuffer(2, {
+    const schema: IXyoObjectSchema = {
       x: {
         id: 1,
         sizeIdentifierSize: null,
@@ -85,7 +86,9 @@ describe(`Serialization`, () => {
         sizeIdentifierSize: null,
         iterableType: 'iterable-untyped'
       }
-    }, xCollection.getData())
+    }
+    const xCollection = new XCollection(schema, [new X(schema, 1)])
+    const result = resolveSerializablesToBuffer(2, schema, xCollection.getData())
 
     expect(Buffer.from([
       0x00, // size bits with reserved bits
@@ -96,8 +99,7 @@ describe(`Serialization`, () => {
   })
 
   it(`Should serialize typed simple collection with 2 objects`, () => {
-    const xCollection = new XCollection([new X(1), new X(2)])
-    const result = resolveSerializablesToBuffer(2, {
+    const schema: IXyoObjectSchema = {
       x: {
         id: 1,
         sizeIdentifierSize: null,
@@ -108,7 +110,9 @@ describe(`Serialization`, () => {
         sizeIdentifierSize: null,
         iterableType: 'iterable-typed'
       }
-    }, xCollection.getData())
+    }
+    const xCollection = new XCollection(schema, [new X(schema, 1), new X(schema, 2)])
+    const result = resolveSerializablesToBuffer(2, schema, xCollection.getData())
 
     expect(Buffer.from([
       0x00, // size bits with reserved bits
@@ -121,8 +125,7 @@ describe(`Serialization`, () => {
   })
 
   it(`Should serialize untyped simple collection with 2 objects`, () => {
-    const xCollection = new XCollection([new X(1), new X(2)])
-    const result = resolveSerializablesToBuffer(2, {
+    const schema: IXyoObjectSchema = {
       x: {
         id: 1,
         sizeIdentifierSize: null,
@@ -133,7 +136,9 @@ describe(`Serialization`, () => {
         sizeIdentifierSize: null,
         iterableType: 'iterable-untyped'
       }
-    }, xCollection.getData())
+    }
+    const xCollection = new XCollection(schema, [new X(schema, 1), new X(schema, 2)])
+    const result = resolveSerializablesToBuffer(2, schema, xCollection.getData())
 
     expect(Buffer.from([
       0x00, // size bits with reserved bits
@@ -148,8 +153,7 @@ describe(`Serialization`, () => {
   })
 
   it(`Should serialize a collection of untyped collections with 0 objects`, () => {
-    const xCollectionSet = new XCollectionSet([])
-    const result = resolveSerializablesToBuffer(3, {
+    const schema: IXyoObjectSchema = {
       x: {
         id: 1,
         sizeIdentifierSize: null,
@@ -165,15 +169,15 @@ describe(`Serialization`, () => {
         sizeIdentifierSize: null,
         iterableType: 'iterable-typed'
       }
-    }, xCollectionSet.getData())
+    }
+    const xCollectionSet = new XCollectionSet(schema, [])
+    const result = resolveSerializablesToBuffer(3, schema, xCollectionSet.getData())
 
     expect(Buffer.from([]).equals(result)).toBe(true)
   })
 
   it(`Should serialize a collection of untyped collections 2 objects`, () => {
-    const xCollection = new XCollection([new X(1), new X(2)])
-    const xCollectionSet = new XCollectionSet([xCollection])
-    const result = resolveSerializablesToBuffer(3, {
+    const schema: IXyoObjectSchema = {
       x: {
         id: 1,
         sizeIdentifierSize: null,
@@ -189,7 +193,10 @@ describe(`Serialization`, () => {
         sizeIdentifierSize: null,
         iterableType: 'iterable-typed'
       }
-    }, xCollectionSet.getData())
+    }
+    const xCollection = new XCollection(schema, [new X(schema, 1), new X(schema, 2)])
+    const xCollectionSet = new XCollectionSet(schema, [xCollection])
+    const result = resolveSerializablesToBuffer(3, schema, xCollectionSet.getData())
 
     expect(Buffer.from([
       0x20, // size bits with reserved bits
@@ -207,9 +214,7 @@ describe(`Serialization`, () => {
   })
 
   it(`Should serialize a collection of typed collections 2 objects`, () => {
-    const xCollection = new XCollection([new X(1), new X(2)])
-    const xCollectionSet = new XCollectionSet([xCollection])
-    const result = resolveSerializablesToBuffer(3, {
+    const schema: IXyoObjectSchema = {
       x: {
         id: 1,
         sizeIdentifierSize: null,
@@ -225,7 +230,10 @@ describe(`Serialization`, () => {
         sizeIdentifierSize: null,
         iterableType: 'iterable-untyped'
       }
-    }, xCollectionSet.getData())
+    }
+    const xCollection = new XCollection(schema, [new X(schema, 1), new X(schema, 2)])
+    const xCollectionSet = new XCollectionSet(schema, [xCollection])
+    const result = resolveSerializablesToBuffer(3, schema, xCollectionSet.getData())
 
     expect(Buffer.from([
       0x30, // size bits with reserved bits
@@ -244,7 +252,7 @@ describe(`Serialization`, () => {
 class X extends XyoBaseSerializable implements IXyoSerializableObject {
   public readonly schemaObjectId: number = 1
 
-  constructor(private readonly value: number) { super() }
+  constructor(schema: IXyoObjectSchema, private readonly value: number) { super(schema) }
 
   public getData(): Buffer {
     if (this.value <= 255) {
@@ -269,7 +277,7 @@ class X extends XyoBaseSerializable implements IXyoSerializableObject {
 class DynamicX extends XyoBaseSerializable implements IXyoSerializableObject {
   public readonly schemaObjectId: number = 1
 
-  constructor(private readonly value: number) { super() }
+  constructor(schema: IXyoObjectSchema, private readonly value: number) { super(schema) }
 
   public getData(): Buffer | IXyoSerializableObject[] {
     const b = Buffer.alloc(1)
@@ -282,7 +290,7 @@ class DynamicX extends XyoBaseSerializable implements IXyoSerializableObject {
 class XCollection extends XyoBaseSerializable implements IXyoSerializableObject {
   public readonly schemaObjectId: number = 2
 
-  constructor(private readonly collection: X[]) { super() }
+  constructor(schema: IXyoObjectSchema, private readonly collection: X[]) { super(schema) }
 
   public getData(): IXyoSerializableObject[] {
     return this.collection
@@ -293,7 +301,7 @@ class XCollection extends XyoBaseSerializable implements IXyoSerializableObject 
 class XCollectionSet extends XyoBaseSerializable implements IXyoSerializableObject {
   public readonly schemaObjectId: number = 3
 
-  constructor(private readonly collection: XCollection[]) { super() }
+  constructor(schema: IXyoObjectSchema, private readonly collection: XCollection[]) { super(schema) }
 
   public getData(): IXyoSerializableObject[] {
     return this.collection

@@ -4,21 +4,21 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 9:47:29 am
+ * @Last modified time: Wednesday, 12th December 2018 11:23:46 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoPublicKey } from '@xyo-network/signing'
 import { schema } from '@xyo-network/serialization-schema'
-import { XyoBaseSerializable, parse } from '@xyo-network/serialization'
+import { XyoBaseSerializable, parse, IXyoSerializationService } from '@xyo-network/serialization'
 
 export class XyoRsaPublicKey extends XyoBaseSerializable implements IXyoPublicKey {
 
   public static schemaObjectId = schema.rsaPublicKey.id
 
-  public static deserialize(data: Buffer) {
-    const parseResult = parse(data)
+  public static deserialize(data: Buffer, serializationService: IXyoSerializationService) {
+    const parseResult = parse(data, serializationService.schema)
     return new XyoRsaPublicKey(parseResult.data as Buffer)
   }
 
@@ -29,7 +29,7 @@ export class XyoRsaPublicKey extends XyoBaseSerializable implements IXyoPublicKe
    */
 
   constructor(public readonly modulus: Buffer) {
-    super()
+    super(schema)
   }
 
   public get schemaObjectId (): number {
