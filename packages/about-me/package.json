@@ -1,16 +1,16 @@
 {
   "name": "@xyo-network/about-me",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Provides a service for sharing information about oneself with other nodes in the XYO network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.5.0",
-    "@xyo-network/ip-service": "^0.5.0",
-    "@xyo-network/peer-discovery": "^0.5.0",
-    "@xyo-network/signing": "^0.5.0",
+    "@xyo-network/base": "^0.6.0",
+    "@xyo-network/ip-service": "^0.6.0",
+    "@xyo-network/peer-discovery": "^0.6.0",
+    "@xyo-network/signing": "^0.6.0",
     "lodash": "^4.17.11",
     "uuid": "^3.3.2"
   },
