@@ -1,13 +1,13 @@
 {
   "name": "@xyo-network/errors",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Provides a basic error class to be used by XYO services",
   "main": "dist/xyo-error.js",
   "types": "dist/xyo-error.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.4.0"
+    "@xyo-network/base": "^0.5.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
