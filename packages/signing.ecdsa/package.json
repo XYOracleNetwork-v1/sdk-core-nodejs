@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/signing.ecdsa",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Implements ecdsa crypto functionality",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/peer-interaction",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Abstraction utilities for implementing interactions between nodes",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,12 +8,12 @@
   "license": "MIT",
   "dependencies": {
     "@xyo-network/base": "^0.8.0",
-    "@xyo-network/bound-witness": "^0.8.0",
+    "@xyo-network/bound-witness": "^0.8.1",
     "@xyo-network/buffer-utils": "^0.8.0",
     "@xyo-network/hashing": "^0.8.0",
     "@xyo-network/network": "^0.8.0",
-    "@xyo-network/origin-block-repository": "^0.8.0",
-    "@xyo-network/origin-chain": "^0.8.0",
+    "@xyo-network/origin-block-repository": "^0.8.1",
+    "@xyo-network/origin-chain": "^0.8.1",
     "@xyo-network/serialization": "^0.8.0",
     "@xyo-network/serialization-schema": "^0.8.0",
     "@xyo-network/signing": "^0.8.0"
