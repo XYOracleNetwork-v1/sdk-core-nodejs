@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-server-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 4:52:15 pm
+ * @Last modified time: Tuesday, 11th December 2018 5:26:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -142,7 +142,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
                   return memo
                 }, [fetter] as FetterOrWitness[])
               fragmentParts.push(witness)
-              return resolve(new XyoBoundWitness(fragmentParts))
+              return resolve(new InnerBoundWitness(fragmentParts, signingData))
             }
           }
         }
@@ -150,5 +150,16 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
 
       return reject(new XyoError(`Peer disconnected in xyo-bound-witness-interaction`, XyoErrors.CRITICAL))
     }) as Promise<IXyoBoundWitness>
+  }
+}
+
+// tslint:disable-next-line:max-classes-per-file
+class InnerBoundWitness extends XyoBoundWitness {
+  constructor(fetterWitnesses: FetterOrWitness[], private readonly signingData: Buffer) {
+    super(fetterWitnesses)
+  }
+
+  public getSigningData() {
+    return this.signingData
   }
 }
