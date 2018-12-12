@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 1:46:35 pm
+ * @Last modified time: Wednesday, 12th December 2018 2:20:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -91,6 +91,37 @@ export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWit
   }
 
   public getReadableValue() {
+    return {
+      parties: this.publicKeys.map((publicKeySet, partyIndex) => {
+        return {
+          signing: publicKeySet.keys.map((key, keyIndex) => {
+            return {
+              publicKey: {
+                type: key.getReadableName(),
+                rawKey: key.getReadableValue()
+              },
+              signature: {
+                type: this.signatures[partyIndex].signatures[keyIndex].getReadableName(),
+                rawSignature: this.signatures[partyIndex].signatures[keyIndex].getReadableValue(),
+              }
+            }
+          }),
+          heuristics: this.heuristics[partyIndex].map((heuristic) => {
+            return {
+              type: heuristic.getReadableName(),
+              value: heuristic.getReadableValue()
+            }
+          }),
+          metadata: this.metadata[partyIndex].map((metadataItem) => {
+            return {
+              type: metadataItem.getReadableName(),
+              value: metadataItem.getReadableValue()
+            }
+          })
+        }
+      })
+    }
+
     return {
       publicKeys: this.publicKeys.map(keySet => keySet.getReadableValue()),
       signatures: this.signatures.map(sigSet => sigSet.getReadableValue()),
