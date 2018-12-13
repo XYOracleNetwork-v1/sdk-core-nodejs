@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:19:58 pm
+ * @Last modified time: Thursday, 13th December 2018 10:45:58 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,6 +14,9 @@ import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { schema } from '@xyo-network/serialization-schema'
 import { IXyoDeserializer, IXyoSerializationService } from "@xyo-network/serialization"
 import { XyoRsaSignature } from "./rsa-signature"
+import { XyoRsaShaSigner } from "./xyo-rsa-sha-signer"
+
+export { XyoRsaShaSigner } from "./xyo-rsa-sha-signer"
 
 /** The types of signing algorithm supported */
 type SignerProviderType = (
@@ -65,3 +68,16 @@ class XyoRsaWithSha256Signature implements IXyoDeserializer<XyoRsaSignature> {
 export const rsaWithSha256SignatureDeserializer = new XyoRsaWithSha256Signature()
 
 export { XyoRsaPublicKey } from './xyo-rsa-public-key'
+
+// tslint:disable-next-line:max-classes-per-file
+class XyoRsaShaSignerDeserializer implements IXyoDeserializer<XyoRsaShaSigner> {
+  public schemaObjectId = schema.rsaSigner.id
+
+  public deserialize(data: Buffer, serializationService: IXyoSerializationService) {
+    const parseResult = serializationService.parse(data)
+    const signer = getSignerProvider('rsa-sha256')
+    return signer.newInstance(parseResult.dataBytes.toString())
+  }
+}
+
+XyoRsaShaSigner.deserializer = new XyoRsaShaSignerDeserializer()

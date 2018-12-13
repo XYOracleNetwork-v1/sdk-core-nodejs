@@ -4,15 +4,15 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serialization-config.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 4:14:20 pm
+ * @Last modified time: Thursday, 13th December 2018 10:48:51 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { sha256HashDeserializer, XyoStubHash } from '@xyo-network/hashing'
-import { XyoStubPublicKey, XyoStubSignature } from '@xyo-network/signing'
-import { XyoEcdsaSignature, XyoEcdsaSecp256k1UnCompressedPublicKey } from '@xyo-network/signing.ecdsa'
-import { XyoRsaPublicKey, rsaWithSha256SignatureDeserializer } from '@xyo-network/signing.rsa'
+import { XyoStubPublicKey, XyoStubSignature, XyoStubSigner } from '@xyo-network/signing'
+import { XyoEcdsaSignature, XyoEcdsaSecp256k1UnCompressedPublicKey, XyoEcdsaSecp256k1Signer } from '@xyo-network/signing.ecdsa'
+import { XyoRsaPublicKey, rsaWithSha256SignatureDeserializer, XyoRsaShaSigner } from '@xyo-network/signing.rsa'
 
 import {
   XyoIndex,
@@ -65,5 +65,8 @@ export function createSerializer(): IXyoSerializationService {
   serializationService.addDeserializer(XyoBoundWitnessFragment.deserializer)
   serializationService.addDeserializer(XyoBoundWitness.deserializer)
   serializationService.addDeserializer(XyoBridgeBlockSet.deserializer)
+  serializationService.addDeserializer(XyoStubSigner.deserializer)
+  serializationService.addDeserializer(XyoRsaShaSigner.deserializer)
+  serializationService.addDeserializer(XyoEcdsaSecp256k1Signer.deserializer)
   return serializationService
 }
