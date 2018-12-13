@@ -4,14 +4,16 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:56:20 am
+ * @Last modified time: Thursday, 13th December 2018 9:37:51 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 export {
   IXyoIterableStorageProvider,
-  IXyoStorageProvider
+  IXyoStorageProvider,
+  IXyoStorageIterationResult,
+  IXyoBufferKeyValuePair
 } from './@types'
 
 export { XyoInMemoryStorageProvider } from './xyo-in-memory-storage-provider'
