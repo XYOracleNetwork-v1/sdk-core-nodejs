@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/origin-chain",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "Utilities for managing an origin chain in the xyo network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
