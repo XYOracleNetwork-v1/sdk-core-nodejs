@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/about-me",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Provides a service for sharing information about oneself with other nodes in the XYO network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,7 +10,7 @@
     "@xyo-network/base": "^0.8.0",
     "@xyo-network/ip-service": "^0.8.0",
     "@xyo-network/peer-discovery": "^0.8.0",
-    "@xyo-network/signing": "^0.8.2",
+    "@xyo-network/signing": "^0.8.3",
     "lodash": "^4.17.11",
     "uuid": "^3.3.2"
   },
