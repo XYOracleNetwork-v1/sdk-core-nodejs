@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 4:25:32 pm
+ * @Last modified time: Thursday, 13th December 2018 1:10:55 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -63,8 +63,12 @@ export class XyoBaseNode extends XyoBase {
 
   protected getNetwork(): IXyoNetworkProvider {
     return this.getOrCreate('IXyoNetworkProvider', () => {
-      return new XyoServerTcpNetwork(11000)
+      return new XyoServerTcpNetwork(this.getNodePort())
     })
+  }
+
+  protected getNodePort(): number {
+    return 11000
   }
 
   protected getCatalogue(): IXyoNetworkProcedureCatalogue {
@@ -206,16 +210,18 @@ export class XyoBaseNode extends XyoBase {
 
   protected getBoundWitnessValidator(): XyoBoundWitnessValidator {
     return this.getOrCreate('XyoBoundWitnessValidator', () => {
-      return new XyoBoundWitnessValidator(
-        {
-          checkPartyLengths: true,
-          checkIndexExists: true,
-          checkCountOfSignaturesMatchPublicKeysCount: true,
-          validateSignatures: true,
-          validateHash: true
-        }
-      )
+      return new XyoBoundWitnessValidator(this.getBoundWitnessValidatorSettings())
     })
+  }
+
+  protected getBoundWitnessValidatorSettings() {
+    return {
+      checkPartyLengths: true,
+      checkIndexExists: true,
+      checkCountOfSignaturesMatchPublicKeysCount: true,
+      validateSignatures: true,
+      validateHash: true
+    }
   }
 
   protected getNestedBoundWitnessExtractor(): XyoNestedBoundWitnessExtractor {
