@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-previous-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 7th December 2018 1:18:09 pm
+ * @Last modified time: Thursday, 13th December 2018 11:51:36 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, parse, IXyoSerializableObject } from "@xyo-network/serialization"
+import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, IXyoSerializableObject, ParseQuery } from "@xyo-network/serialization"
 import { schema } from '@xyo-network/serialization-schema'
 import { IXyoHash } from "@xyo-network/hashing"
 
@@ -19,22 +19,30 @@ export class XyoPreviousHash extends XyoBaseSerializable {
   public readonly schemaObjectId = schema.previousHash.id
 
   constructor (public readonly hash: IXyoHash) {
-    super()
+    super(schema)
   }
 
-  public getData(): IXyoSerializableObject {
-    return this.hash
+  public getData(): IXyoSerializableObject[] {
+    return [this.hash]
+  }
+
+  public getReadableValue () {
+    return this.hash.getReadableValue()
   }
 }
 
 // tslint:disable-next-line:max-classes-per-file
-class XyoNextPublicKeyDeserializer implements IXyoDeserializer<XyoPreviousHash> {
+class XyoPreviousHashDeserializer implements IXyoDeserializer<XyoPreviousHash> {
   public readonly schemaObjectId = schema.previousHash.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoPreviousHash {
-    const parseResult = parse(data)
-    return new XyoPreviousHash(serializationService.deserialize(parseResult.dataBytes).hydrate<IXyoHash>())
+    const parseResult = serializationService.parse(data)
+    const query = new ParseQuery(parseResult)
+    return new XyoPreviousHash(
+      serializationService
+        .deserialize(query.getChildAt(0).readData(true)).hydrate<IXyoHash>()
+    )
   }
 }
 
-XyoPreviousHash.deserializer = new XyoNextPublicKeyDeserializer()
+XyoPreviousHash.deserializer = new XyoPreviousHashDeserializer()

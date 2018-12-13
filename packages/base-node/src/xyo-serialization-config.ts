@@ -4,15 +4,15 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serialization-config.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:28:46 am
+ * @Last modified time: Thursday, 13th December 2018 10:48:51 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { sha256HashDeserializer, XyoStubHash } from '@xyo-network/hashing'
-import { XyoStubPublicKey, XyoStubSignature } from '@xyo-network/signing'
-import { XyoEcdsaSignature, XyoEcdsaSecp256k1UnCompressedPublicKey } from '@xyo-network/signing.ecdsa'
-import { XyoRsaPublicKey, rsaWithSha256SignatureDeserializer } from '@xyo-network/signing.rsa'
+import { XyoStubPublicKey, XyoStubSignature, XyoStubSigner } from '@xyo-network/signing'
+import { XyoEcdsaSignature, XyoEcdsaSecp256k1UnCompressedPublicKey, XyoEcdsaSecp256k1Signer } from '@xyo-network/signing.ecdsa'
+import { XyoRsaPublicKey, rsaWithSha256SignatureDeserializer, XyoRsaShaSigner } from '@xyo-network/signing.rsa'
 
 import {
   XyoIndex,
@@ -32,13 +32,12 @@ import {
   XyoBoundWitnessFragment,
   XyoBoundWitness
 } from '@xyo-network/bound-witness'
-import { IXyoSerializationService, XyoSerializationService, XyoBaseSerializable } from '@xyo-network/serialization'
+import { IXyoSerializationService, XyoSerializationService } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
-import { rssiSerializationProvider, unixTimeSerializationProvider, latitudeSerializationProvider, longitudeSerializationProvider, XyoGps } from '@xyo-network/heuristics-common'
+import { rssiSerializationProvider, XyoUnixTime, latitudeSerializationProvider, longitudeSerializationProvider, XyoGps } from '@xyo-network/heuristics-common'
 
 export function createSerializer(): IXyoSerializationService {
   const serializationService = new XyoSerializationService(schema)
-  XyoBaseSerializable.serializationService = serializationService
 
   serializationService.addDeserializer(XyoEcdsaSignature.deserializer)
   serializationService.addDeserializer(XyoStubSignature)
@@ -50,7 +49,7 @@ export function createSerializer(): IXyoSerializationService {
   serializationService.addDeserializer(XyoBridgeHashSet.deserializer)
   serializationService.addDeserializer(XyoPreviousHash.deserializer)
   serializationService.addDeserializer(rssiSerializationProvider.deserializer)
-  serializationService.addDeserializer(unixTimeSerializationProvider.deserializer)
+  serializationService.addDeserializer(XyoUnixTime.deserializer)
   serializationService.addDeserializer(latitudeSerializationProvider.deserializer)
   serializationService.addDeserializer(longitudeSerializationProvider.deserializer)
   serializationService.addDeserializer(XyoGps.deserializer)
@@ -66,5 +65,8 @@ export function createSerializer(): IXyoSerializationService {
   serializationService.addDeserializer(XyoBoundWitnessFragment.deserializer)
   serializationService.addDeserializer(XyoBoundWitness.deserializer)
   serializationService.addDeserializer(XyoBridgeBlockSet.deserializer)
+  serializationService.addDeserializer(XyoStubSigner.deserializer)
+  serializationService.addDeserializer(XyoRsaShaSigner.deserializer)
+  serializationService.addDeserializer(XyoEcdsaSecp256k1Signer.deserializer)
   return serializationService
 }

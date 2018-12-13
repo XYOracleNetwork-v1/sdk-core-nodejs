@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-next-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 7th December 2018 1:16:49 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:56:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, parse, IXyoSerializableObject } from "@xyo-network/serialization"
+import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, IXyoSerializableObject } from "@xyo-network/serialization"
 import { schema } from '@xyo-network/serialization-schema'
 import { IXyoPublicKey } from "@xyo-network/signing"
 
@@ -19,11 +19,15 @@ export class XyoNextPublicKey extends XyoBaseSerializable {
   public readonly schemaObjectId = schema.nextPublicKey.id
 
   constructor (public readonly publicKey: IXyoPublicKey) {
-    super()
+    super(schema)
   }
 
   public getData(): IXyoSerializableObject {
     return this.publicKey
+  }
+
+  public getReadableValue () {
+    return this.publicKey.getReadableValue()
   }
 }
 
@@ -32,8 +36,10 @@ class XyoNextPublicKeyDeserializer implements IXyoDeserializer<XyoNextPublicKey>
   public readonly schemaObjectId = schema.nextPublicKey.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoNextPublicKey {
-    const parseResult = parse(data)
-    return new XyoNextPublicKey(serializationService.deserialize(parseResult.dataBytes).hydrate<IXyoPublicKey>())
+    const parseResult = serializationService.parse(data)
+    return new XyoNextPublicKey(
+      serializationService.deserialize(parseResult.dataBytes).hydrate<IXyoPublicKey>()
+    )
   }
 }
 

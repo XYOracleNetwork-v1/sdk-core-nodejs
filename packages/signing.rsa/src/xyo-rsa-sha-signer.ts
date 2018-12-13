@@ -4,22 +4,26 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha-signer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 26th November 2018 3:36:01 pm
+ * @Last modified time: Thursday, 13th December 2018 10:42:49 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBase } from '@xyo-network/base'
+import { schema } from '@xyo-network/serialization-schema'
 import { XyoRsaPublicKey } from './xyo-rsa-public-key'
 import { IXyoSigner, IXyoSignature, IXyoPublicKey } from '@xyo-network/signing'
 import { XyoRsaSignature } from './rsa-signature'
+import { XyoBaseSerializable, IXyoDeserializer } from '@xyo-network/serialization'
 
 /**
  * A service for signing using RSASha. This particular class
  * encapsulates a crypto key-pair
  */
 
-export class XyoRsaShaSigner extends XyoBase implements IXyoSigner {
+export class XyoRsaShaSigner extends XyoBaseSerializable implements IXyoSigner {
+
+  public static deserializer: IXyoDeserializer<XyoRsaShaSigner>
+  public readonly schemaObjectId = schema.rsaSigner.id
 
   constructor (
     public readonly getSignature: (data: Buffer) => Buffer,
@@ -28,7 +32,7 @@ export class XyoRsaShaSigner extends XyoBase implements IXyoSigner {
     public readonly verifySign: (signature: IXyoSignature, data: Buffer, publicKey: IXyoPublicKey) => Promise<boolean>,
     private readonly rsaSignatureSchemaId: number
   ) {
-    super()
+    super(schema)
   }
 
   /**
@@ -54,5 +58,13 @@ export class XyoRsaShaSigner extends XyoBase implements IXyoSigner {
 
   get privateKey(): string {
     return this.getPrivateKey()
+  }
+
+  public getReadableValue() {
+    return this.privateKey
+  }
+
+  public getData(): Buffer {
+    return Buffer.from(this.privateKey)
   }
 }

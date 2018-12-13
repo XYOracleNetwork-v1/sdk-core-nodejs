@@ -4,27 +4,59 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 7th December 2018 4:35:30 pm
+ * @Last modified time: Wednesday, 12th December 2018 4:13:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { getUnsignedIntegerSerializer, getSignedIntegerSerializer, getDoubleSerializer, XyoSerializableNumber } from '@xyo-network/heuristics'
+import { getSignedIntegerSerializer, getDoubleSerializer, XyoSerializableNumber } from '@xyo-network/heuristics'
 import { schema } from '@xyo-network/serialization-schema'
-import { XyoBaseSerializable, IXyoDeserializer, parse, ParseQuery, IXyoSerializationService } from '@xyo-network/serialization'
+import { XyoBaseSerializable, IXyoDeserializer, ParseQuery, IXyoSerializationService } from '@xyo-network/serialization'
+import { writeIntegerToBuffer, readIntegerFromBuffer } from '@xyo-network/buffer-utils'
 
-export const rssiSerializationProvider = getSignedIntegerSerializer(schema.rssi.id)
-export const unixTimeSerializationProvider = getUnsignedIntegerSerializer(schema.time.id)
-export const latitudeSerializationProvider = getDoubleSerializer(schema.latitude.id)
-export const longitudeSerializationProvider = getDoubleSerializer(schema.longitude.id)
+export const rssiSerializationProvider = getSignedIntegerSerializer(schema, schema.rssi.id)
+export const latitudeSerializationProvider = getDoubleSerializer(schema, schema.latitude.id)
+export const longitudeSerializationProvider = getDoubleSerializer(schema, schema.longitude.id)
 
+export class XyoUnixTime extends XyoBaseSerializable {
+  public static deserializer: IXyoDeserializer<XyoUnixTime>
+
+  public schemaObjectId = schema.time.id
+
+  constructor (private readonly date: Date) {
+    super(schema)
+  }
+
+  public getData() {
+    return writeIntegerToBuffer(this.date.valueOf(), 8, false)
+  }
+
+  public getReadableValue() {
+    return this.date.toISOString()
+  }
+}
+
+// tslint:disable-next-line:max-classes-per-file
+class XyoUnixTimeDeserializer implements IXyoDeserializer<XyoUnixTime> {
+  public schemaObjectId = schema.time.id
+
+  public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoUnixTime {
+    const parseResult = serializationService.parse(data)
+    const resultingNumber = readIntegerFromBuffer(parseResult.dataBytes, 8, false)
+    return new XyoUnixTime(new Date(resultingNumber))
+  }
+}
+
+XyoUnixTime.deserializer = new XyoUnixTimeDeserializer()
+
+// tslint:disable-next-line:max-classes-per-file
 export class XyoGps extends XyoBaseSerializable {
   public static deserializer: IXyoDeserializer<XyoGps>
 
   public readonly schemaObjectId = schema.gps.id
 
   constructor (public readonly latitude: number, public readonly longitude: number) {
-    super()
+    super(schema)
   }
 
   public getData() {
@@ -33,6 +65,13 @@ export class XyoGps extends XyoBaseSerializable {
       longitudeSerializationProvider.newInstance(this.longitude)
     ]
   }
+
+  public getReadableValue() {
+    return {
+      latitude: this.latitude,
+      longitude: this.longitude
+    }
+  }
 }
 
 // tslint:disable-next-line:max-classes-per-file
@@ -40,7 +79,7 @@ class XyoGpsDeserializer implements IXyoDeserializer<XyoGps> {
   public schemaObjectId = schema.gps.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoGps {
-    const parseResult = parse(data)
+    const parseResult = serializationService.parse(data)
     const parseQuery = new ParseQuery(parseResult)
 
     return new XyoGps(

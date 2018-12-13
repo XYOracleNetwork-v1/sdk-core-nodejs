@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:26:22 am
+ * @Last modified time: Thursday, 13th December 2018 10:07:02 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -42,7 +42,7 @@ export interface IXyoSignature extends IXyoSerializableObject {
 /**
  * Abstraction for an instance of an object that providers signing services
  */
-export interface IXyoSigner {
+export interface IXyoSigner extends IXyoSerializableObject {
 
   /**
    * Subclasses will return the publicKey of the crypto key pair

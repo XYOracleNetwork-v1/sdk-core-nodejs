@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:54:50 am
+ * @Last modified time: Thursday, 13th December 2018 10:45:58 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,8 +12,11 @@
 import { XyoRsaShaSignerProvider } from "./xyo-rsa-sha-signer-provider"
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { schema } from '@xyo-network/serialization-schema'
-import { IXyoDeserializer, parse } from "@xyo-network/serialization"
+import { IXyoDeserializer, IXyoSerializationService } from "@xyo-network/serialization"
 import { XyoRsaSignature } from "./rsa-signature"
+import { XyoRsaShaSigner } from "./xyo-rsa-sha-signer"
+
+export { XyoRsaShaSigner } from "./xyo-rsa-sha-signer"
 
 /** The types of signing algorithm supported */
 type SignerProviderType = (
@@ -51,8 +54,8 @@ export function getSignerProvider(signerProviderType: SignerProviderType): XyoRs
 class XyoRsaWithSha256Signature implements IXyoDeserializer<XyoRsaSignature> {
   public schemaObjectId = schema.rsaWithSha256Signature.id
 
-  public deserialize(data: Buffer): XyoRsaSignature {
-    const parseResult = parse(data)
+  public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoRsaSignature {
+    const parseResult = serializationService.parse(data)
     const signerProvider = getSignerProvider('rsa-sha256')
     return new XyoRsaSignature(
       parseResult.data as Buffer,
@@ -65,3 +68,16 @@ class XyoRsaWithSha256Signature implements IXyoDeserializer<XyoRsaSignature> {
 export const rsaWithSha256SignatureDeserializer = new XyoRsaWithSha256Signature()
 
 export { XyoRsaPublicKey } from './xyo-rsa-public-key'
+
+// tslint:disable-next-line:max-classes-per-file
+class XyoRsaShaSignerDeserializer implements IXyoDeserializer<XyoRsaShaSigner> {
+  public schemaObjectId = schema.rsaSigner.id
+
+  public deserialize(data: Buffer, serializationService: IXyoSerializationService) {
+    const parseResult = serializationService.parse(data)
+    const signer = getSignerProvider('rsa-sha256')
+    return signer.newInstance(parseResult.dataBytes.toString())
+  }
+}
+
+XyoRsaShaSigner.deserializer = new XyoRsaShaSignerDeserializer()

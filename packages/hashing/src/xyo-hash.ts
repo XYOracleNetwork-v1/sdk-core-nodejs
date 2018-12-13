@@ -4,13 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 10:00:26 am
+ * @Last modified time: Wednesday, 12th December 2018 1:37:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBaseHash } from "./xyo-base-hash"
 import { IXyoHash, IXyoHashProvider } from "./@types"
+import { schema } from '@xyo-network/serialization-schema'
 
 export class XyoHash extends XyoBaseHash implements IXyoHash {
 
@@ -19,7 +20,7 @@ export class XyoHash extends XyoBaseHash implements IXyoHash {
     private readonly hashProvider: IXyoHashProvider,
     public readonly schemaObjectId: number
   ) {
-    super()
+    super(schema)
   }
 
   public getHash() {

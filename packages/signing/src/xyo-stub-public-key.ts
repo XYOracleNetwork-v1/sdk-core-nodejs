@@ -4,27 +4,27 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-stub-public-key.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:27:55 am
+ * @Last modified time: Wednesday, 12th December 2018 1:37:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoPublicKey } from "./@types"
 import { schema } from "@xyo-network/serialization-schema"
-import { XyoBaseSerializable, parse } from '@xyo-network/serialization'
+import { XyoBaseSerializable, IXyoSerializationService } from '@xyo-network/serialization'
 
 export class XyoStubPublicKey extends XyoBaseSerializable implements IXyoPublicKey {
   public static schemaObjectId = schema.stubPublicKey.id
 
-  public static deserialize(data: Buffer): XyoStubPublicKey {
-    const parsed = parse(data)
+  public static deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoStubPublicKey {
+    const parsed = serializationService.parse(data)
     return new XyoStubPublicKey((parsed.data as Buffer).toString('hex'))
   }
 
   public schemaObjectId = schema.stubPublicKey.id
 
   constructor(private readonly publicKeyHexString: string) {
-    super()
+    super(schema)
   }
 
   public getRawPublicKey(): Buffer {
@@ -33,5 +33,9 @@ export class XyoStubPublicKey extends XyoBaseSerializable implements IXyoPublicK
 
   public getData(): Buffer {
     return this.getRawPublicKey()
+  }
+
+  public getReadableValue() {
+    return this.getRawPublicKey().toString('hex')
   }
 }

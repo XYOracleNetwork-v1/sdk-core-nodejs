@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-in-memory-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 1:42:14 pm
+ * @Last modified time: Wednesday, 12th December 2018 10:03:55 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,11 +12,12 @@
 import { IXyoHash } from '@xyo-network/hashing'
 import { IXyoSigner, IXyoPublicKey } from '@xyo-network/signing'
 import { IXyoOriginChainRepository } from './@types'
+import { XyoBase } from '@xyo-network/base'
 
 /**
  * Encapsulates the values that go into an origin-chain managements
  */
-export class XyoOriginChainStateInMemoryRepository implements IXyoOriginChainRepository {
+export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IXyoOriginChainRepository {
 
   /** The index of the block in the origin chain */
   private idx: number
@@ -29,6 +30,7 @@ export class XyoOriginChainStateInMemoryRepository implements IXyoOriginChainRep
     private readonly waitingSigners: IXyoSigner[],
     public genesisSigner?: IXyoSigner
   ) {
+    super()
     this.idx = index
   }
 
@@ -121,6 +123,10 @@ export class XyoOriginChainStateInMemoryRepository implements IXyoOriginChainRep
   private newOriginBlock(hash: IXyoHash) {
     this.nextPublicKey = undefined
     this.latestHash = hash
+    if (this.idx === 0) {
+      this.logInfo(`Updating genesis signer`)
+      this.genesisSigner = this.currentSigners.length > 0 ? this.currentSigners[0] : this.genesisSigner
+    }
     this.idx += 1
     this.addWaitingSigner()
   }

@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 2:01:58 pm
+ * @Last modified time: Wednesday, 12th December 2018 4:03:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoBoundWitness, FetterOrWitness, IXyoKeySet, IXyoSignatureSet, IXyoBoundWitnessParty, IXyoFetter, IXyoWitness } from "./@types"
-import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, parse, ParseQuery, IXyoSerializableObject } from '@xyo-network/serialization'
+import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, ParseQuery, IXyoSerializableObject } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
 import { XyoBoundWitnessParty } from './xyo-bound-witness-party'
 
@@ -74,7 +74,7 @@ export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWit
   public readonly schemaObjectId = schema.boundWitness.id
 
   constructor(public readonly fetterWitnesses: FetterOrWitness[]) {
-    super()
+    super(schema)
   }
 
   public getSigningData(): Buffer {
@@ -90,6 +90,34 @@ export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWit
     return this.fetterWitnesses
   }
 
+  public getReadableValue() {
+    return {
+      parties: this.publicKeys.map((publicKeySet, partyIndex) => {
+        return {
+          signing: publicKeySet.keys.map((key, keyIndex) => {
+            return {
+              publicKey: {
+                type: key.getReadableName(),
+                rawKey: key.getReadableValue()
+              },
+              signature: {
+                type: this.signatures[partyIndex].signatures[keyIndex].getReadableName(),
+                rawSignature: this.signatures[partyIndex].signatures[keyIndex].getReadableValue(),
+              }
+            }
+          }),
+          heuristics: this.heuristics[partyIndex].reduce((memo: {[s: string]: any}, heuristic) => {
+            memo[heuristic.getReadableName()] = heuristic.getReadableValue()
+            return memo
+          }, {}),
+          metadata: this.metadata[partyIndex].reduce((memo: {[s: string]: any}, metadata) => {
+            memo[metadata.getReadableName()] = metadata.getReadableValue()
+            return memo
+          }, {}),
+        }
+      })
+    }
+  }
 }
 
 // tslint:disable-next-line:max-classes-per-file
@@ -97,7 +125,7 @@ class XyoBoundWitnessDeserializer implements IXyoDeserializer<IXyoBoundWitness> 
   public schemaObjectId = schema.boundWitness.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): IXyoBoundWitness {
-    const parseResult = parse(data)
+    const parseResult = serializationService.parse(data)
     const query = new ParseQuery(parseResult)
     return new XyoBoundWitness(
       query.mapChildren(

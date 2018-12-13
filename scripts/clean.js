@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: clean.js
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 2:46:41 pm
+ * @Last modified time: Wednesday, 12th December 2018 2:00:38 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -23,12 +23,14 @@ Promise.all(
     const referencePath = reference.path
     await deleteFolderRecursive(path.join(packagesPath, referencePath, 'node_modules'))
     await deleteFolderRecursive(path.join(packagesPath, referencePath, 'dist'))
+    await deleteFolderRecursive(path.join(packagesPath, referencePath, 'coverage'))
   })
 )
 .then(() => {
   return Promise.all([
     deleteFolderRecursive(path.join(packagesPath, 'dist')),
-    deleteFolderRecursive(path.join(workingDirectory, 'node_modules'))
+    deleteFolderRecursive(path.join(workingDirectory, 'node_modules')),
+    deleteFolderRecursive(path.join(workingDirectory, 'coverage'))
   ])
 })
 

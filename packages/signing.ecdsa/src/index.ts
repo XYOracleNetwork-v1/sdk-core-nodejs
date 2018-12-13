@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:54:21 am
+ * @Last modified time: Thursday, 13th December 2018 10:49:46 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,6 +17,8 @@ import { XyoEcdsaSignature } from './xyo-ecdsa-signature'
 import { XyoEcdsaSignatureDeserializer } from './xyo-ecdsa-signature-deserializer'
 import { XyoEcdsaUncompressedPublicKeyDeserializer } from './xyo-ecdsa-uncompressed-public-key-deserializer'
 import { XyoEcdsaSecp256k1UnCompressedPublicKey } from './xyo-ecdsa-secp256k1-uncompressed-public-key'
+import { IXyoDeserializer, IXyoSerializationService } from '@xyo-network/serialization'
+import { XyoEcdsaSecp256k1Signer } from './xyo-ecdsa-secp256k1-signer'
 
 /** The types of signing algorithm supported */
 type SignerProviderType = (
@@ -65,3 +67,18 @@ XyoEcdsaSignature.deserializer = new XyoEcdsaSignatureDeserializer(
 XyoEcdsaSecp256k1UnCompressedPublicKey.deserializer = new XyoEcdsaUncompressedPublicKeyDeserializer(
   schema.ecSecp256k1UncompressedPublicKey.id
 )
+
+class XyoEcdsaSecp256k1SignerDeserializer implements IXyoDeserializer<XyoEcdsaSecp256k1Signer> {
+  public readonly schemaObjectId = schema.ecdsaSecp256k1WithSha256Signer.id
+
+  public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoEcdsaSecp256k1Signer {
+    const parseData = serializationService.parse(data)
+    const privateKeyHex = parseData.dataBytes.toString()
+    const signerProvider = getSignerProvider('secp256k1-sha256')
+    return signerProvider.newInstance(privateKeyHex)
+  }
+}
+
+XyoEcdsaSecp256k1Signer.deserializer = new XyoEcdsaSecp256k1SignerDeserializer()
+
+export { XyoEcdsaSecp256k1Signer } from './xyo-ecdsa-secp256k1-signer'

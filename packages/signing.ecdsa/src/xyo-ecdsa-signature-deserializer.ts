@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-signature-deserializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 7th December 2018 11:40:17 am
+ * @Last modified time: Wednesday, 12th December 2018 12:23:58 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoDeserializer, parse } from '@xyo-network/serialization'
+import { IXyoDeserializer, IXyoSerializationService } from '@xyo-network/serialization'
 import { XyoEcdsaSignature } from '.'
 import { IXyoSignerProvider } from '@xyo-network/signing'
 
@@ -17,8 +17,8 @@ export class XyoEcdsaSignatureDeserializer implements IXyoDeserializer<XyoEcdsaS
 
   constructor (public readonly schemaObjectId: number, public readonly signerProvider: IXyoSignerProvider) {}
 
-  public deserialize(data: Buffer) {
-    const parseResult = parse(data)
+  public deserialize(data: Buffer, serializationService: IXyoSerializationService) {
+    const parseResult = serializationService.parse(data)
 
     return new XyoEcdsaSignature(parseResult.dataBytes,
       this.schemaObjectId,

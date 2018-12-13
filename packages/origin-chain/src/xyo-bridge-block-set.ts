@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bridge-block-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 12:20:37 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:55:26 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBaseSerializable, IXyoDeserializer, parse, ParseQuery, IXyoSerializationService } from "@xyo-network/serialization"
+import { XyoBaseSerializable, IXyoDeserializer, ParseQuery, IXyoSerializationService } from "@xyo-network/serialization"
 import { schema } from "@xyo-network/serialization-schema"
 import { IXyoBoundWitness } from "@xyo-network/bound-witness"
 
@@ -20,11 +20,15 @@ export class XyoBridgeBlockSet extends XyoBaseSerializable {
   public readonly schemaObjectId = schema.bridgeBlockSet.id
 
   constructor (public readonly boundWitnesses: IXyoBoundWitness[]) {
-    super()
+    super(schema)
   }
 
   public getData() {
     return this.boundWitnesses
+  }
+
+  public getReadableValue() {
+    return this.boundWitnesses.map(boundWitness => boundWitness.getReadableValue())
   }
 }
 
@@ -33,12 +37,10 @@ class XyoBridgeBlockSetDeserializer implements IXyoDeserializer<XyoBridgeBlockSe
   public readonly schemaObjectId = schema.bridgeBlockSet.id
 
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoBridgeBlockSet {
-    const parseResult = parse(data)
+    const parseResult = serializationService.parse(data)
     const query = new ParseQuery(parseResult)
     const boundWitnesses = query.mapChildren((boundWitness) => {
-      return serializationService
-        .deserialize(boundWitness.readData(true))
-        .hydrate<IXyoBoundWitness>()
+      return serializationService.deserialize(boundWitness.readData(true)).hydrate<IXyoBoundWitness>()
     })
     return new XyoBridgeBlockSet(boundWitnesses)
   }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 7th December 2018 4:19:44 pm
+ * @Last modified time: Thursday, 13th December 2018 11:38:25 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -161,5 +161,20 @@ export const schema: IXyoObjectSchema = {
     sizeIdentifierSize: null,
     iterableType: 'not-iterable',
     id: 0x1D
+  },
+  stubSigner: {
+    sizeIdentifierSize: null,
+    iterableType: 'iterable-untyped',
+    id: 0x70
+  },
+  ecdsaSecp256k1WithSha256Signer: {
+    sizeIdentifierSize: null,
+    iterableType: 'not-iterable',
+    id: 0x71
+  },
+  rsaSigner: {
+    sizeIdentifierSize: null,
+    iterableType: 'not-iterable',
+    id: 0x72
   }
 }

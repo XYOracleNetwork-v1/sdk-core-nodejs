@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 12:21:07 pm
+ * @Last modified time: Thursday, 13th December 2018 10:50:41 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -16,3 +16,4 @@ export { XyoNextPublicKey } from './xyo-next-public-key'
 export { XyoPreviousHash } from './xyo-previous-hash'
 export { XyoBridgeHashSet } from './xyo-bridge-hash-set'
 export { XyoBridgeBlockSet } from './xyo-bridge-block-set'
+export { XyoOriginChainLocalStorageRepository } from './xyo-origin-chain-local-storage-repository'

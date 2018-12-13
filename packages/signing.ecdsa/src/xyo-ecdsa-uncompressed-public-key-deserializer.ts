@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-uncompressed-public-key-deserializer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 7th December 2018 11:40:22 am
+ * @Last modified time: Wednesday, 12th December 2018 12:23:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoDeserializer, parse } from '@xyo-network/serialization'
+import { IXyoDeserializer, IXyoSerializationService } from '@xyo-network/serialization'
 import { XyoEcdsaSecp256k1UnCompressedPublicKey } from '.'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 
@@ -18,8 +18,8 @@ export class XyoEcdsaUncompressedPublicKeyDeserializer implements IXyoDeserializ
 
   constructor (public readonly schemaObjectId: number) {}
 
-  public deserialize(data: Buffer) {
-    const parseResult = parse(data)
+  public deserialize(data: Buffer, serializationService: IXyoSerializationService) {
+    const parseResult = serializationService.parse(data)
 
     if (parseResult.dataBytes.length !== 64) {
       throw new XyoError(`Could not deserialize XyoEcdsaSecp256k1UnCompressedPublicKey`, XyoErrors.CRITICAL)

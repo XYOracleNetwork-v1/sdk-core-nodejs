@@ -1,17 +1,20 @@
 {
-  "name": "@xyo-network/node-runner",
-  "version": "0.9.1",
-  "description": "Implements a node life-cycle loop that can be used / extended to manage how a node in the XYO network behaves in different scenarios.",
+  "name": "@xyo-network/storage.leveldb",
+  "version": "0.9.0",
+  "description": "Implements the storage provider interface using the LevelDB",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.9.0",
-    "@xyo-network/peer-connections": "^0.9.1"
+    "@xyo-network/storage": "^0.9.0",
+    "leveldown": "^4.0.1",
+    "levelup": "^3.1.1"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
+    "@types/leveldown": "^4.0.0",
+    "@types/levelup": "^3.1.0",
     "@types/node": "^10.7.1",
     "jest": "^23.6.0",
     "ts-jest": "^23.1.3",

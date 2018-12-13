@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: base-serializable.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 5:10:28 pm
+ * @Last modified time: Wednesday, 12th December 2018 3:57:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoSerializableObject, IXyoSerializationService, IXyoObjectSchema } from "../@types"
+import { IXyoSerializableObject, IXyoObjectSchema } from "../@types"
 import { XyoBase } from "@xyo-network/base"
 import { resolveSerializablesToBuffer } from "./resolveSerializablesToBuffer"
 import { serialize } from "./serialize"
@@ -18,15 +18,18 @@ import { XyoError, XyoErrors } from "@xyo-network/errors"
 
 export abstract class XyoBaseSerializable extends XyoBase implements IXyoSerializableObject {
 
-  public get schema(): IXyoObjectSchema {
-    return (XyoBaseSerializable.serializationService && XyoBaseSerializable.serializationService.schema) || undefined
+  public abstract schemaObjectId: number
+  public srcBuffer: Buffer | null = null
+
+  constructor(private readonly schema: IXyoObjectSchema) {
+    super()
   }
 
-  public static serializationService: IXyoSerializationService
+  public getReadableName(): string {
+    return Object.keys(this.schema).find(k => this.schema[k].id === this.schemaObjectId) || String(this.schemaObjectId)
+  }
 
-  public abstract schemaObjectId: number
-
-  public srcBuffer: Buffer | null = null
+  public abstract getReadableValue(): any
 
   // tslint:disable-next-line:max-line-length
   public abstract getData(): Buffer | IXyoSerializableObject | IXyoSerializableObject[]
@@ -66,10 +69,6 @@ export abstract class XyoBaseSerializable extends XyoBase implements IXyoSeriali
   }
 
   protected serializablesToBuffer(serializables: IXyoSerializableObject[]) {
-    if (!this.schema) {
-      throw new XyoError(`Serialization service not set`, XyoErrors.CRITICAL)
-    }
-
     return resolveSerializablesToBuffer(
       this.schemaObjectId,
       this.schema,

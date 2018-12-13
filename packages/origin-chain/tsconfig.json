@@ -27,6 +27,8 @@
     { "path": "../buffer-utils"},
     { "path": "../serialization-schema"},
     { "path": "../bound-witness"},
+    { "path": "../base"},
+    { "path": "../storage"},
     { "path": "../serialization"}
   ]
 }

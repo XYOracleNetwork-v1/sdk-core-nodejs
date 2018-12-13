@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:53:24 am
+ * @Last modified time: Wednesday, 12th December 2018 12:17:37 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,6 +18,5 @@ export {
 } from './@types'
 
 export { XyoSerializationService } from './xyo-serialization-service'
-export { parse } from './helpers/parse'
 export { ParseQuery } from './helpers/parse-query'
 export { XyoBaseSerializable } from './helpers/base-serializable'

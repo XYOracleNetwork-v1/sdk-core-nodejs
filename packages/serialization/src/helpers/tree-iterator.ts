@@ -4,23 +4,35 @@
  * @Email:  developer@xyfindables.com
  * @Filename: tree-iterator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 6th December 2018 6:04:18 pm
+ * @Last modified time: Wednesday, 12th December 2018 1:28:00 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBaseSerializable } from './base-serializable'
-import { IXyoSerializableObject, IParseResult } from '../@types'
+import { IXyoSerializableObject, IParseResult, IXyoSerializationService, IXyoObjectSchema } from '../@types'
 import { ParseQuery } from './parse-query'
 
 export class XyoTreeIterator extends XyoBaseSerializable implements IXyoSerializableObject {
 
-  constructor (private readonly parseResult: IParseResult) {
-    super()
+  constructor (
+    private readonly serializationService: IXyoSerializationService,
+    private readonly parseResult: IParseResult,
+    private readonly readableName: string
+  ) {
+    super(serializationService.schema)
   }
 
   get schemaObjectId (): number {
     return this.parseResult.id
+  }
+
+  public getReadableName(): string {
+    return this.readableName
+  }
+
+  public getReadableValue() {
+    return Buffer.concat([this.parseResult.headerBytes, this.parseResult.dataBytes]).toString('hex')
   }
 
   public getData(): Buffer {
@@ -32,6 +44,6 @@ export class XyoTreeIterator extends XyoBaseSerializable implements IXyoSerializ
   }
 
   public hydrate<T extends IXyoSerializableObject>(): T {
-    return XyoBaseSerializable.serializationService.hydrate<T>(this.parseResult) as T
+    return this.serializationService.hydrate<T>(this.parseResult) as T
   }
 }
