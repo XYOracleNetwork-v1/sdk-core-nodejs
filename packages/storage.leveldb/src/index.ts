@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 13th December 2018 9:40:00 am
+ * @Last modified time: Thursday, 13th December 2018 9:47:40 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,6 +14,10 @@ import levelup, { LevelUp } from 'levelup'
 import leveldown, { LevelDown } from 'leveldown'
 
 export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
+
+  public static createStore(location: string) {
+    return getLevelDbStore(location)
+  }
 
   private db: LevelUp<LevelDown>
 
@@ -137,4 +141,17 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
     }) as Promise<IXyoStorageIterationResult>
   }
 
+}
+
+const cache: { [s: string]: XyoLevelDbStorageProvider } = {}
+
+function getLevelDbStore(storeLocation: string) {
+  const store = cache[storeLocation]
+  if (store) {
+    return store
+  }
+
+  const newStore = new XyoLevelDbStorageProvider(storeLocation)
+  cache[storeLocation] = newStore
+  return newStore
 }
