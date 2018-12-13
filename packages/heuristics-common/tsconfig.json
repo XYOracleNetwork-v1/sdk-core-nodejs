@@ -24,6 +24,7 @@
   "references": [
     { "path": "../heuristics"},
     { "path": "../serialization"},
+    { "path": "../buffer-utils"},
     { "path": "../serialization-schema"}
   ]
 }

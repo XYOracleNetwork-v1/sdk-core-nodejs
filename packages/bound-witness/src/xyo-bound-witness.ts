@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 2:27:36 pm
+ * @Last modified time: Wednesday, 12th December 2018 4:03:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -116,17 +116,6 @@ export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWit
           }, {}),
         }
       })
-    }
-
-    return {
-      publicKeys: this.publicKeys.map(keySet => keySet.getReadableValue()),
-      signatures: this.signatures.map(sigSet => sigSet.getReadableValue()),
-      heuristics: this.heuristics.map(heuristicsCollection => heuristicsCollection.map((heuristic) => {
-        return {
-          name: heuristic.getReadableName(),
-          value: heuristic.getReadableValue(),
-        }
-      }))
     }
   }
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: base-serializable.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 1:36:28 pm
+ * @Last modified time: Wednesday, 12th December 2018 3:57:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -69,10 +69,6 @@ export abstract class XyoBaseSerializable extends XyoBase implements IXyoSeriali
   }
 
   protected serializablesToBuffer(serializables: IXyoSerializableObject[]) {
-    if (!this.schema) {
-      throw new XyoError(`Serialization service not set`, XyoErrors.CRITICAL)
-    }
-
     return resolveSerializablesToBuffer(
       this.schemaObjectId,
       this.schema,

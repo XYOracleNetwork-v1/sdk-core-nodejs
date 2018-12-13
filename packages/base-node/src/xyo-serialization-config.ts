@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serialization-config.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 11:21:18 am
+ * @Last modified time: Wednesday, 12th December 2018 4:14:20 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,9 +32,9 @@ import {
   XyoBoundWitnessFragment,
   XyoBoundWitness
 } from '@xyo-network/bound-witness'
-import { IXyoSerializationService, XyoSerializationService, XyoBaseSerializable } from '@xyo-network/serialization'
+import { IXyoSerializationService, XyoSerializationService } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
-import { rssiSerializationProvider, unixTimeSerializationProvider, latitudeSerializationProvider, longitudeSerializationProvider, XyoGps } from '@xyo-network/heuristics-common'
+import { rssiSerializationProvider, XyoUnixTime, latitudeSerializationProvider, longitudeSerializationProvider, XyoGps } from '@xyo-network/heuristics-common'
 
 export function createSerializer(): IXyoSerializationService {
   const serializationService = new XyoSerializationService(schema)
@@ -49,7 +49,7 @@ export function createSerializer(): IXyoSerializationService {
   serializationService.addDeserializer(XyoBridgeHashSet.deserializer)
   serializationService.addDeserializer(XyoPreviousHash.deserializer)
   serializationService.addDeserializer(rssiSerializationProvider.deserializer)
-  serializationService.addDeserializer(unixTimeSerializationProvider.deserializer)
+  serializationService.addDeserializer(XyoUnixTime.deserializer)
   serializationService.addDeserializer(latitudeSerializationProvider.deserializer)
   serializationService.addDeserializer(longitudeSerializationProvider.deserializer)
   serializationService.addDeserializer(XyoGps.deserializer)
