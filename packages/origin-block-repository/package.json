@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/origin-block-repository",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "An abstraction over a collection of origin blocks and subsequently accessing them",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,7 +10,7 @@
     "@xyo-network/bound-witness": "^0.8.3",
     "@xyo-network/hashing": "^0.8.3",
     "@xyo-network/serialization": "^0.8.3",
-    "@xyo-network/storage": "^0.8.0"
+    "@xyo-network/storage": "^0.8.4"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

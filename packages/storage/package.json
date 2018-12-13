@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/storage",
-  "version": "0.8.0",
+  "version": "0.8.4",
   "description": "An abstraction for persistence of key value pairs in the XYO Network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
