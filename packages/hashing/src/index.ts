@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:19:49 pm
+ * @Last modified time: Friday, 14th December 2018 12:14:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -75,3 +75,5 @@ class XyoSha256HashDeserializer implements IXyoDeserializer<IXyoHash> {
 }
 
 export const sha256HashDeserializer = new XyoSha256HashDeserializer()
+
+export {} from './xyo-hashing-test-utils'
