@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/peer-interaction-handlers",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "A number of handlers for bound-witness interactions with peers in the xyo network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,7 +11,7 @@
     "@xyo-network/bound-witness": "^0.10.0",
     "@xyo-network/errors": "^0.10.0",
     "@xyo-network/network": "^0.10.0",
-    "@xyo-network/peer-interaction": "^0.10.0",
+    "@xyo-network/peer-interaction": "^0.10.1",
     "@xyo-network/serialization": "^0.10.0",
     "@xyo-network/serialization-schema": "^0.10.0",
     "@xyo-network/signing": "^0.10.0"
