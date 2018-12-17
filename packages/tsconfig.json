@@ -41,6 +41,7 @@
       { "path": "heuristics" },
       { "path": "heuristics-common" },
       { "path": "storage.leveldb" },
+      { "path": "serializer" },
       { "path": "about-me" }
   ],
   "include": [
@@ -71,6 +72,7 @@
     "peer-discovery/src/**/*.ts",
     "heuristics/src/**/*.ts",
     "storage.leveldb/src/**/*.ts",
+    "serializer/src/**/*.ts",
     "heuristics-common/src/**/*.ts"
   ]
 }

@@ -26,7 +26,8 @@
     "@xyo-network/signing": "^0.9.1",
     "@xyo-network/signing.ecdsa": "^0.9.1",
     "@xyo-network/signing.rsa": "^0.9.1",
-    "@xyo-network/storage": "^0.9.0"
+    "@xyo-network/storage": "^0.9.0",
+    "@xyo-network/serializer": "^0.9.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

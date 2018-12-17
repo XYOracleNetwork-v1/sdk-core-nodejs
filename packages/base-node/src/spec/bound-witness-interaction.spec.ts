@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: bound-witness-interaction.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:14:05 pm
+ * @Last modified time: Monday, 17th December 2018 11:24:15 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 // tslint:disable:ter-indent
 
-import { createSerializer } from '../xyo-serialization-config'
+import { serializer } from '@xyo-network/serializer'
 import { XyoBoundWitnessStandardServerInteraction } from '@xyo-network/peer-interaction-handlers'
 import { IXyoPayload, XyoBoundWitnessFragment, XyoFetter, XyoKeySet, XyoWitness, XyoSignatureSet, XyoBoundWitnessValidator } from '@xyo-network/bound-witness'
 import { XyoIndex } from '@xyo-network/origin-chain'
@@ -23,7 +23,7 @@ import { XyoMockNetworkPipe } from '@xyo-network/network'
 
 describe('Server interaction', () => {
   it(`It should leave two parties with the same bound-witness`, async () => {
-    const serializationService = createSerializer()
+    const serializationService = serializer
     const serverPublicKey = new XyoStubPublicKey('AABBCCDD')
     const serverSignature = new XyoStubSignature('DDCCBBAA')
     const serverSigner = new XyoStubSigner(serverPublicKey, serverSignature)
@@ -218,7 +218,7 @@ describe('Server interaction', () => {
   })
 
   it(`It should leave two parties with the same bound-witness`, async () => {
-    const serializationService = createSerializer()
+    const serializationService = serializer
     const serverSignerProvider = getSignerProvider('secp256k1-sha256')
     const serverSigner = serverSignerProvider.newInstance()
     const serverPublicKey = serverSigner.publicKey
@@ -303,7 +303,7 @@ describe('Server interaction', () => {
 
   it(`Should validate signature`, async () => {
     // tslint:disable:max-line-length
-    const serializationService = createSerializer()
+    const serializationService = serializer
     const signatureHex = `000943209e5bddcac71e63797f3d3208ce7aa4105c202b7828fd4475482f92c815e2b1242003883b375725e37481792958ba529a91692b84a408952bc470b68c81de2428cf`
     const publicKeyHex = `000c41d49f7ea7330a6997ba8be61f1f9578fd0ee509f4102f00a0b12c1e2171b176d8f69f18779477c6a94bfb36dd5035e2d04415bfcb193e34674cbe1f461ada99f1`
     const signingDataHex = `201571201944000c41d49f7ea7330a6997ba8be61f1f9578fd0ee509f4102f00a0b12c1e2171b176d8f69f18779477c6a94bfb36dd5035e2d04415bfcb193e34674cbe1f461ada99f1200824001021146717735d97eff0078951c9eab1e3c07e353c4e74bbc265636d1188f5e0474c000302366015007a60190046400c004230226f7ebb2f8ffc9e2d1ad366f27ea63603e358d162463ff043c861c3c45e86e24876eb15a9c11fcdadb334b9b0d8169e7a38c82867cc7c6e5fe4a8d2384c047008002640100022146717735d97eff0078951c9eab1e3c07e353c4e74bbc265636d1188f5e0474c4003000600000036`

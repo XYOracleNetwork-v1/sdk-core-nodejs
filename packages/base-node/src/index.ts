@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 13th December 2018 1:27:41 pm
+ * @Last modified time: Monday, 17th December 2018 11:21:38 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,8 +18,6 @@ import { XyoPeerInteractionRouter } from '@xyo-network/peer-interaction-router'
 import { XyoBoundWitnessStandardServerInteraction, XyoBoundWitnessTakeOriginChainServerInteraction } from '@xyo-network/peer-interaction-handlers'
 import { IXyoHashProvider, getHashingProvider } from '@xyo-network/hashing'
 import { getSignerProvider } from '@xyo-network/signing.ecdsa'
-
-import { createSerializer } from './xyo-serialization-config'
 import {
   XyoBoundWitnessHandlerProvider,
   IXyoBoundWitnessPayloadProvider,
@@ -42,6 +40,7 @@ import {
 import { IXyoSerializationService } from '@xyo-network/serialization'
 import { XyoInMemoryStorageProvider } from '@xyo-network/storage'
 import { IXyoSigner } from '@xyo-network/signing'
+import { serializer } from '@xyo-network/serializer'
 
 // tslint:disable-next-line:max-classes-per-file
 export class XyoBaseNode extends XyoBase {
@@ -242,7 +241,7 @@ export class XyoBaseNode extends XyoBase {
 
   protected getSerializationService(): IXyoSerializationService  {
     return this.getOrCreate('IXyoSerializationService', () => {
-      return createSerializer()
+      return serializer
     })
   }
 }
