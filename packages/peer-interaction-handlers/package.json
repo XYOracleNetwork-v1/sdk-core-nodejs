@@ -1,20 +1,20 @@
 {
   "name": "@xyo-network/peer-interaction-handlers",
-  "version": "0.9.2",
+  "version": "0.10.0",
   "description": "A number of handlers for bound-witness interactions with peers in the xyo network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.9.0",
-    "@xyo-network/bound-witness": "^0.9.1",
-    "@xyo-network/errors": "^0.9.0",
-    "@xyo-network/network": "^0.9.0",
-    "@xyo-network/peer-interaction": "^0.9.2",
-    "@xyo-network/serialization": "^0.9.0",
-    "@xyo-network/serialization-schema": "^0.9.1",
-    "@xyo-network/signing": "^0.9.1"
+    "@xyo-network/base": "^0.10.0",
+    "@xyo-network/bound-witness": "^0.10.0",
+    "@xyo-network/errors": "^0.10.0",
+    "@xyo-network/network": "^0.10.0",
+    "@xyo-network/peer-interaction": "^0.10.0",
+    "@xyo-network/serialization": "^0.10.0",
+    "@xyo-network/serialization-schema": "^0.10.0",
+    "@xyo-network/signing": "^0.10.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
