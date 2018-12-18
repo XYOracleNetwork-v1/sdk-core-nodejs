@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 7th December 2018 3:40:25 pm
+ * @Last modified time: Monday, 17th December 2018 4:18:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -178,6 +178,7 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
 
           if (sizeOfPayload === undefined) {
             sizeOfPayload = data.readUInt32BE(0)
+            this.logInfo(`Expecting message of size ${sizeOfPayload}`)
           }
 
           if (data.length < CATALOGUE_SIZE_OF_PAYLOAD_BYTES + CATALOGUE_SIZE_OF_SIZE_BYTES) {
