@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/network.tcp",
-  "version": "0.10.0",
+  "version": "0.10.2",
   "description": "A TCP implementation of a network as defined in @xyo-network/network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
