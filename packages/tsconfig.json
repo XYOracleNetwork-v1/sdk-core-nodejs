@@ -42,6 +42,7 @@
       { "path": "heuristics-common" },
       { "path": "storage.leveldb" },
       { "path": "serializer" },
+      { "path": "graphql-server" },
       { "path": "about-me" }
   ],
   "include": [
@@ -73,6 +74,7 @@
     "heuristics/src/**/*.ts",
     "storage.leveldb/src/**/*.ts",
     "serializer/src/**/*.ts",
+    "graphql-server/src/**/*.ts",
     "heuristics-common/src/**/*.ts"
   ]
 }
