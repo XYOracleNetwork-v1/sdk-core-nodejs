@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-stub-signature.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 1:38:11 pm
+ * @Last modified time: Friday, 14th December 2018 12:31:06 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -24,11 +24,18 @@ export class XyoStubSignature extends XyoBaseSerializable  implements IXyoSignat
 
   public schemaObjectId = XyoStubSignature.schemaObjectId
 
-  constructor (private readonly desiredSignatureHexString: string) {
+  constructor (
+    private readonly desiredSignatureHexString: string,
+    private readonly validData?: Buffer
+  ) {
     super(schema)
   }
 
   public async verify(data: Buffer, publicKey: IXyoPublicKey): Promise<boolean> {
+    if (this.validData) {
+      return data.equals(this.validData)
+    }
+
     return true
   }
 

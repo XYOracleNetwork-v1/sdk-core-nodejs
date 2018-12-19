@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-local-storage-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 13th December 2018 10:24:49 am
+ * @Last modified time: Monday, 17th December 2018 3:10:41 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -132,7 +132,7 @@ export class XyoOriginChainLocalStorageRepository implements IXyoOriginChainRepo
     const previousHash = obj.previousHash ?
       this.serializationService
         .deserialize(Buffer.from(obj.previousHash, 'hex'))
-        .hydrate<XyoPreviousHash>() :
+        .hydrate<IXyoHash>() :
       undefined
 
     const nextPublicKey = obj.nextPublicKey ?
@@ -149,7 +149,7 @@ export class XyoOriginChainLocalStorageRepository implements IXyoOriginChainRepo
 
     return new XyoOriginChainStateInMemoryRepository(
       index,
-      (previousHash && previousHash.hash) || undefined,
+      previousHash || undefined,
       signers,
       (nextPublicKey && nextPublicKey.publicKey) || undefined,
       waitingSigners,

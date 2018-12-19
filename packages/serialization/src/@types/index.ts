@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 1:23:31 pm
+ * @Last modified time: Friday, 14th December 2018 12:09:06 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -87,6 +87,7 @@ export interface IXyoSerializableObject {
   serializeHex(): string
   getReadableName(): string
   getReadableValue(): any
+  isEqual(other: IXyoSerializableObject): boolean
 }
 
 export interface IXyoDeserializer<T extends IXyoSerializableObject> {

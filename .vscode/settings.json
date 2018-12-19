@@ -19,6 +19,7 @@
     "leveldown",
     "pojo",
     "promisify",
+    "repo",
     "rssi",
     "ryanxyo",
     "secp",

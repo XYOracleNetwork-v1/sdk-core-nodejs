@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: base-serializable.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 3:57:51 pm
+ * @Last modified time: Friday, 14th December 2018 12:09:57 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,7 +14,6 @@ import { XyoBase } from "@xyo-network/base"
 import { resolveSerializablesToBuffer } from "./resolveSerializablesToBuffer"
 import { serialize } from "./serialize"
 import { findSchemaById } from "./findSchemaById"
-import { XyoError, XyoErrors } from "@xyo-network/errors"
 
 export abstract class XyoBaseSerializable extends XyoBase implements IXyoSerializableObject {
 
@@ -66,6 +65,10 @@ export abstract class XyoBaseSerializable extends XyoBase implements IXyoSeriali
 
   public serializeHex(): string {
     return this.serialize().toString('hex')
+  }
+
+  public isEqual(other: IXyoSerializableObject) {
+    return this.serialize().equals(other.serialize())
   }
 
   protected serializablesToBuffer(serializables: IXyoSerializableObject[]) {
