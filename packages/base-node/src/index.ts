@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th December 2018 11:21:38 am
+ * @Last modified time: Friday, 21st December 2018 2:42:57 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -235,7 +235,7 @@ export class XyoBaseNode extends XyoBase {
 
   protected getNestedBoundWitnessExtractor(): XyoNestedBoundWitnessExtractor {
     return this.getOrCreate('XyoNestedBoundWitnessExtractor', () => {
-      return new XyoNestedBoundWitnessExtractor(() => false) // TODO
+      return new XyoNestedBoundWitnessExtractor() // TODO
     })
   }
 
