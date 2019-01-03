@@ -4,13 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-nested-bound-witness-extractor-utils.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 5th December 2018 10:28:43 am
+ * @Last modified time: Friday, 21st December 2018 2:46:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoBoundWitness } from '@xyo-network/bound-witness'
-
+import { schema } from '@xyo-network/serialization-schema'
+import { XyoBridgeBlockSet } from '@xyo-network/origin-chain'
 /**
  *  This class is useful for extracting out bridged blocks nested inside of bound-witnesses
  *
@@ -18,7 +19,6 @@ import { IXyoBoundWitness } from '@xyo-network/bound-witness'
  * @class XyoNestedBoundWitnessExtractor
  */
 export class XyoNestedBoundWitnessExtractor {
-  constructor(private readonly isBridgeBlockSetFn: (obj: any) => boolean) {}
 
   /**
    * Bound witnesses can contain other bound-witnesses within their unsigned payload.
@@ -45,20 +45,18 @@ export class XyoNestedBoundWitnessExtractor {
     boundWitnessContainer: IXyoBoundWitness[]
   ) {
 
-    // TODO
+    boundWitness.metadata.forEach((payload) => {
+      payload.forEach((unsignedPayloadItem) => {
+        if (unsignedPayloadItem.schemaObjectId !== schema.bridgeBlockSet.id) {
+          return
+        }
 
-    // boundWitness.payloads.forEach((payload) => {
-    //   payload.unsignedPayload.forEach((unsignedPayloadItem) => {
-    //     if (!this.isBridgeBlockSetFn(unsignedPayloadItem)) {
-    //       return
-    //     }
-
-    //     const nestedBridgeBlockSet = fromArray<IXyoBoundWitness>(unsignedPayloadItem)
-    //     nestedBridgeBlockSet.forEach((nestedBoundWitness) => {
-    //       boundWitnessContainer.push(nestedBoundWitness)
-    //       this.recursivelyExtractNestedBoundWitnesses(nestedBoundWitness, boundWitnessContainer)
-    //     })
-    //   })
-    // })
+        const nestedBridgeBlockSet = unsignedPayloadItem as XyoBridgeBlockSet
+        nestedBridgeBlockSet.boundWitnesses.forEach((nestedBoundWitness) => {
+          boundWitnessContainer.push(nestedBoundWitness)
+          this.recursivelyExtractNestedBoundWitnesses(nestedBoundWitness, boundWitnessContainer)
+        })
+      })
+    })
   }
 }
