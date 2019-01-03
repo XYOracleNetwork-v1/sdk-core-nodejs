@@ -82,20 +82,21 @@ i.e. Where the test file is `test/integration/lib.spec.ts`
 ## Additional Documentation
 
 - [about-me](packages/about-me/README.md)
-- [archivist-repository](packages/archivist-repository/README.md)
-- [archivist-repository.sql](packages/archivist-repository.sql/README.md)
 - [base](packages/base/README.md)
+- [base-node](packages/base-node/README.md)
 - [bound-witness](packages/bound-witness/README.md)
 - [buffer-utils](packages/buffer-utils/README.md)
 - [errors](packages/errors/README.md)
+- [graphql-server](packages/graphql-server/README.md)
 - [hashing](packages/hashing/README.md)
 - [heuristics](packages/heuristics/README.md)
 - [heuristics-common](packages/heuristics-common/README.md)
 - [ip-service](packages/ip-service/README.md)
 - [logger](packages/logger/README.md)
+- [meta-list](packages/meta-list/README.md)
 - [network](packages/network/README.md)
 - [network.tcp](packages/network.tcp/README.md)
-- [node](packages/node/README.md)
+- [node-runner](packages/node-runner/README.md)
 - [origin-block-repository](packages/origin-block-repository/README.md)
 - [origin-chain](packages/origin-chain/README.md)
 - [peer-connections](packages/peer-connections/README.md)
@@ -105,11 +106,12 @@ i.e. Where the test file is `test/integration/lib.spec.ts`
 - [peer-interaction-router](packages/peer-interaction-router/README.md)
 - [serialization](packages/serialization/README.md)
 - [serialization-schema](packages/serialization-schema/README.md)
+- [serializer](packages/serializer/README.md)
 - [signing](packages/signing/README.md)
 - [signing.ecdsa](packages/signing.ecdsa/README.md)
 - [signing.rsa](packages/signing.rsa/README.md)
 - [storage](packages/storage/README.md)
-- [base-node](packages/base-node/README.md)
+- [storage.leveldb](packages/storage.leveldb/README.md)
 
 ## Developer Guide
 
