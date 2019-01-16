@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-block-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 16th January 2019 12:54:38 pm
+ * @Last modified time: Wednesday, 16th January 2019 12:58:39 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -123,7 +123,6 @@ export class XyoOriginBlockRepository implements IXyoOriginBlockRepository {
     }
 
     return this.serializationService.deserialize(result).hydrate<IXyoBoundWitness>()
-
   }
 }
 
