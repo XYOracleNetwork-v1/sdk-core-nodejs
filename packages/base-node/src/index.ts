@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st December 2018 2:42:57 pm
+ * @Last modified time: Wednesday, 16th January 2019 2:57:08 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -28,13 +28,19 @@ import {
 
 import {
   IXyoOriginChainRepository,
-  XyoOriginChainStateInMemoryRepository
+  XyoOriginChainStateInMemoryRepository,
+  XyoIndex
 } from '@xyo-network/origin-chain'
 
 import { IXyoOriginBlockRepository, XyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import {
   XyoBoundWitnessValidator,
-  IXyoBoundWitness
+  IXyoBoundWitness,
+  XyoFetter,
+  XyoKeySet,
+  XyoBoundWitness,
+  XyoWitness,
+  XyoSignatureSet
 } from '@xyo-network/bound-witness'
 
 import { IXyoSerializationService } from '@xyo-network/serialization'
@@ -44,9 +50,11 @@ import { serializer } from '@xyo-network/serializer'
 
 // tslint:disable-next-line:max-classes-per-file
 export class XyoBaseNode extends XyoBase {
+
   protected nodeRunner: XyoNodeRunner | undefined
 
-  public start() {
+  public async start(): Promise<void> {
+    await this.configureOriginChainStateRepository()
     this.nodeRunner = new XyoNodeRunner(this.getPeerConnectionDelegate())
     this.nodeRunner.start()
   }
@@ -243,6 +251,36 @@ export class XyoBaseNode extends XyoBase {
     return this.getOrCreate('IXyoSerializationService', () => {
       return serializer
     })
+  }
+
+  protected async configureOriginChainStateRepository() {
+    const originChainStateRepository = this.getOriginStateRepository()
+
+    if ((await originChainStateRepository.getSigners()).length === 0) {
+      const signers = this.getSigners()
+      await originChainStateRepository.setCurrentSigners(signers)
+    }
+
+    const currentIndex = await originChainStateRepository.getIndex()
+
+    if (currentIndex === 0) { // create genesis block
+      this.logInfo(`Creating genesis block`)
+      const signers = await originChainStateRepository.getSigners()
+
+      const fetter = new XyoFetter(new XyoKeySet(signers.map(signer => signer.publicKey)), [new XyoIndex(0)])
+      const signingData = fetter.serialize()
+      const signatures = await Promise.all(signers.map(signer => signer.signData(signingData)))
+      const genesisBlock = new XyoBoundWitness([
+        fetter,
+        new XyoWitness(new XyoSignatureSet(signatures), [])
+      ])
+
+      const hash = await this.getHashingProvider().createHash(signingData)
+      await this.getOriginBlockRepository().addOriginBlock(hash, genesisBlock)
+      await this.getOriginStateRepository().updateOriginChainState(hash)
+
+      this.logInfo(`Add genesis block with hash ${hash.serializeHex()}`)
+    }
   }
 }
 
