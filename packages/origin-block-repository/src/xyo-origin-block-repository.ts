@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-block-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 12:14:41 pm
+ * @Last modified time: Wednesday, 16th January 2019 12:54:38 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -117,17 +117,13 @@ export class XyoOriginBlockRepository implements IXyoOriginBlockRepository {
   }
 
   public async getOriginBlockByHash(hash: Buffer): Promise<IXyoBoundWitness | undefined> {
-    try {
-      const result = await this.originBlocksStorageProvider.read(hash)
-      if (!result) {
-        return undefined
-      }
-
-      throw new Error(`TODO`)
-      // return this.serializationService.deserialize<IXyoBoundWitness>(result)
-    } catch (err) {
+    const result = await this.originBlocksStorageProvider.read(hash)
+    if (!result) {
       return undefined
     }
+
+    return this.serializationService.deserialize(result).hydrate<IXyoBoundWitness>()
+
   }
 }
 
