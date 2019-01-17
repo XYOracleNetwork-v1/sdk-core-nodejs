@@ -4,13 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 1:37:24 pm
+ * @Last modified time: Wednesday, 16th January 2019 5:08:32 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoHash } from '@xyo-network/hashing'
 import { IXyoSigner, IXyoPublicKey } from '@xyo-network/signing'
+import { IXyoBoundWitness } from '@xyo-network/bound-witness'
 
 /**
  * Tracks the state of a particular `XyoNode` in the network. In particular,
@@ -19,6 +20,10 @@ import { IXyoSigner, IXyoPublicKey } from '@xyo-network/signing'
  */
 
 export interface IXyoOriginChainRepository {
+
+  /** Will create a genesis block if one does not yet exist */
+  createGenesisBlock(): Promise<IXyoBoundWitness>
+
   /** Returns the index value that will go into the next block */
   getIndex(): Promise<number>
 

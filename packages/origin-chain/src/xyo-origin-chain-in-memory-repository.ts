@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-in-memory-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 10:03:55 am
+ * @Last modified time: Wednesday, 16th January 2019 5:05:09 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,6 +13,9 @@ import { IXyoHash } from '@xyo-network/hashing'
 import { IXyoSigner, IXyoPublicKey } from '@xyo-network/signing'
 import { IXyoOriginChainRepository } from './@types'
 import { XyoBase } from '@xyo-network/base'
+import { IXyoBoundWitness, XyoKeySet, XyoFetter, XyoBoundWitness, XyoWitness, XyoSignatureSet } from '@xyo-network/bound-witness'
+import { XyoError, XyoErrors } from '@xyo-network/errors'
+import { XyoIndex } from './xyo-index'
 
 /**
  * Encapsulates the values that go into an origin-chain managements
@@ -52,6 +55,31 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
 
   public async getIndex(): Promise<number> {
     return this.index
+  }
+
+  public async createGenesisBlock(): Promise<IXyoBoundWitness> {
+    const currentIndex = await this.getIndex()
+
+    if (currentIndex !== 0) {
+      throw new XyoError(`Could not create Genesis block as one already exists`, XyoErrors.CRITICAL)
+    }
+
+    this.logInfo(`Creating genesis block`)
+    const signers = await this.getSigners()
+
+    const fetter = new XyoFetter(
+      new XyoKeySet(signers.map(signer => signer.publicKey)),
+      [new XyoIndex(0)]
+    )
+
+    const signingData = fetter.serialize()
+    const signatures = await Promise.all(signers.map(signer => signer.signData(signingData)))
+    const genesisBlock = new XyoBoundWitness([
+      fetter,
+      new XyoWitness(new XyoSignatureSet(signatures), [])
+    ])
+
+    return genesisBlock
   }
 
   public async getPreviousHash(): Promise<IXyoHash | undefined> {

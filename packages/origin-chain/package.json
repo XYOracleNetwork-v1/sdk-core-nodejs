@@ -14,6 +14,7 @@
     "@xyo-network/serialization": "^0.14.0",
     "@xyo-network/serialization-schema": "^0.14.0",
     "@xyo-network/signing": "^0.14.0",
+    "@xyo-network/errors": "^0.14.0",
     "@xyo-network/storage": "^0.14.0"
   },
   "devDependencies": {
