@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 4:03:51 pm
+ * @Last modified time: Wednesday, 23rd January 2019 1:28:49 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,6 +13,7 @@ import { IXyoBoundWitness, FetterOrWitness, IXyoKeySet, IXyoSignatureSet, IXyoBo
 import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, ParseQuery, IXyoSerializableObject } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
 import { XyoBoundWitnessParty } from './xyo-bound-witness-party'
+import { XyoError, XyoErrors } from "@xyo-network/errors"
 
 export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWitness {
 
@@ -75,6 +76,28 @@ export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWit
 
   constructor(public readonly fetterWitnesses: FetterOrWitness[]) {
     super(schema)
+  }
+
+  public getHeuristicFromParty<T extends IXyoSerializableObject>(
+    partyIndex: number,
+    schemaObjectId: number
+  ): T | undefined {
+    if (this.parties.length <= partyIndex) {
+      throw new XyoError(`Insufficient number of parties to complete request`, XyoErrors.CRITICAL)
+    }
+
+    return this.parties[partyIndex].getHeuristic<T>(schemaObjectId)
+  }
+
+  public getMetaDataItemFromParty<T extends IXyoSerializableObject>(
+    partyIndex: number,
+    schemaObjectId: number
+  ): T | undefined {
+    if (this.parties.length <= partyIndex) {
+      throw new XyoError(`Insufficient number of parties to complete request`, XyoErrors.CRITICAL)
+    }
+
+    return this.parties[partyIndex].getMetaDataItem<T>(schemaObjectId)
   }
 
   public getSigningData(): Buffer {

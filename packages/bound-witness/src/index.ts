@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 2:24:48 pm
+ * @Last modified time: Wednesday, 23rd January 2019 2:20:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,7 +19,8 @@ export {
   IXyoKeySet,
   IXyoSignatureSet,
   FetterOrWitness,
-  IXyoPayload
+  IXyoPayload,
+  IXyoBoundWitnessParty
 } from './@types'
 export { XyoBoundWitnessValidator } from './xyo-bound-witness-validator'
 export { XyoBoundWitness } from './xyo-bound-witness'

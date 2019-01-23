@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-client-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 7th December 2018 3:40:27 pm
+ * @Last modified time: Tuesday, 22nd January 2019 10:10:06 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -119,6 +119,7 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
       this.isLooping = false
       reject() // reject, could not find peer
       this.shouldStopPromise()
+      return
     }
 
     this.logInfo(`Will try to find next address`)
@@ -127,7 +128,7 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
     if (!nextAddress) { // If no networkWork address is available, pause for 1sec, then loop again
       return setTimeout(() => {
         this.loop(catalogue, resolve, reject)
-      }, 60000)
+      }, 1000)
     }
 
     try {

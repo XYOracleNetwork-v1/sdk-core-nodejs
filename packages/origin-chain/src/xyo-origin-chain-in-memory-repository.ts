@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-in-memory-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 16th January 2019 5:05:09 pm
+ * @Last modified time: Wednesday, 23rd January 2019 3:28:38 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,9 +13,10 @@ import { IXyoHash } from '@xyo-network/hashing'
 import { IXyoSigner, IXyoPublicKey } from '@xyo-network/signing'
 import { IXyoOriginChainRepository } from './@types'
 import { XyoBase } from '@xyo-network/base'
-import { IXyoBoundWitness, XyoKeySet, XyoFetter, XyoBoundWitness, XyoWitness, XyoSignatureSet } from '@xyo-network/bound-witness'
+import { IXyoBoundWitness, IXyoBoundWitnessParty, XyoKeySet, XyoFetter, XyoBoundWitness, XyoWitness, XyoSignatureSet } from '@xyo-network/bound-witness'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { XyoIndex } from './xyo-index'
+import { XyoNextPublicKey } from './xyo-next-public-key'
 
 /**
  * Encapsulates the values that go into an origin-chain managements
@@ -25,16 +26,23 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
   /** The index of the block in the origin chain */
   private idx: number
 
+  private interactionsByPublicKeyData: IInteractionsByPublicKeyData | undefined
+
   constructor(
     index: number,
-    private latestHash: IXyoHash | undefined,
+    private readonly originChainHashes: IXyoHash[],
+    private readonly originBlockResolver: { getOriginBlockByHash(hash: Buffer): Promise<IXyoBoundWitness | undefined> },
     private readonly currentSigners: IXyoSigner[],
     private nextPublicKey: IXyoPublicKey | undefined,
     private readonly waitingSigners: IXyoSigner[],
-    public genesisSigner?: IXyoSigner
+    public genesisSigner?: IXyoSigner,
   ) {
     super()
     this.idx = index
+  }
+
+  public async getOriginChainHashes(): Promise<IXyoHash[]> {
+    return this.originChainHashes
   }
 
   /**
@@ -50,7 +58,7 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
    */
 
   private get previousHash (): IXyoHash | undefined {
-    return this.latestHash || undefined
+    return this.originChainHashes.length && this.originChainHashes[this.originChainHashes.length - 1] || undefined
   }
 
   public async getIndex(): Promise<number> {
@@ -94,8 +102,9 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
     return this.waitingSigners
   }
 
-  public async updateOriginChainState(hash: IXyoHash): Promise<void> {
-    this.newOriginBlock(hash)
+  public async updateOriginChainState(hash: IXyoHash, block: IXyoBoundWitness): Promise<void> {
+    await this.newOriginBlock(hash, block)
+    return
   }
 
   /**
@@ -144,19 +153,32 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
     return this.genesisSigner
   }
 
+  public async getInteractionWithPublicKey(publicKey: IXyoPublicKey): Promise<IXyoHash[]> {
+    const interactionData = await this.getOrInitializeInteractionsData()
+    const interactions = interactionData.interactions[publicKey.serializeHex()]
+    if (!interactions) {
+      return []
+    }
+
+    return interactions
+  }
+
   /**
    * Sets the state so that the chain is ready for a new origin block
    */
 
-  private newOriginBlock(hash: IXyoHash) {
+  private async newOriginBlock(hash: IXyoHash, block: IXyoBoundWitness) {
     this.nextPublicKey = undefined
-    this.latestHash = hash
+    this.originChainHashes.push(hash)
     if (this.idx === 0) {
       this.logInfo(`Updating genesis signer`)
       this.genesisSigner = this.currentSigners.length > 0 ? this.currentSigners[0] : this.genesisSigner
     }
+
     this.idx += 1
     this.addWaitingSigner()
+    const interactionsData = await this.getOrInitializeInteractionsData()
+    await this.addBlockToInteractionData(block, hash, interactionsData)
   }
 
   /**
@@ -169,4 +191,117 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
       this.waitingSigners.splice(0, 1)
     }
   }
+
+  private async getOrInitializeInteractionsData(): Promise<IInteractionsByPublicKeyData> {
+    if (this.interactionsByPublicKeyData) {
+      return this.interactionsByPublicKeyData
+    }
+
+    if (this.originChainHashes.length === 0) {
+      this.interactionsByPublicKeyData = {
+        stop: false,
+        interactions: {},
+        previousParty: undefined
+      }
+
+      return this.interactionsByPublicKeyData
+    }
+
+    const genesisBlock = await this.originBlockResolver.getOriginBlockByHash(
+      this.originChainHashes[0].serialize()
+    )
+
+    // To disambiguate identity, a genesis block should have 1 publicKeySet
+    if (!genesisBlock || genesisBlock.publicKeys.length !== 1) {
+      this.interactionsByPublicKeyData = {
+        stop: false,
+        interactions: {},
+        previousParty: undefined
+      }
+      return this.interactionsByPublicKeyData
+    }
+
+    const party = genesisBlock.parties[0]
+
+    this.interactionsByPublicKeyData = {
+      stop: false,
+      interactions: {},
+      previousParty: party
+    }
+
+    const result = await this.addBlocksToInteractionData(
+      this.originChainHashes.slice(1),
+      this.interactionsByPublicKeyData
+    )
+
+    return result
+  }
+
+  private addBlocksToInteractionData(blocks: IXyoHash[], data: IInteractionsByPublicKeyData) {
+    return blocks.reduce(async (memo, hash) => {
+      const m = await memo
+      if (m.stop) {
+        return m
+      }
+
+      const block = await this.originBlockResolver.getOriginBlockByHash(hash.serialize())
+      if (!block) {
+        m.stop = true
+        return m
+      }
+
+      this.addBlockToInteractionData(block, hash, m)
+      return m
+
+    }, Promise.resolve(data)
+  )
+  }
+
+  private addBlockToInteractionData(block: IXyoBoundWitness, hash: IXyoHash, data: IInteractionsByPublicKeyData) {
+    const partyOfNextBlock = data.previousParty ? this.getPartyOfChildBlock(data.previousParty, block) : undefined
+
+    if (partyOfNextBlock === undefined) {
+      data.stop = true
+      return
+    }
+
+    block.parties.forEach((blockParty, index) => {
+      if (index === partyOfNextBlock.partyIndex) {
+        data.previousParty = partyOfNextBlock
+        return
+      }
+
+      blockParty.keySet.keys.forEach((pk) => {
+        const hexKey = pk.serializeHex()
+        data.interactions[hexKey] = data.interactions[hexKey] || []
+        data.interactions[hexKey].push(hash)
+      })
+    })
+  }
+
+  private getPartyOfChildBlock(assertedParty: IXyoBoundWitnessParty, block: IXyoBoundWitness) {
+    const nextPublicKey = assertedParty.getHeuristic<XyoNextPublicKey>(XyoNextPublicKey.schemaObjectId)
+    if (nextPublicKey !== undefined) {
+      const indexOfKeySet = block.publicKeys.findIndex((keyset) => {
+        return keyset.keys.findIndex(k => k.isEqual(nextPublicKey.publicKey)) !== -1
+      })
+
+      return indexOfKeySet !== -1 ? block.parties[indexOfKeySet] : undefined
+    }
+
+    const index = block.publicKeys.findIndex((keySet) => {
+      return assertedParty.keySet.keys.findIndex((key) => {
+        return keySet.keys.findIndex(k => k.isEqual(key)) !== -1
+      }) !== -1
+    })
+
+    return index !== -1 ? block.parties[index] : undefined
+  }
+}
+
+interface IInteractionsByPublicKey { [pk: string]: IXyoHash[]}
+interface IInteractionsByPublicKeyData {
+  previousParty: IXyoBoundWitnessParty | undefined,
+  interactions: IInteractionsByPublicKey,
+  stop: boolean
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 6th December 2018 3:44:51 pm
+ * @Last modified time: Wednesday, 23rd January 2019 1:14:17 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -67,7 +67,7 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
       throw err
     }
 
-    await this.originStateRepository.updateOriginChainState(hashValue)
+    await this.originStateRepository.updateOriginChainState(hashValue, boundWitness)
     await this.originBlockRepository.addOriginBlock(hashValue, boundWitness)
     const nestedBoundWitnesses = this.nestedBoundWitnessExtractor.extractNestedBoundWitnesses(boundWitness)
 
