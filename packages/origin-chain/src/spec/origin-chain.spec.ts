@@ -4,17 +4,18 @@
  * @Email:  developer@xyfindables.com
  * @Filename: origin-chain.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 23rd January 2019 3:40:05 pm
+ * @Last modified time: Thursday, 24th January 2019 11:28:47 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoOriginChainStateInMemoryRepository } from '../xyo-origin-chain-in-memory-repository'
-import { XyoStubHash, IXyoHash } from '@xyo-network/hashing'
+import { XyoStubHash } from '@xyo-network/hashing'
 import { XyoStubSigner, XyoStubPublicKey, XyoStubSignature } from '@xyo-network/signing'
 import { XyoBoundWitness, XyoFetter, XyoKeySet, XyoWitness, XyoSignatureSet } from '@xyo-network/bound-witness'
 import { XyoIndex } from '../xyo-index'
 import { XyoPreviousHash } from '../xyo-previous-hash'
+import { serializer } from '@xyo-network/serializer'
 
 describe(`OriginChain`, () => {
   it(`Should update origin chain`, async () => {
@@ -22,12 +23,14 @@ describe(`OriginChain`, () => {
     const repo = new XyoOriginChainStateInMemoryRepository(
       0,
       [],
+      [],
       {
         getOriginBlockByHash: async () => undefined
       },
       [originChainSigner],
       undefined,
       [],
+      serializer,
       originChainSigner
     )
 
@@ -70,6 +73,7 @@ describe(`OriginChain`, () => {
     const repo = new XyoOriginChainStateInMemoryRepository(
       0,
       [genesisHash],
+      [genesisPublicKey],
       {
         getOriginBlockByHash: async (hash: Buffer) => {
           return (hash.toString().indexOf('xxyyzz') !== -1) ? genesisBlock : undefined
@@ -78,6 +82,7 @@ describe(`OriginChain`, () => {
       [originChainSigner],
       undefined,
       [],
+      serializer,
       originChainSigner
     )
 

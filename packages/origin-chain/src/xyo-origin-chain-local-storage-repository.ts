@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-local-storage-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 23rd January 2019 1:14:00 pm
+ * @Last modified time: Thursday, 24th January 2019 11:35:25 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoOriginChainRepository } from './@types'
+import { IXyoOriginChainRepository, IBlockInOriginChainResult } from './@types'
 import { XyoOriginChainStateInMemoryRepository } from './xyo-origin-chain-in-memory-repository'
 import { IXyoStorageProvider } from '@xyo-network/storage'
 import { IXyoSigner, IXyoPublicKey } from '@xyo-network/signing'
@@ -30,6 +30,19 @@ export class XyoOriginChainLocalStorageRepository extends XyoBase implements IXy
   ) {
     super()
   }
+
+  public async isBlockInOriginChain(block: IXyoBoundWitness, hash: IXyoHash): Promise<IBlockInOriginChainResult> {
+    return (await this.getOrCreateInMemoryDelegate()).isBlockInOriginChain(block, hash)
+  }
+
+  public async publicKeyBelongsToOriginChain(publicKey: IXyoPublicKey): Promise<boolean> {
+    return (await this.getOrCreateInMemoryDelegate()).publicKeyBelongsToOriginChain(publicKey)
+  }
+
+  public async getAllPublicKeysForOriginChain(): Promise<IXyoPublicKey[]> {
+    return (await this.getOrCreateInMemoryDelegate()).getAllPublicKeysForOriginChain()
+  }
+
   public async getOriginChainHashes(): Promise<IXyoHash[]> {
     return (await this.getOrCreateInMemoryDelegate()).getOriginChainHashes()
   }
@@ -116,10 +129,12 @@ export class XyoOriginChainLocalStorageRepository extends XyoBase implements IXy
     this.inMemoryDelegate = new XyoOriginChainStateInMemoryRepository(
       0,
       [],
+      [],
       this.originBlockResolver,
       [],
       undefined,
-      []
+      [],
+      this.serializationService
     )
     await this.saveOriginChainState(this.inMemoryDelegate)
     return this.inMemoryDelegate
@@ -156,6 +171,11 @@ export class XyoOriginChainLocalStorageRepository extends XyoBase implements IXy
         .hydrate<IXyoHash>()
     )
 
+    const publicKeys = obj.publicKeys.map(pk => this.serializationService
+        .deserialize(Buffer.from(pk, 'hex'))
+        .hydrate<IXyoPublicKey>()
+    )
+
     const nextPublicKey = obj.nextPublicKey ?
       this.serializationService
         .deserialize(Buffer.from(obj.nextPublicKey, 'hex'))
@@ -171,10 +191,12 @@ export class XyoOriginChainLocalStorageRepository extends XyoBase implements IXy
     return new XyoOriginChainStateInMemoryRepository(
       index,
       hashes,
+      publicKeys,
       this.originBlockResolver,
       signers,
       (nextPublicKey && nextPublicKey.publicKey) || undefined,
       waitingSigners,
+      this.serializationService,
       genesisSigner
     )
   }
@@ -183,12 +205,14 @@ export class XyoOriginChainLocalStorageRepository extends XyoBase implements IXy
     const index = await originChainState.getIndex()
     const nextPublicKey = await originChainState.getNextPublicKey()
     const hashes = await originChainState.getOriginChainHashes()
+    const publicKeys = await originChainState.getAllPublicKeysForOriginChain()
     const signers = await originChainState.getSigners()
     const waitingSigners = await originChainState.getWaitingSigners()
     const genesisSigner = await originChainState.getGenesisSigner()
 
     const payload: ISerializedOriginChainState = {
       index,
+      publicKeys: publicKeys.map(pk => pk.serializeHex()),
       signers: signers.map((signer) => {
         return signer.serializeHex()
       }),
@@ -196,16 +220,12 @@ export class XyoOriginChainLocalStorageRepository extends XyoBase implements IXy
         return signer.serializeHex()
       }),
       nextPublicKey: null,
-      hashes: [],
+      hashes: hashes.map(h => h.serializeHex()),
       genesisSigner: genesisSigner && genesisSigner.serializeHex() || null
     }
 
     if (nextPublicKey) {
       payload.nextPublicKey = nextPublicKey.serializeHex()
-    }
-
-    if (hashes.length) {
-      payload.hashes = hashes.map(h => h.serializeHex())
     }
 
     return JSON.stringify(payload)
@@ -215,6 +235,7 @@ export class XyoOriginChainLocalStorageRepository extends XyoBase implements IXy
 interface ISerializedOriginChainState {
   index: number
   signers: string[]
+  publicKeys: string[]
   waitingSigners: string[]
   nextPublicKey: string | null
   hashes: string[]

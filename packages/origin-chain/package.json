@@ -14,6 +14,7 @@
     "@xyo-network/hashing": "^0.16.0",
     "@xyo-network/serialization": "^0.16.0",
     "@xyo-network/serialization-schema": "^0.16.0",
+    "@xyo-network/serializer": "^0.16.0",
     "@xyo-network/signing": "^0.16.0",
     "@xyo-network/storage": "^0.16.0"
   },

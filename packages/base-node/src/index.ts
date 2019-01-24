@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 23rd January 2019 1:32:37 pm
+ * @Last modified time: Thursday, 24th January 2019 11:24:14 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -210,7 +210,19 @@ export class XyoBaseNode extends XyoBase {
 
       const signers = await this.getSigners()
       const originBlockRepo = await this.getOriginBlockRepository()
-      return new XyoOriginChainStateInMemoryRepository(0, [], originBlockRepo, signers, undefined, [], undefined)
+      const serializationService = await this.getSerializationService()
+
+      return new XyoOriginChainStateInMemoryRepository(
+        0, // index
+        [], // hashes
+        [], // public keys
+        originBlockRepo,
+        signers,
+        undefined, // next-public-key
+        [], // waiting signers
+        serializationService,
+        undefined // genesis signer
+      )
     })
   }
 
