@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-local-storage-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th December 2018 3:10:41 pm
+ * @Last modified time: Wednesday, 16th January 2019 5:04:00 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,17 +15,24 @@ import { IXyoStorageProvider } from '@xyo-network/storage'
 import { IXyoSigner } from '@xyo-network/signing'
 import { IXyoHash } from '@xyo-network/hashing'
 import { IXyoSerializationService } from '@xyo-network/serialization'
-import { XyoPreviousHash } from './xyo-previous-hash'
 import { XyoNextPublicKey } from './xyo-next-public-key'
+import { XyoBase } from '@xyo-network/base'
+import { IXyoBoundWitness } from '@xyo-network/bound-witness'
 
-export class XyoOriginChainLocalStorageRepository implements IXyoOriginChainRepository {
+export class XyoOriginChainLocalStorageRepository extends XyoBase implements IXyoOriginChainRepository {
 
   private inMemoryDelegate: XyoOriginChainStateInMemoryRepository | undefined
 
   constructor (
     private readonly storageProvider: IXyoStorageProvider,
     private readonly serializationService: IXyoSerializationService
-  ) {}
+  ) {
+    super()
+  }
+
+  public async createGenesisBlock(): Promise<IXyoBoundWitness> {
+    return (await this.getOrCreateInMemoryDelegate()).createGenesisBlock()
+  }
 
   public async getIndex() {
     return (await this.getOrCreateInMemoryDelegate()).getIndex()

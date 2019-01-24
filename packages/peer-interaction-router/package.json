@@ -1,17 +1,17 @@
 {
   "name": "@xyo-network/peer-interaction-router",
-  "version": "0.13.0",
+  "version": "0.15.0",
   "description": "A router for registering catalogue items to handlers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.13.0",
-    "@xyo-network/network": "^0.13.0",
-    "@xyo-network/peer-connections": "^0.13.0",
-    "@xyo-network/peer-interaction": "^0.13.0",
-    "@xyo-network/peer-interaction-handlers": "^0.13.0"
+    "@xyo-network/base": "^0.15.0",
+    "@xyo-network/network": "^0.15.0",
+    "@xyo-network/peer-connections": "^0.15.0",
+    "@xyo-network/peer-interaction": "^0.15.0",
+    "@xyo-network/peer-interaction-handlers": "^0.15.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:52:05 am
+ * @Last modified time: Wednesday, 16th January 2019 4:24:11 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,6 +14,7 @@ export {
   IXyoBoundWitnessPayloadProvider,
   IXyoBoundWitnessSuccessListener,
   IXyoNodeInteraction,
+  IXyoBoundWitnessInteractionFactory
 } from './@types'
 
 export { XyoBoundWitnessHandlerProvider } from './xyo-bound-witness-handler-provider'

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 1:26:51 pm
+ * @Last modified time: Wednesday, 16th January 2019 2:54:11 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -50,6 +50,15 @@ export abstract class XyoBase {
     return this.cache.getOrCreate(name, initializer)
   }
 
+  // protected async getOrCreateAsync<T>(name: string, initializer: () => Promise<T>): Promise<T> {
+  //   if (!this.cache) {
+  //     this.cache = new XyoSimpleCache()
+  //   }
+
+  //   const t = await this.cache.getOrCreate(name, initializer)
+  //   return t
+  // }
+
   /** Logs to the `info` level */
   protected logInfo(message?: any, ...optionalParams: any[]) {
     const resolvedOptionalParams = (optionalParams && optionalParams.length && optionalParams) || undefined
@@ -81,4 +90,7 @@ export abstract class XyoBase {
   }
 }
 
-XyoBase.logger = new XyoLogger(process.env.NODE_ENV !== 'test', process.env.NODE_ENV !== 'test')
+XyoBase.logger = new XyoLogger(
+  process.env.ENABLE_LOGGING_FILES !== undefined,
+  process.env.ENABLE_LOGGING_FILES !== undefined
+)
