@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 13th December 2018 10:50:41 am
+ * @Last modified time: Thursday, 24th January 2019 10:27:21 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-export { IXyoOriginChainRepository } from './@types'
+export { IXyoOriginChainRepository, IBlockInOriginChainResult } from './@types'
 export { XyoOriginChainStateInMemoryRepository } from './xyo-origin-chain-in-memory-repository'
 export { XyoIndex } from './xyo-index'
 export { XyoNextPublicKey } from './xyo-next-public-key'

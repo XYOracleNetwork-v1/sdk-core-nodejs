@@ -4,19 +4,20 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-in-memory-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 23rd January 2019 3:28:38 pm
+ * @Last modified time: Thursday, 24th January 2019 11:21:29 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoHash } from '@xyo-network/hashing'
 import { IXyoSigner, IXyoPublicKey } from '@xyo-network/signing'
-import { IXyoOriginChainRepository } from './@types'
+import { IXyoOriginChainRepository, IBlockInOriginChainResult } from './@types'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoBoundWitness, IXyoBoundWitnessParty, XyoKeySet, XyoFetter, XyoBoundWitness, XyoWitness, XyoSignatureSet } from '@xyo-network/bound-witness'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { XyoIndex } from './xyo-index'
 import { XyoNextPublicKey } from './xyo-next-public-key'
+import { IXyoSerializationService } from '@xyo-network/serialization'
 
 /**
  * Encapsulates the values that go into an origin-chain managements
@@ -28,21 +29,38 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
 
   private interactionsByPublicKeyData: IInteractionsByPublicKeyData | undefined
 
+  private publicKeyIndex: {[pk: string]: boolean} = {}
+
+  private hashIndex: {[h: string]: boolean} = {}
+
   constructor(
     index: number,
     private readonly originChainHashes: IXyoHash[],
+    allPublicKeys: IXyoPublicKey[],
     private readonly originBlockResolver: { getOriginBlockByHash(hash: Buffer): Promise<IXyoBoundWitness | undefined> },
     private readonly currentSigners: IXyoSigner[],
     private nextPublicKey: IXyoPublicKey | undefined,
     private readonly waitingSigners: IXyoSigner[],
+    private readonly serializationService: IXyoSerializationService,
     public genesisSigner?: IXyoSigner,
   ) {
     super()
     this.idx = index
+
+    // Initialize originChainHashIndex
+    this.originChainHashes.forEach(h => this.hashIndex[h.serializeHex()] = true)
+
+    // Initialize publicKeyIndex
+    allPublicKeys.forEach(pk => this.publicKeyIndex[pk.serializeHex()] = true)
+    currentSigners.forEach(signer => this.publicKeyIndex[signer.publicKey.serializeHex()] = true)
   }
 
   public async getOriginChainHashes(): Promise<IXyoHash[]> {
     return this.originChainHashes
+  }
+
+  public async getAllPublicKeysForOriginChain(): Promise<IXyoPublicKey[]> {
+    return Object.keys(this.publicKeyIndex).map(pk => this.serializationService.deserialize(pk).hydrate())
   }
 
   /**
@@ -134,7 +152,10 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
       this.currentSigners.pop()
     }
 
-    this.currentSigners.push(...signers)
+    signers.forEach((s) => {
+      this.currentSigners.push(s)
+      this.publicKeyIndex[s.publicKey.serializeHex()] = true
+    })
   }
 
   /**
@@ -163,6 +184,28 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
     return interactions
   }
 
+  public async isBlockInOriginChain(block: IXyoBoundWitness, hash: IXyoHash): Promise<IBlockInOriginChainResult> {
+    if (!this.hashIndex[hash.serializeHex()]) {
+      return {
+        result: false,
+        indexOfPartyInBlock: undefined
+      }
+    }
+
+    const indexOfParty = block.parties.findIndex((p) => {
+      return p.keySet.keys.some(k => this.publicKeyIndex[k.serializeHex()])
+    })
+
+    return {
+      result: indexOfParty !== -1,
+      indexOfPartyInBlock: indexOfParty !== -1 ? indexOfParty : undefined
+    }
+  }
+
+  public async publicKeyBelongsToOriginChain(publicKey: IXyoPublicKey): Promise < boolean > {
+    return this.publicKeyIndex[publicKey.serializeHex()]
+  }
+
   /**
    * Sets the state so that the chain is ready for a new origin block
    */
@@ -170,6 +213,7 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
   private async newOriginBlock(hash: IXyoHash, block: IXyoBoundWitness) {
     this.nextPublicKey = undefined
     this.originChainHashes.push(hash)
+    this.hashIndex[hash.serializeHex()] = true
     if (this.idx === 0) {
       this.logInfo(`Updating genesis signer`)
       this.genesisSigner = this.currentSigners.length > 0 ? this.currentSigners[0] : this.genesisSigner
@@ -188,12 +232,13 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
   private addWaitingSigner() {
     if (this.waitingSigners.length > 0) {
       this.currentSigners.push(this.waitingSigners[0])
+      this.publicKeyIndex[this.waitingSigners[0].publicKey.serializeHex()] = true
       this.waitingSigners.splice(0, 1)
     }
   }
 
-  private async getOrInitializeInteractionsData(): Promise<IInteractionsByPublicKeyData> {
-    if (this.interactionsByPublicKeyData) {
+  private async getOrInitializeInteractionsData(): Promise < IInteractionsByPublicKeyData > {
+    if (this .interactionsByPublicKeyData) {
       return this.interactionsByPublicKeyData
     }
 

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 23rd January 2019 1:10:13 pm
+ * @Last modified time: Thursday, 24th January 2019 11:06:20 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -67,4 +67,29 @@ export interface IXyoOriginChainRepository {
   getInteractionWithPublicKey(publicKey: IXyoPublicKey): Promise<IXyoHash[]>
 
   getOriginChainHashes(): Promise<IXyoHash[]>
+
+  isBlockInOriginChain(block: IXyoBoundWitness, hash: IXyoHash): Promise<IBlockInOriginChainResult>
+
+  publicKeyBelongsToOriginChain(publicKey: IXyoPublicKey): Promise<boolean>
+
+  getAllPublicKeysForOriginChain(): Promise<IXyoPublicKey[]>
+}
+
+export interface IBlockInOriginChainResult {
+  /**
+   * Returns true if it is a block in the origin-chain, false otherwise
+   *
+   * @type {boolean}
+   * @memberof IBlockInOriginChainResult
+   */
+  result: boolean,
+
+  /**
+   * If it is a block in the origin chain this will return this index of the party.
+   * If the block does not belong to origin-chain the result will be undefined
+   *
+   * @type {(number | undefined)}
+   * @memberof IBlockInOriginChainResult
+   */
+  indexOfPartyInBlock: number | undefined
 }
