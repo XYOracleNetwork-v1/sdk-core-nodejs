@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 2:27:42 pm
+ * @Last modified time: Wednesday, 23rd January 2019 1:50:55 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -79,6 +79,8 @@ export interface IXyoBoundWitnessParty {
   signatureSet: IXyoSignatureSet
   heuristics: IXyoSerializableObject[]
   metadata: IXyoSerializableObject[]
+  getHeuristic<T extends IXyoSerializableObject>(schemaObjectId: number): T | undefined
+  getMetaDataItem<T extends IXyoSerializableObject>(schemaObjectId: number): T | undefined
 }
 
 export interface IXyoBoundWitness extends IXyoSerializableObject, IXyoBoundWitnessFragment {
@@ -91,4 +93,6 @@ export interface IXyoBoundWitness extends IXyoSerializableObject, IXyoBoundWitne
   readonly parties: IXyoBoundWitnessParty[]
 
   getSigningData(): Buffer
+  getHeuristicFromParty<T extends IXyoSerializableObject>(partyIndex: number, schemaObjectId: number): T | undefined
+  getMetaDataItemFromParty<T extends IXyoSerializableObject>(partyIndex: number, schemaObjectId: number): T | undefined
 }

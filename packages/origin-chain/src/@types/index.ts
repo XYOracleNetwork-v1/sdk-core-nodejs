@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 16th January 2019 5:08:32 pm
+ * @Last modified time: Wednesday, 23rd January 2019 1:10:13 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -50,7 +50,7 @@ export interface IXyoOriginChainRepository {
    * And, signers will be rotated if there is a queue
    */
 
-  updateOriginChainState(hash: IXyoHash): Promise<void>
+  updateOriginChainState(hash: IXyoHash, block: IXyoBoundWitness): Promise<void>
 
   /** Returns a list of the signers waiting to be used */
   getWaitingSigners(): Promise<IXyoSigner[]>
@@ -63,4 +63,8 @@ export interface IXyoOriginChainRepository {
 
   /** Returns the first xyo-signer for the origin chain */
   getGenesisSigner(): Promise<IXyoSigner | undefined>
+
+  getInteractionWithPublicKey(publicKey: IXyoPublicKey): Promise<IXyoHash[]>
+
+  getOriginChainHashes(): Promise<IXyoHash[]>
 }

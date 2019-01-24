@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 16th January 2019 5:14:33 pm
+ * @Last modified time: Wednesday, 23rd January 2019 1:32:37 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -209,7 +209,8 @@ export class XyoBaseNode extends XyoBase {
       // persisting outside outside of a process life-cycle. SubClasses should consider overriding this method
 
       const signers = await this.getSigners()
-      return new XyoOriginChainStateInMemoryRepository(0, undefined, signers, undefined, [], undefined)
+      const originBlockRepo = await this.getOriginBlockRepository()
+      return new XyoOriginChainStateInMemoryRepository(0, [], originBlockRepo, signers, undefined, [], undefined)
     })
   }
 
@@ -289,7 +290,7 @@ export class XyoBaseNode extends XyoBase {
       const hash = await hashingProvider.createHash(genesisBlock.getSigningData())
       const originBlockRepository = await this.getOriginBlockRepository()
       await originBlockRepository.addOriginBlock(hash, genesisBlock)
-      originChainStateRepository.updateOriginChainState(hash)
+      originChainStateRepository.updateOriginChainState(hash, genesisBlock)
       this.logInfo(`Add genesis block with hash ${hash.serializeHex()}`)
     }
   }

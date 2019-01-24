@@ -4,24 +4,16 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-party.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 1:52:42 pm
+ * @Last modified time: Wednesday, 23rd January 2019 1:50:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoBoundWitnessParty, IXyoFetter, IXyoWitness, IXyoKeySet, IXyoSignatureSet } from './@types'
+import { IXyoBoundWitnessParty, IXyoFetter, IXyoWitness, IXyoKeySet, IXyoSignatureSet, IXyoBoundWitness } from './@types'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoSerializableObject } from '@xyo-network/serialization'
 
 export class XyoBoundWitnessParty extends XyoBase implements IXyoBoundWitnessParty {
-
-  constructor(
-    public readonly fetter: IXyoFetter,
-    public readonly witness: IXyoWitness,
-    public readonly partyIndex: number
-  ) {
-    super()
-  }
 
   public get keySet(): IXyoKeySet {
     return this.getOrCreate('keySet', () => {
@@ -44,6 +36,28 @@ export class XyoBoundWitnessParty extends XyoBase implements IXyoBoundWitnessPar
   public get metadata(): IXyoSerializableObject[] {
     return this.getOrCreate('metadata', () => {
       return this.witness.metadata
+    })
+  }
+
+  constructor(
+    public readonly fetter: IXyoFetter,
+    public readonly witness: IXyoWitness,
+    public readonly partyIndex: number
+  ) {
+    super()
+  }
+
+  public getHeuristic<T extends IXyoSerializableObject>(schemaObjectId: number) {
+    return this.getOrCreate(`heuristics[${schemaObjectId}]`, () => {
+      const items = this.heuristics.filter(h => h.schemaObjectId === schemaObjectId)
+      return items.length > 0 ? items[0] as T : undefined
+    })
+  }
+
+  public getMetaDataItem<T extends IXyoSerializableObject>(schemaObjectId: number): T | undefined {
+    return this.getOrCreate(`metadata[${schemaObjectId}]`, () => {
+      const items = this.metadata.filter(m => m.schemaObjectId === schemaObjectId)
+      return items.length > 0 ? items[0] as T : undefined
     })
   }
 
