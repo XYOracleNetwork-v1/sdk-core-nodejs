@@ -90,7 +90,7 @@ describe(`P2P`, () => {
     })
   })
 
-  it.only('Should wait for entire buffer', (done) => {
+  it('Should wait for entire buffer', (done) => {
     const value = 'hello'
     const emitter = new EventEmitter()
     const connection = new XyoPeerConnection(emitter as Socket)
