@@ -167,3 +167,5 @@ export interface IXyoPeerConnectionPool {
 
 /** A function to unsubscribe from a topic */
 export type unsubscribeFn = () => void
+
+export type Callback = (...args: any[]) => void

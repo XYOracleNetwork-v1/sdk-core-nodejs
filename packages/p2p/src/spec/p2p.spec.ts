@@ -1,7 +1,26 @@
 
 import { XyoPeerTransport, XyoPeerDiscoveryService, XyoP2PService } from "../"
-import { XyoPeerConnectionPool } from "../xyo-peer-connection-pool"
-import { encodeXyoTopicBuffer, decodeXyoTopicBuffer, decodeAllXyoTopicBuffers } from "../xyo-topic-buffer"
+import { encodeXyoTopicBuffer, decodeXyoTopicBuffer } from "../xyo-topic-buffer"
+import { XyoPeerConnection } from "../xyo-peer-connection"
+import { Socket } from "net"
+import { EventEmitter } from "events"
+
+interface IPeer {
+  publicKey: string
+  address: string
+}
+
+const createPeer = (port: number, i: number): IPeer => ({
+  publicKey: `peer ${i}`,
+  address: `/ip4/0.0.0.0/tcp/${port + i}`
+})
+
+const createP2PService = (peer: IPeer) => {
+  const transport = new XyoPeerTransport(peer.address)
+  const discovery = new XyoPeerDiscoveryService(peer.publicKey, peer.address, transport)
+  const node = new XyoP2PService(discovery)
+  return { transport, discovery, node }
+}
 
 const peer1 = {
   publicKey: 'I am peer 1',
@@ -71,19 +90,22 @@ describe(`P2P`, () => {
     })
   })
 
-  it(`Should decode multiple topic buffers`, () => {
-    const buff1 = encodeXyoTopicBuffer('topic1', Buffer.from('foo'))
-    const buff2 = encodeXyoTopicBuffer('topic2', Buffer.from('bar'))
-    const buff = Buffer.concat([buff1, buff2])
-    expect(decodeAllXyoTopicBuffers(buff)).toEqual([{
-      topic: 'topic1',
-      message: 'foo',
-      offset: 17
-    }, {
-      topic: 'topic2',
-      message: 'bar',
-      offset: 17 + 17
-    }])
+  it('Should wait for entire buffer', () => {
+    const value = 'hello'
+    const emitter = new EventEmitter()
+    const connection = new XyoPeerConnection(emitter as Socket)
+    const received: any[] = []
+    connection.onMessage((msg) => {
+      received.push(msg)
+      expect(received.length).toBe(1)
+      expect(msg.toString()).toBe(value)
+    })
+
+    const size = Buffer.alloc(4)
+    const message = Buffer.from(value)
+    size.writeUInt32BE(size.length + message.length, 0)
+    emitter.emit('data', size)
+    emitter.emit('data', message)
   })
 
   it(`Should create a transport`, () => {
@@ -266,21 +288,14 @@ describe(`P2P`, () => {
   })
 
   it('Should handle many connections', async () => {
-    interface IPeer {
-      publicKey: string
-      address: string
-    }
     const port = 9000
     const count = 10
     const discovered = jest.fn()
-    const createPeer = (i: number): IPeer => ({ publicKey: `peer ${i}`, address: `/ip4/0.0.0.0/tcp/${port + i}` })
-    const bootstrapPeer = createPeer(0)
-    const createP2PService = (i: number): Promise<IPeer> => {
+    const bootstrapPeer = createPeer(port, 0)
+    const create = (i: number): Promise<IPeer> => {
       return new Promise((resolve) => {
-        const peer = createPeer(i)
-        const transport = new XyoPeerTransport(peer.address)
-        const discovery = new XyoPeerDiscoveryService(peer.publicKey, peer.address, transport)
-        const node = new XyoP2PService(discovery)
+        const peer = createPeer(port, i)
+        const { transport, discovery, node } = createP2PService(peer)
         discovery.start()
         discovery.addBootstrapNodes([bootstrapPeer.address])
         discovery.onDiscovery((connection) => {
@@ -293,115 +308,114 @@ describe(`P2P`, () => {
       })
     }
 
-    const peers = await Promise.all([...Array(count)].map((_, i) => createP2PService(i)))
-    expect(discovered.mock.calls).toEqual([
-      [peers[0].publicKey, peers[1].publicKey],
-      [peers[0].publicKey, peers[2].publicKey],
-      [peers[0].publicKey, peers[3].publicKey],
-      [peers[0].publicKey, peers[4].publicKey],
-      [peers[0].publicKey, peers[5].publicKey],
-      [peers[0].publicKey, peers[6].publicKey],
-      [peers[0].publicKey, peers[7].publicKey],
-      [peers[0].publicKey, peers[8].publicKey],
-      [peers[0].publicKey, peers[9].publicKey],
+    const peers = await Promise.all([...Array(count)].map((_, i) => create(i)))
+    expect(discovered).toBeCalledTimes(count * (count - 1))
+    expect(discovered).toBeCalledWith(peers[0].publicKey, peers[1].publicKey)
+    expect(discovered).toBeCalledWith(peers[0].publicKey, peers[2].publicKey)
+    expect(discovered).toBeCalledWith(peers[0].publicKey, peers[3].publicKey)
+    expect(discovered).toBeCalledWith(peers[0].publicKey, peers[4].publicKey)
+    expect(discovered).toBeCalledWith(peers[0].publicKey, peers[5].publicKey)
+    expect(discovered).toBeCalledWith(peers[0].publicKey, peers[6].publicKey)
+    expect(discovered).toBeCalledWith(peers[0].publicKey, peers[7].publicKey)
+    expect(discovered).toBeCalledWith(peers[0].publicKey, peers[8].publicKey)
+    expect(discovered).toBeCalledWith(peers[0].publicKey, peers[9].publicKey)
 
-      [peers[1].publicKey, peers[0].publicKey],
-      [peers[2].publicKey, peers[0].publicKey],
-      [peers[3].publicKey, peers[0].publicKey],
-      [peers[4].publicKey, peers[0].publicKey],
-      [peers[5].publicKey, peers[0].publicKey],
-      [peers[6].publicKey, peers[0].publicKey],
-      [peers[7].publicKey, peers[0].publicKey],
-      [peers[8].publicKey, peers[0].publicKey],
-      [peers[9].publicKey, peers[0].publicKey],
+    expect(discovered).toBeCalledWith(peers[1].publicKey, peers[0].publicKey)
+    expect(discovered).toBeCalledWith(peers[2].publicKey, peers[0].publicKey)
+    expect(discovered).toBeCalledWith(peers[3].publicKey, peers[0].publicKey)
+    expect(discovered).toBeCalledWith(peers[4].publicKey, peers[0].publicKey)
+    expect(discovered).toBeCalledWith(peers[5].publicKey, peers[0].publicKey)
+    expect(discovered).toBeCalledWith(peers[6].publicKey, peers[0].publicKey)
+    expect(discovered).toBeCalledWith(peers[7].publicKey, peers[0].publicKey)
+    expect(discovered).toBeCalledWith(peers[8].publicKey, peers[0].publicKey)
+    expect(discovered).toBeCalledWith(peers[9].publicKey, peers[0].publicKey)
 
-      [peers[1].publicKey, peers[2].publicKey],
-      [peers[1].publicKey, peers[3].publicKey],
-      [peers[1].publicKey, peers[4].publicKey],
-      [peers[1].publicKey, peers[5].publicKey],
-      [peers[1].publicKey, peers[6].publicKey],
-      [peers[1].publicKey, peers[7].publicKey],
-      [peers[1].publicKey, peers[8].publicKey],
-      [peers[1].publicKey, peers[9].publicKey],
+    expect(discovered).toBeCalledWith(peers[1].publicKey, peers[2].publicKey)
+    expect(discovered).toBeCalledWith(peers[1].publicKey, peers[3].publicKey)
+    expect(discovered).toBeCalledWith(peers[1].publicKey, peers[4].publicKey)
+    expect(discovered).toBeCalledWith(peers[1].publicKey, peers[5].publicKey)
+    expect(discovered).toBeCalledWith(peers[1].publicKey, peers[6].publicKey)
+    expect(discovered).toBeCalledWith(peers[1].publicKey, peers[7].publicKey)
+    expect(discovered).toBeCalledWith(peers[1].publicKey, peers[8].publicKey)
+    expect(discovered).toBeCalledWith(peers[1].publicKey, peers[9].publicKey)
 
-      [peers[2].publicKey, peers[3].publicKey],
-      [peers[2].publicKey, peers[4].publicKey],
-      [peers[2].publicKey, peers[5].publicKey],
-      [peers[2].publicKey, peers[6].publicKey],
-      [peers[2].publicKey, peers[7].publicKey],
-      [peers[2].publicKey, peers[8].publicKey],
-      [peers[2].publicKey, peers[9].publicKey],
+    expect(discovered).toBeCalledWith(peers[2].publicKey, peers[3].publicKey)
+    expect(discovered).toBeCalledWith(peers[2].publicKey, peers[4].publicKey)
+    expect(discovered).toBeCalledWith(peers[2].publicKey, peers[5].publicKey)
+    expect(discovered).toBeCalledWith(peers[2].publicKey, peers[6].publicKey)
+    expect(discovered).toBeCalledWith(peers[2].publicKey, peers[7].publicKey)
+    expect(discovered).toBeCalledWith(peers[2].publicKey, peers[8].publicKey)
+    expect(discovered).toBeCalledWith(peers[2].publicKey, peers[9].publicKey)
 
-      [peers[3].publicKey, peers[4].publicKey],
-      [peers[3].publicKey, peers[5].publicKey],
-      [peers[3].publicKey, peers[6].publicKey],
-      [peers[3].publicKey, peers[7].publicKey],
-      [peers[3].publicKey, peers[8].publicKey],
-      [peers[3].publicKey, peers[9].publicKey],
+    expect(discovered).toBeCalledWith(peers[3].publicKey, peers[4].publicKey)
+    expect(discovered).toBeCalledWith(peers[3].publicKey, peers[5].publicKey)
+    expect(discovered).toBeCalledWith(peers[3].publicKey, peers[6].publicKey)
+    expect(discovered).toBeCalledWith(peers[3].publicKey, peers[7].publicKey)
+    expect(discovered).toBeCalledWith(peers[3].publicKey, peers[8].publicKey)
+    expect(discovered).toBeCalledWith(peers[3].publicKey, peers[9].publicKey)
 
-      [peers[4].publicKey, peers[5].publicKey],
-      [peers[4].publicKey, peers[6].publicKey],
-      [peers[4].publicKey, peers[7].publicKey],
-      [peers[4].publicKey, peers[8].publicKey],
-      [peers[4].publicKey, peers[9].publicKey],
+    expect(discovered).toBeCalledWith(peers[4].publicKey, peers[5].publicKey)
+    expect(discovered).toBeCalledWith(peers[4].publicKey, peers[6].publicKey)
+    expect(discovered).toBeCalledWith(peers[4].publicKey, peers[7].publicKey)
+    expect(discovered).toBeCalledWith(peers[4].publicKey, peers[8].publicKey)
+    expect(discovered).toBeCalledWith(peers[4].publicKey, peers[9].publicKey)
 
-      [peers[5].publicKey, peers[6].publicKey],
-      [peers[5].publicKey, peers[7].publicKey],
-      [peers[5].publicKey, peers[8].publicKey],
-      [peers[5].publicKey, peers[9].publicKey],
+    expect(discovered).toBeCalledWith(peers[5].publicKey, peers[6].publicKey)
+    expect(discovered).toBeCalledWith(peers[5].publicKey, peers[7].publicKey)
+    expect(discovered).toBeCalledWith(peers[5].publicKey, peers[8].publicKey)
+    expect(discovered).toBeCalledWith(peers[5].publicKey, peers[9].publicKey)
 
-      [peers[6].publicKey, peers[7].publicKey],
-      [peers[6].publicKey, peers[8].publicKey],
-      [peers[6].publicKey, peers[9].publicKey],
+    expect(discovered).toBeCalledWith(peers[6].publicKey, peers[7].publicKey)
+    expect(discovered).toBeCalledWith(peers[6].publicKey, peers[8].publicKey)
+    expect(discovered).toBeCalledWith(peers[6].publicKey, peers[9].publicKey)
 
-      [peers[7].publicKey, peers[8].publicKey],
-      [peers[7].publicKey, peers[9].publicKey],
+    expect(discovered).toBeCalledWith(peers[7].publicKey, peers[8].publicKey)
+    expect(discovered).toBeCalledWith(peers[7].publicKey, peers[9].publicKey)
 
-      [peers[8].publicKey, peers[9].publicKey],
+    expect(discovered).toBeCalledWith(peers[8].publicKey, peers[9].publicKey)
 
-      [peers[2].publicKey, peers[1].publicKey],
-      [peers[3].publicKey, peers[1].publicKey],
-      [peers[4].publicKey, peers[1].publicKey],
-      [peers[5].publicKey, peers[1].publicKey],
-      [peers[6].publicKey, peers[1].publicKey],
-      [peers[7].publicKey, peers[1].publicKey],
-      [peers[8].publicKey, peers[1].publicKey],
-      [peers[9].publicKey, peers[1].publicKey],
+    expect(discovered).toBeCalledWith(peers[2].publicKey, peers[1].publicKey)
+    expect(discovered).toBeCalledWith(peers[3].publicKey, peers[1].publicKey)
+    expect(discovered).toBeCalledWith(peers[4].publicKey, peers[1].publicKey)
+    expect(discovered).toBeCalledWith(peers[5].publicKey, peers[1].publicKey)
+    expect(discovered).toBeCalledWith(peers[6].publicKey, peers[1].publicKey)
+    expect(discovered).toBeCalledWith(peers[7].publicKey, peers[1].publicKey)
+    expect(discovered).toBeCalledWith(peers[8].publicKey, peers[1].publicKey)
+    expect(discovered).toBeCalledWith(peers[9].publicKey, peers[1].publicKey)
 
-      [peers[3].publicKey, peers[2].publicKey],
-      [peers[4].publicKey, peers[2].publicKey],
-      [peers[5].publicKey, peers[2].publicKey],
-      [peers[6].publicKey, peers[2].publicKey],
-      [peers[7].publicKey, peers[2].publicKey],
-      [peers[8].publicKey, peers[2].publicKey],
-      [peers[9].publicKey, peers[2].publicKey],
+    expect(discovered).toBeCalledWith(peers[3].publicKey, peers[2].publicKey)
+    expect(discovered).toBeCalledWith(peers[4].publicKey, peers[2].publicKey)
+    expect(discovered).toBeCalledWith(peers[5].publicKey, peers[2].publicKey)
+    expect(discovered).toBeCalledWith(peers[6].publicKey, peers[2].publicKey)
+    expect(discovered).toBeCalledWith(peers[7].publicKey, peers[2].publicKey)
+    expect(discovered).toBeCalledWith(peers[8].publicKey, peers[2].publicKey)
+    expect(discovered).toBeCalledWith(peers[9].publicKey, peers[2].publicKey)
 
-      [peers[4].publicKey, peers[3].publicKey],
-      [peers[5].publicKey, peers[3].publicKey],
-      [peers[6].publicKey, peers[3].publicKey],
-      [peers[7].publicKey, peers[3].publicKey],
-      [peers[8].publicKey, peers[3].publicKey],
-      [peers[9].publicKey, peers[3].publicKey],
+    expect(discovered).toBeCalledWith(peers[4].publicKey, peers[3].publicKey)
+    expect(discovered).toBeCalledWith(peers[5].publicKey, peers[3].publicKey)
+    expect(discovered).toBeCalledWith(peers[6].publicKey, peers[3].publicKey)
+    expect(discovered).toBeCalledWith(peers[7].publicKey, peers[3].publicKey)
+    expect(discovered).toBeCalledWith(peers[8].publicKey, peers[3].publicKey)
+    expect(discovered).toBeCalledWith(peers[9].publicKey, peers[3].publicKey)
 
-      [peers[5].publicKey, peers[4].publicKey],
-      [peers[6].publicKey, peers[4].publicKey],
-      [peers[7].publicKey, peers[4].publicKey],
-      [peers[8].publicKey, peers[4].publicKey],
-      [peers[9].publicKey, peers[4].publicKey],
+    expect(discovered).toBeCalledWith(peers[5].publicKey, peers[4].publicKey)
+    expect(discovered).toBeCalledWith(peers[6].publicKey, peers[4].publicKey)
+    expect(discovered).toBeCalledWith(peers[7].publicKey, peers[4].publicKey)
+    expect(discovered).toBeCalledWith(peers[8].publicKey, peers[4].publicKey)
+    expect(discovered).toBeCalledWith(peers[9].publicKey, peers[4].publicKey)
 
-      [peers[6].publicKey, peers[5].publicKey],
-      [peers[7].publicKey, peers[5].publicKey],
-      [peers[8].publicKey, peers[5].publicKey],
-      [peers[9].publicKey, peers[5].publicKey],
+    expect(discovered).toBeCalledWith(peers[6].publicKey, peers[5].publicKey)
+    expect(discovered).toBeCalledWith(peers[7].publicKey, peers[5].publicKey)
+    expect(discovered).toBeCalledWith(peers[8].publicKey, peers[5].publicKey)
+    expect(discovered).toBeCalledWith(peers[9].publicKey, peers[5].publicKey)
 
-      [peers[7].publicKey, peers[6].publicKey],
-      [peers[8].publicKey, peers[6].publicKey],
-      [peers[9].publicKey, peers[6].publicKey],
+    expect(discovered).toBeCalledWith(peers[7].publicKey, peers[6].publicKey)
+    expect(discovered).toBeCalledWith(peers[8].publicKey, peers[6].publicKey)
+    expect(discovered).toBeCalledWith(peers[9].publicKey, peers[6].publicKey)
 
-      [peers[8].publicKey, peers[7].publicKey],
-      [peers[9].publicKey, peers[7].publicKey],
+    expect(discovered).toBeCalledWith(peers[8].publicKey, peers[7].publicKey)
+    expect(discovered).toBeCalledWith(peers[9].publicKey, peers[7].publicKey)
 
-      [peers[9].publicKey, peers[8].publicKey],
-    ])
+    expect(discovered).toBeCalledWith(peers[9].publicKey, peers[8].publicKey)
   })
 })

@@ -1,5 +1,5 @@
-import { IXyoP2PService, IXyoPeer, IXyoPeerTransport, unsubscribeFn, IXyoPeerConnection, IXyoPeerDiscoveryService } from "./@types"
-import { XyoPubSub, Callback } from './xyo-pub-sub'
+import { IXyoP2PService, IXyoPeer, IXyoPeerTransport, unsubscribeFn, IXyoPeerConnection, IXyoPeerDiscoveryService, Callback } from "./@types"
+import { XyoPubSub } from './xyo-pub-sub'
 import { XyoPeerTransport } from './xyo-peer-transport'
 import { encodeXyoTopicBuffer, decodeXyoTopicBuffer } from "./xyo-topic-buffer"
 import { XyoPeerConnectionPool } from "./xyo-peer-connection-pool"

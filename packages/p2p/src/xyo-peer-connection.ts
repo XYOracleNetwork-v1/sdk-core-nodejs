@@ -1,10 +1,9 @@
 import '../index.d'
-import { IXyoPeer, IXyoPeerConnection } from './@types'
+import { IXyoPeer, IXyoPeerConnection, Callback } from './@types'
 import { XyoPubSub } from './xyo-pub-sub'
+import { encodeXyoBuffer, accumulateChunks } from './xyo-topic-buffer'
 import { Socket } from 'net'
 import multiaddr from 'multiaddr'
-
-type Callback = (...args: any[]) => void
 
 export class XyoPeerConnection implements IXyoPeerConnection {
 
@@ -14,9 +13,9 @@ export class XyoPeerConnection implements IXyoPeerConnection {
   private listener: XyoPubSub = new XyoPubSub()
 
   constructor(private connection: Socket) {
-    connection.on('data', d => this.listener.publish('message', d))
     connection.on('error', e => this.listener.publish('error', e))
     connection.on('close', e => this.listener.publish('close', e))
+    connection.on('data', accumulateChunks((d: Buffer) => this.listener.publish('message', d)))
   }
 
   public setMultiAddress(address: string) {
@@ -41,7 +40,7 @@ export class XyoPeerConnection implements IXyoPeerConnection {
   }
 
   public write(msg: Buffer) {
-    this.connection.write(msg)
+    this.connection.write(encodeXyoBuffer(msg))
   }
 
   public close() {

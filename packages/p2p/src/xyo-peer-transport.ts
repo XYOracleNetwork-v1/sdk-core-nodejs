@@ -4,8 +4,6 @@ import { XyoPeerConnection } from './xyo-peer-connection'
 import multiaddr from 'multiaddr'
 import net, { Server } from 'net'
 
-type Callback = (...args: any[]) => void
-
 export class XyoPeerTransport implements IXyoPeerTransport {
   private listener: XyoPubSub = new XyoPubSub()
   private server: undefined | Server

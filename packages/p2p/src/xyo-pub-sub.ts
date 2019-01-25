@@ -1,4 +1,4 @@
-export type Callback = (...args: any[]) => void
+import { Callback } from './@types'
 
 export class XyoPubSub {
   private listeners: { [topic: string]: Callback[] } = {}
