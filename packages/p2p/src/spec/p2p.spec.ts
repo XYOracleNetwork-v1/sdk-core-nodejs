@@ -91,24 +91,37 @@ describe(`P2P`, () => {
   })
 
   it('Should wait for entire buffer', (done) => {
-    const value = 'hello'
+    const value1 = 'hello'
+    const value2 = 'world'
     const emitter = new EventEmitter()
     const connection = new XyoPeerConnection(emitter as Socket)
     const received: any[] = []
     connection.onMessage((msg) => {
       received.push(msg)
-      expect(received.length).toBe(1)
-      expect(msg.toString()).toBe(value)
-      done()
+      if (received.length === 1) {
+        expect(msg.toString()).toBe(value1)
+      }
+      if (received.length === 2) {
+        expect(msg.toString()).toBe(value2)
+        done()
+      }
     })
 
-    const size = Buffer.alloc(4)
-    const message1 = Buffer.from(value.slice(0, 2))
-    const message2 = Buffer.from(value.slice(2))
-    size.writeUInt32BE(size.length + message1.length + message2.length, 0)
-    emitter.emit('data', size)
+    const size1 = Buffer.alloc(4)
+    const message1 = Buffer.from(value1.slice(0, 2))
+    const message2 = Buffer.from(value1.slice(2))
+    size1.writeUInt32BE(size1.length + message1.length + message2.length, 0)
+    emitter.emit('data', size1)
     emitter.emit('data', message1)
     emitter.emit('data', message2)
+
+    const size2 = Buffer.alloc(4)
+    const message3 = Buffer.from(value2.slice(0, 2))
+    const message4 = Buffer.from(value2.slice(2))
+    size1.writeUInt32BE(size1.length + message3.length + message4.length, 0)
+    emitter.emit('data', size1)
+    emitter.emit('data', message3)
+    emitter.emit('data', message4)
   })
 
   it(`Should create a transport`, () => {
