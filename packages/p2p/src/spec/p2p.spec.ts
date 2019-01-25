@@ -90,7 +90,7 @@ describe(`P2P`, () => {
     })
   })
 
-  it('Should wait for entire buffer', () => {
+  it.only('Should wait for entire buffer', (done) => {
     const value = 'hello'
     const emitter = new EventEmitter()
     const connection = new XyoPeerConnection(emitter as Socket)
@@ -99,13 +99,16 @@ describe(`P2P`, () => {
       received.push(msg)
       expect(received.length).toBe(1)
       expect(msg.toString()).toBe(value)
+      done()
     })
 
     const size = Buffer.alloc(4)
-    const message = Buffer.from(value)
-    size.writeUInt32BE(size.length + message.length, 0)
+    const message1 = Buffer.from(value.slice(0, 2))
+    const message2 = Buffer.from(value.slice(2))
+    size.writeUInt32BE(size.length + message1.length + message2.length, 0)
     emitter.emit('data', size)
-    emitter.emit('data', message)
+    emitter.emit('data', message1)
+    emitter.emit('data', message2)
   })
 
   it(`Should create a transport`, () => {
