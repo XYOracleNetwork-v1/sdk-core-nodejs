@@ -12,7 +12,7 @@ enum Attrs {
 
 export class XyoPeerDiscoveryService implements IXyoPeerDiscoveryService {
   private running = false
-  private bootrappers: string[] = []
+  private bootstrapAddresses: string[] = []
   private listener: XyoPubSub = new XyoPubSub()
   private pool: XyoPeerConnectionPool = new XyoPeerConnectionPool()
   private starting: Promise<undefined> = Promise.resolve(undefined)
@@ -53,21 +53,19 @@ export class XyoPeerDiscoveryService implements IXyoPeerDiscoveryService {
   }
 
   public addBootstrapNodes(addresses: string[]) {
-    this.bootrappers.push(...addresses.filter(this.isValidBootstrapAddress))
+    this.bootstrapAddresses.push(...addresses.filter(this.isValidBootstrapAddress))
     if (this.running) this.dialBootstrapNodes()
   }
 
-  public start() {
+  public async start() {
     if (this.running) return this.starting
 
     this.starting = this.transport.start().then(() => undefined)
     this.running = true
 
-    return this.starting
-      .then(() => {
-        this.dialBootstrapNodes()
-        return undefined
-      })
+    await this.starting
+    this.dialBootstrapNodes()
+    return undefined
   }
 
   public stop() {
@@ -99,21 +97,21 @@ export class XyoPeerDiscoveryService implements IXyoPeerDiscoveryService {
   }
 
   private dialBootstrapNodes () {
-    this.bootrappers.forEach((address) => {
+    this.bootstrapAddresses.forEach((address) => {
       this.transport.dial(address).then((connection) => {
         connection.write(this.encodeKeyExchange())
         this.handleHandshake(connection)
         this.handleClose(connection)
       })
     })
-    this.bootrappers = []
+    this.bootstrapAddresses = []
   }
 
   private handleBootstrap(connection: IXyoPeerConnection) {
     connection.onMessage((msg) => {
       const { topic, message } = decodeXyoTopicBuffer(msg)
       if (topic === 'discovery') {
-        const { publicKey, address, peers } = JSON.parse(message)
+        const { publicKey, address, peers } = JSON.parse(message) // TODO sanitize / validate input
         connection.setPublicKey(publicKey)
         connection.setMultiAddress(address)
         connection.write(this.encodeKeyExchange())
@@ -148,6 +146,5 @@ export class XyoPeerDiscoveryService implements IXyoPeerDiscoveryService {
     if (this.address === address) return false
     // TODO: Do not connect to peers that are in progress
     return !this.pool.getPeerConnectionByAddress(address)
-    return true
   }
 }

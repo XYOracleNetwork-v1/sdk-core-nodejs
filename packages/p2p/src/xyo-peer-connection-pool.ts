@@ -1,5 +1,4 @@
 import { IXyoPeerConnectionPool, IXyoPeerConnection } from './@types'
-import { XyoPubSub } from './xyo-pub-sub'
 
 export class XyoPeerConnectionPool implements IXyoPeerConnectionPool {
 

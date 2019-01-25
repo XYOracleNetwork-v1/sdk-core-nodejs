@@ -4,6 +4,7 @@
     "Deserializers",
     "Findables",
     "IXyo",
+    "Multiaddr",
     "Serializables",
     "Truthy",
     "blockchain",

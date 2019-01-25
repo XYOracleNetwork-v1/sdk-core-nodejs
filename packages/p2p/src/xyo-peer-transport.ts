@@ -1,4 +1,4 @@
-import { IXyoPeer, IXyoPeerTransport, IXyoPeerConnection } from './@types'
+import {  IXyoPeerTransport, IXyoPeerConnection } from './@types'
 import { XyoPubSub } from './xyo-pub-sub'
 import { XyoPeerConnection } from './xyo-peer-connection'
 import multiaddr from 'multiaddr'

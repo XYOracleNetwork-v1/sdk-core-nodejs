@@ -1,4 +1,4 @@
-import { IXyoPeer, IXyoPeerConnection, Callback } from './@types'
+import { IXyoPeerConnection, Callback } from './@types'
 import { XyoPubSub } from './xyo-pub-sub'
 import { encodeXyoBuffer, accumulateChunks } from './xyo-topic-buffer'
 import { Socket } from 'net'
