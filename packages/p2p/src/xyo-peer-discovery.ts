@@ -5,8 +5,12 @@ import { encodeXyoTopicBuffer, decodeXyoTopicBuffer } from "./xyo-topic-buffer"
 import { XyoPeerConnectionPool } from "./xyo-peer-connection-pool"
 import { Server } from 'net'
 
-export class XyoPeerDiscoveryService implements IXyoPeerDiscoveryService {
+enum Attrs {
+  address = 'address',
+  publicKey = 'publicKey'
+}
 
+export class XyoPeerDiscoveryService implements IXyoPeerDiscoveryService {
   private running = false
   private bootrappers: string[] = []
   private listener: XyoPubSub = new XyoPubSub()
@@ -26,20 +30,22 @@ export class XyoPeerDiscoveryService implements IXyoPeerDiscoveryService {
     })
   }
 
+  public getListOfPeersAttributes = (attr: Attrs) => {
+    return this.pool.getPeerConnections()
+    .map(conn => conn[attr])
+    .filter(value => !!value)
+  }
+
+  public getListOfKnownAddresses () {
+    return this.getListOfPeersAttributes(Attrs.address)
+  }
+
+  public getListOfKnownPublicKeys() {
+    return this.getListOfPeersAttributes(Attrs.publicKey)
+  }
+
   public getListOfKnownPeers () {
     return this.pool.getPeerConnections()
-  }
-
-  public getListOfKnownAddresses(): string[] {
-    return this.pool.getPeerConnections()
-    .map(conn => conn.address)
-    .filter(address => !!address)
-  }
-
-  public getListOfKnownPublicKeys(): string[] {
-    return this.pool.getPeerConnections()
-    .map(conn => conn.publicKey)
-    .filter(publicKey => !!publicKey)
   }
 
   public getPeerConnection (publicKey: string) {
