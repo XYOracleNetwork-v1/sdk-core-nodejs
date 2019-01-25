@@ -4,15 +4,17 @@ interface IXyoTopic {
   offset: number
 }
 
+const SIZE_OF_SIZE = 4
+
 export const encodeXyoBuffer = (msg: Buffer): Buffer => {
-  const size = Buffer.alloc(4)
+  const size = Buffer.alloc(SIZE_OF_SIZE)
   size.writeUInt32BE(size.length + msg.length, 0)
   return Buffer.concat([size, msg])
 }
 
 export const encodeXyoTopicBuffer = (topic: string, messageBuff: Buffer): Buffer => {
-  const topicSize = Buffer.alloc(4)
-  const messageSize = Buffer.alloc(4)
+  const topicSize = Buffer.alloc(SIZE_OF_SIZE)
+  const messageSize = Buffer.alloc(SIZE_OF_SIZE)
   const topicBuff = Buffer.from(topic)
   topicSize.writeUInt32BE(topicSize.length + topicBuff.length, 0)
   messageSize.writeUInt32BE(messageSize.length + messageBuff.length, 0)
@@ -22,8 +24,8 @@ export const encodeXyoTopicBuffer = (topic: string, messageBuff: Buffer): Buffer
 export const decodeXyoTopicBuffer = (buffer: Buffer, offset: number = 0): IXyoTopic => {
   const topicLength = buffer.readUInt32BE(offset)
   const messageLength = buffer.readUInt32BE(offset + topicLength)
-  const topic = buffer.slice(4 + offset, offset + topicLength).toString()
-  const message = buffer.slice(4 + offset + topicLength, offset + topicLength + messageLength).toString()
+  const topic = buffer.slice(SIZE_OF_SIZE + offset, offset + topicLength).toString()
+  const message = buffer.slice(SIZE_OF_SIZE + offset + topicLength, offset + topicLength + messageLength).toString()
   return { topic, message, offset: offset + topicLength + messageLength }
 }
 
@@ -33,7 +35,7 @@ export function accumulateChunks(cb: (msg: Buffer) => void): (chunk: Buffer) => 
   return (chunk: Buffer) => {
     acc = Buffer.concat([acc, chunk])
 
-    if (acc.length < 4) {
+    if (acc.length < SIZE_OF_SIZE) {
       return
     }
 
@@ -43,7 +45,7 @@ export function accumulateChunks(cb: (msg: Buffer) => void): (chunk: Buffer) => 
       return
     }
 
-    cb(acc.slice(4, sizeOfPayload))
+    cb(acc.slice(SIZE_OF_SIZE, sizeOfPayload))
     acc = acc.slice(sizeOfPayload)
   }
 }
