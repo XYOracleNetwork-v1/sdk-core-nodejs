@@ -9,6 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
+import "./index.d"
 export { IXyoP2PService, IXyoPeer, unsubscribeFn } from './@types'
 export { XyoPeerTransport } from './xyo-peer-transport'
 export { XyoPeerDiscoveryService } from './xyo-peer-discovery'

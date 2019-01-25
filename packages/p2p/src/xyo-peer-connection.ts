@@ -1,4 +1,3 @@
-import '../index.d'
 import { IXyoPeer, IXyoPeerConnection, Callback } from './@types'
 import { XyoPubSub } from './xyo-pub-sub'
 import { encodeXyoBuffer, accumulateChunks } from './xyo-topic-buffer'
