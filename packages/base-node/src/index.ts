@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 29th January 2019 11:18:37 am
+ * @Last modified time: Tuesday, 29th January 2019 12:13:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -77,7 +77,7 @@ export class XyoBaseNode extends XyoBase {
   }
 
   protected async getNodeRunnerDelegate(): Promise<IXyoNodeRunnerDelegate> {
-    return this.getOrCreate(``, async () => {
+    return this.getOrCreate(`IXyoNodeRunnerDelegate`, async () => {
       const peerConnectionDelegate = await this.getPeerConnectionDelegate()
       return {
         run: async () => {
