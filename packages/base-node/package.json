@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/base-node",
-  "version": "0.18.4",
+  "version": "0.18.5",
   "description": "A basic test node that demonstrates how to use the sdk ",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
