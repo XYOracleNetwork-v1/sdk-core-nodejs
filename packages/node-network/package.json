@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/node-network",
-  "version": "0.18.0",
+  "version": "0.18.3",
   "description": "High level node network protocol for communication between nodes",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
