@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/node-network",
-  "version": "0.18.3",
+  "version": "0.18.6",
   "description": "High level node network protocol for communication between nodes",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,7 +8,7 @@
   "license": "MIT",
   "dependencies": {
     "@xyo-network/base": "^0.18.0",
-    "@xyo-network/p2p": "^0.18.0"
+    "@xyo-network/p2p": "^0.18.6"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
