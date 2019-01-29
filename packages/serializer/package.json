@@ -1,21 +1,21 @@
 {
   "name": "@xyo-network/serializer",
-  "version": "0.17.1",
+  "version": "0.18.0",
   "description": "A serializer the Xyo Network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/bound-witness": "^0.17.1",
-    "@xyo-network/hashing": "^0.17.1",
-    "@xyo-network/heuristics-common": "^0.17.1",
-    "@xyo-network/origin-chain": "^0.17.1",
-    "@xyo-network/serialization": "^0.17.1",
-    "@xyo-network/serialization-schema": "^0.17.1",
-    "@xyo-network/signing": "^0.17.1",
-    "@xyo-network/signing.ecdsa": "^0.17.1",
-    "@xyo-network/signing.rsa": "^0.17.1"
+    "@xyo-network/bound-witness": "^0.18.0",
+    "@xyo-network/hashing": "^0.18.0",
+    "@xyo-network/heuristics-common": "^0.18.0",
+    "@xyo-network/origin-chain": "^0.18.0",
+    "@xyo-network/serialization": "^0.18.0",
+    "@xyo-network/serialization-schema": "^0.18.0",
+    "@xyo-network/signing": "^0.18.0",
+    "@xyo-network/signing.ecdsa": "^0.18.0",
+    "@xyo-network/signing.rsa": "^0.18.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

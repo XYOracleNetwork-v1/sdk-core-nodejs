@@ -1,13 +1,13 @@
 {
   "name": "@xyo-network/node-network",
-  "version": "0.17.1",
+  "version": "0.18.0",
   "description": "High level node network protocol for communication between nodes",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/p2p": "^0.17.3"
+    "@xyo-network/p2p": "^0.18.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
