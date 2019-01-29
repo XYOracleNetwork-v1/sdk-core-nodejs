@@ -7,6 +7,7 @@
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
+    "@xyo-network/base": "^0.18.0",
     "@xyo-network/p2p": "^0.18.0"
   },
   "devDependencies": {
