@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-secp256k1-signer-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 13th December 2018 10:30:44 am
+ * @Last modified time: Tuesday, 29th January 2019 10:50:33 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -57,7 +57,7 @@ export class XyoEcdsaSecp256k1SignerProvider extends XyoBase implements IXyoSign
 
     return new XyoEcdsaSecp256k1Signer(
       this.verifySign.bind(this),
-      this.getSignFn(key).bind(this),
+      this.getSignFn(key),
       () => {
         const publicKey = key.getPublic()
         return {

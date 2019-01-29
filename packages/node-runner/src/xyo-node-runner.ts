@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 4:22:44 pm
+ * @Last modified time: Tuesday, 29th January 2019 10:57:38 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoPeerConnectionDelegate } from '@xyo-network/peer-connections'
 import { XyoBase } from '@xyo-network/base'
+import { IXyoNodeRunnerDelegate } from './@types'
 
 /**
  * An XyoNodeRunner represents a node in the xyo-network system.
@@ -26,7 +26,7 @@ export class XyoNodeRunner extends XyoBase {
   private isLooping = false
   private shouldStopLooping = false
 
-  constructor(private readonly peerConnectionDelegate: IXyoPeerConnectionDelegate) {
+  constructor(private readonly delegate: IXyoNodeRunnerDelegate) {
     super()
   }
 
@@ -43,7 +43,7 @@ export class XyoNodeRunner extends XyoBase {
 
   public stop() {
     this.shouldStopLooping = true
-    return this.peerConnectionDelegate.stopProvidingConnections()
+    return this.delegate.onStop()
   }
 
   /**
@@ -57,8 +57,7 @@ export class XyoNodeRunner extends XyoBase {
     }
 
     try {
-      const networkPipe = await this.peerConnectionDelegate.provideConnection()
-      await this.peerConnectionDelegate.handlePeerConnection(networkPipe)
+      await this.delegate.run()
     } catch (err) {
       this.logError(`There was an uncaught error in the xyo-node loop`, err)
     }

@@ -6,7 +6,7 @@ import { Server } from "net"
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 28th January 2019 2:03:51 pm
+ * @Last modified time: Tuesday, 29th January 2019 11:09:37 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -52,7 +52,10 @@ export interface IXyoP2PService {
    * @memberof IXyoP2PService
    */
   subscribe(topic: string, cb: (senderPublicKey: string, message: Buffer) => void): unsubscribeFn
+
+  startDiscovering(): Promise<undefined>
 }
+
 export interface IXyoPeer {
 
   /**
@@ -71,6 +74,7 @@ export interface IXyoPeer {
    */
   address: string
 }
+
 export interface IXyoPeerTransport {
   /**
    * Listen for connections on supplied address

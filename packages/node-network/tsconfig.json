@@ -22,6 +22,6 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    {"path": "../base"}
+    {"path": "../p2p"}
   ]
 }

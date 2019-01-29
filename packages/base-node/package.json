@@ -26,6 +26,9 @@
     "@xyo-network/serializer": "^0.17.1",
     "@xyo-network/signing": "^0.17.1",
     "@xyo-network/signing.ecdsa": "^0.17.1",
+    "@xyo-network/node-network": "^0.17.1",
+    "@xyo-network/p2p": "^0.17.3",
+    "@xyo-network/errors": "^0.17.1",
     "@xyo-network/signing.rsa": "^0.17.1",
     "@xyo-network/storage": "^0.17.1"
   },

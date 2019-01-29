@@ -42,6 +42,9 @@
     { "path": "../signing.rsa"},
     { "path": "../heuristics-common"},
     { "path": "../storage"},
+    { "path": "../errors"},
+    { "path": "../node-network"},
+    { "path": "../p2p"},
     { "path": "../serializer"},
   ]
 }
