@@ -43,8 +43,4 @@ export class XyoP2PService extends XyoBase implements IXyoP2PService {
   public subscribe(topic: string, cb: Callback): unsubscribeFn {
     return this.listener.subscribe(topic, cb)
   }
-
-  public startDiscovering() {
-    return this.discoveryService.start()
-  }
 }

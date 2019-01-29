@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 29th January 2019 1:39:35 pm
+ * @Last modified time: Tuesday, 29th January 2019 2:56:42 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -62,8 +62,10 @@ export class XyoBaseNode extends XyoBase {
     await this.nodeRunner.start()
 
     // Start P2P service and node-network
-    const p2pService = await this.getP2PService()
-    await p2pService.startDiscovering()
+    const discoveryNetwork = await this.getDiscoveryNetwork()
+    await discoveryNetwork.start()
+    const bootstrapNodes = await this.getDiscoveryBootstrapNodes()
+    await discoveryNetwork.addBootstrapNodes(bootstrapNodes)
     await this.getNodeNetwork()
   }
 
