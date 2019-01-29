@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 29th January 2019 12:13:15 pm
+ * @Last modified time: Tuesday, 29th January 2019 12:32:37 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -136,7 +136,7 @@ export class XyoBaseNode extends XyoBase {
 
   protected async getP2PAddress(): Promise<string> {
     return this.getOrCreate(`P2PAddress`, async () => {
-      return 'ip4/0.0.0.0/tcp/11500'
+      return '/ip4/0.0.0.0/tcp/11500'
     })
   }
 
