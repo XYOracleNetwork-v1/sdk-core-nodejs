@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 24th January 2019 11:24:14 am
+ * @Last modified time: Tuesday, 29th January 2019 11:18:37 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBase } from '@xyo-network/base'
-import { XyoNodeRunner } from '@xyo-network/node-runner'
+import { XyoNodeRunner, IXyoNodeRunnerDelegate } from '@xyo-network/node-runner'
 import { IXyoNetworkProvider, IXyoNetworkProcedureCatalogue, CatalogueItem } from '@xyo-network/network'
 import { XyoServerTcpNetwork } from '@xyo-network/network.tcp'
 import { XyoSimplePeerConnectionDelegate, IXyoPeerConnectionDelegate, IXyoPeerConnectionHandler, XyoPeerConnectionHandler } from '@xyo-network/peer-connections'
@@ -18,6 +18,7 @@ import { XyoPeerInteractionRouter } from '@xyo-network/peer-interaction-router'
 import { XyoBoundWitnessStandardServerInteraction, XyoBoundWitnessTakeOriginChainServerInteraction } from '@xyo-network/peer-interaction-handlers'
 import { IXyoHashProvider, getHashingProvider } from '@xyo-network/hashing'
 import { getSignerProvider } from '@xyo-network/signing.ecdsa'
+
 import {
   XyoBoundWitnessHandlerProvider,
   IXyoBoundWitnessPayloadProvider,
@@ -40,8 +41,11 @@ import {
 
 import { IXyoSerializationService } from '@xyo-network/serialization'
 import { XyoInMemoryStorageProvider } from '@xyo-network/storage'
-import { IXyoSigner } from '@xyo-network/signing'
+import { IXyoSigner, IXyoPublicKey } from '@xyo-network/signing'
 import { serializer } from '@xyo-network/serializer'
+import { IXyoNodeNetwork, XyoNodeNetwork, IXyoComponentFeatureResponse } from '@xyo-network/node-network'
+import { IXyoP2PService, XyoP2PService, IXyoPeerDiscoveryService, XyoPeerDiscoveryService, XyoPeerTransport } from '@xyo-network/p2p'
+import { XyoError, XyoErrors } from '@xyo-network/errors'
 
 // tslint:disable-next-line:max-classes-per-file
 export class XyoBaseNode extends XyoBase {
@@ -49,10 +53,18 @@ export class XyoBaseNode extends XyoBase {
   protected nodeRunner: XyoNodeRunner | undefined
 
   public async start(): Promise<void> {
+    // Setup origin-chain
     await this.configureOriginChainStateRepository()
-    const delegate = await this.getPeerConnectionDelegate()
+
+    // Set up and start the node-runner
+    const delegate = await this.getNodeRunnerDelegate()
     this.nodeRunner = new XyoNodeRunner(delegate)
-    this.nodeRunner.start()
+    await this.nodeRunner.start()
+
+    // Start P2P service and node-network
+    const p2pService = await this.getP2PService()
+    await p2pService.startDiscovering()
+    await this.getNodeNetwork()
   }
 
   public async stop(): Promise<boolean> {
@@ -62,6 +74,70 @@ export class XyoBaseNode extends XyoBase {
     }
 
     return false
+  }
+
+  protected async getNodeRunnerDelegate(): Promise<IXyoNodeRunnerDelegate> {
+    return this.getOrCreate(``, async () => {
+      const peerConnectionDelegate = await this.getPeerConnectionDelegate()
+      return {
+        run: async () => {
+          const networkPipe = await peerConnectionDelegate.provideConnection()
+          return peerConnectionDelegate.handlePeerConnection(networkPipe)
+        },
+        onStop: async () => {
+          return peerConnectionDelegate.stopProvidingConnections()
+        }
+      }
+    })
+  }
+
+  protected async getNodeNetwork(): Promise<IXyoNodeNetwork> {
+    return this.getOrCreate(`IXyoNodeNetwork`, async () => {
+      const p2pService = await this.getP2PService()
+      const network = new XyoNodeNetwork(p2pService)
+      const features = await this.getNodeFeatures()
+      network.setFeatures(features)
+      return network
+    })
+  }
+
+  protected async getNodeFeatures(): Promise<IXyoComponentFeatureResponse> {
+    return this.getOrCreate('IXyoComponentFeatureResponse', async () => {
+      return {}
+    })
+  }
+
+  protected async getP2PService(): Promise<IXyoP2PService> {
+    return this.getOrCreate(`IXyoNodeNetwork`, async () => {
+      const discoveryNetwork = await this.getDiscoveryNetwork()
+      return new XyoP2PService(discoveryNetwork)
+    })
+  }
+
+  protected async getDiscoveryNetwork(): Promise<IXyoPeerDiscoveryService> {
+    return this.getOrCreate(`IXyoNodeNetwork`, async () => {
+      const discoveryPublicKey = await this.getDiscoveryNetworkPublicKey()
+      const p2pAddress = await this.getP2PAddress()
+      const peerTransport = new XyoPeerTransport(p2pAddress)
+      return new XyoPeerDiscoveryService(discoveryPublicKey.serializeHex(), p2pAddress, peerTransport)
+    })
+  }
+
+  protected async getDiscoveryNetworkPublicKey(): Promise<IXyoPublicKey> {
+    return this.getOrCreate(`DiscoveryNetworkPublicKey`, async () => {
+      const signers = await this.getSigners()
+      if (signers.length === 0) {
+        throw new XyoError('Signers must have at least item to initialize discovery service', XyoErrors.CRITICAL)
+      }
+
+      return signers[0].publicKey
+    })
+  }
+
+  protected async getP2PAddress(): Promise<string> {
+    return this.getOrCreate(`P2PAddress`, async () => {
+      return 'ip4/0.0.0.0/tcp/11500'
+    })
   }
 
   protected async getPeerConnectionDelegate(): Promise<IXyoPeerConnectionDelegate> {

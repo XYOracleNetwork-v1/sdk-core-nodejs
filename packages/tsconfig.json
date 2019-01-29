@@ -45,6 +45,7 @@
       { "path": "graphql-server" },
       { "path": "meta-list" },
       { "path": "p2p" },
+      { "path": "node-network" },
       { "path": "about-me" }
   ],
   "include": [
@@ -79,6 +80,7 @@
     "graphql-server/src/**/*.ts",
     "meta-list/src/**/*.ts",
     "p2p/src/**/*.ts",
+    "node-network/src/**/*.ts",
     "heuristics-common/src/**/*.ts"
   ]
 }

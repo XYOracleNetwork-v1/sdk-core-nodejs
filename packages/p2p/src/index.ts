@@ -4,12 +4,11 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 28th January 2019 3:48:55 pm
+ * @Last modified time: Tuesday, 29th January 2019 10:45:53 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import "./multiaddr"
 export { IXyoP2PService, IXyoPeer, unsubscribeFn, IXyoPeerDiscoveryService } from './@types'
 export { XyoPeerTransport } from './xyo-peer-transport'
 export { XyoPeerDiscoveryService } from './xyo-peer-discovery'

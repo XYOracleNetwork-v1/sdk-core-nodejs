@@ -1,7 +1,9 @@
+// tslint:disable-next-line:no-reference
+/// <reference path="./@types/multiaddr.d.ts" />
+import multiaddr from 'multiaddr'
 import {  IXyoPeerTransport, IXyoPeerConnection } from './@types'
 import { XyoPubSub } from './xyo-pub-sub'
 import { XyoPeerConnection } from './xyo-peer-connection'
-import multiaddr from 'multiaddr'
 import net, { Server } from 'net'
 
 export class XyoPeerTransport implements IXyoPeerTransport {
