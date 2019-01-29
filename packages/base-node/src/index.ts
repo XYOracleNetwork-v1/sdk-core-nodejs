@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 29th January 2019 2:56:42 pm
+ * @Last modified time: Tuesday, 29th January 2019 3:04:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -117,14 +117,11 @@ export class XyoBaseNode extends XyoBase {
   }
 
   protected async getDiscoveryNetwork(): Promise<IXyoPeerDiscoveryService> {
-    return this.getOrCreate(`IXyoNodeNetwork`, async () => {
+    return this.getOrCreate(`IXyoPeerDiscoveryService`, async () => {
       const discoveryPublicKey = await this.getDiscoveryNetworkPublicKey()
       const p2pAddress = await this.getP2PAddress()
       const peerTransport = new XyoPeerTransport(p2pAddress)
-      const bootstrapNodes = await this.getDiscoveryBootstrapNodes()
-      const discoveryService = new XyoPeerDiscoveryService(discoveryPublicKey.serializeHex(), p2pAddress, peerTransport)
-      discoveryService.addBootstrapNodes(bootstrapNodes)
-      return discoveryService
+      return new XyoPeerDiscoveryService(discoveryPublicKey.serializeHex(), p2pAddress, peerTransport)
     })
   }
 
