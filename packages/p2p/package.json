@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/p2p",
-  "version": "0.19.0",
+  "version": "0.19.1",
   "description": "A peer to peer network module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
