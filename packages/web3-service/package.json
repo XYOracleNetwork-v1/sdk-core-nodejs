@@ -1,14 +1,14 @@
 {
   "name": "@xyo-network/web3-service",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "Provides smart contract services",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.21.0",
-    "@xyo-network/errors": "^0.21.0",
+    "@xyo-network/base": "^0.22.0",
+    "@xyo-network/errors": "^0.22.0",
     "web3": "^1.0.0-beta.40",
     "web3-providers": "^1.0.0-beta.40"
   },

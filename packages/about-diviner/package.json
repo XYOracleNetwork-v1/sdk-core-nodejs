@@ -1,13 +1,13 @@
 {
   "name": "@xyo-network/about-diviner",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "The about description for a diviner",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/scsc": "^0.21.0"
+    "@xyo-network/scsc": "^0.22.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
