@@ -1,16 +1,16 @@
 {
   "name": "@xyo-network/diviner-graphql-api",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "description": "A base class for the Xyo Network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/about-diviner": "^0.20.0",
-    "@xyo-network/graphql-server": "^0.20.0",
-    "@xyo-network/meta-list": "^0.20.0",
-    "@xyo-network/questions": "^0.20.0",
+    "@xyo-network/about-diviner": "^0.21.0",
+    "@xyo-network/graphql-server": "^0.21.0",
+    "@xyo-network/meta-list": "^0.21.0",
+    "@xyo-network/questions": "^0.21.0",
     "graphql": "^14.0.2",
     "graphql-import": "^0.7.1"
   },
