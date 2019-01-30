@@ -1,0 +1,11 @@
+# import List from "list.graphql"
+# import ListMeta from "listmeta.graphql"
+
+type Question {
+  type: String
+}
+
+type QuestionList implements List {
+  meta: ListMeta!,
+  items: [Question]!
+}

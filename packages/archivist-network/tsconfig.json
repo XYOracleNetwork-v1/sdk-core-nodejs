@@ -21,7 +21,15 @@
     "src/**/*.spec.ts"
   ],
   "include": ["src/**/*"],
-  "references": [{
-    "path": "../base"
-  }]
+  "references": [
+    {"path": "../base"},
+    {"path": "../bound-witness"},
+    {"path": "../diviner-archivist-client"},
+    {"path": "../diviner-archivist-client.graphql"},
+    {"path": "../errors"},
+    {"path": "../hashing"},
+    {"path": "../node-network"},
+    {"path": "../p2p"},
+    {"path": "../serialization"}
+  ]
 }

@@ -1,0 +1,4 @@
+type Intersection {
+  time: String,
+  range: Int
+}

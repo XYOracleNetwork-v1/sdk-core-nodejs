@@ -21,7 +21,10 @@
     "src/**/*.spec.ts"
   ],
   "include": ["src/**/*"],
-  "references": [{
-    "path": "../base"
-  }]
+  "references": [
+    {"path": "../bound-witness"},
+    {"path": "../hashing"},
+    {"path": "../origin-block-repository"},
+    {"path": "../signing"}
+  ]
 }

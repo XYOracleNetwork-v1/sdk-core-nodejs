@@ -2,7 +2,7 @@
   "compilerOptions": {
       "target": "es6",
       "module": "commonjs",
-      "lib": ["esnext"],
+      "lib": ["esnext", "dom"],
       "declaration": true,
       "declarationMap": true,
       "sourceMap": true,
@@ -21,7 +21,9 @@
     "src/**/*.spec.ts"
   ],
   "include": ["src/**/*"],
-  "references": [{
-    "path": "../base"
-  }]
+  "references": [
+    {"path": "../base"},
+    {"path": "../diviner-archivist-client"},
+    {"path": "../meta-list"}
+  ]
 }

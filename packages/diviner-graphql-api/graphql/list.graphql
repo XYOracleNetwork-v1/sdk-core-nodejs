@@ -1,0 +1,5 @@
+# import ListMeta from "listmeta.graphql"
+
+interface List {
+  meta: ListMeta!
+}

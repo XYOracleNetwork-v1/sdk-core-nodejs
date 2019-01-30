@@ -24,11 +24,13 @@
   "references": [
     { "path": "../hashing"},
     { "path": "../signing"},
+    { "path": "../errors"},
     { "path": "../buffer-utils"},
     { "path": "../serialization-schema"},
     { "path": "../bound-witness"},
     { "path": "../base"},
     { "path": "../storage"},
+    { "path": "../serializer"},
     { "path": "../serialization"}
   ]
 }

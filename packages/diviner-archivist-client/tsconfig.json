@@ -21,7 +21,7 @@
     "src/**/*.spec.ts"
   ],
   "include": ["src/**/*"],
-  "references": [{
-    "path": "../base"
-  }]
+  "references": [
+    {"path": "../meta-list"}
+  ]
 }

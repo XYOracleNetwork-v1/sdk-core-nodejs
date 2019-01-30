@@ -1,0 +1,21 @@
+# import About from "about.graphql"
+# import Block from "block.graphql"
+# import IntersectionList from "intersectionlist.graphql"
+# import ArchivistList from "archivistlist.graphql"
+# import QuestionList from "questionlist.graphql"
+
+enum Direction {
+  FORWARD,
+  BACKWARD,
+  BOTH
+}
+
+type Query {
+  about: About,
+  block(hash: String): Block,
+  questions: QuestionList,
+  intersections(addresses: [String]): IntersectionList,
+  archivists: ArchivistList
+  questionHasIntersected(partyOneAddresses: [String]!, partyTwoAddresses: [String]!, markers: [String], direction: Direction): String,
+  questionNotifyIntersect(partyOneAddresses: [String]!, partyTwoAddresses: [String]!, markers: [String]): String
+}

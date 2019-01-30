@@ -21,7 +21,10 @@
     "src/**/*.spec.ts"
   ],
   "include": ["src/**/*"],
-  "references": [{
-    "path": "../base"
-  }]
+  "references": [
+    {"path": "../questions"},
+    {"path": "../about-diviner"},
+    {"path": "../meta-list"},
+    {"path": "../graphql-server"}
+  ]
 }

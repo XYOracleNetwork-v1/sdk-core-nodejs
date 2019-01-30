@@ -21,7 +21,15 @@
     "src/**/*.spec.ts"
   ],
   "include": ["src/**/*"],
-  "references": [{
-    "path": "../base"
-  }]
+  "references": [
+    {"path": "../archivist-repository"},
+    {"path": "../base"},
+    {"path": "../bound-witness"},
+    {"path": "../hashing"},
+    {"path": "../origin-block-repository"},
+    {"path": "../origin-chain"},
+    {"path": "../serialization"},
+    {"path": "../serialization-schema"},
+    {"path": "../signing"}
+  ]
 }
