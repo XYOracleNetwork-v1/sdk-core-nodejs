@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 25th January 2019 2:01:23 pm
+ * @Last modified time: Wednesday, 30th January 2019 12:05:14 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -81,7 +81,7 @@ export class Web3QuestionService extends XyoBase implements IQuestionsProvider {
           question.itemB,
           question.beneficiary
         )
-        .send({ from: this.web3Service.currentUser, gas, gasPrice })
+        .send({ gas, gasPrice, from: this.web3Service.currentUser })
         .then((payForDeliveryResult: any) => {
           this.logInfo(`PayForDelivery Result: ${payForDeliveryResult}`)
         })

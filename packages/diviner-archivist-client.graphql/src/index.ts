@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 28th January 2019 1:08:20 pm
+ * @Last modified time: Wednesday, 30th January 2019 11:58:15 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -46,8 +46,8 @@ export class XyoDivinerArchivistGraphQLClient extends XyoBase implements IXyoDiv
   constructor (private readonly archivistUrl: string) {
     super()
     const httpLink = createHttpLink({
-      uri: this.archivistUrl,
       fetch,
+      uri: this.archivistUrl,
       fetchOptions: {
         timeout: 10000
       }

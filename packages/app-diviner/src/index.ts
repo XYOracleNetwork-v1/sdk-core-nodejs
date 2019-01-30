@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 29th January 2019 5:45:42 pm
+ * @Last modified time: Wednesday, 30th January 2019 11:57:43 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -166,9 +166,8 @@ class DivinerLauncher extends XyoBaseNode {
           const files = await ipfsClient.readFiles(this.divinerConfig.stakedConsensus.ipfsHash)
 
           if (!files || files.length !== 1) {
-            this.logError(
-              `Undetermined state: Must return one and only one file for ipfs path ${this.divinerConfig.stakedConsensus.ipfsHash}`
-            )
+            const hash = this.divinerConfig.stakedConsensus.ipfsHash
+            this.logError(`Must return one and only one file for ipfs path ${hash}`)
             throw new Error('TODO: refactor to proper xyo-error once extracted into correct module')
           }
 

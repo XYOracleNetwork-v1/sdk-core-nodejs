@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-question-service.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 28th January 2019 12:44:07 pm
+ * @Last modified time: Wednesday, 30th January 2019 12:05:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,11 +32,16 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
     super()
   }
 
-  public async buildProofOfIntersection(question: IXyoHasIntersectedQuestion, forHashes: IXyoHash[]): Promise<IProofOfIntersection | undefined> {
+  public async buildProofOfIntersection(
+    question: IXyoHasIntersectedQuestion,
+    forHashes: IXyoHash[]
+  ): Promise<IProofOfIntersection | undefined> {
     if (forHashes.length === 0) return undefined
 
     // We will reference this a number of times, basic DRY principles apply
-    const continueFn = async () => forHashes.length > 1 ? this.buildProofOfIntersection(question, forHashes.slice(1)) : undefined
+    const continueFn = async () => forHashes.length > 1 ?
+      this.buildProofOfIntersection(question, forHashes.slice(1)) :
+      undefined
 
     const promiseChain: Promise<IProofOfIntersection | undefined> = Promise.resolve(undefined)
     const hash = forHashes[0]
@@ -58,8 +63,13 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
     const myParty = block.parties[isPartOfOriginChainResult.indexOfPartyInBlock]
 
     // Assumes only one key in partyOne and partyTwo values
-    const matchedMyPublicKeyInPartyOneInQuestion = myParty.keySet.keys.some(k => k.serializeHex() === question.partyOne[0])
-    const matchedMyPublicKeyInPartyTwoInQuestion = myParty.keySet.keys.some(k => k.serializeHex() === question.partyTwo[0])
+    const matchedMyPublicKeyInPartyOneInQuestion = myParty.keySet.keys.some(
+      k => k.serializeHex() === question.partyOne[0]
+    )
+
+    const matchedMyPublicKeyInPartyTwoInQuestion = myParty.keySet.keys.some(
+      k => k.serializeHex() === question.partyTwo[0]
+    )
 
     // First case: Doesn't match either means rolling public key
     if (!matchedMyPublicKeyInPartyOneInQuestion && !matchedMyPublicKeyInPartyTwoInQuestion) {
@@ -72,7 +82,7 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
       return continueFn()
     }
 
-    // By virtue of the above logic matchedPublicKeyInPartyOneInQuestion XOR matchedPublicKeyInPartyTwoInQuestion must be true
+    // matchedPublicKeyInPartyOneInQuestion XOR matchedPublicKeyInPartyTwoInQuestion must be true
     const otherParty = block.parties[(isPartOfOriginChainResult.indexOfPartyInBlock + 1) % 2]
 
     const matchedOtherPublicKeyInPartyQuestion = otherParty.keySet.keys.some((k) => {
@@ -104,7 +114,9 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
 
     const result = await this.blockPermissionRequestResolver.requestPermissionForBlock(hash)
     if (!result) {
-      this.logInfo(`Unable to resolve proof for out of origin-chain block ${hash.serializeHex()}, no attribution request responses`)
+      this.logInfo(
+        `Unable to resolve proof for out of origin-chain block ${hash.serializeHex()}, no attribution request responses`
+      )
       return continueFn()
     }
     let publicKeysToFind = block.publicKeys.reduce((acc, pks) => {
@@ -127,7 +139,11 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
       // Make sure the hash we're trying to find is in the supporting data
       const bw = result.supportingData[hashToFind]
       if (!bw) {
-        this.logInfo(`Failed in building proof for out of origin-chain block ${hash.serializeHex()}, insufficient supporting data for hash ${hashToFind}`)
+        this.logInfo(
+          `Failed in building proof for out of origin-chain block ${hash.serializeHex()},` +
+          `insufficient supporting data for hash ${hashToFind}`
+        )
+
         succeededInProducingProof = false
         break
       }
@@ -144,7 +160,8 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
           // Find the bridge block with the hash of interest in the bridge-hash-set
           const bridgeHashSetContainsHash = hSet.some((h) => {
             return h.schemaObjectId === XyoBridgeHashSet.deserializer.schemaObjectId &&
-              ((h as XyoBridgeHashSet).getData() as IXyoHash[]).some(bridgeHash => bridgeHash.serializeHex() === hashToFind)
+              ((h as XyoBridgeHashSet).getData() as IXyoHash[])
+              .some(bridgeHash => bridgeHash.serializeHex() === hashToFind)
           })
 
           // Make sure there public-key continuity otherwise bridge block is invalid
@@ -162,7 +179,10 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
 
       // We can not build a proof with the current set of data
       if (!bridgeBlockHash) {
-        this.logInfo(`Failed in building proof for out of origin-chain block ${hash.serializeHex()}, could not find bridge block for ${hashToFind}`)
+        this.logInfo(
+          `Failed in building proof for out of origin-chain block ${hash.serializeHex()}, ` +
+          `could not find bridge block for ${hashToFind}`
+        )
         succeededInProducingProof = false
         break
       }
@@ -200,7 +220,12 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
   }
 
   public async getIntersections(question: IXyoHasIntersectedQuestion): Promise<IXyoHash[]> {
-    return this.archivistNetwork.getIntersections(question.partyOne, question.partyTwo, question.markers, question.direction)
+    return this.archivistNetwork.getIntersections(
+      question.partyOne,
+      question.partyTwo,
+      question.markers,
+      question.direction
+    )
   }
 
   private async getBlockFromArchivistNetwork(hash: IXyoHash): Promise<IXyoBoundWitness | undefined> {

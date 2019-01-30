@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-questions-service.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 28th January 2019 12:50:21 pm
+ * @Last modified time: Wednesday, 30th January 2019 12:01:35 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -109,7 +109,15 @@ describe('Questions Service', () => {
 
     const bw1Hash = new XyoStubHash(Buffer.from('bw1Hash'))
 
-    const fetterS2BW2 = new XyoFetter(new XyoKeySet([s2PublicKey]), [new XyoIndex(1), new XyoPreviousHash(bw1Hash), new XyoBridgeHashSet([bw1Hash])])
+    const fetterS2BW2 = new XyoFetter(
+      new XyoKeySet([s2PublicKey]),
+      [
+        new XyoIndex(1),
+        new XyoPreviousHash(bw1Hash),
+        new XyoBridgeHashSet([bw1Hash])
+      ]
+    )
+
     const fetterB1BW2 = new XyoFetter(new XyoKeySet([b1PublicKey]), [new XyoIndex(0)])
     const witnessS2BW2 = new XyoWitness(new XyoSignatureSet([new XyoStubSignature('ABCD')]), [])
     const witnessB1BW2 = new XyoWitness(new XyoSignatureSet([new XyoStubSignature('DCBA')]), [])
@@ -123,7 +131,14 @@ describe('Questions Service', () => {
 
     const bw2Hash = new XyoStubHash(Buffer.from('bw2Hash'))
 
-    const fetterB1BW3 = new XyoFetter(new XyoKeySet([b1PublicKey]), [new XyoIndex(1), new XyoPreviousHash(bw2Hash), new XyoBridgeHashSet([bw1Hash])])
+    const fetterB1BW3 = new XyoFetter(
+      new XyoKeySet([b1PublicKey]),
+      [
+        new XyoIndex(1),
+        new XyoPreviousHash(bw2Hash),
+        new XyoBridgeHashSet([bw1Hash])
+      ]
+    )
     const fetterA1BW3 = new XyoFetter(new XyoKeySet([a1PublicKey]), [new XyoIndex(0)])
     const witnessB1BW3 = new XyoWitness(new XyoSignatureSet([new XyoStubSignature('ABCD')]), [])
     const witnessA1BW3 = new XyoWitness(new XyoSignatureSet([new XyoStubSignature('DCBA')]), [])
@@ -137,7 +152,15 @@ describe('Questions Service', () => {
 
     const bw3Hash = new XyoStubHash(Buffer.from('bw3Hash'))
 
-    const fetterA1BW4 = new XyoFetter(new XyoKeySet([a1PublicKey]), [new XyoIndex(1), new XyoPreviousHash(bw3Hash), new XyoBridgeHashSet([bw1Hash])])
+    const fetterA1BW4 = new XyoFetter(
+      new XyoKeySet([a1PublicKey]),
+      [
+        new XyoIndex(1),
+        new XyoPreviousHash(bw3Hash),
+        new XyoBridgeHashSet([bw1Hash])
+      ]
+    )
+
     const fetterD1BW4 = new XyoFetter(new XyoKeySet([d1PublicKey]), [new XyoIndex(0)])
     const witnessA1BW4 = new XyoWitness(new XyoSignatureSet([new XyoStubSignature('ABCD')]), [])
     const witnessD1BW4 = new XyoWitness(new XyoSignatureSet([new XyoStubSignature('DCBA')]), [])
@@ -244,7 +267,9 @@ async function getBoundWitnesses() {
   ]
 }
 
-async function getOriginBlockRepository(hashToBlockMap: {[h: string]: IXyoBoundWitness}): Promise<IXyoOriginBlockRepository> {
+async function getOriginBlockRepository(
+  hashToBlockMap: {[h: string]: IXyoBoundWitness}
+): Promise<IXyoOriginBlockRepository> {
   // @ts-ignore
   return {
     getOriginBlockByHash: async (hash) => {
@@ -253,8 +278,9 @@ async function getOriginBlockRepository(hashToBlockMap: {[h: string]: IXyoBoundW
   }
 }
 
-// tslint:disable-next-line:array-type
-async function getOriginChainRepository(blocksInOriginChain: {hash: IXyoHash, indexInBlock: number}[]): Promise<IXyoOriginChainRepository> {
+async function getOriginChainRepository(
+  blocksInOriginChain: IOriginChainMockInput[]
+): Promise<IXyoOriginChainRepository> {
   // @ts-ignore
   return {
     isBlockInOriginChain: async (block, hash) => {
@@ -272,10 +298,14 @@ async function getArchivistNetwork(): Promise<IXyoArchivistNetwork> {
   return undefined // Dont need to mock
 }
 
-async function getBlockPermissionsRequestsResolver(blockPermissionsMap: {[s: string]: IRequestPermissionForBlockResult}): Promise<IBlockPermissionRequestResolver> {
+async function getBlockPermissionsRequestsResolver(
+  blockPermissionsMap: {[s: string]: IRequestPermissionForBlockResult}
+): Promise<IBlockPermissionRequestResolver> {
   return {
     requestPermissionForBlock: async (hash: IXyoHash) => {
       return blockPermissionsMap[hash.serializeHex()]
     }
   }
 }
+
+interface IOriginChainMockInput {hash: IXyoHash, indexInBlock: number}

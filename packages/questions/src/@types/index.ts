@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 28th January 2019 11:57:52 am
+ * @Last modified time: Wednesday, 30th January 2019 11:58:29 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -16,7 +16,10 @@ export interface IXyoAnswerProvider<Q, A> {
 }
 
 export interface IXyoQuestionService {
-  buildProofOfIntersection(question: IXyoHasIntersectedQuestion, forHashes: IXyoHash[]): Promise<IProofOfIntersection | undefined>
+  buildProofOfIntersection(
+    question: IXyoHasIntersectedQuestion,
+    forHashes: IXyoHash[]
+  ): Promise<IProofOfIntersection | undefined>
   getIntersections(question: IXyoHasIntersectedQuestion): Promise<IXyoHash[]>
 }
 

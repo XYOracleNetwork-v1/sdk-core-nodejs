@@ -11,7 +11,9 @@
     "release": "lerna publish",
     "test": "export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose --detectOpenHandles",
     "tslint": "tslint -c tslint.json -p packages/tsconfig.json",
-    "clean": "node scripts/clean.js"
+    "clean": "node scripts/clean.js",
+    "start:diviner": "NODE_ENV=develop node packages/app-diviner/bin/xyo-diviner",
+    "start:archivist": "NODE_ENV=develop node packages/app-archivist/bin/xyo-archivist"
   },
   "devDependencies": {
     "@xyo-network/config-tslint": "^0.1.6",

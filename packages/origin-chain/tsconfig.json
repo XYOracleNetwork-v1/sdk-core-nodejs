@@ -22,15 +22,14 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    { "path": "../hashing"},
-    { "path": "../signing"},
-    { "path": "../errors"},
-    { "path": "../buffer-utils"},
-    { "path": "../serialization-schema"},
-    { "path": "../bound-witness"},
     { "path": "../base"},
-    { "path": "../storage"},
-    { "path": "../serializer"},
-    { "path": "../serialization"}
+    { "path": "../bound-witness"},
+    { "path": "../buffer-utils"},
+    { "path": "../errors"},
+    { "path": "../hashing"},
+    { "path": "../serialization"},
+    { "path": "../serialization-schema"},
+    { "path": "../signing"},
+    { "path": "../storage"}
   ]
 }
