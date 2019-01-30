@@ -1,0 +1,5 @@
+type ListMeta {
+  totalCount: Int!,
+  endCursor: String!,
+  hasNextPage: Boolean!
+}

@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+      "target": "es6",
+      "module": "commonjs",
+      "lib": ["esnext"],
+      "declaration": true,
+      "declarationMap": true,
+      "sourceMap": true,
+      "strict": true,
+      "composite": true,
+      "esModuleInterop": true,
+      "noImplicitAny": true,
+      "moduleResolution": "node",
+      "outDir": "dist",
+      "rootDir": "src"
+  },
+  "exclude": [
+    "node_modules",
+    "src/**/test/*",
+    "src/**/spec",
+    "src/**/*.spec.ts"
+  ],
+  "include": ["src/**/*"],
+  "references": [
+    {"path": "../about-me"},
+    {"path": "../api-archivist-graphql"},
+    {"path": "../archivist-repository"},
+    {"path": "../archivist-repository.sql"},
+    {"path": "../base-node"},
+    {"path": "../bound-witness"},
+    {"path": "../errors"},
+    {"path": "../graphql-server"},
+    {"path": "../ip-service"},
+    {"path": "../network"},
+    {"path": "../origin-block-repository"},
+    {"path": "../origin-chain"},
+    {"path": "../peer-discovery"},
+    {"path": "../peer-interaction-router"},
+    {"path": "../storage"},
+    {"path": "../storage.leveldb"},
+    {"path": "../node-network"}
+  ]
+}

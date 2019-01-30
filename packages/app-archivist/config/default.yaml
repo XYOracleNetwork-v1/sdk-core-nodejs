@@ -1,0 +1,69 @@
+# The port bound-witnesses will occur on
+port: 11000
+
+# The port to graphql server will server on
+graphql: 11001
+
+# The local private data directory of the archivist. Will be used by LevelDb
+data: ./archivist-db
+
+# The name of the node, will default to the mac-address
+nodeName: null
+
+# The version this node is using
+nodeVersion: "0.2.0"
+
+# The recommended way for sharing ip addresses with other nodes.
+# It is very difficult to effectively and reliably determine an ip address
+# However, most end-users will know what this value is when bootstrapping the
+# program, and therefore can tell the application what its public-ip is
+ipOverride: null
+
+# If the `ipOverride` field is not specified (which is recommended) 
+# The ip-service will try to resolve the public-facing ip-address for the
+# node if this value is `true`. If false, it will resolve to the external ip
+isPublic: false
+
+# SQL configurations, if any, for the archivist-repository
+sql:
+  host: null
+  port: null
+  user: null
+  password: null
+  database: null
+
+# p2p discovery configuration
+discovery:
+  # If false, no discovery will take place
+  enable: false
+
+  # A DNS record look up that may resolve to many ip-addresses to bootstrap against
+  dns: 'peers.xyo.network'
+
+  # Alternatively, or in addition to, `bootstrap peers` in the form of {ip: string, port: number},
+  # may be supplied in order socialize the node
+  bootstrapPeers: []
+  # - ip: 127.0.0.1
+  #   port: 11000
+
+  # The default graphql port for discovery
+  defaultPort: 11001
+
+# Validation Config when incoming bound-witnesses occur or are bridged
+validation:
+
+  # Make sure all parties have the same length in their positionally coupled fields,
+  # `publicKeys`, `signatures`, `payloads` 
+  checkPartyLengths: true
+
+  # Check that each party has supplied an `index` value
+  checkIndexExists: true
+
+  # Check that for each signature there exist a public key
+  checkCountOfSignaturesMatchPublicKeysCount: true
+
+  # Check that each signature validates against the signed payload
+  validateSignatures: true
+
+  # Check that resulting or provided hash validates against the signed payload
+  validateHash: true

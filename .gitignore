@@ -67,3 +67,9 @@ dist/
 data/
 archivist-db/
 db.json
+diviner-db/
+ipfs/
+
+# Scratch files
+scratch.ts
+scratch.js

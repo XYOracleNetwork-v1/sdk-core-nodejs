@@ -1,0 +1,8 @@
+# import Intersection from "intersection.graphql"
+# import List from "list.graphql"
+# import ListMeta from "listmeta.graphql"
+
+type IntersectionList implements List {
+  meta: ListMeta!,
+  items: [Intersection]!
+}
