@@ -1,13 +1,13 @@
 {
   "name": "@xyo-network/node-runner",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "description": "Implements a node life-cycle loop that can be used / extended to manage how a node in the XYO network behaves in different scenarios.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.18.0"
+    "@xyo-network/base": "^0.19.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
