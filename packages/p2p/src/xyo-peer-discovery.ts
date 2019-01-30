@@ -3,14 +3,14 @@ import { XyoPubSub } from './xyo-pub-sub'
 import { XyoPeerTransport } from './xyo-peer-transport'
 import { encodeXyoTopicBuffer, decodeXyoTopicBuffer } from "./xyo-topic-buffer"
 import { XyoPeerConnectionPool } from "./xyo-peer-connection-pool"
-import { Server } from 'net'
+import { XyoBase } from "@xyo-network/base"
 
 enum Attrs {
   address = 'address',
   publicKey = 'publicKey'
 }
 
-export class XyoPeerDiscoveryService implements IXyoPeerDiscoveryService {
+export class XyoPeerDiscoveryService extends XyoBase implements IXyoPeerDiscoveryService {
   private running = false
   private bootstrapAddresses: string[] = []
   private listener: XyoPubSub = new XyoPubSub()
@@ -22,9 +22,17 @@ export class XyoPeerDiscoveryService implements IXyoPeerDiscoveryService {
     private address: string,
     private transport: IXyoPeerTransport,
   ) {
-    this.onDiscovery(connection => this.pool.addPeerConnection(connection))
-    this.onDisconnected(connection => this.pool.removePeerConnection(connection))
+    super()
+    this.onDiscovery((connection) => {
+      this.logInfo(`Discovered Peer`)
+      this.pool.addPeerConnection(connection)
+    })
+    this.onDisconnected((connection) => {
+      this.logInfo('Disconnected from Peer')
+      this.pool.removePeerConnection(connection)
+    })
     this.transport.onConnection((connection) => {
+      this.logInfo(`Connected to Peer ${connection.publicKey}`)
       this.handleBootstrap(connection)
       this.handleClose(connection)
     })
@@ -53,11 +61,13 @@ export class XyoPeerDiscoveryService implements IXyoPeerDiscoveryService {
   }
 
   public addBootstrapNodes(addresses: string[]) {
+    this.logInfo(`Adding bootstrap nodes ${addresses.map(a => `\n${a}`)}`)
     this.bootstrapAddresses.push(...addresses.filter(this.isValidBootstrapAddress))
     if (this.running) this.dialBootstrapNodes()
   }
 
   public async start() {
+    this.logInfo(`Starting discovery`)
     if (this.running) return this.starting
 
     this.starting = this.transport.start().then(() => undefined)
@@ -69,6 +79,7 @@ export class XyoPeerDiscoveryService implements IXyoPeerDiscoveryService {
   }
 
   public stop() {
+    this.logInfo(`Stopping discovery`)
     this.running = false
     this.transport.stop()
   }
@@ -97,6 +108,7 @@ export class XyoPeerDiscoveryService implements IXyoPeerDiscoveryService {
   }
 
   private dialBootstrapNodes () {
+    this.logInfo(`Dialing bootstrap nodes`)
     this.bootstrapAddresses.forEach((address) => {
       this.transport.dial(address).then((connection) => {
         connection.write(this.encodeKeyExchange())
@@ -112,6 +124,7 @@ export class XyoPeerDiscoveryService implements IXyoPeerDiscoveryService {
       const { topic, message } = decodeXyoTopicBuffer(msg)
       if (topic === 'discovery') {
         const { publicKey, address, peers } = JSON.parse(message) // TODO sanitize / validate input
+        this.logInfo(`Discovery topic received for publicKey ${publicKey}`)
         connection.setPublicKey(publicKey)
         connection.setMultiAddress(address)
         connection.write(this.encodeKeyExchange())

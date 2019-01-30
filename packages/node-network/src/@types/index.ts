@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 28th January 2019 5:30:24 pm
+ * @Last modified time: Tuesday, 29th January 2019 5:13:49 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -35,7 +35,7 @@ export interface IXyoComponentArchivistFeatureDetail {
   graphqlHost: string
   graphqlPort: number
   boundWitnessHost: string
-  boundWitnessPort: string
+  boundWitnessPort: number
 }
 
 // tslint:disable-next-line:no-empty-interface
