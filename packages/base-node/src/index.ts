@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 29th January 2019 3:42:02 pm
+ * @Last modified time: Tuesday, 29th January 2019 3:49:26 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -65,15 +65,8 @@ export class XyoBaseNode extends XyoBase {
     const discoveryNetwork = await this.getDiscoveryNetwork()
     await discoveryNetwork.start()
     const bootstrapNodes = await this.getDiscoveryBootstrapNodes()
-    const features = await this.getNodeFeatures()
-
-    discoveryNetwork.addBootstrapNodes(bootstrapNodes)
-
-    const unsubscribe = discoveryNetwork.onDiscovery(async (connection) => {
-      const nodeNetwork = await this.getNodeNetwork()
-      nodeNetwork.setFeatures(features)
-      unsubscribe()
-    })
+    await discoveryNetwork.addBootstrapNodes(bootstrapNodes)
+    await this.getNodeNetwork()
   }
 
   public async stop(): Promise<boolean> {
@@ -103,7 +96,10 @@ export class XyoBaseNode extends XyoBase {
   protected async getNodeNetwork(): Promise<IXyoNodeNetwork> {
     return this.getOrCreate(`IXyoNodeNetwork`, async () => {
       const p2pService = await this.getP2PService()
-      return new XyoNodeNetwork(p2pService)
+      const network = new XyoNodeNetwork(p2pService)
+      const features = await this.getNodeFeatures()
+      network.setFeatures(features)
+      return network
     })
   }
 
