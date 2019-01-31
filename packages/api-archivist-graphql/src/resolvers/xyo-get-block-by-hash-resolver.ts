@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-get-block-by-hash-resolver.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 28th January 2019 1:00:55 pm
+ * @Last modified time: Wednesday, 30th January 2019 2:36:22 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -29,6 +29,7 @@ export class XyoGetBlockByHashResolver implements IXyoDataResolver<any, any, any
     }
 
     return {
+      humanReadable: block.getReadableValue(),
       bytes: block.serializeHex(),
       publicKeys: block.publicKeys.map((keyset) => {
         return {

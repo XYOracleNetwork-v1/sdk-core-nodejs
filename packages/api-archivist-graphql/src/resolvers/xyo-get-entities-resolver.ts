@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-get-entities-resolver.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th December 2018 11:47:29 am
+ * @Last modified time: Wednesday, 30th January 2019 2:35:05 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-graphql-server.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 19th December 2018 11:22:18 am
+ * @Last modified time: Wednesday, 30th January 2019 2:30:21 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,6 +13,7 @@ import { ApolloServer, gql, IResolvers } from 'apollo-server'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoDataResolver } from './@types'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
+import GraphQLJSON from 'graphql-type-json'
 
 export class XyoGraphQLServer extends XyoBase {
   public server: ApolloServer | undefined
@@ -62,6 +63,7 @@ export class XyoGraphQLServer extends XyoBase {
     }, {})
 
     const resolvers: IResolvers = {
+      JSON: GraphQLJSON,
       Query: compiledRouter
     }
 

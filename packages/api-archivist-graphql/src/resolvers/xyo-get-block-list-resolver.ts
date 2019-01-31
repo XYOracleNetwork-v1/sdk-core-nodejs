@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-get-block-list-resolver.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 28th January 2019 1:01:09 pm
+ * @Last modified time: Wednesday, 30th January 2019 2:42:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -43,6 +43,7 @@ export class XyoGetBlockList implements IXyoDataResolver<any, any, any, any> {
       },
       items: await Promise.all(result.list.map(async (block) => {
         return {
+          humanReadable: block.getReadableValue(),
           bytes: block.serializeHex(),
           publicKeys: block.publicKeys.map((keyset) => {
             return {

@@ -4,6 +4,8 @@ export class GraphqlSchemaBuilder extends XyoBase {
 
   public async buildSchema() {
     const compiledSchema = `
+      scalar JSON
+
       type Query {
         blocksByPublicKey(publicKeys: [String!]): [XyoBlockCollection],
         blockList(limit: Int!, cursor: String): XyoBlockList!,
@@ -19,6 +21,7 @@ export class GraphqlSchemaBuilder extends XyoBase {
       }
 
       type XyoBlock {
+        humanReadable: JSON!
         bytes: String!
         publicKeys: [XyoKeySet!]
         signatures: [XyoSignatureSet!]

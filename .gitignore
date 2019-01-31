@@ -69,6 +69,7 @@ archivist-db/
 db.json
 diviner-db/
 ipfs/
+sandbox/
 
 # Scratch files
 scratch.ts
