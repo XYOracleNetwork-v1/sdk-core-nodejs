@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 29th January 2019 3:49:26 pm
+ * @Last modified time: Wednesday, 30th January 2019 2:18:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -334,7 +334,7 @@ export class XyoBaseNode extends XyoBase {
       return {
         onBoundWitnessSuccess: async (boundWitness: IXyoBoundWitness) => {
           const hash = await hashingProvider.createHash(boundWitness.getSigningData())
-          this.logInfo(`Created bound witness with hash ${hash}`)
+          this.logInfo(`Created bound witness with hash ${hash.serializeHex()}`)
         }
       }
     })

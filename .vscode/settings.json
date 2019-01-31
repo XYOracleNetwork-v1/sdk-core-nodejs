@@ -1,10 +1,12 @@
 {
-  "cSpell.words": [ 'Deserializer',
+  "cSpell.words": [
+    "Deserializer",
     "Deserializers",
     "Findables",
     "ISCSC",
     "IXyo",
     "Multiaddr",
+    "QLJSON",
     "SCSC",
     "Serializables",
     "Truthy",
@@ -28,7 +30,9 @@
     "leveldown",
     "openzeppelin",
     "pojo",
+    "popd",
     "promisify",
+    "pushd",
     "repo",
     "rssi",
     "ryanxyo",

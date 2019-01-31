@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-get-blocks-by-public-key-resolver.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 28th January 2019 1:01:30 pm
+ * @Last modified time: Wednesday, 30th January 2019 2:42:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -51,6 +51,7 @@ export class XyoGetBlocksByPublicKeyResolver extends XyoBase implements IXyoData
 
       const serializedBoundWitnesses = await Promise.all(blocksByPublicKeySet.boundWitnesses.map(async (block) => {
         return {
+          humanReadable: block.getReadableValue(),
           bytes: block.serializeHex(),
           publicKeys: block.publicKeys.map((keyset) => {
             return {
