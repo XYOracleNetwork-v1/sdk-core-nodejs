@@ -148,6 +148,30 @@ i.e.
 
 ### Development Tools
 
+#### NVM (Node Version Manager)
+
+A number of the libraries that this project depends on may fail at install-time because they need to be built from C++ source where the output is specific to the host system. The underlying issue is that it is trying to modify files in protected areas of the file-system. This is all to say that [nvm](https://github.com/creationix/nvm) is strongly recommended for developers. Additionally you will find a [.nvmrc file](.nvmrc) at the root-level of the project that specifies the currently supported version of Node.
+
+#### Workflow
+
+The project structure was designed to support and encourage a modular architecture. This project uses a typical [Lerna](https://lernajs.io/) layout. That is, all modules are located in the [packages folder](packages). This allows for a couple of things that are conducive to an efficient development and release process:
+
+- Local linking of modules during development
+- Ability to release patches, minor, and major version upgrades to npm with ease
+- TypeScript linking using [project references](https://www.typescriptlang.org/docs/handbook/project-references.html)
+
+That said, since this is a TypeScript project, the source must be transpiled to JavaScript before execution. So, if a change is made to one or more modules in the package directory `yarn build` must be run from the project root for the changes to reflect.
+
+So a typical workflow might look like this:
+
+- Developer pulls down repository and changes directory in project root
+- Developer runs `yarn install` to install all dependencies of all the packages in accordance with [yarn workspace feature](https://yarnpkg.com/lang/en/docs/workspaces/)
+- Developer runs `yarn build` to transpile TypeScript source to JavaScript
+- Developer makes changes in one or more packages
+- Developer runs `yarn build` to see those changes reflected and linked accordingly
+- On occasion, running `yarn clean` may prove useful for resetting the project to clean state
+- When a change-set is complete and has gone through the proper code-review etc, a release can be made running `yarn release`. Release versions should follow [SemVer](https://semver.org/) standards.
+
 There are a number of scripts for managing the different services that this project depends.
 
 In particular you can manage you ganache, ipfs, and MySQL docker services using the commands found in the `scripts` section of the [package.json file](package.json).
