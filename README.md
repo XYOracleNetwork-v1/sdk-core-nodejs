@@ -8,22 +8,23 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/XYOracleNetwork/sdk-core-nodejs.svg)](https://greenkeeper.io/)
 [![Maintainability](https://api.codeclimate.com/v1/badges/f6bc63330b1d2422973b/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability)
 
-Core functionality for the XYO nodejs projects. This repository implements
-the core objects used in the XYO protocol. Additionally it provides core
-XYO features like performing bound-witnesses, hashing, signing, serialization, origin-chain management and TCP Network services.
+## Project Overview
 
-The XYO protocol for creating origin-blocks is specified in the [XYO Yellow Paper](https://docs.xyo.network/XYO-Yellow-Paper.pdf).
-In it, it describes the behavior of how a node on the XYO network should create
-bound-witnesses. Note, the behavior is not coupled with any particular technology constraints around transport layers, cryptographic algorithms, or hashing algorithms.
+### Scope of features
+
+Core functionality for the XYO NodeJS projects. This repository implements
+the core objects and services used in the XYO protocol. Additionally it provides core XYO features like performing bound-witnesses, hashing, signing, serialization, origin-chain management and TCP Network services. Alas, it exposes a number of CLI applications for running archivists and diviners.
+
+### Yellow Paper
+
+The XYO protocol for creating origin-blocks is specified in the [XYO Yellow Paper](https://docs.xyo.network/XYO-Yellow-Paper.pdf). In it, it describes the behavior of how a node on the XYO network should create bound-witnesses. Note, the behavior is not coupled with any particular technology constraints around transport layers, cryptographic algorithms, or hashing algorithms.
+
+### Architecture and Design
 
 As such, the design of the system is aimed at abstracting these concepts
-so that the concrete implementations of these components can be swapped out so long
-as they conform to the correct interfaces.
+so that the concrete implementations of these components can be swapped out so long as they conform to the correct interfaces.
 
-Practically, this library uses TypeScript, which transpiles to JavaScript. Additionally, a TCP
-network provider has been implemented. Furthermore, some of the most popular public-key cryptography
-algorithms and hashing algorithms have been wrapped and made available to the core library.
-If you're favorite crypto signing algorithm is not yet supported, we welcome pull-requests and suggestions.
+Practically, this library uses TypeScript, which transpiles to JavaScript. Additionally, a TCP network provider has been implemented. Furthermore, some of the most popular public-key cryptography algorithms and hashing algorithms have been wrapped and made available to the core library. If you're favorite crypto signing algorithm is not yet supported, we welcome pull-requests and suggestions.
 
 [Here](https://github.com/XYOracleNetwork/spec-coreobjectmodel-tex) is a link to the core object model that contains an index of major/minor values and their respective objects.
 
@@ -49,15 +50,19 @@ Once you've switched to the repository directory, install the dependencies. We p
   yarn install
 ```
 
+### Build
+
 Once the dependencies are installed run
 
 ```sh
   yarn build
 ```
 
+### Running the project
+
 This will transpile the TypeScript into javascript and link the local packages together.
 
-To start a reference implementation of a base-node that can perform bound-witnesses as a server run
+To start a reference implementation of a base-node that can perform bound-witnesses as a server run:
 
 ```sh
   node packages/base-node
@@ -65,13 +70,15 @@ To start a reference implementation of a base-node that can perform bound-witnes
 
 This will start a node on port 11000 and accept incoming bound-witness requests
 
-Since this project is meant to function as a library there is no application to be run. There are number of tests that can be run from the command-line using.
+### Testing
+
+#### Run all tests
 
 ```sh
   yarn test
 ```
 
-Run a set of tests in a particular file:
+#### Run a set of tests in a particular file:
 
 i.e. Where the test file is `test/integration/lib.spec.ts`
 
@@ -150,7 +157,9 @@ i.e.
 
 #### NVM (Node Version Manager)
 
-A number of the libraries that this project depends on may fail at install-time because they need to be built from C++ source where the output is specific to the host system. The underlying issue is that it is trying to modify files in protected areas of the file-system. This is all to say that [nvm](https://github.com/creationix/nvm) is strongly recommended for developers. Additionally you will find a [.nvmrc file](.nvmrc) at the root-level of the project that specifies the currently supported version of Node.
+A number of the libraries that this project depends on may fail at install-time because they need to be built from C++ source where the output is specific to the host system. The underlying issue is that it is trying to modify files in protected areas of the file-system.
+
+This is all to say that [nvm](https://github.com/creationix/nvm) is strongly recommended for developers. Additionally you will find a [.nvmrc file](.nvmrc) at the root-level of the project that specifies the currently supported version of Node.
 
 #### Workflow
 
@@ -172,29 +181,37 @@ So a typical workflow might look like this:
 - On occasion, running `yarn clean` may prove useful for resetting the project to clean state
 - When a change-set is complete and has gone through the proper code-review etc, a release can be made running `yarn release`. Release versions should follow [SemVer](https://semver.org/) standards.
 
+#### Useful Scripts
+
 There are a number of scripts for managing the different services that this project depends.
 
 In particular you can manage you ganache, ipfs, and MySQL docker services using the commands found in the `scripts` section of the [package.json file](package.json).
 
-Bootstrap or manage your MySQL service
+##### Bootstrap or manage your MySQL service
 
 ```sh
   yarn manage:db
 ```
 
-Bootstrap or manage your local development ganache instance
+##### Bootstrap or manage your local development ganache instance
 
 ```sh
-  yarn manage:ganache # OR yarn:manage:balances to view balances of accounts
+  yarn manage:ganache
 ```
 
-Bootstrap or manage your local development ipfs instance
+##### View balances of Eth accounts on ganache instance
+
+```sh
+  yarn:manage:ganache:balances
+```
+
+##### Bootstrap or manage your local development ipfs instance
 
 ```sh
   yarn manage:ipfs
 ```
 
-Add a file/folder to your IPFS node using a relative or absolute path
+##### Add a file/folder to your IPFS node using a relative or absolute path
 
 ```sh
   yarn manage:ipfs:add {/path/to/file}
