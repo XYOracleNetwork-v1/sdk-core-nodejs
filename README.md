@@ -83,10 +83,12 @@ This will start a node on port 11000 and accept incoming bound-witness requests
 i.e. Where the test file is `test/integration/lib.spec.ts`
 
 ```sh
-  NODE_ENV=test && node ./node_modules/jest/bin/jest test/integration/lib.spec.ts
+  yarn test lib.spec.ts
 ```
 
 ## Additional Documentation
+
+All packages have their own README files as well. These are the README files that will be found on their respective npm package pages as well.
 
 - [storage.leveldb](packages/storage.leveldb/README.md)
 - [ipfs-client](packages/ipfs-client/README.md)
