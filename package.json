@@ -14,6 +14,7 @@
     "clean": "node scripts/clean.js",
     "start:diviner": "NODE_ENV=develop node packages/app-diviner/bin/xyo-diviner",
     "start:archivist": "NODE_ENV=develop node packages/app-archivist/bin/xyo-archivist",
+    "create:package": "node scripts/create-package.js",
     "manage:db": "node scripts/manage-xyo-db.js",
     "manage:ganache": "node scripts/manage-ganache.js",
     "manage:ganache:balances": "node scripts/manage-ganache.js balances",
