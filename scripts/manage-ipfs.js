@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: manage-ipfs.js
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 31st January 2019 3:11:29 pm
+ * @Last modified time: Friday, 1st February 2019 12:35:17 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -129,6 +129,8 @@ async function tryStartIpfsService(restartWithCorsConfig) {
     shelljs.exec(`docker exec ipfs_host ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "GET", "POST"]'`)
     restartDockerContainer('ipfs_host')
   }
+
+  logInfo(`Successfully started ipfs service`)
 
   return true
 }

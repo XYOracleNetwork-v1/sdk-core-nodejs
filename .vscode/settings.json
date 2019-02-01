@@ -20,6 +20,7 @@
     "deserializing",
     "ecdsa",
     "ethereum",
+    "eval",
     "graphql",
     "hasher",
     "ipfs",

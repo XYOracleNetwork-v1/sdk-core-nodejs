@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 30th January 2019 11:57:43 am
+ * @Last modified time: Friday, 1st February 2019 12:37:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -58,45 +58,52 @@ class DivinerLauncher extends XyoBaseNode {
     this.keyValueDb = new XyoKeyValueDatabase(db)
     this.originChainMemoryProvider = await this.keyValueDb!.getOrCreateNamespace('origin-chain')
     this.originBlockMemoryProvider = await this.keyValueDb!.getOrCreateNamespace('origin-block-repository')
-    // const questionsService = await this.getQuestionsService()
+    const questionsService = await this.getQuestionsService()
 
     // const scscDataProvider = await this.getScscDataProvider()
     // const scsc = await scscDataProvider.resolve()
 
-    // this.server = await createDivinerGraphqlServer(
-    //   // The port to run the graphql server on
-    //   this.divinerConfig.graphQLPort,
+    this.server = await createDivinerGraphqlServer(
+      // The port to run the graphql server on
+      this.divinerConfig.graphQLPort,
 
-    //   // The `about me` data-provider
-    //   async () => {
-    //     return new XyoAboutDiviner(
-    //       this.divinerConfig.about.version,
-    //       this.divinerConfig.about.url,
-    //       this.divinerConfig.about.address,
-    //       this.divinerConfig.discovery.seeds,
-    //       scsc
-    //     )
-    //   },
+      // The `about me` data-provider
+      async () => {
+        return new XyoAboutDiviner(
+          this.divinerConfig.about.version,
+          this.divinerConfig.about.url,
+          this.divinerConfig.about.address,
+          this.divinerConfig.discovery.seeds,
+          {
+            address: 'TODO',
+            platform: 'TODO',
+            network: 'TODO',
+            abi: 'TODO',
+            bytecode: 'TODO',
+            ipfs: 'TODO'
+          }
+        )
+      },
 
-    //   // Provides a list archivists this diviner knows about
-    //   async () => {
-    //     return new XyoMetaList(
-    //       new XyoMeta(
-    //         this.divinerConfig.discovery.seeds.length,
-    //         undefined,
-    //         false
-    //       ),
-    //       this.divinerConfig.discovery.seeds
-    //     )
-    //   },
-    //   {
-    //     resolve: (args: IXyoHasIntersectedQuestion) => {
-    //       return questionsService.getIntersections(args)
-    //     }
-    //   }
-    // )
+      // Provides a list archivists this diviner knows about
+      async () => {
+        return new XyoMetaList(
+          new XyoMeta(
+            this.divinerConfig.discovery.seeds.length,
+            undefined,
+            false
+          ),
+          this.divinerConfig.discovery.seeds
+        )
+      },
+      {
+        resolve: (args: IXyoHasIntersectedQuestion) => {
+          return questionsService.getIntersections(args)
+        }
+      }
+    )
 
-    // await this.server.start()
+    await this.server.start()
     await super.start()
     const discoveryNetwork = await this.getDiscoveryNetwork()
     const archivistNetwork = await this.getArchivistNetwork()

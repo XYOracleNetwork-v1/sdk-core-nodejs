@@ -219,6 +219,18 @@ In particular you can manage you ganache, ipfs, and MySQL docker services using 
   yarn manage:ipfs:add {/path/to/file}
 ```
 
+##### Create a new TypeScript package in packages directory
+
+```sh
+  yarn manage:create-package
+```
+
+##### Set the first account in ganache as environment variable for config
+
+```sh
+  eval `./scripts/manage-ganache.js set-account`
+```
+
 ## License
 
 Only for internal XY Company use at this time
