@@ -1,10 +1,12 @@
+#!/usr/bin/env node
+
 /*
  * @Author: XY | The Findables Company <ryanxyo>
  * @Date:   Thursday, 31st January 2019 10:23:51 am
  * @Email:  developer@xyfindables.com
  * @Filename: manage-ganache.js
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 31st January 2019 2:32:41 pm
+ * @Last modified time: Friday, 1st February 2019 1:30:45 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -105,6 +107,7 @@ async function tryStartGanacheService() {
     docker run \
     --name ganache \
     -d \
+    -p 8545:8545 \
     trufflesuite/ganache-cli:latest -m "${mnemonic}"
   `)
 
@@ -130,9 +133,21 @@ async function tryStartGanacheService() {
   }
 }
 
+function getWeb3Client() {
+  return new Web3(new HttpProvider('http://0.0.0.0:8545'))  
+}
+
 async function balances() {
-  var web3 = new Web3(new HttpProvider('http://0.0.0.0:8545'))
-  const accounts = await web3.eth.getAccounts(a => b = a).then(r => res = r)
+  const web3 = getWeb3Client()
+
+  let accounts = []
+  try {
+    accounts = await web3.eth.getAccounts()
+  } catch (e) {
+    logError(`There was an error getting accounts`)
+    return
+  } 
+   
   const balances = await Promise.all(accounts.map(async (a) => {
     const balanceWei = await web3.eth.getBalance('0x889EF607000a8C521fc7413118bF6E9E7442D907')
     return { account: a, balance: web3.utils.fromWei(balanceWei)}
@@ -145,6 +160,19 @@ async function balances() {
   logInfo('=====================================================\n')
 }
 
+async function getAccountEnv() {
+  const web3 = getWeb3Client()
+  let accounts = []
+  try {
+    accounts = await web3.eth.getAccounts()
+  } catch (e) {
+    logError(`There was an error getting accounts`)
+    return
+  }
+  
+  return `export ABOUT__ETH_ADDRESS=${accounts[0]}`
+}
+
 module.exports = { main }
 
 /** If this is the main program, execute it */
@@ -152,7 +180,9 @@ if (require.main === module) {
   if (process.argv.length > 2) {
     switch (process.argv[2]) {
       case 'balances':
-        return balances()
+        return balances().then(() => exitWithCode(0, 'Exiting')).catch(e => exitWithCode(1, 'There was an error getting balances ' + e))
+      case 'set-account':
+        return getAccountEnv().then(res => exitWithCode(0, res)).catch(e => exitWithCode(1, 'There was an error getting account env ' + e))
       default: throw new Error('No sub-commands specified') 
     }
   }

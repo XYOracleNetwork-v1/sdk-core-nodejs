@@ -1,7 +1,7 @@
 port: 11000
 graphql: 11001
 data: ./archivist-db
-nodeName: Ryans Archivist
+nodeName: Development Archivist
 isPublic: true
 ipOverride: 127.0.0.1
 sql:

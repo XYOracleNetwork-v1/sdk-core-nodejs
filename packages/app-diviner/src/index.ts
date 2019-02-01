@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 1st February 2019 12:12:03 pm
+ * @Last modified time: Friday, 1st February 2019 12:37:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -60,8 +60,8 @@ class DivinerLauncher extends XyoBaseNode {
     this.originBlockMemoryProvider = await this.keyValueDb!.getOrCreateNamespace('origin-block-repository')
     const questionsService = await this.getQuestionsService()
 
-    const scscDataProvider = await this.getScscDataProvider()
-    const scsc = await scscDataProvider.resolve()
+    // const scscDataProvider = await this.getScscDataProvider()
+    // const scsc = await scscDataProvider.resolve()
 
     this.server = await createDivinerGraphqlServer(
       // The port to run the graphql server on
@@ -74,7 +74,14 @@ class DivinerLauncher extends XyoBaseNode {
           this.divinerConfig.about.url,
           this.divinerConfig.about.address,
           this.divinerConfig.discovery.seeds,
-          scsc
+          {
+            address: 'TODO',
+            platform: 'TODO',
+            network: 'TODO',
+            abi: 'TODO',
+            bytecode: 'TODO',
+            ipfs: 'TODO'
+          }
         )
       },
 
