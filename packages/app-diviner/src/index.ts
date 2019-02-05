@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 1st February 2019 12:37:54 pm
+ * @Last modified time: Tuesday, 5th February 2019 11:53:14 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,7 +15,8 @@ import { XyoGraphQLServer } from '@xyo-network/graphql-server'
 import { XyoAboutDiviner } from '@xyo-network/about-diviner'
 import { IXyoSCSCDescriptionProvider } from '@xyo-network/scsc'
 import { XyoMetaList, XyoMeta } from '@xyo-network/meta-list'
-import { XyoQuestionService, IXyoHasIntersectedQuestion, IXyoQuestionService, QuestionsWorker, IBlockPermissionRequestResolver } from '@xyo-network/questions'
+import { XyoQuestionService, IXyoHasIntersectedQuestion, IXyoQuestionService, QuestionsWorker } from '@xyo-network/questions'
+import { IBlockPermissionRequestResolver } from '@xyo-network/attribution-request'
 import { IXyoDivinerArchivistClient } from '@xyo-network/diviner-archivist-client'
 import { XyoDivinerArchivistGraphQLClient } from '@xyo-network/diviner-archivist-client.graphql'
 import { XyoIpfsClient, IXyoIpfsClient } from '@xyo-network/ipfs-client'

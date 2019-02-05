@@ -4,12 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 29th January 2019 5:13:49 pm
+ * @Last modified time: Tuesday, 5th February 2019 12:12:45 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { unsubscribeFn } from '@xyo-network/p2p'
+import { IRequestPermissionForBlockResult } from '@xyo-network/attribution-request'
 
 export interface IXyoNodeNetwork {
 
@@ -29,6 +30,10 @@ export interface IXyoNodeNetwork {
    * @memberof IXyoNodeNetwork
    */
   requestFeatures(callback: (publicKey: string, featureRequest: IXyoComponentFeatureResponse) => void): unsubscribeFn
+
+  requestPermissionForBlock(
+    callback: (publicKey: string, permissionRequest: IRequestPermissionForBlockResult) => void
+  ): unsubscribeFn
 }
 
 export interface IXyoComponentArchivistFeatureDetail {

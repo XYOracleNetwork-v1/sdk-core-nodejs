@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-question-service.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 30th January 2019 12:05:02 pm
+ * @Last modified time: Tuesday, 5th February 2019 11:47:14 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,6 +20,7 @@ import { IXyoOriginChainRepository, XyoBridgeHashSet } from '@xyo-network/origin
 import { IXyoBoundWitness } from '@xyo-network/bound-witness'
 import { IXyoPublicKey } from '@xyo-network/signing'
 import { IXyoArchivistNetwork } from '@xyo-network/archivist-network'
+import { IBlockPermissionRequestResolver } from '@xyo-network/attribution-request'
 
 export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
 
@@ -237,14 +238,4 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
     if (block) return block
     return this.getBlockFromArchivistNetwork(hash)
   }
-}
-
-export interface IBlockPermissionRequestResolver {
-  requestPermissionForBlock(hash: IXyoHash): Promise<IRequestPermissionForBlockResult | undefined>
-}
-
-export interface IRequestPermissionForBlockResult {
-  newBoundWitnessHash: IXyoHash
-  partyIndex: number
-  supportingData: {[hash: string]: IXyoBoundWitness}
 }

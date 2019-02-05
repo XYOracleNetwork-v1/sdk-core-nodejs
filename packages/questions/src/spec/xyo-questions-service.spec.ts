@@ -4,12 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-questions-service.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 30th January 2019 12:01:35 pm
+ * @Last modified time: Tuesday, 5th February 2019 11:53:48 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoQuestionService, IBlockPermissionRequestResolver, IRequestPermissionForBlockResult } from '../xyo-question-service'
+import { XyoQuestionService } from '../xyo-question-service'
+import { IBlockPermissionRequestResolver, IRequestPermissionForBlockResult } from '@xyo-network/attribution-request'
 import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { IXyoOriginChainRepository, XyoIndex, XyoPreviousHash, XyoBridgeHashSet } from '@xyo-network/origin-chain'
 import { IXyoHasIntersectedQuestion } from '../@types'

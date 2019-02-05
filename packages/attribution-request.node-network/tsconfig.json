@@ -22,17 +22,10 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    {"path": "../archivist-network"},
-    {"path": "../base"},
     {"path": "../bound-witness"},
-    {"path": "../diviner-archivist-client"},
-    {"path": "../errors"},
-    {"path": "../hashing"},
-    {"path": "../node-runner"},
-    {"path": "../origin-block-repository"},
-    {"path": "../origin-chain"},
-    {"path": "../serialization"},
+    {"path": "../node-network"},
+    {"path": "../base"},
     {"path": "../attribution-request"},
-    {"path": "../signing"}
+    {"path": "../hashing"}
   ]
 }

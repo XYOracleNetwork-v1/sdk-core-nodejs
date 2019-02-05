@@ -4,16 +4,18 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 29th January 2019 1:13:36 pm
+ * @Last modified time: Tuesday, 5th February 2019 12:14:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoNodeNetwork, IXyoComponentFeatureResponse } from "./@types"
 import { unsubscribeFn, IXyoP2PService } from "@xyo-network/p2p"
+import { IRequestPermissionForBlockResult } from "@xyo-network/attribution-request"
 import { XyoBase } from "@xyo-network/base"
 
 export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
+
   private unsubscribeComponentFeature: unsubscribeFn | undefined
 
   constructor (private readonly p2pService: IXyoP2PService) {
@@ -36,8 +38,9 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
     })
   }
 
-  public requestFeatures(callback: (publicKey: string, featureRequest: IXyoComponentFeatureResponse) => void
-  ): unsubscribeFn {
+  public requestFeatures(
+    callback: (publicKey: string, featureRequest: IXyoComponentFeatureResponse) => void)
+  : unsubscribeFn {
     this.logInfo(`Requesting features from network`)
     this.p2pService.publish('component-feature:request', Buffer.alloc(0))
     return this.p2pService.subscribe('component-feature:response', (pk, message) => {
@@ -45,6 +48,12 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
       this.logInfo(`Received component-feature:response from ${pk} and payload:\n${message.toString()}`)
       callback(pk, parseFeatureResponse)
     })
+  }
+
+  public requestPermissionForBlock(
+    callback: (publicKey: string, permissionRequest: IRequestPermissionForBlockResult) => void)
+  : unsubscribeFn {
+    throw new Error("Method not implemented.")
   }
 
 }

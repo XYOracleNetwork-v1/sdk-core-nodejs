@@ -17,6 +17,7 @@
     "@xyo-network/origin-block-repository": "^0.23.0",
     "@xyo-network/origin-chain": "^0.23.0",
     "@xyo-network/serialization": "^0.23.0",
+    "@xyo-network/attribution-request": "^0.23.0",
     "@xyo-network/signing": "^0.23.0"
   },
   "devDependencies": {

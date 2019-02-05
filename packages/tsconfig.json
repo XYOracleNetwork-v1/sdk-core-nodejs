@@ -3,7 +3,10 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "lib": ["esnext", "dom"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "declaration": false,
     "declarationMap": false,
     "sourceMap": false,
@@ -12,57 +15,161 @@
     "noImplicitAny": true,
     "moduleResolution": "node",
     "outDir": "dist"
-  },  
+  },
   "references": [
-    {"path": "about-diviner"},
-    {"path": "about-me"},
-    {"path": "api-archivist-graphql"},
-    {"path": "app-archivist"},
-    {"path": "app-diviner"},
-    {"path": "archivist-network"},
-    {"path": "archivist-repository"},
-    {"path": "archivist-repository.sql"},
-    {"path": "base"},
-    {"path": "base-node"},
-    {"path": "bound-witness"},
-    {"path": "buffer-utils"},
-    {"path": "data-generator"},
-    {"path": "diviner-archivist-client"},
-    {"path": "diviner-archivist-client.graphql"},
-    {"path": "diviner-graphql-api"},
-    {"path": "errors"},
-    {"path": "graphql-server"},
-    {"path": "hashing"},
-    {"path": "heuristics"},
-    {"path": "heuristics-common"},
-    {"path": "ip-service"},
-    {"path": "ipfs-client"},
-    {"path": "logger"},
-    {"path": "meta-list"},
-    {"path": "network"},
-    {"path": "network.tcp"},
-    {"path": "node-network"},
-    {"path": "node-runner"},
-    {"path": "origin-block-repository"},
-    {"path": "origin-chain"},
-    {"path": "p2p"},
-    {"path": "peer-connections"},
-    {"path": "peer-discovery"},
-    {"path": "peer-interaction"},
-    {"path": "peer-interaction-handlers"},
-    {"path": "peer-interaction-router"},
-    {"path": "questions"},
-    {"path": "scsc"},
-    {"path": "serialization"},
-    {"path": "serialization-schema"},
-    {"path": "serializer"},
-    {"path": "signing"},
-    {"path": "signing.ecdsa"},
-    {"path": "signing.rsa"},
-    {"path": "storage"},
-    {"path": "storage.leveldb"},
-    {"path": "web3-question-service"},
-    {"path": "web3-service"}
+    {
+      "path": "about-diviner"
+    },
+    {
+      "path": "about-me"
+    },
+    {
+      "path": "api-archivist-graphql"
+    },
+    {
+      "path": "app-archivist"
+    },
+    {
+      "path": "app-diviner"
+    },
+    {
+      "path": "archivist-network"
+    },
+    {
+      "path": "archivist-repository"
+    },
+    {
+      "path": "archivist-repository.sql"
+    },
+    {
+      "path": "base"
+    },
+    {
+      "path": "base-node"
+    },
+    {
+      "path": "bound-witness"
+    },
+    {
+      "path": "buffer-utils"
+    },
+    {
+      "path": "data-generator"
+    },
+    {
+      "path": "diviner-archivist-client"
+    },
+    {
+      "path": "diviner-archivist-client.graphql"
+    },
+    {
+      "path": "diviner-graphql-api"
+    },
+    {
+      "path": "errors"
+    },
+    {
+      "path": "graphql-server"
+    },
+    {
+      "path": "hashing"
+    },
+    {
+      "path": "heuristics"
+    },
+    {
+      "path": "heuristics-common"
+    },
+    {
+      "path": "ip-service"
+    },
+    {
+      "path": "ipfs-client"
+    },
+    {
+      "path": "logger"
+    },
+    {
+      "path": "meta-list"
+    },
+    {
+      "path": "network"
+    },
+    {
+      "path": "network.tcp"
+    },
+    {
+      "path": "node-network"
+    },
+    {
+      "path": "node-runner"
+    },
+    {
+      "path": "origin-block-repository"
+    },
+    {
+      "path": "origin-chain"
+    },
+    {
+      "path": "p2p"
+    },
+    {
+      "path": "peer-connections"
+    },
+    {
+      "path": "peer-discovery"
+    },
+    {
+      "path": "peer-interaction"
+    },
+    {
+      "path": "peer-interaction-handlers"
+    },
+    {
+      "path": "peer-interaction-router"
+    },
+    {
+      "path": "questions"
+    },
+    {
+      "path": "scsc"
+    },
+    {
+      "path": "serialization"
+    },
+    {
+      "path": "serialization-schema"
+    },
+    {
+      "path": "serializer"
+    },
+    {
+      "path": "signing"
+    },
+    {
+      "path": "signing.ecdsa"
+    },
+    {
+      "path": "signing.rsa"
+    },
+    {
+      "path": "storage"
+    },
+    {
+      "path": "storage.leveldb"
+    },
+    {
+      "path": "web3-question-service"
+    },
+    {
+      "path": "web3-service"
+    },
+    {
+      "path": "attribution-request"
+    },
+    {
+      "path": "attribution-request.node-network"
+    }
   ],
   "include": [
     "about-diviner/src/**/*.ts",
@@ -113,6 +220,8 @@
     "storage/src/**/*.ts",
     "storage.leveldb/src/**/*.ts",
     "web3-question-service/src/**/*.ts",
-    "web3-service/src/**/*.ts"
+    "web3-service/src/**/*.ts",
+    "attribution-request/src/**/*.ts",
+    "attribution-request.node-network/src/**/*.ts"
   ]
 }

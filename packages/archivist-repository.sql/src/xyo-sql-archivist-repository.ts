@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-sql-archivist-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th December 2018 1:05:02 pm
+ * @Last modified time: Tuesday, 5th February 2019 10:29:37 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -28,7 +28,7 @@ import _ from 'lodash'
 import { IXyoHash } from '@xyo-network/hashing'
 import { IOriginBlockQueryResult } from '@xyo-network/origin-block-repository'
 import { schema } from '@xyo-network/serialization-schema'
-import { XyoNextPublicKey, XyoIndex, XyoPreviousHash } from '@xyo-network/origin-chain'
+import { XyoNextPublicKey, XyoIndex, XyoPreviousHash, XyoBridgeHashSet } from '@xyo-network/origin-chain'
 
 export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistRepository {
 
@@ -386,6 +386,31 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
         await promiseChain
         return this.linkPreviousInsertOriginBlockParties(originBlockPartyId)
       }, Promise.resolve() as Promise<void>)
+
+      await originBlock.parties.reduce(async (promiseChain, blockParty) => {
+        await promiseChain
+        const bridgeHashSetCandidate = blockParty.heuristics.find(h => h.schemaObjectId === schema.bridgeHashSet.id)
+        if (bridgeHashSetCandidate === undefined) {
+          return
+        }
+
+        const bridgeHashSet = bridgeHashSetCandidate as XyoBridgeHashSet
+        const values = bridgeHashSet.hashSet.map(
+          h => `('${hash.serializeHex()}', ${blockParty.partyIndex}, '${h.serializeHex()}' )`
+        )
+        if (values.length === 0) {
+          return
+        }
+
+        const valuesQuery = values.join(',\n')
+        await this.sqlService.query(`
+          INSERT INTO OriginBlockAttributions (
+            sourceSignedHash,
+            originBlockPartyIndex,
+            providesAttributionForSignedHash
+          ) VALUES ${valuesQuery};
+        `, [])
+      }, Promise.resolve())
 
       const idHierarchy = {
         originBlockId,
