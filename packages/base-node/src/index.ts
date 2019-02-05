@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 30th January 2019 2:18:02 pm
+ * @Last modified time: Tuesday, 5th February 2019 3:15:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -96,7 +96,9 @@ export class XyoBaseNode extends XyoBase {
   protected async getNodeNetwork(): Promise<IXyoNodeNetwork> {
     return this.getOrCreate(`IXyoNodeNetwork`, async () => {
       const p2pService = await this.getP2PService()
-      const network = new XyoNodeNetwork(p2pService)
+      const serializationService = await this.getSerializationService()
+      const hashProvider = await this.getHashingProvider()
+      const network = new XyoNodeNetwork(p2pService, serializationService, hashProvider)
       const features = await this.getNodeFeatures()
       network.setFeatures(features)
       return network

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-question-service.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 5th February 2019 11:47:14 am
+ * @Last modified time: Tuesday, 5th February 2019 3:33:08 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,10 +17,11 @@ import { IXyoHash } from '@xyo-network/hashing'
 import { IXyoSerializationService } from '@xyo-network/serialization'
 import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { IXyoOriginChainRepository, XyoBridgeHashSet } from '@xyo-network/origin-chain'
-import { IXyoBoundWitness } from '@xyo-network/bound-witness'
-import { IXyoPublicKey } from '@xyo-network/signing'
+import { IXyoBoundWitness, IXyoPayload } from '@xyo-network/bound-witness'
+import { IXyoPublicKey, IXyoSigner } from '@xyo-network/signing'
 import { IXyoArchivistNetwork } from '@xyo-network/archivist-network'
 import { IBlockPermissionRequestResolver } from '@xyo-network/attribution-request'
+import { IXyoBoundWitnessPayloadProvider } from '@xyo-network/peer-interaction'
 
 export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
 
@@ -28,7 +29,8 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
     private readonly originBlocksRepository: IXyoOriginBlockRepository,
     private readonly originChainRepository: IXyoOriginChainRepository,
     private readonly archivistNetwork: IXyoArchivistNetwork,
-    private readonly blockPermissionRequestResolver: IBlockPermissionRequestResolver
+    private readonly blockPermissionRequestResolver: IBlockPermissionRequestResolver,
+    private readonly boundWitnessPayloadProvider: IXyoBoundWitnessPayloadProvider
   ) {
     super()
   }
@@ -58,7 +60,16 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
 
     // The block in question is not part of your origin-chain
     if (!isPartOfOriginChainResult.result || isPartOfOriginChainResult.indexOfPartyInBlock === undefined) {
-      return this.resolveProofForOutOfOriginChainBlock(block, hash, question, continueFn)
+      const signers = await this.originChainRepository.getSigners()
+      const payload = await this.boundWitnessPayloadProvider.getPayload(this.originChainRepository)
+      return this.resolveProofForOutOfOriginChainBlock(
+        block,
+        hash,
+        signers,
+        payload,
+        question,
+        continueFn
+      )
     }
 
     const myParty = block.parties[isPartOfOriginChainResult.indexOfPartyInBlock]
@@ -108,12 +119,14 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
   public async resolveProofForOutOfOriginChainBlock(
     block: IXyoBoundWitness,
     hash: IXyoHash,
+    signers: IXyoSigner[],
+    payload: IXyoPayload,
     question: IXyoHasIntersectedQuestion,
     continueFn: () => Promise<IProofOfIntersection | undefined>
   ): Promise<IProofOfIntersection | undefined> {
     this.logInfo(`Attempting to resolve proof for out of origin-chain block ${hash.serializeHex()}`)
 
-    const result = await this.blockPermissionRequestResolver.requestPermissionForBlock(hash)
+    const result = await this.blockPermissionRequestResolver.requestPermissionForBlock(hash, signers, payload, 10000)
     if (!result) {
       this.logInfo(
         `Unable to resolve proof for out of origin-chain block ${hash.serializeHex()}, no attribution request responses`

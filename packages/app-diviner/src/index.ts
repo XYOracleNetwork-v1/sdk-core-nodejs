@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 5th February 2019 11:53:14 am
+ * @Last modified time: Tuesday, 5th February 2019 3:34:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -129,13 +129,15 @@ class DivinerLauncher extends XyoBaseNode {
       const originBlockRepository = await this.getOriginBlockRepository()
       const originChainStateRepository = await this.getOriginStateRepository()
       const blockPermissionRequestResolver = await this.getBlockPermissionRequestResolver()
+      const boundWitnessPayloadProvider = await this.getBoundWitnessPayloadProvider()
       const archivistNetwork = await this.getArchivistNetwork()
 
       return new XyoQuestionService(
         originBlockRepository,
         originChainStateRepository,
         archivistNetwork,
-        blockPermissionRequestResolver
+        blockPermissionRequestResolver,
+        boundWitnessPayloadProvider
       )
     })
   }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-block-permission-request-resolver.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 5th February 2019 12:08:21 pm
+ * @Last modified time: Tuesday, 5th February 2019 3:17:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,6 +15,8 @@ import { IBlockPermissionRequestResolver, IRequestPermissionForBlockResult } fro
 import { IXyoHash } from '@xyo-network/hashing'
 import { IXyoNodeNetwork } from '@xyo-network/node-network'
 import { XyoBase } from '@xyo-network/base'
+import { IXyoSigner } from '@xyo-network/signing'
+import { IXyoPayload } from '@xyo-network/bound-witness'
 
 export class XyoBlockPermissionRequestResolver extends XyoBase implements IBlockPermissionRequestResolver {
 
@@ -22,7 +24,31 @@ export class XyoBlockPermissionRequestResolver extends XyoBase implements IBlock
     super()
   }
 
-  public requestPermissionForBlock(hash: IXyoHash): Promise<IRequestPermissionForBlockResult | undefined> {
-    throw new Error("Method not implemented.")
+  public async requestPermissionForBlock(
+    hash: IXyoHash,
+    signers: IXyoSigner[],
+    payload: IXyoPayload,
+    timeout: number
+  ): Promise<IRequestPermissionForBlockResult | undefined> {
+    let resolved = false
+    return new Promise((resolve, reject) => {
+      const unsubscribeFn = this.nodeNetwork.requestPermissionForBlock(hash, signers, payload, (pk, permission) => {
+        if (resolved) {
+          return
+        }
+
+        resolved = true
+        resolve(permission)
+        unsubscribeFn()
+      })
+
+      setTimeout(() => {
+        if (!resolved) {
+          resolved = true
+          resolve(undefined)
+          unsubscribeFn()
+        }
+      }, timeout)
+    }) as Promise<IRequestPermissionForBlockResult | undefined>
   }
 }

@@ -24,6 +24,12 @@
   "references": [
     {"path": "../p2p"},
     {"path": "../attribution-request"},
+    {"path": "../hashing"},
+    {"path": "../serialization"},
+    {"path": "../bound-witness"},
+    {"path": "../signing"},
+    {"path": "../serialization-schema"},
+    {"path": "../origin-chain"},
     {"path": "../base"}
   ]
 }

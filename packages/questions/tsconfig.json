@@ -33,6 +33,7 @@
     {"path": "../origin-chain"},
     {"path": "../serialization"},
     {"path": "../attribution-request"},
+    {"path": "../peer-interaction"},
     {"path": "../signing"}
   ]
 }

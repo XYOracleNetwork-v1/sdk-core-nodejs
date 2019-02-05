@@ -26,6 +26,7 @@
     {"path": "../node-network"},
     {"path": "../base"},
     {"path": "../attribution-request"},
+    {"path": "../signing"},
     {"path": "../hashing"}
   ]
 }

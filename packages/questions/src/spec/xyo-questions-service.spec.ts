@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-questions-service.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 5th February 2019 11:53:48 am
+ * @Last modified time: Tuesday, 5th February 2019 3:40:24 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,6 +18,7 @@ import { XyoStubHash, IXyoHash } from '@xyo-network/hashing'
 import { IXyoBoundWitness, XyoBoundWitness, XyoKeySet, XyoFetter, XyoSignatureSet, XyoWitness } from '@xyo-network/bound-witness'
 import { XyoStubPublicKey, XyoStubSignature, XyoStubSigner } from '@xyo-network/signing'
 import { IXyoArchivistNetwork } from '@xyo-network/archivist-network'
+import { XyoBoundWitnessPayloadProvider } from '@xyo-network/peer-interaction'
 
 describe('Questions Service', () => {
   it('Should not provide an answer if no supporting data exists', async () => {
@@ -31,7 +32,8 @@ describe('Questions Service', () => {
       originBlockRepo,
       originChainRepository,
       archivistNetwork,
-      blockPermissionsRequestResolver
+      blockPermissionsRequestResolver,
+      new XyoBoundWitnessPayloadProvider()
     )
 
     const question: IXyoHasIntersectedQuestion = {
@@ -64,7 +66,8 @@ describe('Questions Service', () => {
       originBlockRepo,
       originChainRepository,
       archivistNetwork,
-      blockPermissionsRequestResolver
+      blockPermissionsRequestResolver,
+      new XyoBoundWitnessPayloadProvider()
     )
 
     const question: IXyoHasIntersectedQuestion = {
@@ -199,7 +202,8 @@ describe('Questions Service', () => {
       originBlockRepo,
       originChainRepository,
       archivistNetwork,
-      blockPermissionsRequestResolver
+      blockPermissionsRequestResolver,
+      new XyoBoundWitnessPayloadProvider()
     )
 
     const question: IXyoHasIntersectedQuestion = {
@@ -290,7 +294,11 @@ async function getOriginChainRepository(
         result: res !== undefined,
         indexOfPartyInBlock: res !== undefined ? res.indexInBlock : undefined
       }
-    }
+    },
+    getSigners: async () => [],
+    getPreviousHash: async () => undefined,
+    getIndex: async () => 0,
+    getNextPublicKey: async () => undefined
   }
 }
 
