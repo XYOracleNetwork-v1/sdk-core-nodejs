@@ -25,6 +25,7 @@
     { "path": "../bound-witness"},
     { "path": "../storage"},
     { "path": "../hashing"},
-    { "path": "../serialization"}
+    { "path": "../serialization"},
+    { "path": "../serialization-schema"}
   ]
 }

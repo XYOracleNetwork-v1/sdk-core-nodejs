@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 5th February 2019 3:05:10 pm
+ * @Last modified time: Wednesday, 6th February 2019 1:44:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,11 +15,12 @@ import { IRequestPermissionForBlockResult } from "@xyo-network/attribution-reque
 import { XyoBase } from "@xyo-network/base"
 import { IXyoHash, IXyoHashProvider } from "@xyo-network/hashing"
 import { IXyoSerializationService } from "@xyo-network/serialization"
-import { IXyoBoundWitness, IXyoPayload, XyoBoundWitnessFragment, XyoFetter, XyoKeySet, XyoSignatureSet, XyoWitness, XyoBoundWitness } from "@xyo-network/bound-witness"
-import { tryParseComponentFeature, tryParseFetterSet, tryParseWitnessSet } from "./parsers"
+import { IXyoBoundWitness, IXyoPayload, XyoBoundWitnessFragment, XyoFetter, XyoKeySet, XyoSignatureSet, XyoWitness, XyoBoundWitness, XyoFetterSet, XyoWitnessSet } from "@xyo-network/bound-witness"
+import { tryParseComponentFeature, tryParseFetterSet, tryParseWitnessSet, tryParseHash, tryParseBoundWitnessFragment } from "./parsers"
 import { IXyoSigner } from "@xyo-network/signing"
 import { schema } from '@xyo-network/serialization-schema'
-import { XyoBridgeBlockSet } from '@xyo-network/origin-chain'
+import { XyoBridgeBlockSet, IXyoOriginChainRepository, XyoBridgeHashSet, IBlockInOriginChainResult } from '@xyo-network/origin-chain'
+import { IXyoOriginBlockRepository } from "@xyo-network/origin-block-repository"
 
 export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
 
@@ -31,6 +32,73 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
     private readonly hashProvider: IXyoHashProvider
   ) {
     super()
+  }
+
+  public serviceBlockPermissionRequests(
+    originBlockRepository: IXyoOriginBlockRepository,
+    originChainRepository: IXyoOriginChainRepository,
+    signersProvider: () => Promise<IXyoSigner[]>,
+    payloadProvider: () => Promise<IXyoPayload>,
+  ): unsubscribeFn {
+    let unsubscribes: unsubscribeFn[] = []
+    unsubscribes.push(this.p2pService.subscribe(
+      'block-permission:request', async (pk, msg) => {
+        const hash = tryParseHash(msg, { logger: XyoBase.logger, publicKey: pk })
+        if (!hash) {
+          return
+        }
+
+        const block = await originBlockRepository.getOriginBlockByHash(msg)
+        if (!block) {
+          return
+        }
+
+        const belongsToMeResult = await originChainRepository.isBlockInOriginChain(block, hash)
+        if (belongsToMeResult.result) { // The block being asked for is one that is in my origin chain
+          return this.doBoundWitnessWithSupportingData(
+            hash,
+            [block],
+            [hash],
+            await signersProvider(),
+            await payloadProvider()
+          )
+        }
+
+        const attributionBlocksByHash = await originBlockRepository.getBlocksThatProviderAttribution(msg)
+
+        // Try to find the block that contains the attribution that was first shared with me
+        const blockInMyChain = await Object.keys(attributionBlocksByHash)
+          .reduce(async (
+            promiseChain: Promise<{hash: string, originChainResult: IBlockInOriginChainResult} | undefined>,
+            hashKey
+          ) => {
+            const memo = await promiseChain
+            if (memo) return memo
+            const bw = attributionBlocksByHash[hashKey]
+            const xyoHash = this.serializationService.deserialize(hashKey).hydrate<IXyoHash>()
+            const result = await originChainRepository.isBlockInOriginChain(bw, xyoHash)
+
+            if (!result.result || result.indexOfPartyInBlock === undefined) return undefined
+
+            const otherBlockParty = bw.parties[(result.indexOfPartyInBlock + 1) % 2] // get the other party
+            const bridgeHashSet = otherBlockParty.getHeuristic<XyoBridgeHashSet>(schema.bridgeHashSet.id)
+            if (!bridgeHashSet) return undefined
+            const containsHashItem = bridgeHashSet.hashSet.some(hashSetItem => hashSetItem.isEqual(hash))
+            if (containsHashItem) {
+              return { hash: hashKey, originChainResult: result }
+            }
+
+            return undefined
+          }, Promise.resolve(undefined))
+
+        if (!blockInMyChain) return
+      })
+    )
+
+    return () => {
+      unsubscribes.forEach(u => u())
+      unsubscribes = []
+    }
   }
 
   public setFeatures(features: IXyoComponentFeatureResponse): void {
@@ -106,7 +174,7 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
         const bwFrag = new XyoBoundWitnessFragment([fetter, witness])
         const newTopic = `block-permission:response:${blockHash.serializeHex()}:bound-witness-fragment`
         this.p2pService.publish(newTopic, bwFrag.serialize())
-        const nextTopic = `block-permission:response:${blockHash.serializeHex()}:signatures`
+        const nextTopic = `block-permission:response:${blockHash.serializeHex()}:witness-set`
         unsubscribes.push(this.p2pService.subscribe(nextTopic, async (sigsPk, sigsMessage) => {
           unsubscribes[0]()
           unsubscribes.splice(0, 1)
@@ -149,6 +217,50 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
       unsubscribes.forEach(u => u())
       unsubscribes = []
     }
+  }
+
+  private async doBoundWitnessWithSupportingData(
+    forHash: IXyoHash,
+    blocks: IXyoBoundWitness[],
+    hashes: IXyoHash[],
+    signers: IXyoSigner[],
+    payload: IXyoPayload
+  ): Promise<IXyoBoundWitness | undefined> {
+    return new Promise((resolve, reject) => {
+      const keySet = new XyoKeySet(signers.map(s => s.publicKey))
+      const fetter = new XyoFetter(keySet, [...payload.heuristics, new XyoBridgeHashSet(hashes)])
+      const fetterSet = new XyoFetterSet([fetter])
+      this.p2pService.publish(`block-permission:response:${forHash.serializeHex()}`, fetterSet.serialize())
+      const newTopic = `block-permission:response:${forHash.serializeHex()}:bound-witness-fragment`
+      this.p2pService.subscribe(newTopic, async (pk, bwFragMsg) => {
+        const boundWitnessFragment = tryParseBoundWitnessFragment(bwFragMsg, { logger: XyoBase.logger, publicKey: pk })
+        if (!boundWitnessFragment) {
+          return resolve(undefined)
+        }
+
+        const signingData = Buffer.concat([
+          fetter.serialize(),
+          boundWitnessFragment.fetterWitnesses[0].serialize()
+        ])
+
+        const signatures = await Promise.all(signers.map((signer) => {
+          return signer.signData(signingData)
+        }))
+
+        const witnessSet = new XyoWitnessSet([
+          new XyoWitness(new XyoSignatureSet(signatures), [...payload.metadata, new XyoBridgeBlockSet(blocks)])
+        ])
+
+        const nextTopic = `block-permission:response:${forHash.serializeHex()}:witness-set`
+        this.p2pService.publish(nextTopic, witnessSet.serialize())
+        resolve(new XyoBoundWitness([
+          fetter,
+          boundWitnessFragment.fetterWitnesses[0],
+          boundWitnessFragment.fetterWitnesses[1],
+          witnessSet.witnesses[0]
+        ]))
+      })
+    }) as Promise<IXyoBoundWitness | undefined>
   }
 }
 

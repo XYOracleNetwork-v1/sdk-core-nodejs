@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-block-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 16th January 2019 12:58:39 pm
+ * @Last modified time: Wednesday, 6th February 2019 10:20:08 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,8 +12,10 @@
 import { IXyoStorageProvider, IXyoIterableStorageProvider } from '@xyo-network/storage'
 import { IXyoBoundWitness } from '@xyo-network/bound-witness'
 import { IXyoOriginBlockRepository, IOriginBlockQueryResult } from './@types'
-import { IXyoHash } from '@xyo-network/hashing'
+import { IXyoHash, IXyoHashProvider } from '@xyo-network/hashing'
 import { IXyoSerializationService } from '@xyo-network/serialization'
+import { schema } from '@xyo-network/serialization-schema'
+import { XyoBridgeHashSet } from '@xyo-network/origin-chain'
 
 /**
  * An XyoOriginChainNavigator exposes an api for managing
@@ -30,7 +32,8 @@ export class XyoOriginBlockRepository implements IXyoOriginBlockRepository {
 
   constructor(
     private readonly originBlocksStorageProvider: IXyoStorageProvider,
-    private readonly serializationService: IXyoSerializationService
+    private readonly serializationService: IXyoSerializationService,
+    private readonly hashingProvider: IXyoHashProvider
   ) {}
 
   /**
@@ -123,6 +126,51 @@ export class XyoOriginBlockRepository implements IXyoOriginBlockRepository {
     }
 
     return this.serializationService.deserialize(result).hydrate<IXyoBoundWitness>()
+  }
+
+  public async getBlocksThatProviderAttribution(hash: Buffer): Promise<{[h: string]: IXyoBoundWitness}>  {
+    const dest: IXyoBoundWitness[] = []
+    await this.recursivelyGetAllBlocksThatProvideAttribution(hash, undefined, dest)
+
+    // This is going to be horribly slow
+    return dest.reduce(async (promiseChain: Promise<{[h: string]: IXyoBoundWitness}>, result) => {
+      const memo = await promiseChain
+      const h = await this.hashingProvider.createHash(result.getSigningData())
+      memo[h.serializeHex()] = result
+      return memo
+    }, Promise.resolve({}))
+  }
+
+  private async recursivelyGetAllBlocksThatProvideAttribution(
+    hash: Buffer,
+    currentCursor: Buffer | undefined,
+    dest: IXyoBoundWitness[]
+  ): Promise<void> {
+    const results = await this.getOriginBlocks(1000, currentCursor)
+    const matches = results.list.filter((bw) => {
+      bw.parties.some((party) => {
+        const bridgeSet = party.getHeuristic<XyoBridgeHashSet>(schema.bridgeHashSet.id)
+        if (!bridgeSet) {
+          return false
+        }
+
+        return bridgeSet.hashSet.some(hs => hs.serialize().equals(hash))
+      })
+    })
+
+    dest.push(...matches)
+    if (!results.hasNextPage) {
+      return
+    }
+
+    const lastItem = results.list[results.list.length - 1]
+    const lastHash = await this.hashingProvider.createHash(lastItem.getSigningData())
+
+    return this.recursivelyGetAllBlocksThatProvideAttribution(
+      hash,
+      lastHash.serialize(),
+      dest
+    )
   }
 }
 

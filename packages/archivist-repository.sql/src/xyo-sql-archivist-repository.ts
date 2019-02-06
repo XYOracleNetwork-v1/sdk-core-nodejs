@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-sql-archivist-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 5th February 2019 10:29:37 am
+ * @Last modified time: Wednesday, 6th February 2019 10:04:16 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -443,6 +443,22 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
       .map(item => this.serializationService.deserialize(item.bytes).hydrate<IXyoBoundWitness>())
       .first()
       .value()
+  }
+
+  public async getBlocksThatProviderAttribution(hash: Buffer): Promise<{[h: string]: IXyoBoundWitness}> {
+    const results = await this.sqlService.query<Array<{bytes: Buffer, originBlockHash: string}>>(`
+      SELECT
+        ob.bytes as bytes,
+        ob.signedHash as originBlockHash
+      FROM OriginBlockAttributions oba
+        JOIN OriginBlocks ob on ob.signedHash = oba.sourceSignedHash
+      WHERE oba.providesAttributionForSignedHash = ?;
+    `, [hash.toString('hex')])
+
+    return results.reduce((memo: {[h: string]: IXyoBoundWitness}, result) => {
+      memo[result.originBlockHash] = this.serializationService.deserialize(result.bytes).hydrate()
+      return memo
+    }, {})
   }
 
   public async getOriginBlocks(limit: number, offsetHash?: Buffer | undefined): Promise<IOriginBlockQueryResult> {

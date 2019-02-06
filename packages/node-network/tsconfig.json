@@ -30,6 +30,7 @@
     {"path": "../signing"},
     {"path": "../serialization-schema"},
     {"path": "../origin-chain"},
+    {"path": "../origin-block-repository"},
     {"path": "../base"}
   ]
 }

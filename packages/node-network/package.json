@@ -15,6 +15,7 @@
     "@xyo-network/signing": "^0.23.0",
     "@xyo-network/serialization-schema": "^0.23.0",
     "@xyo-network/origin-chain": "^0.23.0",
+    "@xyo-network/origin-block-repository": "^0.23.0",
     "@xyo-network/p2p": "^0.23.0"
   },
   "devDependencies": {

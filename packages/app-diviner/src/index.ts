@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 5th February 2019 3:34:53 pm
+ * @Last modified time: Tuesday, 5th February 2019 5:06:59 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -273,7 +273,9 @@ class DivinerLauncher extends XyoBaseNode {
         throw new XyoError('OriginBlockMemoryProvider must be initialized', XyoErrors.CRITICAL)
       }
 
-      return new XyoOriginBlockRepository(this.originBlockMemoryProvider, serializationService)
+      const hashProvider = await this.getHashingProvider()
+
+      return new XyoOriginBlockRepository(this.originBlockMemoryProvider, serializationService, hashProvider)
     })
   }
 }
