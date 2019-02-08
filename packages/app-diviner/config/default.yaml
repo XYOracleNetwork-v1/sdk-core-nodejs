@@ -21,7 +21,7 @@ ethereumContracts:
 data: ./diviner-db
 discovery:
   ip: 127.0.0.1
-  port: 11500
+  port: 11501
   seeds:
     - ip: 127.0.0.1
-      port: 11001
+      port: 11500

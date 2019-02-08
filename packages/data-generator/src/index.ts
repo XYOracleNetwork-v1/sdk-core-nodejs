@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 5th February 2019 11:11:59 am
+ * @Last modified time: Wednesday, 6th February 2019 3:12:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -191,6 +191,15 @@ async function main(args: Arguments<any>) {
     await memo
     return repo.addOriginBlock(data.hash, data.boundWitness)
   }, Promise.resolve())
+
+  console.log(`\nCreated ${Object.keys(entitiesById).length} key-pairs`)
+  Object.keys(entitiesById).forEach((k) => {
+    const signer = entitiesById[k].signer
+    console.log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`)
+    console.log(`Public Key: ${signer.publicKey.serializeHex()}`)
+    console.log(`Private Key: ${signer.privateKey}`)
+    console.log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n`)
+  })
 }
 
 async function tryBuildHeuristics(

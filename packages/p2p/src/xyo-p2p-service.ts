@@ -27,10 +27,10 @@ export class XyoP2PService extends XyoBase implements IXyoP2PService {
   }
 
   public publishMessageToPeer(topic: string, message: Buffer, publicKey: string) {
-    this.logInfo(`Sending message to peer with topic ${topic}`)
     const connection = this.discoveryService.getPeerConnection(publicKey)
     if (connection) {
-      connection.write(encodeXyoTopicBuffer(topic, message))
+      const bufferedMessage = encodeXyoTopicBuffer(topic, message)
+      connection.write(bufferedMessage)
     }
     return Promise.resolve()
   }
@@ -48,5 +48,18 @@ export class XyoP2PService extends XyoBase implements IXyoP2PService {
       this.logInfo(`Message subscription with ${topic} received`)
       cb(senderPublicKey, message)
     })
+  }
+
+  public subscribeOnce(topic: string, cb: (senderPublicKey: string, message: Buffer) => void): unsubscribeFn {
+    let unsubscribe: unsubscribeFn | undefined = this.subscribe(topic, (senderPublicKey, message) => {
+      if (unsubscribe) {
+        unsubscribe()
+        unsubscribe = undefined
+      }
+
+      cb(senderPublicKey, message)
+    })
+
+    return unsubscribe
   }
 }

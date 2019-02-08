@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-block-permission-request-resolver.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 5th February 2019 3:17:18 pm
+ * @Last modified time: Thursday, 7th February 2019 3:46:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,8 +15,6 @@ import { IBlockPermissionRequestResolver, IRequestPermissionForBlockResult } fro
 import { IXyoHash } from '@xyo-network/hashing'
 import { IXyoNodeNetwork } from '@xyo-network/node-network'
 import { XyoBase } from '@xyo-network/base'
-import { IXyoSigner } from '@xyo-network/signing'
-import { IXyoPayload } from '@xyo-network/bound-witness'
 
 export class XyoBlockPermissionRequestResolver extends XyoBase implements IBlockPermissionRequestResolver {
 
@@ -26,13 +24,11 @@ export class XyoBlockPermissionRequestResolver extends XyoBase implements IBlock
 
   public async requestPermissionForBlock(
     hash: IXyoHash,
-    signers: IXyoSigner[],
-    payload: IXyoPayload,
     timeout: number
   ): Promise<IRequestPermissionForBlockResult | undefined> {
     let resolved = false
     return new Promise((resolve, reject) => {
-      const unsubscribeFn = this.nodeNetwork.requestPermissionForBlock(hash, signers, payload, (pk, permission) => {
+      const unsubscribeFn = this.nodeNetwork.requestPermissionForBlock(hash, (pk, permission) => {
         if (resolved) {
           return
         }

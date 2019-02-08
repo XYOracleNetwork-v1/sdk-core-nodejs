@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 29th January 2019 5:43:54 pm
+ * @Last modified time: Thursday, 7th February 2019 12:25:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -26,7 +26,7 @@ import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { ProcessManager } from './process-manager'
 import { XyoPeerInteractionRouter } from '@xyo-network/peer-interaction-router'
 import { CatalogueItem } from '@xyo-network/network'
-import { IXyoComponentFeatureResponse } from '@xyo-network/node-network'
+import { IXyoComponentFeatureResponse, IXyoNodeNetwork, XyoNodeNetwork } from '@xyo-network/node-network'
 
 export class XyoArchivistNode extends XyoBaseNode {
   private readonly config = configuration

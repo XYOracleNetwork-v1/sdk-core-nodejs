@@ -10,6 +10,8 @@ enum Direction {
   BOTH
 }
 
+scalar JSON
+
 type Query {
   about: About,
   block(hash: String): Block,

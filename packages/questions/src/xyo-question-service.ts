@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-question-service.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 5th February 2019 3:33:08 pm
+ * @Last modified time: Thursday, 7th February 2019 12:28:31 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -29,8 +29,7 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
     private readonly originBlocksRepository: IXyoOriginBlockRepository,
     private readonly originChainRepository: IXyoOriginChainRepository,
     private readonly archivistNetwork: IXyoArchivistNetwork,
-    private readonly blockPermissionRequestResolver: IBlockPermissionRequestResolver,
-    private readonly boundWitnessPayloadProvider: IXyoBoundWitnessPayloadProvider
+    private readonly blockPermissionRequestResolver: IBlockPermissionRequestResolver
   ) {
     super()
   }
@@ -60,13 +59,9 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
 
     // The block in question is not part of your origin-chain
     if (!isPartOfOriginChainResult.result || isPartOfOriginChainResult.indexOfPartyInBlock === undefined) {
-      const signers = await this.originChainRepository.getSigners()
-      const payload = await this.boundWitnessPayloadProvider.getPayload(this.originChainRepository)
       return this.resolveProofForOutOfOriginChainBlock(
         block,
         hash,
-        signers,
-        payload,
         question,
         continueFn
       )
@@ -119,14 +114,12 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
   public async resolveProofForOutOfOriginChainBlock(
     block: IXyoBoundWitness,
     hash: IXyoHash,
-    signers: IXyoSigner[],
-    payload: IXyoPayload,
     question: IXyoHasIntersectedQuestion,
     continueFn: () => Promise<IProofOfIntersection | undefined>
   ): Promise<IProofOfIntersection | undefined> {
     this.logInfo(`Attempting to resolve proof for out of origin-chain block ${hash.serializeHex()}`)
 
-    const result = await this.blockPermissionRequestResolver.requestPermissionForBlock(hash, signers, payload, 10000)
+    const result = await this.blockPermissionRequestResolver.requestPermissionForBlock(hash, 10000)
     if (!result) {
       this.logInfo(
         `Unable to resolve proof for out of origin-chain block ${hash.serializeHex()}, no attribution request responses`

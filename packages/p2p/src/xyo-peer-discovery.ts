@@ -123,7 +123,7 @@ export class XyoPeerDiscoveryService extends XyoBase implements IXyoPeerDiscover
     connection.onMessage((msg) => {
       const { topic, message } = decodeXyoTopicBuffer(msg)
       if (topic === 'discovery') {
-        const { publicKey, address, peers } = JSON.parse(message) // TODO sanitize / validate input
+        const { publicKey, address, peers } = JSON.parse(message.toString()) // TODO sanitize / validate input
         this.logInfo(`Discovery topic received for publicKey ${publicKey}`)
         connection.setPublicKey(publicKey)
         connection.setMultiAddress(address)
@@ -138,7 +138,7 @@ export class XyoPeerDiscoveryService extends XyoBase implements IXyoPeerDiscover
     connection.onMessage((msg) => {
       const { topic, message } = decodeXyoTopicBuffer(msg)
       if (topic === 'discovery') {
-        const { publicKey, address, peers } = JSON.parse(message)
+        const { publicKey, address, peers } = JSON.parse(message.toString())
         connection.setPublicKey(publicKey)
         connection.setMultiAddress(address)
         this.listener.publish('discovery', connection)

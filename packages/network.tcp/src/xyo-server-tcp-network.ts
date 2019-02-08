@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th December 2018 4:18:44 pm
+ * @Last modified time: Thursday, 7th February 2019 5:27:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -191,7 +191,7 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
 
           if (
             otherCatalogueItems === undefined &&
-            data.length >= (CATALOGUE_SIZE_OF_PAYLOAD_BYTES + sizeOfCatalogue)
+            data.length >= (CATALOGUE_SIZE_OF_PAYLOAD_BYTES + CATALOGUE_SIZE_OF_SIZE_BYTES + sizeOfCatalogue)
           ) {
             otherCatalogueItems = bufferToCatalogueItems(
               data.slice(

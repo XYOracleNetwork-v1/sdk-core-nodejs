@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 6th February 2019 1:18:36 pm
+ * @Last modified time: Thursday, 7th February 2019 10:57:19 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,42 +12,74 @@
 import { IXyoComponentFeatureResponse } from "../@types"
 import { XyoFetterSet, XyoWitnessSet, IXyoBoundWitnessFragment } from "@xyo-network/bound-witness"
 import { IXyoHash } from "@xyo-network/hashing"
+import { XyoBase } from "@xyo-network/base"
+import { IXyoSerializationService, IXyoSerializableObject } from "@xyo-network/serialization"
 
-function tryParse<T>(message: Buffer, context: any): T| undefined {
-  if (!message || message.length === 0) {
-    context.logger.error(`No message provided, can not parse from public key ${context.publicKey}`)
-    return undefined
+export class XyoMessageParser extends XyoBase {
+
+  constructor(private readonly serializationService: IXyoSerializationService) {
+    super()
   }
 
-  try {
-    const res = JSON.parse(message.toString())
-    if (context.validation) {
-      context.validation(res)
+  public tryParseComponentFeature(message: Buffer, context: IParseContext): IXyoComponentFeatureResponse | undefined {
+    return this.tryParseJSON<IXyoComponentFeatureResponse>(message, context)
+  }
+
+  public tryParseFetterSet(message: Buffer, context: IParseContext): XyoFetterSet | undefined {
+    return this.tryParseSerializableObject<XyoFetterSet>(message, context)
+  }
+
+  public tryParseWitnessSet(message: Buffer, context: IParseContext): XyoWitnessSet | undefined {
+    return this.tryParseSerializableObject<XyoWitnessSet>(message, context)
+  }
+
+  public  tryParseHash(message: Buffer, context: IParseContext): IXyoHash | undefined {
+    return this.tryParseSerializableObject<IXyoHash>(message, context)
+  }
+
+  public tryParseBoundWitnessFragment(message: Buffer, context: IParseContext): IXyoBoundWitnessFragment | undefined {
+    return this.tryParseSerializableObject<IXyoBoundWitnessFragment>(message, context)
+  }
+
+  private tryParseJSON<T>(message: Buffer, context: any): T| undefined {
+    if (!message || message.length === 0) {
+      context.logger.error(`No message provided, can not parse from public key ${context.publicKey}`)
+      return undefined
     }
 
-    return res as T
-  } catch (e) {
-    context.logger.error(`There was an error parsing message buffer ${message} from public key ${context.publicKey}`, e)
-    return undefined
+    try {
+      const res = JSON.parse(message.toString())
+      if (context.validation) {
+        context.validation(res)
+      }
+
+      return res as T
+    } catch (e) {
+      this.logError(`There was an error parsing message buffer ${message} from public key ${context.publicKey}`, e)
+      return undefined
+    }
+  }
+
+  private tryParseSerializableObject<T extends IXyoSerializableObject>(message: Buffer, context: any): T| undefined {
+    if (!message || message.length === 0) {
+      context.logger.error(`No message provided, can not parse from public key ${context.publicKey}`)
+      return undefined
+    }
+
+    try {
+      const res = this.serializationService.deserialize(message).hydrate<T>()
+      if (context.validation) {
+        context.validation(res)
+      }
+
+      return res as T
+    } catch (e) {
+      this.logError(`There was an error parsing message buffer ${message} from public key ${context.publicKey}`, e)
+      return undefined
+    }
   }
 }
 
-export function tryParseComponentFeature(message: Buffer, context: any): IXyoComponentFeatureResponse | undefined {
-  return tryParse<IXyoComponentFeatureResponse>(message, context)
-}
-
-export function tryParseFetterSet(message: Buffer, context: any): XyoFetterSet | undefined {
-  return tryParse<XyoFetterSet>(message, context)
-}
-
-export function tryParseWitnessSet(message: Buffer, context: any): XyoWitnessSet | undefined {
-  return tryParse<XyoWitnessSet>(message, context)
-}
-
-export function tryParseHash(message: Buffer, context: any): IXyoHash | undefined {
-  return tryParse<IXyoHash>(message, context)
-}
-
-export function tryParseBoundWitnessFragment(message: Buffer, context: any): IXyoBoundWitnessFragment | undefined {
-  return tryParse<IXyoBoundWitnessFragment>(message, context)
+export interface IParseContext {
+  publicKey: string
 }

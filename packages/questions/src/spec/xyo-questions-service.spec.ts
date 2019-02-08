@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-questions-service.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 5th February 2019 3:40:24 pm
+ * @Last modified time: Thursday, 7th February 2019 12:29:47 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,8 +32,7 @@ describe('Questions Service', () => {
       originBlockRepo,
       originChainRepository,
       archivistNetwork,
-      blockPermissionsRequestResolver,
-      new XyoBoundWitnessPayloadProvider()
+      blockPermissionsRequestResolver
     )
 
     const question: IXyoHasIntersectedQuestion = {
@@ -66,8 +65,7 @@ describe('Questions Service', () => {
       originBlockRepo,
       originChainRepository,
       archivistNetwork,
-      blockPermissionsRequestResolver,
-      new XyoBoundWitnessPayloadProvider()
+      blockPermissionsRequestResolver
     )
 
     const question: IXyoHasIntersectedQuestion = {
@@ -202,8 +200,7 @@ describe('Questions Service', () => {
       originBlockRepo,
       originChainRepository,
       archivistNetwork,
-      blockPermissionsRequestResolver,
-      new XyoBoundWitnessPayloadProvider()
+      blockPermissionsRequestResolver
     )
 
     const question: IXyoHasIntersectedQuestion = {

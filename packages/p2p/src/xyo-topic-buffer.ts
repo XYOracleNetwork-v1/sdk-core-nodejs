@@ -1,6 +1,6 @@
 interface IXyoTopic {
   topic: string
-  message: string
+  message: Buffer
   offset: number
 }
 
@@ -25,7 +25,7 @@ export const decodeXyoTopicBuffer = (buffer: Buffer, offset: number = 0): IXyoTo
   const topicLength = buffer.readUInt32BE(offset)
   const messageLength = buffer.readUInt32BE(offset + topicLength)
   const topic = buffer.slice(SIZE_OF_SIZE + offset, offset + topicLength).toString()
-  const message = buffer.slice(SIZE_OF_SIZE + offset + topicLength, offset + topicLength + messageLength).toString()
+  const message = buffer.slice(SIZE_OF_SIZE + offset + topicLength, offset + topicLength + messageLength)
   return { topic, message, offset: offset + topicLength + messageLength }
 }
 

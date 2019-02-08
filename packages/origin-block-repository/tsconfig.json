@@ -26,6 +26,7 @@
     { "path": "../storage"},
     { "path": "../hashing"},
     { "path": "../serialization"},
+    { "path": "../origin-chain"},
     { "path": "../serialization-schema"}
   ]
 }

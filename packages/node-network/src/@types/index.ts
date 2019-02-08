@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 6th February 2019 1:44:39 pm
+ * @Last modified time: Thursday, 7th February 2019 12:14:21 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,10 +12,6 @@
 import { unsubscribeFn } from '@xyo-network/p2p'
 import { IRequestPermissionForBlockResult } from '@xyo-network/attribution-request'
 import { IXyoHash } from '@xyo-network/hashing'
-import { IXyoSigner } from '@xyo-network/signing'
-import { IXyoPayload } from '@xyo-network/bound-witness'
-import { IXyoOriginChainRepository } from '@xyo-network/origin-chain'
-import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 
 export interface IXyoNodeNetwork {
 
@@ -38,17 +34,10 @@ export interface IXyoNodeNetwork {
 
   requestPermissionForBlock(
     blockHash: IXyoHash,
-    signers: IXyoSigner[],
-    payload: IXyoPayload,
     callback: (publicKey: string, permissionRequest: IRequestPermissionForBlockResult) => void
   ): unsubscribeFn
 
-  serviceBlockPermissionRequests(
-    originBlockRepository: IXyoOriginBlockRepository,
-    originChainRepository: IXyoOriginChainRepository,
-    signersProvider: () => Promise<IXyoSigner[]>,
-    payloadProvider: () => Promise<IXyoPayload>
-  ): unsubscribeFn
+  serviceBlockPermissionRequests(): unsubscribeFn
 }
 
 export interface IXyoComponentArchivistFeatureDetail {

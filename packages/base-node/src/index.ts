@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 5th February 2019 5:06:22 pm
+ * @Last modified time: Thursday, 7th February 2019 12:26:12 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -25,7 +25,8 @@ import {
   IXyoBoundWitnessSuccessListener,
   XyoNestedBoundWitnessExtractor,
   XyoBoundWitnessPayloadProvider,
-  IXyoBoundWitnessInteractionFactory
+  IXyoBoundWitnessInteractionFactory,
+  XyoBoundWitnessSuccessListener
 } from '@xyo-network/peer-interaction'
 
 import {
@@ -35,8 +36,7 @@ import {
 
 import { IXyoOriginBlockRepository, XyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import {
-  XyoBoundWitnessValidator,
-  IXyoBoundWitness
+  XyoBoundWitnessValidator
 } from '@xyo-network/bound-witness'
 
 import { IXyoSerializationService } from '@xyo-network/serialization'
@@ -98,11 +98,33 @@ export class XyoBaseNode extends XyoBase {
       const p2pService = await this.getP2PService()
       const serializationService = await this.getSerializationService()
       const hashProvider = await this.getHashingProvider()
-      const network = new XyoNodeNetwork(p2pService, serializationService, hashProvider)
+      const originChainRepository = await this.getOriginStateRepository()
+      const originBlockRepository = await this.getOriginBlockRepository()
+      const payloadProvider = await this.getBoundWitnessPayloadProvider()
+      const boundWitnessSuccessListener = await this.getBoundWitnessSuccessListener()
+
+      const network = new XyoNodeNetwork(
+        p2pService,
+        serializationService,
+        hashProvider,
+        originBlockRepository,
+        originChainRepository,
+        payloadProvider,
+        boundWitnessSuccessListener
+      )
+
       const features = await this.getNodeFeatures()
       network.setFeatures(features)
+      if (this.shouldServiceBlockPermissionRequests()) {
+        network.serviceBlockPermissionRequests()
+      }
+
       return network
     })
+  }
+
+  protected async shouldServiceBlockPermissionRequests() {
+    return false
   }
 
   protected async getNodeFeatures(): Promise<IXyoComponentFeatureResponse> {
@@ -215,9 +237,7 @@ export class XyoBaseNode extends XyoBase {
 
   protected async getStandardBoundWitnessHandlerProvider(): Promise<XyoBoundWitnessHandlerProvider> {
     return this.getOrCreate('XyoStandardBoundWitnessHandlerProvider', async () => {
-      const hashingProvider = await this.getHashingProvider()
       const originStateRepository = await this.getOriginStateRepository()
-      const originBlockRepository = await this.getOriginBlockRepository()
       const boundWitnessPayloadProvider = await this.getBoundWitnessPayloadProvider()
       const boundWitnessSuccessListener = await this.getBoundWitnessSuccessListener()
       const serializationService = await this.getSerializationService()
@@ -231,18 +251,12 @@ export class XyoBaseNode extends XyoBase {
           )
         }
       }
-      const boundWitnessValidator = await this.getBoundWitnessValidator()
-      const nestedBoundWitnessExtractor = await this.getNestedBoundWitnessExtractor()
 
       return new XyoBoundWitnessHandlerProvider(
-        hashingProvider,
         originStateRepository,
-        originBlockRepository,
         boundWitnessPayloadProvider,
         boundWitnessSuccessListener,
-        standardServerInteractionFactory,
-        boundWitnessValidator,
-        nestedBoundWitnessExtractor
+        standardServerInteractionFactory
       )
     })
   }
@@ -270,14 +284,10 @@ export class XyoBaseNode extends XyoBase {
       const nestedBoundWitnessExtractor = await this.getNestedBoundWitnessExtractor()
 
       return new XyoBoundWitnessHandlerProvider(
-        hashingProvider,
         originStateRepository,
-        originBlockRepository,
         boundWitnessPayloadProvider,
         boundWitnessSuccessListener,
-        takeOriginChainServerInteractionFactory,
-        boundWitnessValidator,
-        nestedBoundWitnessExtractor
+        takeOriginChainServerInteractionFactory
       )
     })
   }
@@ -334,12 +344,16 @@ export class XyoBaseNode extends XyoBase {
   protected async getBoundWitnessSuccessListener(): Promise<IXyoBoundWitnessSuccessListener> {
     return this.getOrCreate('IXyoBoundWitnessSuccessListener', async () => {
       const hashingProvider = await this.getHashingProvider()
-      return {
-        onBoundWitnessSuccess: async (boundWitness: IXyoBoundWitness) => {
-          const hash = await hashingProvider.createHash(boundWitness.getSigningData())
-          this.logInfo(`Created bound witness with hash ${hash.serializeHex()}`)
-        }
-      }
+      const originBlockRepository = await this.getOriginBlockRepository()
+      const boundWitnessValidator = await this.getBoundWitnessValidator()
+      const originChainRepository = await this.getOriginStateRepository()
+
+      return new XyoBoundWitnessSuccessListener(
+        hashingProvider,
+        boundWitnessValidator,
+        originChainRepository,
+        originBlockRepository
+      )
     })
   }
 

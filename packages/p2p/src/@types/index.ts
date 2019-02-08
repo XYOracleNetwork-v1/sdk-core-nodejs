@@ -6,7 +6,7 @@ import { Server } from "net"
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 29th January 2019 2:55:29 pm
+ * @Last modified time: Thursday, 7th February 2019 1:00:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -52,6 +52,16 @@ export interface IXyoP2PService {
    * @memberof IXyoP2PService
    */
   subscribe(topic: string, cb: (senderPublicKey: string, message: Buffer) => void): unsubscribeFn
+
+  /**
+   * Same as `Subscribe` but stops listening after the first time the subscription is fulfilled
+   *
+   * @param {string} topic
+   * @param {(senderPublicKey: string, message: Buffer) => void} cb
+   * @returns {unsubscribeFn}
+   * @memberof IXyoP2PService
+   */
+  subscribeOnce(topic: string, cb: (senderPublicKey: string, message: Buffer) => void): unsubscribeFn
 }
 
 export interface IXyoPeer {
