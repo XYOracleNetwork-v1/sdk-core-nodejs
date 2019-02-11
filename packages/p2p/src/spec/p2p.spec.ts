@@ -85,7 +85,7 @@ describe(`P2P`, () => {
     const buff = encodeXyoTopicBuffer('topic1', Buffer.from('foo'))
     expect(decodeXyoTopicBuffer(buff)).toEqual({
       topic: 'topic1',
-      message: 'foo',
+      message: Buffer.from('foo'),
       offset: 17
     })
   })

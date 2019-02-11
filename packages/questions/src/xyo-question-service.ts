@@ -4,24 +4,20 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-question-service.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 7th February 2019 12:28:31 pm
+ * @Last modified time: Friday, 8th February 2019 12:39:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoDivinerArchivistClient } from '@xyo-network/diviner-archivist-client'
-import { IXyoHasIntersectedQuestion, IXyoQuestionService, IProofOfIntersectionAnswer, IXyoBlockTransfer, IProofOfIntersection } from './@types'
-import { XyoErrors, XyoError } from '@xyo-network/errors'
+import { IXyoHasIntersectedQuestion, IXyoQuestionService, IXyoBlockTransfer, IProofOfIntersection } from './@types'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoHash } from '@xyo-network/hashing'
-import { IXyoSerializationService } from '@xyo-network/serialization'
 import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { IXyoOriginChainRepository, XyoBridgeHashSet } from '@xyo-network/origin-chain'
-import { IXyoBoundWitness, IXyoPayload } from '@xyo-network/bound-witness'
-import { IXyoPublicKey, IXyoSigner } from '@xyo-network/signing'
+import { IXyoBoundWitness } from '@xyo-network/bound-witness'
+import { IXyoPublicKey } from '@xyo-network/signing'
 import { IXyoArchivistNetwork } from '@xyo-network/archivist-network'
 import { IBlockPermissionRequestResolver } from '@xyo-network/attribution-request'
-import { IXyoBoundWitnessPayloadProvider } from '@xyo-network/peer-interaction'
 
 export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
 

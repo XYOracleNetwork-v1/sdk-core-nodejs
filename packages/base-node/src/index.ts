@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 7th February 2019 12:26:12 pm
+ * @Last modified time: Friday, 8th February 2019 12:44:59 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -263,9 +263,7 @@ export class XyoBaseNode extends XyoBase {
 
   protected async getTakeOriginChainBoundWitnessHandlerProvider(): Promise<XyoBoundWitnessHandlerProvider> {
     return this.getOrCreate('XyoTakeOriginChainBoundWitnessHandlerProvider', async () => {
-      const hashingProvider = await this.getHashingProvider()
       const originStateRepository = await this.getOriginStateRepository()
-      const originBlockRepository = await this.getOriginBlockRepository()
       const boundWitnessPayloadProvider = await this.getBoundWitnessPayloadProvider()
       const boundWitnessSuccessListener = await this.getBoundWitnessSuccessListener()
       const serializationService = await this.getSerializationService()
@@ -279,9 +277,6 @@ export class XyoBaseNode extends XyoBase {
           )
         }
       }
-
-      const boundWitnessValidator = await this.getBoundWitnessValidator()
-      const nestedBoundWitnessExtractor = await this.getNestedBoundWitnessExtractor()
 
       return new XyoBoundWitnessHandlerProvider(
         originStateRepository,

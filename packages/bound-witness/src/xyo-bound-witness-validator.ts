@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-validator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 4:36:43 pm
+ * @Last modified time: Friday, 8th February 2019 2:30:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,13 +19,7 @@ import { schema } from "@xyo-network/serialization-schema"
 export class XyoBoundWitnessValidator extends XyoBase {
 
   constructor(
-    private readonly options: {
-      checkPartyLengths: boolean,
-      checkIndexExists: boolean,
-      checkCountOfSignaturesMatchPublicKeysCount: boolean,
-      validateSignatures: boolean,
-      validateHash: boolean
-    }) {
+    private readonly options: IXyoBoundWitnessValidationOptions) {
     super()
   }
 
@@ -100,4 +94,12 @@ export class XyoBoundWitnessValidator extends XyoBase {
       }, Promise.resolve() as Promise<void>)
     }, Promise.resolve() as Promise<void>)
   }
+}
+
+export interface IXyoBoundWitnessValidationOptions {
+  checkPartyLengths: boolean,
+  checkIndexExists: boolean,
+  checkCountOfSignaturesMatchPublicKeysCount: boolean,
+  validateSignatures: boolean,
+  validateHash: boolean
 }
