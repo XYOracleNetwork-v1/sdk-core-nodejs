@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 12th February 2019 10:21:52 am
+ * @Last modified time: Tuesday, 12th February 2019 10:43:37 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -75,13 +75,14 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork, IXyoTran
     })
   }
 
-  public listenForTransactions(transaction: IXyoTransaction<any>): () => void {
+  public listenForTransactions(): unsubscribeFn {
     const handler = new XyoReceivedTransactionHandler(
       this.serializationService,
       this.p2pService,
       this.hashProvider,
       this.transactionsRepository
     )
+
     handler.initialize()
     return handler.unsubscribeAll.bind(handler)
   }
