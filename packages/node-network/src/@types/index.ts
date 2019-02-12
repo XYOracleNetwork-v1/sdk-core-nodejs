@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 7th February 2019 12:14:21 pm
+ * @Last modified time: Tuesday, 12th February 2019 9:03:16 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { unsubscribeFn } from '@xyo-network/p2p'
+import { unsubscribeFn } from '@xyo-network/utils'
 import { IRequestPermissionForBlockResult } from '@xyo-network/attribution-request'
 import { IXyoHash } from '@xyo-network/hashing'
 

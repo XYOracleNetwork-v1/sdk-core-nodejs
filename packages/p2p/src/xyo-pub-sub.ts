@@ -1,4 +1,4 @@
-import { Callback } from './@types'
+import { Callback } from '@xyo-network/utils'
 
 export class XyoPubSub {
   private listeners: { [topic: string]: Callback[] } = {}

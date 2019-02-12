@@ -172,6 +172,9 @@
     },
     {
       "path": "transaction-pool"
+    },
+    {
+      "path": "utils"
     }
   ],
   "include": [
@@ -226,6 +229,7 @@
     "web3-service/src/**/*.ts",
     "attribution-request/src/**/*.ts",
     "attribution-request.node-network/src/**/*.ts",
-    "transaction-pool/src/**/*.ts"
+    "transaction-pool/src/**/*.ts",
+    "utils/src/**/*.ts"
   ]
 }

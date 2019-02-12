@@ -1,9 +1,10 @@
-import { IXyoP2PService, unsubscribeFn, IXyoPeerDiscoveryService } from './@types'
+import { IXyoP2PService, IXyoPeerDiscoveryService } from './@types'
 import { XyoBase } from '@xyo-network/base'
 import { XyoPubSub } from './xyo-pub-sub'
 import { decodeXyoTopicBuffer, encodeXyoTopicBuffer } from './xyo-topic-buffer'
+import { unsubscribeFn } from '@xyo-network/utils'
 
-type Callback = (senderPublicKey: string, message: Buffer) => void
+type p2pCallback = (senderPublicKey: string, message: Buffer) => void
 
 export class XyoP2PService extends XyoBase implements IXyoP2PService {
 
@@ -43,7 +44,7 @@ export class XyoP2PService extends XyoBase implements IXyoP2PService {
     return Promise.resolve()
   }
 
-  public subscribe(topic: string, cb: Callback): unsubscribeFn {
+  public subscribe(topic: string, cb: p2pCallback): unsubscribeFn {
     return this.listener.subscribe(topic, (senderPublicKey, message) => {
       this.logInfo(`Message subscription with ${topic} received`)
       cb(senderPublicKey, message)

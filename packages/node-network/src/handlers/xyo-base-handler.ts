@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-handler.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 7th February 2019 2:08:14 pm
+ * @Last modified time: Tuesday, 12th February 2019 9:03:31 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBase } from "@xyo-network/base"
 import { XyoMessageParser } from "../parsers"
-import { unsubscribeFn } from "@xyo-network/p2p"
+import { unsubscribeFn } from "@xyo-network/utils"
 import { IXyoSerializationService } from "@xyo-network/serialization"
 
 export abstract class XyoBaseHandler extends XyoBase {

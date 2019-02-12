@@ -18,6 +18,7 @@
     "@xyo-network/origin-block-repository": "^0.23.0",
     "@xyo-network/peer-interaction": "^0.23.0",
     "@xyo-network/transaction-pool": "^0.23.0",
+    "@xyo-network/utils": "^0.23.0",
     "@xyo-network/p2p": "^0.23.0"
   },
   "devDependencies": {

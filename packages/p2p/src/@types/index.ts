@@ -1,4 +1,5 @@
 import { Server } from "net"
+import { unsubscribeFn } from '@xyo-network/utils'
 
 /*
  * @Author: XY | The Findables Company <ryanxyo>
@@ -6,7 +7,7 @@ import { Server } from "net"
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 7th February 2019 1:00:28 pm
+ * @Last modified time: Tuesday, 12th February 2019 8:57:39 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -175,8 +176,3 @@ export interface IXyoPeerConnectionPool {
 
   isValidConnection(connection: IXyoPeerConnection): boolean
 }
-
-/** A function to unsubscribe from a topic */
-export type unsubscribeFn = () => void
-
-export type Callback = (...args: any[]) => void

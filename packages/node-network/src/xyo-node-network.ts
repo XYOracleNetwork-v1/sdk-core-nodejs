@@ -4,13 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 12th February 2019 8:51:12 am
+ * @Last modified time: Tuesday, 12th February 2019 9:11:53 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoNodeNetwork, IXyoComponentFeatureResponse } from "./@types"
-import { unsubscribeFn, IXyoP2PService } from "@xyo-network/p2p"
+import { IXyoP2PService } from "@xyo-network/p2p"
+import { unsubscribeFn } from "@xyo-network/utils"
 import { IRequestPermissionForBlockResult } from "@xyo-network/attribution-request"
 import { XyoBase } from "@xyo-network/base"
 import { IXyoHash, IXyoHashProvider } from "@xyo-network/hashing"
