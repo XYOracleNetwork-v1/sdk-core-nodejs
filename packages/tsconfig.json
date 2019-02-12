@@ -169,6 +169,9 @@
     },
     {
       "path": "attribution-request.node-network"
+    },
+    {
+      "path": "transaction-pool"
     }
   ],
   "include": [
@@ -222,6 +225,7 @@
     "web3-question-service/src/**/*.ts",
     "web3-service/src/**/*.ts",
     "attribution-request/src/**/*.ts",
-    "attribution-request.node-network/src/**/*.ts"
+    "attribution-request.node-network/src/**/*.ts",
+    "transaction-pool/src/**/*.ts"
   ]
 }

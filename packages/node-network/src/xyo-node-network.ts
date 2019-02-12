@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 7th February 2019 3:27:23 pm
+ * @Last modified time: Tuesday, 12th February 2019 8:51:12 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -22,7 +22,9 @@ import { IXyoBoundWitnessSuccessListener, IXyoBoundWitnessPayloadProvider } from
 import { XyoBlockPermissionResponseHandler } from "./handlers/xyo-block-permission-response-handler"
 import { XyoRequestPermissionForBlockHandler } from "./handlers/xyo-request-permission-for-block-handler"
 
-export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
+import { IXyoTransactionRepository, IXyoTransaction } from '@xyo-network/transaction-pool'
+
+export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork, IXyoTransactionRepository {
 
   private unsubscribeComponentFeature: unsubscribeFn | undefined
   private messageParser: XyoMessageParser
@@ -38,6 +40,10 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
   ) {
     super()
     this.messageParser = new XyoMessageParser(serializationService)
+  }
+
+  public listenForTransactions(transaction: IXyoTransaction<any>): () => void {
+    throw new Error("Method not implemented.")
   }
 
   public serviceBlockPermissionRequests(): unsubscribeFn {
@@ -68,6 +74,15 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
         senderPublicKey
       )
     })
+  }
+
+  public async shareTransaction(transaction: IXyoTransaction<any>): Promise<void> {
+    this.p2pService.publish('transaction:share', Buffer.from(JSON.stringify(transaction)))
+  }
+
+  // tslint:disable-next-line:prefer-array-literal
+  public getTransactions(): Promise<Array<IXyoTransaction<any>>> {
+    throw new Error("Method not implemented.")
   }
 
   public requestFeatures(callback: (publicKey: string, featureRequest: IXyoComponentFeatureResponse) => void)
