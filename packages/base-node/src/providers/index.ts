@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 11th February 2019 10:18:13 am
+ * @Last modified time: Tuesday, 12th February 2019 10:38:02 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,7 +17,7 @@ import { IXyoPeerConnectionDelegate, XyoSimplePeerConnectionDelegate, XyoPeerCon
 import { IXyoNodeNetwork, XyoNodeNetwork } from '@xyo-network/node-network'
 import { IXyoP2PService, IXyoPeerDiscoveryService, XyoP2PService, XyoPeerTransport, XyoPeerDiscoveryService } from '@xyo-network/p2p'
 import { IXyoSerializationService } from '@xyo-network/serialization'
-import { IXyoHashProvider, getHashingProvider } from '@xyo-network/hashing'
+import { IXyoHashProvider, getHashingProvider, IXyoHash } from '@xyo-network/hashing'
 import { IXyoOriginChainRepository, XyoOriginChainStateInMemoryRepository } from '@xyo-network/origin-chain'
 import { IXyoOriginBlockRepository, XyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessSuccessListener, XyoBoundWitnessPayloadProvider, XyoBoundWitnessSuccessListener, XyoBoundWitnessHandlerProvider, IXyoBoundWitnessInteractionFactory } from '@xyo-network/peer-interaction'
@@ -31,6 +31,8 @@ import { XyoServerTcpNetwork } from '@xyo-network/network.tcp'
 import { XyoPeerInteractionRouter } from '@xyo-network/peer-interaction-router'
 import { XyoBoundWitnessTakeOriginChainServerInteraction, XyoBoundWitnessStandardServerInteraction } from '@xyo-network/peer-interaction-handlers'
 import { getSignerProvider } from '@xyo-network/signing.ecdsa'
+import { IXyoRepository } from '@xyo-network/utils'
+import { IXyoTransaction } from '@xyo-network/transaction-pool'
 
 const nodeRunnerDelegateProvider: IXyoProvider<IXyoNodeRunnerDelegate> = {
   async get(container) {
@@ -56,7 +58,7 @@ const nodeNetworkProvider: IXyoProvider<IXyoNodeNetwork> = {
     const originBlockRepository = await container.get<IXyoOriginBlockRepository>(`IXyoOriginBlockRepository`)
     const payloadProvider = await container.get<IXyoBoundWitnessPayloadProvider>(`IXyoBoundWitnessPayloadProvider`)
     const boundWitnessSuccessListener = await container.get<IXyoBoundWitnessSuccessListener>(`IXyoBoundWitnessSuccessListener`)
-
+    const transactionRepository = await container.get<IXyoRepository<IXyoHash, IXyoTransaction<any>>>(`TransactionRepository`)
     const network = new XyoNodeNetwork(
       p2pService,
       serializationService,
@@ -64,7 +66,8 @@ const nodeNetworkProvider: IXyoProvider<IXyoNodeNetwork> = {
       originBlockRepository,
       originChainRepository,
       payloadProvider,
-      boundWitnessSuccessListener
+      boundWitnessSuccessListener,
+      transactionRepository
     )
 
     return network
@@ -287,6 +290,30 @@ const signersProvider: IXyoProvider<IXyoSigner[]> = {
   }
 }
 
+const transactionsRepository: IXyoRepository<IXyoHash, IXyoTransaction<any>> =  (() => {
+  const inMemoryRepo: {[s: string]: IXyoTransaction<any>} = {}
+
+  const repo: IXyoRepository<IXyoHash, IXyoTransaction<any>> = {
+    add: async (id, item) => {
+      if (!inMemoryRepo[id.serializeHex()]) {
+        inMemoryRepo[id.serializeHex()] = item
+      }
+      return
+    },
+    remove: async (id) => {
+      delete inMemoryRepo[id.serializeHex()]
+    },
+    contains: async (id) => {
+      return Boolean(inMemoryRepo[id.serializeHex()])
+    },
+    find: async (id) => {
+      return inMemoryRepo[id.serializeHex()] || undefined
+    }
+  }
+
+  return repo
+})()
+
 export const providers = {
   signersProvider,
   serializationServiceProvider,
@@ -307,5 +334,6 @@ export const providers = {
   p2PServiceProvider,
   discoveryNetworkProvider,
   discoveryNetworkPublicKeyProvider,
-  p2pAddressProvider
+  p2pAddressProvider,
+  transactionsRepository
 }

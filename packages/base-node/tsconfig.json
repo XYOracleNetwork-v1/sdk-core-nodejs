@@ -45,6 +45,8 @@
     {"path": "../signing"},
     {"path": "../signing.ecdsa"},
     {"path": "../signing.rsa"},
+    {"path": "../utils"},
+    {"path": "../transaction-pool"},
     {"path": "../storage"}
   ]
 }

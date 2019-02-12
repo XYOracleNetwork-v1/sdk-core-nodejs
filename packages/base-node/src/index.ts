@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 8th February 2019 12:44:59 pm
+ * @Last modified time: Tuesday, 12th February 2019 10:33:40 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -16,7 +16,7 @@ import { XyoServerTcpNetwork } from '@xyo-network/network.tcp'
 import { XyoSimplePeerConnectionDelegate, IXyoPeerConnectionDelegate, IXyoPeerConnectionHandler, XyoPeerConnectionHandler } from '@xyo-network/peer-connections'
 import { XyoPeerInteractionRouter } from '@xyo-network/peer-interaction-router'
 import { XyoBoundWitnessStandardServerInteraction, XyoBoundWitnessTakeOriginChainServerInteraction } from '@xyo-network/peer-interaction-handlers'
-import { IXyoHashProvider, getHashingProvider } from '@xyo-network/hashing'
+import { IXyoHashProvider, getHashingProvider, IXyoHash } from '@xyo-network/hashing'
 import { getSignerProvider } from '@xyo-network/signing.ecdsa'
 
 import {
@@ -46,6 +46,8 @@ import { serializer } from '@xyo-network/serializer'
 import { IXyoNodeNetwork, XyoNodeNetwork, IXyoComponentFeatureResponse } from '@xyo-network/node-network'
 import { IXyoP2PService, XyoP2PService, IXyoPeerDiscoveryService, XyoPeerDiscoveryService, XyoPeerTransport } from '@xyo-network/p2p'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
+import { IXyoRepository } from '@xyo-network/utils'
+import { IXyoTransaction } from '../../transaction-pool/dist'
 
 // tslint:disable-next-line:max-classes-per-file
 export class XyoBaseNode extends XyoBase {
@@ -102,6 +104,7 @@ export class XyoBaseNode extends XyoBase {
       const originBlockRepository = await this.getOriginBlockRepository()
       const payloadProvider = await this.getBoundWitnessPayloadProvider()
       const boundWitnessSuccessListener = await this.getBoundWitnessSuccessListener()
+      const transactionRepository = await this.getTransactionRepository()
 
       const network = new XyoNodeNetwork(
         p2pService,
@@ -110,7 +113,8 @@ export class XyoBaseNode extends XyoBase {
         originBlockRepository,
         originChainRepository,
         payloadProvider,
-        boundWitnessSuccessListener
+        boundWitnessSuccessListener,
+        transactionRepository
       )
 
       const features = await this.getNodeFeatures()
@@ -120,6 +124,32 @@ export class XyoBaseNode extends XyoBase {
       }
 
       return network
+    })
+  }
+
+  protected async getTransactionRepository(): Promise<IXyoRepository<IXyoHash, IXyoTransaction<any>>> {
+    return this.getOrCreate(`TransactionRepository`, async () => {
+      const inMemoryRepo: {[s: string]: IXyoTransaction<any>} = {}
+
+      const repo: IXyoRepository<IXyoHash, IXyoTransaction<any>> = {
+        add: async (id, item) => {
+          if (!inMemoryRepo[id.serializeHex()]) {
+            inMemoryRepo[id.serializeHex()] = item
+          }
+          return
+        },
+        remove: async (id) => {
+          delete inMemoryRepo[id.serializeHex()]
+        },
+        contains: async (id) => {
+          return Boolean(inMemoryRepo[id.serializeHex()])
+        },
+        find: async (id) => {
+          return inMemoryRepo[id.serializeHex()] || undefined
+        }
+      }
+
+      return repo
     })
   }
 

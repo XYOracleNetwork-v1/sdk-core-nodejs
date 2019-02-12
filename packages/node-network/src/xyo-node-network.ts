@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 12th February 2019 9:11:53 am
+ * @Last modified time: Tuesday, 12th February 2019 10:21:52 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoNodeNetwork, IXyoComponentFeatureResponse } from "./@types"
 import { IXyoP2PService } from "@xyo-network/p2p"
-import { unsubscribeFn } from "@xyo-network/utils"
+import { unsubscribeFn, IXyoRepository } from "@xyo-network/utils"
 import { IRequestPermissionForBlockResult } from "@xyo-network/attribution-request"
 import { XyoBase } from "@xyo-network/base"
 import { IXyoHash, IXyoHashProvider } from "@xyo-network/hashing"
@@ -24,6 +24,7 @@ import { XyoBlockPermissionResponseHandler } from "./handlers/xyo-block-permissi
 import { XyoRequestPermissionForBlockHandler } from "./handlers/xyo-request-permission-for-block-handler"
 
 import { IXyoTransactionRepository, IXyoTransaction } from '@xyo-network/transaction-pool'
+import { XyoReceivedTransactionHandler } from "./handlers/xyo-received-transaction-handler"
 
 export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork, IXyoTransactionRepository {
 
@@ -37,14 +38,11 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork, IXyoTran
     private readonly originBlockRepository: IXyoOriginBlockRepository,
     private readonly originChainRepository: IXyoOriginChainRepository,
     private readonly payloadProvider: IXyoBoundWitnessPayloadProvider,
-    private readonly boundWitnessSuccessListener: IXyoBoundWitnessSuccessListener
+    private readonly boundWitnessSuccessListener: IXyoBoundWitnessSuccessListener,
+    private readonly transactionsRepository: IXyoRepository<IXyoHash, IXyoTransaction<any>>
   ) {
     super()
     this.messageParser = new XyoMessageParser(serializationService)
-  }
-
-  public listenForTransactions(transaction: IXyoTransaction<any>): () => void {
-    throw new Error("Method not implemented.")
   }
 
   public serviceBlockPermissionRequests(): unsubscribeFn {
@@ -75,6 +73,17 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork, IXyoTran
         senderPublicKey
       )
     })
+  }
+
+  public listenForTransactions(transaction: IXyoTransaction<any>): () => void {
+    const handler = new XyoReceivedTransactionHandler(
+      this.serializationService,
+      this.p2pService,
+      this.hashProvider,
+      this.transactionsRepository
+    )
+    handler.initialize()
+    return handler.unsubscribeAll.bind(handler)
   }
 
   public async shareTransaction(transaction: IXyoTransaction<any>): Promise<void> {

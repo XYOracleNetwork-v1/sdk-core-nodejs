@@ -1,2 +1,2 @@
 
-export { unsubscribeFn, Callback } from './@types'
+export { unsubscribeFn, Callback, IXyoRepository } from './@types'
