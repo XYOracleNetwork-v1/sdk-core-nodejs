@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 13th February 2019 1:33:43 pm
+ * @Last modified time: Wednesday, 13th February 2019 4:01:01 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,13 +12,13 @@
 // tslint:disable:max-line-length
 
 import { IXyoNodeRunnerDelegate } from '@xyo-network/node-runner'
-import { IXyoProvider, IXyoResolvers, IXyoDiscoveryConfig, IXyoNodeNetworkConfig, IXyoPeerTransportConfig, IXyoNetworkConfig, IXyoNetworkProcedureCatalogueConfig } from '../@types'
+import { IXyoProvider, IXyoResolvers, IXyoDiscoveryConfig, IXyoNodeNetworkConfig, IXyoPeerTransportConfig, IXyoNetworkConfig, IXyoNetworkProcedureCatalogueConfig, IXyoOriginChainConfig } from '../@types'
 import { IXyoPeerConnectionDelegate, XyoSimplePeerConnectionDelegate, XyoPeerConnectionHandler } from '@xyo-network/peer-connections'
 import { IXyoNodeNetwork, XyoNodeNetwork } from '@xyo-network/node-network'
 import { IXyoP2PService, IXyoPeerDiscoveryService, XyoP2PService, XyoPeerTransport, XyoPeerDiscoveryService, IXyoPeerTransport } from '@xyo-network/p2p'
 import { IXyoSerializationService } from '@xyo-network/serialization'
 import { IXyoHashProvider, getHashingProvider, IXyoHash } from '@xyo-network/hashing'
-import { IXyoOriginChainRepository, XyoOriginChainStateInMemoryRepository } from '@xyo-network/origin-chain'
+import { IXyoOriginChainRepository, XyoOriginChainStateInMemoryRepository, XyoOriginChainLocalStorageRepository } from '@xyo-network/origin-chain'
 import { IXyoOriginBlockRepository, XyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessSuccessListener, XyoBoundWitnessPayloadProvider, XyoBoundWitnessSuccessListener, XyoBoundWitnessHandlerProvider, IXyoBoundWitnessInteractionFactory } from '@xyo-network/peer-interaction'
 import { serializer } from '@xyo-network/serializer'
@@ -30,18 +30,20 @@ import { XyoServerTcpNetwork } from '@xyo-network/network.tcp'
 import { XyoPeerInteractionRouter } from '@xyo-network/peer-interaction-router'
 import { XyoBoundWitnessTakeOriginChainServerInteraction, XyoBoundWitnessStandardServerInteraction } from '@xyo-network/peer-interaction-handlers'
 import { getSignerProvider } from '@xyo-network/signing.ecdsa'
-import { IXyoRepository } from '@xyo-network/utils'
+import { IXyoRepository, createDirectoryIfNotExists } from '@xyo-network/utils'
 import { IXyoTransaction } from '@xyo-network/transaction-pool'
 import { IResolvers } from '../xyo-resolvers-enum'
+import { XyoLevelDbStorageProvider } from '@xyo-network/storage.leveldb'
 
-const nodeRunnerDelegate: IXyoProvider<IXyoNodeRunnerDelegate, undefined, undefined> = {
+const nodeRunnerDelegate: IXyoProvider<IXyoNodeRunnerDelegate, undefined> = {
   async get(container) {
     const peerConnection = await container.get<IXyoPeerConnectionDelegate>(IResolvers.PEER_CONNECTION_DELEGATE)
+    const nodeNet = await container.get<IXyoNodeNetwork>(IResolvers.NODE_NETWORK) // this will initialize it
 
     return {
       run: async () => {
         const networkPipe = await peerConnection.provideConnection()
-        return peerConnection.handlePeerConnection(networkPipe)
+        await peerConnection.handlePeerConnection(networkPipe)
       },
       onStop: async () => {
         return peerConnection.stopProvidingConnections()
@@ -50,8 +52,8 @@ const nodeRunnerDelegate: IXyoProvider<IXyoNodeRunnerDelegate, undefined, undefi
   }
 }
 
-const nodeNetwork: IXyoProvider<IXyoNodeNetwork, undefined, IXyoNodeNetworkConfig> = {
-  async get(container) {
+const nodeNetwork: IXyoProvider<IXyoNodeNetwork, IXyoNodeNetworkConfig> = {
+  async get(container, config) {
     const p2p = await container.get<IXyoP2PService>(IResolvers.P2P_SERVICE)
     const serialization = await container.get<IXyoSerializationService>(IResolvers.SERIALIZATION_SERVICE)
     const hasher = await container.get<IXyoHashProvider>(IResolvers.HASH_PROVIDER)
@@ -72,78 +74,64 @@ const nodeNetwork: IXyoProvider<IXyoNodeNetwork, undefined, IXyoNodeNetworkConfi
       transactionRepository
     )
 
-    return networkService
-  },
-  async initialize(instance, container, config) {
     const features = await config.features
-    instance.setFeatures(features)
+    networkService.setFeatures(features)
 
     if (config.shouldServiceBlockPermissionRequests) {
-      instance.serviceBlockPermissionRequests()
+      networkService.serviceBlockPermissionRequests()
     }
+
+    return networkService
   }
 }
 
-const p2pService: IXyoProvider<IXyoP2PService, undefined, undefined> = {
+const p2pService: IXyoProvider<IXyoP2PService, undefined> = {
   async get(container) {
     const discoveryNetworkService = await container.get<IXyoPeerDiscoveryService>(IResolvers.DISCOVERY_NETWORK)
     return new XyoP2PService(discoveryNetworkService)
   }
 }
 
-const discoveryNetwork: IXyoProvider<IXyoPeerDiscoveryService, undefined, IXyoDiscoveryConfig> = {
-  async get(container) {
+const discoveryNetwork: IXyoProvider<IXyoPeerDiscoveryService, IXyoDiscoveryConfig> = {
+  async get(container, config) {
     const transport = await container.get<IXyoPeerTransport>(IResolvers.PEER_TRANSPORT)
-    return new XyoPeerDiscoveryService(transport)
-  },
-
-  async initialize(discoveryNetworkInstance, container, config) {
-    await discoveryNetworkInstance.initialize(config)
-    await discoveryNetworkInstance.start()
-    await discoveryNetworkInstance.addBootstrapNodes(config.bootstrapNodes)
+    const service =  new XyoPeerDiscoveryService(transport)
+    await service.initialize(config)
+    await service.start()
+    await service.addBootstrapNodes(config.bootstrapNodes)
+    return service
   }
 }
 
-const peerTransport: IXyoProvider<IXyoPeerTransport, undefined, IXyoPeerTransportConfig> = {
-  async get(container) {
-    return new XyoPeerTransport()
-  },
-  async initialize(instance, container, config) {
-    instance.initialize(config.address)
+const peerTransport: IXyoProvider<IXyoPeerTransport, IXyoPeerTransportConfig> = {
+  async get(container, config) {
+    const transport = new XyoPeerTransport()
+    transport.initialize(config.address)
+    return transport
   }
 }
 
-const serializationService: IXyoProvider<IXyoSerializationService, undefined, undefined> = {
+const serializationService: IXyoProvider<IXyoSerializationService, undefined> = {
   async get(container) {
     return serializer
   }
 }
 
-const hashProvider: IXyoProvider<IXyoHashProvider, undefined, undefined> = {
+const hashProvider: IXyoProvider<IXyoHashProvider, undefined> = {
   async get(container) {
     return getHashingProvider('sha256')
   }
 }
 
-const originChainRepository: IXyoProvider<IXyoOriginChainRepository, undefined, undefined> = {
-  async get(container) {
-    const signers = await container.get<IXyoSigner[]>(IResolvers.SIGNERS)
+const originChainRepository: IXyoProvider<IXyoOriginChainRepository, IXyoOriginChainConfig> = {
+  async get(container, config) {
     const originBlockRepo = await container.get<IXyoOriginBlockRepository>(IResolvers.ORIGIN_BLOCK_REPOSITORY)
     const serialization = await container.get<IXyoSerializationService>(IResolvers.SERIALIZATION_SERVICE)
-
-    return new XyoOriginChainStateInMemoryRepository(
-        0, // index
-        [], // hashes
-        [], // public keys
-        originBlockRepo,
-        signers,
-        undefined, // next-public-key
-        [], // waiting signers
-        serialization,
-        undefined // genesis signer
-      )
+    await createDirectoryIfNotExists(config.data)
+    const db = XyoLevelDbStorageProvider.createStore(config.data)
+    return new XyoOriginChainLocalStorageRepository(db, originBlockRepo, serialization)
   },
-  async initialize(originChainRepo, container, config) {
+  async postInit(originChainRepo, container) {
     const originChainSigners = await originChainRepo.getSigners()
 
     if (originChainSigners.length === 0) {
@@ -157,10 +145,12 @@ const originChainRepository: IXyoProvider<IXyoOriginChainRepository, undefined, 
       const successListener = await container.get<IXyoBoundWitnessSuccessListener>(IResolvers.BOUND_WITNESS_SUCCESS_LISTENER)
       await successListener.onBoundWitnessSuccess(genesisBlock)
     }
+
+    return
   }
 }
 
-const originBlockRepository: IXyoProvider<IXyoOriginBlockRepository, undefined, undefined> = {
+const originBlockRepository: IXyoProvider<IXyoOriginBlockRepository, undefined> = {
   async get(container) {
     const storageProvider = new XyoInMemoryStorageProvider()
     const serialization = await container.get<IXyoSerializationService>(IResolvers.SERIALIZATION_SERVICE)
@@ -169,13 +159,13 @@ const originBlockRepository: IXyoProvider<IXyoOriginBlockRepository, undefined, 
   }
 }
 
-const boundWitnessPayloadProvider: IXyoProvider<IXyoBoundWitnessPayloadProvider, undefined, undefined> = {
+const boundWitnessPayloadProvider: IXyoProvider<IXyoBoundWitnessPayloadProvider, undefined> = {
   async get(container) {
     return new XyoBoundWitnessPayloadProvider()
   }
 }
 
-const boundWitnessSuccessListener: IXyoProvider<IXyoBoundWitnessSuccessListener, undefined, undefined> = {
+const boundWitnessSuccessListener: IXyoProvider<IXyoBoundWitnessSuccessListener, undefined> = {
   async get(container) {
     const hasher = await container.get<IXyoHashProvider>(IResolvers.HASH_PROVIDER)
     const originBlockRepo = await container.get<IXyoOriginBlockRepository>(IResolvers.ORIGIN_BLOCK_REPOSITORY)
@@ -191,16 +181,13 @@ const boundWitnessSuccessListener: IXyoProvider<IXyoBoundWitnessSuccessListener,
   }
 }
 
-const boundWitnessValidator: IXyoProvider<XyoBoundWitnessValidator, undefined, IXyoBoundWitnessValidationOptions> = {
-  async get(container) {
-    return new XyoBoundWitnessValidator()
-  },
-  async initialize(instance, container, config) {
-    instance.setValidationOptions(config)
+const boundWitnessValidator: IXyoProvider<XyoBoundWitnessValidator, IXyoBoundWitnessValidationOptions> = {
+  async get(container, config) {
+    return new XyoBoundWitnessValidator(config)
   }
 }
 
-const peerConnectionDelegate: IXyoProvider<IXyoPeerConnectionDelegate, undefined, undefined> = {
+const peerConnectionDelegate: IXyoProvider<IXyoPeerConnectionDelegate, undefined> = {
   async get(container) {
     const networkService = await container.get<IXyoNetworkProvider>(IResolvers.NETWORK)
     const catalogue = await container.get<IXyoNetworkProcedureCatalogue>(IResolvers.NETWORK_PROCEDURE_CATALOGUE)
@@ -259,53 +246,51 @@ const peerConnectionDelegate: IXyoProvider<IXyoPeerConnectionDelegate, undefined
   }
 }
 
-const network: IXyoProvider<IXyoNetworkProvider, undefined, IXyoNetworkConfig> = {
-  async get(container) {
-    return new XyoServerTcpNetwork()
-  },
-  async initialize(instance, container, config) {
-    (instance as XyoServerTcpNetwork).setPort(config.port)
+const network: IXyoProvider<IXyoNetworkProvider, IXyoNetworkConfig> = {
+  async get(container, config) {
+    return new XyoServerTcpNetwork(config.port)
   }
 }
 
-const networkProcedureCatalogue: IXyoProvider<IXyoNetworkProcedureCatalogue, undefined, IXyoNetworkProcedureCatalogueConfig> = {
-  async get(container) {
-    return new XyoNetworkProcedureCatalogue()
-  },
-  async initialize(instance, container, config) {
-    instance.setCatalogue(config.catalogue)
+const networkProcedureCatalogue: IXyoProvider<IXyoNetworkProcedureCatalogue, IXyoNetworkProcedureCatalogueConfig> = {
+  async get(container, config) {
+    const procedureCatalogue =  new XyoNetworkProcedureCatalogue()
+    procedureCatalogue.setCatalogue(config.catalogue)
+    return procedureCatalogue
   }
 }
 
-const signersProvider: IXyoProvider<IXyoSigner[], undefined, undefined> = {
+const signersProvider: IXyoProvider<IXyoSigner[], undefined> = {
   async get(container) {
     return [getSignerProvider('secp256k1-sha256').newInstance()]
   }
 }
 
-const transactionsRepository: IXyoRepository<IXyoHash, IXyoTransaction<any>> =  (() => {
-  const inMemoryRepo: {[s: string]: IXyoTransaction<any>} = {}
+const transactionsRepository: IXyoProvider<IXyoRepository<IXyoHash, IXyoTransaction<any>>, undefined> = {
+  async get() {
+    const inMemoryRepo: {[s: string]: IXyoTransaction<any>} = {}
 
-  const repo: IXyoRepository<IXyoHash, IXyoTransaction<any>> = {
-    add: async (id, item) => {
-      if (!inMemoryRepo[id.serializeHex()]) {
-        inMemoryRepo[id.serializeHex()] = item
+    const repo: IXyoRepository<IXyoHash, IXyoTransaction<any>> = {
+      add: async (id, item) => {
+        if (!inMemoryRepo[id.serializeHex()]) {
+          inMemoryRepo[id.serializeHex()] = item
+        }
+        return
+      },
+      remove: async (id) => {
+        delete inMemoryRepo[id.serializeHex()]
+      },
+      contains: async (id) => {
+        return Boolean(inMemoryRepo[id.serializeHex()])
+      },
+      find: async (id) => {
+        return inMemoryRepo[id.serializeHex()] || undefined
       }
-      return
-    },
-    remove: async (id) => {
-      delete inMemoryRepo[id.serializeHex()]
-    },
-    contains: async (id) => {
-      return Boolean(inMemoryRepo[id.serializeHex()])
-    },
-    find: async (id) => {
-      return inMemoryRepo[id.serializeHex()] || undefined
     }
-  }
 
-  return repo
-})()
+    return repo
+  }
+}
 
 export const resolvers: IXyoResolvers = {
   [IResolvers.SIGNERS]: signersProvider,

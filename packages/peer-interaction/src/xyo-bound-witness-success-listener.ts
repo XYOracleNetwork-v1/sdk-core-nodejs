@@ -39,8 +39,8 @@ export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBound
       throw err
     }
 
-    await this.originChainRepository.updateOriginChainState(hashValue, boundWitness)
     await this.originBlockRepository.addOriginBlock(hashValue, boundWitness)
+    await this.originChainRepository.updateOriginChainState(hashValue, boundWitness)
     const nestedBoundWitnesses = new XyoNestedBoundWitnessExtractor().extractNestedBoundWitnesses(boundWitness)
 
     await nestedBoundWitnesses.reduce(async (promiseChain, nestedBoundWitness) => {

@@ -32,7 +32,9 @@
     "@xyo-network/signing.rsa": "^0.23.0",
     "@xyo-network/storage": "^0.23.0",
     "@xyo-network/transaction-pool": "^0.23.0",
-    "@xyo-network/utils": "^0.23.0"
+    "@xyo-network/storage.leveldb": "^0.23.0",
+    "@xyo-network/utils": "^0.23.0",
+    "merge": "^1.2.1"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

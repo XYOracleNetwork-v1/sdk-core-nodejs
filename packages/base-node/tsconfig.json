@@ -47,6 +47,7 @@
     {"path": "../signing.rsa"},
     {"path": "../utils"},
     {"path": "../transaction-pool"},
+    {"path": "../storage.leveldb"},
     {"path": "../storage"}
   ]
 }

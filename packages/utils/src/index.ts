@@ -40,7 +40,7 @@ export async function createDirectoryIfNotExists(path: string) {
 
 export class BaseLifeCyclable extends XyoBase implements ILifeCyclable {
 
-  private readonly eventEmitter: EventEmitter
+  protected readonly eventEmitter: EventEmitter
 
   constructor(private readonly partialImplementation?: Partial<ILifeCycleEvent>) {
     super()
@@ -225,7 +225,7 @@ export class LifeCycleRunner {
     | 'stopped'
     | 'post:stopped' = undefined
 
-  constructor(private readonly lifeCyclable: ILifeCyclable) {}
+  constructor(protected readonly lifeCyclable: ILifeCyclable) {}
 
   public async initialize(): Promise<void> {
     if (!this.canInitialize()) {
@@ -239,7 +239,7 @@ export class LifeCycleRunner {
     await this.lifeCyclable.initialize()
     this.state = 'initialized'
 
-    await this.lifeCyclable.initialize()
+    await this.lifeCyclable.postInitialize()
     this.state = 'post:initialized'
   }
 

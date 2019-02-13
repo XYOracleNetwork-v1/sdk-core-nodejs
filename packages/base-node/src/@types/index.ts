@@ -1,5 +1,5 @@
 import { IResolvers } from "../xyo-resolvers-enum"
-import { IXyoSigner, IXyoPublicKey } from "@xyo-network/signing"
+import { IXyoSigner } from "@xyo-network/signing"
 import { IXyoSerializationService } from "@xyo-network/serialization"
 import { IXyoHashProvider, IXyoHash } from "@xyo-network/hashing"
 import { IXyoOriginChainRepository } from "@xyo-network/origin-chain"
@@ -22,7 +22,7 @@ import { IXyoTransaction } from "@xyo-network/transaction-pool"
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 13th February 2019 1:33:28 pm
+ * @Last modified time: Wednesday, 13th February 2019 3:52:42 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -31,32 +31,32 @@ export type depScope = 'transient' | 'singleton'
 export interface IXyoProviderContainer {
   hasDependency(dep: IResolvers): boolean
   get<T>(dep: IResolvers): Promise<T>
-  register<T, C, I>(dep: IResolvers, provider: IXyoProvider<T, C, I>, scope: depScope): void
+  register<T, C>(dep: IResolvers, provider: IXyoProvider<T, C>, scope: depScope): void
 }
 
-export interface IXyoProvider<T, C, I> {
-  get(container: IXyoProviderContainer, context?: C): Promise<T>,
-  initialize?(instance: T, container: IXyoProviderContainer, initParams: I): Promise<void>
+export interface IXyoProvider<T, C> {
+  get(container: IXyoProviderContainer, context: C): Promise<T>
+  postInit?(instance: T, container: IXyoProviderContainer, context: C): Promise<void>
 }
 
 export interface IXyoResolvers {
-  [IResolvers.PEER_TRANSPORT]: IXyoProvider<IXyoPeerTransport, undefined, IXyoPeerTransportConfig>
-  [IResolvers.SIGNERS]: IXyoProvider<IXyoSigner[], undefined, undefined>
-  [IResolvers.SERIALIZATION_SERVICE]: IXyoProvider<IXyoSerializationService, undefined, undefined>
-  [IResolvers.HASH_PROVIDER]: IXyoProvider<IXyoHashProvider, undefined, undefined>
-  [IResolvers.ORIGIN_CHAIN_REPOSITORY]: IXyoProvider<IXyoOriginChainRepository, undefined, undefined>
-  [IResolvers.ORIGIN_BLOCK_REPOSITORY]: IXyoProvider<IXyoOriginBlockRepository, undefined, undefined>
-  [IResolvers.BOUND_WITNESS_PAYLOAD_PROVIDER]: IXyoProvider<IXyoBoundWitnessPayloadProvider, undefined, undefined>
-  [IResolvers.BOUND_WITNESS_SUCCESS_LISTENER]: IXyoProvider<IXyoBoundWitnessSuccessListener, undefined, undefined>
-  [IResolvers.BOUND_WITNESS_VALIDATOR]: IXyoProvider<XyoBoundWitnessValidator, undefined, IXyoBoundWitnessValidationOptions>
-  [IResolvers.NETWORK_PROCEDURE_CATALOGUE]: IXyoProvider<IXyoNetworkProcedureCatalogue, undefined, IXyoNetworkProcedureCatalogueConfig>
-  [IResolvers.NETWORK]: IXyoProvider<IXyoNetworkProvider, undefined, IXyoNetworkConfig>
-  [IResolvers.PEER_CONNECTION_DELEGATE]: IXyoProvider<IXyoPeerConnectionDelegate, undefined, undefined>
-  [IResolvers.NODE_RUNNER_DELEGATE]: IXyoProvider<IXyoNodeRunnerDelegate, undefined, undefined>
-  [IResolvers.NODE_NETWORK]: IXyoProvider<IXyoNodeNetwork, undefined, IXyoNodeNetworkConfig>
-  [IResolvers.P2P_SERVICE]: IXyoProvider<IXyoP2PService, undefined, undefined>
-  [IResolvers.DISCOVERY_NETWORK]: IXyoProvider<IXyoPeerDiscoveryService, undefined, IXyoDiscoveryConfig>
-  [IResolvers.TRANSACTION_REPOSITORY]: IXyoRepository<IXyoHash, IXyoTransaction<any>>
+  [IResolvers.PEER_TRANSPORT]: IXyoProvider<IXyoPeerTransport, IXyoPeerTransportConfig>
+  [IResolvers.SIGNERS]: IXyoProvider<IXyoSigner[], undefined>
+  [IResolvers.SERIALIZATION_SERVICE]: IXyoProvider<IXyoSerializationService, undefined>
+  [IResolvers.HASH_PROVIDER]: IXyoProvider<IXyoHashProvider, undefined>
+  [IResolvers.ORIGIN_CHAIN_REPOSITORY]: IXyoProvider<IXyoOriginChainRepository, IXyoOriginChainConfig>
+  [IResolvers.ORIGIN_BLOCK_REPOSITORY]: IXyoProvider<IXyoOriginBlockRepository, undefined>
+  [IResolvers.BOUND_WITNESS_PAYLOAD_PROVIDER]: IXyoProvider<IXyoBoundWitnessPayloadProvider, undefined>
+  [IResolvers.BOUND_WITNESS_SUCCESS_LISTENER]: IXyoProvider<IXyoBoundWitnessSuccessListener, undefined>
+  [IResolvers.BOUND_WITNESS_VALIDATOR]: IXyoProvider<XyoBoundWitnessValidator, IXyoBoundWitnessValidationOptions>
+  [IResolvers.NETWORK_PROCEDURE_CATALOGUE]: IXyoProvider<IXyoNetworkProcedureCatalogue, IXyoNetworkProcedureCatalogueConfig>
+  [IResolvers.NETWORK]: IXyoProvider<IXyoNetworkProvider, IXyoNetworkConfig>
+  [IResolvers.PEER_CONNECTION_DELEGATE]: IXyoProvider<IXyoPeerConnectionDelegate, undefined>
+  [IResolvers.NODE_RUNNER_DELEGATE]: IXyoProvider<IXyoNodeRunnerDelegate, undefined>
+  [IResolvers.NODE_NETWORK]: IXyoProvider<IXyoNodeNetwork, IXyoNodeNetworkConfig>
+  [IResolvers.P2P_SERVICE]: IXyoProvider<IXyoP2PService, undefined>
+  [IResolvers.DISCOVERY_NETWORK]: IXyoProvider<IXyoPeerDiscoveryService, IXyoDiscoveryConfig>
+  [IResolvers.TRANSACTION_REPOSITORY]: IXyoProvider<IXyoRepository<IXyoHash, IXyoTransaction<any>>, undefined>
 }
 
 export interface IXyoDiscoveryConfig {
@@ -80,4 +80,8 @@ export interface IXyoNetworkConfig {
 
 export interface IXyoNetworkProcedureCatalogueConfig {
   catalogue: CatalogueItem[]
+}
+
+export interface IXyoOriginChainConfig {
+  data: string
 }

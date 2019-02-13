@@ -4,27 +4,27 @@
  * @Email:  developer@xyfindables.com
  * @Filename: resolvers-enum
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 13th February 2019 1:33:59 pm
+ * @Last modified time: Wednesday, 13th February 2019 2:42:08 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 export enum IResolvers {
-  SIGNERS = 'SIGNERS',
-  NETWORK = 'NETWORK',
-  PEER_CONNECTION_DELEGATE = 'PEER_CONNECTION_DELEGATE',
-  PEER_TRANSPORT = 'PEER_TRANSPORT',
-  NODE_RUNNER_DELEGATE = 'NODE_RUNNER_DELEGATE',
-  NODE_NETWORK = 'NODE_NETWORK',
-  P2P_SERVICE = 'P2P_SERVICE',
-  DISCOVERY_NETWORK = 'DISCOVERY_NETWORK',
-  SERIALIZATION_SERVICE = 'SERIALIZATION_SERVICE',
-  HASH_PROVIDER = 'HASH_PROVIDER',
-  ORIGIN_CHAIN_REPOSITORY = 'ORIGIN_CHAIN_REPOSITORY',
-  ORIGIN_BLOCK_REPOSITORY = 'ORIGIN_BLOCK_REPOSITORY',
-  BOUND_WITNESS_PAYLOAD_PROVIDER = 'BOUND_WITNESS_PAYLOAD_PROVIDER',
-  BOUND_WITNESS_SUCCESS_LISTENER = 'BOUND_WITNESS_SUCCESS_LISTENER',
-  BOUND_WITNESS_VALIDATOR = 'BOUND_WITNESS_VALIDATOR',
-  TRANSACTION_REPOSITORY = 'TRANSACTION_REPOSITORY',
-  NETWORK_PROCEDURE_CATALOGUE = 'NETWORK_PROCEDURE_CATALOGUE'
+  SIGNERS = 'signers',
+  NETWORK = 'network',
+  PEER_CONNECTION_DELEGATE = 'peerConnectionDelegate',
+  PEER_TRANSPORT = 'peerTransport',
+  NODE_RUNNER_DELEGATE = 'nodeRunnerDelegate',
+  NODE_NETWORK = 'nodeNetwork',
+  P2P_SERVICE = 'p2pService',
+  DISCOVERY_NETWORK = 'discovery',
+  SERIALIZATION_SERVICE = 'serializationService',
+  HASH_PROVIDER = 'hashProvider',
+  ORIGIN_CHAIN_REPOSITORY = 'originChainRepository',
+  ORIGIN_BLOCK_REPOSITORY = 'originBlockRepository',
+  BOUND_WITNESS_PAYLOAD_PROVIDER = 'boundWitnessPayloadProvider',
+  BOUND_WITNESS_SUCCESS_LISTENER = 'boundWitnessSuccessListener',
+  BOUND_WITNESS_VALIDATOR = 'boundWitnessValidator',
+  TRANSACTION_REPOSITORY = 'transactionRepository',
+  NETWORK_PROCEDURE_CATALOGUE = 'networkProcedureCatalogue'
 }
