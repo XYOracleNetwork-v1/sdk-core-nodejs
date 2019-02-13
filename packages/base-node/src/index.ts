@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 12th February 2019 10:33:40 am
+ * @Last modified time: Wednesday, 13th February 2019 1:29:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -47,7 +47,7 @@ import { IXyoNodeNetwork, XyoNodeNetwork, IXyoComponentFeatureResponse } from '@
 import { IXyoP2PService, XyoP2PService, IXyoPeerDiscoveryService, XyoPeerDiscoveryService, XyoPeerTransport } from '@xyo-network/p2p'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { IXyoRepository } from '@xyo-network/utils'
-import { IXyoTransaction } from '../../transaction-pool/dist'
+import { IXyoTransaction } from '@xyo-network/transaction-pool'
 
 // tslint:disable-next-line:max-classes-per-file
 export class XyoBaseNode extends XyoBase {
@@ -174,8 +174,12 @@ export class XyoBaseNode extends XyoBase {
     return this.getOrCreate(`IXyoPeerDiscoveryService`, async () => {
       const discoveryPublicKey = await this.getDiscoveryNetworkPublicKey()
       const p2pAddress = await this.getP2PAddress()
-      const peerTransport = new XyoPeerTransport(p2pAddress)
-      return new XyoPeerDiscoveryService(discoveryPublicKey.serializeHex(), p2pAddress, peerTransport)
+      const peerTransport = new XyoPeerTransport()
+      peerTransport.initialize(p2pAddress)
+
+      const discoveryService = new XyoPeerDiscoveryService(peerTransport)
+      discoveryService.initialize({ publicKey: discoveryPublicKey.serializeHex(), address: p2pAddress })
+      return discoveryService
     })
   }
 
@@ -234,6 +238,9 @@ export class XyoBaseNode extends XyoBase {
             CatalogueItem.BOUND_WITNESS,
             CatalogueItem.GIVE_ORIGIN_CHAIN
           ]
+        },
+        setCatalogue() {
+          return // not implemented
         }
       }
     })

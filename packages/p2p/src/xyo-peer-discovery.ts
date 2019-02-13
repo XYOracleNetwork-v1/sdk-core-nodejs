@@ -1,4 +1,4 @@
-import { IXyoPeerTransport, IXyoPeerConnection, IXyoPeerDiscoveryService } from "./@types"
+import { IXyoPeerTransport, IXyoPeerConnection, IXyoPeerDiscoveryService, IXyoPeerDiscoveryConfig } from "./@types"
 import { XyoPubSub } from './xyo-pub-sub'
 import { encodeXyoTopicBuffer, decodeXyoTopicBuffer } from "./xyo-topic-buffer"
 import { XyoPeerConnectionPool } from "./xyo-peer-connection-pool"
@@ -16,13 +16,17 @@ export class XyoPeerDiscoveryService extends XyoBase implements IXyoPeerDiscover
   private listener: XyoPubSub = new XyoPubSub()
   private pool: XyoPeerConnectionPool = new XyoPeerConnectionPool()
   private starting: Promise<undefined> = Promise.resolve(undefined)
+  private publicKey!: string
+  private address!: string
 
-  constructor(
-    private publicKey: string,
-    private address: string,
-    private transport: IXyoPeerTransport,
-  ) {
+  constructor(private transport: IXyoPeerTransport) {
     super()
+  }
+
+  public initialize(config: IXyoPeerDiscoveryConfig) {
+    this.publicKey = config.publicKey
+    this.address = config.address
+
     this.onDiscovery((connection) => {
       this.logInfo(`Discovered Peer`)
       this.pool.addPeerConnection(connection)
@@ -36,6 +40,8 @@ export class XyoPeerDiscoveryService extends XyoBase implements IXyoPeerDiscover
       this.handleBootstrap(connection)
       this.handleClose(connection)
     })
+
+    return
   }
 
   public getListOfPeersAttributes = (attr: Attrs) => {

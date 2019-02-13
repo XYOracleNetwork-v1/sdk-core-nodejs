@@ -38,6 +38,7 @@
     {"path": "../peer-interaction-router"},
     {"path": "../storage"},
     {"path": "../storage.leveldb"},
-    {"path": "../node-network"}
+    {"path": "../node-network"},
+    {"path": "../utils"}
   ]
 }

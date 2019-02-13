@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 7th February 2019 12:25:48 pm
+ * @Last modified time: Tuesday, 12th February 2019 12:52:31 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,7 +19,7 @@ import { XyoIpService } from '@xyo-network/ip-service'
 import { IXyoArchivistRepository } from '@xyo-network/archivist-repository'
 import { XyoPeerDiscoveryService } from '@xyo-network/peer-discovery'
 import { XyoOriginChainLocalStorageRepository, IXyoOriginChainRepository } from '@xyo-network/origin-chain'
-import { createDirectoryIfNotExists } from './utils'
+import { createDirectoryIfNotExists } from '@xyo-network/utils'
 import { XyoLevelDbStorageProvider } from '@xyo-network/storage.leveldb'
 import configuration from './configuration'
 import { XyoError, XyoErrors } from '@xyo-network/errors'

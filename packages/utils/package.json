@@ -7,6 +7,8 @@
   "author": "Ryan",
   "license": "MIT",
   "dependencies": {
+    "@xyo-network/base": "^0.23.0",
+    "@xyo-network/errors": "^0.23.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

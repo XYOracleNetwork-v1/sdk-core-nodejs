@@ -4,12 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:36:09 am
+ * @Last modified time: Wednesday, 13th February 2019 1:28:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { CatalogueItem } from './catalogue-item'
+import { IXyoNetworkProcedureCatalogue } from './@types'
 
 export { CatalogueItem } from './catalogue-item'
 export { XyoMockNetworkPipe } from './xyo-mock-network-pipe'
@@ -56,4 +57,22 @@ export function bufferToCatalogueItems(buffer: Buffer): CatalogueItem[] {
 /** Returns a number, which is feature-mask representing CatalogueItems */
 export function catalogueItemsToMask(catalogueItems: CatalogueItem[]) {
   return catalogueItems.reduce((sum, item) => sum + item, 0)
+}
+
+export class XyoNetworkProcedureCatalogue implements IXyoNetworkProcedureCatalogue {
+
+  private catalogue: CatalogueItem[] = []
+
+  public canDo(catalogueItem: CatalogueItem): boolean {
+    return this.catalogue.indexOf(catalogueItem) > -1
+  }
+
+  public getCurrentCatalogue(): CatalogueItem[] {
+    return this.catalogue
+  }
+
+  public setCatalogue(catalogue: CatalogueItem[]) {
+    this.catalogue = catalogue
+  }
+
 }

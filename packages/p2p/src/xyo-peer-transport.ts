@@ -7,13 +7,15 @@ import { XyoPeerConnection } from './xyo-peer-connection'
 import net, { Server } from 'net'
 
 export class XyoPeerTransport implements IXyoPeerTransport {
+  public address!: string
   private listener: XyoPubSub = new XyoPubSub()
   private server: undefined | Server
   private port: undefined | number
-  private host: string
+  private host!: string
 
-  constructor(public address: string) {
-    const { port, address: host } = multiaddr(address).nodeAddress()
+  public initialize(address: string) {
+    this.address = address
+    const { port, address: host } = multiaddr(this.address).nodeAddress()
     this.port = port as number
     this.host = host as string
   }

@@ -10,3 +10,65 @@ export interface IXyoRepository<K, V> {
   contains(id: K): Promise<boolean>
   find(id: K): Promise<V | undefined>
 }
+
+export type pureFn<V> = () => V
+export type asyncPureFn<V> = () => Promise<V>
+
+export type providerFn<V> = () => Promise<V>
+export type parameterizedProviderFn<C, V> = (context: C) => Promise<V>
+export type factoryFn<V> = () => V
+export type parameterizedFactoryFn<C, V> = (context: C) => V
+
+export interface IProvider<V> {
+  get(): Promise<V>
+}
+export interface IParameterizedProvider<C, V> {
+  get(context: C): Promise<V>
+}
+export interface IFactory<V> {
+  get(): V
+}
+
+export interface IParameterizedFactory<C, V> {
+  get(context: C): V
+}
+
+export interface IInitializable {
+  initialize(): Promise<void>
+}
+
+export interface IRunnable extends IInitializable {
+  start(): Promise<void>
+  stop(): Promise<void>
+}
+
+export interface ILifeCycleEvent {
+  onPreInitialize(): Promise<void>
+  onInitialize(): Promise<void>
+  onPostInitialize(): Promise<void>
+
+  onPreStart(): Promise<void>
+  onStart(): Promise<void>
+  onPostStart(): Promise<void>
+
+  onPreStop(): Promise<void>
+  onStop(): Promise<void>
+  onPostStop(): Promise<void>
+}
+
+export interface ILifeCyclable extends IRunnable {
+  preInitialize(): Promise<void>
+  initialize(): Promise<void>
+  postInitialize(): Promise<void>
+
+  preStart(): Promise<void>
+  postStart(): Promise<void>
+
+  preStop(): Promise<void>
+  postStop(): Promise<void>
+
+  on(event: string | symbol, listener: (...args: any[]) => void): this
+  once(event: string | symbol, listener: (...args: any[]) => void): this
+  off(event: string | symbol, listener: (...args: any[]) => void): this
+  removeAllListeners(event?: string | symbol): this
+}

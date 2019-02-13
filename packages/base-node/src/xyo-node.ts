@@ -4,54 +4,179 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 11th February 2019 10:17:40 am
+ * @Last modified time: Wednesday, 13th February 2019 1:34:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBase } from "@xyo-network/base"
-import { providers } from './providers'
-import { IXyoProvider } from "./@types"
-import { IXyoSigner, IXyoPublicKey } from "@xyo-network/signing"
-import { CatalogueItem, IXyoNetworkProcedureCatalogue, IXyoNetworkProvider } from "@xyo-network/network"
-import { IXyoPeerConnectionDelegate } from "@xyo-network/peer-connections"
-import { IXyoNodeRunnerDelegate } from "@xyo-network/node-runner"
-import { IXyoNodeNetwork } from "@xyo-network/node-network"
-import { IXyoP2PService, IXyoPeerDiscoveryService } from "@xyo-network/p2p"
-import { IXyoSerializationService } from "@xyo-network/serialization"
-import { IXyoHashProvider } from "@xyo-network/hashing"
-import { IXyoOriginChainRepository } from "@xyo-network/origin-chain"
-import { IXyoOriginBlockRepository } from "@xyo-network/origin-block-repository"
-import { IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessSuccessListener } from "@xyo-network/peer-interaction"
-import { XyoBoundWitnessValidator, IXyoBoundWitnessValidationOptions } from "@xyo-network/bound-witness"
+import { IXyoProvider, IXyoProviderContainer, IXyoResolvers, depScope } from "./@types"
+import { CatalogueItem } from "@xyo-network/network"
+import { IXyoNodeRunnerDelegate, XyoNodeRunner } from "@xyo-network/node-runner"
+import { createDirectoryIfNotExists, LifeCycleRunner, BaseLifeCyclable } from "@xyo-network/utils"
+import { resolvers } from './resolvers'
+import { IResolvers } from "./xyo-resolvers-enum"
+import { XyoError, XyoErrors } from "@xyo-network/errors"
 
-export class XyoNode extends XyoBase {
-
-  constructor() {
-    super()
+export const DEFAULT_NODE_OPTIONS: IXyoNodeOptions = {
+  modules: resolvers,
+  config: {
+    data: {
+      path: './node-db'
+    },
+    boundWitness: {
+      catalogue: [
+        CatalogueItem.BOUND_WITNESS,
+        CatalogueItem.GIVE_ORIGIN_CHAIN,
+        CatalogueItem.GIVE_REQUESTED_BLOCKS,
+        CatalogueItem.TAKE_ORIGIN_CHAIN,
+        CatalogueItem.TAKE_REQUESTED_BLOCKS,
+      ],
+      tcp: {
+        serverPort: 11000
+      }
+    }
   }
 }
 
-export interface IXyoNodeProviders {
-  signersProvider: IXyoProvider<IXyoSigner[]>
-  boundWitnessCatalogueProvider: IXyoProvider<CatalogueItem[]>
-  boundWitnessServerPortProvider: IXyoProvider<number>
-  networkProvider: IXyoProvider<IXyoNetworkProvider>
-  peerConnectionDelegateProvider: IXyoProvider<IXyoPeerConnectionDelegate>
-  nodeRunnerDelegateProvider: IXyoProvider<IXyoNodeRunnerDelegate>
-  nodeNetworkProvider: IXyoProvider<IXyoNodeNetwork>
-  p2PServiceProvider: IXyoProvider<IXyoP2PService>
-  discoveryNetworkProvider: IXyoProvider<IXyoPeerDiscoveryService>
-  discoveryNetworkPublicKeyProvider: IXyoProvider<IXyoPublicKey>
-  p2pAddressProvider: IXyoProvider<string>
-  serializationServiceProvider: IXyoProvider<IXyoSerializationService>
-  hashProvider: IXyoProvider<IXyoHashProvider>
-  originChainRepositoryProvider: IXyoProvider<IXyoOriginChainRepository>
-  originBlockRepositoryProvider: IXyoProvider<IXyoOriginBlockRepository>
-  boundWitnessPayloadProviderProvider: IXyoProvider<IXyoBoundWitnessPayloadProvider>
-  boundWitnessSuccessListenerProvider: IXyoProvider<IXyoBoundWitnessSuccessListener>
-  boundWitnessValidatorProvider: IXyoProvider<XyoBoundWitnessValidator>
-  boundWitnessValidationOptionsProvider: IXyoProvider<IXyoBoundWitnessValidationOptions>
+class XyoNodeLifeCycle extends BaseLifeCyclable implements IXyoProviderContainer {
+
+  private nodeRunner: XyoNodeRunner | undefined
+
+  private instanceLifeCycleMap: {[s: string]: depScope} = {
+    [IResolvers.SIGNERS]: 'singleton',
+    [IResolvers.SERIALIZATION_SERVICE]: 'singleton',
+    [IResolvers.HASH_PROVIDER]: 'singleton',
+    [IResolvers.ORIGIN_CHAIN_REPOSITORY]: 'singleton',
+    [IResolvers.ORIGIN_BLOCK_REPOSITORY]: 'singleton',
+    [IResolvers.BOUND_WITNESS_PAYLOAD_PROVIDER]: 'transient',
+    [IResolvers.BOUND_WITNESS_SUCCESS_LISTENER]: 'singleton',
+    [IResolvers.BOUND_WITNESS_VALIDATOR]: 'singleton',
+    [IResolvers.NETWORK_PROCEDURE_CATALOGUE]: 'singleton',
+    [IResolvers.NETWORK]: 'singleton',
+    [IResolvers.PEER_CONNECTION_DELEGATE]: 'singleton',
+    [IResolvers.NODE_RUNNER_DELEGATE]: 'singleton',
+    [IResolvers.NODE_NETWORK]: 'singleton',
+    [IResolvers.P2P_SERVICE]: 'singleton',
+    [IResolvers.DISCOVERY_NETWORK]: 'singleton',
+    [IResolvers.TRANSACTION_REPOSITORY]: 'singleton'
+  }
+
+  private cachedModules: {[r: string]: any} = {}
+
+  // @ts-ignore
+  private readonly resolvedOptions: IXyoNodeOptions
+
+  constructor (private readonly options?: PartialNodeOptions) {
+    super()
+  }
+
+  public async initialize() {
+    await this.resolveOptions()
+    await this.createDataDirectory(this.resolvedOptions)
+  }
+
+  public async start() {
+    const delegate = await this.get<IXyoNodeRunnerDelegate>(IResolvers.NODE_RUNNER_DELEGATE)
+    this.nodeRunner = new XyoNodeRunner(delegate)
+    await this.nodeRunner.start()
+  }
+
+  public async stop() {
+    if (this.nodeRunner) {
+      await this.nodeRunner.stop()
+    }
+
+    return
+  }
+
+  public async get<T>(provider: IResolvers): Promise<T> {
+    const hasDependency = this.hasDependency(provider)
+    if (!hasDependency) {
+      throw new XyoError(`Could not resolve dependency ${provider}`, XyoErrors.CRITICAL)
+    }
+
+    const resolvedRecipe = this.resolvedOptions.modules[provider] as unknown as IXyoProvider<T, any, any>
+    const instanceLifeCycle = this.instanceLifeCycleMap[provider]
+
+    if (instanceLifeCycle === 'singleton') {
+      const cachedModule = this.cachedModules[provider]
+      if (cachedModule === null) {
+        throw new XyoError(`Circular dependency detected for provider ${provider}`, XyoErrors.CRITICAL)
+      }
+
+      if (cachedModule) return cachedModule as T
+    }
+
+    this.cachedModules[provider] = null
+    const resolvedModule = await this.resolveProvider<T>(provider).get(this)
+
+    if (!resolvedModule) {
+      throw new XyoError(`Could not resolve module ${provider}`, XyoErrors.CRITICAL)
+    }
+
+    this.cachedModules[provider] = (instanceLifeCycle === 'singleton') ? resolvedModule : undefined
+
+    if (resolvedRecipe.initialize) {
+      // @ts-ignore
+      const config = this.resolvedOptions.config[provider]
+      await resolvedRecipe.initialize(resolvedModule, this, config)
+    }
+
+    return resolvedModule
+  }
+
+  public hasDependency(provider: IResolvers): boolean {
+    const recipe = this.resolvedOptions.modules[provider]
+    const instanceLifeCycle = this.instanceLifeCycleMap[provider]
+    if (!recipe || !instanceLifeCycle) {
+      return false
+    }
+
+    return true
+  }
+
+  public register<T, C, I>(dep: IResolvers, provider: IXyoProvider<T, C, I>, scope: depScope): void {
+    if (this.cachedModules[dep] !== undefined) {
+      throw new XyoError(`This module has already been resolved, can not be re-registered safely`, XyoErrors.CRITICAL)
+    }
+
+    // @ts-ignore
+    this.resolvedOptions.modules[dep] = provider
+    this.instanceLifeCycleMap[dep] = scope
+  }
+
+  private resolveProvider<T>(provider: IResolvers): IXyoProvider<T, any, any> {
+    // @ts-ignore
+    return undefined
+  }
+
+  private async resolveOptions() {
+    // @ts-ignore
+    return undefined
+  }
+
+  private async createDataDirectory(nodeOptions: PartialNodeOptions) {
+    let dataPath = './node-db'
+    if (
+      nodeOptions &&
+      nodeOptions.config &&
+      nodeOptions.config.data &&
+      nodeOptions.config.data.path
+    ) {
+      dataPath = nodeOptions.config.data.path
+    }
+
+    this.logInfo(`Setting Data Directory to ${dataPath}`)
+    await createDirectoryIfNotExists(dataPath)
+  }
+}
+
+// tslint:disable-next-line:max-classes-per-file
+export class XyoNode extends LifeCycleRunner {
+
+  constructor (private readonly nodeOptions?: Partial<IXyoNodeOptions>) {
+    super(new XyoNodeLifeCycle(nodeOptions))
+  }
 }
 
 export interface IXyoTCPBoundWitnessConfig {
@@ -60,14 +185,31 @@ export interface IXyoTCPBoundWitnessConfig {
 
 export interface IXyoBoundWitnessConfig {
   catalogue: CatalogueItem[],
-  tcp: IXyoNodeProviders
+  tcp: IXyoTCPBoundWitnessConfig
+}
+
+export interface IXyoDataConfig {
+  path: string
 }
 
 export interface IXyoNodeConfig {
+  data: IXyoDataConfig
   boundWitness: IXyoBoundWitnessConfig
 }
 
 export interface IXyoNodeOptions {
-  modules: {}
+  modules: Partial<IXyoResolvers>
   config: IXyoNodeConfig
+}
+
+export type PartialNodeOptions = Partial<IXyoNodeOptions>
+
+export async function main() {
+  const newNode = new XyoNode()
+  await newNode.initialize()
+  await newNode.start()
+}
+
+if (require.main === module) {
+  main()
 }

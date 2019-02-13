@@ -26,6 +26,7 @@
     "@xyo-network/peer-interaction-router": "^0.23.0",
     "@xyo-network/storage": "^0.23.0",
     "@xyo-network/storage.leveldb": "^0.23.0",
+    "@xyo-network/utils": "^0.23.0",
     "config": "^2.0.1",
     "js-yaml": "^3.12.0"
   },

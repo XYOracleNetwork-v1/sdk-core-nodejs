@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 7th February 2019 5:27:10 pm
+ * @Last modified time: Wednesday, 13th February 2019 1:19:14 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -54,8 +54,12 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
    * @param port The port to bind to for incoming network requests
    */
 
-  constructor (public readonly port: number) {
+  constructor (public port?: number) {
     super()
+  }
+
+  public setPort(port: number) {
+    this.port = port
   }
 
   /**

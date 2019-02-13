@@ -7,7 +7,7 @@ import { unsubscribeFn } from '@xyo-network/utils'
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 12th February 2019 8:57:39 am
+ * @Last modified time: Wednesday, 13th February 2019 1:07:32 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -89,6 +89,8 @@ export interface IXyoPeerTransport {
    * Listen for connections on supplied address
    * @memberof IXyoPeerReceiver
    */
+
+  initialize(address: string): void
   start(): Promise<Server>
 
   /**
@@ -137,7 +139,15 @@ export interface IXyoPeerConnection {
   close: () => void
 }
 
+export interface IXyoPeerDiscoveryConfig {
+  publicKey: string
+  address: string
+}
+
 export interface IXyoPeerDiscoveryService {
+
+  initialize(config: IXyoPeerDiscoveryConfig): void
+
   start(): Promise<undefined>
 
   stop(): void
