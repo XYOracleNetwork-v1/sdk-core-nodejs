@@ -16,8 +16,10 @@ const createPeer = (port: number, i: number): IPeer => ({
 })
 
 const createP2PService = (peer: IPeer) => {
-  const transport = new XyoPeerTransport(peer.address)
-  const discovery = new XyoPeerDiscoveryService(peer.publicKey, peer.address, transport)
+  const transport = new XyoPeerTransport()
+  transport.initialize(peer.address)
+  const discovery = new XyoPeerDiscoveryService(transport)
+  discovery.initialize({ publicKey: peer.publicKey, address: peer.address })
   const node = new XyoP2PService(discovery)
   return { transport, discovery, node }
 }
@@ -85,7 +87,7 @@ describe(`P2P`, () => {
     const buff = encodeXyoTopicBuffer('topic1', Buffer.from('foo'))
     expect(decodeXyoTopicBuffer(buff)).toEqual({
       topic: 'topic1',
-      message: 'foo',
+      message: Buffer.from('foo'),
       offset: 17
     })
   })
@@ -125,7 +127,9 @@ describe(`P2P`, () => {
   })
 
   it(`Should create a transport`, () => {
-    expect(new XyoPeerTransport(peer1.address)).toBeInstanceOf(XyoPeerTransport)
+    const transport = new XyoPeerTransport()
+    transport.initialize(peer1.address)
+    expect(transport).toBeInstanceOf(XyoPeerTransport)
   })
 
   it(`Should concat buffers`, () => {
@@ -134,7 +138,8 @@ describe(`P2P`, () => {
   })
 
   it(`Should communicate`, async (done) => {
-    const transport = new XyoPeerTransport(peer1.address)
+    const transport = new XyoPeerTransport()
+    transport.initialize(peer1.address)
 
     await transport.start()
 
@@ -181,11 +186,16 @@ describe(`P2P`, () => {
   })
 
   it(`Should discover peers`, async (done) => {
-    const transport1 = new XyoPeerTransport(peer1.address)
-    const discovery1 = new XyoPeerDiscoveryService(peer1.publicKey, peer1.address, transport1)
+    const transport1 = new XyoPeerTransport()
+    transport1.initialize(peer1.address)
+    const discovery1 = new XyoPeerDiscoveryService(transport1)
+    discovery1.initialize({ publicKey: peer1.publicKey, address: peer1.address })
 
-    const transport2 = new XyoPeerTransport(peer2.address)
-    const discovery2 = new XyoPeerDiscoveryService(peer2.publicKey, peer2.address, transport2)
+    const transport2 = new XyoPeerTransport()
+    transport2.initialize(peer2.address)
+
+    const discovery2 = new XyoPeerDiscoveryService(transport2)
+    discovery2.initialize({ publicKey: peer2.publicKey, address: peer2.address })
 
     const discovered = jest.fn()
     discovery2.addBootstrapNodes([peer1.address])
@@ -208,16 +218,24 @@ describe(`P2P`, () => {
   })
 
   it(`Should create a new P2P Service`, async (done) => {
-    const transport1 = new XyoPeerTransport(peer1.address)
-    const discovery1 = new XyoPeerDiscoveryService(peer1.publicKey, peer1.address, transport1)
+    const transport1 = new XyoPeerTransport()
+    transport1.initialize(peer1.address)
+    const discovery1 = new XyoPeerDiscoveryService(transport1)
+    discovery1.initialize({ publicKey: peer1.publicKey, address: peer1.address, })
     const node1 = new XyoP2PService(discovery1)
 
-    const transport2 = new XyoPeerTransport(peer2.address)
-    const discovery2 = new XyoPeerDiscoveryService(peer2.publicKey, peer2.address, transport2)
+    const transport2 = new XyoPeerTransport()
+    transport2.initialize(peer2.address)
+
+    const discovery2 = new XyoPeerDiscoveryService(transport2)
+    discovery2.initialize({ publicKey: peer2.publicKey, address: peer2.address, })
     const node2 = new XyoP2PService(discovery2)
 
-    const transport3 = new XyoPeerTransport(peer3.address)
-    const discovery3 = new XyoPeerDiscoveryService(peer3.publicKey, peer3.address, transport3)
+    const transport3 = new XyoPeerTransport()
+    transport3.initialize(peer3.address)
+
+    const discovery3 = new XyoPeerDiscoveryService(transport3)
+    discovery3.initialize({ publicKey: peer3.publicKey, address: peer3.address, })
     const node3 = new XyoP2PService(discovery3)
 
     discovery1.start()
@@ -248,16 +266,26 @@ describe(`P2P`, () => {
   })
 
   it('Should recursively discover peers of peers', async (done) => {
-    const transport1 = new XyoPeerTransport(peer1.address)
-    const discovery1 = new XyoPeerDiscoveryService(peer1.publicKey, peer1.address, transport1)
+    const transport1 = new XyoPeerTransport()
+    transport1.initialize(peer1.address)
+
+    const discovery1 = new XyoPeerDiscoveryService(transport1)
+    discovery1.initialize({ publicKey: peer1.publicKey, address: peer1.address, })
+
     const node1 = new XyoP2PService(discovery1)
 
-    const transport2 = new XyoPeerTransport(peer2.address)
-    const discovery2 = new XyoPeerDiscoveryService(peer2.publicKey, peer2.address, transport2)
+    const transport2 = new XyoPeerTransport()
+    transport2.initialize(peer2.address)
+
+    const discovery2 = new XyoPeerDiscoveryService(transport2)
+    discovery2.initialize({ publicKey: peer2.publicKey, address: peer2.address })
     const node2 = new XyoP2PService(discovery2)
 
-    const transport3 = new XyoPeerTransport(peer3.address)
-    const discovery3 = new XyoPeerDiscoveryService(peer3.publicKey, peer3.address, transport3)
+    const transport3 = new XyoPeerTransport()
+    transport3.initialize(peer3.address)
+
+    const discovery3 = new XyoPeerDiscoveryService(transport3)
+    discovery3.initialize({ publicKey: peer3.publicKey, address: peer3.address, })
     const node3 = new XyoP2PService(discovery3)
 
     const discovered = jest.fn()

@@ -1,9 +1,9 @@
-import { IXyoP2PService, IXyoPeer, IXyoPeerTransport, unsubscribeFn, IXyoPeerConnection, IXyoPeerDiscoveryService, Callback } from "./@types"
+import { IXyoPeerTransport, IXyoPeerConnection, IXyoPeerDiscoveryService, IXyoPeerDiscoveryConfig } from "./@types"
 import { XyoPubSub } from './xyo-pub-sub'
-import { XyoPeerTransport } from './xyo-peer-transport'
 import { encodeXyoTopicBuffer, decodeXyoTopicBuffer } from "./xyo-topic-buffer"
 import { XyoPeerConnectionPool } from "./xyo-peer-connection-pool"
 import { XyoBase } from "@xyo-network/base"
+import { Callback } from "@xyo-network/utils"
 
 enum Attrs {
   address = 'address',
@@ -16,13 +16,17 @@ export class XyoPeerDiscoveryService extends XyoBase implements IXyoPeerDiscover
   private listener: XyoPubSub = new XyoPubSub()
   private pool: XyoPeerConnectionPool = new XyoPeerConnectionPool()
   private starting: Promise<undefined> = Promise.resolve(undefined)
+  private publicKey!: string
+  private address!: string
 
-  constructor(
-    private publicKey: string,
-    private address: string,
-    private transport: IXyoPeerTransport,
-  ) {
+  constructor(private transport: IXyoPeerTransport) {
     super()
+  }
+
+  public initialize(config: IXyoPeerDiscoveryConfig) {
+    this.publicKey = config.publicKey
+    this.address = config.address
+
     this.onDiscovery((connection) => {
       this.logInfo(`Discovered Peer`)
       this.pool.addPeerConnection(connection)
@@ -36,6 +40,8 @@ export class XyoPeerDiscoveryService extends XyoBase implements IXyoPeerDiscover
       this.handleBootstrap(connection)
       this.handleClose(connection)
     })
+
+    return
   }
 
   public getListOfPeersAttributes = (attr: Attrs) => {
@@ -61,6 +67,9 @@ export class XyoPeerDiscoveryService extends XyoBase implements IXyoPeerDiscover
   }
 
   public addBootstrapNodes(addresses: string[]) {
+    if (addresses.length === 0) {
+      return
+    }
     this.logInfo(`Adding bootstrap nodes ${addresses.map(a => `\n${a}`)}`)
     this.bootstrapAddresses.push(...addresses.filter(this.isValidBootstrapAddress))
     if (this.running) this.dialBootstrapNodes()
@@ -123,7 +132,7 @@ export class XyoPeerDiscoveryService extends XyoBase implements IXyoPeerDiscover
     connection.onMessage((msg) => {
       const { topic, message } = decodeXyoTopicBuffer(msg)
       if (topic === 'discovery') {
-        const { publicKey, address, peers } = JSON.parse(message) // TODO sanitize / validate input
+        const { publicKey, address, peers } = JSON.parse(message.toString()) // TODO sanitize / validate input
         this.logInfo(`Discovery topic received for publicKey ${publicKey}`)
         connection.setPublicKey(publicKey)
         connection.setMultiAddress(address)
@@ -138,7 +147,7 @@ export class XyoPeerDiscoveryService extends XyoBase implements IXyoPeerDiscover
     connection.onMessage((msg) => {
       const { topic, message } = decodeXyoTopicBuffer(msg)
       if (topic === 'discovery') {
-        const { publicKey, address, peers } = JSON.parse(message)
+        const { publicKey, address, peers } = JSON.parse(message.toString())
         connection.setPublicKey(publicKey)
         connection.setMultiAddress(address)
         this.listener.publish('discovery', connection)

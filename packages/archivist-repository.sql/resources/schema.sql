@@ -80,6 +80,20 @@ CREATE TABLE IF NOT EXISTS `OriginBlockParties` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `OriginBlockAttributions`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `OriginBlockAttributions` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `sourceSignedHash` VARCHAR(128) NOT NULL,
+  `originBlockPartyIndex` INT NOT NULL,
+  `providesAttributionForSignedHash` VARCHAR(128) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `sourceSignedHash_INDEX` (`sourceSignedHash`(128)),
+  INDEX `providesAttributionForSignedHash_INDEX` (`providesAttributionForSignedHash`(128))
+)
+ENGINE = InnoDB;
+
 
 -- -----------------------------------------------------
 -- Table `KeySignatures`

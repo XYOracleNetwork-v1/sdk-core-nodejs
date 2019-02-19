@@ -5,7 +5,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bridge-hash-set.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 1:55:50 pm
+ * @Last modified time: Tuesday, 5th February 2019 10:11:51 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,7 +19,7 @@ export class XyoBridgeHashSet extends XyoBaseSerializable {
 
   public schemaObjectId = schema.bridgeHashSet.id
 
-  constructor (private readonly hashSet: IXyoHash[]) {
+  constructor (public readonly hashSet: IXyoHash[]) {
     super(schema)
   }
 

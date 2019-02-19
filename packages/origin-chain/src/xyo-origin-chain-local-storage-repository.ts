@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-local-storage-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 24th January 2019 11:35:25 am
+ * @Last modified time: Wednesday, 13th February 2019 3:48:13 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,7 @@
 import { IXyoOriginChainRepository, IBlockInOriginChainResult } from './@types'
 import { XyoOriginChainStateInMemoryRepository } from './xyo-origin-chain-in-memory-repository'
 import { IXyoStorageProvider } from '@xyo-network/storage'
-import { IXyoSigner, IXyoPublicKey } from '@xyo-network/signing'
+import { IXyoSigner, IXyoPublicKey, IXyoSignerProvider } from '@xyo-network/signing'
 import { IXyoHash } from '@xyo-network/hashing'
 import { IXyoSerializationService } from '@xyo-network/serialization'
 import { XyoNextPublicKey } from './xyo-next-public-key'
@@ -136,6 +136,7 @@ export class XyoOriginChainLocalStorageRepository extends XyoBase implements IXy
       [],
       this.serializationService
     )
+
     await this.saveOriginChainState(this.inMemoryDelegate)
     return this.inMemoryDelegate
   }

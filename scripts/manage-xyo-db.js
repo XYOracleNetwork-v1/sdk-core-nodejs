@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: create-xyo-db.js
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 31st January 2019 2:32:54 pm
+ * @Last modified time: Tuesday, 5th February 2019 11:14:02 am
  * @License: All Rights Reserved 
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -83,8 +83,8 @@ async function main(argv) {
 }
 
 async function collectionUsernameAndPassword() {
-  let { username } = await prompt({type: 'input', name: 'username', message: 'Enter a username for the sql database'})
-  let { password } = await prompt({type: 'input', name: 'password', message: 'Enter a password for the sql database'})  
+  let { username } = await prompt({type: 'input', initial: 'admin', name: 'username', message: 'Enter a username for the sql database'})
+  let { password } = await prompt({type: 'input', initial: 'password', name: 'password', message: 'Enter a password for the sql database'})  
   return {username, password}
 }
 

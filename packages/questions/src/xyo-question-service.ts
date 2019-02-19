@@ -4,22 +4,20 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-question-service.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 30th January 2019 12:05:02 pm
+ * @Last modified time: Friday, 8th February 2019 12:39:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoDivinerArchivistClient } from '@xyo-network/diviner-archivist-client'
-import { IXyoHasIntersectedQuestion, IXyoQuestionService, IProofOfIntersectionAnswer, IXyoBlockTransfer, IProofOfIntersection } from './@types'
-import { XyoErrors, XyoError } from '@xyo-network/errors'
+import { IXyoHasIntersectedQuestion, IXyoQuestionService, IXyoBlockTransfer, IProofOfIntersection } from './@types'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoHash } from '@xyo-network/hashing'
-import { IXyoSerializationService } from '@xyo-network/serialization'
 import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { IXyoOriginChainRepository, XyoBridgeHashSet } from '@xyo-network/origin-chain'
 import { IXyoBoundWitness } from '@xyo-network/bound-witness'
 import { IXyoPublicKey } from '@xyo-network/signing'
 import { IXyoArchivistNetwork } from '@xyo-network/archivist-network'
+import { IBlockPermissionRequestResolver } from '@xyo-network/attribution-request'
 
 export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
 
@@ -57,7 +55,12 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
 
     // The block in question is not part of your origin-chain
     if (!isPartOfOriginChainResult.result || isPartOfOriginChainResult.indexOfPartyInBlock === undefined) {
-      return this.resolveProofForOutOfOriginChainBlock(block, hash, question, continueFn)
+      return this.resolveProofForOutOfOriginChainBlock(
+        block,
+        hash,
+        question,
+        continueFn
+      )
     }
 
     const myParty = block.parties[isPartOfOriginChainResult.indexOfPartyInBlock]
@@ -112,7 +115,7 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
   ): Promise<IProofOfIntersection | undefined> {
     this.logInfo(`Attempting to resolve proof for out of origin-chain block ${hash.serializeHex()}`)
 
-    const result = await this.blockPermissionRequestResolver.requestPermissionForBlock(hash)
+    const result = await this.blockPermissionRequestResolver.requestPermissionForBlock(hash, 10000)
     if (!result) {
       this.logInfo(
         `Unable to resolve proof for out of origin-chain block ${hash.serializeHex()}, no attribution request responses`
@@ -237,14 +240,4 @@ export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
     if (block) return block
     return this.getBlockFromArchivistNetwork(hash)
   }
-}
-
-export interface IBlockPermissionRequestResolver {
-  requestPermissionForBlock(hash: IXyoHash): Promise<IRequestPermissionForBlockResult | undefined>
-}
-
-export interface IRequestPermissionForBlockResult {
-  newBoundWitnessHash: IXyoHash
-  partyIndex: number
-  supportingData: {[hash: string]: IXyoBoundWitness}
 }

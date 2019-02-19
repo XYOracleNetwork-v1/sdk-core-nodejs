@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-in-memory-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 24th January 2019 11:21:29 am
+ * @Last modified time: Wednesday, 13th February 2019 3:14:46 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -238,7 +238,7 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
   }
 
   private async getOrInitializeInteractionsData(): Promise < IInteractionsByPublicKeyData > {
-    if (this .interactionsByPublicKeyData) {
+    if (this.interactionsByPublicKeyData) {
       return this.interactionsByPublicKeyData
     }
 

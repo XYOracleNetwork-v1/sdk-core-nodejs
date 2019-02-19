@@ -45,6 +45,18 @@
     {"path": "../signing"},
     {"path": "../signing.ecdsa"},
     {"path": "../signing.rsa"},
+    {"path": "../utils"},
+    {"path": "../transaction-pool"},
+    {"path": "../storage.leveldb"},
+    {"path": "../archivist-repository"},
+    {"path": "../archivist-repository.sql"},
+    {"path": "../graphql-apis"},
+    {"path": "../graphql-server"},
+    {"path": "../about-me"},
+    {"path": "../questions"},
+    {"path": "../attribution-request.node-network"},
+    {"path": "../web3-service"},
+    {"path": "../web3-question-service"},
     {"path": "../storage"}
   ]
 }

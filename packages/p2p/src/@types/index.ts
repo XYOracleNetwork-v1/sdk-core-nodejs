@@ -1,4 +1,5 @@
 import { Server } from "net"
+import { unsubscribeFn } from '@xyo-network/utils'
 
 /*
  * @Author: XY | The Findables Company <ryanxyo>
@@ -6,7 +7,7 @@ import { Server } from "net"
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 29th January 2019 2:55:29 pm
+ * @Last modified time: Wednesday, 13th February 2019 1:07:32 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -52,6 +53,16 @@ export interface IXyoP2PService {
    * @memberof IXyoP2PService
    */
   subscribe(topic: string, cb: (senderPublicKey: string, message: Buffer) => void): unsubscribeFn
+
+  /**
+   * Same as `Subscribe` but stops listening after the first time the subscription is fulfilled
+   *
+   * @param {string} topic
+   * @param {(senderPublicKey: string, message: Buffer) => void} cb
+   * @returns {unsubscribeFn}
+   * @memberof IXyoP2PService
+   */
+  subscribeOnce(topic: string, cb: (senderPublicKey: string, message: Buffer) => void): unsubscribeFn
 }
 
 export interface IXyoPeer {
@@ -78,6 +89,8 @@ export interface IXyoPeerTransport {
    * Listen for connections on supplied address
    * @memberof IXyoPeerReceiver
    */
+
+  initialize(address: string): void
   start(): Promise<Server>
 
   /**
@@ -126,7 +139,15 @@ export interface IXyoPeerConnection {
   close: () => void
 }
 
+export interface IXyoPeerDiscoveryConfig {
+  publicKey: string
+  address: string
+}
+
 export interface IXyoPeerDiscoveryService {
+
+  initialize(config: IXyoPeerDiscoveryConfig): void
+
   start(): Promise<undefined>
 
   stop(): void
@@ -165,8 +186,3 @@ export interface IXyoPeerConnectionPool {
 
   isValidConnection(connection: IXyoPeerConnection): boolean
 }
-
-/** A function to unsubscribe from a topic */
-export type unsubscribeFn = () => void
-
-export type Callback = (...args: any[]) => void

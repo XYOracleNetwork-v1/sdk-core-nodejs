@@ -30,7 +30,22 @@
     "@xyo-network/signing": "^0.23.0",
     "@xyo-network/signing.ecdsa": "^0.23.0",
     "@xyo-network/signing.rsa": "^0.23.0",
-    "@xyo-network/storage": "^0.23.0"
+    "@xyo-network/storage": "^0.23.0",
+    "@xyo-network/transaction-pool": "^0.23.0",
+    "@xyo-network/storage.leveldb": "^0.23.0",
+    "@xyo-network/graphql-apis": "^0.23.0",
+    "@xyo-network/utils": "^0.23.0",
+    "@xyo-network/about-me": "^0.23.0",
+    "@xyo-network/archivist-network": "^0.23.0",
+    "@xyo-network/archivist-repository": "^0.23.0",
+    "@xyo-network/graphql-server": "^0.23.0",
+    "@xyo-network/archivist-repository.sql": "^0.23.0",
+    "@xyo-network/questions": "^0.23.0",
+    "@xyo-network/attribution-request.node-network": "^0.23.0",
+    "@xyo-network/meta-list": "^0.23.0",
+    "@xyo-network/web3-service": "^0.23.0",
+    "@xyo-network/web3-question-service": "^0.23.0",
+    "merge": "^1.2.1"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

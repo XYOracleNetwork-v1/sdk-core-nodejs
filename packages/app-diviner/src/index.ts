@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 1st February 2019 12:37:54 pm
+ * @Last modified time: Thursday, 14th February 2019 3:59:17 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,7 +15,8 @@ import { XyoGraphQLServer } from '@xyo-network/graphql-server'
 import { XyoAboutDiviner } from '@xyo-network/about-diviner'
 import { IXyoSCSCDescriptionProvider } from '@xyo-network/scsc'
 import { XyoMetaList, XyoMeta } from '@xyo-network/meta-list'
-import { XyoQuestionService, IXyoHasIntersectedQuestion, IXyoQuestionService, QuestionsWorker, IBlockPermissionRequestResolver } from '@xyo-network/questions'
+import { XyoQuestionService, IXyoHasIntersectedQuestion, IXyoQuestionService, QuestionsWorker } from '@xyo-network/questions'
+import { IBlockPermissionRequestResolver } from '@xyo-network/attribution-request'
 import { IXyoDivinerArchivistClient } from '@xyo-network/diviner-archivist-client'
 import { XyoDivinerArchivistGraphQLClient } from '@xyo-network/diviner-archivist-client.graphql'
 import { XyoIpfsClient, IXyoIpfsClient } from '@xyo-network/ipfs-client'
@@ -149,16 +150,6 @@ class DivinerLauncher extends XyoBaseNode {
     })
   }
 
-  public async getDivinerArchivistClient(): Promise<IXyoDivinerArchivistClient> {
-    return this.getOrCreate('IXyoDivinerArchivistClient', async () => {
-      if (this.divinerConfig.discovery.seeds.length === 0) {
-        throw new Error('At least one archivist seed is required')
-      }
-
-      return new XyoDivinerArchivistGraphQLClient(this.divinerConfig.discovery.seeds[0])
-    })
-  }
-
   public async getIpfsClient(): Promise<IXyoIpfsClient> {
     return this.getOrCreate('XyoIpfsClient', async () => {
       return new XyoIpfsClient(this.divinerConfig.ipfs)
@@ -270,7 +261,9 @@ class DivinerLauncher extends XyoBaseNode {
         throw new XyoError('OriginBlockMemoryProvider must be initialized', XyoErrors.CRITICAL)
       }
 
-      return new XyoOriginBlockRepository(this.originBlockMemoryProvider, serializationService)
+      const hashProvider = await this.getHashingProvider()
+
+      return new XyoOriginBlockRepository(this.originBlockMemoryProvider, serializationService, hashProvider)
     })
   }
 }
@@ -287,6 +280,7 @@ export async function main(args: string[]) {
   XyoBase.logger.info(`Launching Diviner with config\n${JSON.stringify(config, null, 2)}`)
   const launcher = new DivinerLauncher(config.default)
   await launcher.start()
+  return launcher
 }
 
 if (require.main === module) {

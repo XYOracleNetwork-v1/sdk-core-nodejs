@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:35:57 am
+ * @Last modified time: Wednesday, 13th February 2019 1:28:35 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -52,6 +52,8 @@ export interface IXyoNetworkProcedureCatalogue {
    */
 
   getCurrentCatalogue(): CatalogueItem[]
+
+  setCatalogue(catalogue: CatalogueItem[]): void
 }
 
 /**

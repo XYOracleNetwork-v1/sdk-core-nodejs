@@ -23,6 +23,17 @@
   "include": ["src/**/*"],
   "references": [
     {"path": "../p2p"},
+    {"path": "../attribution-request"},
+    {"path": "../hashing"},
+    {"path": "../serialization"},
+    {"path": "../bound-witness"},
+    {"path": "../signing"},
+    {"path": "../serialization-schema"},
+    {"path": "../origin-chain"},
+    {"path": "../origin-block-repository"},
+    {"path": "../peer-interaction"},
+    {"path": "../transaction-pool"},
+    {"path": "../utils"},
     {"path": "../base"}
   ]
 }

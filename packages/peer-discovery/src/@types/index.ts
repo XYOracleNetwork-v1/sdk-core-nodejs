@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 3rd December 2018 12:41:18 pm
+ * @Last modified time: Thursday, 14th February 2019 12:55:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,16 +13,11 @@ export interface IXyoPeerDescription {
   name: string
   version: string
   ip: string
-  graphqlPort: number
-  nodePort: number
+  graphqlPort: number | undefined
+  boundWitnessServerPort: number | undefined
   address: string
 }
 
 export interface IXyoPeerDescriptionWithPeers extends IXyoPeerDescription {
-  peers?: IXyoPeerDescription[]
-}
-
-export interface IXyoPeerCandidate {
-  ip: string
-  port: number
+  peers: string[]
 }
