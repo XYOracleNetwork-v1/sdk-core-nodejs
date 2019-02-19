@@ -1,0 +1,26 @@
+ip: 0.0.0.0
+p2pPort: 11500
+apis:
+  - about
+  - blockByHash
+  - blockList
+  - intersections
+  - blocksByPublicKey
+  - entities
+  - transactionList
+serverPort: 11000
+graphqlPort: 11001
+data: /Users/ryan/dev/projects/xyo/sdk-test/packages/app/node-data
+name: archivist-diviner
+archivist:
+  sql:
+    host: 127.0.0.1
+    user: admin
+    password: password
+    database: Xyo
+    port: 3306
+diviner:
+  ethereum:
+    host: 'http://127.0.0.1:8545'
+    account: '0x123'
+    payOnDelivery: '0x456'

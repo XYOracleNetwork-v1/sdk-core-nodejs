@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: validator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 15th February 2019 5:37:51 pm
+ * @Last modified time: Tuesday, 19th February 2019 2:48:30 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -29,7 +29,7 @@ function validateAgainstSchema<T>(val: T, schema: Joi.Schema) {
 }
 
 export async function validateNodeName(nodeName: string): Promise<IValidationResult> {
-  const schema = Joi.string().alphanum().min(5).max(15).required()
+  const schema = Joi.string().regex(new RegExp('[\w\_\-]+')).min(1).max(20).required()
   return validateAgainstSchema<string>(nodeName, schema)
 }
 

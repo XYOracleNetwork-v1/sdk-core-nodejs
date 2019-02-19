@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 1:53:45 pm
+ * @Last modified time: Tuesday, 19th February 2019 2:35:25 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -188,7 +188,7 @@ const originChainRepository: IXyoProvider<IXyoOriginChainRepository, IXyoOriginC
 const originBlockRepository: IXyoProvider<IXyoOriginBlockRepository, undefined> = {
   async get(container) {
     try {
-      const archivistRepo = container.get<IXyoArchivistRepository>(IResolvers.ARCHIVIST_REPOSITORY)
+      const archivistRepo = await container.get<IXyoArchivistRepository>(IResolvers.ARCHIVIST_REPOSITORY)
       return archivistRepo
     } catch (err) {
       const storageProvider = new XyoInMemoryStorageProvider()

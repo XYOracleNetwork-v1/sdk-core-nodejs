@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 11:04:17 am
+ * @Last modified time: Tuesday, 19th February 2019 2:28:30 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoNode } from '@xyo-network/base-node'
-import { ProcessManager, fileExists, readFile, writeFile } from '@xyo-network/utils'
+import { ProcessManager, fileExists, readFile, writeFile, createDirectoryIfNotExists } from '@xyo-network/utils'
 import { XyoBase } from '@xyo-network/base'
 import path from 'path'
 import { AppWizard } from './app-wizard'
@@ -75,8 +75,9 @@ export class XyoAppLauncher extends XyoBase {
     if (!this.config) throw new XyoError(`Config not initialized`, XyoErrors.CRITICAL)
 
     const nodeData = path.resolve(this.config.data, this.config.name)
-    const isArchivist = this.config.archivist !== undefined
-    const isDiviner = this.config.diviner !== undefined
+    const isArchivist = Boolean(this.config.archivist)
+    const isDiviner = Boolean(this.config.diviner)
+
     if (!isArchivist && !isDiviner) {
       throw new XyoError(`Must support at least archivist or diviner functionality`, XyoErrors.CRITICAL)
     }
@@ -190,6 +191,7 @@ export class XyoAppLauncher extends XyoBase {
   }
 
   private async writeConfigFile(yamlStr: string, config: IAppConfig, configFolder: string): Promise<void> {
+    await createDirectoryIfNotExists(configFolder)
     const pathToWrite = path.resolve(configFolder, `${config.name}.yaml`)
     await writeFile(pathToWrite, yamlStr, 'utf8')
     return
