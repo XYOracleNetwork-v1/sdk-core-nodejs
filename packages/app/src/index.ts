@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 2:28:30 pm
+ * @Last modified time: Tuesday, 19th February 2019 3:41:35 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -25,6 +25,7 @@ export class XyoAppLauncher extends XyoBase {
 
   public config: IAppConfig | undefined
   public yamlConfig: string | undefined
+  public startNode = true
 
   public async initialize(configName?: string) {
     let writeConfigFile = false
@@ -44,12 +45,16 @@ export class XyoAppLauncher extends XyoBase {
         this.config = yaml.safeLoad(file) as IAppConfig
       } else {
         this.logInfo(`Could not find a configuration file at ${configPath}`)
-        this.config = await new AppWizard(rootPath).createConfiguration(configName)
+        const res = await new AppWizard(rootPath).createConfiguration(configName)
+        this.config = (res && res.config) || undefined
+        this.startNode = Boolean(res && res.startNode)
         writeConfigFile = true
       }
     } else {
       this.logInfo(`No configuration passed in not found`)
-      this.config = await new AppWizard(rootPath).createConfiguration()
+      const res = await new AppWizard(rootPath).createConfiguration()
+      this.config = (res && res.config) || undefined
+      this.startNode = Boolean(res && res.startNode)
       writeConfigFile = true
     }
 
@@ -116,7 +121,7 @@ export class XyoAppLauncher extends XyoBase {
           path: nodeData
         },
         discovery: {
-          bootstrapNodes: [],
+          bootstrapNodes: this.config.bootstrapNodes,
           publicKey: this.config.name,
           address: `/ip4/${this.config.ip}/tcp/${this.config.p2pPort}`
         },
@@ -206,6 +211,11 @@ export async function main(args: string[]) {
     console.error(`There was an error during initialization. Will exit`, err)
     process.exit(1)
     return
+  }
+
+  if (!appLauncher.startNode) {
+    console.log(`Exiting process after configuration`)
+    process.exit(0)
   }
 
   try {

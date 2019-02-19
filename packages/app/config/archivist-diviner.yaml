@@ -8,9 +8,10 @@ apis:
   - blocksByPublicKey
   - entities
   - transactionList
+bootstrapNodes: []
 serverPort: 11000
 graphqlPort: 11001
-data: /Users/ryan/dev/projects/xyo/sdk-test/packages/app/node-data
+data: ./node-data
 name: archivist-diviner
 archivist:
   sql:

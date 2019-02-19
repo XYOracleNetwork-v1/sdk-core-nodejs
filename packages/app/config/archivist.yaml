@@ -7,6 +7,7 @@ apis:
   - intersections
   - blocksByPublicKey
   - entities
+bootstrapNodes: []
 serverPort: 11000
 graphqlPort: 11001
 data: ./node-data

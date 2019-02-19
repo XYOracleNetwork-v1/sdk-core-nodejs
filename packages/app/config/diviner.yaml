@@ -5,9 +5,10 @@ apis:
   - blockByHash
   - blockList
   - transactionList
+bootstrapNodes: []
 serverPort: null
 graphqlPort: 11001
-data: /Users/ryan/dev/projects/xyo/sdk-test/packages/app/node-data
+data: ./node-data
 name: diviner
 archivist: null
 diviner:
