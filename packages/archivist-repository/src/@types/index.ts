@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th December 2018 12:37:25 pm
+ * @Last modified time: Thursday, 14th February 2019 2:25:08 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,6 @@
 import { IXyoPublicKey } from '@xyo-network/signing'
 import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { IXyoBoundWitness } from '@xyo-network/bound-witness'
-import { IXyoHash } from '@xyo-network/hashing'
 
 /**
  * A persistance abstraction for an XyoArchivist. This interface powers

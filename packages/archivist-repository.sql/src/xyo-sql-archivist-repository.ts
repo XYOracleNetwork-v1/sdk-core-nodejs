@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-sql-archivist-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 18th December 2018 1:05:02 pm
+ * @Last modified time: Wednesday, 6th February 2019 10:04:16 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -28,7 +28,7 @@ import _ from 'lodash'
 import { IXyoHash } from '@xyo-network/hashing'
 import { IOriginBlockQueryResult } from '@xyo-network/origin-block-repository'
 import { schema } from '@xyo-network/serialization-schema'
-import { XyoNextPublicKey, XyoIndex, XyoPreviousHash } from '@xyo-network/origin-chain'
+import { XyoNextPublicKey, XyoIndex, XyoPreviousHash, XyoBridgeHashSet } from '@xyo-network/origin-chain'
 
 export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistRepository {
 
@@ -387,6 +387,31 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
         return this.linkPreviousInsertOriginBlockParties(originBlockPartyId)
       }, Promise.resolve() as Promise<void>)
 
+      await originBlock.parties.reduce(async (promiseChain, blockParty) => {
+        await promiseChain
+        const bridgeHashSetCandidate = blockParty.heuristics.find(h => h.schemaObjectId === schema.bridgeHashSet.id)
+        if (bridgeHashSetCandidate === undefined) {
+          return
+        }
+
+        const bridgeHashSet = bridgeHashSetCandidate as XyoBridgeHashSet
+        const values = bridgeHashSet.hashSet.map(
+          h => `('${hash.serializeHex()}', ${blockParty.partyIndex}, '${h.serializeHex()}' )`
+        )
+        if (values.length === 0) {
+          return
+        }
+
+        const valuesQuery = values.join(',\n')
+        await this.sqlService.query(`
+          INSERT INTO OriginBlockAttributions (
+            sourceSignedHash,
+            originBlockPartyIndex,
+            providesAttributionForSignedHash
+          ) VALUES ${valuesQuery};
+        `, [])
+      }, Promise.resolve())
+
       const idHierarchy = {
         originBlockId,
         originBlockPartyIds,
@@ -418,6 +443,22 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
       .map(item => this.serializationService.deserialize(item.bytes).hydrate<IXyoBoundWitness>())
       .first()
       .value()
+  }
+
+  public async getBlocksThatProviderAttribution(hash: Buffer): Promise<{[h: string]: IXyoBoundWitness}> {
+    const results = await this.sqlService.query<Array<{bytes: Buffer, originBlockHash: string}>>(`
+      SELECT
+        ob.bytes as bytes,
+        ob.signedHash as originBlockHash
+      FROM OriginBlockAttributions oba
+        JOIN OriginBlocks ob on ob.signedHash = oba.sourceSignedHash
+      WHERE oba.providesAttributionForSignedHash = ?;
+    `, [hash.toString('hex')])
+
+    return results.reduce((memo: {[h: string]: IXyoBoundWitness}, result) => {
+      memo[result.originBlockHash] = this.serializationService.deserialize(result.bytes).hydrate()
+      return memo
+    }, {})
   }
 
   public async getOriginBlocks(limit: number, offsetHash?: Buffer | undefined): Promise<IOriginBlockQueryResult> {

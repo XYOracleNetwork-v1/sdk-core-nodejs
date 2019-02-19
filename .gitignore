@@ -70,6 +70,9 @@ db.json
 diviner-db/
 ipfs/
 sandbox/
+**/node-db/
+**/node-data/
+packages/app/config/
 
 # Scratch files
 scratch.ts

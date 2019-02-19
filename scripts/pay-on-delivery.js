@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: pay-on-delivery.js
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 1st February 2019 2:41:06 pm
+ * @Last modified time: Tuesday, 5th February 2019 10:33:36 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -63,7 +63,7 @@ async function main () {
   shelljs.exec('yarn')
   shelljs.exec('yarn global add tool-dapploy-nodejs')
 
-  logInfo(`Deploying PayOnDelivery Contract and copying contracts to ifps`)  
+  logInfo(`Deploying PayOnDelivery Contract and copying contracts to ipfs`)  
   shelljs.exec('dapploy')
   shelljs.cp('-r', 'build/contracts ../ipfs/staging')
   const addToIPFS = shelljs.exec('docker exec ipfs_host ipfs add -r /export/contracts')

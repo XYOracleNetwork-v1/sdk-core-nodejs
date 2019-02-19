@@ -14,14 +14,14 @@ stakedConsensus:
   network: kovan
   platform: ethereum
 web3:
-  host: http://127.0.0.1:7545
+  host: http://127.0.0.1:8545
 ethereumContracts:
   PayOnDelivery:
     address: please substitute :-)
 data: ./diviner-db
 discovery:
   ip: 127.0.0.1
-  port: 11500
+  port: 11501
   seeds:
     - ip: 127.0.0.1
-      port: 11001
+      port: 11500

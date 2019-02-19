@@ -4,10 +4,9 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 3rd December 2018 12:38:48 pm
+ * @Last modified time: Thursday, 14th February 2019 12:55:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-export { XyoPeerDiscoveryService } from './xyo-peer-discovery-service'
-export { IXyoPeerDescription, IXyoPeerDescriptionWithPeers, IXyoPeerCandidate } from './@types'
+export { IXyoPeerDescription, IXyoPeerDescriptionWithPeers } from './@types'

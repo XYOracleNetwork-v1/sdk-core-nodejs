@@ -1,9 +1,10 @@
-import { IXyoP2PService, unsubscribeFn, IXyoPeerDiscoveryService } from './@types'
+import { IXyoP2PService, IXyoPeerDiscoveryService } from './@types'
 import { XyoBase } from '@xyo-network/base'
 import { XyoPubSub } from './xyo-pub-sub'
 import { decodeXyoTopicBuffer, encodeXyoTopicBuffer } from './xyo-topic-buffer'
+import { unsubscribeFn } from '@xyo-network/utils'
 
-type Callback = (senderPublicKey: string, message: Buffer) => void
+type p2pCallback = (senderPublicKey: string, message: Buffer) => void
 
 export class XyoP2PService extends XyoBase implements IXyoP2PService {
 
@@ -27,10 +28,10 @@ export class XyoP2PService extends XyoBase implements IXyoP2PService {
   }
 
   public publishMessageToPeer(topic: string, message: Buffer, publicKey: string) {
-    this.logInfo(`Sending message to peer with topic ${topic}`)
     const connection = this.discoveryService.getPeerConnection(publicKey)
     if (connection) {
-      connection.write(encodeXyoTopicBuffer(topic, message))
+      const bufferedMessage = encodeXyoTopicBuffer(topic, message)
+      connection.write(bufferedMessage)
     }
     return Promise.resolve()
   }
@@ -43,10 +44,23 @@ export class XyoP2PService extends XyoBase implements IXyoP2PService {
     return Promise.resolve()
   }
 
-  public subscribe(topic: string, cb: Callback): unsubscribeFn {
+  public subscribe(topic: string, cb: p2pCallback): unsubscribeFn {
     return this.listener.subscribe(topic, (senderPublicKey, message) => {
       this.logInfo(`Message subscription with ${topic} received`)
       cb(senderPublicKey, message)
     })
+  }
+
+  public subscribeOnce(topic: string, cb: (senderPublicKey: string, message: Buffer) => void): unsubscribeFn {
+    let unsubscribe: unsubscribeFn | undefined = this.subscribe(topic, (senderPublicKey, message) => {
+      if (unsubscribe) {
+        unsubscribe()
+        unsubscribe = undefined
+      }
+
+      cb(senderPublicKey, message)
+    })
+
+    return unsubscribe
   }
 }

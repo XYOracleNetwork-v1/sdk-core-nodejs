@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 21st December 2018 2:55:31 pm
+ * @Last modified time: Wednesday, 6th February 2019 3:12:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -26,8 +26,8 @@ import { IXyoSigner } from '@xyo-network/signing'
 import { schema } from '@xyo-network/serialization-schema'
 import { IXyoSerializableObject, XyoBaseSerializable } from '@xyo-network/serialization'
 import { rssiSerializationProvider } from '@xyo-network/heuristics-common'
-import { IXyoHash, getHashingProvider } from '@xyo-network/hashing'
-import { XyoIndex, XyoPreviousHash } from '@xyo-network/origin-chain'
+import { IXyoHash, getHashingProvider, XyoHash, IXyoHashProvider } from '@xyo-network/hashing'
+import { XyoIndex, XyoPreviousHash, XyoBridgeHashSet } from '@xyo-network/origin-chain'
 import { createArchivistSqlRepository } from '@xyo-network/archivist-repository.sql'
 import { serializer } from '@xyo-network/serializer'
 
@@ -36,7 +36,10 @@ const dataSet: IXyoInteraction[] = [
     party1Id: 1,
     party2Id: 2,
     party1Heuristics: {
-      rssi: -22
+      rssi: -22,
+      bridgeHashSet: [
+        '#0'
+      ]
     },
     party2Heuristics: {
       rssi: -22
@@ -46,7 +49,10 @@ const dataSet: IXyoInteraction[] = [
     party1Id: 2,
     party2Id: 3,
     party1Heuristics: {
-      rssi: -22
+      rssi: -22,
+      bridgeHashSet: [
+        '#4' // the one above
+      ]
     },
     party2Heuristics: {
       rssi: -22
@@ -102,21 +108,21 @@ async function main(args: Arguments<any>) {
     const blocks = await genesisBlocksPromise
     const entity = entitiesById[id]
     const keySet = new XyoKeySet([entity.signer.publicKey])
-    const heuristics = tryBuildHeuristics({}, 0)
+    const heuristics = await tryBuildHeuristics({}, 0, { data: blocks })
     const fetter = new XyoFetter(keySet, heuristics)
     const signingData = fetter.serialize()
     const signature = await entity.signer.signData(signingData)
     const witness = new XyoWitness(new XyoSignatureSet([signature]), [])
     const boundWitness = new XyoBoundWitness([fetter, witness])
-    blocks.push(boundWitness)
     entity.index = (entity.index || 0) + 1
     const hash = await hashingProvider.createHash(signingData)
+    blocks.push({ boundWitness, hash })
     entity.previousHash = hash
 
     entity.originChain = entity.originChain || []
     entity.originChain.push(boundWitness)
     return blocks
-  }, Promise.resolve([]) as Promise<IXyoBoundWitness[]>)
+  }, Promise.resolve([]) as Promise<IHashBoundWitnessPair[]>)
 
   const boundWitnesses = await dataSet.reduce(async (interactionsPromise, interaction, index) => {
     const interactions = await interactionsPromise
@@ -132,15 +138,17 @@ async function main(args: Arguments<any>) {
 
     const serverKeySet = new XyoKeySet([serverEntity.signer.publicKey])
     const clientKeySet = new XyoKeySet([clientEntity.signer.publicKey])
-    const serverHeuristics = tryBuildHeuristics(
+    const serverHeuristics = await tryBuildHeuristics(
       interaction.party1Heuristics,
       serverEntity.index || 0,
+      { data: interactions },
       serverEntity.previousHash
     )
 
-    const clientHeuristics = tryBuildHeuristics(
+    const clientHeuristics = await tryBuildHeuristics(
       interaction.party2Heuristics,
       clientEntity.index || 0,
+      { data: interactions },
       clientEntity.previousHash
     )
     const serverFetter = new XyoFetter(serverKeySet, serverHeuristics)
@@ -156,10 +164,10 @@ async function main(args: Arguments<any>) {
     const clientWitness = new XyoWitness(new XyoSignatureSet([clientSignature]), [])
     const boundWitness = new XyoBoundWitness([serverFetter, clientFetter, clientWitness, serverWitness])
 
-    interactions.push(boundWitness)
     serverEntity.index = (serverEntity.index || 0) + 1
     clientEntity.index = (clientEntity.index || 0) + 1
     const hash = await hashingProvider.createHash(signingData)
+    interactions.push({ boundWitness, hash })
     serverEntity.previousHash = hash
     clientEntity.previousHash = hash
 
@@ -169,7 +177,7 @@ async function main(args: Arguments<any>) {
     clientEntity.originChain = clientEntity.originChain || []
     clientEntity.originChain.push(boundWitness)
     return interactions
-  }, Promise.resolve(genesisBlocks) as Promise<IXyoBoundWitness[]>)
+  }, Promise.resolve(genesisBlocks))
 
   const repo = await createArchivistSqlRepository({
     host: args.host as string,
@@ -179,18 +187,27 @@ async function main(args: Arguments<any>) {
     port: args.port as number
   }, serializer)
 
-  await boundWitnesses.reduce(async (memo, boundWitness) => {
+  await boundWitnesses.reduce(async (memo, data) => {
     await memo
-    const hash = await hashingProvider.createHash(boundWitness.getSigningData())
-    return repo.addOriginBlock(hash, boundWitness)
+    return repo.addOriginBlock(data.hash, data.boundWitness)
   }, Promise.resolve())
+
+  console.log(`\nCreated ${Object.keys(entitiesById).length} key-pairs`)
+  Object.keys(entitiesById).forEach((k) => {
+    const signer = entitiesById[k].signer
+    console.log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`)
+    console.log(`Public Key: ${signer.publicKey.serializeHex()}`)
+    console.log(`Private Key: ${signer.privateKey}`)
+    console.log(`~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n`)
+  })
 }
 
-function tryBuildHeuristics(
+async function tryBuildHeuristics(
   heuristics: IXyoHeuristics,
   index: number,
+  context: IHeuristicContext,
   previousHash?: IXyoHash
-): IXyoSerializableObject[] {
+): Promise<IXyoSerializableObject[]> {
   const heuristicsCollection: IXyoSerializableObject[] = []
   heuristicsCollection.push(new XyoIndex(index))
   if (previousHash !== undefined) {
@@ -198,7 +215,8 @@ function tryBuildHeuristics(
   }
 
   return Object.keys(heuristics)
-    .reduce((memo: IXyoSerializableObject[], key) => {
+    .reduce(async (promiseChain: Promise<IXyoSerializableObject[]>, key) => {
+      const memo = await promiseChain
       const def = schema[key]
       const val = heuristics[key]
       if (def) {
@@ -206,13 +224,25 @@ function tryBuildHeuristics(
           case schema.rssi.id:
             memo.push(rssiSerializationProvider.newInstance(val as number))
             return memo
+          case schema.bridgeHashSet.id:
+            memo.push(new XyoBridgeHashSet(
+              (val as string[]).map((s) => {
+                if (s.startsWith('#')) { // its a reference to the index of the bound-witness
+                  const ref = parseInt(s.split('#')[1], 10)
+                  return context.data[ref].hash
+                }
+
+                return serializer.deserialize(s).hydrate<IXyoHash>()
+              })
+            ))
+            return memo
         }
       }
 
       const serializable = new XyoKeyValueSerializable(key, val)
       memo.push(serializable)
       return memo
-    }, heuristicsCollection)
+    }, Promise.resolve(heuristicsCollection))
 }
 
 function createPublicKeys(data: IXyoInteraction[]): IXyoEntityById {
@@ -276,4 +306,13 @@ class XyoKeyValueSerializable extends XyoBaseSerializable implements IXyoSeriali
     const value = JSON.stringify(this.getReadableValue())
     return Buffer.from(value)
   }
+}
+
+interface IHeuristicContext {
+  data: IHashBoundWitnessPair[]
+}
+
+interface IHashBoundWitnessPair {
+  hash: IXyoHash,
+  boundWitness: IXyoBoundWitness
 }

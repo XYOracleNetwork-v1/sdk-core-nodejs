@@ -44,6 +44,7 @@
     { "path": "../storage"},
     { "path": "../storage.leveldb"},
     { "path": "../web3-question-service"},
+    { "path": "../attribution-request"},
     { "path": "../web3-service"}
   ]
 }

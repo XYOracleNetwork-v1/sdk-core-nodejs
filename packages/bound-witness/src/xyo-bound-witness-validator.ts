@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-validator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 4:36:43 pm
+ * @Last modified time: Thursday, 14th February 2019 2:01:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,15 +18,21 @@ import { schema } from "@xyo-network/serialization-schema"
 
 export class XyoBoundWitnessValidator extends XyoBase {
 
-  constructor(
-    private readonly options: {
-      checkPartyLengths: boolean,
-      checkIndexExists: boolean,
-      checkCountOfSignaturesMatchPublicKeysCount: boolean,
-      validateSignatures: boolean,
-      validateHash: boolean
-    }) {
+  private options: IXyoBoundWitnessValidationOptions
+
+  constructor(options?: IXyoBoundWitnessValidationOptions) {
     super()
+    this.options = options || {
+      checkPartyLengths: true,
+      checkIndexExists: true,
+      checkCountOfSignaturesMatchPublicKeysCount: true,
+      validateSignatures: true,
+      validateHash: true
+    }
+  }
+
+  public setValidationOptions(validationOptions: IXyoBoundWitnessValidationOptions) {
+    this.options = validationOptions
   }
 
   public async validateBoundWitness(hash: IXyoHash, originBlock: IXyoBoundWitness): Promise<void> {
@@ -36,7 +42,6 @@ export class XyoBoundWitnessValidator extends XyoBase {
     const keysLength = originBlock.publicKeys.length
     const signingData = originBlock.getSigningData()
 
-    this.logInfo(`Signing data`, signingData.toString('hex'))
     if (this.options.validateHash) {
       const validates = await hash.verifyHash(signingData)
       if (!validates) {
@@ -89,10 +94,6 @@ export class XyoBoundWitnessValidator extends XyoBase {
         )
 
         if (!validates) {
-          this.logError('Signature', innerSignature.serializeHex())
-          this.logError('Public Key', originBlock.publicKeys[outerIndex].keys[innerIndex].serializeHex())
-          this.logError('Signing data', signingData.toString('hex'))
-
           throw new XyoError(
             `Could not validate signature at index [${outerIndex}][${innerIndex}]`, XyoErrors.INVALID_PARAMETERS
           )
@@ -100,4 +101,12 @@ export class XyoBoundWitnessValidator extends XyoBase {
       }, Promise.resolve() as Promise<void>)
     }, Promise.resolve() as Promise<void>)
   }
+}
+
+export interface IXyoBoundWitnessValidationOptions {
+  checkPartyLengths: boolean,
+  checkIndexExists: boolean,
+  checkCountOfSignaturesMatchPublicKeysCount: boolean,
+  validateSignatures: boolean,
+  validateHash: boolean
 }

@@ -19,33 +19,3 @@ Using npm
 ```sh
   npm install @xyo-network/about-me --save
 ```
-
-## Usage
-
-```javascript
-  import { XyoAboutMeService } from '@xyo-network/about-me'
-
-  const aboutMeService = new XyoAboutMeService(
-    getIpService()
-    getVersion()
-    getIsPubliclyAddressable()
-    getGenesisPublicKey()
-    getPeerDiscoverService()
-  )
-
-  // Gets the about me response that your node can share
-  await aboutMeService.getAboutMe()
-
-  // If passed with an `aboutMe` from some other node it will add
-  // the description to a queue of nodes to interrogate as a potential
-  // peer
-  await aboutMeService.getAboutMe(otherNodesAboutMe)
-
-  // Start discovering nodes in the xyo network
-  const stopDiscoveringFn = aboutMeService.startDiscoveringPeers()
-
-  // DO STUFF
-
-  // Calling this will stop the node-discovery process
-  stopDiscoveringFn()
-```

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-server-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 14th December 2018 1:32:37 pm
+ * @Last modified time: Tuesday, 5th February 2019 2:37:22 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -79,12 +79,8 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
     aggregator.push(transferQuery.query([0]).readData(true))
     const signingData = Buffer.concat(aggregator)
     this.logInfo(`Signing Data`, signingData.toString('hex'))
-    const signatures = await Promise.all(this.signers.map(async (signer) => {
-      const sig = await signer.signData(signingData)
-
-      this.logInfo(`signer public key`, signer.publicKey.serializeHex())
-      this.logInfo(`signer sig`, sig.serializeHex())
-      return sig
+    const signatures = await Promise.all(this.signers.map((signer) => {
+      return signer.signData(signingData)
     }))
 
     if (!disconnected) {

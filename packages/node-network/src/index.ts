@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 29th January 2019 1:01:42 pm
+ * @Last modified time: Tuesday, 12th February 2019 9:03:46 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,5 +18,4 @@ export {
   IXyoComponentFeatureResponse
 } from './@types'
 
-export { unsubscribeFn } from'@xyo-network/p2p'
 export { XyoNodeNetwork } from './xyo-node-network'

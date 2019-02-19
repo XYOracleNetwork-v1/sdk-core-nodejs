@@ -4,12 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-questions-service.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 30th January 2019 12:01:35 pm
+ * @Last modified time: Thursday, 7th February 2019 12:29:47 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoQuestionService, IBlockPermissionRequestResolver, IRequestPermissionForBlockResult } from '../xyo-question-service'
+import { XyoQuestionService } from '../xyo-question-service'
+import { IBlockPermissionRequestResolver, IRequestPermissionForBlockResult } from '@xyo-network/attribution-request'
 import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { IXyoOriginChainRepository, XyoIndex, XyoPreviousHash, XyoBridgeHashSet } from '@xyo-network/origin-chain'
 import { IXyoHasIntersectedQuestion } from '../@types'
@@ -17,6 +18,7 @@ import { XyoStubHash, IXyoHash } from '@xyo-network/hashing'
 import { IXyoBoundWitness, XyoBoundWitness, XyoKeySet, XyoFetter, XyoSignatureSet, XyoWitness } from '@xyo-network/bound-witness'
 import { XyoStubPublicKey, XyoStubSignature, XyoStubSigner } from '@xyo-network/signing'
 import { IXyoArchivistNetwork } from '@xyo-network/archivist-network'
+import { XyoBoundWitnessPayloadProvider } from '@xyo-network/peer-interaction'
 
 describe('Questions Service', () => {
   it('Should not provide an answer if no supporting data exists', async () => {
@@ -289,7 +291,11 @@ async function getOriginChainRepository(
         result: res !== undefined,
         indexOfPartyInBlock: res !== undefined ? res.indexInBlock : undefined
       }
-    }
+    },
+    getSigners: async () => [],
+    getPreviousHash: async () => undefined,
+    getIndex: async () => 0,
+    getNextPublicKey: async () => undefined
   }
 }
 

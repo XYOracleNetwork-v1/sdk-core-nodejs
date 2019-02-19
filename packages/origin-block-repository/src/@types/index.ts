@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 9:34:08 am
+ * @Last modified time: Wednesday, 6th February 2019 10:01:11 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,6 +17,8 @@ import { IXyoBoundWitness } from '@xyo-network/bound-witness'
  * of OriginBlocks
  */
 export interface IXyoOriginBlockRepository {
+
+  getBlocksThatProviderAttribution(hash: Buffer): Promise<{[h: string]: IXyoBoundWitness}>
 
   /**
    * Deletes an origin-block corresponding to hash passed in

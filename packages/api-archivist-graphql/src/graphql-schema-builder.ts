@@ -9,7 +9,7 @@ export class GraphqlSchemaBuilder extends XyoBase {
       type Query {
         blocksByPublicKey(publicKeys: [String!]): [XyoBlockCollection],
         blockList(limit: Int!, cursor: String): XyoBlockList!,
-        about(aboutYou: XyoAboutYou): XyoAboutMe,
+        about: XyoAboutMe,
         blockByHash(hash: String!): XyoBlock,
         entities(limit: Int!, cursor: String): XyoEntitiesList!
         intersections(publicKeyA: String!, publicKeyB: String!, limit: Int!, cursor: String): XyoIntersectionList!
@@ -59,10 +59,6 @@ export class GraphqlSchemaBuilder extends XyoBase {
         publicKeySet: [String!]!
       }
 
-      type BlocksByPublicKey {
-        blocks(publicKeys: [String!]): [XyoBlockCollection!]
-      }
-
       type XyoAboutMe {
         name: String,
         version: String,
@@ -105,16 +101,6 @@ export class GraphqlSchemaBuilder extends XyoBase {
       type XyoEntitiesList implements List {
         meta: ListMeta!
         items: [XyoEntity!]!
-      }
-
-      input XyoAboutYou {
-        name: String,
-        version: String,
-        ip: String,
-        graphqlPort: Int,
-        nodePort: Int,
-        address: String,
-        peers: [XyoAboutYou]
       }
     `
 

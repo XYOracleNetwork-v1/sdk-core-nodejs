@@ -33,6 +33,7 @@
     "@xyo-network/storage.leveldb": "^0.23.0",
     "@xyo-network/web3-question-service": "^0.23.0",
     "@xyo-network/web3-service": "^0.23.0",
+    "@xyo-network/attribution-request": "^0.23.0",
     "config": "^2.0.1",
     "js-yaml": "^3.12.0"
   },
