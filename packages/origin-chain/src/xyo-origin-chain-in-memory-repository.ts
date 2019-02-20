@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-in-memory-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 13th February 2019 3:14:46 pm
+ * @Last modified time: Tuesday, 19th February 2019 5:58:24 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -32,6 +32,7 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
   private publicKeyIndex: {[pk: string]: boolean} = {}
 
   private hashIndex: {[h: string]: boolean} = {}
+  private mutex: any
 
   constructor(
     index: number,
@@ -61,6 +62,27 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
 
   public async getAllPublicKeysForOriginChain(): Promise<IXyoPublicKey[]> {
     return Object.keys(this.publicKeyIndex).map(pk => this.serializationService.deserialize(pk).hydrate())
+  }
+
+  public async acquireMutex() {
+    if (this.mutex) return undefined
+
+    this.mutex = {
+      date: new Date()
+    }
+
+    return this.mutex
+  }
+
+  public async releaseMutex(mutex: any) {
+    if (!this.mutex) return
+
+    if (this.mutex !== mutex) throw new XyoError(`Can not release mutex, does not exist`, XyoErrors.CRITICAL)
+    this.mutex = undefined
+  }
+
+  public async canAcquireMutex() {
+    return this.mutex !== undefined
   }
 
   /**

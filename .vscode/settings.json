@@ -8,6 +8,7 @@
     "IXyo",
     "Initializable",
     "Multiaddr",
+    "Mutex",
     "QLAPIs",
     "QLJSON",
     "SCSC",

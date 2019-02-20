@@ -45,6 +45,9 @@ export class XyoBlockPermissionResponseHandler extends XyoBaseHandler {
   }
 
   private async onBlockPermissionRequest(pk: string, msg: Buffer) {
+    const canGetMutex = await this.originChainRepository.canAcquireMutex()
+    if (!canGetMutex) return // Dont worry about it for now, may optimize later
+
     const hash = this.messageParser.tryParseHash(msg, { publicKey: pk })
     if (!hash) {
       return
@@ -56,10 +59,15 @@ export class XyoBlockPermissionResponseHandler extends XyoBaseHandler {
     }
 
     const belongsToMeResult = await this.originChainRepository.isBlockInOriginChain(block, hash)
+    let mutex: any | undefined
 
      // The block being asked for is one that is in my origin chain
     if (belongsToMeResult.result) {
-      return this.doBoundWitness(hash, [block])
+      mutex = await this.originChainRepository.acquireMutex()
+      if (!mutex) return
+      return this.doBoundWitness(hash, [block], mutex)
+        .then(() => this.originChainRepository.releaseMutex(mutex))
+        .catch(() => this.originChainRepository.releaseMutex(mutex))
     }
 
     // Get all the blocks that have provided attribution for the hash
@@ -84,8 +92,13 @@ export class XyoBlockPermissionResponseHandler extends XyoBaseHandler {
       return
     }
 
+    mutex = await this.originChainRepository.acquireMutex()
+    if (!mutex) return
+
     // Found Attribution, do just-in-time bound witness
-    return this.doBoundWitness(hash, [block, ...supportingDataBlocks])
+    return this.doBoundWitness(hash, [block, ...supportingDataBlocks], mutex)
+      .then(() => this.originChainRepository.releaseMutex(mutex))
+      .catch(() => this.originChainRepository.releaseMutex(mutex))
   }
 
   private async tryFindBlockInOriginChain(hash: IXyoHash, attributionBlocksByHash: {[h: string]: IXyoBoundWitness}) {
@@ -161,7 +174,7 @@ export class XyoBlockPermissionResponseHandler extends XyoBaseHandler {
     return undefined
   }
 
-  private async doBoundWitness(hash: IXyoHash, blocks: IXyoBoundWitness[]) {
+  private async doBoundWitness(hash: IXyoHash, blocks: IXyoBoundWitness[], mutex: any) {
     const newBoundWitness = await this.doBoundWitnessWithSupportingData(
       hash,
       blocks,
@@ -174,7 +187,7 @@ export class XyoBlockPermissionResponseHandler extends XyoBaseHandler {
       return
     }
 
-    await this.boundWitnessSuccessListener.onBoundWitnessSuccess(newBoundWitness)
+    await this.boundWitnessSuccessListener.onBoundWitnessSuccess(newBoundWitness, mutex)
     return
   }
 

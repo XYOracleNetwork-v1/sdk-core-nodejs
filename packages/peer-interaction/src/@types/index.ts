@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 21st November 2018 1:37:27 pm
+ * @Last modified time: Tuesday, 19th February 2019 6:00:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -42,7 +42,7 @@ export interface IXyoBoundWitnessPayloadProvider {
  */
 
 export interface IXyoBoundWitnessSuccessListener {
-  onBoundWitnessSuccess(boundWitness: IXyoBoundWitness): Promise<void>
+  onBoundWitnessSuccess(boundWitness: IXyoBoundWitness, mutex: any): Promise<void>
 }
 
 /** A generic interface for node-interaction handler */

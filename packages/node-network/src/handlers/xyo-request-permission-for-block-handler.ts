@@ -19,8 +19,11 @@ import { IXyoBoundWitnessSuccessListener, IXyoBoundWitnessPayloadProvider } from
 import { XyoKeySet, XyoFetter, XyoSignatureSet, XyoWitness, XyoBoundWitnessFragment, XyoBoundWitness, IXyoBoundWitness, IXyoFetterSet, IXyoFetter, IXyoWitness } from "@xyo-network/bound-witness"
 import { schema } from '@xyo-network/serialization-schema'
 import { IRequestPermissionForBlockResult } from "@xyo-network/attribution-request"
+import { XyoError, XyoErrors } from "@xyo-network/errors"
 
 export class XyoRequestPermissionForBlockHandler extends XyoBaseHandler {
+
+  private mutex: any
 
   constructor(
     protected readonly serializationService: IXyoSerializationService,
@@ -30,7 +33,7 @@ export class XyoRequestPermissionForBlockHandler extends XyoBaseHandler {
     private readonly payloadProvider: IXyoBoundWitnessPayloadProvider,
     private readonly boundWitnessSuccessListener: IXyoBoundWitnessSuccessListener,
     private readonly blockHash: IXyoHash,
-    private readonly callback: (publicKey: string, permissionRequest: IRequestPermissionForBlockResult) => void
+    private readonly callback: (publicKey: string, permissionRequest: IRequestPermissionForBlockResult) => void,
   ) {
     super(serializationService)
   }
@@ -47,8 +50,18 @@ export class XyoRequestPermissionForBlockHandler extends XyoBaseHandler {
     )
   }
 
+  public async releaseMutex() {
+    if (this.mutex !== undefined) {
+      await this.originChainRepository.releaseMutex(this.mutex)
+      this.mutex = undefined
+    }
+  }
+
   private blockPermissionResponse() {
     return async (pk: string, message: Buffer) => {
+      this.mutex = await this.tryGetMutex(0)
+      if (!this.mutex) return
+
       const result = await this.getBoundWitnessFragments(pk, message)
       if (!result) return
 
@@ -80,7 +93,7 @@ export class XyoRequestPermissionForBlockHandler extends XyoBaseHandler {
         witnessSet.witnesses[0]
       ])
 
-      await this.boundWitnessSuccessListener.onBoundWitnessSuccess(newBoundWitness)
+      await this.boundWitnessSuccessListener.onBoundWitnessSuccess(newBoundWitness, this.mutex)
       const newBoundWitnessHash = await this.hashProvider.createHash(newBoundWitness.getSigningData())
 
       // Extract out the bridgeBlockSet
@@ -146,5 +159,16 @@ export class XyoRequestPermissionForBlockHandler extends XyoBaseHandler {
   private publishRequestPermission() {
     const requestTopic = 'block-permission:request'
     this.p2pService.publish(requestTopic, this.blockHash.serialize())
+  }
+
+  private async tryGetMutex(currentTry: number) {
+    const mutex = await this.originChainRepository.acquireMutex()
+    if (mutex) return mutex
+    if (currentTry === 3) throw new XyoError(`Could not acquire mutex for origin chain`, XyoErrors.CRITICAL)
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        this.tryGetMutex(currentTry + 1).then(resolve).catch(reject)
+      }, 100 * (currentTry + 1)) // linear backoff
+    })
   }
 }

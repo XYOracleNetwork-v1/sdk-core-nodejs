@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 7th February 2019 11:39:11 am
+ * @Last modified time: Tuesday, 19th February 2019 6:32:06 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,6 +19,7 @@ import {
   IXyoBoundWitnessSuccessListener,
   IXyoBoundWitnessInteractionFactory
 } from './@types'
+import { XyoError, XyoErrors } from '@xyo-network/errors'
 
 export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBoundWitnessHandlerProvider {
 
@@ -32,15 +33,31 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
   }
 
   public async handle(networkPipe: IXyoNetworkPipe): Promise<IXyoBoundWitness> {
-    const [payload, signers] = await Promise.all([
-      this.boundWitnessPayloadProvider.getPayload(this.originStateRepository),
-      this.originStateRepository.getSigners()
-    ])
+    const mutex = await this.tryGetMutex(0)
+    try {
+      const [payload, signers] = await Promise.all([
+        this.boundWitnessPayloadProvider.getPayload(this.originStateRepository),
+        this.originStateRepository.getSigners()
+      ])
 
-    const interaction = this.boundWitnessInteractionFactory.newInstance(signers, payload)
+      const interaction = this.boundWitnessInteractionFactory.newInstance(signers, payload)
 
-    const boundWitness = await interaction.run(networkPipe)
-    await this.boundWitnessSuccessListener.onBoundWitnessSuccess(boundWitness)
-    return boundWitness
+      const boundWitness = await interaction.run(networkPipe)
+      await this.boundWitnessSuccessListener.onBoundWitnessSuccess(boundWitness, mutex)
+      return boundWitness
+    } finally {
+      await this.originStateRepository.releaseMutex(mutex)
+    }
+  }
+
+  private async tryGetMutex(currentTry: number) {
+    const mutex = await this.originStateRepository.acquireMutex()
+    if (mutex) return mutex
+    if (currentTry === 3) throw new XyoError(`Could not acquire mutex for origin chain`, XyoErrors.CRITICAL)
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        this.tryGetMutex(currentTry + 1).then(resolve).catch(reject)
+      }, 100 * (currentTry + 1)) // linear backoff
+    })
   }
 }

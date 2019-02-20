@@ -31,6 +31,7 @@
     { "path": "../signing"},
     { "path": "../origin-block-repository"},
     { "path": "../buffer-utils"},
+    { "path": "../errors"},
     { "path": "../origin-chain"}
   ]
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 24th January 2019 11:06:20 am
+ * @Last modified time: Tuesday, 19th February 2019 5:57:52 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -21,6 +21,12 @@ import { IXyoBoundWitness } from '@xyo-network/bound-witness'
 
 export interface IXyoOriginChainRepository {
 
+  acquireMutex(): Promise<any | undefined>
+
+  releaseMutex(mutex: any): Promise<void>
+
+  canAcquireMutex(): Promise<boolean>
+
   /** Will create a genesis block if one does not yet exist */
   createGenesisBlock(): Promise<IXyoBoundWitness>
 
@@ -34,7 +40,7 @@ export interface IXyoOriginChainRepository {
   getSigners(): Promise<IXyoSigner[]>
 
   /** Adds a signer to the queue that will be used in a subsequent block */
-  addSigner(signer: IXyoSigner): Promise<void>
+  addSigner(signer: IXyoSigner, mutex?: any): Promise<void>
 
   /** Removes the oldest signer from the list of signers signing blocks */
   removeOldestSigner(): Promise<void>
@@ -50,7 +56,7 @@ export interface IXyoOriginChainRepository {
    * And, signers will be rotated if there is a queue
    */
 
-  updateOriginChainState(hash: IXyoHash, block: IXyoBoundWitness): Promise<void>
+  updateOriginChainState(hash: IXyoHash, block: IXyoBoundWitness, mutex: any): Promise<void>
 
   /** Returns a list of the signers waiting to be used */
   getWaitingSigners(): Promise<IXyoSigner[]>
@@ -59,7 +65,7 @@ export interface IXyoOriginChainRepository {
    * Overrides the queue behavior for setting the signers for next block,
    * and sets the passed in signers as the current signers
    */
-  setCurrentSigners(signers: IXyoSigner[]): Promise<void>
+  setCurrentSigners(signers: IXyoSigner[], mutex: any): Promise<void>
 
   /** Returns the first xyo-signer for the origin chain */
   getGenesisSigner(): Promise<IXyoSigner | undefined>

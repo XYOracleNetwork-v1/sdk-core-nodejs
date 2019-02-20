@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 2:35:25 pm
+ * @Last modified time: Tuesday, 19th February 2019 6:31:03 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -168,17 +168,23 @@ const originChainRepository: IXyoProvider<IXyoOriginChainRepository, IXyoOriginC
   },
   async postInit(originChainRepo, container) {
     const originChainSigners = await originChainRepo.getSigners()
+    const mutex = originChainRepo.acquireMutex()
+    if (!mutex) throw new XyoError(`Could not acquire mutex`, XyoErrors.CRITICAL)
 
-    if (originChainSigners.length === 0) {
-      const signers = await container.get<IXyoSigner[]>(IResolvers.SIGNERS)
-      await originChainRepo.setCurrentSigners(signers)
-    }
+    try {
+      if (originChainSigners.length === 0) {
+        const signers = await container.get<IXyoSigner[]>(IResolvers.SIGNERS)
+        await originChainRepo.setCurrentSigners(signers, mutex)
+      }
 
-    const currentIndex = await originChainRepo.getIndex()
-    if (currentIndex === 0) { // create genesis block
-      const genesisBlock = await originChainRepo.createGenesisBlock()
-      const successListener = await container.get<IXyoBoundWitnessSuccessListener>(IResolvers.BOUND_WITNESS_SUCCESS_LISTENER)
-      await successListener.onBoundWitnessSuccess(genesisBlock)
+      const currentIndex = await originChainRepo.getIndex()
+      if (currentIndex === 0) { // create genesis block
+        const genesisBlock = await originChainRepo.createGenesisBlock()
+        const successListener = await container.get<IXyoBoundWitnessSuccessListener>(IResolvers.BOUND_WITNESS_SUCCESS_LISTENER)
+        await successListener.onBoundWitnessSuccess(genesisBlock, mutex)
+      }
+    } finally {
+      await originChainRepo.releaseMutex(mutex)
     }
 
     return

@@ -28,7 +28,7 @@ export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBound
     super()
   }
 
-  public async onBoundWitnessSuccess(boundWitness: IXyoBoundWitness): Promise<void> {
+  public async onBoundWitnessSuccess(boundWitness: IXyoBoundWitness, mutex: any): Promise<void> {
     const hashValue = await this.hashingProvider.createHash(boundWitness.getSigningData())
 
     try {
@@ -39,7 +39,7 @@ export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBound
     }
 
     await this.originBlockRepository.addOriginBlock(hashValue, boundWitness)
-    await this.originChainRepository.updateOriginChainState(hashValue, boundWitness)
+    await this.originChainRepository.updateOriginChainState(hashValue, boundWitness, mutex)
 
     this.logInfo(`${hashValue.serializeHex()} added to Origin-Chain and Origin-Block-Repository`)
     const nestedBoundWitnesses = new XyoNestedBoundWitnessExtractor().extractNestedBoundWitnesses(boundWitness)
