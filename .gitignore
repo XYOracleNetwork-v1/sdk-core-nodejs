@@ -72,7 +72,11 @@ ipfs/
 sandbox/
 **/node-db/
 **/node-data/
-packages/app/config/
+
+packages/app/config/*
+!packages/app/config/archivist.yaml
+!packages/app/config/diviner.yaml
+!packages/app/config/archivist-diviner.yaml
 
 # Scratch files
 scratch.ts

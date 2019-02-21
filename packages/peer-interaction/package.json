@@ -16,6 +16,7 @@
     "@xyo-network/origin-chain": "^0.23.0",
     "@xyo-network/serialization": "^0.23.0",
     "@xyo-network/serialization-schema": "^0.23.0",
+    "@xyo-network/errors": "^0.23.0",
     "@xyo-network/signing": "^0.23.0"
   },
   "devDependencies": {

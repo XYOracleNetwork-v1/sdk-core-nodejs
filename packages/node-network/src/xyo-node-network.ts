@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 12th February 2019 10:43:37 am
+ * @Last modified time: Tuesday, 19th February 2019 6:32:19 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -116,7 +116,6 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork, IXyoTran
     blockHash: IXyoHash,
     callback: (publicKey: string, permissionRequest: IRequestPermissionForBlockResult) => void
   ): unsubscribeFn {
-
     const req = new XyoRequestPermissionForBlockHandler(
       this.serializationService,
       this.hashProvider,

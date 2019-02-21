@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-block-permission-request-resolver.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 7th February 2019 3:46:16 pm
+ * @Last modified time: Tuesday, 19th February 2019 6:23:36 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -28,6 +28,14 @@ export class XyoBlockPermissionRequestResolver extends XyoBase implements IBlock
   ): Promise<IRequestPermissionForBlockResult | undefined> {
     let resolved = false
     return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (!resolved) {
+          resolved = true
+          resolve(undefined)
+          unsubscribeFn()
+        }
+      }, timeout)
+
       const unsubscribeFn = this.nodeNetwork.requestPermissionForBlock(hash, (pk, permission) => {
         if (resolved) {
           return
@@ -37,14 +45,6 @@ export class XyoBlockPermissionRequestResolver extends XyoBase implements IBlock
         resolve(permission)
         unsubscribeFn()
       })
-
-      setTimeout(() => {
-        if (!resolved) {
-          resolved = true
-          resolve(undefined)
-          unsubscribeFn()
-        }
-      }, timeout)
     }) as Promise<IRequestPermissionForBlockResult | undefined>
   }
 }

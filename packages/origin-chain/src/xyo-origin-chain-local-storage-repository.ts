@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-local-storage-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 13th February 2019 3:48:13 pm
+ * @Last modified time: Tuesday, 19th February 2019 5:59:52 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -29,6 +29,18 @@ export class XyoOriginChainLocalStorageRepository extends XyoBase implements IXy
     private readonly serializationService: IXyoSerializationService
   ) {
     super()
+  }
+
+  public async acquireMutex() {
+    return (await this.getOrCreateInMemoryDelegate()).acquireMutex()
+  }
+
+  public async releaseMutex(mutex: any) {
+    return (await this.getOrCreateInMemoryDelegate()).releaseMutex(mutex)
+  }
+
+  public async canAcquireMutex() {
+    return (await this.getOrCreateInMemoryDelegate()).canAcquireMutex()
   }
 
   public async isBlockInOriginChain(block: IXyoBoundWitness, hash: IXyoHash): Promise<IBlockInOriginChainResult> {

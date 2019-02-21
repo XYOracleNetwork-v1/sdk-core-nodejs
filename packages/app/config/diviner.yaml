@@ -1,0 +1,18 @@
+ip: 0.0.0.0
+p2pPort: 11500
+apis:
+  - about
+  - blockByHash
+  - blockList
+  - transactionList
+bootstrapNodes: []
+serverPort: null
+graphqlPort: 11001
+data: ./node-data
+name: diviner
+archivist: null
+diviner:
+  ethereum:
+    host: 'http://127.0.0.1:8545'
+    account: '0x123'
+    payOnDelivery: '0x456'

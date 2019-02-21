@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: validator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 15th February 2019 5:37:51 pm
+ * @Last modified time: Tuesday, 19th February 2019 3:28:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -29,7 +29,7 @@ function validateAgainstSchema<T>(val: T, schema: Joi.Schema) {
 }
 
 export async function validateNodeName(nodeName: string): Promise<IValidationResult> {
-  const schema = Joi.string().alphanum().min(5).max(15).required()
+  const schema = Joi.string().regex(/[\w\_\-]+/).min(1).max(20).required()
   return validateAgainstSchema<string>(nodeName, schema)
 }
 
@@ -104,6 +104,25 @@ export async function validateHexString(hexString: string) {
       message: (err as Error).message
     }
   }
+}
+
+export async function validateMultiAddress(addr: string) {
+  const parts = addr.split('/')
+  if (
+    parts.length !== 5 ||
+    parts[0] !== '' ||
+    parts[1] !== 'ip4' ||
+    parts[3] !== 'tcp'
+  ) {
+    return {
+      validates: false,
+      message: 'Malformed address'
+    }
+  }
+
+  const ipVal = await validateIpAddress(parts[2])
+  if (!ipVal.validates) return ipVal
+  return validatePort(parts[4])
 }
 
 export async function validateConfigFile(config: IAppConfig): Promise<IValidationResult> {

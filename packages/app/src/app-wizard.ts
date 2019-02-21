@@ -4,18 +4,19 @@
  * @Email:  developer@xyfindables.com
  * @Filename: app-wizard.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 1:59:03 pm
+ * @Last modified time: Tuesday, 19th February 2019 3:36:39 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { prompt } from 'enquirer'
-import { validateNodeName, validateDataPath, validateIpAddress, IValidationResult, validatePort, validateURL, validateHexString } from './validator'
+import { validateNodeName, validateDataPath, validateIpAddress, IValidationResult, validatePort, validateURL, validateHexString, validateMultiAddress } from './validator'
 import { XyoBase } from '@xyo-network/base'
 import path from 'path'
 import { ISqlConnectionDetails } from '@xyo-network/archivist-repository.sql'
 import { intersection } from 'lodash'
-import { IAppConfig } from './@types'
+import { IAppConfig, ICreateConfigResult } from './@types'
+import dns from 'dns'
 
 function promptValidator<T>(validator: (val: T) => Promise<IValidationResult>) {
   return async (v: T) => {
@@ -212,6 +213,72 @@ export async function getApiChoices(options: string[]): Promise<string[]> {
   return choices
 }
 
+export async function getBootstrapNodes(): Promise<string[]> {
+  const bootstrapNodes: string[] = []
+  const { confirmAddBootstrapNodes } = await prompt<{confirmAddBootstrapNodes: boolean}>({
+    type: 'confirm',
+    name: 'confirmAddBootstrapNodes',
+    message: 'Do you want to add bootstrap nodes?',
+    initial: true
+  })
+
+  if (!confirmAddBootstrapNodes) return bootstrapNodes
+
+  const dnsResults: string[] = await new Promise((resolve, reject) => {
+    dns.lookup('peers.xyo.network', { all: true }, (err, results) => {
+      if (err) return []
+      return resolve(
+        results.map((r) => {
+          return `/ip4/${r.address}/tcp/11500`
+        })
+      )
+    })
+  })
+
+  if (dnsResults.length) {
+    const { choices } = await prompt<{choices: string[]}>({
+      type: 'multiselect',
+      name: 'choices',
+      message: 'These addresses were found on the `peers.xyo.network` DNS record.' +
+        'You can select and deselect each address by pressing spacebar',
+      choices: dnsResults,
+      initial: dnsResults
+    })
+
+    bootstrapNodes.push(...choices)
+  }
+
+  await getMultiAddrEntry(bootstrapNodes)
+
+  // Returns the unique keys
+  return Object.keys(bootstrapNodes.reduce((memo: {[s: string]: boolean}, k) => {
+    memo[k] = true
+    return memo
+  }, {}))
+}
+
+export async function getMultiAddrEntry(bootstrapNodes: string[]): Promise<void> {
+  const { confirmAddIndividualIps } = await prompt<{confirmAddIndividualIps: boolean}>({
+    type: 'confirm',
+    name: 'confirmAddIndividualIps',
+    message: 'Do you want to add any more individual bootstrap nodes?',
+    initial: false
+  })
+
+  if (!confirmAddIndividualIps) return
+
+  // @ts-ignore
+  const { ipAddress } = await prompt<{ipAddress: string}>({
+    type: 'input',
+    message: `What is the address value of the bootstrap node? Should look something like /ip4/127.0.0.1/tcp/11500`,
+    name: 'ipAddress',
+    validate: promptValidator(validateMultiAddress)
+  })
+
+  bootstrapNodes.push(ipAddress)
+  await getMultiAddrEntry(bootstrapNodes)
+}
+
 export async function getGraphQLPort(): Promise<number | undefined> {
  // @ts-ignore
   const { confirmGraphQL } = await prompt<{confirmGraphQL: boolean}>({
@@ -228,19 +295,31 @@ export async function getGraphQLPort(): Promise<number | undefined> {
   return getPort('What port should your GraphQL server run on?', 11001)
 }
 
+export async function startNodeAfterInitialize() {
+  const { start } = await prompt<{start: boolean}>({
+    message: 'Do you want to start the node after configuration is complete?',
+    initial: true,
+    type: 'confirm',
+    name: 'start'
+  })
+
+  return start
+}
+
 export class AppWizard extends XyoBase {
 
   constructor (private readonly rootPath: string) {
     super()
   }
 
-  public async createConfiguration(configNameSuggest?: string): Promise<IAppConfig | undefined> {
+  public async createConfiguration(configNameSuggest?: string): Promise<ICreateConfigResult | undefined> {
     const doWizard = await confirmCreateConfigWizard()
     if (!doWizard) return undefined
     const nodeName = await getNameOfNode(configNameSuggest)
     const dataPath = await getDataPath(path.resolve(this.rootPath, 'node-data'))
     const ip = await getPublicIpAddress()
     const p2pPort = await getPort(`What port would you like to use for your peer to peer protocol?`, 11500)
+    const bootstrapNodes = await getBootstrapNodes()
     const actAsServer = await doActAsServer()
 
     const serverPort = await (actAsServer ?
@@ -287,6 +366,7 @@ export class AppWizard extends XyoBase {
     .map(a => a.name)
 
     const apis = await (graphQLPort ? getApiChoices(apiOptions) : Promise.resolve([]) as Promise<string[]>)
+    const startNode = await startNodeAfterInitialize()
 
     this.logInfo(`Node name: ${nodeName}`)
     this.logInfo(`Data path: ${dataPath}`)
@@ -303,26 +383,31 @@ export class AppWizard extends XyoBase {
     if (ethereumAccountAddress) this.logInfo(`Ethereum Account Address: ${ethereumAccountAddress}`)
     if (payOnDeliveryAddress) this.logInfo(`PayOnDelivery Contract Address: ${payOnDeliveryAddress}`)
     if (apis.length) this.logInfo(`APIs: ${apis.join(', ')}`)
+    if (bootstrapNodes.length) this.logInfo(`Bootstrap Nodes: ${bootstrapNodes.join(', ')}`)
 
     return {
-      ip,
-      p2pPort,
-      apis,
-      serverPort: serverPort || null,
-      graphqlPort: graphQLPort || null,
-      data: dataPath,
-      name: nodeName,
-      archivist: components.includes(XyoComponent.ARCHIVIST) ? {
-        sql: sqlCredentials!
-      } : null,
-      diviner: components.includes(XyoComponent.DIVINER) ? {
-        ethereum: {
-          host: ethereumNodeAddress!,
-          account: ethereumAccountAddress!,
-          payOnDelivery: payOnDeliveryAddress!
+      startNode,
+      config: {
+        ip,
+        p2pPort,
+        apis,
+        bootstrapNodes,
+        serverPort: serverPort || null,
+        graphqlPort: graphQLPort || null,
+        data: dataPath,
+        name: nodeName,
+        archivist: components.includes(XyoComponent.ARCHIVIST) ? {
+          sql: sqlCredentials!
+        } : null,
+        diviner: components.includes(XyoComponent.DIVINER) ? {
+          ethereum: {
+            host: ethereumNodeAddress!,
+            account: ethereumAccountAddress!,
+            payOnDelivery: payOnDeliveryAddress!
 
-        }
-      } : null
+          }
+        } : null
+      }
     }
   }
 }

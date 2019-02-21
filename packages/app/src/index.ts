@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 11:04:17 am
+ * @Last modified time: Tuesday, 19th February 2019 3:41:35 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoNode } from '@xyo-network/base-node'
-import { ProcessManager, fileExists, readFile, writeFile } from '@xyo-network/utils'
+import { ProcessManager, fileExists, readFile, writeFile, createDirectoryIfNotExists } from '@xyo-network/utils'
 import { XyoBase } from '@xyo-network/base'
 import path from 'path'
 import { AppWizard } from './app-wizard'
@@ -25,6 +25,7 @@ export class XyoAppLauncher extends XyoBase {
 
   public config: IAppConfig | undefined
   public yamlConfig: string | undefined
+  public startNode = true
 
   public async initialize(configName?: string) {
     let writeConfigFile = false
@@ -44,12 +45,16 @@ export class XyoAppLauncher extends XyoBase {
         this.config = yaml.safeLoad(file) as IAppConfig
       } else {
         this.logInfo(`Could not find a configuration file at ${configPath}`)
-        this.config = await new AppWizard(rootPath).createConfiguration(configName)
+        const res = await new AppWizard(rootPath).createConfiguration(configName)
+        this.config = (res && res.config) || undefined
+        this.startNode = Boolean(res && res.startNode)
         writeConfigFile = true
       }
     } else {
       this.logInfo(`No configuration passed in not found`)
-      this.config = await new AppWizard(rootPath).createConfiguration()
+      const res = await new AppWizard(rootPath).createConfiguration()
+      this.config = (res && res.config) || undefined
+      this.startNode = Boolean(res && res.startNode)
       writeConfigFile = true
     }
 
@@ -75,8 +80,9 @@ export class XyoAppLauncher extends XyoBase {
     if (!this.config) throw new XyoError(`Config not initialized`, XyoErrors.CRITICAL)
 
     const nodeData = path.resolve(this.config.data, this.config.name)
-    const isArchivist = this.config.archivist !== undefined
-    const isDiviner = this.config.diviner !== undefined
+    const isArchivist = Boolean(this.config.archivist)
+    const isDiviner = Boolean(this.config.diviner)
+
     if (!isArchivist && !isDiviner) {
       throw new XyoError(`Must support at least archivist or diviner functionality`, XyoErrors.CRITICAL)
     }
@@ -115,7 +121,7 @@ export class XyoAppLauncher extends XyoBase {
           path: nodeData
         },
         discovery: {
-          bootstrapNodes: [],
+          bootstrapNodes: this.config.bootstrapNodes,
           publicKey: this.config.name,
           address: `/ip4/${this.config.ip}/tcp/${this.config.p2pPort}`
         },
@@ -190,6 +196,7 @@ export class XyoAppLauncher extends XyoBase {
   }
 
   private async writeConfigFile(yamlStr: string, config: IAppConfig, configFolder: string): Promise<void> {
+    await createDirectoryIfNotExists(configFolder)
     const pathToWrite = path.resolve(configFolder, `${config.name}.yaml`)
     await writeFile(pathToWrite, yamlStr, 'utf8')
     return
@@ -204,6 +211,11 @@ export async function main(args: string[]) {
     console.error(`There was an error during initialization. Will exit`, err)
     process.exit(1)
     return
+  }
+
+  if (!appLauncher.startNode) {
+    console.log(`Exiting process after configuration`)
+    process.exit(0)
   }
 
   try {
