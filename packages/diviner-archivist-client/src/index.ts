@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 28th January 2019 1:08:38 pm
+ * @Last modified time: Friday, 22nd February 2019 2:39:04 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,7 +19,7 @@ export interface IXyoDivinerArchivistClient {
     cursor: string | undefined
   ): Promise<IXyoMetaList<string>>
 
-  getBlockBytesFromHash(hash: string): Promise<string>
+  getBlockBytesFromHash(hash: string): Promise<string | undefined>
 }
 
 export interface IXyoDivinerArchivistClientProvider {

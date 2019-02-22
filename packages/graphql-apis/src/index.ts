@@ -23,7 +23,21 @@ export async function buildGraphQLServer(
       // @ts-ignore
       if (!config.apis[api]) return memo
       const { default: resolver, serviceDependencies } = (await import(`./endpoints/${api}`)) as IEndpointModule
-      const deps = await Promise.all(serviceDependencies.map(serviceDependency => container.get(serviceDependency)))
+      const deps = await Promise.all(serviceDependencies.map(async (serviceDependency) => {
+        let optionalDep = false
+        let dep = serviceDependency
+        if (serviceDependency.charAt(serviceDependency.length - 1) === '?') {
+          optionalDep = true
+          dep = serviceDependency.substr(0, serviceDependency.length - 1)
+        }
+
+        try {
+          return container.get(dep)
+        } catch (e) {
+          if (!optionalDep) throw e
+          return undefined
+        }
+      }))
       const instance = new (Function.prototype.bind.apply(resolver, [null, ...deps]))
       memo.resolvers[api] = instance
       memo.queries.push((resolver as IReflectionEndpoint).query)

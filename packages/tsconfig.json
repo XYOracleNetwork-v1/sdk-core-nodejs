@@ -178,6 +178,12 @@
     },
     {
       "path": "consensus"
+    },
+    {
+      "path": "block-producer"
+    },
+    {
+      "path": "block-witness"
     }
   ],
   "include": [
@@ -234,6 +240,8 @@
     "utils/src/**/*.ts",
     "graphql-apis/src/**/*.ts",
     "app/src/**/*.ts",
-    "consensus/src/**/*.ts"
+    "consensus/src/**/*.ts",
+    "block-producer/src/**/*.ts",
+    "block-witness/src/**/*.ts"
   ]
 }

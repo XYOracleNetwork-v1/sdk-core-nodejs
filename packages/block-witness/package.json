@@ -1,13 +1,13 @@
 {
-  "name": "@xyo-network/consensus",
+  "name": "@xyo-network/block-witness",
   "version": "0.23.0",
-  "description": "Provides consensus datapoints",
+  "private":true,
+  "description": "Given a block candidate will run the validations necessary to create a new block",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan",
   "license": "MIT",
   "dependencies": {
-    "bignumber.js": "^8.0.2"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

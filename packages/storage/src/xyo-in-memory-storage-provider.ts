@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-in-memory-storage-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:57:22 am
+ * @Last modified time: Friday, 22nd February 2019 2:18:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -44,7 +44,7 @@ export class XyoInMemoryStorageProvider implements IXyoStorageProvider {
   public async read(key: Buffer): Promise<Buffer | undefined> {
     const result = this.data[key.toString()]
     if (!result) {
-      throw new Error('Key does not exist')
+      return undefined
     }
 
     return result
