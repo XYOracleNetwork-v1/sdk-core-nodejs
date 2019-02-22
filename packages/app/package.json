@@ -3,6 +3,9 @@
   "version": "0.23.0",
   "description": "The XYO application for running components on the XYO network",
   "main": "dist/index.js",
+  "bin": {
+    "xyo-node": "bin/xyo-node"
+  },
   "types": "dist/index.d.ts",
   "author": "Ryan",
   "license": "MIT",
