@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 30th January 2019 11:58:15 am
+ * @Last modified time: Friday, 22nd February 2019 2:38:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -85,17 +85,17 @@ export class XyoDivinerArchivistGraphQLClient extends XyoBase implements IXyoDiv
     }
   }
 
-  public async getBlockBytesFromHash(hash: string): Promise<string> {
+  public async getBlockBytesFromHash(hash: string): Promise<string | undefined> {
     try {
       this.logInfo(`Getting block by hash ${hash}`)
-      const result = await this.client.query<{blockByHash: string}>({
+      const result = await this.client.query<{blockByHash: { bytes: string}}>({
         query: XyoDivinerArchivistGraphQLClient.blockBytesByHashQuery,
         variables: {
           hash
         }
       })
 
-      return result.data.blockByHash
+      return result && result.data && result.data.blockByHash && result.data.blockByHash.bytes
     } catch (ex) {
       this.logError('There was an error getting block by hash from archivist client', ex)
       throw ex

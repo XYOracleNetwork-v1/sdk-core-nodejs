@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-archivist-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 29th January 2019 3:55:49 pm
+ * @Last modified time: Friday, 22nd February 2019 2:32:45 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -66,7 +66,9 @@ export class XyoArchivistNetwork extends XyoBase implements IXyoArchivistNetwork
       const res = this.peersIndex.byPublicKey[a]
       if (res.features.archivist) {
         const archivistOptions = res.features.archivist.featureOptions as IXyoComponentArchivistFeatureDetail
-        return new XyoDivinerArchivistGraphQLClient(`${archivistOptions.graphqlHost}:${archivistOptions.graphqlPort}`)
+        return new XyoDivinerArchivistGraphQLClient(
+          `http://${archivistOptions.graphqlHost}:${archivistOptions.graphqlPort}`
+        )
       }
 
       return undefined
@@ -212,7 +214,7 @@ export class XyoArchivistNetwork extends XyoBase implements IXyoArchivistNetwork
             }
           }
         } catch (err) {
-          this.logError(`Unable to deserialize bound-witness with bytes ${result}`)
+          this.logError(`Unable to deserialize bound-witness with bytes ${result}`, err)
           // No reason to handle error, we have a redundancy of archivists
         } finally {
           if (returnCount === archivistClients.length && !resolved) {

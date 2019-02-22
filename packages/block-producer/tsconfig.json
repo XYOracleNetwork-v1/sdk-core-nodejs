@@ -22,17 +22,8 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    {"path": "../about-me"},
-    {"path": "../utils"},
-    {"path": "../origin-block-repository"},
-    {"path": "../archivist-repository"},
-    {"path": "../archivist-network"},
-    {"path": "../bound-witness"},
     {"path": "../base"},
-    {"path": "../signing"},
-    {"path": "../serialization"},
-    {"path": "../transaction-pool"},
-    {"path": "../hashing"},
-    {"path": "../graphql-server"}
+    {"path": "../errors"},
+    {"path": "../consensus"}
   ]
 }
