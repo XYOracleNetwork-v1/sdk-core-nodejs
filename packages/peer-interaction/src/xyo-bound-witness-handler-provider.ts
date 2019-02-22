@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-handler-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 6:32:06 pm
+ * @Last modified time: Friday, 22nd February 2019 10:12:16 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoNetworkPipe } from '@xyo-network/network'
 import { IXyoBoundWitness } from '@xyo-network/bound-witness'
-import { IXyoOriginChainRepository } from '@xyo-network/origin-chain'
+import { IXyoOriginChainRepository, IXyoOriginChainMutex } from '@xyo-network/origin-chain'
 import { XyoBase } from '@xyo-network/base'
 import {
   IXyoBoundWitnessHandlerProvider,
@@ -50,14 +50,14 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
     }
   }
 
-  private async tryGetMutex(currentTry: number) {
+  private async tryGetMutex(currentTry: number): Promise<IXyoOriginChainMutex> {
     const mutex = await this.originStateRepository.acquireMutex()
     if (mutex) return mutex
     if (currentTry === 3) throw new XyoError(`Could not acquire mutex for origin chain`, XyoErrors.CRITICAL)
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         this.tryGetMutex(currentTry + 1).then(resolve).catch(reject)
-      }, 100 * (currentTry + 1)) // linear backoff
+      }, 100 * (currentTry + 1)) // linear back-off
     })
   }
 }

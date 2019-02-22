@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-local-storage-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 5:59:52 pm
+ * @Last modified time: Friday, 22nd February 2019 10:15:38 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoOriginChainRepository, IBlockInOriginChainResult } from './@types'
+import { IXyoOriginChainRepository, IBlockInOriginChainResult, IXyoOriginChainMutex } from './@types'
 import { XyoOriginChainStateInMemoryRepository } from './xyo-origin-chain-in-memory-repository'
 import { IXyoStorageProvider } from '@xyo-network/storage'
 import { IXyoSigner, IXyoPublicKey, IXyoSignerProvider } from '@xyo-network/signing'
@@ -35,7 +35,7 @@ export class XyoOriginChainLocalStorageRepository extends XyoBase implements IXy
     return (await this.getOrCreateInMemoryDelegate()).acquireMutex()
   }
 
-  public async releaseMutex(mutex: any) {
+  public async releaseMutex(mutex: IXyoOriginChainMutex) {
     return (await this.getOrCreateInMemoryDelegate()).releaseMutex(mutex)
   }
 

@@ -4,14 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-in-memory-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 5:58:24 pm
+ * @Last modified time: Friday, 22nd February 2019 10:14:46 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoHash } from '@xyo-network/hashing'
 import { IXyoSigner, IXyoPublicKey } from '@xyo-network/signing'
-import { IXyoOriginChainRepository, IBlockInOriginChainResult } from './@types'
+import { IXyoOriginChainRepository, IBlockInOriginChainResult, IXyoOriginChainMutex } from './@types'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoBoundWitness, IXyoBoundWitnessParty, XyoKeySet, XyoFetter, XyoBoundWitness, XyoWitness, XyoSignatureSet } from '@xyo-network/bound-witness'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
@@ -32,7 +32,7 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
   private publicKeyIndex: {[pk: string]: boolean} = {}
 
   private hashIndex: {[h: string]: boolean} = {}
-  private mutex: any
+  private mutex: IXyoOriginChainMutex | undefined
 
   constructor(
     index: number,
@@ -68,16 +68,18 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
     if (this.mutex) return undefined
 
     this.mutex = {
+      isActive: true,
       date: new Date()
     }
 
     return this.mutex
   }
 
-  public async releaseMutex(mutex: any) {
+  public async releaseMutex(mutex: IXyoOriginChainMutex) {
     if (!this.mutex) return
 
     if (this.mutex !== mutex) throw new XyoError(`Can not release mutex, does not exist`, XyoErrors.CRITICAL)
+    this.mutex.isActive = false
     this.mutex = undefined
   }
 
