@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 6:31:03 pm
+ * @Last modified time: Friday, 22nd February 2019 10:12:46 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -168,7 +168,7 @@ const originChainRepository: IXyoProvider<IXyoOriginChainRepository, IXyoOriginC
   },
   async postInit(originChainRepo, container) {
     const originChainSigners = await originChainRepo.getSigners()
-    const mutex = originChainRepo.acquireMutex()
+    const mutex = await originChainRepo.acquireMutex()
     if (!mutex) throw new XyoError(`Could not acquire mutex`, XyoErrors.CRITICAL)
 
     try {

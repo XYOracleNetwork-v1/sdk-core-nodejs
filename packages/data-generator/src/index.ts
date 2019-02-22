@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 6th February 2019 3:12:48 pm
+ * @Last modified time: Friday, 22nd February 2019 10:25:54 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -25,7 +25,7 @@ import yargs, { Arguments } from 'yargs'
 import { IXyoSigner } from '@xyo-network/signing'
 import { schema } from '@xyo-network/serialization-schema'
 import { IXyoSerializableObject, XyoBaseSerializable } from '@xyo-network/serialization'
-import { rssiSerializationProvider } from '@xyo-network/heuristics-common'
+import { XyoGps, rssiSerializationProvider } from '@xyo-network/heuristics-common'
 import { IXyoHash, getHashingProvider, XyoHash, IXyoHashProvider } from '@xyo-network/hashing'
 import { XyoIndex, XyoPreviousHash, XyoBridgeHashSet } from '@xyo-network/origin-chain'
 import { createArchivistSqlRepository } from '@xyo-network/archivist-repository.sql'
@@ -39,10 +39,18 @@ const dataSet: IXyoInteraction[] = [
       rssi: -22,
       bridgeHashSet: [
         '#0'
-      ]
+      ],
+      gps: {
+        latitude: 32.725626,
+        longitude: -117.161774
+      }
     },
     party2Heuristics: {
-      rssi: -22
+      rssi: -22,
+      gps: {
+        latitude: 32.725626,
+        longitude: -117.161774
+      }
     }
   },
   {
@@ -52,50 +60,90 @@ const dataSet: IXyoInteraction[] = [
       rssi: -22,
       bridgeHashSet: [
         '#4' // the one above
-      ]
+      ],
+      gps: {
+        latitude: 33.725626,
+        longitude: -116.161774
+      }
     },
     party2Heuristics: {
-      rssi: -22
+      rssi: -22,
+      gps: {
+        latitude: 33.725626,
+        longitude: -116.161774
+      }
     }
   },
   {
     party1Id: 1,
     party2Id: 3,
     party1Heuristics: {
-      rssi: -33
+      rssi: -33,
+      gps: {
+        latitude: 34.725626,
+        longitude: -115.161774
+      }
     },
     party2Heuristics: {
-      rssi: -33
+      rssi: -33,
+      gps: {
+        latitude: 34.725626,
+        longitude: -115.161774
+      }
     }
   },
   {
     party1Id: 4,
     party2Id: 3,
     party1Heuristics: {
-      rssi: -14
+      rssi: -14,
+      gps: {
+        latitude: 35.725626,
+        longitude: -114.161774
+      }
     },
     party2Heuristics: {
-      rssi: -14
+      rssi: -14,
+      gps: {
+        latitude: 35.725626,
+        longitude: -114.161774
+      }
     }
   },
   {
     party1Id: 4,
     party2Id: 1,
     party1Heuristics: {
-      rssi: -40
+      rssi: -40,
+      gps: {
+        latitude: 36.725626,
+        longitude: -113.161774
+      }
     },
     party2Heuristics: {
-      rssi: -40
+      rssi: -40,
+      gps: {
+        latitude: 36.725626,
+        longitude: -113.161774
+      }
     }
   },
   {
     party1Id: 4,
     party2Id: 2,
     party1Heuristics: {
-      rssi: -36
+      rssi: -36,
+      gps: {
+        latitude: 37.725626,
+        longitude: -112.161774
+      }
     },
     party2Heuristics: {
-      rssi: -36
+      rssi: -36,
+      gps: {
+        latitude: 37.725626,
+        longitude: -112.161774
+      }
     }
   }
 ]
@@ -223,6 +271,10 @@ async function tryBuildHeuristics(
         switch (def.id) {
           case schema.rssi.id:
             memo.push(rssiSerializationProvider.newInstance(val as number))
+            return memo
+          case schema.gps.id:
+            const gpsLoc = val as {latitude: number, longitude: number}
+            memo.push(new XyoGps(gpsLoc.latitude, gpsLoc.longitude))
             return memo
           case schema.bridgeHashSet.id:
             memo.push(new XyoBridgeHashSet(

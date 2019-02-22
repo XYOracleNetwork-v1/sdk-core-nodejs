@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 5:57:52 pm
+ * @Last modified time: Friday, 22nd February 2019 10:14:01 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,6 +12,11 @@
 import { IXyoHash } from '@xyo-network/hashing'
 import { IXyoSigner, IXyoPublicKey } from '@xyo-network/signing'
 import { IXyoBoundWitness } from '@xyo-network/bound-witness'
+
+export interface IXyoOriginChainMutex {
+  [k: string]: any
+  isActive: boolean
+}
 
 /**
  * Tracks the state of a particular `XyoNode` in the network. In particular,
@@ -21,9 +26,9 @@ import { IXyoBoundWitness } from '@xyo-network/bound-witness'
 
 export interface IXyoOriginChainRepository {
 
-  acquireMutex(): Promise<any | undefined>
+  acquireMutex(): Promise<IXyoOriginChainMutex | undefined>
 
-  releaseMutex(mutex: any): Promise<void>
+  releaseMutex(mutex: IXyoOriginChainMutex): Promise<void>
 
   canAcquireMutex(): Promise<boolean>
 
@@ -40,7 +45,7 @@ export interface IXyoOriginChainRepository {
   getSigners(): Promise<IXyoSigner[]>
 
   /** Adds a signer to the queue that will be used in a subsequent block */
-  addSigner(signer: IXyoSigner, mutex?: any): Promise<void>
+  addSigner(signer: IXyoSigner, mutex?: IXyoOriginChainMutex): Promise<void>
 
   /** Removes the oldest signer from the list of signers signing blocks */
   removeOldestSigner(): Promise<void>
@@ -65,7 +70,7 @@ export interface IXyoOriginChainRepository {
    * Overrides the queue behavior for setting the signers for next block,
    * and sets the passed in signers as the current signers
    */
-  setCurrentSigners(signers: IXyoSigner[], mutex: any): Promise<void>
+  setCurrentSigners(signers: IXyoSigner[], mutex: IXyoOriginChainMutex): Promise<void>
 
   /** Returns the first xyo-signer for the origin chain */
   getGenesisSigner(): Promise<IXyoSigner | undefined>
