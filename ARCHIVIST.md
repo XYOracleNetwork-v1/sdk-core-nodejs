@@ -40,6 +40,16 @@ yarn build
   yarn manage:db
 ```
 
+**Note that you should go ahead and kill any processes, and allow the wizard to select your db credentials**
+
+```bash
+Existing XyoDb container found. Status: Running
+? What would you like to do with the existing XyoDb service? …
+❯ Restart the existing database // SELECT THIS OPTION
+  Kill it and start a new one
+  No action
+```
+
 ##### Start the Archivist
 
 ```bash
@@ -113,5 +123,17 @@ Start the node
 You will see some GraphQL data and dialing nodes, notice the Xyo objects and nodes at work! 
 
 You should then see that you have discovered a peer, which will feed your archivist heuristics! Exciting stuff! 
+
+To check out a bound witness, try this command (you are running the database on Docker)
+
+```bash
+docker exec -i XyoDb mysql -uadmin -ppassword  <<< "SELECT meta FROM Xyo.OriginBlocks WHERE id=6"
+```
+
+When you enter that command, you are going to get some output with a rawSignature, heuristics, rssi, and latitude and longitude!
+
+To make it prettier, let's go into the browser and enter our raw JSON in a string like this:
+
+console.log(JSON.parse(`your raw json (make sure you use backtics!)`))
 
 ## Congratulations! You have now started an XYO Archivist!
