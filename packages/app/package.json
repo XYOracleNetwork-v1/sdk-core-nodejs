@@ -4,7 +4,12 @@
   "description": "The XYO application for running components on the XYO network",
   "main": "dist/index.js",
   "bin": {
-    "xyo-node": "bin/xyo-node"
+    "xyo-start": "bin/start-node.js",
+    "xyo-stop": "bin/stop-node.js"
+  },
+  "scripts": {
+    "start": "./bin/start-node.js",
+    "stop": "./bin/stop-node.js"
   },
   "types": "dist/index.d.ts",
   "author": "Ryan",

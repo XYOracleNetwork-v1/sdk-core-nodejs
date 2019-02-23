@@ -38,6 +38,7 @@
     "leveldown",
     "multiselect",
     "openzeppelin",
+    "pids",
     "pojo",
     "popd",
     "positionally",
