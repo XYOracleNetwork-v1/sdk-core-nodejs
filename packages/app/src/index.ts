@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 3:41:35 pm
+ * @Last modified time: Friday, 22nd February 2019 4:38:47 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,6 +20,7 @@ import { validateConfigFile } from './validator'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { CatalogueItem } from '@xyo-network/network'
 import { IXyoComponentFeatureResponse } from '@xyo-network/node-network'
+import { fstat } from 'fs'
 
 export class XyoAppLauncher extends XyoBase {
 
@@ -76,7 +77,7 @@ export class XyoAppLauncher extends XyoBase {
     this.logInfo(`Config:\n\n${this.yamlConfig}\n\n`)
   }
 
-  public start () {
+  public async start () {
     if (!this.config) throw new XyoError(`Config not initialized`, XyoErrors.CRITICAL)
 
     const nodeData = path.resolve(this.config.data, this.config.name)
@@ -110,6 +111,7 @@ export class XyoAppLauncher extends XyoBase {
       }
     }
 
+    await this.addPidToPidsFolder()
     const newNode = new XyoNode({
       config: {
         nodeRunnerDelegates: {
@@ -193,6 +195,17 @@ export class XyoAppLauncher extends XyoBase {
     })
     const managedProcessNode = new ProcessManager(newNode)
     managedProcessNode.manage(process)
+  }
+
+  private async addPidToPidsFolder() {
+    try {
+      const pidFolder = path.resolve(__dirname, '..', 'pids')
+      await createDirectoryIfNotExists(pidFolder)
+      await writeFile(path.resolve(pidFolder, `${this.config!.name}.pid`), process.pid, { encoding: 'utf8' })
+    } catch (e) {
+      this.logError(`There was an updating the pids folder`, e)
+      throw e
+    }
   }
 
   private async writeConfigFile(yamlStr: string, config: IAppConfig, configFolder: string): Promise<void> {

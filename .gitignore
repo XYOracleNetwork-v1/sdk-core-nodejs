@@ -72,6 +72,8 @@ ipfs/
 sandbox/
 **/node-db/
 **/node-data/
+**/pids/*
+!**/pids/keep
 
 packages/app/config/*
 !packages/app/config/archivist.yaml
