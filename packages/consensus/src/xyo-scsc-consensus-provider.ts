@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-scsc-consensus-provider.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 25th February 2019 10:34:51 am
+ * @Last modified time: Monday, 25th February 2019 11:27:09 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,11 +13,20 @@ import { IConsensusProvider, IRequest, ISignatureComponents, IResponse } from '.
 import { BigNumber } from 'bignumber.js'
 import { XyoBase } from '@xyo-network/base'
 import { XyoWeb3Service } from '@xyo-network/web3-service'
+import { unsubscribeFn } from '@xyo-network/utils'
 
 export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvider {
 
   constructor(private readonly web3Service: XyoWeb3Service) {
     super()
+  }
+
+  public getAllRequests(): Promise<{ [id: string]: IRequest; }> {
+    throw new Error("Method not implemented.")
+  }
+
+  public onRequestAdded(cb: (id: BigNumber, request: IRequest) => void): unsubscribeFn {
+    throw new Error("Method not implemented.")
   }
 
   public getNetworkActiveStake(): Promise<BigNumber> {

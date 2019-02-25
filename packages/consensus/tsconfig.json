@@ -23,6 +23,7 @@
   "include": ["src/**/*"],
   "references": [
     {"path": "../base"},
-    {"path": "../web3-service"}
+    {"path": "../web3-service"},
+    {"path": "../utils"}
   ]
 }

@@ -1,4 +1,5 @@
 import { BigNumber } from 'bignumber.js'
+import { unsubscribeFn } from "@xyo-network/utils"
 
 /**
  * Serves as the layer between the application and a blockchain
@@ -77,6 +78,24 @@ export interface IConsensusProvider {
    * @memberof IConsensusProvider
    */
   getRequestById(id: BigNumber): Promise<IRequest | undefined>
+
+  /**
+   * Gets all the requests in the system that do not have a response
+   *
+   * @returns {Promise<{[id: string]: IRequest}>} A dict where keys are the id of requests, and values are the request
+   * @memberof IConsensusProvider
+   */
+  getAllRequests(): Promise<{[id: string]: IRequest}>
+
+  /**
+   * Register a callback for when a new request is added.
+   * Returns an `unsubscribeFn` that can be called to stop listening
+   *
+   * @param {(id: BigNumber, request: IRequest) => void} cb
+   * @returns {unsubscribeFn}
+   * @memberof IConsensusProvider
+   */
+  onRequestAdded(cb: (id: BigNumber, request: IRequest) => void): unsubscribeFn
 
   /**
    * Returns a paginated list of unhandled requests, given a limit and

@@ -9,7 +9,8 @@
   "dependencies": {
     "bignumber.js": "^8.0.2",
     "@xyo-network/base": "^0.24.0",
-    "@xyo-network/web3-service": "^0.24.0"
+    "@xyo-network/web3-service": "^0.24.0",
+    "@xyo-network/utils": "^0.24.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
