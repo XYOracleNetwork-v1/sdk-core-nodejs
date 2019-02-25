@@ -21,5 +21,8 @@
     "src/**/*.spec.ts"
   ],
   "include": ["src/**/*"],
-  "references": []
+  "references": [
+    {"path": "../base"},
+    {"path": "../web3-service"}
+  ]
 }
