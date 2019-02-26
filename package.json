@@ -27,23 +27,23 @@
     "manage:db:logs": "docker logs -f --tail 100 XyoDb",
     "manage:ganache": "node scripts/manage-ganache.js",
     "manage:ganache:balances": "node scripts/manage-ganache.js balances",
-    "manage:ganache:logs": "docker logs -f --tail 100 ganache",    
+    "manage:ganache:logs": "docker logs -f --tail 100 ganache",
     "manage:ipfs": "node scripts/manage-ipfs.js",
     "manage:ipfs:cmd": "docker exec ipfs_host ipfs",
     "manage:ipfs:add": "node scripts/manage-ipfs.js add",
     "manage:ipfs:logs": "docker logs -f --tail 100 ipfs_host"
   },
   "devDependencies": {
+    "@types/web3": "1.0.14",
     "@xyo-network/config-tslint": "^0.1.6",
+    "enquirer": "^2.3.0",
     "husky": "^1.3.1",
     "lerna": "^3.10.7",
+    "shelljs": "^0.8.3",
     "tslint": "^5.12.1",
     "typescript": "^3.2.2",
-    "shelljs": "^0.8.3",
-    "enquirer": "^2.3.0",
-    "web3": "^1.0.0-beta.40",
-    "web3-providers": "^1.0.0-beta.40",
-    "@types/web3": "1.0.14"    
+    "web3": "^1.0.0-beta.46",
+    "web3-providers": "^1.0.0-beta.46"
   },
   "husky": {
     "hooks": {

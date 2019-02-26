@@ -63,12 +63,12 @@ export interface IConsensusProvider {
   getRewardPercentages(): Promise<IRewardComponents>
 
   /**
-   * Returns the most recent block in the blockchain, undefined it there is not yet a block
+   * Returns the previously submitted block hash
    *
-   * @returns {(Promise<IConsensusBlock | undefined>)}
+   * @returns {(Promise<number>)}
    * @memberof IConsensusProvider
    */
-  getLatestBlock(): Promise<IConsensusBlock | undefined>
+  getLatestBlockHash(): Promise<number>
 
   /**
    * Given a particular requestId, return the Request

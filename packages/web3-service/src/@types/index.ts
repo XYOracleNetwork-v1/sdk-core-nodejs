@@ -8,3 +8,12 @@
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
+// import { BigNumber } from 'bignumber.js'
+
+export interface IContractData {
+  address: string
+}
+
+export interface IConsensusContract {
+  methods: any
+}
