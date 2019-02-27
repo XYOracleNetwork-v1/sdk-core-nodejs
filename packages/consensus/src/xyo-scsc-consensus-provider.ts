@@ -9,13 +9,13 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IConsensusProvider, IRequest, ISignatureComponents, IResponse } from './@types'
+import { IConsensusProvider, IRequest, ISignatureComponents, IResponse, IRewardComponents } from './@types'
 import { BigNumber } from 'bignumber.js'
 import { XyoBase } from '@xyo-network/base'
 import { XyoWeb3Service } from '@xyo-network/web3-service'
-import { unsubscribeFn } from '@xyo-network/utils'
 
 export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvider {
+
   private web3Service: XyoWeb3Service
 
   constructor(private readonly web3: XyoWeb3Service) {
@@ -25,7 +25,11 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
 
   public async getRequestById(id: BigNumber): Promise<IRequest | undefined> {
     const consensus = await this.web3Service.getOrInitializeSCSC()
-    return consensus.methods.requestsById(id).call()
+    const req = consensus.methods.requestsById(id).call()
+    if (req.createdAt && req.createdAt.toNumber() === 0) {
+      return undefined
+    }
+    return req
   }
 
   public async getAllRequests(): Promise<{ [id: string]: IRequest }> {
@@ -42,52 +46,94 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
     return result._latest
   }
 
-  public onRequestAdded(cb: (id: BigNumber, request: IRequest) => void): unsubscribeFn {
-    throw new Error("Method not implemented.")
+  public async getNetworkActiveStake(): Promise<BigNumber> {
+    const consensus = await this.web3Service.getOrInitializeSCSC()
+    return consensus.methods.totalActiveStake().call()
   }
 
-  public getNetworkActiveStake(): Promise<BigNumber> {
-    throw new Error("Method not implemented.")
+  public async getActiveStake(paymentId: BigNumber): Promise<BigNumber> {
+    const consensus = await this.web3Service.getOrInitializeSCSC()
+    const stakeeStake = await consensus.methods.stakeeStake(paymentId).call()
+    return stakeeStake.activeStake
   }
 
-  public getActiveStake(paymentId: BigNumber): Promise<BigNumber> {
-    throw new Error("Method not implemented.")
-  }
+  public async getStakerActiveStake(paymentId: BigNumber, stakerAddr: string): Promise<BigNumber> {
+    const consensus = await this.web3Service.getOrInitializeSCSC()
+    const numStakerStakes = await consensus.methods.numStakerStakes(stakerAddr)
+    const numStakeeStakes = await consensus.methods.numStakeeStakes(paymentId)
 
-  public getStakerActiveStake(paymentId: BigNumber, stakerAddr: string): Promise<BigNumber> {
-    throw new Error("Method not implemented.")
+    const stakeIdPromises = []
+    if (numStakerStakes < numStakeeStakes) {
+      for (let i = 0; i < numStakerStakes; i++) {
+        stakeIdPromises.push(consensus.methods.stakerToStakingIds(stakerAddr, i).call())
+      }
+    } else {
+      for (let i = 0; i < numStakeeStakes; i++) {
+        stakeIdPromises.push(consensus.methods.stakeeToStakingIds(paymentId, i).call())
+      }
+    }
+    const stakeIds = await Promise.all(stakeIdPromises)
+
+    if (stakeIds.length === 0) {
+      return new BigNumber(0)
+    }
+    const stakeFeches = stakeIds.map(async (id: any) => consensus.methods.stakeData(id))
+    const stakeDatas = await Promise.all(stakeFeches)
+    const activeStake = new BigNumber(0)
+    stakeDatas.forEach((stakeData: any) => {
+      console.log("LOOKING AT STAKE DATA", stakeData)
+      if (stakeData.staker === stakerAddr && stakeData.stakee === paymentId) {
+        activeStake.plus(stakeData.amount)
+      }
+    })
+    return activeStake
   }
 
   public getStakersForStakee(paymentId: BigNumber): Promise<string[]> {
     throw new Error("Method not implemented.")
   }
 
-  public isBlockProducer(paymentId: BigNumber): Promise<boolean> {
+  public async getPaymentIdFromAddress(publicKey: string): Promise<BigNumber> {
     throw new Error("Method not implemented.")
   }
 
-  public getRewardPercentages(): Promise<import("./@types").IRewardComponents> {
-    throw new Error("Method not implemented.")
+  public async isBlockProducer(paymentId: BigNumber): Promise<boolean> {
+    const stakable = await this.web3Service.getOrInitializeStakableTokenContract()
+    return stakable.methods.isBlockProducer(paymentId).call()
   }
 
-  public getUnhandledRequests(limit: number, cursor?: BigNumber | undefined): Promise<IRequest[]> {
-    throw new Error("Method not implemented.")
+  public async getRewardPercentages(): Promise<IRewardComponents> {
+    const consensus = await this.web3Service.getOrInitializeSCSC()
+    // TODO load the Paramaterizer contract instead
+    const bpReward = await consensus.methods.params.get('xyBlockProducerRewardPct').call()
+    const rewardComponents: IRewardComponents = {
+      blockProducers: bpReward,
+      supporters: 100 - bpReward
+    }
+    return rewardComponents
+  }
+
+  public async getNumRequests(): Promise<number> {
+    const consensus = await this.web3Service.getOrInitializeSCSC()
+    return consensus.methods.numRequests().call()
+  }
+
+  public async getNumBlocks(): Promise<number> {
+    const consensus = await this.web3Service.getOrInitializeSCSC()
+    return consensus.methods.numBlocks().call()
   }
 
   public getGasEstimateForRequest(requestId: BigNumber): Promise<BigNumber> {
     throw new Error("Method not implemented.")
   }
 
-  public getExpectedGasRefund(requestIds: BigNumber[]): Promise<BigNumber> {
-    throw new Error("Method not implemented.")
-  }
-
-  public getNumRequests(): Promise<number> {
-    throw new Error("Method not implemented.")
-  }
-
-  public getNumBlocks(): Promise<number> {
-    throw new Error("Method not implemented.")
+  public async getExpectedGasRefund(requestIds: BigNumber[]): Promise<BigNumber> {
+    const requests = await this.getRequests(requestIds)
+    const total = new BigNumber(0)
+    requests.forEach((req) => {
+      total.plus(req.weiMining)
+    })
+    return total
   }
 
   public canSubmitBlock(address: string): Promise<boolean> {
@@ -125,8 +171,16 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
     throw new Error("Method not implemented.")
   }
 
-  public printSomething() {
-    console.log('hello world')
+  private async getRequests(indexes: BigNumber[]): Promise<IRequest[]> {
+    const idPromises = []
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < indexes.length; i++) {
+      const req: Promise<IRequest | undefined> = this.getRequestById(indexes[i])
+      if (req) {
+        idPromises.push(req)
+      }
+    }
+    return Promise.all(idPromises) as Promise<IRequest[]>
   }
 
   private async getNextBatchRequests(
@@ -148,18 +202,10 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
     }
 
     const indexes = await Promise.all(promises)
-    const idPromises = []
-// tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < indexes.length; i++) {
-      const request: Promise<IRequest | undefined> = this.getRequestById(indexes[i])
-      if (request) {
-        idPromises.push(request)
-      }
-    }
-    const requests = await Promise.all(idPromises)
+    const requests = await this.getRequests(indexes)
 
-    requests.map((request, index) => {
-      const req = request as IRequest
+    requests.map((req1, index) => {
+      const req = req1 as IRequest
       if (!req.hasResponse && Object.keys(unanswered).length < maxTransactions) {
         unanswered[index] = req as IRequest
       }

@@ -27,6 +27,15 @@ export interface IConsensusProvider {
   getActiveStake(paymentId: BigNumber): Promise<BigNumber>
 
   /**
+   * Given a public key address, returns the calculated paymentId
+   *
+   * @param {string} publicKey
+   * @returns {Promise<BigNumber>}
+   * @memberof IConsensusProvider
+   */
+  getPaymentIdFromAddress(publicKey: string): Promise<BigNumber>
+
+  /**
    * For a particular stakee and staker, returns the active stake
    *
    * @param {BigNumber} paymentId The stakee id
@@ -80,33 +89,12 @@ export interface IConsensusProvider {
   getRequestById(id: BigNumber): Promise<IRequest | undefined>
 
   /**
-   * Gets all the requests in the system that do not have a response
+   * Gets a page of recent requests in the system that do not have a response
    *
    * @returns {Promise<{[id: string]: IRequest}>} A dict where keys are the id of requests, and values are the request
    * @memberof IConsensusProvider
    */
   getAllRequests(): Promise<{[id: string]: IRequest}>
-
-  /**
-   * Register a callback for when a new request is added.
-   * Returns an `unsubscribeFn` that can be called to stop listening
-   *
-   * @param {(id: BigNumber, request: IRequest) => void} cb
-   * @returns {unsubscribeFn}
-   * @memberof IConsensusProvider
-   */
-  onRequestAdded(cb: (id: BigNumber, request: IRequest) => void): unsubscribeFn
-
-  /**
-   * Returns a paginated list of unhandled requests, given a limit and
-   * an optional cursor
-   *
-   * @param {number} limit The max the number of results to return
-   * @param {BigNumber} cursor An optional cursor value to offset the pagination
-   * @returns {Promise<IRequest[]>}
-   * @memberof IConsensusProvider
-   */
-  getUnhandledRequests(limit: number, cursor?: BigNumber): Promise<IRequest[]>
 
   /**
    * Given a particular requestId, returns the current gas estimate
@@ -249,10 +237,10 @@ export interface IConsensusBlock {
  * @interface IRequest
  */
 export interface IRequest {
-  xyoBounty: number
-  weiMining: number
+  xyoBounty: BigNumber
+  weiMining: BigNumber
   miningProvider: number
-  createdAt: number // Block Height in ethereum blocks
+  createdAt: BigNumber // Block Height in ethereum blocks
   requestSender: string
   requestType: IRequestType // 1-byte number
   hasResponse: boolean

@@ -161,15 +161,8 @@ class DivinerLauncher extends XyoBaseNode {
       return {
         resolve: async () => {
           const ipfsClient = await this.getIpfsClient()
-          const files = await ipfsClient.readFiles(this.divinerConfig.stakedConsensus.ipfsHash)
 
-          if (!files || files.length !== 1) {
-            const hash = this.divinerConfig.stakedConsensus.ipfsHash
-            this.logError(`Must return one and only one file for ipfs path ${hash}`)
-            throw new Error('TODO: refactor to proper xyo-error once extracted into correct module')
-          }
-
-          const result = JSON.parse(files[0].toString())
+          const result = await ipfsClient.readFile(this.divinerConfig.stakedConsensus.ipfsHash)
 
           return {
             address: '',

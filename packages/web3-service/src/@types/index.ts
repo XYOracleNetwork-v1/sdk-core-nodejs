@@ -12,8 +12,19 @@
 
 export interface IContractData {
   address: string
+  ipfsHash: string
+  name?: string
+  abi?: any
+}
+
+export interface IContractAbi {
+  methods: any
 }
 
 export interface IConsensusContract {
+  methods: any
+}
+
+export interface IStakableTokenContract {
   methods: any
 }

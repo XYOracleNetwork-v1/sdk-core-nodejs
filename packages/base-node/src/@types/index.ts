@@ -26,6 +26,7 @@ import { IXyoP2PService, IXyoPeerDiscoveryService, IXyoPeerTransport } from "@xy
 import { IXyoRepository, IXyoProvider } from "@xyo-network/utils"
 import { IXyoTransaction } from "@xyo-network/transaction-pool"
 import { XyoAboutMeService } from "@xyo-network/about-me"
+import { IContractData } from "@xyo-network/web3-service"
 
 export interface IXyoResolvers {
   [key: string]: IXyoProvider<any, any>
@@ -101,9 +102,9 @@ export interface IXyoWeb3ServiceConfig {
   host: string,
   account: string,
   contracts: {
-    PayOnDelivery: {
-      address: string
-    }
+    PayOnDelivery: IContractData,
+    XyStakingConsensus: IContractData,
+    XyStakableToken: IContractData,
   }
 }
 

@@ -18,7 +18,7 @@ import { XyoBase } from '@xyo-network/base'
 export type XyoIpfsClientCtorOptions = IIpfsInitializationOptions
 
 export interface IXyoIpfsClient {
-  readFiles(address: string): Promise<Buffer[]>
+  readFile(address: string): Promise<Buffer>
 }
 
 export class XyoIpfsClient extends XyoBase implements IXyoIpfsClient {
@@ -30,15 +30,18 @@ export class XyoIpfsClient extends XyoBase implements IXyoIpfsClient {
     this.ipfs = ipfsClient(ipfsInitializationOptions)
   }
 
-  public async readFiles(address: string): Promise<Buffer[]> {
+  public async readFile(address: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.ipfs.get(address, (err, files) => {
         if (err) {
           this.logError(`There was an error getting ipfs address ${address}`, err)
           return reject(err)
         }
-
-        return resolve(files.map(f => f.content))
+        if (!files || files.length !== 1) {
+          this.logError(`Bad ipfs hash ${address}`)
+          throw new Error('Bad Ipfs hash')
+        }
+        return resolve(JSON.parse(String(files[0].content)))
       })
     })
   }
