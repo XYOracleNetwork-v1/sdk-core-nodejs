@@ -27,6 +27,9 @@ describe('Consensus', async () => {
       }, XyStakableToken: {
         ipfsHash: "QmezVKUQ8BRK9jdEwxgNR1Xij4oqppMaGNsid7QnrBYszY",
         address: '0xf30742B61037dDD900f1B5caa358A1B311D9a375',
+      }, XyGovernance: {
+        ipfsHash: "QmP8V44TaQc6PAYF53zWgEsTU9AsawoPpbZ1p1Hio5kdfN",
+        address: '0x60C7F7cDF4a71f2e5658448CBfd5E4C377e39877',
       }
     })
     consensus = new XyoScscConsensusProvider(web3Service)
@@ -39,6 +42,7 @@ describe('Consensus', async () => {
       }, delayInms)
     })
   }
+
   describe("SCSC", () => {
     it('Should get request by id', async () => {
       const req = await consensus.getRequestById(1)

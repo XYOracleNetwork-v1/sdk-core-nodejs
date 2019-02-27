@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IConsensusProvider, IRequest, ISignatureComponents, IResponse, IRewardComponents } from './@types'
+import { IConsensusProvider, IStake, IRequest, ISignatureComponents, IResponse, IRewardComponents } from './@types'
 import { BigNumber } from 'bignumber.js'
 import { XyoBase } from '@xyo-network/base'
 import { XyoWeb3Service } from '@xyo-network/web3-service'
@@ -24,7 +24,7 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
   }
 
   public async getRequestById(id: BigNumber): Promise<IRequest | undefined> {
-    const consensus = await this.web3Service.getOrInitializeSCSC()
+    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
     const req = consensus.methods.requestsById(id).call()
     if (req.createdAt && req.createdAt.toNumber() === 0) {
       return undefined
@@ -34,31 +34,31 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
 
   public async getAllRequests(): Promise<{ [id: string]: IRequest }> {
     const resultMapping: { [id: string]: IRequest } = {}
-    const consensus = await this.web3Service.getOrInitializeSCSC()
+    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
     const numRequests = await consensus.methods.numRequests().call()
     const start = numRequests > 0 ? numRequests - 1 : 0
     return this.getNextBatchRequests(resultMapping, start)
   }
 
   public async getLatestBlockHash(): Promise<number> {
-    const consensus = await this.web3Service.getOrInitializeSCSC()
+    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
     const result = await consensus.methods.getLatestBlock().call()
     return result._latest
   }
 
   public async getNetworkActiveStake(): Promise<BigNumber> {
-    const consensus = await this.web3Service.getOrInitializeSCSC()
+    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
     return consensus.methods.totalActiveStake().call()
   }
 
   public async getActiveStake(paymentId: BigNumber): Promise<BigNumber> {
-    const consensus = await this.web3Service.getOrInitializeSCSC()
+    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
     const stakeeStake = await consensus.methods.stakeeStake(paymentId).call()
     return stakeeStake.activeStake
   }
 
   public async getStakerActiveStake(paymentId: BigNumber, stakerAddr: string): Promise<BigNumber> {
-    const consensus = await this.web3Service.getOrInitializeSCSC()
+    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
     const numStakerStakes = await consensus.methods.numStakerStakes(stakerAddr)
     const numStakeeStakes = await consensus.methods.numStakeeStakes(paymentId)
 
@@ -89,7 +89,7 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
     return activeStake
   }
 
-  public getStakersForStakee(paymentId: BigNumber): Promise<string[]> {
+  public getStakesForStakee(paymentId: BigNumber): Promise<IStake[]> {
     throw new Error("Method not implemented.")
   }
 
@@ -98,14 +98,14 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
   }
 
   public async isBlockProducer(paymentId: BigNumber): Promise<boolean> {
-    const stakable = await this.web3Service.getOrInitializeStakableTokenContract()
+    const stakable = await this.web3Service.getOrInitializeSC("XyStakableToken")
     return stakable.methods.isBlockProducer(paymentId).call()
   }
 
   public async getRewardPercentages(): Promise<IRewardComponents> {
-    const consensus = await this.web3Service.getOrInitializeSCSC()
+    const governance = await this.web3Service.getOrInitializeSC("XyGovernance")
     // TODO load the Paramaterizer contract instead
-    const bpReward = await consensus.methods.params.get('xyBlockProducerRewardPct').call()
+    const bpReward = await governance.methods.get('xyBlockProducerRewardPct').call()
     const rewardComponents: IRewardComponents = {
       blockProducers: bpReward,
       supporters: 100 - bpReward
@@ -114,12 +114,12 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
   }
 
   public async getNumRequests(): Promise<number> {
-    const consensus = await this.web3Service.getOrInitializeSCSC()
+    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
     return consensus.methods.numRequests().call()
   }
 
   public async getNumBlocks(): Promise<number> {
-    const consensus = await this.web3Service.getOrInitializeSCSC()
+    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
     return consensus.methods.numBlocks().call()
   }
 
@@ -186,7 +186,7 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
   private async getNextBatchRequests(
       unanswered: { [id: string]: IRequest }, start: number
     ): Promise<{ [id: string]: IRequest }> {
-    const consensus = await this.web3Service.getOrInitializeSCSC()
+    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
 
     const batchRequests = 30 // num requests in search scope from end of request list
     const maxTransactions = 20 // max number of transactions to return in full batch

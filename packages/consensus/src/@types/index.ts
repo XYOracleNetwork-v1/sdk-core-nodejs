@@ -46,13 +46,13 @@ export interface IConsensusProvider {
   getStakerActiveStake(paymentId: BigNumber, stakerAddr: string): Promise<BigNumber>
 
   /**
-   * Returns a list of staker address for a particular stakee
+   * Returns a list of stake objects a particular stakee
    *
    * @param {BigNumber} paymentId The stakeeId
-   * @returns {Promise<string[]>} The list of addresses that are staking the stakee
+   * @returns {Promise<string[]>} The list of stake datas
    * @memberof IConsensusProvider
    */
-  getStakersForStakee(paymentId: BigNumber): Promise<string[]>
+  getStakesForStakee(paymentId: BigNumber): Promise<IStake[]>
 
   /**
    * Given a stakeeId, will return true if the stakee is a block-producer, false otherwise
@@ -204,6 +204,21 @@ export interface IConsensusProvider {
    * @memberof IConsensusProvider
    */
   createResponses(responses: IResponse[]): Promise <Buffer[]>
+}
+
+/**
+ * The stake data object
+ *
+ * @export
+ * @interface IStake
+ */
+export interface IStake {
+  amount: BigNumber
+  stakeBlock: BigNumber
+  unstakeBlock: BigNumber
+  stakee: BigNumber
+  staker: string
+  isActivated: boolean
 }
 
 /**

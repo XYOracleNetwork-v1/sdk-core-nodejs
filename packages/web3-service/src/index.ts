@@ -15,7 +15,6 @@ export {
 } from './@types'
 
 import Web3 from 'web3'
-import { Contract } from 'web3-eth-contract'
 
 import { IConsensusContract, IContractData, IStakableTokenContract, IContractAbi } from './@types'
 import { XyoIpfsClient, IXyoIpfsClient } from '@xyo-network/ipfs-client'
@@ -23,10 +22,9 @@ import { XyoIpfsClient, IXyoIpfsClient } from '@xyo-network/ipfs-client'
 import { XyoBase } from '@xyo-network/base'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { HttpProvider } from 'web3-providers'
+import { Contract } from 'web3-eth-contract'
 
 export class XyoWeb3Service extends XyoBase {
-  private scscContract: IConsensusContract | undefined
-  private stakableTokenContract: IStakableTokenContract | undefined
   private web3: Web3 | undefined
   private ipfs: XyoIpfsClient
   constructor (
@@ -72,20 +70,12 @@ export class XyoWeb3Service extends XyoBase {
     return contract.address
   }
 
-  public async getOrInitializeSCSC(): Promise<any> {
-    if (this.scscContract) {
-      return this.scscContract
+  public async getOrInitializeSC(name: string): Promise<any> {
+    if (this.existingContracts[name].contract) {
+      return this.existingContracts[name].contract
     }
-    this.scscContract = await this.getContractByName("XyStakingConsensus") as IConsensusContract
-    return this.scscContract
-  }
-
-  public async getOrInitializeStakableTokenContract(): Promise<any> {
-    if (this.stakableTokenContract) {
-      return this.stakableTokenContract
-    }
-    this.stakableTokenContract = await this.getContractByName("XyStakableToken") as IStakableTokenContract
-    return this.stakableTokenContract
+    this.existingContracts[name].contract = await this.getContractByName(name)
+    return this.existingContracts[name].contract
   }
 
   private async getOrInitializeWeb3(): Promise<Web3> {
