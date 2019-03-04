@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 22nd February 2019 10:29:07 am
+ * @Last modified time: Monday, 4th March 2019 10:47:10 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -93,3 +93,37 @@ class XyoGpsDeserializer implements IXyoDeserializer<XyoGps> {
 }
 
 XyoGps.deserializer = new XyoGpsDeserializer()
+
+// tslint:disable-next-line:max-classes-per-file
+export class XyoJSONBlob  extends XyoBaseSerializable {
+  public static deserializer: IXyoDeserializer<XyoJSONBlob>
+  public readonly schemaObjectId = schema.jsonBlob.id
+
+  constructor(public readonly jsonStr: string) {
+    super(schema)
+  }
+
+  public getData() {
+    return Buffer.from(this.jsonStr)
+  }
+
+  public getReadableValue() {
+    return this.getJSON()
+  }
+
+  public getJSON() {
+    return JSON.parse(this.jsonStr)
+  }
+}
+
+// tslint:disable-next-line:max-classes-per-file
+class XyoJSONBlobDeserializer implements IXyoDeserializer<XyoJSONBlob> {
+  public schemaObjectId = schema.jsonBlob.id
+
+  public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoJSONBlob {
+    const parseResult = serializationService.parse(data)
+    return new XyoJSONBlob(parseResult.dataBytes.toString())
+  }
+}
+
+XyoJSONBlob.deserializer = new XyoJSONBlobDeserializer()
