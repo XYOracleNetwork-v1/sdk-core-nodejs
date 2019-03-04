@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 22nd February 2019 10:25:54 am
+ * @Last modified time: Monday, 4th March 2019 10:37:06 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -25,7 +25,7 @@ import yargs, { Arguments } from 'yargs'
 import { IXyoSigner } from '@xyo-network/signing'
 import { schema } from '@xyo-network/serialization-schema'
 import { IXyoSerializableObject, XyoBaseSerializable } from '@xyo-network/serialization'
-import { XyoGps, rssiSerializationProvider } from '@xyo-network/heuristics-common'
+import { XyoGps, rssiSerializationProvider, XyoJSONBlob } from '@xyo-network/heuristics-common'
 import { IXyoHash, getHashingProvider, XyoHash, IXyoHashProvider } from '@xyo-network/hashing'
 import { XyoIndex, XyoPreviousHash, XyoBridgeHashSet } from '@xyo-network/origin-chain'
 import { createArchivistSqlRepository } from '@xyo-network/archivist-repository.sql'
@@ -43,6 +43,9 @@ const dataSet: IXyoInteraction[] = [
       gps: {
         latitude: 32.725626,
         longitude: -117.161774
+      },
+      jsonBlob: {
+        hello: 'world'
       }
     },
     party2Heuristics: {
@@ -275,6 +278,10 @@ async function tryBuildHeuristics(
           case schema.gps.id:
             const gpsLoc = val as {latitude: number, longitude: number}
             memo.push(new XyoGps(gpsLoc.latitude, gpsLoc.longitude))
+            return memo
+          case schema.jsonBlob.id:
+            const jsonPayload = JSON.stringify(val)
+            memo.push(new XyoJSONBlob(jsonPayload))
             return memo
           case schema.bridgeHashSet.id:
             memo.push(new XyoBridgeHashSet(

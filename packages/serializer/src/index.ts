@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 17th December 2018 11:19:12 am
+ * @Last modified time: Monday, 4th March 2019 9:35:31 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -34,7 +34,7 @@ import {
 } from '@xyo-network/bound-witness'
 import { IXyoSerializationService, XyoSerializationService } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
-import { rssiSerializationProvider, XyoUnixTime, latitudeSerializationProvider, longitudeSerializationProvider, XyoGps } from '@xyo-network/heuristics-common'
+import { rssiSerializationProvider, XyoUnixTime, latitudeSerializationProvider, longitudeSerializationProvider, XyoGps, XyoJSONBlob } from '@xyo-network/heuristics-common'
 
 function createSerializer(): IXyoSerializationService {
   const serializationService = new XyoSerializationService(schema)
@@ -68,6 +68,7 @@ function createSerializer(): IXyoSerializationService {
   serializationService.addDeserializer(XyoStubSigner.deserializer)
   serializationService.addDeserializer(XyoRsaShaSigner.deserializer)
   serializationService.addDeserializer(XyoEcdsaSecp256k1Signer.deserializer)
+  serializationService.addDeserializer(XyoJSONBlob.deserializer)
   return serializationService
 }
 
