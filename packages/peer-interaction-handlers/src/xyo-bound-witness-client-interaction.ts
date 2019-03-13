@@ -30,6 +30,9 @@ import {
    * between two networked nodes.
    */
   export abstract class XyoBoundWitnessClientInteraction extends XyoBase implements IXyoNodeInteraction<IXyoBoundWitness> {
+    
+    public abstract catalogueItem: CatalogueItem
+
     constructor(
       private readonly signers: IXyoSigner[],
       private readonly payload: IXyoPayload,
