@@ -1,21 +1,21 @@
 {
   "name": "@xyo-network/origin-chain",
-  "version": "0.27.0",
+  "version": "0.29.0",
   "description": "Utilities for managing an origin chain in the xyo network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.27.0",
-    "@xyo-network/bound-witness": "^0.27.0",
-    "@xyo-network/buffer-utils": "^0.27.0",
-    "@xyo-network/errors": "^0.27.0",
-    "@xyo-network/hashing": "^0.27.0",
-    "@xyo-network/serialization": "^0.27.0",
-    "@xyo-network/serialization-schema": "^0.27.0",
-    "@xyo-network/signing": "^0.27.0",
-    "@xyo-network/storage": "^0.27.0"
+    "@xyo-network/base": "^0.29.0",
+    "@xyo-network/bound-witness": "^0.29.0",
+    "@xyo-network/buffer-utils": "^0.29.0",
+    "@xyo-network/errors": "^0.29.0",
+    "@xyo-network/hashing": "^0.29.0",
+    "@xyo-network/serialization": "^0.29.0",
+    "@xyo-network/serialization-schema": "^0.29.0",
+    "@xyo-network/signing": "^0.29.0",
+    "@xyo-network/storage": "^0.29.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
