@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: resolveSerializablesToBuffer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 6th December 2018 11:36:07 am
+ * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -27,7 +27,7 @@ export function resolveSerializablesToBuffer(
 
   const partialSchema = findSchemaById(schemaId, objectSchema)
   if (partialSchema.iterableType === 'not-iterable') {
-    throw new XyoError(`Incorrect schema iterable type for ${schemaId}`, XyoErrors.CRITICAL)
+    throw new XyoError(`Incorrect schema iterable type for ${schemaId}`)
   }
 
   const serializablesById: {[s: string]: number} = {}
@@ -41,14 +41,14 @@ export function resolveSerializablesToBuffer(
 
   const numberOfSerializerTypes = Object.keys(serializablesById).length
   if (numberOfSerializerTypes === 0) {
-    throw new XyoError(`Serializers do not conform`, XyoErrors.CRITICAL)
+    throw new XyoError(`Serializers do not conform`)
   }
 
   let arraySerializationType: IIterableType
 
   if (numberOfSerializerTypes > 1) {
     if (partialSchema.iterableType === 'iterable-typed') {
-      throw new XyoError(`Incorrect schema iterable type for ${schemaId}`, XyoErrors.CRITICAL)
+      throw new XyoError(`Incorrect schema iterable type for ${schemaId}`)
     }
     arraySerializationType = 'iterable-untyped'
   } else { // numberOfSerializerTypes === 1

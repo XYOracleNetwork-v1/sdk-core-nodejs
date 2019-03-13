@@ -32,6 +32,8 @@
     { "path": "../origin-block-repository"},
     { "path": "../buffer-utils"},
     { "path": "../errors"},
+    { "path": "../utils"},
+    { "path": "../content-addressable-service"},
     { "path": "../origin-chain"}
   ]
 }

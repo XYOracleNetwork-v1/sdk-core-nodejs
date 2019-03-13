@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: ipfs-http-client.d.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 20th December 2018 12:22:13 pm
+ * @Last modified time: Thursday, 7th March 2019 9:54:44 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -26,8 +26,20 @@ declare module 'ipfs-http-client' {
     content: Buffer
   }
 
+  export interface IIpfsAddOptions {
+    pin: boolean
+  }
+
+  export interface IIpfsAddResultItem {
+    path: string
+    hash: string
+    size: number
+  }
+
   export interface IIpfsClient {
     get(ipfsPath: string | Buffer, cb: (err: Error | undefined, files: IIpfsFileDescriptor[]) => void ): void
+    add(data: Buffer, options: IIpfsAddOptions, cb: (err: Error | null, res: IIpfsAddResultItem[]) => void): void
+    add(data: Buffer, cb: (err: Error | null, res: IIpfsAddResultItem[]) => void): void
   }
 
   export default function(options: IIpfsInitializationOptions): IIpfsClient

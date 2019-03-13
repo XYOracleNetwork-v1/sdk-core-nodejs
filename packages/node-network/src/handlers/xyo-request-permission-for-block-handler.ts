@@ -20,6 +20,7 @@ import { XyoKeySet, XyoFetter, XyoSignatureSet, XyoWitness, XyoBoundWitnessFragm
 import { schema } from '@xyo-network/serialization-schema'
 import { IRequestPermissionForBlockResult } from "@xyo-network/attribution-request"
 import { XyoError, XyoErrors } from "@xyo-network/errors"
+import { XyoBase } from "@xyo-network/base"
 
 export class XyoRequestPermissionForBlockHandler extends XyoBaseHandler {
 
@@ -164,11 +165,11 @@ export class XyoRequestPermissionForBlockHandler extends XyoBaseHandler {
   private async tryGetMutex(currentTry: number) {
     const mutex = await this.originChainRepository.acquireMutex()
     if (mutex) return mutex
-    if (currentTry === 3) throw new XyoError(`Could not acquire mutex for origin chain`, XyoErrors.CRITICAL)
+    if (currentTry === 3) throw new XyoError(`Could not acquire mutex for origin chain`)
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
+      XyoBase.timeout(() => {
         this.tryGetMutex(currentTry + 1).then(resolve).catch(reject)
-      }, 100 * (currentTry + 1)) // linear backoff
+      }, 100 * (currentTry + 1)) // linear back-off
     })
   }
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-block-permission-request-resolver.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 6:23:36 pm
+ * @Last modified time: Wednesday, 6th March 2019 2:47:07 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -28,7 +28,7 @@ export class XyoBlockPermissionRequestResolver extends XyoBase implements IBlock
   ): Promise<IRequestPermissionForBlockResult | undefined> {
     let resolved = false
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
+      XyoBase.timeout(() => {
         if (!resolved) {
           resolved = true
           resolve(undefined)

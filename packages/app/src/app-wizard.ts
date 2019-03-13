@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: app-wizard.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 3:36:39 pm
+ * @Last modified time: Wednesday, 6th March 2019 4:05:58 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,7 +15,7 @@ import { XyoBase } from '@xyo-network/base'
 import path from 'path'
 import { ISqlConnectionDetails } from '@xyo-network/archivist-repository.sql'
 import { intersection } from 'lodash'
-import { IAppConfig, ICreateConfigResult } from './@types'
+import { ICreateConfigResult, IEthCryptoKeyPair } from './@types'
 import dns from 'dns'
 
 function promptValidator<T>(validator: (val: T) => Promise<IValidationResult>) {
@@ -176,28 +176,62 @@ export async function getEthereumNodeAddress(): Promise<string> {
   return ethereumNodeAddress
 }
 
-export async function getEthereumAccountAddress(): Promise<string> {
+export async function getEthereumAccountAddress(): Promise<IEthCryptoKeyPair> {
     // @ts-ignore
   const { ethereumAccountAddress } = await prompt<{ethereumAccountAddress: string}>({
     type: 'input',
     name: 'ethereumAccountAddress',
-    message: 'What is your Ethereum Account address? This will start with `0x`',
+    message: 'What is your Ethereum address? This will start with `0x`',
     validate: promptValidator(validateHexString)
   })
 
-  return ethereumAccountAddress
+  // @ts-ignore
+  const { ethereumPrivateKey } = await prompt<{ethereumPrivateKey: string}>({
+    type: 'input',
+    name: 'ethereumPrivateKey',
+    message: 'What is your Ethereum Private key?'
+  })
+
+  return { address: ethereumAccountAddress, privateKey: ethereumPrivateKey }
 }
 
-export async function getPayOnDeliveryAddress(): Promise<string> {
+export async function getContractConfig(contract: string) {
     // @ts-ignore
-  const { payOnDeliveryAddress } = await prompt<{payOnDeliveryAddress: string}>({
+  const { contractAddr } = await prompt<{contractAddr: string}>({
     type: 'input',
-    name: 'payOnDeliveryAddress',
-    message: 'What is the PayOnDelivery contract address? This will start with `0x`',
+    name: 'contractAddr',
+    message: `What is the ${contract} contract address? This will start with \`0x\``,
     validate: promptValidator(validateHexString)
   })
 
-  return payOnDeliveryAddress
+  const { ipfsAddr } = await prompt<{ipfsAddr: string}>({
+    type: 'input',
+    name: 'ipfsAddr',
+    message: `What is the ${contract} IPFS address? This will start with \`Qm\``
+  })
+
+  return { contractAddr, ipfsAddr }
+}
+
+export async function getIPFSConfig() {
+  const { ipfsHost } = await prompt<{ipfsHost: string}>({
+    type: 'input',
+    name: 'ipfsHost',
+    message: 'What is the IPFS host value',
+    initial: 'ipfs.layerone.co'
+  })
+
+  const ipfsPort = await getPort('What is the IPFS port value', 5002)
+
+  const { ipfsProtocol } = await prompt<{ipfsProtocol: string}>({
+    initial: 'https',
+    type: 'select',
+    choices: ['https', 'http'],
+    message: `What is the IPFS protocl?`,
+    name: 'ipfsProtocol'
+  })
+
+  return { ipfsHost, ipfsPort, ipfsProtocol }
 }
 
 export async function getApiChoices(options: string[]): Promise<string[]> {
@@ -327,6 +361,8 @@ export class AppWizard extends XyoBase {
       Promise.resolve(undefined)
     )
 
+    const { ipfsHost, ipfsPort, ipfsProtocol } = await getIPFSConfig()
+
     const components = await getXyoComponents()
 
     const sqlCredentials = await (components.includes(XyoComponent.ARCHIVIST) ?
@@ -339,13 +375,32 @@ export class AppWizard extends XyoBase {
       Promise.resolve(undefined)
     )
 
-    const ethereumAccountAddress = await (components.includes(XyoComponent.DIVINER) ?
+    const ethKeys = await (components.includes(XyoComponent.DIVINER) ?
       getEthereumAccountAddress() :
       Promise.resolve(undefined)
     )
 
-    const payOnDeliveryAddress = await (components.includes(XyoComponent.DIVINER) ?
-      getPayOnDeliveryAddress() :
+    // tslint:disable-next-line:variable-name
+    const XyStakingConsensus = await (components.includes(XyoComponent.DIVINER) ?
+      getContractConfig('XyStakingConsensus') :
+      Promise.resolve(undefined)
+    )
+
+    // tslint:disable-next-line:variable-name
+    const XyStakableToken = await (components.includes(XyoComponent.DIVINER) ?
+      getContractConfig('XyStakableToken') :
+      Promise.resolve(undefined)
+    )
+
+    // tslint:disable-next-line:variable-name
+    const XyGovernance = await (components.includes(XyoComponent.DIVINER) ?
+      getContractConfig('XyGovernance') :
+      Promise.resolve(undefined)
+    )
+
+    // tslint:disable-next-line:variable-name
+    const XyPayOnDelivery = await (components.includes(XyoComponent.DIVINER) ?
+      getContractConfig('XyPayOnDelivery') :
       Promise.resolve(undefined)
     )
 
@@ -368,23 +423,6 @@ export class AppWizard extends XyoBase {
     const apis = await (graphQLPort ? getApiChoices(apiOptions) : Promise.resolve([]) as Promise<string[]>)
     const startNode = await startNodeAfterInitialize()
 
-    this.logInfo(`Node name: ${nodeName}`)
-    this.logInfo(`Data path: ${dataPath}`)
-    this.logInfo(`IP: ${ip}`)
-    this.logInfo(`P2P Port: ${p2pPort}`)
-    this.logInfo(`Serve Bound-Witness: ${actAsServer}`)
-
-    if (serverPort) this.logInfo(`Server Port: ${serverPort}`)
-
-    this.logInfo(`Xyo Components: ${components}`)
-
-    if (sqlCredentials) this.logInfo(`SQL Credentials: ${JSON.stringify(sqlCredentials, null, 2)}`)
-    if (ethereumNodeAddress) this.logInfo(`Ethereum Node Address: ${ethereumNodeAddress}`)
-    if (ethereumAccountAddress) this.logInfo(`Ethereum Account Address: ${ethereumAccountAddress}`)
-    if (payOnDeliveryAddress) this.logInfo(`PayOnDelivery Contract Address: ${payOnDeliveryAddress}`)
-    if (apis.length) this.logInfo(`APIs: ${apis.join(', ')}`)
-    if (bootstrapNodes.length) this.logInfo(`Bootstrap Nodes: ${bootstrapNodes.join(', ')}`)
-
     return {
       startNode,
       config: {
@@ -399,14 +437,43 @@ export class AppWizard extends XyoBase {
         archivist: components.includes(XyoComponent.ARCHIVIST) ? {
           sql: sqlCredentials!
         } : null,
-        diviner: components.includes(XyoComponent.DIVINER) ? {
-          ethereum: {
-            host: ethereumNodeAddress!,
-            account: ethereumAccountAddress!,
-            payOnDelivery: payOnDeliveryAddress!
-
-          }
-        } : null
+        diviner:
+          (
+            components.includes(XyoComponent.DIVINER) &&
+            ethKeys &&
+            XyStakingConsensus &&
+            XyStakableToken &&
+            XyGovernance &&
+            XyPayOnDelivery
+          ) ? {
+            ethereum: {
+              host: ethereumNodeAddress!,
+              account: ethKeys,
+              contracts: {
+                XyStakingConsensus: {
+                  ipfsHash: XyStakingConsensus.ipfsAddr,
+                  address: XyStakingConsensus.contractAddr
+                },
+                XyStakableToken: {
+                  ipfsHash: XyStakableToken.ipfsAddr,
+                  address: XyStakableToken.contractAddr
+                },
+                XyGovernance: {
+                  ipfsHash: XyGovernance.ipfsAddr,
+                  address: XyGovernance.contractAddr
+                },
+                XyPayOnDelivery: {
+                  ipfsHash: XyPayOnDelivery.ipfsAddr,
+                  address: XyPayOnDelivery.contractAddr
+                }
+              }
+            }
+          } : null,
+        ipfs: {
+          host: ipfsHost,
+          port: String(ipfsPort),
+          protocol: ipfsProtocol
+        }
       }
     }
   }

@@ -14,9 +14,11 @@
     "@xyo-network/hashing": "^0.26.0",
     "@xyo-network/network": "^0.26.0",
     "@xyo-network/origin-block-repository": "^0.26.0",
+    "@xyo-network/utils": "^0.26.0",
     "@xyo-network/origin-chain": "^0.26.0",
     "@xyo-network/serialization": "^0.26.0",
     "@xyo-network/serialization-schema": "^0.26.0",
+    "@xyo-network/content-addressable-service": "^0.26.0",
     "@xyo-network/signing": "^0.26.0"
   },
   "devDependencies": {

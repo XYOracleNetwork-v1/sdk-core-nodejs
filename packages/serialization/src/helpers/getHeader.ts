@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: getHeader.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 28th November 2018 5:12:56 pm
+ * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -46,7 +46,7 @@ export function getHeader(byteLength: number, scheme: IXyoObjectPartialSchema, w
             return { numberToEncode: 3, bytesRequired: 8 }
         }
       default:
-        throw new XyoError(`This should never happen exception`, XyoErrors.CRITICAL)
+        throw new XyoError(`This should never happen exception`)
     }
   })()
 

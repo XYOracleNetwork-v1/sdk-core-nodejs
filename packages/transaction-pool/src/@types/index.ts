@@ -1,16 +1,36 @@
-import { unsubscribeFn } from '@xyo-network/utils'
+import { IXyoMetaList } from '@xyo-network/meta-list'
 
-export type IXyoTransactionType = 'withdraw' | 'question-answer' // extend when necessary
+export type IXyoTransactionType = 'withdraw' | 'request-response' // extend when necessary
 
 export interface IXyoTransaction<T> {
   transactionType: IXyoTransactionType,
   data: T
 }
 
-export interface IXyoTransactionRepository {
-  shareTransaction(transaction: IXyoTransaction<any>): Promise<void>
-  listenForTransactions(): unsubscribeFn
+export interface IXyoRequestResponseTransaction<X, Y, Z> extends IXyoTransaction<IRequestResponse<X, Y, Z>> {
+  transactionType: 'request-response',
+  data: IRequestResponse<X, Y, Z>
+}
 
-  // tslint:disable-next-line:prefer-array-literal
-  getTransactions(): Promise<Array<IXyoTransaction<any>>>
+export interface IRequestResponse<Request, Response, Answer> {
+  request: Request,
+  response: Response,
+  answer: Answer
+}
+
+export interface IXyoTransactionMeta {
+  isAvailable: boolean
+  blockHash: string | null,
+  blockNumber: number | null,
+  blockOrder: number | null,
+  supportingDataValidated: boolean
+  type: IXyoTransactionType
+}
+
+// tslint:disable-next-line:max-line-length
+export interface IXyoTransactionRepository {
+  add(id: string, item: IXyoTransaction<any>): Promise<void>
+  contains(id: string): Promise<boolean>
+  find(id: string): Promise<IXyoTransaction<any> | undefined>
+  list(limit: number, cursor: string | undefined): Promise<IXyoMetaList<IXyoTransaction<any>>>
 }

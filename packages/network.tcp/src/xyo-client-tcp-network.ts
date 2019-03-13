@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-client-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 22nd January 2019 10:10:06 am
+ * @Last modified time: Wednesday, 6th March 2019 2:56:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -126,9 +126,10 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
 
     const nextAddress = await this.networkAddressProvider.next() // get next networkAddress to try
     if (!nextAddress) { // If no networkWork address is available, pause for 1sec, then loop again
-      return setTimeout(() => {
+      XyoBase.timeout(() => {
         this.loop(catalogue, resolve, reject)
       }, 1000)
+      return
     }
 
     try {
@@ -138,9 +139,10 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
     } catch (err) {
       this.logError(`There was an error creating client connection`, err)
       // Take 1sec break an try again
-      return setTimeout(() => {
+      XyoBase.timeout(() => {
         this.loop(catalogue, resolve, reject)
       }, 60000)
+      return
     }
   }
 

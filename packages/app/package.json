@@ -8,7 +8,7 @@
     "xyo-stop": "bin/stop-node.js"
   },
   "scripts": {
-    "start": "./bin/start-node.js",
+    "start": "node ./bin/start-node.js",
     "stop": "./bin/stop-node.js"
   },
   "types": "dist/index.d.ts",

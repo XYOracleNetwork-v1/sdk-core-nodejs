@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-local-storage-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 22nd February 2019 10:15:38 am
+ * @Last modified time: Wednesday, 6th March 2019 1:52:49 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -12,7 +12,7 @@
 import { IXyoOriginChainRepository, IBlockInOriginChainResult, IXyoOriginChainMutex } from './@types'
 import { XyoOriginChainStateInMemoryRepository } from './xyo-origin-chain-in-memory-repository'
 import { IXyoStorageProvider } from '@xyo-network/storage'
-import { IXyoSigner, IXyoPublicKey, IXyoSignerProvider } from '@xyo-network/signing'
+import { IXyoSigner, IXyoPublicKey } from '@xyo-network/signing'
 import { IXyoHash } from '@xyo-network/hashing'
 import { IXyoSerializationService } from '@xyo-network/serialization'
 import { XyoNextPublicKey } from './xyo-next-public-key'
@@ -25,7 +25,7 @@ export class XyoOriginChainLocalStorageRepository extends XyoBase implements IXy
 
   constructor (
     private readonly storageProvider: IXyoStorageProvider,
-    private readonly originBlockResolver: { getOriginBlockByHash(hash: Buffer): Promise<IXyoBoundWitness | undefined> },
+    private readonly originBlockResolver: IXyoOriginBlockByHash,
     private readonly serializationService: IXyoSerializationService
   ) {
     super()
@@ -253,4 +253,8 @@ interface ISerializedOriginChainState {
   nextPublicKey: string | null
   hashes: string[]
   genesisSigner: string | null
+}
+
+interface IXyoOriginBlockByHash {
+  getOriginBlockByHash(hash: Buffer): Promise<IXyoBoundWitness | undefined>
 }

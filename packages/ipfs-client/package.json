@@ -8,7 +8,11 @@
   "license": "MIT",
   "dependencies": {
     "@xyo-network/base": "^0.26.0",
-    "ipfs-http-client": "^28.1.0"
+    "@xyo-network/utils": "^0.26.0",
+    "@xyo-network/errors": "^0.26.0",
+    "@xyo-network/content-addressable-service": "^0.26.0",
+    "@xyo-network/serialization": "^0.26.0",
+    "ipfs-http-client": "^29.1.1"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 4th March 2019 10:37:06 am
+ * @Last modified time: Wednesday, 13th March 2019 2:52:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -179,12 +179,12 @@ async function main(args: Arguments<any>) {
     const interactions = await interactionsPromise
     const serverEntity = entitiesById[interaction.party1Id]
     if (!serverEntity) {
-      throw new XyoError(`Could not get signers for party index ${index}`, XyoErrors.CRITICAL)
+      throw new XyoError(`Could not get signers for party index ${index}`)
     }
 
     const clientEntity = entitiesById[interaction.party2Id]
     if (!clientEntity) {
-      throw new XyoError(`Could not get signers for party index ${index}`, XyoErrors.CRITICAL)
+      throw new XyoError(`Could not get signers for party index ${index}`)
     }
 
     const serverKeySet = new XyoKeySet([serverEntity.signer.publicKey])

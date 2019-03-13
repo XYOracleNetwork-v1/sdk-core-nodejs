@@ -4,10 +4,14 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 22nd February 2019 4:38:47 pm
+ * @Last modified time: Tuesday, 12th March 2019 3:44:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
+
+export {
+  IAppConfig
+} from './@types'
 
 import { XyoNode } from '@xyo-network/base-node'
 import { ProcessManager, fileExists, readFile, writeFile, createDirectoryIfNotExists } from '@xyo-network/utils'
@@ -20,7 +24,6 @@ import { validateConfigFile } from './validator'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { CatalogueItem } from '@xyo-network/network'
 import { IXyoComponentFeatureResponse } from '@xyo-network/node-network'
-import { fstat } from 'fs'
 
 export class XyoAppLauncher extends XyoBase {
 
@@ -66,26 +69,24 @@ export class XyoAppLauncher extends XyoBase {
 
     const { validates, message } = await validateConfigFile(this.config)
     if (!validates) {
-      throw new XyoError(`There was an error in your config file ${message}. Exiting`, XyoErrors.CRITICAL)
+      throw new XyoError(`There was an error in your config file ${message}. Exiting`)
     }
 
     if (writeConfigFile) {
-      this.yamlConfig = safeDump(this.config)
+      this.yamlConfig = safeDump(JSON.parse(JSON.stringify(this.config)))
       await this.writeConfigFile(this.yamlConfig, this.config, configFolder)
     }
-
-    this.logInfo(`Config:\n\n${this.yamlConfig}\n\n`)
   }
 
   public async start () {
-    if (!this.config) throw new XyoError(`Config not initialized`, XyoErrors.CRITICAL)
+    if (!this.config) throw new XyoError(`Config not initialized`)
 
     const nodeData = path.resolve(this.config.data, this.config.name)
     const isArchivist = Boolean(this.config.archivist)
     const isDiviner = Boolean(this.config.diviner)
 
     if (!isArchivist && !isDiviner) {
-      throw new XyoError(`Must support at least archivist or diviner functionality`, XyoErrors.CRITICAL)
+      throw new XyoError(`Must support at least archivist or diviner functionality`)
     }
 
     const features: IXyoComponentFeatureResponse = {}
@@ -117,8 +118,13 @@ export class XyoAppLauncher extends XyoBase {
         nodeRunnerDelegates: {
           enableBoundWitnessServer: Boolean(this.config.serverPort),
           enableGraphQLServer: Boolean(this.config.graphqlPort && this.config.apis.length > 0),
-          enableQuestionsWorker: isDiviner
+          enableQuestionsWorker: isDiviner,
+          enableBlockProducer: isDiviner,
+          enableBlockWitness: isDiviner
         },
+        blockProducer: isDiviner ? {
+          accountAddress: this.config.diviner!.ethereum.account.address
+        } : null,
         data: {
           path: nodeData
         },
@@ -184,13 +190,15 @@ export class XyoAppLauncher extends XyoBase {
         } : null,
         web3Service: isDiviner && this.config.diviner ? {
           host: this.config.diviner.ethereum.host,
-          address: this.config.diviner.ethereum.account,
-          contracts: {
-            PayOnDelivery: {
-              address: this.config.diviner.ethereum.payOnDelivery
-            }
-          }
-        } : null
+          address: this.config.diviner.ethereum.account.address,
+          privateKey: this.config.diviner.ethereum.account.privateKey,
+          contracts: this.config.diviner.ethereum.contracts
+        } : null,
+        contentAddressableService: {
+          host: this.config.ipfs.host,
+          port: this.config.ipfs.port,
+          protocol: this.config.ipfs.protocol
+        }
       }
     })
     const managedProcessNode = new ProcessManager(newNode)

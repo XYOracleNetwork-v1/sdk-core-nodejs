@@ -8,7 +8,6 @@
   "license": "MIT",
   "dependencies": {
     "@xyo-network/base": "^0.26.0",
-    "@xyo-network/ip-service": "^0.26.0",
     "@xyo-network/peer-discovery": "^0.26.0",
     "@xyo-network/signing": "^0.26.0",
     "@xyo-network/utils": "^0.26.0",

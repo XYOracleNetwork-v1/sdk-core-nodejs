@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network-pipe.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 7th December 2018 11:42:41 am
+ * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -88,20 +88,22 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
     }
 
     return new Promise((resolve, reject) => {
-      let timeout: NodeJS.Timeout
+      let timeout: (() => void) | undefined
       const listener = this.onSendOnDataFn((data) => {
-        if (timeout) clearTimeout(timeout)
+        if (timeout) timeout()
+        timeout = undefined
 
         return resolve(data)
       }, (err: any) => {
-        if (timeout) clearTimeout(timeout)
+        if (timeout) timeout()
+        timeout = undefined
         reject(err)
       })
 
-      timeout = setTimeout(async () => {
+      timeout = XyoBase.timeout(async () => {
         this.connectionResult.socket.removeListener('data', listener)
         await this.close()
-        reject(new XyoError('Connection timed out after sending message', XyoErrors.CRITICAL))
+        reject(new XyoError('Connection timed out after sending message'))
       }, 3000)
 
       this.connectionResult.socket.on('data', listener)
@@ -148,7 +150,7 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
       if (data === undefined) {
         if (chunk.length < 4) {
           this.connectionResult.socket.end()
-          return reject(new XyoError(`Corrupt payload`, XyoErrors.CRITICAL))
+          return reject(new XyoError(`Corrupt payload`))
         }
 
         sizeOfPayload = chunk.readUInt32BE(0)

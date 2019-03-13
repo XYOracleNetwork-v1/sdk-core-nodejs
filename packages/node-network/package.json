@@ -20,7 +20,8 @@
     "@xyo-network/serialization-schema": "^0.26.0",
     "@xyo-network/signing": "^0.26.0",
     "@xyo-network/transaction-pool": "^0.26.0",
-    "@xyo-network/utils": "^0.26.0"
+    "@xyo-network/utils": "^0.26.0",
+    "@xyo-network/consensus": "^0.26.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

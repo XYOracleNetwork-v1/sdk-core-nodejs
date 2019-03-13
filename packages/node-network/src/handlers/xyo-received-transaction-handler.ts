@@ -1,9 +1,7 @@
 import { XyoBaseHandler } from "./xyo-base-handler"
 import { IXyoSerializationService } from "@xyo-network/serialization"
 import { IXyoP2PService } from "@xyo-network/p2p"
-import { IXyoTransaction } from "@xyo-network/transaction-pool"
-import { IXyoRepository } from "@xyo-network/utils"
-import { IXyoHash, IXyoHashProvider } from "@xyo-network/hashing"
+import { IXyoTransactionRepository, IXyoTransaction } from "@xyo-network/transaction-pool"
 
 /*
  * @Author: XY | The Findables Company <ryanxyo>
@@ -11,7 +9,7 @@ import { IXyoHash, IXyoHashProvider } from "@xyo-network/hashing"
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-received-transaction-handler.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 12th February 2019 10:20:56 am
+ * @Last modified time: Monday, 11th March 2019 3:49:01 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -21,8 +19,7 @@ export class XyoReceivedTransactionHandler extends XyoBaseHandler {
   constructor (
     protected readonly serializationService: IXyoSerializationService,
     private readonly p2pService: IXyoP2PService,
-    private readonly hashProvider: IXyoHashProvider,
-    private readonly transactionsRepository: IXyoRepository<IXyoHash, IXyoTransaction<any>>
+    private readonly transactionsRepository: IXyoTransactionRepository
   ) {
     super(serializationService)
   }
@@ -31,12 +28,12 @@ export class XyoReceivedTransactionHandler extends XyoBaseHandler {
     const topic = 'transaction:share'
     this.addUnsubscribe(topic,
       this.p2pService.subscribe(topic, async (pk, message) => {
-        const hash = await this.hashProvider.createHash(message)
-        const alreadyExists = await this.transactionsRepository.contains(hash)
+        const jsonMsg = JSON.parse(message.toString()) as {id: string, transaction: IXyoTransaction<any>}
+        const alreadyExists = await this.transactionsRepository.contains(jsonMsg.id)
         if (alreadyExists) return
+
         try {
-          const transaction = JSON.parse(Buffer.toString())
-          await this.transactionsRepository.add(hash, transaction)
+          await this.transactionsRepository.add(jsonMsg.id, jsonMsg.transaction)
         } catch (err) {
           this.logError(`There was an issue parsing transaction from public key ${pk}`)
           // non-critical error, so swallow it

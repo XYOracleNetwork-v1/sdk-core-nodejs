@@ -28,12 +28,15 @@
     {"path": "../diviner-archivist-client"},
     {"path": "../errors"},
     {"path": "../hashing"},
-    {"path": "../node-runner"},
     {"path": "../origin-block-repository"},
     {"path": "../origin-chain"},
     {"path": "../serialization"},
     {"path": "../attribution-request"},
     {"path": "../peer-interaction"},
-    {"path": "../signing"}
+    {"path": "../transaction-pool"},
+    {"path": "../node-network"},
+    {"path": "../content-addressable-service"},
+    {"path": "../signing"},
+    {"path": "../utils"}
   ]
 }

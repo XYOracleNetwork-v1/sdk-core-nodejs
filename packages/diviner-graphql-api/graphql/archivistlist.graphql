@@ -1,7 +1,0 @@
-# import List from "list.graphql"
-# import ListMeta from "listmeta.graphql"
-
-type ArchivistList implements List {
-  meta: ListMeta!,
-  items: [String]!
-}

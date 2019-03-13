@@ -4,30 +4,42 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 25th January 2019 2:00:32 pm
+ * @Last modified time: Wednesday, 13th March 2019 9:30:10 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import Web3 from 'web3'
+export {
+  IConsensusContract,
+  IContractData
+} from './@types'
 
+import Web3 from 'web3'
+import { IContractData, ISignedTxParams } from './@types'
+import { IXyoContentAddressableService } from '@xyo-network/content-addressable-service'
 import { XyoBase } from '@xyo-network/base'
-import { XyoError, XyoErrors } from '@xyo-network/errors'
-import { HttpProvider } from 'web3-providers'
+import { XyoError } from '@xyo-network/errors'
+import { WebsocketProvider } from 'web3-providers'
+import TX from 'ethereumjs-tx'
 
 export class XyoWeb3Service extends XyoBase {
-
   private web3: Web3 | undefined
-
   constructor (
     private readonly web3ProviderArgs: any,
-    public readonly currentUser: string,
-    private readonly existingContracts: {[contractName: string]: IContractData}
+    private readonly contentService: IXyoContentAddressableService,
+    private readonly existingContracts: {[contractName: string]: IContractData},
+    public readonly accountAddress: string,
+    public readonly accountPrivateKey?: string,
   ) {
     super()
   }
 
-  public async getContractByName(name: string) {
+  public async signMessage(message: string): Promise<any> {
+    const web3 = await this.getOrInitializeWeb3()
+    return web3.eth.sign(message, this.accountAddress)
+  }
+
+  public async getContractByName(name: string): Promise<any> {
     const web3 = await this.getOrInitializeWeb3()
     const abi = await this.getABIOfContract(name)
     const address = await this.getAddressOfContract(name)
@@ -41,426 +53,124 @@ export class XyoWeb3Service extends XyoBase {
     }
   }
 
-  public async getABIOfContract(name: string): Promise<any[]> {
-    if (name === 'PayOnDelivery') {
-      return payForDeliveryABI
-    }
+  public async getABIOfContract(name: string): Promise<any> {
+    const hash = this.existingContracts[name].ipfsHash
+    const rawData = await this.contentService.get(hash)
+    const ipfsData = JSON.parse(String(rawData))
 
-    throw new Error('Not yet implemented')
+    return ipfsData.abi
+  }
+
+  public padLeft(hexString: string, toLength: number): string {
+    if (!hexString) {
+      return "0x0000000000000000000000000000000000000000000000000000000000000000"
+    }
+    if (!this.web3) {
+      const padded = hexString.startsWith('0x') ?
+      hexString.slice(2, hexString.length).padStart(64, '0') :
+      hexString.padStart(64, '0')
+      return `0x${padded}`
+    }
+    const forceHex = this.web3.utils.stringToHex(hexString)
+    return this.web3.utils.padLeft(forceHex, toLength)
   }
 
   public async getAddressOfContract(name: string): Promise<string> {
     const contract = this.existingContracts[name]
     if (!contract) {
-      throw new XyoError(`Could not find contract with name ${name}`, XyoErrors.CRITICAL)
+      throw new XyoError(`Could not find contract with name ${name}`)
     }
 
     return contract.address
   }
 
-  private async getOrInitializeWeb3(): Promise<Web3> {
+  public async sendRawTx(params: ISignedTxParams): Promise<any> {
+    const web3 = await this.getOrInitializeWeb3()
+    const from = this.accountAddress
+    const nonce = await web3.eth.getTransactionCount(from)
+    const gasLimit = web3.utils.toHex(3000000)
+    const gasPrice = web3.utils.toHex(5 * 1e9) // 5 gwei
+    const txParams = {
+      from,
+      nonce,
+      gasLimit,
+      gasPrice,
+      to: params.to,
+      value: params.value || 0,
+      data: params.data,
+    }
+    const tx = new TX(txParams)
+    tx.sign(Buffer.from(this.accountPrivateKey!, 'hex'))
+    const serializedTx = tx.serialize()
+    console.log('serializedTx : ', serializedTx)
+    return new Promise((resolve, reject) => {
+      web3.eth.sendSignedTransaction(`0x${serializedTx.toString('hex')}`)
+        .on('receipt', (r: any) => {
+          resolve(r)
+        })
+        // .on('confirmation', console.log)
+        // .on('transactionHash', console.log)
+        .on('error', reject)
+    })
+  }
+
+  public async callRawTx(params: ISignedTxParams): Promise<any> {
+    const web3 = await this.getOrInitializeWeb3()
+    const from = this.accountAddress
+    const nonce = await web3.eth.getTransactionCount(from)
+    const gasLimit = web3.utils.toHex(3000000)
+    const gasPrice = web3.utils.toHex(5 * 1e9) // 5 gwei
+    const txParams = {
+      from,
+      nonce,
+      gasLimit,
+      gasPrice,
+      to: params.to,
+      value: params.value || 0,
+      data: params.data.toString(),
+    }
+    const tx = new TX(txParams)
+    tx.sign(Buffer.from(this.accountPrivateKey!, 'hex'))
+    const serializedTx = tx.serialize()
+    console.log('serializedTx : ', serializedTx)
+    return web3.eth.call(txParams)
+  }
+
+  public async getOrInitializeWeb3(): Promise<Web3> {
     if (this.web3) {
       return this.web3
     }
 
     if (!this.web3ProviderArgs) {
-      throw new XyoError('No web3 provider args provided', XyoErrors.CRITICAL)
+      throw new XyoError('No web3 provider args provided')
     }
 
     if (typeof this.web3ProviderArgs !== 'string') { // Consider extending this
-      throw new XyoError('Web3 initialization parameters need to be a string', XyoErrors.CRITICAL)
+      throw new XyoError('Web3 initialization parameters need to be a string')
     }
 
-    const httpProvider = new HttpProvider(this.web3ProviderArgs)
+    const httpProvider = new WebsocketProvider(this.web3ProviderArgs)
     this.web3 = new Web3(httpProvider)
+
+    if (this.accountPrivateKey) {
+      const account = this.web3.eth.accounts.privateKeyToAccount(`0x${this.accountPrivateKey}`)
+      if (account.address.toLowerCase() !== this.accountAddress.toLowerCase()) {
+        throw new XyoError(`Invalid Eth crypto key pair`)
+      }
+
+      this.web3.eth.accounts.wallet.add(account)
+      this.web3.defaultAccount = account.address
+    }
+
     return this.web3
   }
-}
 
-const payForDeliveryABI = [
-  {
-    constant: true,
-    inputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    name: 'questions',
-    outputs: [
-      {
-        name: 'itemA',
-        type: 'string'
-      },
-      {
-        name: 'itemB',
-        type: 'string'
-      },
-      {
-        name: 'marker',
-        type: 'string'
-      },
-      {
-        name: 'questionId',
-        type: 'uint256'
-      },
-      {
-        name: 'beneficiary',
-        type: 'address'
-      },
-      {
-        name: 'buyer',
-        type: 'address'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [],
-    name: 'renounceOwnership',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [
-      {
-        name: 'account',
-        type: 'address'
-      }
-    ],
-    name: 'isSigner',
-    outputs: [
-      {
-        name: '',
-        type: 'bool'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'owner',
-    outputs: [
-      {
-        name: '',
-        type: 'address'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'isOwner',
-    outputs: [
-      {
-        name: '',
-        type: 'bool'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [
-      {
-        name: '',
-        type: 'uint256'
-      },
-      {
-        name: '',
-        type: 'address'
-      }
-    ],
-    name: '_deposits',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [],
-    name: 'renounceSigner',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: 'account',
-        type: 'address'
-      }
-    ],
-    name: 'addSigner',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: 'newOwner',
-        type: 'address'
-      }
-    ],
-    name: 'transferOwnership',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    inputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'constructor'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        name: 'itemA',
-        type: 'string'
-      },
-      {
-        indexed: false,
-        name: 'itemB',
-        type: 'string'
-      },
-      {
-        indexed: false,
-        name: 'marker',
-        type: 'string'
-      },
-      {
-        indexed: false,
-        name: 'weiAmount',
-        type: 'uint256'
-      },
-      {
-        indexed: false,
-        name: 'beneficiary',
-        type: 'address'
-      }
-    ],
-    name: 'DeliveryQuestion',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        name: 'itemA',
-        type: 'string'
-      },
-      {
-        indexed: false,
-        name: 'itemB',
-        type: 'string'
-      },
-      {
-        indexed: false,
-        name: 'weiAmount',
-        type: 'uint256'
-      },
-      {
-        indexed: false,
-        name: 'beneficiary',
-        type: 'address'
-      }
-    ],
-    name: 'PayedForDelivery',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        name: 'account',
-        type: 'address'
-      }
-    ],
-    name: 'SignerAdded',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        name: 'account',
-        type: 'address'
-      }
-    ],
-    name: 'SignerRemoved',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        name: 'previousOwner',
-        type: 'address'
-      },
-      {
-        indexed: true,
-        name: 'newOwner',
-        type: 'address'
-      }
-    ],
-    name: 'OwnershipTransferred',
-    type: 'event'
-  },
-  {
-    constant: true,
-    inputs: [
-      {
-        name: 'itemA',
-        type: 'string'
-      },
-      {
-        name: 'itemB',
-        type: 'string'
-      }
-    ],
-    name: 'itemHash',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'pure',
-    type: 'function'
-  },
-  {
-    constant: true,
-    inputs: [
-      {
-        name: 'itemA',
-        type: 'string'
-      },
-      {
-        name: 'itemB',
-        type: 'string'
-      },
-      {
-        name: 'beneficiary',
-        type: 'address'
-      }
-    ],
-    name: 'depositsFor',
-    outputs: [
-      {
-        name: '',
-        type: 'uint256'
-      }
-    ],
-    payable: false,
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: 'itemA',
-        type: 'string'
-      },
-      {
-        name: 'itemB',
-        type: 'string'
-      },
-      {
-        name: 'beneficiary',
-        type: 'address'
-      },
-      {
-        name: 'marker',
-        type: 'string'
-      }
-    ],
-    name: 'escrowPayment',
-    outputs: [],
-    payable: true,
-    stateMutability: 'payable',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: 'itemA',
-        type: 'string'
-      },
-      {
-        name: 'itemB',
-        type: 'string'
-      },
-      {
-        name: 'beneficiary',
-        type: 'address'
-      }
-    ],
-    name: 'payForDelivery',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: 'itemA',
-        type: 'string'
-      },
-      {
-        name: 'itemB',
-        type: 'string'
-      },
-      {
-        name: 'beneficiary',
-        type: 'address'
-      }
-    ],
-    name: 'refundPayment',
-    outputs: [],
-    payable: false,
-    stateMutability: 'nonpayable',
-    type: 'function'
+  public async getOrInitializeSC(name: string): Promise<any> {
+    if (this.existingContracts[name].contract) {
+      return this.existingContracts[name].contract
+    }
+    this.existingContracts[name].contract = await this.getContractByName(name)
+    return this.existingContracts[name].contract
   }
-]
 
-export interface IContractData {
-  address: string
 }

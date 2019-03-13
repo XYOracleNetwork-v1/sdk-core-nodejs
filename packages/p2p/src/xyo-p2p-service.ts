@@ -37,7 +37,6 @@ export class XyoP2PService extends XyoBase implements IXyoP2PService {
   }
 
   public publish(topic: string, message: Buffer) {
-    this.logInfo(`Publishing message with topic ${topic}`)
     this.discoveryService.getListOfKnownPublicKeys().forEach(publicKey =>
       this.publishMessageToPeer(topic, message, publicKey))
 

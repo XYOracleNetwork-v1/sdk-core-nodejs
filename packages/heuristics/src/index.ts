@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 1:47:24 pm
+ * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -42,7 +42,7 @@ export class XyoSerializableNumber extends XyoBaseSerializable  {
       return doubleToBuffer(this.number)
     }
 
-    throw new XyoError(`Unsupported number typed ${this.numberType || 'undefined'}`, XyoErrors.CRITICAL)
+    throw new XyoError(`Unsupported number typed ${this.numberType || 'undefined'}`)
   }
 
   public getReadableValue() {
@@ -71,7 +71,7 @@ export class XyoNumberDeserializer implements IXyoDeserializer<XyoSerializableNu
     } else if (this.numberType === 'double') {
       number = readDoubleFromBuffer(parseResult.dataBytes, 0)
     } else {
-      throw new XyoError(`Unsupported number typed ${this.numberType || 'undefined'}`, XyoErrors.CRITICAL)
+      throw new XyoError(`Unsupported number typed ${this.numberType || 'undefined'}`)
     }
 
     return new XyoSerializableNumber(number, serializationService.schema, this.schemaObjectId, this.numberType)

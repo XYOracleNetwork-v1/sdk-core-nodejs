@@ -35,6 +35,7 @@
     {"path": "../transaction-pool"},
     {"path": "../utils"},
     {"path": "../errors"},
+    {"path": "../consensus"},
     {"path": "../base"}
   ]
 }

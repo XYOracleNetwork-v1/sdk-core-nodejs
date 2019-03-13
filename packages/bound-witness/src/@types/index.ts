@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 23rd January 2019 1:50:55 pm
+ * @Last modified time: Friday, 8th March 2019 12:06:03 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -95,4 +95,5 @@ export interface IXyoBoundWitness extends IXyoSerializableObject, IXyoBoundWitne
   getSigningData(): Buffer
   getHeuristicFromParty<T extends IXyoSerializableObject>(partyIndex: number, schemaObjectId: number): T | undefined
   getMetaDataItemFromParty<T extends IXyoSerializableObject>(partyIndex: number, schemaObjectId: number): T | undefined
+  stripMetaData(): IXyoBoundWitness
 }

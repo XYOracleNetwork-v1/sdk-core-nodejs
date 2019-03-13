@@ -76,7 +76,6 @@ export class XyoPeerDiscoveryService extends XyoBase implements IXyoPeerDiscover
   }
 
   public async start() {
-    this.logInfo(`Starting discovery`)
     if (this.running) return this.starting
 
     this.starting = this.transport.start().then(() => undefined)
@@ -117,7 +116,6 @@ export class XyoPeerDiscoveryService extends XyoBase implements IXyoPeerDiscover
   }
 
   private dialBootstrapNodes () {
-    this.logInfo(`Dialing bootstrap nodes`)
     this.bootstrapAddresses.forEach((address) => {
       this.transport.dial(address).then((connection) => {
         connection.write(this.encodeKeyExchange())

@@ -25,7 +25,6 @@
     {"path": "../base"},
     {"path": "../signing"},
     {"path": "../peer-discovery"},
-    {"path": "../utils"},
-    {"path": "../ip-service"}
+    {"path": "../utils"}
   ]
 }

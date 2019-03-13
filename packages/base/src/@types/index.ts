@@ -4,11 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 10th December 2018 1:22:44 pm
+ * @Last modified time: Wednesday, 6th March 2019 1:42:35 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
-
-export interface ISimpleCache {
-  getOrCreate<T>(name: string, initializer: () => T): T
-}

@@ -34,7 +34,7 @@
       "request": "launch",
       "name": "Test Open File",
       "program": "${workspaceFolder}/node_modules/jest/bin/jest",
-      "args": ["${relativeFile}"],
+      "args": ["${relativeFile}", "--detectOpenHandles"],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "env": {

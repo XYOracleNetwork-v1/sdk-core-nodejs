@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: resolvers-enum
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 14th February 2019 4:22:54 pm
+ * @Last modified time: Monday, 4th March 2019 12:50:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,7 +14,7 @@ export enum IResolvers {
   NETWORK = 'network',
   PEER_CONNECTION_DELEGATE = 'peerConnectionDelegate',
   PEER_TRANSPORT = 'peerTransport',
-  NODE_RUNNER_DELEGATES = 'nodeRunnerDelegates',
+  RUNNABLES = 'nodeRunnerDelegates',
   NODE_NETWORK = 'nodeNetwork',
   P2P_SERVICE = 'p2pService',
   DISCOVERY_NETWORK = 'discovery',
@@ -33,5 +33,9 @@ export enum IResolvers {
   QUESTIONS_PROVIDER = 'questionsProvider',
   ABOUT_ME_SERVICE = 'aboutMeService',
   GRAPHQL = 'graphql',
-  WEB3_SERVICE = 'web3Service'
+  WEB3_SERVICE = 'web3Service',
+  CONTENT_ADDRESSABLE_SERVICE = "contentAddressableService",
+  CONSENSUS_PROVIDER = "consensusProvider",
+  BLOCK_PRODUCER = "blockProducer",
+  BLOCK_WITNESS = "blockWitness"
 }

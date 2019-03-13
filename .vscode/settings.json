@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
+    "BN",
     "Cyclable",
     "Deserializer",
     "Deserializers",
@@ -13,6 +14,7 @@
     "QLJSON",
     "SCSC",
     "Serializables",
+    "Stakable",
     "Stakee",
     "Staker",
     "Stakers",
@@ -30,9 +32,11 @@
     "eval",
     "graphql",
     "hasher",
+    "hdwallet",
     "ipfs",
     "keccak",
     "kovan",
+    "layerone",
     "lerna",
     "leveldb",
     "leveldown",
@@ -51,9 +55,11 @@
     "serializable",
     "serializer",
     "serializers",
+    "sigs",
     "struct",
     "transpiled",
     "transpiles",
+    "unstake",
     "workspaces",
     "xyfindables"
   ],
