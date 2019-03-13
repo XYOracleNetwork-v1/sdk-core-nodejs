@@ -1,15 +1,15 @@
 {
   "name": "@xyo-network/peer-connections",
-  "version": "0.26.0",
+  "version": "0.27.0",
   "description": "A number of utility classes for connecting with other peers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.26.0",
-    "@xyo-network/bound-witness": "^0.26.0",
-    "@xyo-network/network": "^0.26.0"
+    "@xyo-network/base": "^0.27.0",
+    "@xyo-network/bound-witness": "^0.27.0",
+    "@xyo-network/network": "^0.27.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
