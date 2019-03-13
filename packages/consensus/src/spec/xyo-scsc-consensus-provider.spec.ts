@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-scsc-consensus-provider.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 11th March 2019 12:55:20 pm
+ * @Last modified time: Wednesday, 13th March 2019 3:09:06 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,7 +13,6 @@ import { XyoScscConsensusProvider } from '../xyo-scsc-consensus-provider'
 import { XyoIpfsClient, XyoIpfsClientCtorOptions } from '@xyo-network/ipfs-client'
 import { XyoWeb3Service } from '@xyo-network/web3-service'
 import { BN, fileExists, readFile } from '@xyo-network/utils'
-import { IAppConfig } from '@xyo-network/app'
 import path from 'path'
 import yaml from 'js-yaml'
 
@@ -34,7 +33,7 @@ describe('Consensus', async () => {
     console.log(`Loaded Configuration name: ${configName}`)
 
     const file = await readFile(configPath, 'utf8')
-    const config = yaml.safeLoad(file) as IAppConfig
+    const config = yaml.safeLoad(file)
 
     const host = config.diviner!.ethereum.host
     account = config.diviner!.ethereum.account.address

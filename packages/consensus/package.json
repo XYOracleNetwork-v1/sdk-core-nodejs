@@ -7,7 +7,6 @@
   "author": "Ryan",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/app": "^0.27.0",
     "@xyo-network/base": "^0.27.0",
     "@xyo-network/errors": "^0.27.0",
     "@xyo-network/ipfs-client": "^0.27.0",
