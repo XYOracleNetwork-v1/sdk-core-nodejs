@@ -27,7 +27,7 @@
     "manage:db:logs": "docker logs -f --tail 100 XyoDb",
     "manage:ganache": "node scripts/manage-ganache.js",
     "manage:ganache:balances": "node scripts/manage-ganache.js balances",
-    "manage:ganache:logs": "docker logs -f --tail 100 ganache",    
+    "manage:ganache:logs": "docker logs -f --tail 100 ganache",
     "manage:ipfs": "node scripts/manage-ipfs.js",
     "manage:ipfs:cmd": "docker exec ipfs_host ipfs",
     "manage:ipfs:add": "node scripts/manage-ipfs.js add",
@@ -43,7 +43,7 @@
     "enquirer": "^2.3.0",
     "web3": "^1.0.0-beta.40",
     "web3-providers": "^1.0.0-beta.40",
-    "@types/web3": "1.0.14"    
+    "@types/web3": "1.0.14"
   },
   "husky": {
     "hooks": {
