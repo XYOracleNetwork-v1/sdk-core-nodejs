@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/scsc",
-  "version": "0.25.0",
+  "version": "0.26.0",
   "description": "Interfaces and utilities relating to the SCSC contracts",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

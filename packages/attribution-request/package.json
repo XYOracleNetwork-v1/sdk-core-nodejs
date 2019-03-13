@@ -1,15 +1,15 @@
 {
   "name": "@xyo-network/attribution-request",
-  "version": "0.25.0",
+  "version": "0.26.0",
   "description": "Provides functionality for doing just-in-time attribution requests",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/bound-witness": "^0.25.0",
-    "@xyo-network/hashing": "^0.25.0",
-    "@xyo-network/signing": "^0.25.0"
+    "@xyo-network/bound-witness": "^0.26.0",
+    "@xyo-network/hashing": "^0.26.0",
+    "@xyo-network/signing": "^0.26.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
