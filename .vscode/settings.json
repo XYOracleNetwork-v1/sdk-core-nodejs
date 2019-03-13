@@ -71,5 +71,7 @@
     "**/diviner-db": true,
     "**/logs": true,
     "**/coverage": true
-  }
+  },
+  "tslint.autoFixOnSave": true,
+
 }

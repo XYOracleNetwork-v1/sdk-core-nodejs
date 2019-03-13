@@ -184,6 +184,12 @@
     },
     {
       "path": "block-witness"
+    },
+    {
+      "path": "ble"
+    },
+    {
+      "path": "ble.noble"
     }
   ],
   "include": [
@@ -242,6 +248,8 @@
     "app/src/**/*.ts",
     "consensus/src/**/*.ts",
     "block-producer/src/**/*.ts",
-    "block-witness/src/**/*.ts"
+    "block-witness/src/**/*.ts",
+    "ble/src/**/*.ts",
+    "ble.noble/src/**/*.ts"
   ]
 }
