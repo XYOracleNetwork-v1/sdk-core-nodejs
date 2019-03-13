@@ -22,6 +22,7 @@ import { IXyoNodeInteraction } from '@xyo-network/peer-interaction'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoSigner } from '@xyo-network/signing'
 import { IXyoSerializationService, ParseQuery } from '@xyo-network/serialization'
+import { InnerBoundWitness } from './xyo-inner-bound-witness'
 
 /**
  * An `XyoBoundWitnessInteraction` manages a "session"
@@ -44,7 +45,6 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
   /**
    * Does a bound witness with another node
    */
-
   public async run(networkPipe: IXyoNetworkPipe): Promise<IXyoBoundWitness> {
     return new Promise(async (resolve, reject) => {
       try {
@@ -144,16 +144,5 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
       this.logError(`Failed BoundWitnessTransfer on step 1`, err)
       throw err
     }
-  }
-}
-
-// tslint:disable-next-line:max-classes-per-file
-class InnerBoundWitness extends XyoBoundWitness {
-  constructor(fetterWitnesses: FetterOrWitness[], private readonly signingData: Buffer) {
-    super(fetterWitnesses)
-  }
-
-  public getSigningData() {
-    return this.signingData
   }
 }

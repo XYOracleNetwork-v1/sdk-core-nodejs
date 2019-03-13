@@ -12,3 +12,5 @@
 export { XyoBoundWitnessServerInteraction } from './xyo-bound-witness-server-interaction'
 export { XyoBoundWitnessStandardServerInteraction } from './xyo-bound-witness-standard-server-interaction'
 export { XyoBoundWitnessTakeOriginChainServerInteraction } from './xyo-bound-witness-take-origin-chain-server-interaction'
+export { XyoBoundWitnessClientInteraction } from './xyo-bound-witness-client-interaction'
+export { XyoBoundWitnessStandardClientInteraction } from './xyo-bound-witness-standard-client-interaction'
