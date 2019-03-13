@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/app",
-  "version": "0.24.0",
+  "version": "0.25.0",
   "description": "The XYO application for running components on the XYO network",
   "main": "dist/index.js",
   "bin": {
@@ -15,13 +15,13 @@
   "author": "Ryan",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/archivist-repository.sql": "^0.24.0",
-    "@xyo-network/base": "^0.24.0",
-    "@xyo-network/base-node": "^0.24.0",
-    "@xyo-network/errors": "^0.24.0",
-    "@xyo-network/network": "^0.24.0",
-    "@xyo-network/node-network": "^0.24.0",
-    "@xyo-network/utils": "^0.24.0",
+    "@xyo-network/archivist-repository.sql": "^0.25.0",
+    "@xyo-network/base": "^0.25.0",
+    "@xyo-network/base-node": "^0.25.0",
+    "@xyo-network/errors": "^0.25.0",
+    "@xyo-network/network": "^0.25.0",
+    "@xyo-network/node-network": "^0.25.0",
+    "@xyo-network/utils": "^0.25.0",
     "enquirer": "^2.3.0",
     "joi": "^14.3.1",
     "js-yaml": "^3.12.1",

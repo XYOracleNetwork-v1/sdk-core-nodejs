@@ -1,13 +1,13 @@
 {
   "name": "@xyo-network/serialization-schema",
-  "version": "0.24.0",
+  "version": "0.25.0",
   "description": "The schema being used to serialize objects in Xyo",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/serialization": "^0.24.0"
+    "@xyo-network/serialization": "^0.25.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

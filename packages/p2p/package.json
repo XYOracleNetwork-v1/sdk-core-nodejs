@@ -1,14 +1,14 @@
 {
   "name": "@xyo-network/p2p",
-  "version": "0.24.0",
+  "version": "0.25.0",
   "description": "A peer to peer network module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.24.0",
-    "@xyo-network/utils": "^0.24.0",
+    "@xyo-network/base": "^0.25.0",
+    "@xyo-network/utils": "^0.25.0",
     "multiaddr": "^6.0.3"
   },
   "devDependencies": {

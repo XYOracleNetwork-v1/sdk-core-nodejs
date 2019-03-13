@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/block-witness",
-  "version": "0.24.0",
+  "version": "0.25.0",
   "private": true,
   "description": "Given a block candidate will run the validations necessary to create a new block",
   "main": "dist/index.js",
