@@ -9,7 +9,9 @@
   "dependencies": {
     "@xyo-network/base": "^0.26.0",
     "@xyo-network/questions": "^0.26.0",
-    "@xyo-network/web3-service": "^0.26.0"
+    "@xyo-network/utils": "^0.26.0",
+    "@xyo-network/consensus": "^0.26.0",
+    "@xyo-network/content-addressable-service": "^0.26.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

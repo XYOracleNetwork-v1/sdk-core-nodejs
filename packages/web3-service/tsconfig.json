@@ -23,6 +23,8 @@
   "include": ["src/**/*"],
   "references": [
     {"path": "../base"},
-    {"path": "../errors"}
+    {"path": "../content-addressable-service"},
+    {"path": "../errors"},
+    {"path": "../utils"}
   ]
 }

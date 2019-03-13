@@ -20,3 +20,7 @@ archivist:
     database: Xyo
     port: 3306
 diviner: null
+ipfs:
+  host: ipfs.layerone.co
+  port: '5002'
+  protocol: https

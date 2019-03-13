@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 3:36:30 pm
+ * @Last modified time: Wednesday, 6th March 2019 4:04:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -26,13 +26,31 @@ export interface IAppConfig {
   apis: string[]
   bootstrapNodes: string[]
   archivist: {
-    sql: ISqlConnectionDetails;
+    sql: ISqlConnectionDetails
   } | null
   diviner: {
     ethereum: {
       host: string;
-      account: string;
-      payOnDelivery: string;
+      account: IEthCryptoKeyPair;
+      contracts: {
+        [s: string]: {
+          ipfsHash: string,
+          address: string
+        }
+      }
     };
-  } | null
+  } | null,
+  ipfs: {
+    host: string,
+    port: string,
+    protocol: string
+  }
+}
+export interface IEthContractAddressIPFS {
+  ipfsHash: string,
+  address: string
+}
+export interface IEthCryptoKeyPair {
+  address: string,
+  privateKey: string
 }

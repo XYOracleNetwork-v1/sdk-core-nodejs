@@ -62,8 +62,6 @@ type Query {
 ${Object.values(typesByName).join('\n\n')}
 `
 
-  console.log(`schema \n\n${schema}`)
-
   const server = new XyoGraphQLServer(schema, config.port)
   Object.keys(resolvers).forEach((route) => {
     server.addQueryResolver(route, resolvers[route])

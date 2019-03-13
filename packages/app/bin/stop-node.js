@@ -56,5 +56,10 @@ function killProc(pidFile, pidFolder) {
   shelljs.rm(filePath)
 }
 
+module.exports = {
+  killProcess: killProc,
+  killAllProcesses: main
+}
+
 if(require.main === module) main(process.argv)
 

@@ -22,8 +22,10 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    { "path": "../web3-service"},
+    { "path": "../consensus"},
     { "path": "../questions"},
-    { "path": "../base"}
+    { "path": "../utils"},
+    { "path": "../base"},
+    { "path": "../content-addressable-service"}
   ]
 }

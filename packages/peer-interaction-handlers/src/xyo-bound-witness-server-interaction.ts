@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-server-interaction.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 5th February 2019 2:37:22 pm
+ * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -72,7 +72,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
 
     const numberOfItemsInTransfer = transferQuery.getChildrenCount()
     if (numberOfItemsInTransfer < 2 || numberOfItemsInTransfer % 2 !== 0) {
-      throw new XyoError(`Invalid Bound Witness Fragments`, XyoErrors.CRITICAL)
+      throw new XyoError(`Invalid Bound Witness Fragments`)
     }
 
     const aggregator: Buffer[] = [fetter.serialize()]
@@ -109,7 +109,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
       return new InnerBoundWitness(fragmentParts, signingData)
     }
 
-    throw new XyoError(`Peer disconnected in xyo-bound-witness-interaction`, XyoErrors.CRITICAL)
+    throw new XyoError(`Peer disconnected in xyo-bound-witness-interaction`)
   }
 
   private getFirstMessage() {
@@ -137,7 +137,7 @@ export abstract class XyoBoundWitnessServerInteraction extends XyoBase implement
       let response: Buffer | undefined
       response = await networkPipe.send(bytesToSend)
       if (!response) {
-        throw new XyoError(`Unexpected undefined response in bound witness interaction`, XyoErrors.CRITICAL)
+        throw new XyoError(`Unexpected undefined response in bound witness interaction`)
       }
       return response
     } catch (err) {

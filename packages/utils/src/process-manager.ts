@@ -12,6 +12,7 @@
 // tslint:disable:no-console
 
 import { LifeCycleRunner } from "."
+import { XyoBase } from "@xyo-network/base"
 
 export class ProcessManager {
 
@@ -21,9 +22,11 @@ export class ProcessManager {
 
   public async manage(process: NodeJS.Process) {
     process.on('beforeExit', (exitCode) => {
+      XyoBase.unschedule()
       console.log(`Will exit with exitCode ${exitCode}`)
     })
     .on('exit', async (exitCode) => {
+      XyoBase.unschedule()
       if (this.program.canStop()) {
         await this.program.stop()
       }
@@ -70,7 +73,12 @@ export class ProcessManager {
       process.exit(0)
     })
 
-    await this.program.initialize()
-    await this.program.start()
+    try {
+      await this.program.initialize()
+      await this.program.start()
+    } catch (e) {
+      console.error(`Uncaught error in process-manager`, e)
+      throw e
+    }
   }
 }

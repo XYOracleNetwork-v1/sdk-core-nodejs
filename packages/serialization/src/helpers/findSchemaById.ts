@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: findSchemaById.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 28th November 2018 5:12:43 pm
+ * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,7 +18,7 @@ export function findSchemaById(schemaId: number, objectSchema: IXyoObjectSchema)
   })
 
   if (!key) {
-    throw new XyoError(`Could not find a serializer with id ${schemaId}`, XyoErrors.CRITICAL)
+    throw new XyoError(`Could not find a serializer with id ${schemaId}`)
   }
 
   return objectSchema[key]

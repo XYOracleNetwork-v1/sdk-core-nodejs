@@ -4,14 +4,16 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 10:17:21 am
+ * @Last modified time: Monday, 11th March 2019 3:50:11 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { unsubscribeFn } from '@xyo-network/utils'
+import { unsubscribeFn, BN } from '@xyo-network/utils'
 import { IRequestPermissionForBlockResult } from '@xyo-network/attribution-request'
 import { IXyoHash } from '@xyo-network/hashing'
+import { IXyoTransaction } from '@xyo-network/transaction-pool'
+import { IConsensusProvider } from '@xyo-network/consensus'
 
 export interface IXyoNodeNetwork {
 
@@ -38,6 +40,16 @@ export interface IXyoNodeNetwork {
   ): unsubscribeFn
 
   serviceBlockPermissionRequests(): unsubscribeFn
+
+  shareTransaction(id: string, transaction: IXyoTransaction<any>): Promise<void>
+  listenForTransactions(): unsubscribeFn
+
+  requestSignaturesForBlockCandidate(
+    candidate: IBlockWitnessRequestDTO,
+    callback: (publicKey: string, signatureComponents: { r: string, s: string, v: number}) => void
+  ): unsubscribeFn
+
+  listenForBlockWitnessRequests(consensusProvider: IConsensusProvider): unsubscribeFn
 }
 
 export interface IXyoComponentArchivistFeatureDetail {
@@ -60,4 +72,22 @@ export interface IXyoComponentFeatureDetail<T extends {}> {
   featureType: string
   supportsFeature: boolean,
   featureOptions: T
+}
+
+export interface IBlockWitnessRequestDTO {
+  blockHash: string
+  agreedStakeBlockHeight: string
+  previousBlockHash: string
+  supportingDataHash: string
+  requests: string[],
+  responses: string
+}
+
+export interface IBlockWitnessRequest {
+  blockHash: string
+  agreedStakeBlockHeight: BN,
+  previousBlockHash: string
+  supportingDataHash: string
+  requests: string[],
+  responses: Buffer
 }

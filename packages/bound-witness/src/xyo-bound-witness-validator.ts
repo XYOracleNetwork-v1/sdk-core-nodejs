@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-validator.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 14th February 2019 2:01:15 pm
+ * @Last modified time: Thursday, 7th March 2019 3:53:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -35,14 +35,14 @@ export class XyoBoundWitnessValidator extends XyoBase {
     this.options = validationOptions
   }
 
-  public async validateBoundWitness(hash: IXyoHash, originBlock: IXyoBoundWitness): Promise<void> {
+  public async validateBoundWitness(hash: IXyoHash | undefined, originBlock: IXyoBoundWitness): Promise<void> {
     const signaturesLength = originBlock.signatures.length
     const heuristicsLength = originBlock.heuristics.length
     const metadataLength = originBlock.metadata.length
     const keysLength = originBlock.publicKeys.length
     const signingData = originBlock.getSigningData()
 
-    if (this.options.validateHash) {
+    if (this.options.validateHash && hash) {
       const validates = await hash.verifyHash(signingData)
       if (!validates) {
         throw new XyoError(`Hash does not match signing data`, XyoErrors.INVALID_PARAMETERS)

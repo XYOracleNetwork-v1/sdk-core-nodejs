@@ -19,10 +19,16 @@ export {
   ILifeCycleEvent,
   IXyoProvider,
   IXyoProviderContainer,
-  depScope
+  depScope,
+  IRepoItem
 } from './@types'
 
 export { ProcessManager } from './process-manager'
+
+/// <reference path="./@types/bs58.d.ts" />
+import bs58 from 'bs58'
+import BigNumber = require('bn.js')
+export { BigNumber as BN }
 
 import { promisify } from "util"
 import fs from 'fs'
@@ -69,6 +75,12 @@ export async function createDirectoryIfNotExists(p: string) {
 export const readFile = promisify(fs.readFile)
 export const writeFile = promisify(fs.writeFile)
 
+export interface IXyoRunnable {
+  type: 'daemon' | 'loop' | 'task'
+  run(): Promise<void>
+  stop(): Promise<void>
+}
+
 export class BaseLifeCyclable extends XyoBase implements ILifeCyclable {
 
   protected readonly eventEmitter: EventEmitter
@@ -79,7 +91,6 @@ export class BaseLifeCyclable extends XyoBase implements ILifeCyclable {
   }
 
   public async preInitialize(): Promise<void> {
-    this.logInfo(`${this.constructor.name}:pre:initialize`)
     if (this.partialImplementation && this.partialImplementation.onPreInitialize) {
       await this.partialImplementation.onPreInitialize()
     }
@@ -88,7 +99,6 @@ export class BaseLifeCyclable extends XyoBase implements ILifeCyclable {
   }
 
   public async initialize(): Promise<void> {
-    this.logInfo(`${this.constructor.name}:initialize`)
     if (this.partialImplementation && this.partialImplementation.onInitialize) {
       await this.partialImplementation.onInitialize()
     }
@@ -97,8 +107,6 @@ export class BaseLifeCyclable extends XyoBase implements ILifeCyclable {
   }
 
   public async postInitialize(): Promise<void> {
-    this.logInfo(`${this.constructor.name}:post:initialize`)
-
     if (this.partialImplementation && this.partialImplementation.onPostInitialize) {
       await this.partialImplementation.onPostInitialize()
     }
@@ -107,8 +115,6 @@ export class BaseLifeCyclable extends XyoBase implements ILifeCyclable {
   }
 
   public async preStart(): Promise<void> {
-    this.logInfo(`${this.constructor.name}:pre:started`)
-
     if (this.partialImplementation && this.partialImplementation.onPreStart) {
       await this.partialImplementation.onPreStart()
     }
@@ -117,8 +123,6 @@ export class BaseLifeCyclable extends XyoBase implements ILifeCyclable {
   }
 
   public async start(): Promise<void> {
-    this.logInfo(`${this.constructor.name}:started`)
-
     if (this.partialImplementation && this.partialImplementation.onStart) {
       await this.partialImplementation.onStart()
     }
@@ -127,8 +131,6 @@ export class BaseLifeCyclable extends XyoBase implements ILifeCyclable {
   }
 
   public async postStart(): Promise<void> {
-    this.logInfo(`${this.constructor.name}:post:started`)
-
     if (this.partialImplementation && this.partialImplementation.onPostStart) {
       await this.partialImplementation.onPostStart()
     }
@@ -137,8 +139,6 @@ export class BaseLifeCyclable extends XyoBase implements ILifeCyclable {
   }
 
   public async preStop(): Promise<void> {
-    this.logInfo(`${this.constructor.name}:pre:stopped`)
-
     if (this.partialImplementation && this.partialImplementation.onPreStop) {
       await this.partialImplementation.onPreStop()
     }
@@ -147,8 +147,6 @@ export class BaseLifeCyclable extends XyoBase implements ILifeCyclable {
   }
 
   public async stop(): Promise<void> {
-    this.logInfo(`${this.constructor.name}:stopped`)
-
     if (this.partialImplementation && this.partialImplementation.onStop) {
       await this.partialImplementation.onStop()
     }
@@ -157,8 +155,6 @@ export class BaseLifeCyclable extends XyoBase implements ILifeCyclable {
   }
 
   public async postStop(): Promise<void> {
-    this.logInfo(`${this.constructor.name}:post:stopped`)
-
     if (this.partialImplementation && this.partialImplementation.onPostStop) {
       await this.partialImplementation.onPostStop()
     }
@@ -242,6 +238,84 @@ export class LifeCycleBuilder {
 }
 
 // tslint:disable-next-line:max-classes-per-file
+export abstract class XyoDaemon extends XyoBase {
+
+  private resolveStopLoopingPromise?: () => void
+  private unscheduleTimeout: (() => void) | undefined
+  private looping = false
+
+  public async start(): Promise<void> {
+    return this.runner(500)
+  }
+
+  public async stop(): Promise<void> {
+    if (this.unscheduleTimeout) this.unscheduleTimeout()
+    this.unscheduleTimeout = undefined
+
+    return new Promise((resolve, reject) => {
+      if (!this.looping) {
+        return resolve()
+      }
+
+      this.resolveStopLoopingPromise = resolve
+    })
+  }
+
+  protected abstract run(): Promise<void> | void
+
+  protected delayRun(currentValue: number, errorOccurred: boolean): number | undefined {
+    return errorOccurred ? currentValue * 2 : 500 // exponential back-off
+  }
+
+  protected shouldStop(): boolean {
+    return this.resolveStopLoopingPromise !== undefined
+  }
+
+  private async runner(timeout: number) {
+    this.looping = true
+    let errorOccurred = false
+
+    if (this.shouldStop()) {
+      if (this.resolveStopLoopingPromise) {
+        this.resolveStopLoopingPromise()
+        this.resolveStopLoopingPromise = undefined
+      }
+      this.looping = false
+      return
+    }
+
+    try {
+      const runReq = this.run()
+      if (runReq !== undefined) {
+        await runReq
+      }
+    } catch (err) {
+      this.logError(`There was an error in the block-producer loop`, err)
+      errorOccurred = true
+    }
+
+    if (this.shouldStop()) {
+      if (this.resolveStopLoopingPromise) {
+        this.resolveStopLoopingPromise()
+        this.resolveStopLoopingPromise = undefined
+      }
+
+      this.looping = false
+      return
+    }
+
+    const delay = this.delayRun(timeout, errorOccurred)
+    if (delay === undefined) {
+      this.looping = false
+      return
+    }
+
+    this.looping = false
+    this.unscheduleTimeout = XyoBase.timeout(() => this.runner(delay), delay)
+  }
+}
+
+// tslint:disable-next-line:max-classes-per-file
 export class LifeCycleRunner {
   public state:
     undefined
@@ -260,7 +334,7 @@ export class LifeCycleRunner {
 
   public async initialize(): Promise<void> {
     if (!this.canInitialize()) {
-      throw new XyoError(`Already initialized, can not initialize again`, XyoErrors.CRITICAL)
+      throw new XyoError(`Already initialized, can not initialize again`)
     }
 
     this.state = null
@@ -276,7 +350,7 @@ export class LifeCycleRunner {
 
   public async start(): Promise<void> {
     if (!this.canStart()) {
-      throw new XyoError(`Not yet initialized, can not start`, XyoErrors.CRITICAL)
+      throw new XyoError(`Not yet initialized, can not start`)
     }
 
     await this.lifeCyclable.preStart()
@@ -291,7 +365,7 @@ export class LifeCycleRunner {
 
   public async stop(): Promise<void> {
     if (!this.canStop()) {
-      throw new XyoError(`Not yet started, can not stop`, XyoErrors.CRITICAL)
+      throw new XyoError(`Not yet started, can not stop`)
     }
 
     await this.lifeCyclable.preStop()
@@ -317,6 +391,11 @@ export class LifeCycleRunner {
   }
 }
 
+export const base58 = {
+  encode: (b: Buffer) => bs58.encode(b),
+  decode: (hex: string) => bs58.decode(hex)
+}
+
 export async function fileExists(pathToFile: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
     fs.access(pathToFile, fs.constants.F_OK, (err) => {
@@ -326,94 +405,6 @@ export async function fileExists(pathToFile: string): Promise<boolean> {
 }
 
 // tslint:disable-next-line:max-classes-per-file
-export class XyoBaseInMemoryRepository<K, V> extends XyoBase implements IXyoRepository<K, V> {
-  private readonly inMemoryRepo: {[s: string]: V} = {}
-
-  constructor(private readonly toString: parameterizedFactoryFn<K, string>) {
-    super()
-  }
-
-  public async add(id: K, item: V) {
-    if (!this.inMemoryRepo[this.toString(id)]) {
-      this.inMemoryRepo[this.toString(id)] = item
-    }
-    return
-  }
-
-  public async remove(id: K) {
-    delete this.inMemoryRepo[this.toString(id)]
-  }
-
-  public async contains(id: K) {
-    return Boolean(this.inMemoryRepo[this.toString(id)])
-  }
-
-  public async find(id: K) {
-    return this.inMemoryRepo[this.toString(id)] || undefined
-  }
-
-  public async list(limit: number, cursor: string | undefined) {
-    let startingIndex = 0
-    const allKeys = Object.keys(this.inMemoryRepo)
-    if (cursor) {
-      const indexOfCursor = allKeys.indexOf(cursor)
-      if (indexOfCursor === -1) {
-        return {
-          meta: {
-            totalCount: allKeys.length,
-            hasNextPage: false,
-            endCursor: undefined
-          },
-          items: []
-        }
-      }
-
-      startingIndex = indexOfCursor + 1
-    }
-
-    if (startingIndex >= allKeys.length) {
-      return {
-        meta: {
-          totalCount: allKeys.length,
-          hasNextPage: false,
-          endCursor: undefined
-        },
-        items: []
-      }
-    }
-
-    // tslint:disable-next-line:prefer-array-literal
-    const items: V[] = []
-
-    let hasNextPage = false
-    let nextCursor: string | undefined
-    let iterations = 0
-    let indexOfNext = startingIndex + iterations
-
-    while (true) {
-      const key = allKeys[indexOfNext]
-      items.push(this.inMemoryRepo[key])
-      iterations += 1
-      indexOfNext = startingIndex + iterations
-      hasNextPage = allKeys.length > indexOfNext
-
-      if (iterations === limit) {
-        nextCursor = key
-        break
-      }
-
-      if (!hasNextPage) {
-        break
-      }
-    }
-
-    return {
-      items,
-      meta: {
-        hasNextPage,
-        totalCount: allKeys.length,
-        endCursor: nextCursor,
-      },
-    }
-  }
+export class XyoPair<K, V> {
+  constructor(public readonly k: K, public readonly v: V) {}
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 13th February 2019 1:19:14 pm
+ * @Last modified time: Wednesday, 6th March 2019 3:02:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -46,7 +46,7 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
    */
 
   private connection: net.Socket | undefined
-  private disconnectTimeout: NodeJS.Timeout | undefined
+  private disconnectTimeout: (() => void) | undefined
 
   /**
    * Creates an instance of a XyoServerTcpNetwork
@@ -261,14 +261,14 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
 
   private cancelDisconnect() {
     if (this.disconnectTimeout) {
-      clearTimeout(this.disconnectTimeout)
+      this.disconnectTimeout()
       this.disconnectTimeout = undefined
     }
   }
 
   private scheduleDisconnect(c: net.Socket) {
     this.cancelDisconnect()
-    this.disconnectTimeout = setTimeout(() => {
+    this.disconnectTimeout = XyoBase.timeout(() => {
       this.logInfo(`Connection timed out while negotiating`)
       this.connection = undefined
       c.end()

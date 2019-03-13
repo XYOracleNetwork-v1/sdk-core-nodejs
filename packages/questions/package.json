@@ -14,11 +14,14 @@
     "@xyo-network/diviner-archivist-client": "^0.26.0",
     "@xyo-network/errors": "^0.26.0",
     "@xyo-network/hashing": "^0.26.0",
-    "@xyo-network/node-runner": "^0.26.0",
     "@xyo-network/origin-block-repository": "^0.26.0",
     "@xyo-network/origin-chain": "^0.26.0",
     "@xyo-network/peer-interaction": "^0.26.0",
     "@xyo-network/serialization": "^0.26.0",
+    "@xyo-network/transaction-pool": "^0.26.0",
+    "@xyo-network/node-network": "^0.26.0",
+    "@xyo-network/content-addressable-service": "^0.26.0",
+    "@xyo-network/utils": "^0.26.0",
     "@xyo-network/signing": "^0.26.0"
   },
   "devDependencies": {

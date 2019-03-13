@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-questions-service.spec.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 7th February 2019 12:29:47 pm
+ * @Last modified time: Thursday, 7th March 2019 4:42:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -253,8 +253,8 @@ async function getBoundWitnesses() {
   const secondBlock = new XyoBoundWitness([
     secondFetterA,
     secondFetterB,
+    secondWitnessB,
     secondWitnessA,
-    secondWitnessB
   ])
 
   return [

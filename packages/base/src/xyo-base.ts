@@ -4,15 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 16th January 2019 2:54:11 pm
+ * @Last modified time: Wednesday, 6th March 2019 4:29:22 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoLogger } from "@xyo-network/logger"
 import safeStringify from 'fast-safe-stringify'
-import { ISimpleCache } from "./@types"
-import { XyoSimpleCache } from "./xyo-simple-cache"
 
 /**
  * A general purpose base class that can be used to incorporate
@@ -40,24 +38,48 @@ export abstract class XyoBase {
     }, 2)
   }
 
-  private cache: ISimpleCache | undefined
-
-  protected getOrCreate<T>(name: string, initializer: () => T): T {
-    if (!this.cache) {
-      this.cache = new XyoSimpleCache()
-    }
-
-    return this.cache.getOrCreate(name, initializer)
+  public static unschedule() {
+    Object.values(this.immediateIds).forEach(v => clearImmediate(v))
+    Object.values(this.timeoutIds).forEach(v => clearTimeout(v))
+    Object.values(this.intervalIds).forEach(v => clearInterval(v))
   }
 
-  // protected async getOrCreateAsync<T>(name: string, initializer: () => Promise<T>): Promise<T> {
-  //   if (!this.cache) {
-  //     this.cache = new XyoSimpleCache()
-  //   }
+  public static timeout(fn: (...args: any[]) => void, timeMs: number, description?: string) {
+    return this.schedule(setTimeout, clearTimeout, fn, timeMs, this.timeoutIds, description)
+  }
 
-  //   const t = await this.cache.getOrCreate(name, initializer)
-  //   return t
-  // }
+  public static interval(fn: (...args: any[]) => void, timeMs: number, description?: string) {
+    return this.schedule(setInterval, clearInterval, fn, timeMs, this.intervalIds, description)
+  }
+
+  public static immediate(fn: (...args: any[]) => void, description?: string) {
+    return this.schedule(setImmediate, clearImmediate, fn, 0, this.immediateIds, description)
+  }
+
+  private static timeoutIds: {[s: string]: NodeJS.Timeout} = {}
+  private static intervalIds: {[s: string]: NodeJS.Timeout} = {}
+  private static immediateIds: {[s: string]: NodeJS.Immediate} = {}
+
+  private static schedule<T>(
+    scheduler: (callback: (...args: any[]) => void, ms: number, ...args: any[]) => T,
+    unscheduler: (t: T) => void,
+    fn: (...args: any[]) => void,
+    timeMs: number,
+    aggregator: {[s: string]: T},
+    description?: string
+  ) {
+    const key = String(new Date().valueOf() + Math.random())
+    const t = scheduler(() => {
+      delete this.timeoutIds[key]
+      if (description) XyoBase.logger.info(`Scheduler resolved: ${description} after ${timeMs}ms`)
+      fn()
+    }, timeMs)
+    aggregator[key] = t
+    return () => {
+      delete aggregator[key]
+      unscheduler(t)
+    }
+  }
 
   /** Logs to the `info` level */
   protected logInfo(message?: any, ...optionalParams: any[]) {

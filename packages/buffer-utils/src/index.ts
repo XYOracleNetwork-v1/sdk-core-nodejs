@@ -4,13 +4,13 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:14:17 am
+ * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoError, XyoErrors } from "@xyo-network/errors"
-import BN from 'bn.js'
+import { BN } from "@xyo-network/utils"
 
 /** A helper function to write a number to a buffer that supports multiple sizes and signings */
 export function writeIntegerToBuffer(
@@ -35,7 +35,7 @@ export function writeIntegerToBuffer(
         buf.writeInt32BE(numberToWrite, bufOffset)
         return buf
       default:
-        throw new XyoError(`Could not write number to buffer`, XyoErrors.CRITICAL)
+        throw new XyoError(`Could not write number to buffer`)
     }
   }
 
@@ -50,15 +50,15 @@ export function writeIntegerToBuffer(
       buf.writeUInt32BE(numberToWrite, bufOffset)
       return buf
     case 8:
-      const bigNumberBuffer = new BN(numberToWrite).toBuffer('be', 8)
+      const bnBuffer = new BN(numberToWrite).toBuffer('be', 8)
       let i = 0
       while (i < 8) {
-        buf[i + bufOffset] = bigNumberBuffer[i]
+        buf[i + bufOffset] = bnBuffer[i]
         i += 1
       }
       return buf
     default:
-      throw new XyoError(`Could not write number to buffer`, XyoErrors.CRITICAL)
+      throw new XyoError(`Could not write number to buffer`)
   }
 }
 
@@ -75,7 +75,7 @@ export function readIntegerFromBuffer(buffer: Buffer, bytes: number, isSigned: b
       case 4:
         return buffer.readInt32BE(bufOffset)
       default:
-        throw new XyoError(`Could not read number from buffer`, XyoErrors.CRITICAL)
+        throw new XyoError(`Could not read number from buffer`)
     }
   }
 
@@ -89,7 +89,7 @@ export function readIntegerFromBuffer(buffer: Buffer, bytes: number, isSigned: b
     case 8:
       return new BN(buffer.slice(bufOffset || 0, bufOffset + bytes)).toNumber()
     default:
-      throw new XyoError(`Could not read number from buffer`, XyoErrors.CRITICAL)
+      throw new XyoError(`Could not read number from buffer`)
   }
 }
 
@@ -124,7 +124,7 @@ export function unsignedIntegerToBuffer(num: number): Buffer {
   } else if (num > Math.pow(2, 32)) {
     buf = new BN(num).toBuffer('be')
   } else {
-    throw new XyoError('This should never happen', XyoErrors.CRITICAL)
+    throw new XyoError('This should never happen')
   }
 
   return buf
@@ -143,9 +143,9 @@ export function signedIntegerToBuffer(num: number): Buffer {
     buf = Buffer.alloc(4)
     buf.writeInt32BE(num, 0)
   } else if (num > Math.pow(2, 31)) {
-    throw new XyoError('This is not yet supported', XyoErrors.CRITICAL)
+    throw new XyoError('This is not yet supported')
   } else {
-    throw new XyoError('This should never happen', XyoErrors.CRITICAL)
+    throw new XyoError('This should never happen')
   }
 
   return buf

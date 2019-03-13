@@ -7,7 +7,12 @@
   "author": "Ryan",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/utils": "^0.26.0"
+    "@xyo-network/utils": "^0.26.0",
+    "@xyo-network/errors": "^0.26.0",
+    "@xyo-network/meta-list": "^0.26.0",
+    "@xyo-network/hashing": "^0.26.0",
+    "@xyo-network/base": "^0.26.0",
+    "@xyo-network/storage.leveldb": "^0.26.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serialization-service.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 1:32:39 pm
+ * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -49,7 +49,7 @@ export class XyoSerializationService extends XyoBase implements IXyoSerializatio
 
   public addDeserializer(deserializer: IXyoDeserializer<IXyoSerializableObject>) {
     if (Boolean(this.recipes[deserializer.schemaObjectId])) {
-      throw new XyoError(`There already exist a deserializer for ${deserializer.schemaObjectId}`, XyoErrors.CRITICAL)
+      throw new XyoError(`There already exist a deserializer for ${deserializer.schemaObjectId}`)
     }
 
     this.recipes[deserializer.schemaObjectId] = deserializer
@@ -75,7 +75,7 @@ export class XyoSerializationService extends XyoBase implements IXyoSerializatio
     const srcSchema = readHeader(src)
     const recipe = this.recipes[srcSchema.id]
     if (!recipe) {
-      throw new XyoError(`No recipe exists for ${srcSchema.id}`, XyoErrors.CRITICAL)
+      throw new XyoError(`No recipe exists for ${srcSchema.id}`)
     }
 
     const deserializationResult = recipe.deserialize(src, this) as T

@@ -31,7 +31,6 @@
     {"path": "../heuristics-common"},
     {"path": "../network"},
     {"path": "../network.tcp"},
-    {"path": "../node-runner"},
     {"path": "../origin-block-repository"},
     {"path": "../origin-chain"},
     {"path": "../peer-connections"},

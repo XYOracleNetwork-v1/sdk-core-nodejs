@@ -4,16 +4,28 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 11th February 2019 4:20:35 pm
+ * @Last modified time: Thursday, 7th March 2019 1:55:49 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoHash } from '@xyo-network/hashing'
+import { IXyoRequestResponseTransaction } from '@xyo-network/transaction-pool'
 
 export interface IXyoAnswerProvider<Q, A> {
   resolve(question: Q): Promise<A>
 }
+
+export interface ITransactionIntersectionRequest {
+  id: string,
+  request: IIntersectionRequest
+}
+
+export interface IXyoIntersectionTransaction extends IXyoRequestResponseTransaction<
+  ITransactionIntersectionRequest,
+  IProofOfIntersectionAnswer,
+  boolean
+> {}
 
 export interface IXyoQuestionService {
   buildProofOfIntersection(
@@ -23,11 +35,25 @@ export interface IXyoQuestionService {
   getIntersections(question: IXyoHasIntersectedQuestion): Promise<IXyoHash[]>
 }
 
+export interface IRequestDocument<T> {
+  xyoBounty: number,
+  xyoPayOnDelivery: number,
+  weiPayOnDelivery: number,
+  beneficiary: string,
+  type: 'intersection',
+  data: T
+}
+
 export interface IXyoHasIntersectedQuestion {
   partyOne: string[],
   partyTwo: string[],
   markers: string[],
-  direction: 'FORWARD' | 'BACKWARD'
+  direction: 'FORWARD' | 'BACKWARD' | null
+}
+
+export interface IIntersectionRequest extends IRequestDocument<IXyoHasIntersectedQuestion> {
+  data: IXyoHasIntersectedQuestion
+  getId?(): string
 }
 
 export enum IQuestionType {
@@ -37,8 +63,6 @@ export enum IQuestionType {
 export interface IQuestion<Q extends any, A extends any> {
   type: IQuestionType
   getQuestion(): Q
-  answer(answer: A): void
-  cantAnswer(): void
 }
 
 export interface IQuestionsProvider {

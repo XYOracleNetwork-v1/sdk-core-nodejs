@@ -24,7 +24,6 @@
     "@xyo-network/network": "^0.26.0",
     "@xyo-network/network.tcp": "^0.26.0",
     "@xyo-network/node-network": "^0.26.0",
-    "@xyo-network/node-runner": "^0.26.0",
     "@xyo-network/origin-block-repository": "^0.26.0",
     "@xyo-network/origin-chain": "^0.26.0",
     "@xyo-network/p2p": "^0.26.0",
@@ -45,6 +44,11 @@
     "@xyo-network/utils": "^0.26.0",
     "@xyo-network/web3-question-service": "^0.26.0",
     "@xyo-network/web3-service": "^0.26.0",
+    "@xyo-network/ipfs-client": "^0.26.0",
+    "@xyo-network/consensus": "^0.26.0",
+    "@xyo-network/block-producer": "^0.26.0",
+    "@xyo-network/block-witness": "^0.26.0",
+    "@xyo-network/content-addressable-service": "^0.26.0",
     "merge": "^1.2.1"
   },
   "devDependencies": {

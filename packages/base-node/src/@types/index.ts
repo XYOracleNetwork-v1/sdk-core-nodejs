@@ -20,12 +20,12 @@ import { IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessSuccessListener } from
 import { XyoBoundWitnessValidator, IXyoBoundWitnessValidationOptions } from "@xyo-network/bound-witness"
 import { CatalogueItem, IXyoNetworkProcedureCatalogue, IXyoNetworkProvider } from "@xyo-network/network"
 import { IXyoPeerConnectionDelegate } from "@xyo-network/peer-connections"
-import { IXyoNodeRunnerDelegate } from "@xyo-network/node-runner"
 import { IXyoNodeNetwork, IXyoComponentFeatureResponse } from "@xyo-network/node-network"
 import { IXyoP2PService, IXyoPeerDiscoveryService, IXyoPeerTransport } from "@xyo-network/p2p"
-import { IXyoRepository, IXyoProvider } from "@xyo-network/utils"
-import { IXyoTransaction } from "@xyo-network/transaction-pool"
+import { IXyoProvider, IXyoRunnable } from "@xyo-network/utils"
+import { IXyoTransactionRepository } from "@xyo-network/transaction-pool"
 import { XyoAboutMeService } from "@xyo-network/about-me"
+import { IContractData } from "@xyo-network/web3-service"
 
 export interface IXyoResolvers {
   [key: string]: IXyoProvider<any, any>
@@ -41,11 +41,11 @@ export interface IXyoResolvers {
   [IResolvers.NETWORK_PROCEDURE_CATALOGUE]: IXyoProvider<IXyoNetworkProcedureCatalogue, IXyoNetworkProcedureCatalogueConfig>
   [IResolvers.NETWORK]: IXyoProvider<IXyoNetworkProvider, IXyoNetworkConfig>
   [IResolvers.PEER_CONNECTION_DELEGATE]: IXyoProvider<IXyoPeerConnectionDelegate, undefined>
-  [IResolvers.NODE_RUNNER_DELEGATES]: IXyoProvider<IXyoNodeRunnerDelegate[], undefined>
+  [IResolvers.RUNNABLES]: IXyoProvider<IXyoRunnable[], undefined>
   [IResolvers.NODE_NETWORK]: IXyoProvider<IXyoNodeNetwork, IXyoNodeNetworkConfig>
   [IResolvers.P2P_SERVICE]: IXyoProvider<IXyoP2PService, undefined>
   [IResolvers.DISCOVERY_NETWORK]: IXyoProvider<IXyoPeerDiscoveryService, IXyoDiscoveryConfig>
-  [IResolvers.TRANSACTION_REPOSITORY]: IXyoProvider<IXyoRepository<IXyoHash, IXyoTransaction<any>>, undefined>
+  [IResolvers.TRANSACTION_REPOSITORY]: IXyoProvider<IXyoTransactionRepository, undefined>
   [IResolvers.ABOUT_ME_SERVICE]: IXyoProvider<XyoAboutMeService, IXyoAboutMeConfig>
 }
 
@@ -99,11 +99,12 @@ export interface IXyoGraphQLConfig {
 
 export interface IXyoWeb3ServiceConfig {
   host: string,
-  account: string,
+  address: string,
+  privateKey: string
   contracts: {
-    PayOnDelivery: {
-      address: string
-    }
+    PayOnDelivery: IContractData,
+    XyStakingConsensus: IContractData,
+    XyBlockProducer: IContractData,
   }
 }
 

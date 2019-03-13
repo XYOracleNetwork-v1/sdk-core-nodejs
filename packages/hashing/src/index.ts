@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 14th December 2018 12:14:33 pm
+ * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -15,6 +15,7 @@ import { XyoNativeBaseHashProvider } from './xyo-native-base-hash-provider'
 import { schema } from '@xyo-network/serialization-schema'
 import { IXyoDeserializer, IXyoSerializationService } from '@xyo-network/serialization'
 import { XyoHash } from './xyo-hash'
+import { XyoSha3HashProvider } from './xyo-sha3-hash-provider'
 
 export { IXyoHash, IXyoHashProvider } from './@types'
 export { XyoHash } from './xyo-hash'
@@ -23,7 +24,7 @@ export { XyoStubHash } from './xyo-stub-hash'
 /**
  * The currently natively supported hash-types in the XYO protocol
  */
-type HASH_TYPE = 'sha256'
+type HASH_TYPE = 'sha256' | 'sha3'
 
 /** A cache fro the hash-providers */
 const hashProvidersByType: {[h: string]: IXyoHashProvider } = {}
@@ -37,8 +38,8 @@ const hashProvidersByType: {[h: string]: IXyoHashProvider } = {}
  */
 
 export function getHashingProvider(hashType: HASH_TYPE): IXyoHashProvider {
-  if (['sha256'].indexOf(hashType) === -1) {
-    throw new XyoError(`Unsupported hash type ${hashType}`, XyoErrors.CRITICAL)
+  if (['sha256', 'sha3'].indexOf(hashType) === -1) {
+    throw new XyoError(`Unsupported hash type ${hashType}`)
   }
 
   if (hashProvidersByType[hashType]) {
@@ -51,8 +52,11 @@ export function getHashingProvider(hashType: HASH_TYPE): IXyoHashProvider {
     case "sha256":
       hashProvider = new XyoNativeBaseHashProvider('sha256', schema.sha256Hash.id)
       break
+    case "sha3":
+      hashProvider = new XyoSha3HashProvider()
+      break
     default:
-      throw new XyoError(`This should never happen`, XyoErrors.CRITICAL)
+      throw new XyoError(`This should never happen`)
   }
 
   hashProvidersByType[hashType] = hashProvider
@@ -74,6 +78,22 @@ class XyoSha256HashDeserializer implements IXyoDeserializer<IXyoHash> {
   }
 }
 
+// tslint:disable-next-line:max-classes-per-file
+class XyoSha3HashDeserializer implements IXyoDeserializer<IXyoHash> {
+  public schemaObjectId = schema.sha3Hash.id
+
+  public deserialize(data: Buffer, serializationService: IXyoSerializationService): IXyoHash {
+    const parseResult = serializationService.parse(data)
+    const hashProvider = getHashingProvider('sha3')
+    return new XyoHash(
+      parseResult.data as Buffer,
+      hashProvider,
+      this.schemaObjectId
+    )
+  }
+}
+
 export const sha256HashDeserializer = new XyoSha256HashDeserializer()
+export const sha3HashDeserializer = new XyoSha3HashDeserializer()
 
 export {} from './xyo-hashing-test-utils'

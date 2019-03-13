@@ -2,20 +2,20 @@
 
 ![logo]
 
-# Diviner Graphql API
+# Web3 Service
 
-Implements the the Diviner graphql API
+Wrapper for web3
 
 ## Install
 
 Using yarn
 
 ```sh
-  yarn add @xyo-network/diviner-graphql-api
+  yarn add @xyo-network/web3-service
 ```
 
 Using npm
 
 ```sh
-  npm install @xyo-network/diviner-graphql-api --save
+  npm install @xyo-network/web3-service --save
 ```

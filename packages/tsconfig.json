@@ -18,13 +18,7 @@
   },
   "references": [
     {
-      "path": "about-diviner"
-    },
-    {
       "path": "about-me"
-    },
-    {
-      "path": "api-archivist-graphql"
     },
     {
       "path": "archivist-network"
@@ -57,9 +51,6 @@
       "path": "diviner-archivist-client.graphql"
     },
     {
-      "path": "diviner-graphql-api"
-    },
-    {
       "path": "errors"
     },
     {
@@ -73,9 +64,6 @@
     },
     {
       "path": "heuristics-common"
-    },
-    {
-      "path": "ip-service"
     },
     {
       "path": "ipfs-client"
@@ -94,9 +82,6 @@
     },
     {
       "path": "node-network"
-    },
-    {
-      "path": "node-runner"
     },
     {
       "path": "origin-block-repository"
@@ -124,9 +109,6 @@
     },
     {
       "path": "questions"
-    },
-    {
-      "path": "scsc"
     },
     {
       "path": "serialization"
@@ -184,12 +166,13 @@
     },
     {
       "path": "block-witness"
+    },
+    {
+      "path": "content-addressable-service"
     }
   ],
   "include": [
-    "about-diviner/src/**/*.ts",
     "about-me/src/**/*.ts",
-    "api-archivist-graphql/src/**/*.ts",
     "archivist-network/src/**/*.ts",
     "archivist-repository/src/**/*.ts",
     "archivist-repository.sql/src/**/*.ts",
@@ -206,14 +189,12 @@
     "hashing/src/**/*.ts",
     "heuristics/src/**/*.ts",
     "heuristics-common/src/**/*.ts",
-    "ip-service/src/**/*.ts",
     "ipfs-client/src/**/*.ts",
     "logger/src/**/*.ts",
     "meta-list/src/**/*.ts",
     "network/src/**/*.ts",
     "network.tcp/src/**/*.ts",
     "node-network/src/**/*.ts",
-    "node-runner/src/**/*.ts",
     "origin-block-repository/src/**/*.ts",
     "origin-chain/src/**/*.ts",
     "p2p/src/**/*.ts",
@@ -223,7 +204,6 @@
     "peer-interaction-handlers/src/**/*.ts",
     "peer-interaction-router/src/**/*.ts",
     "questions/src/**/*.ts",
-    "scsc/src/**/*.ts",
     "serialization/src/**/*.ts",
     "serialization-schema/src/**/*.ts",
     "serializer/src/**/*.ts",
@@ -242,6 +222,7 @@
     "app/src/**/*.ts",
     "consensus/src/**/*.ts",
     "block-producer/src/**/*.ts",
-    "block-witness/src/**/*.ts"
+    "block-witness/src/**/*.ts",
+    "content-addressable-service/src/**/*.ts"
   ]
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: readHeader.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:15:53 am
+ * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -14,7 +14,7 @@ import { XyoError, XyoErrors } from "@xyo-network/errors"
 
 export function readHeader(header: Buffer): IXyoObjectPartialSchema {
   if (header.length < 2) {
-    throw new XyoError(`The minimum size of a header is 2 bytes`, XyoErrors.CRITICAL)
+    throw new XyoError(`The minimum size of a header is 2 bytes`)
   }
 
   const topByte = header.readUInt8(0)
@@ -52,7 +52,7 @@ export function readHeader(header: Buffer): IXyoObjectPartialSchema {
       }
 
       if (!isIterable && isTyped) { // 0b01
-        throw new XyoError(`Impossible state for serialization`, XyoErrors.CRITICAL)
+        throw new XyoError(`Impossible state for serialization`)
       }
 
       if (isIterable && !isTyped) { // 0b10

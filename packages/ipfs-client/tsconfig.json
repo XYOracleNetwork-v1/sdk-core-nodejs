@@ -22,6 +22,10 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    {"path": "../base"}
+    {"path": "../base"},
+    {"path": "../errors"},
+    {"path": "../utils"},
+    {"path": "../serialization"},
+    {"path": "../content-addressable-service"}
   ]
 }

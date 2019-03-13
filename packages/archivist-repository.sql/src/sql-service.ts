@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: sql-service.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 30th January 2019 12:40:21 pm
+ * @Last modified time: Tuesday, 12th March 2019 3:47:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -82,7 +82,6 @@ export class SqlService extends XyoBase {
       return this.connection
     }
 
-    this.logInfo(`Trying to get connection: try number ${tryNumber} of ${maxTries}`)
     const c = mysql.createConnection(this.options)
 
     const createdConnection = await (new Promise((resolve, reject) => {
@@ -93,9 +92,9 @@ export class SqlService extends XyoBase {
             return reject(err)
           }
 
-          return setTimeout(() => {
+          return XyoBase.timeout(() => {
             return this.getOrCreateConnection(maxTries, tryNumber + 1).then(resolve).catch(reject)
-          }, 1000 * Math.pow(2, tryNumber)) // exponential backoff
+          }, 1000 * Math.pow(2, tryNumber)) // exponential back-off
         }
 
         this.connection = c
@@ -117,8 +116,7 @@ export class SqlService extends XyoBase {
         return resolve(results)
       }
 
-      const query = substitutions ? c.query(q, substitutions, callback) : c.query(q, callback)
-      this.logInfo(query.sql)
+      substitutions ? c.query(q, substitutions, callback) : c.query(q, callback)
     }) as Promise<T>
   }
 

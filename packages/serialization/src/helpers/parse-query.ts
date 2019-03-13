@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: parse-query.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 1:23:27 pm
+ * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -25,10 +25,10 @@ export class ParseQuery {
         if (childParseResults.length > indexToQuery) {
           return childParseResults[indexToQuery]
         }
-        throw new XyoError(`Data can not be queried. Index out of bounds ${indexInArray}`, XyoErrors.CRITICAL)
+        throw new XyoError(`Data can not be queried. Index out of bounds ${indexInArray}`)
       }
 
-      throw new XyoError(`Data can not be queried at index ${indexInArray}`, XyoErrors.CRITICAL)
+      throw new XyoError(`Data can not be queried at index ${indexInArray}`)
     }, this.parseResult)
 
     return new ParseQuery(queriedParseResult)
@@ -36,7 +36,7 @@ export class ParseQuery {
 
   public mapChildren<T>(callbackfn: (value: ParseQuery, index?: number) => T) {
     if (this.isReadable()) {
-      throw new XyoError(`No children to map`, XyoErrors.CRITICAL)
+      throw new XyoError(`No children to map`)
     }
 
     return (this.parseResult.data as IParseResult[]).map((item, index) => {
@@ -46,11 +46,11 @@ export class ParseQuery {
 
   public getChildAt(index: number): ParseQuery {
     if (this.isReadable()) {
-      throw new XyoError(`No children to map`, XyoErrors.CRITICAL)
+      throw new XyoError(`No children to map`)
     }
 
     if (index > (this.parseResult.data as IParseResult[]).length) {
-      throw new XyoError(`Index out of range`, XyoErrors.CRITICAL)
+      throw new XyoError(`Index out of range`)
     }
 
     return new ParseQuery((this.parseResult.data as IParseResult[])[index])
@@ -58,7 +58,7 @@ export class ParseQuery {
 
   public reduceChildren<T>(reducer: (aggregator: T, item: IParseResult, index: number) => T, startingValue: T) {
     if (this.isReadable()) {
-      throw new XyoError(`No children to map`, XyoErrors.CRITICAL)
+      throw new XyoError(`No children to map`)
     }
 
     return (this.parseResult.data as IParseResult[]).reduce(reducer, startingValue)

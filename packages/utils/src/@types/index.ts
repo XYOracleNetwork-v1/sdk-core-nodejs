@@ -1,4 +1,5 @@
 import { IXyoMetaList } from '@xyo-network/meta-list'
+import { XyoPair } from '..'
 
 /** A function to unsubscribe from a topic */
 export type unsubscribeFn = () => void
@@ -6,12 +7,17 @@ export type unsubscribeFn = () => void
 /** Any callback with an arbitrary number of args as parameters */
 export type Callback = (...args: any[]) => void
 
-export interface IXyoRepository<K, V> {
-  add(id: K, item: V): Promise<void>
+export interface IRepoItem<V, M> {
+  data: V,
+  meta: M
+}
+
+export interface IXyoRepository<K, V, M> {
+  add(id: K, item: V, meta?: M): Promise<void>
   remove(id: K): Promise<void>
   contains(id: K): Promise<boolean>
-  find(id: K): Promise<V | undefined>
-  list(limit: number, cursor: string | undefined): Promise<IXyoMetaList<V>>
+  find(id: K): Promise<IRepoItem<V, M> | undefined>
+  list(limit: number, cursor: string | undefined): Promise<IXyoMetaList<IRepoItem<V, M>>>
 }
 
 export type pureFn<V> = () => V
@@ -27,6 +33,7 @@ export interface IProvider<V> {
 }
 export interface IParameterizedProvider<C, V> {
   get(context: C): Promise<V>
+  add(v: V, keep?: boolean): Promise<C>
 }
 export interface IFactory<V> {
   get(): V

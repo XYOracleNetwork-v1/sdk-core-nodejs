@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-in-memory-repository.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 22nd February 2019 10:14:46 am
+ * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -78,7 +78,7 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
   public async releaseMutex(mutex: IXyoOriginChainMutex) {
     if (!this.mutex) return
 
-    if (this.mutex !== mutex) throw new XyoError(`Can not release mutex, does not exist`, XyoErrors.CRITICAL)
+    if (this.mutex !== mutex) throw new XyoError(`Can not release mutex, does not exist`)
     this.mutex.isActive = false
     this.mutex = undefined
   }
@@ -111,7 +111,7 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
     const currentIndex = await this.getIndex()
 
     if (currentIndex !== 0) {
-      throw new XyoError(`Could not create Genesis block as one already exists`, XyoErrors.CRITICAL)
+      throw new XyoError(`Could not create Genesis block as one already exists`)
     }
 
     this.logInfo(`Creating genesis block`)

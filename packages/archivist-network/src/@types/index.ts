@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 30th January 2019 11:58:08 am
+ * @Last modified time: Thursday, 7th March 2019 1:56:19 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -18,7 +18,7 @@ export interface IXyoArchivistNetwork {
     partyOne: string[],
     partyTwo: string[],
     markers: string[],
-    direction: 'FORWARD' | 'BACKWARD'
+    direction: 'FORWARD' | 'BACKWARD' | null
   ): Promise<IXyoHash[]>
   getBlock(hash: IXyoHash): Promise<IXyoBoundWitness|undefined>
 }
