@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 12th March 2019 3:41:11 pm
+ * @Last modified time: Wednesday, 13th March 2019 4:03:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -16,7 +16,7 @@ import { IXyoPeerConnectionDelegate, XyoSimplePeerConnectionDelegate, XyoPeerCon
 import { IXyoNodeNetwork, XyoNodeNetwork } from '@xyo-network/node-network'
 import { IXyoP2PService, IXyoPeerDiscoveryService, XyoP2PService, XyoPeerTransport, XyoPeerDiscoveryService, IXyoPeerTransport } from '@xyo-network/p2p'
 import { IXyoSerializationService } from '@xyo-network/serialization'
-import { IXyoHashProvider, getHashingProvider, IXyoHash } from '@xyo-network/hashing'
+import { IXyoHashProvider, getHashingProvider } from '@xyo-network/hashing'
 import { IXyoOriginChainRepository, XyoOriginChainLocalStorageRepository } from '@xyo-network/origin-chain'
 import { IXyoOriginBlockRepository, XyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessSuccessListener, XyoBoundWitnessPayloadProvider, XyoBoundWitnessSuccessListener, XyoBoundWitnessHandlerProvider, IXyoBoundWitnessInteractionFactory } from '@xyo-network/peer-interaction'
@@ -29,8 +29,8 @@ import { XyoServerTcpNetwork } from '@xyo-network/network.tcp'
 import { XyoPeerInteractionRouter } from '@xyo-network/peer-interaction-router'
 import { XyoBoundWitnessTakeOriginChainServerInteraction, XyoBoundWitnessStandardServerInteraction } from '@xyo-network/peer-interaction-handlers'
 import { getSignerProvider } from '@xyo-network/signing.ecdsa'
-import { createDirectoryIfNotExists, IXyoProvider, IXyoRunnable, IRepoItem } from '@xyo-network/utils'
-import { IXyoTransaction, IXyoTransactionRepository, IXyoTransactionMeta } from '@xyo-network/transaction-pool'
+import { createDirectoryIfNotExists, IXyoProvider, IXyoRunnable } from '@xyo-network/utils'
+import { IXyoTransaction, IXyoTransactionRepository, XyoTransactionRepository } from '@xyo-network/transaction-pool'
 import { IResolvers } from './xyo-resolvers-enum'
 import { XyoLevelDbStorageProvider } from '@xyo-network/storage.leveldb'
 import { buildGraphQLServer } from '@xyo-network/graphql-apis'
@@ -40,7 +40,7 @@ import { createArchivistSqlRepository, ISqlConnectionDetails } from '@xyo-networ
 import { XyoError } from '@xyo-network/errors'
 import { XyoGraphQLServer } from '@xyo-network/graphql-server'
 import { IXyoArchivistNetwork, XyoArchivistNetwork } from '@xyo-network/archivist-network'
-import { IXyoQuestionService, XyoQuestionService, IQuestionsProvider, QuestionsWorker, IRequestDocument } from '@xyo-network/questions'
+import { IXyoQuestionService, XyoQuestionService, IQuestionsProvider, QuestionsWorker } from '@xyo-network/questions'
 import { XyoBlockPermissionRequestResolver } from '@xyo-network/attribution-request.node-network'
 import { XyoWeb3Service } from '@xyo-network/web3-service'
 import { Web3QuestionService } from '@xyo-network/web3-question-service'
@@ -54,7 +54,6 @@ import { XyoNodeNetworkRunnable } from './runnables/xyo-node-network-runnable'
 import { XyoQuestionsWorkerRunnable } from './runnables/xyo-questions-worker-runnable'
 import { XyoBlockProducerRunnable } from './runnables/xyo-block-producer-runnable'
 import { XyoBlockWitnessRunnable } from './runnables/xyo-block-witness-runnable'
-import { IXyoMetaList } from '@xyo-network/meta-list'
 import { IXyoContentAddressableService } from '@xyo-network/content-addressable-service'
 
 const graphql: IXyoProvider<XyoGraphQLServer, IXyoGraphQLConfig> = {
@@ -85,7 +84,7 @@ const runnables: IXyoProvider<IXyoRunnable[], any> = {
       delegates.push(gql)
     }
 
-    if (false) { // config.enableQuestionsWorker
+    if (config.enableQuestionsWorker) {
       const questionsProv = await container.get<IQuestionsProvider>(IResolvers.QUESTIONS_PROVIDER)
       const questions = await container.get<IXyoQuestionService>(IResolvers.QUESTION_SERVICE)
       const transactionRepo = await container.get<IXyoTransactionRepository>(IResolvers.TRANSACTION_REPOSITORY)
@@ -409,55 +408,11 @@ const signersProvider: IXyoProvider<IXyoSigner[], undefined> = {
   }
 }
 
-const transactionsRepository: IXyoProvider<IXyoTransactionRepository, undefined> = {
-  async get() {
-    const t: IXyoTransaction<any> = {
-      transactionType: 'request-response',
-      data: {
-        request: {
-          request: {
-            data: {
-              partyOne: ['000c4122c95d0c29f798bf27c8a84150b74bc7e2717172b6e855b8319149fe0813a8498678af39c92003fcbdca08eaa2babd6a6e3198128045a0ec5fa02696ccc890da'],
-              partyTwo: ['000c41ea9e08f5d948e6460d372f9c62f46a7fc849b723cc5a589d54da5cf5bfb41d1e674832d2f5d63b02852477a681e439a48ab1733680bed6f6e3454428466cbb33'],
-              markers: [],
-              direction: null
-            },
-            getId: () => 'QmZyycMiLogkpoA2C8Nz44KCvFbY6vZBAkYKUBz8hMab7Q',
-          },
-          id: 'QmZyycMiLogkpoA2C8Nz44KCvFbY6vZBAkYKUBz8hMab7Q'
-        },
-        response: {
-          hash: 'QmQctAMrmqDyRDpqqCn4h3TnBEGWEG2a9XBUDo4DqdssPg',
-          proofOfIdentities: [],
-          transfers: []
-        },
-        answer: true
-      }
-    }
-
-    // @ts-ignore
-    const transactionProvider: IXyoTransactionRepository = {
-      list: async () => {
-        const l: IXyoMetaList<IXyoTransaction<any>> = {
-          meta: {
-            totalCount: 1,
-            hasNextPage: false,
-            endCursor: undefined
-          },
-          items: [t]
-        }
-        return l
-      },
-      find: async (id) => {
-        console.log(`IXyoTransactionRepository id ${id}`)
-        if (id === 'QmZyycMiLogkpoA2C8Nz44KCvFbY6vZBAkYKUBz8hMab7Q') {
-          return t
-        }
-        return undefined
-      }
-    }
-
-    return transactionProvider
+const transactionsRepository: IXyoProvider<IXyoTransactionRepository, any> = {
+  async get(container, config) {
+    await createDirectoryIfNotExists(config.data)
+    const transactionDb = XyoLevelDbStorageProvider.createStore(config.data)
+    return new XyoTransactionRepository(transactionDb)
   }
 }
 

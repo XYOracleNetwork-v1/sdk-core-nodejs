@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 12th March 2019 3:49:05 pm
+ * @Last modified time: Wednesday, 13th March 2019 4:07:06 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -29,10 +29,7 @@ import {
 } from "@xyo-network/utils"
 import { resolvers } from './resolvers'
 import { IResolvers } from "./xyo-resolvers-enum"
-import { XyoError, XyoErrors } from "@xyo-network/errors"
-import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
-import { IXyoSerializationService } from '@xyo-network/serialization'
-import { XyoOriginChainStateInMemoryRepository } from '@xyo-network/origin-chain'
+import { XyoError } from "@xyo-network/errors"
 import { XyoBase } from '@xyo-network/base'
 
 export const DEFAULT_NODE_OPTIONS: IXyoNodeOptions = {
@@ -138,6 +135,9 @@ export const DEFAULT_NODE_OPTIONS: IXyoNodeOptions = {
       host: 'ipfs.layerone.co',
       port: 5002,
       protocol: 'https'
+    },
+    transactionRepository: {
+      data: './node-db/transactions'
     }
   }
 }
@@ -199,17 +199,7 @@ class XyoNodeLifeCycle extends BaseLifeCyclable implements IXyoProviderContainer
     }
 
     this.delegates.map(async (runnable, index) => {
-      XyoBase.immediate(async () => {
-        try {
-          await runnable.run()
-        } catch (e) {
-          this.logError(`There was an error in runnable`, e)
-        }
-
-        if (runnable.type === 'loop') {
-          XyoBase.timeout(() => runnable.run(), 1000)
-        }
-      })
+      this.run(runnable)
     })
 
     this.eventEmitter.emit('started')
@@ -282,6 +272,22 @@ class XyoNodeLifeCycle extends BaseLifeCyclable implements IXyoProviderContainer
     // @ts-ignore
     this.opts.modules[dep] = provider
     this.instanceLifeCycleMap[dep] = scope
+  }
+
+  private run(runnable: IXyoRunnable) {
+    XyoBase.immediate(async () => {
+      try {
+        await runnable.run()
+      } catch (e) {
+        this.logError(`There was an error in runnable`, e)
+      }
+
+      if (runnable.type === 'loop') {
+        XyoBase.timeout(async () => {
+          this.run(runnable)
+        }, runnable.getSleepTime())
+      }
+    })
   }
 
   private async resolveOptions() {

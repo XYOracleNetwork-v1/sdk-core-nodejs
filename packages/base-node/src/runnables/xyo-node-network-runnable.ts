@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node-network-runnable.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 8th March 2019 3:12:12 pm
+ * @Last modified time: Wednesday, 13th March 2019 4:01:58 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,6 +20,10 @@ export class XyoNodeNetworkRunnable extends XyoBase implements IXyoRunnable {
 
   constructor (private readonly nodeNetworkProvider: providerFn<IXyoNodeNetwork>) {
     super()
+  }
+
+  public getSleepTime(): number {
+    return 1000 // doesn't sleep ever
   }
 
   public async initialize(): Promise<void> {
