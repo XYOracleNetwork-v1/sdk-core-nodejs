@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-server-runnable.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 4th March 2019 1:17:35 pm
+ * @Last modified time: Wednesday, 13th March 2019 4:00:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -19,6 +19,10 @@ export class XyoBoundWitnessServerRunnable extends XyoBase implements IXyoRunnab
 
   constructor(private readonly peerConnectionDelegateProvider: providerFn<IXyoPeerConnectionDelegate>) {
     super()
+  }
+
+  public getSleepTime(): number {
+    return 0 // its a server, doesn't sleep
   }
 
   public async initialize(): Promise<void> {

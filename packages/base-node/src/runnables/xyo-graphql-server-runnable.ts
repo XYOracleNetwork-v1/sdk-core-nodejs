@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-graphql-server-runnable.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 4th March 2019 1:06:46 pm
+ * @Last modified time: Wednesday, 13th March 2019 4:01:43 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,6 +20,10 @@ export class XyoGraphQLServerRunnable extends XyoBase implements IXyoRunnable {
 
   constructor(private readonly graphqlProvider: providerFn<XyoGraphQLServer>) {
     super()
+  }
+
+  public getSleepTime(): number {
+    return 0 // doesn't sleep, its a server
   }
 
   public async initialize(): Promise<void> {

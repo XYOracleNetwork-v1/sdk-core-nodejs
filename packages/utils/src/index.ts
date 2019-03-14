@@ -77,6 +77,7 @@ export const writeFile = promisify(fs.writeFile)
 
 export interface IXyoRunnable {
   type: 'daemon' | 'loop' | 'task'
+  getSleepTime(): number
   run(): Promise<void>
   stop(): Promise<void>
 }

@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: app-wizard.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 6th March 2019 4:05:58 pm
+ * @Last modified time: Wednesday, 13th March 2019 4:26:29 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -227,7 +227,7 @@ export async function getIPFSConfig() {
     initial: 'https',
     type: 'select',
     choices: ['https', 'http'],
-    message: `What is the IPFS protocl?`,
+    message: `What is the IPFS protocol?`,
     name: 'ipfsProtocol'
   })
 
@@ -387,12 +387,6 @@ export class AppWizard extends XyoBase {
     )
 
     // tslint:disable-next-line:variable-name
-    const XyStakableToken = await (components.includes(XyoComponent.DIVINER) ?
-      getContractConfig('XyStakableToken') :
-      Promise.resolve(undefined)
-    )
-
-    // tslint:disable-next-line:variable-name
     const XyGovernance = await (components.includes(XyoComponent.DIVINER) ?
       getContractConfig('XyGovernance') :
       Promise.resolve(undefined)
@@ -442,7 +436,6 @@ export class AppWizard extends XyoBase {
             components.includes(XyoComponent.DIVINER) &&
             ethKeys &&
             XyStakingConsensus &&
-            XyStakableToken &&
             XyGovernance &&
             XyPayOnDelivery
           ) ? {
@@ -453,10 +446,6 @@ export class AppWizard extends XyoBase {
                 XyStakingConsensus: {
                   ipfsHash: XyStakingConsensus.ipfsAddr,
                   address: XyStakingConsensus.contractAddr
-                },
-                XyStakableToken: {
-                  ipfsHash: XyStakableToken.ipfsAddr,
-                  address: XyStakableToken.contractAddr
                 },
                 XyGovernance: {
                   ipfsHash: XyGovernance.ipfsAddr,
