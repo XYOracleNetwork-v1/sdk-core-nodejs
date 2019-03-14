@@ -235,6 +235,36 @@ export interface IConsensusProvider {
    * @memberof IConsensusProvider
    */
   getBlockConfirmationTrustThreshold(): Promise<number>
+
+  /**
+   * Given a particular requestId, returns the block or undefined if none exists
+   *
+   * @param {string} requestId
+   * @returns {Promise<IConsensusBlock | undefined>}
+   * @memberof IConsensusProvider
+   */
+  getBlockForRequest(requestId: string): Promise<IConsensusBlock | undefined>
+
+  /**
+   * Given a particular requestId, returns the supporting data (IPFS hash string)
+   *
+   * @param {string} requestId
+   * @returns {Promise<string | undefined>}
+   * @memberof IConsensusProvider
+   */
+  getSupportingDataForRequest(requestId: string): Promise<string | undefined>
+
+  /**
+   * Sends a request to the smart contract
+   *
+   * @param {string} ipfsHash
+   * @param {BN} bounty
+   * @param {string} bountyFrom
+   * @param {number} requestType
+   * @returns {Promise<IRequest>}
+   * @memberof IConsensusProvider
+   */
+  submitRequest(ipfsHash: string, bounty: BN, bountyFrom: string, requestType: number): Promise<IRequest | undefined>
 }
 
 /**
@@ -270,9 +300,10 @@ export interface IRewardComponents {
  * @interface IConsensusBlock
  */
 export interface IConsensusBlock {
-  previousBlock: string,
+  previousBlock: string
   createdAt: number // Block Height in ethereum blocks
   supportingData: string
+  stakingBlock: number
   creator: string
 }
 
@@ -285,11 +316,10 @@ export interface IConsensusBlock {
 export interface IRequest {
   xyoBounty: BN
   weiMining: BN
-  miningProvider: number
   createdAt: BN // Block Height in ethereum blocks
+  responseBlockNumber: BN
   requestSender: string
   requestType: IRequestType // 1-byte number
-  hasResponse: boolean
 }
 
 /**

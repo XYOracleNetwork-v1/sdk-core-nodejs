@@ -9,6 +9,9 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
+ /// THIS IS A SANDBOX FOR BUILDING CONSENSUS PROVIDER
+ /// STILL NEED TO MOCK CONTRACT INTERACTION
+
 import { XyoScscConsensusProvider } from '../xyo-scsc-consensus-provider'
 import { XyoIpfsClient, XyoIpfsClientCtorOptions } from '@xyo-network/ipfs-client'
 import { XyoWeb3Service } from '@xyo-network/web3-service'
@@ -47,7 +50,9 @@ describe('Consensus', async () => {
       privateKey)
 
     consensus = new XyoScscConsensusProvider(web3Service)
+
   })
+
   async function delay(delayInms: number) {
 // tslint:disable-next-line: no-shadowed-variable
     return new Promise((resolve) => {
@@ -58,6 +63,14 @@ describe('Consensus', async () => {
   }
 
   describe("SCSC", () => {
+    it.only('should submit a request if supplied new and valid ipfs hash', async () => {
+      // TODO randomize ipfs hash
+      const ipfs = "QmRNGw6uafhyT75MquUfbGSXfmBbnjtJUosZq9CbSxRTiT"
+      const request = await consensus.submitRequest(ipfs, 0, account, 1)
+      console.log("WHAT RESULT", request)
+      expect(request.requestSender).toEqual(account)
+    })
+
     it('Should get request by id', async () => {
       const req = await consensus.getRequestById(1)
       console.log("getRequestById", req)
@@ -113,7 +126,7 @@ describe('Consensus', async () => {
       console.log("GOT RESULT", result)
     })
     // 114739,40965,229503,
-    it.only('submitBlock', async () => {
+    it('submitBlock', async () => {
       const args = [
         "0x0000000000000000000000000000000000000000000000000000000000000000",
         1432,

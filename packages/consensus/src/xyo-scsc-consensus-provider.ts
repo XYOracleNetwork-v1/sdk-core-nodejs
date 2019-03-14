@@ -8,7 +8,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IConsensusProvider, IStake, IRequest, ISignatureComponents, IResponse, IRewardComponents, IRequestType } from './@types'
+import { IConsensusProvider, IStake, IRequest, ISignatureComponents, IResponse, IRewardComponents, IRequestType, IConsensusBlock } from './@types'
 import { BN, base58 } from '@xyo-network/utils'
 import { XyoBase } from '@xyo-network/base'
 import { XyoWeb3Service } from '@xyo-network/web3-service'
@@ -125,12 +125,14 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
 
   public async getNumRequests(blockHeight?: BN): Promise<number> {
     const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
-    return consensus.methods.numRequests().call({}, blockHeight)
+    const result = consensus.methods.numRequests().call({}, blockHeight)
+    return this.coerceNumber(result)
   }
 
   public async getNumBlocks(blockHeight?: BN): Promise<number> {
     const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
-    return consensus.methods.numBlocks().call({}, blockHeight)
+    const result = consensus.methods.numBlocks().call({}, blockHeight)
+    return this.coerceNumber(result)
   }
 
   public async getExpectedGasRefund(requestIds: string[]): Promise<BN> {
@@ -172,11 +174,7 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
       [`bytes32`, `uint`, ...bytes32Arr, `bytes32`, `bytes`],
       args
       )
-    const packedBytesCheck = this.solidityPackString(
-      [`bytes32`, `uint`, ...bytes32Arr, `bytes32`, `bytes`],
-      args
-    )
-    console.log("Hashing packed bytes", hash, packedBytesCheck, args)
+
     return hash
   }
 
@@ -230,37 +228,36 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
     ]
     const bytes32Arr = requests.map(() => "bytes32")
 
-    const check = this.solidityPackString(
-      [`bytes32`, `uint`, ...bytes32Arr, `bytes32`, `bytes`],
-      [
-        previousBlock,
-        agreedStakeBlockHeight.toString(),
-        ...requests.map(r => this.getBytes32FromIpfsHash(r)),
-        this.getBytes32FromIpfsHash(supportingData),
-        responses
-      ]
-    )
     try {
       const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
       const data = consensus.methods.submitBlock(...args).encodeABI()
-      // console.log("The packed bytes of the message", check)
-      console.log("Submitting block with args: ", args)
-      // console.log("DATA ABOUT TO SEND", data.toString())
-      // const response = await this.web3Service.callRawTx({ data, to: consensus.address })
       // const response = await consensus.methods.submitBlock(...args)
       //        .send({ from: this.web3Service.accountAddress, gas: 3721975})
-      // console.log("call response from contract", response)
-      // return response
-
       const tx = await this.web3Service.sendRawTx({ data, to: consensus.address })
-      console.log("Got Transaction!!!", tx)
-
-      const newBlock = await this.decodeLogs(tx.logs[0].data, tx.logs[0].topics)
-
+      const newBlock = await this.decodeLogs(tx, "BlockCreated", consensus)
       return newBlock
     } catch (e) {
       throw new XyoError(`Submit block was reverted ${e}`, XyoErrors.CRITICAL)
     }
+  }
+
+  public async getBlockForRequest(requestId: string): Promise<IConsensusBlock | undefined> {
+    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
+    const blockDict = consensus.methods.blockForRequest(requestId).call()
+
+    return {
+      previousBlock: blockDict.previousBlock,
+      createdAt: this.coerceNumber(blockDict.createdAt),
+      supportingData: this.getIpfsHashFromBytes32(blockDict.supportingData),
+      creator: blockDict.creator,
+      stakingBlock: this.coerceNumber(blockDict.stakingBlock)
+    }
+  }
+
+  public async getSupportingDataForRequest(requestId: string): Promise<string | undefined> {
+    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
+    const supportingData = await consensus.methods.supportingDataForRequest(requestId).call()
+    return supportingData.length === 0 ? undefined : this.getIpfsHashFromBytes32(supportingData)
   }
 
   public createResponses(responses: IResponse[]): Buffer {
@@ -300,40 +297,39 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
   }
 
   public async canSubmitBlock(address: string, blockHeight?: BN): Promise<boolean> {
-    return true
-    // const stakable = await this.web3Service.getOrInitializeSC("XyBlockProducer")
-    // const numProducers = await stakable.methods.numBlockProducers().call()
-    // const stakee = this.solidityHashString([`address`],
-    //   [address])
-    // const bpIndex = await stakable.methods.blockProducerIndexes(stakee).call()
-    // const numBlocks = await this.getNumBlocks(blockHeight)
-    // return new BN(bpIndex).isEqualTo(new BN(numBlocks % numProducers))
+    const stakable = await this.web3Service.getOrInitializeSC("XyBlockProducer")
+    const numProducers = await stakable.methods.numBlockProducers().call()
+    const bpIndex = await stakable.methods.blockProducerIndexes(address).call()
+    const numBlocks = await this.getNumBlocks(blockHeight)
+
+    return this.coerceNumber(bpIndex) === numBlocks % this.coerceNumber(numProducers)
   }
 
-  private async decodeLogs(hexString: string, topics: [string]): Promise<string> {
-    const web3 = await this.web3Service.getOrInitializeWeb3()
+  public async submitRequest(
+    ipfsHash: string,
+    bounty: BN,
+    bountyFrom: string,
+    requestType: number
+  ): Promise<IRequest | undefined> {
+    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
+    const requestBytes = this.getBytes32FromIpfsHash(ipfsHash)
+    const args = [requestBytes, bounty, bountyFrom, requestType]
+    const data = consensus.methods.submitRequest(...args).encodeABI()
+    const tx = await this.web3Service.sendRawTx({ data, to: consensus.address })
+    const logs = await this.decodeLogs(tx, "RequestSubmitted", consensus)
+    return this.getRequestById(logs.request)
+  }
 
-    const result = web3.eth.abi.decodeLog([{
-      type: 'bytes32',
-      name: 'blockHash'
-    }, {
-      type: 'bytes32',
-      name: 'previousBlock'
-    }, {
-      type: 'uint256',
-      name: 'createdAtBlock'
-    }, {
-      type: 'bytes32',
-      name: 'payloadHash'
-    }, {
-      type: 'address',
-      name: 'blockProducer'
-    }],
+  private async decodeLogs(tx: any, eventName: string, contract: any): Promise<any> {
+    const hexString = tx.logs[0].data
+    const topics = tx.logs[0].topics
+    const web3 = await this.web3Service.getOrInitializeWeb3()
+    const result = web3.eth.abi.decodeLog(
+      contract.abiModel.abi.events[eventName].abiItem.inputs,
       hexString,
       topics)
-
     console.log("Decoded logs", result)
-    return result.blockHash
+    return result
   }
 
   private padLeft = (str: string, len: number) => this.web3Service.padLeft(str, len)
@@ -373,6 +369,14 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
     console.log('Got datas', requestDatas)
 
     return requestDatas as IRequest[]
+  }
+
+  private coerceNumber(val: BN | number | string): number {
+    if (val instanceof BN) return val.toNumber()
+    if (typeof val === 'number') return val
+    if (typeof val === 'string') return parseInt(val, 10)
+
+    throw new XyoError(`Could not parse number ${val}`)
   }
 
   private coerceBN(val: BN | number | string): BN {
@@ -424,7 +428,7 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
 
     requests.map((req1, index) => {
       const req = req1 as IRequest
-      if (!req.hasResponse && Object.keys(unanswered).length < maxTransactions) {
+      if (this.coerceNumber(req.responseBlockNumber) === 0 && Object.keys(unanswered).length < maxTransactions) {
         const ipfsHash = this.getIpfsHashFromBytes32(requestIds[index])
         console.log("Generated ipfs hash", ipfsHash)
         unanswered[ipfsHash] = req as IRequest
