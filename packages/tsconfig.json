@@ -190,6 +190,12 @@
     },
     {
       "path": "ble.noble"
+    },
+    {
+      "path": "bridge"
+    },
+    {
+      "path": "network.ble"
     }
   ],
   "include": [
@@ -250,6 +256,8 @@
     "block-producer/src/**/*.ts",
     "block-witness/src/**/*.ts",
     "ble/src/**/*.ts",
-    "ble.noble/src/**/*.ts"
+    "ble.noble/src/**/*.ts",
+    "bridge/src/**/*.ts",
+    "network.ble/src/**/*.ts"
   ]
 }

@@ -334,7 +334,7 @@ export async function main() {
             undefined // genesis signer
           )
         }
-      }
+      },
     }
   })
 

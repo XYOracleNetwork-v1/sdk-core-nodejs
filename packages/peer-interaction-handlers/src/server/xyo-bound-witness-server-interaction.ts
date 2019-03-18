@@ -10,34 +10,33 @@
  */
 
 import {
-    CatalogueItem,
-    IXyoNetworkPipe,
-    CATALOGUE_LENGTH_IN_BYTES,
-    CATALOGUE_SIZE_OF_SIZE_BYTES
-  } from '@xyo-network/network'
+  CatalogueItem,
+  IXyoNetworkPipe,
+  CATALOGUE_LENGTH_IN_BYTES,
+  CATALOGUE_SIZE_OF_SIZE_BYTES
+} from '@xyo-network/network'
 
-import { IXyoBoundWitness, IXyoPayload, FetterOrWitness, XyoKeySet, XyoFetter, XyoSignatureSet, XyoWitness, XyoBoundWitnessFragment } from '@xyo-network/bound-witness'
+import { IXyoBoundWitness, IXyoPayload, XyoBoundWitness, FetterOrWitness, XyoKeySet, XyoFetter, XyoFetterSet, XyoSignatureSet, XyoWitness, XyoWitnessSet } from '@xyo-network/bound-witness'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { IXyoNodeInteraction } from '@xyo-network/peer-interaction'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoSigner } from '@xyo-network/signing'
-import { IXyoSerializationService } from '@xyo-network/serialization'
-import { InnerBoundWitness } from './xyo-inner-bound-witness'
+import { IXyoSerializationService, ParseQuery } from '@xyo-network/serialization'
+import { InnerBoundWitness } from '../xyo-inner-bound-witness'
 
-  /**
-   * An `XyoBoundWitnessInteraction` manages a "session"
-   * between two networked nodes.
-   */
+/**
+ * An `XyoBoundWitnessInteraction` manages a "session"
+ * between two networked nodes.
+ */
 
-  // tslint:disable-next-line:max-line-length
-export abstract class XyoBoundWitnessClientInteraction extends XyoBase implements IXyoNodeInteraction<IXyoBoundWitness> {
-
-  public abstract catalogueItem: CatalogueItem
+// tslint:disable-next-line:max-line-length
+export class XyoBoundWitnessServerInteraction extends XyoBase implements IXyoNodeInteraction<IXyoBoundWitness> {
 
   constructor(
     private readonly signers: IXyoSigner[],
     private readonly payload: IXyoPayload,
-    private readonly serializationService: IXyoSerializationService
+    private readonly serializationService: IXyoSerializationService,
+    public catalogueItem: CatalogueItem
   ) {
     super()
   }
@@ -66,26 +65,19 @@ export abstract class XyoBoundWitnessClientInteraction extends XyoBase implement
       this.logInfo(`Peer disconnected in xyo-bound-witness-interaction`)
     })
 
-    const keySet = new XyoKeySet(this.signers.map(s => s.publicKey))
-    const fetter = new XyoFetter(keySet, this.payload.heuristics)
-    const { bytesToSend } = this.getFirstMessage()
-    const encodedResponse = await this.sendMessage(networkPipe, bytesToSend)
-
-    const { cat, response } = this.getChoiceAndResponse(encodedResponse)
-
-    // this is their fetter
+    const { bytesToSend, fetter } = this.getFirstMessage()
+    const response = await this.sendMessage(networkPipe, bytesToSend)
     const transferQuery = this.serializationService.deserialize(response).query()
 
-    // create the bound witness object staring with their fetter
-    const aggregator: Buffer[] = [transferQuery.query([0]).readData(true)]
+    const numberOfItemsInTransfer = transferQuery.getChildrenCount()
+    if (numberOfItemsInTransfer < 2 || numberOfItemsInTransfer % 2 !== 0) {
+      throw new XyoError(`Invalid Bound Witness Fragments`, XyoErrors.CRITICAL)
+    }
 
-    // add our fetter to the bound witness
-    aggregator.push(fetter.serialize())
-
-    // at this point the bound witness data has been collected so we get the signing data
+    const aggregator: Buffer[] = [fetter.serialize()]
+    aggregator.push(transferQuery.query([0]).readData(true))
     const signingData = Buffer.concat(aggregator)
     this.logInfo(`Signing Data`, signingData.toString('hex'))
-
     const signatures = await Promise.all(this.signers.map((signer) => {
       return signer.signData(signingData)
     }))
@@ -93,41 +85,36 @@ export abstract class XyoBoundWitnessClientInteraction extends XyoBase implement
     if (!disconnected) {
       const signatureSet = new XyoSignatureSet(signatures)
       const witness = new XyoWitness(signatureSet, this.payload.metadata)
-      const fragment = new XyoBoundWitnessFragment([fetter, witness])
+      const witnessSet = new XyoWitnessSet([witness])
 
-      // now we send back the fetter and signature
-      const theirSig = await this.sendMessage(networkPipe, fragment.serialize())
-      const otherWitness = this.serializationService.deserialize(theirSig).query()
-      aggregator.push(otherWitness.query([0]).readData(true))
+      await networkPipe.send(witnessSet.serialize(), false)
 
       /** Stop listening for disconnect events */
       unregister()
 
       /** Close the connection */
       await networkPipe.close()
-      const fragmentParts: FetterOrWitness[] = []
 
-      aggregator.forEach((item) => {
-        this.serializationService
-          .deserialize(item)
-          .hydrate<FetterOrWitness>()
-      })
-
+      const fragmentParts = transferQuery
+        .reduceChildren((memo, parseResult) => {
+          memo.push(
+            this.serializationService
+              .deserialize(new ParseQuery(parseResult).readData(true))
+              .hydrate<FetterOrWitness>()
+          )
+          return memo
+        }, [fetter] as FetterOrWitness[])
+      fragmentParts.push(witness)
       return new InnerBoundWitness(fragmentParts, signingData)
     }
 
     throw new XyoError(`Peer disconnected in xyo-bound-witness-interaction`, XyoErrors.CRITICAL)
   }
 
-  private getChoiceAndResponse (message: Buffer) {
-    const sizeOfCat = message.readUInt8(0)
-    const response = message.slice(1 + sizeOfCat, message.length)
-    const cat = message.buffer.slice(1, sizeOfCat + 1)
-
-    return { cat, response }
-  }
-
   private getFirstMessage() {
+    const keySet = new XyoKeySet(this.signers.map(s => s.publicKey))
+    const fetter = new XyoFetter(keySet, this.payload.heuristics)
+    const fetterSet = new XyoFetterSet([fetter])
 
     /** Tell the other node this is the catalogue item you chose */
     const catalogueBuffer = Buffer.alloc(CATALOGUE_LENGTH_IN_BYTES)
@@ -139,9 +126,9 @@ export abstract class XyoBoundWitnessClientInteraction extends XyoBase implement
     const bytesToSend = Buffer.concat([
       sizeOfCatalogueInBytesBuffers,
       catalogueBuffer,
+      fetterSet.serialize()
     ])
-
-    return { bytesToSend }
+    return { bytesToSend, fetter }
   }
 
   private async sendMessage(networkPipe: IXyoNetworkPipe, bytesToSend: Buffer): Promise<Buffer> {

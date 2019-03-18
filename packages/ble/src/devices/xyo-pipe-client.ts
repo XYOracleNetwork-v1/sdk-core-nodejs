@@ -44,6 +44,8 @@ export class XyoPipeClient implements IXyoNetworkPipe {
         await characteristics[0].subscribe()
         return this
       }
+
+      throw Error("No XYO pipe characteristic 1")
     }
 
     return null
@@ -60,7 +62,7 @@ export class XyoPipeClient implements IXyoNetworkPipe {
       return undefined
     }
 
-    throw Error("No XYO pipe characteristic")
+    throw Error("No XYO pipe characteristic 2")
   }
 
   public async close(): Promise<void> {
@@ -97,6 +99,7 @@ export class XyoPipeClient implements IXyoNetworkPipe {
     const chunksToSend = this.chunk(this.addBleSize(data), 20)
     this.logger.info(`Sending entire: ${data.toString('hex')}`)
 
+    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < chunksToSend.length; i++) {
       await characteristic.write(chunksToSend[i])
     }
