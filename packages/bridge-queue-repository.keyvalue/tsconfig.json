@@ -22,6 +22,7 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    {"path": "../network.ble"}
+    {"path": "../bridge-queue-repository"},
+    {"path": "../storage"}
   ]
 }

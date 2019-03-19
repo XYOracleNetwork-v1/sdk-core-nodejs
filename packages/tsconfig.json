@@ -196,6 +196,12 @@
     },
     {
       "path": "network.ble"
+    },
+    {
+      "path": "bridge-queue-repository"
+    },
+    {
+      "path": "bridge-queue-repository.keyvalue"
     }
   ],
   "include": [
@@ -258,6 +264,8 @@
     "ble/src/**/*.ts",
     "ble.noble/src/**/*.ts",
     "bridge/src/**/*.ts",
-    "network.ble/src/**/*.ts"
+    "network.ble/src/**/*.ts",
+    "bridge-queue-repository/src/**/*.ts",
+    "bridge-queue-repository.keyvalue/src/**/*.ts"
   ]
 }
