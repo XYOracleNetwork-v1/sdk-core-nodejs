@@ -8,15 +8,24 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IConsensusProvider, IStake, IRequest, ISignatureComponents, IResponse, IRewardComponents, IRequestType, IConsensusBlock } from './@types'
+import {
+  IConsensusProvider,
+  IStake,
+  IRequest,
+  ISignatureComponents,
+  IResponse,
+  IRewardComponents,
+  IRequestType,
+  IConsensusBlock,
+} from './@types'
 import { BN, base58 } from '@xyo-network/utils'
 import { XyoBase } from '@xyo-network/base'
 import { XyoWeb3Service } from '@xyo-network/web3-service'
 import { soliditySHA3, solidityPack } from 'ethereumjs-abi'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 
-export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvider {
-
+export class XyoScscConsensusProvider extends XyoBase
+  implements IConsensusProvider {
   private static CONFIRMATION_THRESHOLD = 24
 
   private web3Service: XyoWeb3Service
@@ -36,8 +45,13 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
     return XyoScscConsensusProvider.CONFIRMATION_THRESHOLD
   }
 
-  public async getRequestById(id: string, blockHeight?: BN): Promise<IRequest | undefined> {
-    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
+  public async getRequestById(
+    id: string,
+    blockHeight?: BN,
+  ): Promise<IRequest | undefined> {
+    const consensus = await this.web3Service.getOrInitializeSC(
+      'XyStakingConsensus',
+    )
     const req = await consensus.methods.requestsById(id).call({}, blockHeight)
     console.log('Got Request', req)
     if (!req.createdAt || req.createdAt === '0') {
@@ -46,48 +60,83 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
     return req
   }
 
-  public async getNextUnhandledRequests(blockHeight?: BN): Promise<{ [id: string]: IRequest }> {
+  public async getNextUnhandledRequests(
+    blockHeight?: BN,
+  ): Promise<{ [id: string]: IRequest }> {
     const resultMapping: { [id: string]: IRequest } = {}
-    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
-    const numRequests = await consensus.methods.numRequests().call({}, blockHeight)
-    return this.getUnhandledRequestsBatch(resultMapping, numRequests, blockHeight)
+    const consensus = await this.web3Service.getOrInitializeSC(
+      'XyStakingConsensus',
+    )
+    const numRequests = await consensus.methods
+      .numRequests()
+      .call({}, blockHeight)
+    return this.getUnhandledRequestsBatch(
+      resultMapping,
+      numRequests,
+      blockHeight,
+    )
   }
 
   public async getLatestBlockHash(blockHeight?: BN): Promise<string> {
-    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
-    const result = await consensus.methods.getLatestBlock().call({}, blockHeight)
+    const consensus = await this.web3Service.getOrInitializeSC(
+      'XyStakingConsensus',
+    )
+    const result = await consensus.methods
+      .getLatestBlock()
+      .call({}, blockHeight)
     return result
   }
 
   public async getNetworkActiveStake(blockHeight?: BN): Promise<BN> {
-    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
-    const activeState = await consensus.methods.totalActiveStake().call({}, blockHeight)
+    const consensus = await this.web3Service.getOrInitializeSC(
+      'XyStakingConsensus',
+    )
+    const activeState = await consensus.methods
+      .totalActiveStake()
+      .call({}, blockHeight)
     return this.coerceBN(activeState)
   }
 
-  public async getActiveStake(paymentId: string, blockHeight?: BN): Promise<BN> {
-    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
-    const stakeeStake = await consensus.methods.stakeeStake(paymentId).call({}, blockHeight)
+  public async getActiveStake(
+    paymentId: string,
+    blockHeight?: BN,
+  ): Promise<BN> {
+    const consensus = await this.web3Service.getOrInitializeSC(
+      'XyStakingConsensus',
+    )
+    const stakeeStake = await consensus.methods
+      .stakeeStake(paymentId)
+      .call({}, blockHeight)
     return this.coerceBN(stakeeStake.activeStake)
   }
 
   public async getStakerActiveStake(
-      paymentId: string,
-      stakerAddr: string,
-      blockHeight?: BN
-    ): Promise<BN> {
-    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
+    paymentId: string,
+    stakerAddr: string,
+    blockHeight?: BN,
+  ): Promise<BN> {
+    const consensus = await this.web3Service.getOrInitializeSC(
+      'XyStakingConsensus',
+    )
     const numStakerStakes = await consensus.methods.numStakerStakes(stakerAddr)
     const numStakeeStakes = await consensus.methods.numStakeeStakes(paymentId)
 
     const stakeIdPromises = []
     if (numStakerStakes < numStakeeStakes) {
       for (let i = 0; i < numStakerStakes; i++) {
-        stakeIdPromises.push(consensus.methods.stakerToStakingIds(stakerAddr, i).call({}, blockHeight))
+        stakeIdPromises.push(
+          consensus.methods
+            .stakerToStakingIds(stakerAddr, i)
+            .call({}, blockHeight),
+        )
       }
     } else {
       for (let i = 0; i < numStakeeStakes; i++) {
-        stakeIdPromises.push(consensus.methods.stakeeToStakingIds(paymentId, i).call({}, blockHeight))
+        stakeIdPromises.push(
+          consensus.methods
+            .stakeeToStakingIds(paymentId, i)
+            .call({}, blockHeight),
+        )
       }
     }
     const stakeIds = await Promise.all(stakeIdPromises)
@@ -95,11 +144,13 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
     if (stakeIds.length === 0) {
       return new BN(0)
     }
-    const stakeFeches = stakeIds.map(async (id: any) => consensus.methods.stakeData(id))
+    const stakeFeches = stakeIds.map(async (id: any) =>
+      consensus.methods.stakeData(id),
+    )
     const stakeDatas = await Promise.all(stakeFeches)
     const activeStake = new BN(0)
     stakeDatas.forEach((stakeData: any) => {
-      console.log("LOOKING AT STAKE DATA", stakeData)
+      console.log('LOOKING AT STAKE DATA', stakeData)
       if (stakeData.staker === stakerAddr && stakeData.stakee === paymentId) {
         activeStake.add(stakeData.amount)
       }
@@ -107,30 +158,41 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
     return activeStake
   }
 
-  public async isBlockProducer(paymentId: string, blockHeight?: BN): Promise<boolean> {
-    const stakable = await this.web3Service.getOrInitializeSC("XyBlockProducer")
+  public async isBlockProducer(
+    paymentId: string,
+    blockHeight?: BN,
+  ): Promise<boolean> {
+    const stakable = await this.web3Service.getOrInitializeSC('XyBlockProducer')
     return stakable.methods.exists(paymentId).call({}, blockHeight)
   }
 
-  public async getRewardPercentages(blockHeight?: BN): Promise<IRewardComponents> {
-    const governance = await this.web3Service.getOrInitializeSC("XyGovernance")
+  public async getRewardPercentages(
+    blockHeight?: BN,
+  ): Promise<IRewardComponents> {
+    const governance = await this.web3Service.getOrInitializeSC('XyGovernance')
     // TODO load the Paramaterizer contract instead
-    const bpReward = await governance.methods.get('xyBlockProducerRewardPct').call({}, blockHeight)
+    const bpReward = await governance.methods
+      .get('xyBlockProducerRewardPct')
+      .call({}, blockHeight)
     const rewardComponents: IRewardComponents = {
       blockProducers: bpReward.value,
-      supporters: 100 - bpReward.value
+      supporters: 100 - bpReward.value,
     }
     return rewardComponents
   }
 
   public async getNumRequests(blockHeight?: BN): Promise<number> {
-    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
+    const consensus = await this.web3Service.getOrInitializeSC(
+      'XyStakingConsensus',
+    )
     const result = consensus.methods.numRequests().call({}, blockHeight)
     return this.coerceNumber(result)
   }
 
   public async getNumBlocks(blockHeight?: BN): Promise<number> {
-    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
+    const consensus = await this.web3Service.getOrInitializeSC(
+      'XyStakingConsensus',
+    )
     const result = consensus.methods.numBlocks().call({}, blockHeight)
     return this.coerceNumber(result)
   }
@@ -145,12 +207,12 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
   }
 
   public async getMinimumXyoRequestBounty(blockHeight?: BN): Promise<BN> {
-    return this.getGovernanceParam("xyXYORequestBountyMin", blockHeight)
+    return this.getGovernanceParam('xyXYORequestBountyMin', blockHeight)
   }
 
   public async getStakeQuorumPct(blockHeight?: BN): Promise<number> {
-    const pct = await this.getGovernanceParam("xyStakeQuorumPct", blockHeight)
-    return pct.toNumber()
+    const pct = await this.getGovernanceParam('xyStakeQuorumPct', blockHeight)
+    return this.coerceNumber(pct)
   }
 
   public async encodeBlock(
@@ -158,22 +220,21 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
     agreedStakeBlockHeight: BN,
     requests: string[],
     supportingData: string,
-    responses: Buffer
+    responses: Buffer,
   ): Promise<string> {
-
-    const bytes32Arr = requests.map(() => "bytes32")
+    const bytes32Arr = requests.map(() => 'bytes32')
     const hexIpfsSupportingData = this.getBytes32FromIpfsHash(supportingData)
     const args = [
       previousBlock,
       agreedStakeBlockHeight.toString(),
       ...requests.map(r => this.getBytes32FromIpfsHash(r)),
       hexIpfsSupportingData,
-      responses
+      responses,
     ]
     const hash = this.solidityHashString(
       [`bytes32`, `uint`, ...bytes32Arr, `bytes32`, `bytes`],
-      args
-      )
+      args,
+    )
 
     return hash
   }
@@ -182,13 +243,17 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
     this.logInfo(`Sign Block ${block}`)
     const signedMessage = await this.web3Service.signMessage(block)
     const sig = signedMessage
-    console.log("Signed message", signedMessage)
+    console.log('Signed message', signedMessage)
     // TODO Clean (this is broken in web3 beta 48):
     const r = `${sig.slice(0, 66)}`
     const s = `0x${sig.slice(66, 130)}`
     const v = parseInt(sig.slice(130, 132), 16)
     const signature: ISignatureComponents = {
-      sigR:r, sigS: s, sigV:v, publicKey: this.web3Service.accountAddress}
+      sigR: r,
+      sigS: s,
+      sigV: v,
+      publicKey: this.web3Service.accountAddress,
+    }
 
     return signature
   }
@@ -202,19 +267,26 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
     signers: string[],
     sigR: string[],
     sigS: string[],
-    sigV: number[]
+    sigV: number[],
   ): Promise<string> {
-    console.log(`Submit block args`, JSON.stringify({
-      previousBlock,
-      agreedStakeBlockHeight,
-      requests,
-      supportingData,
-      responses,
-      signers,
-      sigR,
-      sigS,
-      sigV,
-    }, null, 2))
+    console.log(
+      `Submit block args`,
+      JSON.stringify(
+        {
+          previousBlock,
+          agreedStakeBlockHeight,
+          requests,
+          supportingData,
+          responses,
+          signers,
+          sigR,
+          sigS,
+          sigV,
+        },
+        null,
+        2,
+      ),
+    )
     const args = [
       previousBlock,
       agreedStakeBlockHeight.toString(),
@@ -224,25 +296,32 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
       signers,
       sigR,
       sigS,
-      sigV
+      sigV,
     ]
-    const bytes32Arr = requests.map(() => "bytes32")
-
     try {
-      const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
+      const consensus = await this.web3Service.getOrInitializeSC(
+        'XyStakingConsensus',
+      )
       const data = consensus.methods.submitBlock(...args).encodeABI()
       // const response = await consensus.methods.submitBlock(...args)
       //        .send({ from: this.web3Service.accountAddress, gas: 3721975})
-      const tx = await this.web3Service.sendRawTx({ data, to: consensus.address })
-      const newBlock = await this.decodeLogs(tx, "BlockCreated", consensus)
+      const tx = await this.web3Service.sendRawTx({
+        data,
+        to: consensus.address,
+      })
+      const newBlock = await this.decodeLogs(tx, 'BlockCreated', consensus)
       return newBlock
     } catch (e) {
       throw new XyoError(`Submit block was reverted ${e}`, XyoErrors.CRITICAL)
     }
   }
 
-  public async getBlockForRequest(requestId: string): Promise<IConsensusBlock | undefined> {
-    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
+  public async getBlockForRequest(
+    requestId: string,
+  ): Promise<IConsensusBlock | undefined> {
+    const consensus = await this.web3Service.getOrInitializeSC(
+      'XyStakingConsensus',
+    )
     const blockDict = consensus.methods.blockForRequest(requestId).call()
 
     return {
@@ -250,38 +329,56 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
       createdAt: this.coerceNumber(blockDict.createdAt),
       supportingData: this.getIpfsHashFromBytes32(blockDict.supportingData),
       creator: blockDict.creator,
-      stakingBlock: this.coerceNumber(blockDict.stakingBlock)
+      stakingBlock: this.coerceNumber(blockDict.stakingBlock),
     }
   }
 
-  public async getSupportingDataForRequest(requestId: string): Promise<string | undefined> {
-    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
-    const supportingData = await consensus.methods.supportingDataForRequest(requestId).call()
-    return supportingData.length === 0 ? undefined : this.getIpfsHashFromBytes32(supportingData)
+  public async getSupportingDataForRequest(
+    requestId: string,
+  ): Promise<string | undefined> {
+    const consensus = await this.web3Service.getOrInitializeSC(
+      'XyStakingConsensus',
+    )
+    const supportingData = await consensus.methods
+      .supportingDataForRequest(requestId)
+      .call()
+    return supportingData.length === 0
+      ? undefined
+      : this.getIpfsHashFromBytes32(supportingData)
   }
 
   public createResponses(responses: IResponse[]): Buffer {
-    const responseTypes = responses.map(r => r.boolResponse ? 'bool' : 'uint')
-    const responseValues = responses.map(r => r.boolResponse ?
-      r.boolResponse : r.numResponse ?
-      r.numResponse : r.withdrawResponse)
+    const responseTypes = responses.map(r => (r.boolResponse ? 'bool' : 'uint'))
+    const responseValues = responses.map(r =>
+      r.boolResponse
+        ? r.boolResponse
+        : r.numResponse
+        ? r.numResponse
+        : r.withdrawResponse,
+    )
     // console.log(`TYPES AND VALUES`, responseTypes, responseValues)
 
-    const packedBytes = solidityPack(
-      [...responseTypes],
-      [...responseValues]
-    )
+    const packedBytes = solidityPack([...responseTypes], [...responseValues])
 
     // console.log(`Packed`, packedBytes)
     return packedBytes
   }
 
-  public async getStakesForStakee(paymentId: string, blockHeight?: BN): Promise<IStake[]> {
-    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
+  public async getStakesForStakee(
+    paymentId: string,
+    blockHeight?: BN,
+  ): Promise<IStake[]> {
+    const consensus = await this.web3Service.getOrInitializeSC(
+      'XyStakingConsensus',
+    )
     const numStakeeStakes = await consensus.methods.numStakeeStakes(paymentId)
     const stakeIdPromises = []
     for (let i = 0; i < numStakeeStakes; i++) {
-      stakeIdPromises.push(consensus.methods.stakeeToStakingIds(paymentId, i).call({}, blockHeight))
+      stakeIdPromises.push(
+        consensus.methods
+          .stakeeToStakingIds(paymentId, i)
+          .call({}, blockHeight),
+      )
     }
     return Promise.all(stakeIdPromises)
   }
@@ -289,78 +386,100 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
   public async getGasEstimateForRequest(requestId: string): Promise<BN> {
     const req = await this.getRequestById(requestId)
     if (req) {
-      const consensusAddress = this.web3Service.getAddressOfContract("XyStakingConsensus")
-      const pOnD = await this.web3Service.getOrInitializeSC("XyPayOnDelivery")
-      return pOnD.methods.submitResponse(consensusAddress, IRequestType.Bool, true).estimateGas()
+      const consensusAddress = this.web3Service.getAddressOfContract(
+        'XyStakingConsensus',
+      )
+      const pOnD = await this.web3Service.getOrInitializeSC('XyPayOnDelivery')
+      return pOnD.methods
+        .submitResponse(consensusAddress, IRequestType.Bool, true)
+        .estimateGas()
     }
     return new BN(0)
   }
 
-  public async canSubmitBlock(address: string, blockHeight?: BN): Promise<boolean> {
-    const stakable = await this.web3Service.getOrInitializeSC("XyBlockProducer")
+  public async canSubmitBlock(
+    address: string,
+    blockHeight?: BN,
+  ): Promise<boolean> {
+    const stakable = await this.web3Service.getOrInitializeSC('XyBlockProducer')
     const numProducers = await stakable.methods.numBlockProducers().call()
     const bpIndex = await stakable.methods.blockProducerIndexes(address).call()
     const numBlocks = await this.getNumBlocks(blockHeight)
 
-    return this.coerceNumber(bpIndex) === numBlocks % this.coerceNumber(numProducers)
+    return (
+      this.coerceNumber(bpIndex) === numBlocks % this.coerceNumber(numProducers)
+    )
   }
 
   public async submitRequest(
     ipfsHash: string,
     bounty: BN,
     bountyFrom: string,
-    requestType: number
+    requestType: number,
   ): Promise<IRequest | undefined> {
-    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
+    const consensus = await this.web3Service.getOrInitializeSC(
+      'XyStakingConsensus',
+    )
     const requestBytes = this.getBytes32FromIpfsHash(ipfsHash)
     const args = [requestBytes, bounty, bountyFrom, requestType]
     const data = consensus.methods.submitRequest(...args).encodeABI()
     const tx = await this.web3Service.sendRawTx({ data, to: consensus.address })
-    const logs = await this.decodeLogs(tx, "RequestSubmitted", consensus)
-    return this.getRequestById(logs.request)
+    const logs = await this.decodeLogs(tx, 'RequestSubmitted', consensus)
+    const result: IRequest | undefined = await this.getRequestById(logs.request)
+    if (result) {
+      result.request = requestBytes
+    }
+    return result
   }
 
-  private async decodeLogs(tx: any, eventName: string, contract: any): Promise<any> {
+  private async decodeLogs(
+    tx: any,
+    eventName: string,
+    contract: any,
+  ): Promise<any> {
     const hexString = tx.logs[0].data
     const topics = tx.logs[0].topics
     const web3 = await this.web3Service.getOrInitializeWeb3()
     const result = web3.eth.abi.decodeLog(
       contract.abiModel.abi.events[eventName].abiItem.inputs,
       hexString,
-      topics)
-    console.log("Decoded logs", result)
+      topics,
+    )
+    console.log('Decoded logs', result)
     return result
   }
 
-  private padLeft = (str: string, len: number) => this.web3Service.padLeft(str, len)
+  private padLeft = (str: string, len: number) =>
+    this.web3Service.padLeft(str, len)
 
   private solidityHashString(types: string[], values: any[]): string {
-    return `0x${soliditySHA3(
-        types,
-        values
-      )
-      .toString(`hex`)}`
+    return `0x${soliditySHA3(types, values).toString(`hex`)}`
   }
 
   private solidityPackString(types: string[], values: any[]): string {
-    return `0x${solidityPack(
-      types,
-      values
-    )
-      .toString(`hex`)}`
+    return `0x${solidityPack(types, values).toString(`hex`)}`
   }
 
-  private async getGovernanceParam(name: string, blockHeight?: BN): Promise<BN> {
-    const governance = await this.web3Service.getOrInitializeSC("XyGovernance")
+  private async getGovernanceParam(
+    name: string,
+    blockHeight?: BN,
+  ): Promise<BN> {
+    const governance = await this.web3Service.getOrInitializeSC('XyGovernance')
     const result = await governance.methods.get(name).call({}, blockHeight)
     return this.coerceBN(result.value | result)
   }
 
-  private async getRequests(requestIds: string[], blockHeight?: BN): Promise<IRequest[]> {
+  private async getRequests(
+    requestIds: string[],
+    blockHeight?: BN,
+  ): Promise<IRequest[]> {
     const idPromises = []
     // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < requestIds.length; i++) {
-      const req: Promise<IRequest | undefined> = this.getRequestById(requestIds[i], blockHeight)
+      const req: Promise<IRequest | undefined> = this.getRequestById(
+        requestIds[i],
+        blockHeight,
+      )
       if (req) {
         idPromises.push(req)
       }
@@ -399,15 +518,20 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
 
   private getBytes32FromIpfsHash(ipfsListing: string) {
     const sliceIndex = ipfsListing.startsWith('Qm') ? 2 : 0
-    return `0x${base58.decode(ipfsListing).slice(sliceIndex).toString('hex')}`
+    return `0x${base58
+      .decode(ipfsListing)
+      .slice(sliceIndex)
+      .toString('hex')}`
   }
 
   private async getUnhandledRequestsBatch(
     unanswered: { [id: string]: IRequest },
     start: number,
-    blockHeight?: BN
+    blockHeight?: BN,
   ): Promise<{ [id: string]: IRequest }> {
-    const consensus = await this.web3Service.getOrInitializeSC("XyStakingConsensus")
+    const consensus = await this.web3Service.getOrInitializeSC(
+      'XyStakingConsensus',
+    )
 
     const batchRequests = 30 // num requests in search scope from end of request list
     const maxTransactions = 20 // max number of transactions to return in full batch
@@ -423,17 +547,24 @@ export class XyoScscConsensusProvider extends XyoBase implements IConsensusProvi
     }
 
     const requestIds = await Promise.all(promises)
-    console.log("Got Request Ids", requestIds)
+    console.log('Got Request Ids', requestIds)
     const requests = await this.getRequests(requestIds)
 
     requests.map((req1, index) => {
       const req = req1 as IRequest
-      if (this.coerceNumber(req.responseBlockNumber) === 0 && Object.keys(unanswered).length < maxTransactions) {
+      if (
+        this.coerceNumber(req.responseBlockNumber) === 0 &&
+        Object.keys(unanswered).length < maxTransactions
+      ) {
         const ipfsHash = this.getIpfsHashFromBytes32(requestIds[index])
-        console.log("Generated ipfs hash", ipfsHash)
+        console.log('Generated ipfs hash', ipfsHash)
         unanswered[ipfsHash] = req as IRequest
       }
     })
-    return this.getUnhandledRequestsBatch(unanswered, start > batchRequests ? start - batchRequests : 0, blockHeight)
+    return this.getUnhandledRequestsBatch(
+      unanswered,
+      start > batchRequests ? start - batchRequests : 0,
+      blockHeight,
+    )
   }
 }

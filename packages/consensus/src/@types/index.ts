@@ -264,7 +264,8 @@ export interface IConsensusProvider {
    * @returns {Promise<IRequest>}
    * @memberof IConsensusProvider
    */
-  submitRequest(ipfsHash: string, bounty: BN, bountyFrom: string, requestType: number): Promise<IRequest | undefined>
+  submitRequest(ipfsHash: string, bounty: BN, bountyFrom: string, requestType: number):
+    Promise<IRequest | undefined>
 }
 
 /**
@@ -314,6 +315,7 @@ export interface IConsensusBlock {
  * @interface IRequest
  */
 export interface IRequest {
+  request?: string
   xyoBounty: BN
   weiMining: BN
   createdAt: BN // Block Height in ethereum blocks
