@@ -1,16 +1,19 @@
 
-import { XyoKeyValueDatabase } from '@xyo-network/storage'
+import { IXyoStorageProvider } from '@xyo-network/storage'
 import { IXyoBridgeQueueRepository, IXyoBridgeQueueItem } from '@xyo-network/bridge-queue-repository'
 
 export class XyoStorageBridgeQueueRepository implements IXyoBridgeQueueRepository {
+  private static QUEUE_KEY = Buffer.from("BRIDGE_QUEUE")
   private memoryBase: IXyoBridgeQueueItem[] = []
+  private storage: IXyoStorageProvider
 
-//   // tslint:disable-next-line:no-empty
-//   constructor () {}
+  constructor (store: IXyoStorageProvider) {
+    this.storage = store
+  }
 
-  public removeHashes(item: Buffer): void {
-    this.memoryBase = this.memoryBase.filter((i) => {
-      return i.hash !== item
+  public removeHashes(items: Buffer[]): void {
+    items.forEach((hash) => {
+      this.removeHash(hash)
     })
   }
 
@@ -50,6 +53,28 @@ export class XyoStorageBridgeQueueRepository implements IXyoBridgeQueueRepositor
           this.memoryBase[i].weight++
         }
       }
+    })
+  }
+
+  public async commit () {
+    await this.storage.write(
+        XyoStorageBridgeQueueRepository.QUEUE_KEY,
+        Buffer.from(JSON.stringify(this.memoryBase))
+    )
+  }
+
+  public async restore () {
+    const encodedState = await this.storage.read(XyoStorageBridgeQueueRepository.QUEUE_KEY)
+
+    if (encodedState) {
+      const string = encodedState.toString("utf8")
+      this.memoryBase = JSON.parse(string)
+    }
+  }
+
+  private removeHash (hash: Buffer) {
+    this.memoryBase = this.memoryBase.filter((i) => {
+      return i.hash !== hash
     })
   }
 

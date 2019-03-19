@@ -1,5 +1,8 @@
+
+export { XyoBridgeQueue } from './xyo-bridge-queue'
+
 export interface IXyoBridgeQueueRepository {
-  removeHashes(item: Buffer): void
+  removeHashes(items: Buffer[]): void
   getQueue(): IXyoBridgeQueueItem[]
   setQueue (queue: IXyoBridgeQueueItem[]): void
   addQueueItem (item: IXyoBridgeQueueItem): void
