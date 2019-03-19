@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-block-witness-runnable.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 5th March 2019 11:38:41 am
+ * @Last modified time: Wednesday, 13th March 2019 4:01:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -21,6 +21,10 @@ export class XyoBlockWitnessRunnable extends XyoBase implements IXyoRunnable {
 
   constructor(private readonly blockWitnessProvider: providerFn<XyoBlockWitness>) {
     super()
+  }
+
+  public getSleepTime(): number {
+    return 1000
   }
 
   public async initialize(): Promise<void> {

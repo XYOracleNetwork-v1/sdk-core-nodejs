@@ -10,35 +10,30 @@
 */
 
 import { XyoBase } from "@xyo-network/base"
-import { IXyoTransactionRepository, IXyoTransaction, IXyoTransactionMeta } from "./@types"
-import { IRepoItem } from "@xyo-network/utils"
+import { IXyoStorageProvider } from "@xyo-network/storage"
+import { IXyoTransactionRepository, IXyoTransaction } from "./@types"
 
 export class XyoTransactionRepository extends XyoBase implements IXyoTransactionRepository {
-  public data: ITransactionData
 
-  constructor (data?: ITransactionData) {
+  constructor (private readonly storage: IXyoStorageProvider) {
     super()
-    this.data = data || {
-      data: {}
-    }
   }
 
   public async add(id: string, item: IXyoTransaction <any>): Promise < void > {
     const transactionBuffer = Buffer.from(JSON.stringify(item))
-
-    this.data.data[id] = transactionBuffer
+    await this.storage.write(Buffer.from(id), transactionBuffer)
   }
   public async contains(id: string): Promise < boolean > {
     try {
-      return Boolean(this.data.data[id])
-    } catch (e) { // swallow
+      return this.storage.containsKey(Buffer.from(id))
+    } catch (e) {
       return false
     }
   }
 
   public async find(id: string) {
     try {
-      const buffer = await this.data.data[id]
+      const buffer = await this.storage.read(Buffer.from(id))
       if (!buffer) return undefined
       return JSON.parse(buffer.toString()) as IXyoTransaction<any>
     } catch (e) { // swallow
@@ -47,20 +42,28 @@ export class XyoTransactionRepository extends XyoBase implements IXyoTransaction
   }
 
   public async list(limit: number, cursor: string | undefined) {
-    const keySpace = Object.keys(this.data.data)
+    const keySpace = (await this.storage.getAllKeys()).map(k => k.toString())
     const totalCount = keySpace.length
 
     const startingIndex = cursor ? keySpace.indexOf(cursor) : 0
     const endingIndex = startingIndex + limit
 
     // tslint:disable-next-line:array-type
-    const transactions: IXyoTransaction<any>[] = []
+    const transactionPromises: Promise<Buffer | undefined>[] = []
     let endCursor: string | undefined
+
     for (let i = startingIndex; i <= endingIndex && i < keySpace.length; i += 1) {
-      const keyPair = this.data.data[keySpace[i]]
-      endCursor = keyPair.toString('hex')
-      transactions.push(JSON.parse(keyPair.toString()) as IXyoTransaction<any>)
+      const bufKey = Buffer.from(keySpace[i])
+      endCursor = bufKey.toString('hex')
+      transactionPromises.push(this.storage.read(bufKey))
     }
+
+    const ts = await Promise.all(transactionPromises)
+    const hydratedTransactions = ts.map((t) => {
+      if (!t) return undefined
+      return JSON.parse(t.toString()) as IXyoTransaction<any>
+    })
+    .filter(t => t !== undefined)
 
     return {
       meta: {
@@ -68,12 +71,8 @@ export class XyoTransactionRepository extends XyoBase implements IXyoTransaction
         totalCount,
         hasNextPage: keySpace.length > endingIndex
       },
-      items: transactions
+      // tslint:disable-next-line:prefer-array-literal
+      items: hydratedTransactions as Array<IXyoTransaction<any>>
     }
-  }
-}
-export interface ITransactionData {
-  data: {
-    [id: string]: Buffer // JSON string representation of transaction and meta
   }
 }

@@ -27,6 +27,6 @@
     {"path": "../meta-list"},
     {"path": "../errors"},
     {"path": "../base"},
-    {"path": "../storage.leveldb"},
+    {"path": "../storage"},
   ]
 }

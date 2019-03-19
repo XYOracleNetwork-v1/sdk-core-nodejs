@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 12th March 2019 3:44:18 pm
+ * @Last modified time: Wednesday, 13th March 2019 3:55:03 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -198,6 +198,9 @@ export class XyoAppLauncher extends XyoBase {
           host: this.config.ipfs.host,
           port: this.config.ipfs.port,
           protocol: this.config.ipfs.protocol
+        },
+        transactionRepository: {
+          data: path.resolve(nodeData, 'transactions')
         }
       }
     })
