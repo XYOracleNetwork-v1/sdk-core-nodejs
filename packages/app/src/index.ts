@@ -9,24 +9,33 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-export {
-  IAppConfig
-} from './@types'
-
+export { IAppConfig } from './@types'
+import { prompt } from 'enquirer'
 import { XyoNode } from '@xyo-network/base-node'
-import { ProcessManager, fileExists, readFile, writeFile, createDirectoryIfNotExists } from '@xyo-network/utils'
+import {
+  ProcessManager,
+  fileExists,
+  readFile,
+  writeFile,
+  createDirectoryIfNotExists,
+} from '@xyo-network/utils'
 import { XyoBase } from '@xyo-network/base'
 import path from 'path'
 import { AppWizard } from './app-wizard'
-import { IAppConfig } from './@types'
+import { IAppConfig, IEthCryptoKeys } from './@types'
 import yaml, { safeDump } from 'js-yaml'
-import { validateConfigFile } from './validator'
+import {
+  validateConfigFile,
+  validatePassword,
+  promptValidator,
+  IValidationResult,
+} from './validator'
+import { XyoCryptoProvider } from '@xyo-network/crypto'
+
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { CatalogueItem } from '@xyo-network/network'
 import { IXyoComponentFeatureResponse } from '@xyo-network/node-network'
-
 export class XyoAppLauncher extends XyoBase {
-
   public config: IAppConfig | undefined
   public yamlConfig: string | undefined
   public startNode = true
@@ -49,7 +58,9 @@ export class XyoAppLauncher extends XyoBase {
         this.config = yaml.safeLoad(file) as IAppConfig
       } else {
         this.logInfo(`Could not find a configuration file at ${configPath}`)
-        const res = await new AppWizard(rootPath).createConfiguration(configName)
+        const res = await new AppWizard(rootPath).createConfiguration(
+          configName,
+        )
         this.config = (res && res.config) || undefined
         this.startNode = Boolean(res && res.startNode)
         writeConfigFile = true
@@ -69,16 +80,17 @@ export class XyoAppLauncher extends XyoBase {
 
     const { validates, message } = await validateConfigFile(this.config)
     if (!validates) {
-      throw new XyoError(`There was an error in your config file ${message}. Exiting`)
+      throw new XyoError(
+        `There was an error in your config file ${message}. Exiting`,
+      )
     }
-
     if (writeConfigFile) {
       this.yamlConfig = safeDump(JSON.parse(JSON.stringify(this.config)))
       await this.writeConfigFile(this.yamlConfig, this.config, configFolder)
     }
   }
 
-  public async start () {
+  public async start() {
     if (!this.config) throw new XyoError(`Config not initialized`)
 
     const nodeData = path.resolve(this.config.data, this.config.name)
@@ -86,7 +98,9 @@ export class XyoAppLauncher extends XyoBase {
     const isDiviner = Boolean(this.config.diviner)
 
     if (!isArchivist && !isDiviner) {
-      throw new XyoError(`Must support at least archivist or diviner functionality`)
+      throw new XyoError(
+        `Must support at least archivist or diviner functionality`,
+      )
     }
 
     const features: IXyoComponentFeatureResponse = {}
@@ -99,8 +113,8 @@ export class XyoAppLauncher extends XyoBase {
           graphqlHost: this.config.ip,
           graphqlPort: this.config.graphqlPort,
           boundWitnessHost: this.config.ip,
-          boundWitnessPort: this.config.serverPort
-        }
+          boundWitnessPort: this.config.serverPort,
+        },
       }
     }
 
@@ -108,43 +122,48 @@ export class XyoAppLauncher extends XyoBase {
       features.diviner = {
         featureType: 'diviner',
         supportsFeature: true,
-        featureOptions: {}
+        featureOptions: {},
       }
     }
-
-    await this.addPidToPidsFolder()
+    const decrypt = await this.addPidToPidsFolder()
     const newNode = new XyoNode({
       config: {
         nodeRunnerDelegates: {
           enableBoundWitnessServer: Boolean(this.config.serverPort),
-          enableGraphQLServer: Boolean(this.config.graphqlPort && this.config.apis.length > 0),
+          enableGraphQLServer: Boolean(
+            this.config.graphqlPort && this.config.apis.length > 0,
+          ),
           enableQuestionsWorker: isDiviner,
           enableBlockProducer: isDiviner,
-          enableBlockWitness: isDiviner
+          enableBlockWitness: isDiviner,
         },
-        blockProducer: isDiviner ? {
-          accountAddress: this.config.diviner!.ethereum.account.address
-        } : null,
+        blockProducer: isDiviner
+          ? {
+            accountAddress: this.config.diviner!.ethereum.account.address,
+          }
+          : null,
         data: {
-          path: nodeData
+          path: nodeData,
         },
         discovery: {
           bootstrapNodes: this.config.bootstrapNodes,
           publicKey: this.config.name,
-          address: `/ip4/${this.config.ip}/tcp/${this.config.p2pPort}`
+          address: `/ip4/${this.config.ip}/tcp/${this.config.p2pPort}`,
         },
         peerTransport: {
-          address: `/ip4/${this.config.ip}/tcp/${this.config.p2pPort}`
+          address: `/ip4/${this.config.ip}/tcp/${this.config.p2pPort}`,
         },
         nodeNetwork: {
           features,
           shouldServiceBlockPermissionRequests: isArchivist,
         },
-        network: this.config.serverPort ? {
-          port: this.config.serverPort
-        } : null,
+        network: this.config.serverPort
+          ? {
+            port: this.config.serverPort,
+          }
+          : null,
         originChainRepository: {
-          data: path.resolve(nodeData, 'origin-chain')
+          data: path.resolve(nodeData, 'origin-chain'),
         },
         networkProcedureCatalogue: {
           catalogue: [
@@ -152,74 +171,119 @@ export class XyoAppLauncher extends XyoBase {
             CatalogueItem.TAKE_ORIGIN_CHAIN,
             CatalogueItem.GIVE_ORIGIN_CHAIN,
             CatalogueItem.TAKE_REQUESTED_BLOCKS,
-            CatalogueItem.GIVE_REQUESTED_BLOCKS
-          ]
+            CatalogueItem.GIVE_REQUESTED_BLOCKS,
+          ],
         },
-        archivistRepository: isArchivist ? {
-          host: this.config.archivist!.sql.host,
-          user: this.config.archivist!.sql.user,
-          password: this.config.archivist!.sql.password,
-          database: this.config.archivist!.sql.database,
-          port: this.config.archivist!.sql.port,
-        } : null,
+        archivistRepository: isArchivist
+          ? {
+            host: this.config.archivist!.sql.host,
+            user: this.config.archivist!.sql.user,
+            password: this.config.archivist!.sql.password,
+            database: this.config.archivist!.sql.database,
+            port: this.config.archivist!.sql.port,
+          }
+          : null,
         boundWitnessValidator: {
           checkPartyLengths: true,
           checkIndexExists: true,
           checkCountOfSignaturesMatchPublicKeysCount: true,
           validateSignatures: true,
-          validateHash: true
+          validateHash: true,
         },
         aboutMeService: {
           ip: this.config.ip,
           boundWitnessServerPort: this.config.serverPort,
           graphqlPort: this.config.graphqlPort,
           version: '0.23.0',
-          name: this.config.name
+          name: this.config.name,
         },
-        graphql: this.config.graphqlPort && this.config.apis.length > 0 ? {
-          port: this.config.graphqlPort,
-          apis: {
-            about: this.config.apis.includes('about'),
-            blockByHash: this.config.apis.includes('blockByHash'),
-            entities: this.config.apis.includes('entities'),
-            blockList: this.config.apis.includes('blockList'),
-            blocksByPublicKey:this.config.apis.includes('blocksByPublicKey'),
-            intersections: this.config.apis.includes('intersections'),
-            transactionList: this.config.apis.includes('transactionList'),
-          }
-        } : null,
-        web3Service: isDiviner && this.config.diviner ? {
-          host: this.config.diviner.ethereum.host,
-          address: this.config.diviner.ethereum.account.address,
-          privateKey: this.config.diviner.ethereum.account.privateKey,
-          contracts: this.config.diviner.ethereum.contracts
-        } : null,
+        graphql:
+          this.config.graphqlPort && this.config.apis.length > 0
+            ? {
+              port: this.config.graphqlPort,
+              apis: {
+                about: this.config.apis.includes('about'),
+                blockByHash: this.config.apis.includes('blockByHash'),
+                entities: this.config.apis.includes('entities'),
+                blockList: this.config.apis.includes('blockList'),
+                blocksByPublicKey: this.config.apis.includes(
+                    'blocksByPublicKey',
+                  ),
+                intersections: this.config.apis.includes('intersections'),
+                transactionList: this.config.apis.includes('transactionList'),
+              },
+            }
+            : null,
+        web3Service:
+          isDiviner && this.config.diviner
+            ? {
+              host: this.config.diviner.ethereum.host,
+              address: this.config.diviner.ethereum.account.address,
+              privateKey: this.config.diviner.ethereum.account.privateKey
+                  ? this.config.diviner.ethereum.account.privateKey
+                  : await this.decryptPrivateKey(
+                      this.config.diviner.ethereum.account,
+                    ),
+              contracts: this.config.diviner.ethereum.contracts,
+            }
+            : null,
         contentAddressableService: {
           host: this.config.ipfs.host,
           port: this.config.ipfs.port,
-          protocol: this.config.ipfs.protocol
+          protocol: this.config.ipfs.protocol,
         },
         transactionRepository: {
-          data: path.resolve(nodeData, 'transactions')
-        }
-      }
+          data: path.resolve(nodeData, 'transactions'),
+        },
+      },
     })
     const managedProcessNode = new ProcessManager(newNode)
     managedProcessNode.manage(process)
+  }
+
+  private async decryptPrivateKey(crypto: IEthCryptoKeys): Promise<string> {
+    if (!crypto.encryptedKey || !crypto.salt) {
+      throw (new Error("No private ethereum key saved in configuration, run setup again"))
+    }
+
+    // @ts-ignore
+    const { password } = await prompt<{ password }>({
+      type: 'input',
+      name: 'password',
+      message: 'What is your Diviner password?',
+      validate: promptValidator(validatePassword),
+    })
+    const provider = new XyoCryptoProvider()
+
+    try {
+      const privateKey = provider.decrypt(password, crypto.encryptedKey, crypto.salt)
+      return privateKey
+    } catch (e) {
+      this.logError(`Incorrect password, try again.`)
+    }
+    return this.decryptPrivateKey(crypto)
   }
 
   private async addPidToPidsFolder() {
     try {
       const pidFolder = path.resolve(__dirname, '..', 'pids')
       await createDirectoryIfNotExists(pidFolder)
-      await writeFile(path.resolve(pidFolder, `${this.config!.name}.pid`), process.pid, { encoding: 'utf8' })
+      await writeFile(
+        path.resolve(pidFolder, `${this.config!.name}.pid`),
+        process.pid,
+        { encoding: 'utf8' },
+      )
     } catch (e) {
       this.logError(`There was an updating the pids folder`, e)
       throw e
     }
   }
 
-  private async writeConfigFile(yamlStr: string, config: IAppConfig, configFolder: string): Promise<void> {
+  private async writeConfigFile(
+    yamlStr: string,
+    config: IAppConfig,
+    configFolder: string,
+  ): Promise<void> {
     await createDirectoryIfNotExists(configFolder)
     const pathToWrite = path.resolve(configFolder, `${config.name}.yaml`)
     await writeFile(pathToWrite, yamlStr, 'utf8')

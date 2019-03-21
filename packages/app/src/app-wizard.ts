@@ -19,21 +19,16 @@ import {
   validateURL,
   validateHexString,
   validateMultiAddress,
+  validatePassword,
+  promptValidator
 } from './validator'
 import { XyoBase } from '@xyo-network/base'
 import path from 'path'
 import { ISqlConnectionDetails } from '@xyo-network/archivist-repository.sql'
 import { intersection } from 'lodash'
-import { ICreateConfigResult, IEthCryptoKeyPair } from './@types'
+import { ICreateConfigResult, IEthCryptoKeys } from './@types'
 import dns from 'dns'
-
-function promptValidator<T>(validator: (val: T) => Promise<IValidationResult>) {
-  return async (v: T) => {
-    const { validates, message } = await validator(v)
-    if (validates) return true
-    return message!
-  }
-}
+import { XyoCryptoProvider } from '@xyo-network/crypto'
 
 export async function getNameOfNode(
   configNameSuggest?: string,
@@ -195,7 +190,7 @@ export async function getEthereumNodeAddress(): Promise<string> {
   return ethereumNodeAddress
 }
 
-export async function getEthereumAccountAddress(): Promise<IEthCryptoKeyPair> {
+export async function getEthereumAccountAddress(): Promise<IEthCryptoKeys> {
   // @ts-ignore
   const { ethereumAccountAddress } = await prompt<{ ethereumAccountAddress: string }>({
     type: 'input',
@@ -209,13 +204,22 @@ export async function getEthereumAccountAddress(): Promise<IEthCryptoKeyPair> {
     type: 'input',
     name: 'ethereumPrivateKey',
     message:
-      'What is your Ethereum Private key? Your address is encrypted and never stored in plain text.',
+      'What is your Ethereum Private key? Diviners encrypt private keys and store encrypted copy locally.',
   })
 
-  // TODO
-  const encrypted = ethereumPrivateKey
+    // @ts-ignore
+  const { password } = await prompt<{ password: string }>({
+    type: 'input',
+    name: 'password',
+    message: 'Please add a Diviner password. We do not store this.',
+    validate: promptValidator(validatePassword),
+  })
 
-  return { address: ethereumAccountAddress, privateKey: encrypted }
+  const provider = new XyoCryptoProvider()
+
+  const { encrypted, salt } = provider.encrypt(password, ethereumPrivateKey)
+
+  return { salt, address: ethereumAccountAddress, encryptedKey: encrypted }
 }
 
 export async function getContractConfig(contract: string) {

@@ -185,7 +185,7 @@ export class XyoScscConsensusProvider extends XyoBase
     const consensus = await this.web3Service.getOrInitializeSC(
       'XyStakingConsensus',
     )
-    const result = consensus.methods.numRequests().call({}, blockHeight)
+    const result = await consensus.methods.numRequests().call({}, blockHeight)
     return this.coerceNumber(result)
   }
 
@@ -193,7 +193,7 @@ export class XyoScscConsensusProvider extends XyoBase
     const consensus = await this.web3Service.getOrInitializeSC(
       'XyStakingConsensus',
     )
-    const result = consensus.methods.numBlocks().call({}, blockHeight)
+    const result = await consensus.methods.numBlocks().call({}, blockHeight)
     return this.coerceNumber(result)
   }
 
@@ -303,8 +303,6 @@ export class XyoScscConsensusProvider extends XyoBase
         'XyStakingConsensus',
       )
       const data = consensus.methods.submitBlock(...args).encodeABI()
-      // const response = await consensus.methods.submitBlock(...args)
-      //        .send({ from: this.web3Service.accountAddress, gas: 3721975})
       const tx = await this.web3Service.sendRawTx({
         data,
         to: consensus.address,

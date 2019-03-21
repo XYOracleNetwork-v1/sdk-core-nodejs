@@ -10,9 +10,14 @@
  */
 
 import { ISqlConnectionDetails } from '@xyo-network/archivist-repository.sql'
-
+export interface IEthCryptoKeys {
+  address: string
+  privateKey?: string
+  encryptedKey?: string
+  salt?: string
+}
 export interface ICreateConfigResult {
-  startNode: boolean,
+  startNode: boolean
   config: IAppConfig
 }
 
@@ -22,7 +27,7 @@ export interface IAppConfig {
   serverPort: number | null
   data: string
   name: string
-  graphqlPort: number | null,
+  graphqlPort: number | null
   apis: string[]
   bootstrapNodes: string[]
   archivist: {
@@ -30,27 +35,23 @@ export interface IAppConfig {
   } | null
   diviner: {
     ethereum: {
-      host: string;
-      account: IEthCryptoKeyPair;
+      host: string
+      account: IEthCryptoKeys
       contracts: {
         [s: string]: {
-          ipfsHash: string,
+          ipfsHash: string
           address: string
         }
       }
-    };
-  } | null,
+    }
+  } | null
   ipfs: {
-    host: string,
-    port: string,
+    host: string
+    port: string
     protocol: string
   }
 }
 export interface IEthContractAddressIPFS {
-  ipfsHash: string,
+  ipfsHash: string
   address: string
-}
-export interface IEthCryptoKeyPair {
-  address: string,
-  privateKey: string
 }
