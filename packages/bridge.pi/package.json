@@ -7,7 +7,7 @@
   "author": "Carter Harrison",
   "license": "MIT",
   "dependencies": {
-    "@s524797336/noble-mac": "^0.1.2",
+    "noble": "1.9.1",
     "@xyo-network/bridge": "^0.31.0",
     "@xyo-network/wifi-manager": "^0.31.0",
     "@xyo-network/bridge-ble": "^0.31.0"

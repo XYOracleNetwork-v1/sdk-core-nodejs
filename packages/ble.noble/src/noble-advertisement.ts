@@ -1,6 +1,7 @@
 import { IXyoAdvertisement, IXyoService } from '@xyo-network/ble'
 import { XyoLogger } from '@xyo-network/logger'
-import noble from '@s524797336/noble-mac'
+// import noble from '@s524797336/noble-mac'
+import noble from 'noble'
 
 export class NobleAdvertisement implements IXyoAdvertisement {
   public advertisement: noble.Advertisement

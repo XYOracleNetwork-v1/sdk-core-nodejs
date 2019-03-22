@@ -1,5 +1,5 @@
-// import noble from 'noble'
-import noble from '@s524797336/noble-mac'
+// import noble from '@s524797336/noble-mac'
+import noble from 'noble'
 import { IXyoService, IXyoCharacteristic } from '@xyo-network/ble'
 import { NobleCharacteristic } from './noble-characteristic'
 import { XyoLogger } from '@xyo-network/logger'
