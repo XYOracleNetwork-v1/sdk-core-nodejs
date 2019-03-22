@@ -190,6 +190,12 @@
     },
     {
       "path": "crypto"
+    },
+    {
+      "path": "bridge-ble"
+    },
+    {
+      "path": "wifi-manager"
     }
   ],
   "include": [
@@ -251,6 +257,8 @@
     "bridge-queue-repository/src/**/*.ts",
     "bridge-queue-repository.keyvalue/src/**/*.ts",
     "content-addressable-service/src/**/*.ts",
-    "crypto/src/**/*.ts"
+    "crypto/src/**/*.ts",
+    "bridge-ble/src/**/*.ts",
+    "wifi-manager/src/**/*.ts"
   ]
 }
