@@ -12,7 +12,7 @@ import { XyoClientTcpNetwork, IXyoNetworkAddressProvider, IXyoTCPNetworkAddress 
 import { IXyoBridgeConfig } from '../@types'
 import { XyoBridge } from '../xyo-bridge'
 
-const bridgeEntryPoint = async () => {
+export const bridgeEntryPoint = async () => {
   const hasher = getHashingProvider('sha256')
   const scanner = new NobleScan()
   const bleNetwork = new XyoBluetoothNetwork(scanner)
