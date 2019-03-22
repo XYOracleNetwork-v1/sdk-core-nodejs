@@ -23,6 +23,8 @@ export {
   IRepoItem
 } from './@types'
 
+export { CurrentValue } from './value'
+export { Subscribe } from './subscribe'
 export { ProcessManager } from './process-manager'
 
 /// <reference path="./@types/bs58.d.ts" />

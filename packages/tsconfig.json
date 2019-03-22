@@ -172,6 +172,12 @@
     },
     {
       "path": "crypto"
+    },
+    {
+      "path": "bridge-ble"
+    },
+    {
+      "path": "wifi-manager"
     }
   ],
   "include": [
@@ -227,6 +233,8 @@
     "block-producer/src/**/*.ts",
     "block-witness/src/**/*.ts",
     "content-addressable-service/src/**/*.ts",
-    "crypto/src/**/*.ts"
+    "crypto/src/**/*.ts",
+    "bridge-ble/src/**/*.ts",
+    "wifi-manager/src/**/*.ts"
   ]
 }
