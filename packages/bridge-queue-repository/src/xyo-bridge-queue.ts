@@ -2,7 +2,7 @@
 import { IXyoBridgeQueueItem, IXyoBridgeQueueRepository } from './'
 
 export class XyoBridgeQueue {
-  public sendLimit = 10
+  public sendLimit = 100
   public removeWeight = 3
   private repository: IXyoBridgeQueueRepository
 

@@ -26,6 +26,7 @@ import { IXyoPeerConnectionDelegate, XyoSimplePeerConnectionDelegate, XyoPeerCon
 import { IXyoBridgeConfig } from './@types'
 
 export class XyoBridge {
+  public bridgeEveryN = 10
   public networkDelegate: XyoSimplePeerConnectionDelegate
   public toNetworkDelegate: XyoSimplePeerConnectionDelegate
   public bridgeQueue = new XyoBridgeQueue(this.bridgeConfig.bridgeQueueRepo)
@@ -125,17 +126,21 @@ export class XyoBridge {
       const blePipe = await this.networkDelegate.provideConnection()
       await this.networkDelegate.handlePeerConnection(blePipe)
 
-      const tcpPipe = await this.toNetworkDelegate.provideConnection()
-      await this.toNetworkDelegate.handlePeerConnection(tcpPipe)
-      await tcpPipe.close()
+      if (await this.bridgeConfig.chainRepo.getIndex() % this.bridgeEveryN === 0) {
+        this.bridgeConfig.logger.info("Will try to bridge blocks")
 
-      const blocksToRemove = this.bridgeQueue.getBlocksToRemove()
+        const tcpPipe = await this.toNetworkDelegate.provideConnection()
+        await this.toNetworkDelegate.handlePeerConnection(tcpPipe)
+        await tcpPipe.close()
 
-      for (const block of blocksToRemove) {
-        await this.bridgeConfig.blockRepo.removeOriginBlock(block)
+        const blocksToRemove = this.bridgeQueue.getBlocksToRemove()
+
+        for (const block of blocksToRemove) {
+          await this.bridgeConfig.blockRepo.removeOriginBlock(block)
+        }
+
+        await this.bridgeConfig.bridgeQueueRepo.commit()
       }
-
-      await this.bridgeConfig.bridgeQueueRepo.commit()
 
     } catch (error) {
       this.bridgeConfig.logger.error(`Uncaught error: ${error}`)
