@@ -200,8 +200,8 @@
     {
       "path": "bridge.pi"
     },
-    {
-      "path": "bridge.pi"
+    { 
+      "path": "bridge-server"
     }
   ],
   "include": [
@@ -267,6 +267,6 @@
     "bridge-ble/src/**/*.ts",
     "wifi-manager/src/**/*.ts",
     "bridge.pi/src/**/*.ts",
-    "bridge.pi/src/**/*.ts"
+    "bridge-server/src/**/*.ts"
   ]
 }

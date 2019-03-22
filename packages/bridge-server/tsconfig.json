@@ -22,9 +22,7 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    {"path": "../bridge"},
-    {"path": "../wifi-manager"},
     {"path": "../bridge-ble"},
-    {"path": "../bridge-server"}
+    {"path": "../wifi-manager"},
   ]
 }

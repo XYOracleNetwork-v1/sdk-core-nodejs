@@ -1,17 +1,20 @@
 {
-  "name": "@xyo-network/bridge.pi",
+  "name": "@xyo-network/bridge-server",
   "version": "0.31.0",
-  "description": "XYO Bridge for PIs",
+  "description": "Server for managing bridge settings",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "author": "Carter Harrison",
+  "author": "",
   "license": "MIT",
   "dependencies": {
-    "noble": "1.9.1",
-    "@xyo-network/bridge": "^0.31.0",
-    "@xyo-network/wifi-manager": "^0.31.0",
     "@xyo-network/bridge-ble": "^0.31.0",
-    "@xyo-network/bridge-server": "^0.31.0"
+    "@xyo-network/wifi-manager": "^0.31.0",
+    "apollo-server-express": "^2.4.8",
+    "express": "^4.16.4",
+    "graphql": "^14.1.1",
+    "graphql-tag": "^2.10.1",
+    "graphql-tools": "^4.0.4",
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
