@@ -246,7 +246,7 @@ export abstract class XyoDaemon extends XyoBase {
   private looping = false
 
   public async start(): Promise<void> {
-    return this.runner(500)
+    return this.runner(3000)
   }
 
   public async stop(): Promise<void> {

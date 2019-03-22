@@ -125,9 +125,6 @@ export const DEFAULT_NODE_OPTIONS: IXyoNodeOptions = {
         }, XyGovernance: {
           ipfsHash: "QmT3zhyoWJ7MA9nqpVP8pSiBaVs5MTqQ2mNNHZ2LbYismQ",
           address: '0x98d1Df3A49Defd8b28e9Feb71d1c7370457643f0',
-        }, XyPayOnDelivery: {
-          ipfsHash: "QmZRkq7PD6sH6GQoEHYvK9VXuH7hkiR3rJuAGAznaHTqc9",
-          address: "0x8f03779A535c0AD04F8Ecb02B958e6650F7B1631"
         }
       }
     },

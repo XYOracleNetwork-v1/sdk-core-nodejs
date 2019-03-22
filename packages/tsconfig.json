@@ -169,6 +169,9 @@
     },
     {
       "path": "content-addressable-service"
+    },
+    {
+      "path": "crypto"
     }
   ],
   "include": [
@@ -223,6 +226,7 @@
     "consensus/src/**/*.ts",
     "block-producer/src/**/*.ts",
     "block-witness/src/**/*.ts",
-    "content-addressable-service/src/**/*.ts"
+    "content-addressable-service/src/**/*.ts",
+    "crypto/src/**/*.ts"
   ]
 }
