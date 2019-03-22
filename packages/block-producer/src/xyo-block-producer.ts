@@ -65,7 +65,7 @@ export class XyoBlockProducer extends XyoDaemon {
 
     if (Object.keys(list).length < MIN_TRANSACTIONS) {
       this.logInfo(
-        'There are ' + Object.keys(list).length + 'transactions in the transaction pool, ' +
+        'There are ' + Object.keys(list).length + ' transactions in the transaction pool, ' +
         'which is not enough transactions to process'
       )
       return

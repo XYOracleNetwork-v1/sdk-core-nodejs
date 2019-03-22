@@ -248,6 +248,7 @@ export abstract class XyoDaemon extends XyoBase {
   private looping = false
 
   public async start(): Promise<void> {
+    this.logInfo("Starting Daemon!")
     return this.runner(3000)
   }
 
@@ -267,7 +268,7 @@ export abstract class XyoDaemon extends XyoBase {
   protected abstract run(): Promise<void> | void
 
   protected delayRun(currentValue: number, errorOccurred: boolean): number | undefined {
-    return errorOccurred ? currentValue * 2 : 500 // exponential back-off
+    return errorOccurred ? currentValue * 2 : 3000 // exponential back-off
   }
 
   protected shouldStop(): boolean {
