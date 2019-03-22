@@ -43,7 +43,7 @@ export class XyoIpfsClient extends XyoBase implements IXyoIpfsClient {
         }
         if (!files || files.length !== 1) {
           this.logError(`Bad ipfs hash ${address}`)
-          throw new Error('Bad Ipfs hash')
+          return reject(new Error('Bad Ipfs hash'))
         }
 
         return resolve(files[0].content)

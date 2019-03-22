@@ -10,19 +10,27 @@
  */
 
 import { XyoBase } from '@xyo-network/base'
-import { IQuestionsProvider, IQuestion, IQuestionType, IXyoQuestionService, IProofOfIntersection, IXyoIntersectionTransaction, IIntersectionRequest, IProofOfIntersectionAnswer } from './@types'
+import {
+  IQuestionsProvider,
+  IQuestion,
+  IQuestionType,
+  IXyoQuestionService,
+  IProofOfIntersection,
+  IXyoIntersectionTransaction,
+  IIntersectionRequest,
+  IProofOfIntersectionAnswer,
+} from './@types'
 import { IXyoTransactionRepository } from '@xyo-network/transaction-pool'
 import { IXyoNodeNetwork } from '@xyo-network/node-network'
 import { IXyoHashProvider } from '@xyo-network/hashing'
 
 export class QuestionsWorker extends XyoBase {
-
-  constructor (
+  constructor(
     private readonly questionsProvider: IQuestionsProvider,
     private readonly questionsService: IXyoQuestionService,
     private readonly transactionsRepository: IXyoTransactionRepository,
     private readonly nodeNetwork: IXyoNodeNetwork,
-    private readonly hashProvider: IXyoHashProvider
+    private readonly hashProvider: IXyoHashProvider,
   ) {
     super()
   }
@@ -32,18 +40,29 @@ export class QuestionsWorker extends XyoBase {
     return this.handleNewQuestion(question)
   }
 
-  private async handleNewQuestion<Q, A>(question: IQuestion<Q, A>): Promise<void> {
+  private async handleNewQuestion<Q, A>(
+    question: IQuestion<Q, A>,
+  ): Promise<void> {
     if (question.type === IQuestionType.DID_INTERSECT) {
-      const coercedQuestion = (question as unknown) as IQuestion<IIntersectionRequest, IProofOfIntersection>
+      const coercedQuestion = (question as unknown) as IQuestion<
+        IIntersectionRequest,
+        IProofOfIntersection
+      >
       const q = coercedQuestion.getQuestion()
       const intersections = await this.questionsService.getIntersections(q.data)
       if (intersections.length > 0) {
-        const proof = await this.questionsService.buildProofOfIntersection(q.data, intersections)
+        const proof = await this.questionsService.buildProofOfIntersection(
+          q.data,
+          intersections,
+        )
         if (proof === undefined) {
+          this.logError('Cannot build proof', q.getId!())
           return
         }
-
+        this.logInfo('Found intersection!', q.getId!())
         await this.handleQuestionAnswered(q.getId!(), q, proof.answer)
+      } else {
+        this.logInfo('No intersection found, retrying', q.getId!())
       }
 
       return
@@ -63,8 +82,8 @@ export class QuestionsWorker extends XyoBase {
           id: questionId,
         },
         response: proof,
-        answer: true
-      }
+        answer: true,
+      },
     }
 
     await this.transactionsRepository.add(questionId, t)

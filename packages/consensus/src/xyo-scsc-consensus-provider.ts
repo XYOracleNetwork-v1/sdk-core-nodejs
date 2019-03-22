@@ -23,6 +23,7 @@ import { XyoBase } from '@xyo-network/base'
 import { XyoWeb3Service } from '@xyo-network/web3-service'
 import { soliditySHA3, solidityPack } from 'ethereumjs-abi'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
+import { create } from 'domain'
 
 export class XyoScscConsensusProvider extends XyoBase
   implements IConsensusProvider {
@@ -53,7 +54,7 @@ export class XyoScscConsensusProvider extends XyoBase
       'XyStakingConsensus',
     )
     const req = await consensus.methods.requestsById(id).call({}, blockHeight)
-    console.log('Got Request', req)
+    // console.log('Got Request', req)
     if (!req.createdAt || req.createdAt === '0') {
       return undefined
     }
@@ -211,7 +212,7 @@ export class XyoScscConsensusProvider extends XyoBase
   }
 
   public async getStakeQuorumPct(blockHeight?: BN): Promise<number> {
-    const pct = await this.getGovernanceParam('xyStakeQuorumPct', blockHeight)
+    const pct = await this.getGovernanceParam('xyStakeSuccessPct', blockHeight)
     return this.coerceNumber(pct)
   }
 
@@ -382,16 +383,7 @@ export class XyoScscConsensusProvider extends XyoBase
   }
 
   public async getGasEstimateForRequest(requestId: string): Promise<BN> {
-    const req = await this.getRequestById(requestId)
-    if (req) {
-      const consensusAddress = this.web3Service.getAddressOfContract(
-        'XyStakingConsensus',
-      )
-      const pOnD = await this.web3Service.getOrInitializeSC('XyPayOnDelivery')
-      return pOnD.methods
-        .submitResponse(consensusAddress, IRequestType.Bool, true)
-        .estimateGas()
-    }
+    // TODO get from governance at least
     return new BN(0)
   }
 
@@ -443,7 +435,6 @@ export class XyoScscConsensusProvider extends XyoBase
       hexString,
       topics,
     )
-    console.log('Decoded logs', result)
     return result
   }
 
@@ -483,7 +474,6 @@ export class XyoScscConsensusProvider extends XyoBase
       }
     }
     const requestDatas = await Promise.all(idPromises)
-    console.log('Got datas', requestDatas)
 
     return requestDatas as IRequest[]
   }
@@ -546,17 +536,34 @@ export class XyoScscConsensusProvider extends XyoBase
 
     const requestIds = await Promise.all(promises)
     console.log('Got Request Ids', requestIds)
+    // TODO verify requestIds not in already visited
     const requests = await this.getRequests(requestIds)
 
     requests.map((req1, index) => {
-      const req = req1 as IRequest
+      const {
+        xyoBounty,
+        weiMining,
+        createdAt,
+        requestSender,
+        requestType,
+        responseBlockNumber,
+      } = req1
+
+      const req = {
+        requestSender,
+        requestType,
+        xyoBounty: this.coerceBN(xyoBounty),
+        weiMining: this.coerceBN(weiMining),
+        createdAt: this.coerceBN(createdAt),
+        responseBlockNumber: this.coerceBN(responseBlockNumber),
+      }
+
       if (
-        this.coerceNumber(req.responseBlockNumber) === 0 &&
+        this.coerceNumber(responseBlockNumber) === 0 &&
         Object.keys(unanswered).length < maxTransactions
       ) {
         const ipfsHash = this.getIpfsHashFromBytes32(requestIds[index])
-        console.log('Generated ipfs hash', ipfsHash)
-        unanswered[ipfsHash] = req as IRequest
+        unanswered[ipfsHash] = req
       }
     })
     return this.getUnhandledRequestsBatch(

@@ -72,7 +72,7 @@ export class XyoBlockProducer extends XyoDaemon {
     }
 
     const latestBlockHash = await this.consensusProvider.getLatestBlockHash()
-    console.log('XyoBlockProducer: latestBlockHash', latestBlockHash)
+    // console.log('XyoBlockProducer: latestBlockHash', latestBlockHash)
     const currentBlockHeight = await this.consensusProvider.getBlockHeight()
     const trustThreshold = await this.consensusProvider.getBlockConfirmationTrustThreshold()
 
@@ -105,6 +105,11 @@ export class XyoBlockProducer extends XyoDaemon {
       responses: Buffer.alloc(0),
       supportingData: [] as any[]
     }))
+
+    if (candidate.requests.length === 0) {
+      this.logInfo("No responses for questions in transaction pool, continuing")
+      return
+    }
 
     const jsonSupportDataBuf = Buffer.from(JSON.stringify(candidate.supportingData))
     const supportingDataHash = await this.contentService.add(jsonSupportDataBuf)

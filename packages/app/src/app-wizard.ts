@@ -20,7 +20,7 @@ import {
   validateHexString,
   validateMultiAddress,
   validatePassword,
-  promptValidator
+  promptValidator,
 } from './validator'
 import { XyoBase } from '@xyo-network/base'
 import path from 'path'
@@ -207,7 +207,7 @@ export async function getEthereumAccountAddress(): Promise<IEthCryptoKeys> {
       'What is your Ethereum Private key? Diviners encrypt private keys and store encrypted copy locally.',
   })
 
-    // @ts-ignore
+  // @ts-ignore
   const { password } = await prompt<{ password: string }>({
     type: 'input',
     name: 'password',
@@ -431,8 +431,8 @@ export class AppWizard extends XyoBase {
       : Promise.resolve(undefined))
 
     // tslint:disable-next-line:variable-name
-    const XyPayOnDelivery = await (components.includes(XyoComponent.DIVINER)
-      ? getContractConfig('XyPayOnDelivery')
+    const XyBlockProducer = await (components.includes(XyoComponent.DIVINER)
+      ? getContractConfig('XyBlockProducer')
       : Promise.resolve(undefined))
 
     const graphQLPort = await getGraphQLPort()
@@ -477,7 +477,7 @@ export class AppWizard extends XyoBase {
           ethKeys &&
           XyStakingConsensus &&
           XyGovernance &&
-          XyPayOnDelivery
+          XyBlockProducer
             ? {
               ethereum: {
                 host: ethereumNodeAddress!,
@@ -491,9 +491,9 @@ export class AppWizard extends XyoBase {
                     ipfsHash: XyGovernance.ipfsAddr,
                     address: XyGovernance.contractAddr,
                   },
-                  XyPayOnDelivery: {
-                    ipfsHash: XyPayOnDelivery.ipfsAddr,
-                    address: XyPayOnDelivery.contractAddr,
+                  XyBlockProducer: {
+                    ipfsHash: XyBlockProducer.ipfsAddr,
+                    address: XyBlockProducer.contractAddr,
                   },
                 },
               },

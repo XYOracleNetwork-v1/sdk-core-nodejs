@@ -343,9 +343,12 @@ export interface IResponse {
  * @enum {number}
  */
 export enum IRequestType { // something like this maybe, maybe-not
-  Bool = 1,
-  UINT = 2,
-  WITHDRAW = 3
+  DEFAULT = 0,
+  BOOL_COMPLETION = 1,
+  UINT_COMPLETION = 2,
+  WITHDRAW = 3,
+  BOOL = 4,
+  UINT = 5
 }
 
 /**
