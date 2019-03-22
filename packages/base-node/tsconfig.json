@@ -31,7 +31,6 @@
     {"path": "../network"},
     {"path": "../network.tcp"},
     {"path": "../node-network"},
-    {"path": "../node-runner"},
     {"path": "../origin-block-repository"},
     {"path": "../origin-chain"},
     {"path": "../p2p"},
@@ -57,6 +56,11 @@
     {"path": "../attribution-request.node-network"},
     {"path": "../web3-service"},
     {"path": "../web3-question-service"},
-    {"path": "../storage"}
+    {"path": "../ipfs-client"},
+    {"path": "../consensus"},
+    {"path": "../storage"},
+    {"path": "../block-producer"},
+    {"path": "../block-witness"},
+    {"path": "../content-addressable-service"}
   ]
 }

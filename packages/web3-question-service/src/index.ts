@@ -4,22 +4,33 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 30th January 2019 12:05:14 pm
+ * @Last modified time: Friday, 8th March 2019 2:29:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { XyoBase } from '@xyo-network/base'
-import { IQuestionsProvider, IQuestionType, IQuestion, IXyoHasIntersectedQuestion } from '@xyo-network/questions'
-import { XyoWeb3Service } from '@xyo-network/web3-service'
+import {
+  IQuestionsProvider,
+  IQuestionType,
+  IQuestion,
+  IRequestDocument,
+  IIntersectionRequest,
+  IProofOfIntersection,
+} from '@xyo-network/questions'
+import { IConsensusProvider } from '@xyo-network/consensus'
+import { IXyoContentAddressableService } from '@xyo-network/content-addressable-service'
 
 export class Web3QuestionService extends XyoBase implements IQuestionsProvider {
+  private readonly alreadyFetchedQuestions: {
+    [questionId: string]: boolean
+  } = {}
+  private readonly ignoreQuestions: { [questionId: string]: boolean } = {}
 
-  private static readonly INTERSECTION_CONTRACT_NAME = 'PayOnDelivery'
-
-  private readonly alreadyFetchedQuestions: {[questionId: string ]: boolean } = {}
-
-  constructor (private readonly web3Service: XyoWeb3Service) {
+  constructor(
+    private readonly consensusProvider: IConsensusProvider,
+    private readonly requestResolver: IXyoContentAddressableService,
+  ) {
     super()
   }
 
@@ -31,88 +42,63 @@ export class Web3QuestionService extends XyoBase implements IQuestionsProvider {
       }
 
       // Consider rejecting after a certain amount of time or using exponential back-off
-      setTimeout(async () => {
+      XyoBase.timeout(async () => {
         const result = await this.nextQuestion()
         resolve(result)
-      }, 1000)
-    }) as Promise<IQuestion<IXyoHasIntersectedQuestion, boolean>>
+      }, 3000)
+    }) as Promise<IQuestion<IIntersectionRequest, IProofOfIntersection>>
   }
 
   private async tryGetQuestion() {
-    const contract = await this.web3Service.getContractByName(Web3QuestionService.INTERSECTION_CONTRACT_NAME)
-    let question: ISCSCHasIntersectedQuestion
+    // This needs to be a lot more sophisticated than it currently is
+    const allQuestions = await this.consensusProvider.getNextUnhandledRequests()
+    if (Object.keys(allQuestions).length === 0) return
 
+    // const newQuestions: { [questionId: string]: boolean } = allQuestions as { [questionId: string ]: boolean }
+
+    const newQuestions = Object.keys(allQuestions).filter(
+      k => !this.ignoreQuestions[k],
+    )
+    if (newQuestions.length === 0) return
+
+    // Order keys by most xyo bounty, not sure this is the right way to order
+    const questionId = newQuestions.sort((a, b) => {
+      if (allQuestions[b].xyoBounty.gt(allQuestions[a].xyoBounty)) return 1
+      if (allQuestions[b].xyoBounty.lt(allQuestions[a].xyoBounty)) return -1
+      return 0
+    })[0]
+
+    this.alreadyFetchedQuestions[questionId] = true
     try {
-      question = await contract.methods.questions(0).call() as ISCSCHasIntersectedQuestion
-      if (!question) {
-        this.logInfo('No questions exist in smart contract')
+      const resolvedQuestionBuffer = await this.requestResolver.get(questionId)
+      if (!resolvedQuestionBuffer) return
+      const resolvedQuestion = JSON.parse(
+        resolvedQuestionBuffer.toString(),
+      ) as IRequestDocument<any>
+
+      if (
+        resolvedQuestion === undefined ||
+        resolvedQuestion.type !== 'intersection'
+      ) {
+        this.logError(
+          'Resolved Question not parsed, or question is not an intersection, ignoring until feature supported',
+          resolvedQuestion,
+        )
+        this.ignoreQuestions[questionId] = true
         return
       }
-    } catch (err) {
-      this.logInfo('No questions exist in smart contract')
-      return
-    }
-
-    if (this.alreadyFetchedQuestions[question.questionId]) {
-      return
-    }
-
-    const formattedQuestion: IXyoHasIntersectedQuestion = {
-      partyOne: [question.itemA],
-      partyTwo: [question.itemB],
-      markers: question.marker ? [question.marker] : [],
-      direction: 'FORWARD'
-    }
-
-    const result: IQuestion<IXyoHasIntersectedQuestion, boolean>  = {
-      type: IQuestionType.DID_INTERSECT,
-      getQuestion: () => {
-        return formattedQuestion
-      },
-      answer: (a) => {
-        if (a !== true) { // tslint:disable-line
-          return
-        }
-
-        const { gas, gasPrice } = this.getGasParameters(IQuestionType.DID_INTERSECT)
-
-        contract.methods.payForDelivery(
-          question.itemA,
-          question.itemB,
-          question.beneficiary
-        )
-        .send({ gas, gasPrice, from: this.web3Service.currentUser })
-        .then((payForDeliveryResult: any) => {
-          this.logInfo(`PayForDelivery Result: ${payForDeliveryResult}`)
-        })
-        .catch((err: any) => {
-          this.logError('There was an error calling PayForDelivery', err)
-          throw err
-        })
-      },
-      cantAnswer: () =>  {
-        this.logInfo('No answer provided')
+      const result: IQuestion<IIntersectionRequest, IProofOfIntersection> = {
+        type: IQuestionType.DID_INTERSECT,
+        getQuestion: () => {
+          return { ...resolvedQuestion, getId: () => questionId }
+        },
       }
-    }
 
-    return result
-  }
-
-  private getGasParameters(questionType: IQuestionType) {
-    // extracted for the purpose of adding some intelligence here at another point
-    return {
-      gas: 6721975,
-      gasPrice: 2000000000
+      return result
+    } catch (e) {
+      this.ignoreQuestions[questionId] = true
+      this.logError('Bad request, ignoring request', questionId)
+      return
     }
   }
-
-}
-
-interface ISCSCHasIntersectedQuestion {
-  itemA: string
-  itemB: string
-  marker: string
-  questionId: number
-  beneficiary: string
-  buyer: string
 }

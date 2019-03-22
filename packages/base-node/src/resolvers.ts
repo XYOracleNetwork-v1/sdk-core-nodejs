@@ -4,20 +4,19 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 22nd February 2019 10:12:46 am
+ * @Last modified time: Wednesday, 13th March 2019 4:03:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 // tslint:disable:max-line-length
 
-import { IXyoNodeRunnerDelegate } from '@xyo-network/node-runner'
 import { IXyoResolvers, IXyoDiscoveryConfig, IXyoNodeNetworkConfig, IXyoPeerTransportConfig, IXyoNetworkConfig, IXyoNetworkProcedureCatalogueConfig, IXyoOriginChainConfig, IXyoAboutMeConfig, IXyoGraphQLConfig, IXyoWeb3ServiceConfig } from './@types'
 import { IXyoPeerConnectionDelegate, XyoSimplePeerConnectionDelegate, XyoPeerConnectionHandler } from '@xyo-network/peer-connections'
 import { IXyoNodeNetwork, XyoNodeNetwork } from '@xyo-network/node-network'
 import { IXyoP2PService, IXyoPeerDiscoveryService, XyoP2PService, XyoPeerTransport, XyoPeerDiscoveryService, IXyoPeerTransport } from '@xyo-network/p2p'
 import { IXyoSerializationService } from '@xyo-network/serialization'
-import { IXyoHashProvider, getHashingProvider, IXyoHash } from '@xyo-network/hashing'
+import { IXyoHashProvider, getHashingProvider } from '@xyo-network/hashing'
 import { IXyoOriginChainRepository, XyoOriginChainLocalStorageRepository } from '@xyo-network/origin-chain'
 import { IXyoOriginBlockRepository, XyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessSuccessListener, XyoBoundWitnessPayloadProvider, XyoBoundWitnessSuccessListener, XyoBoundWitnessHandlerProvider, IXyoBoundWitnessInteractionFactory } from '@xyo-network/peer-interaction'
@@ -30,60 +29,133 @@ import { XyoServerTcpNetwork } from '@xyo-network/network.tcp'
 import { XyoPeerInteractionRouter } from '@xyo-network/peer-interaction-router'
 import { XyoBoundWitnessInteraction } from '@xyo-network/peer-interaction-handlers'
 import { getSignerProvider } from '@xyo-network/signing.ecdsa'
-import { IXyoRepository, createDirectoryIfNotExists, IXyoProvider, XyoBaseInMemoryRepository } from '@xyo-network/utils'
-import { IXyoTransaction } from '@xyo-network/transaction-pool'
+import { createDirectoryIfNotExists, IXyoProvider, IXyoRunnable } from '@xyo-network/utils'
+import { IXyoTransaction, IXyoTransactionRepository, XyoTransactionRepository } from '@xyo-network/transaction-pool'
 import { IResolvers } from './xyo-resolvers-enum'
 import { XyoLevelDbStorageProvider } from '@xyo-network/storage.leveldb'
 import { buildGraphQLServer } from '@xyo-network/graphql-apis'
 import { XyoAboutMeService } from '@xyo-network/about-me'
 import { IXyoArchivistRepository } from '@xyo-network/archivist-repository'
 import { createArchivistSqlRepository, ISqlConnectionDetails } from '@xyo-network/archivist-repository.sql'
-import { XyoError, XyoErrors } from '@xyo-network/errors'
+import { XyoError } from '@xyo-network/errors'
 import { XyoGraphQLServer } from '@xyo-network/graphql-server'
 import { IXyoArchivistNetwork, XyoArchivistNetwork } from '@xyo-network/archivist-network'
 import { IXyoQuestionService, XyoQuestionService, IQuestionsProvider, QuestionsWorker } from '@xyo-network/questions'
 import { XyoBlockPermissionRequestResolver } from '@xyo-network/attribution-request.node-network'
 import { XyoWeb3Service } from '@xyo-network/web3-service'
 import { Web3QuestionService } from '@xyo-network/web3-question-service'
+import { XyoIpfsClient, XyoIpfsClientCtorOptions } from '@xyo-network/ipfs-client'
+import { XyoScscConsensusProvider, IConsensusProvider } from '@xyo-network/consensus'
+import { XyoBlockProducer } from '@xyo-network/block-producer'
+import { XyoBlockWitness, XyoBlockWitnessValidator } from '@xyo-network/block-witness'
+import { XyoGraphQLServerRunnable } from './runnables/xyo-graphql-server-runnable'
+import { XyoBoundWitnessServerRunnable } from './runnables/xyo-bound-witness-server-runnable'
+import { XyoNodeNetworkRunnable } from './runnables/xyo-node-network-runnable'
+import { XyoQuestionsWorkerRunnable } from './runnables/xyo-questions-worker-runnable'
+import { XyoBlockProducerRunnable } from './runnables/xyo-block-producer-runnable'
+import { XyoBlockWitnessRunnable } from './runnables/xyo-block-witness-runnable'
+import { IXyoContentAddressableService } from '@xyo-network/content-addressable-service'
 
 const graphql: IXyoProvider<XyoGraphQLServer, IXyoGraphQLConfig> = {
   async get(container, config) {
     const graphqlServer = await buildGraphQLServer(config, container)
-    await graphqlServer.start()
     return graphqlServer
   }
 }
 
-const nodeRunnerDelegates: IXyoProvider<IXyoNodeRunnerDelegate[], any> = {
+const runnables: IXyoProvider<IXyoRunnable[], any> = {
   async get(container, config) {
-    const delegates: IXyoNodeRunnerDelegate[] = []
+    const delegates: IXyoRunnable[] = []
     if (config.enableBoundWitnessServer) {
-      const peerConnection = await container.get<IXyoPeerConnectionDelegate>(IResolvers.PEER_CONNECTION_DELEGATE)
-      delegates.push({
-        run: async () => {
-          const networkPipe = await peerConnection.provideConnection()
-          await peerConnection.handlePeerConnection(networkPipe)
-        },
-        onStop: async () => {
-          return peerConnection.stopProvidingConnections()
-        }
-      })
+      const boundWitnessServer = new XyoBoundWitnessServerRunnable(
+        async () => container.get<IXyoPeerConnectionDelegate>(IResolvers.PEER_CONNECTION_DELEGATE)
+      )
+
+      delegates.push(boundWitnessServer)
     }
 
-    const nodeNet = await container.get<IXyoNodeNetwork>(IResolvers.NODE_NETWORK_FROM) // this will initialize it
+    const nodes = await container.get<IXyoNodeNetwork>(IResolvers.NODE_NETWORK_FROM) // this will initialize it
+    const nodeNet = new XyoNodeNetworkRunnable(async () => nodes)
+    delegates.push(nodeNet)
 
     if (config.enableGraphQLServer) {
-      const graphqlServer = await container.get<XyoGraphQLServer>(IResolvers.GRAPHQL)
+      const gqlServer = await container.get<XyoGraphQLServer>(IResolvers.GRAPHQL)
+      const gql = new XyoGraphQLServerRunnable(async () => gqlServer)
+      delegates.push(gql)
     }
 
     if (config.enableQuestionsWorker) {
       const questionsProv = await container.get<IQuestionsProvider>(IResolvers.QUESTIONS_PROVIDER)
       const questions = await container.get<IXyoQuestionService>(IResolvers.QUESTION_SERVICE)
-      const qWorker = new QuestionsWorker(questionsProv, questions)
-      delegates.push(qWorker)
+      const transactionRepo = await container.get<IXyoTransactionRepository>(IResolvers.TRANSACTION_REPOSITORY)
+      const hasher = await container.get<IXyoHashProvider>(IResolvers.HASH_PROVIDER)
+
+      const questionsDaemon = new XyoQuestionsWorkerRunnable(async () => {
+        return new QuestionsWorker(
+          questionsProv,
+          questions,
+          transactionRepo,
+          nodes,
+          hasher
+        )
+      })
+
+      delegates.push(questionsDaemon)
+    }
+
+    if (config.enableBlockProducer) {
+      const producer = await container.get<XyoBlockProducer>(IResolvers.BLOCK_PRODUCER)
+      const blockProducerDaemon = new XyoBlockProducerRunnable(async() => producer)
+
+      delegates.push(blockProducerDaemon)
+    }
+
+    if (config.enableBlockWitness) {
+      const witness = await container.get<XyoBlockWitness>(IResolvers.BLOCK_WITNESS)
+      const blockWitnessDaemon = new XyoBlockWitnessRunnable(async () => witness)
+      delegates.push(blockWitnessDaemon)
     }
 
     return delegates
+  }
+}
+
+const blockProducer: IXyoProvider<XyoBlockProducer, any> = {
+  async get(container, config) {
+    const consensus = await container.get<IConsensusProvider>(IResolvers.CONSENSUS_PROVIDER)
+    const nodes = await container.get<IXyoNodeNetwork>(IResolvers.NODE_NETWORK_FROM)
+    const hasher = getHashingProvider('sha3')
+    const transactionRepository = await container.get<IXyoTransactionRepository>(IResolvers.TRANSACTION_REPOSITORY)
+    const contentService = await container.get<IXyoContentAddressableService>(
+      IResolvers.CONTENT_ADDRESSABLE_SERVICE
+    )
+    const serialization = await container.get<IXyoSerializationService>(IResolvers.SERIALIZATION_SERVICE)
+    const validator = await container.get<XyoBoundWitnessValidator>(IResolvers.BOUND_WITNESS_VALIDATOR)
+
+    return new XyoBlockProducer(
+      consensus,
+      config.accountAddress,
+      transactionRepository,
+      hasher,
+      nodes,
+      contentService,
+      new XyoBlockWitnessValidator(
+        contentService,
+        serialization,
+        hasher,
+        validator,
+        consensus
+      )
+    )
+  }
+}
+
+const blockWitness: IXyoProvider<XyoBlockWitness, any> = {
+  async get(container, config) {
+    const consensus = await container.get<IConsensusProvider>(IResolvers.CONSENSUS_PROVIDER)
+    const nodes = await container.get<IXyoNodeNetwork>(IResolvers.NODE_NETWORK)
+
+    return new XyoBlockWitness(nodes, consensus)
   }
 }
 
@@ -91,22 +163,43 @@ const nodeNetwork: IXyoProvider<IXyoNodeNetwork, IXyoNodeNetworkConfig> = {
   async get(container, config) {
     const p2p = await container.get<IXyoP2PService>(IResolvers.P2P_SERVICE)
     const serialization = await container.get<IXyoSerializationService>(IResolvers.SERIALIZATION_SERVICE)
+
     const hasher = await container.get<IXyoHashProvider>(IResolvers.HASH_PROVIDER)
     const originChainRepo = await container.get<IXyoOriginChainRepository>(IResolvers.ORIGIN_CHAIN_REPOSITORY)
     const originBlockRepo = await container.get<IXyoOriginBlockRepository>(IResolvers.ORIGIN_BLOCK_REPOSITORY)
     const payloadProvider = await container.get<IXyoBoundWitnessPayloadProvider>(IResolvers.BOUND_WITNESS_PAYLOAD_PROVIDER)
     const boundWitnessSuccess = await container.get<IXyoBoundWitnessSuccessListener>(IResolvers.BOUND_WITNESS_SUCCESS_LISTENER)
-    const transactionRepository = await container.get<IXyoRepository<IXyoHash, IXyoTransaction<any>>>(IResolvers.TRANSACTION_REPOSITORY)
+    const transactionRepository = await container.get<IXyoTransactionRepository>(IResolvers.TRANSACTION_REPOSITORY)
+
+    const contentService = await container.get<IXyoContentAddressableService>(
+      IResolvers.CONTENT_ADDRESSABLE_SERVICE
+    )
+
+    const validator = await container.get<XyoBoundWitnessValidator>(IResolvers.BOUND_WITNESS_VALIDATOR)
+    const consensus = await (config.features.diviner && config.features.diviner.supportsFeature ?
+      container.get<IConsensusProvider>(IResolvers.CONSENSUS_PROVIDER) :
+      Promise.resolve(undefined))
+
+    const blockWitnessValidator = consensus ? new XyoBlockWitnessValidator(
+      contentService,
+      serialization,
+      hasher,
+      validator,
+      consensus
+    ) : undefined
 
     const networkService = new XyoNodeNetwork(
       p2p,
       serialization,
-      hasher,
-      originBlockRepo,
-      originChainRepo,
-      payloadProvider,
-      boundWitnessSuccess,
-      transactionRepository
+      {
+        blockWitnessValidator,
+        payloadProvider,
+        transactionsRepository: transactionRepository,
+        boundWitnessSuccessListener: boundWitnessSuccess,
+        originChainRepository: originChainRepo,
+        originBlockRepository: originBlockRepo,
+        hashProvider: hasher
+      }
     )
 
     const features = await config.features
@@ -121,7 +214,7 @@ const nodeNetwork: IXyoProvider<IXyoNodeNetwork, IXyoNodeNetworkConfig> = {
 }
 
 const p2pService: IXyoProvider<IXyoP2PService, undefined> = {
-  async get(container) {
+  async get(container, c) {
     const discoveryNetworkService = await container.get<IXyoPeerDiscoveryService>(IResolvers.DISCOVERY_NETWORK)
     return new XyoP2PService(discoveryNetworkService)
   }
@@ -166,10 +259,10 @@ const originChainRepository: IXyoProvider<IXyoOriginChainRepository, IXyoOriginC
     const db = XyoLevelDbStorageProvider.createStore(config.data)
     return new XyoOriginChainLocalStorageRepository(db, originBlockRepo, serialization)
   },
-  async postInit(originChainRepo, container) {
+  async postInit(originChainRepo, container, c) {
     const originChainSigners = await originChainRepo.getSigners()
     const mutex = await originChainRepo.acquireMutex()
-    if (!mutex) throw new XyoError(`Could not acquire mutex`, XyoErrors.CRITICAL)
+    if (!mutex) throw new XyoError(`Could not acquire mutex`)
 
     try {
       if (originChainSigners.length === 0) {
@@ -192,7 +285,7 @@ const originChainRepository: IXyoProvider<IXyoOriginChainRepository, IXyoOriginC
 }
 
 const originBlockRepository: IXyoProvider<IXyoOriginBlockRepository, undefined> = {
-  async get(container) {
+  async get(container, c) {
     try {
       const archivistRepo = await container.get<IXyoArchivistRepository>(IResolvers.ARCHIVIST_REPOSITORY)
       return archivistRepo
@@ -212,17 +305,20 @@ const boundWitnessPayloadProvider: IXyoProvider<IXyoBoundWitnessPayloadProvider,
 }
 
 const boundWitnessSuccessListener: IXyoProvider<IXyoBoundWitnessSuccessListener, undefined> = {
-  async get(container) {
+  async get(container, c) {
     const hasher = await container.get<IXyoHashProvider>(IResolvers.HASH_PROVIDER)
     const originBlockRepo = await container.get<IXyoOriginBlockRepository>(IResolvers.ORIGIN_BLOCK_REPOSITORY)
     const validator = await container.get<XyoBoundWitnessValidator>(IResolvers.BOUND_WITNESS_VALIDATOR)
     const originChainRepo = await container.get<IXyoOriginChainRepository>(IResolvers.ORIGIN_CHAIN_REPOSITORY)
-
+    const contentService = await container.get<IXyoContentAddressableService>(
+      IResolvers.CONTENT_ADDRESSABLE_SERVICE
+    )
     return new XyoBoundWitnessSuccessListener(
       hasher,
       validator,
       originChainRepo,
-      originBlockRepo
+      originBlockRepo,
+      contentService
     )
   }
 }
@@ -234,7 +330,7 @@ const boundWitnessValidator: IXyoProvider<XyoBoundWitnessValidator, IXyoBoundWit
 }
 
 const peerConnectionDelegate: IXyoProvider<IXyoPeerConnectionDelegate, undefined> = {
-  async get(container) {
+  async get(container, c) {
     const networkService = await container.get<IXyoNetworkProvider>(IResolvers.NETWORK)
     const catalogue = await container.get<IXyoNetworkProcedureCatalogue>(IResolvers.NETWORK_PROCEDURE_CATALOGUE)
     const peerInteractionRouter = new XyoPeerInteractionRouter()
@@ -314,9 +410,11 @@ const signersProvider: IXyoProvider<IXyoSigner[], undefined> = {
   }
 }
 
-const transactionsRepository: IXyoProvider<IXyoRepository<IXyoHash, IXyoTransaction<any>>, undefined> = {
-  async get() {
-    return new XyoBaseInMemoryRepository<IXyoHash, IXyoTransaction<any>>(k => k.serializeHex())
+const transactionsRepository: IXyoProvider<IXyoTransactionRepository, any> = {
+  async get(container, config) {
+    await createDirectoryIfNotExists(config.data)
+    const transactionDb = XyoLevelDbStorageProvider.createStore(config.data)
+    return new XyoTransactionRepository(transactionDb)
   }
 }
 
@@ -325,7 +423,7 @@ const aboutMe: IXyoProvider<XyoAboutMeService, IXyoAboutMeConfig> = {
     const originChainRepo = await container.get<IXyoOriginChainRepository>(IResolvers.ORIGIN_CHAIN_REPOSITORY)
     const genesisSigner = await originChainRepo.getGenesisSigner()
     if (!genesisSigner) {
-      throw new XyoError(`Could not get genesis signer from origin chain repo`, XyoErrors.CRITICAL)
+      throw new XyoError(`Could not get genesis signer from origin chain repo`)
     }
 
     const p2p = await container.get<IXyoP2PService>(IResolvers.P2P_SERVICE)
@@ -350,12 +448,12 @@ const archivistRepository: IXyoProvider<IXyoArchivistRepository, ISqlConnectionD
       return createArchivistSqlRepository(config, serialization)
     }
 
-    throw new XyoError(`Archivist repository lacks sql config, can not instantiate`, XyoErrors.CRITICAL)
+    throw new XyoError(`Archivist repository lacks sql config, can not instantiate`)
   }
 }
 
 const archivistNetwork: IXyoProvider<IXyoArchivistNetwork, undefined> = {
-  async get(container) {
+  async get(container, c) {
     const serialization = await container.get<IXyoSerializationService>(IResolvers.SERIALIZATION_SERVICE)
     const nodes = await container.get<IXyoNodeNetwork>(IResolvers.NODE_NETWORK_FROM)
     return new XyoArchivistNetwork(serialization, nodes)
@@ -366,7 +464,7 @@ const archivistNetwork: IXyoProvider<IXyoArchivistNetwork, undefined> = {
 }
 
 const questionService: IXyoProvider<IXyoQuestionService, undefined> = {
-  async get(container) {
+  async get(container, c) {
     const originBlockRepo = await container.get<IXyoOriginBlockRepository>(IResolvers.ORIGIN_BLOCK_REPOSITORY)
     const originChainRepo = await container.get<IXyoOriginChainRepository>(IResolvers.ORIGIN_CHAIN_REPOSITORY)
     const archivists = await container.get<IXyoArchivistNetwork>(IResolvers.ARCHIVIST_NETWORK)
@@ -384,18 +482,40 @@ const questionService: IXyoProvider<IXyoQuestionService, undefined> = {
 
 const web3Service: IXyoProvider<XyoWeb3Service, IXyoWeb3ServiceConfig> = {
   async get(container, config) {
+    const contentService = await container.get<IXyoContentAddressableService>(
+      IResolvers.CONTENT_ADDRESSABLE_SERVICE
+    )
     return new XyoWeb3Service(
       config.host,
-      config.account,
-      config.contracts
+      contentService,
+      config.contracts,
+      config.address,
+      config.privateKey
     )
+  }
+}
+
+const consensusProvider: IXyoProvider<IConsensusProvider, undefined> = {
+  async get(container, config) {
+    const web3 = await container.get<XyoWeb3Service>(IResolvers.WEB3_SERVICE)
+    return new XyoScscConsensusProvider(web3)
   }
 }
 
 const questionsProvider: IXyoProvider<IQuestionsProvider, undefined> = {
   async get(container, config) {
-    const web3 = await container.get<XyoWeb3Service>(IResolvers.WEB3_SERVICE)
-    return new Web3QuestionService(web3)
+    const consensus = await container.get<IConsensusProvider>(IResolvers.CONSENSUS_PROVIDER)
+    const contentService = await container.get<IXyoContentAddressableService>(
+      IResolvers.CONTENT_ADDRESSABLE_SERVICE
+    )
+    return new Web3QuestionService(consensus, contentService)
+  }
+}
+
+const contentAddressableService: IXyoProvider<IXyoContentAddressableService, XyoIpfsClientCtorOptions> = {
+  async get(container, config) {
+    const client = new XyoIpfsClient(config)
+    return client
   }
 }
 
@@ -412,7 +532,7 @@ export const resolvers: IXyoResolvers = {
   [IResolvers.NETWORK]: network,
   [IResolvers.PEER_CONNECTION_DELEGATE]: peerConnectionDelegate,
   [IResolvers.PEER_TRANSPORT]: peerTransport,
-  [IResolvers.NODE_RUNNER_DELEGATES]: nodeRunnerDelegates,
+  [IResolvers.RUNNABLES]: runnables,
   [IResolvers.NODE_NETWORK_FROM]: nodeNetwork,
   [IResolvers.P2P_SERVICE]: p2pService,
   [IResolvers.DISCOVERY_NETWORK]: discoveryNetwork,
@@ -423,5 +543,9 @@ export const resolvers: IXyoResolvers = {
   [IResolvers.GRAPHQL]: graphql,
   [IResolvers.QUESTION_SERVICE]: questionService,
   [IResolvers.WEB3_SERVICE]: web3Service,
-  [IResolvers.QUESTIONS_PROVIDER]: questionsProvider
+  [IResolvers.QUESTIONS_PROVIDER]: questionsProvider,
+  [IResolvers.CONSENSUS_PROVIDER]: consensusProvider,
+  [IResolvers.CONTENT_ADDRESSABLE_SERVICE]: contentAddressableService,
+  [IResolvers.BLOCK_PRODUCER]: blockProducer,
+  [IResolvers.BLOCK_WITNESS]: blockWitness
 }

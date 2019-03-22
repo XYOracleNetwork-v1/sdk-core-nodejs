@@ -33,6 +33,8 @@
     { "path": "../buffer-utils"},
     { "path": "../errors"},
     { "path": "../origin-chain"},
-    { "path": "../bridge-queue-repository"}
+    { "path": "../bridge-queue-repository"},
+    { "path": "../utils"},
+    { "path": "../content-addressable-service"},
   ]
 }

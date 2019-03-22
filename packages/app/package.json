@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/app",
-  "version": "0.26.0",
+  "version": "0.31.0",
   "description": "The XYO application for running components on the XYO network",
   "main": "dist/index.js",
   "bin": {
@@ -8,20 +8,21 @@
     "xyo-stop": "bin/stop-node.js"
   },
   "scripts": {
-    "start": "./bin/start-node.js",
+    "start": "node --inspect ./bin/start-node.js",
     "stop": "./bin/stop-node.js"
   },
   "types": "dist/index.d.ts",
   "author": "Ryan",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/archivist-repository.sql": "^0.26.0",
-    "@xyo-network/base": "^0.26.0",
-    "@xyo-network/base-node": "^0.26.0",
-    "@xyo-network/errors": "^0.26.0",
-    "@xyo-network/network": "^0.26.0",
-    "@xyo-network/node-network": "^0.26.0",
-    "@xyo-network/utils": "^0.26.0",
+    "@xyo-network/archivist-repository.sql": "^0.31.0",
+    "@xyo-network/base": "^0.31.0",
+    "@xyo-network/base-node": "^0.31.0",
+    "@xyo-network/errors": "^0.31.0",
+    "@xyo-network/network": "^0.31.0",
+    "@xyo-network/node-network": "^0.31.0",
+    "@xyo-network/utils": "^0.31.0",
+    "@xyo-network/crypto": "^0.31.0",
     "enquirer": "^2.3.0",
     "joi": "^14.3.1",
     "js-yaml": "^3.12.1",

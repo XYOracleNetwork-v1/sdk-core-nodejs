@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: on-the-fly-serializable.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 12th December 2018 2:29:13 pm
+ * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -48,7 +48,7 @@ export class XyoOnTheFlySerializable extends XyoBaseSerializable {
       return this.dataOptions.fn()
     }
 
-    throw new XyoError(`No option implemented for OnTheFlySerializable`, XyoErrors.CRITICAL)
+    throw new XyoError(`No option implemented for OnTheFlySerializable`)
   }
 
 }

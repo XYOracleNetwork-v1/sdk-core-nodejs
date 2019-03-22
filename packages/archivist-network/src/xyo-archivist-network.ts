@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-archivist-network.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Friday, 22nd February 2019 2:32:45 pm
+ * @Last modified time: Tuesday, 12th March 2019 3:47:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -20,7 +20,7 @@ import { IXyoNodeNetwork, IXyoComponentFeatureResponse, IXyoComponentArchivistFe
 import { XyoDivinerArchivistGraphQLClient } from '@xyo-network/diviner-archivist-client.graphql'
 
 export class XyoArchivistNetwork extends XyoBase implements IXyoArchivistNetwork, IXyoDivinerArchivistClientProvider {
-  private timeout: NodeJS.Timeout | undefined
+  private timeout: (() => void) | undefined
 
   private readonly peersIndex: IPeersIndex = { byType: { archivist: {}, diviner: {} }, byPublicKey: {} }
 
@@ -36,15 +36,16 @@ export class XyoArchivistNetwork extends XyoBase implements IXyoArchivistNetwork
   public startFindingPeers() {
     this.refreshPeers()
     if (this.timeout) {
-      clearTimeout(this.timeout)
+      this.timeout()
+      this.timeout = undefined
     }
 
-    this.timeout = setInterval(this.refreshPeers.bind(this), 60000)
+    this.timeout = XyoBase.interval(this.refreshPeers.bind(this), 60000)
   }
 
   public stopVettingPeers() {
     if (this.timeout) {
-      clearTimeout(this.timeout)
+      this.timeout()
       this.timeout = undefined
     }
   }
@@ -110,11 +111,11 @@ export class XyoArchivistNetwork extends XyoBase implements IXyoArchivistNetwork
       !partyOne || partyOne.length !== 1 ||
       !partyTwo || partyTwo.length !== 1
     ) {
-      throw new XyoError('Party length supports only 1 at this time', XyoErrors.CRITICAL)
+      throw new XyoError('Party length supports only 1 at this time')
     }
 
     if (markers && markers.length > 1) {
-      throw new XyoError('Marker length support is at most 1 at this time', XyoErrors.CRITICAL)
+      throw new XyoError('Marker length support is at most 1 at this time')
     }
 
     this.logInfo(`
@@ -132,7 +133,7 @@ export class XyoArchivistNetwork extends XyoBase implements IXyoArchivistNetwork
     )
 
     if (!intersections) {
-      throw new XyoError('Could not retrieve intersection results', XyoErrors.CRITICAL)
+      throw new XyoError('Could not retrieve intersection results')
     }
 
     if (intersections.items.length === 0) {
@@ -248,7 +249,6 @@ export class XyoArchivistNetwork extends XyoBase implements IXyoArchivistNetwork
   }
 
   private refreshPeers() {
-    this.logInfo('Refreshing peers')
     if (this.unsubscribeRequestFeatures) this.unsubscribeRequestFeatures()
     // Prune peers first
     const currentTime = new Date()

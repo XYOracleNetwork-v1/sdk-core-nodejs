@@ -28,6 +28,7 @@
     {"path": "../archivist-repository.sql"},
     {"path": "../node-network"},
     {"path": "../network"},
-    {"path": "../utils"}
+    {"path": "../utils"},
+    {"path": "../crypto"}
   ]
 }

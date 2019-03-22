@@ -59,7 +59,6 @@ export class XyoBridgeBoundWitnessSuccessListener extends XyoBase implements IXy
       const nestedHashValue = await this.hashingProvider.createHash(nestedBoundWitness.getSigningData())
       const nestedHash = nestedHashValue.serialize() as Buffer
       this.logInfo(`Extracted nested block with hash ${nestedHash.toString('hex')}`)
-      console.log(nestedBoundWitness.serializeHex())
 
       const containsBlock = await this.originBlockRepository.containsOriginBlock(nestedHash)
       if (!containsBlock) {

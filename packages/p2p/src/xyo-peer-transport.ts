@@ -28,7 +28,7 @@ export class XyoPeerTransport implements IXyoPeerTransport {
         this.listener.publish('connected', connection)
       })
 
-      this.server.listen(this.port, this.host, () => {
+      this.server.listen(this.port, '0.0.0.0', () => {
         resolve(this.server)
       })
     })

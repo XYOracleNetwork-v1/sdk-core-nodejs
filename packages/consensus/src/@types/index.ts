@@ -1,4 +1,4 @@
-import { BigNumber } from 'bignumber.js'
+import { BN } from '@xyo-network/utils'
 
 /**
  * Serves as the layer between the application and a blockchain
@@ -14,44 +14,44 @@ export interface IConsensusProvider {
    * @returns {Promise<number>}
    * @memberof IConsensusProvider
    */
-  getNetworkActiveStake(): Promise<BigNumber>
+  getNetworkActiveStake(blockHeight?: BN): Promise<BN>
 
   /**
    * Returns the active stake for a particular stakee
    *
-   * @param {BigNumber} paymentId The paymentId (stakeeId)
-   * @returns {Promise<BigNumber>}
+   * @param {string} paymentId The paymentId (stakeeId)
+   * @returns {Promise<string>}
    * @memberof IConsensusProvider
    */
-  getActiveStake(paymentId: BigNumber): Promise<BigNumber>
+  getActiveStake(paymentId: string, blockHeight?: BN): Promise<BN>
 
   /**
    * For a particular stakee and staker, returns the active stake
    *
-   * @param {BigNumber} paymentId The stakee id
+   * @param {string} paymentId The stakee id
    * @param {string} stakerAddr The staker's address
-   * @returns {Promise<BigNumber>} The total active stake the staker has on the stakee
+   * @returns {Promise<BN>} The total active stake the staker has on the stakee
    * @memberof IConsensusProvider
    */
-  getStakerActiveStake(paymentId: BigNumber, stakerAddr: string): Promise<BigNumber>
+  getStakerActiveStake(paymentId: string, stakerAddr: string, blockHeight?: BN): Promise<BN>
 
   /**
-   * Returns a list of staker address for a particular stakee
+   * Returns a list of stake objects a particular stakee
    *
-   * @param {BigNumber} paymentId The stakeeId
-   * @returns {Promise<string[]>} The list of addresses that are staking the stakee
+   * @param {string} paymentId The stakeeId
+   * @returns {Promise<string[]>} The list of stake datas
    * @memberof IConsensusProvider
    */
-  getStakersForStakee(paymentId: BigNumber): Promise<string[]>
+  getStakesForStakee(paymentId: string, blockHeight?: BN): Promise<IStake[]>
 
   /**
    * Given a stakeeId, will return true if the stakee is a block-producer, false otherwise
    *
-   * @param {BigNumber} paymentId The stakeeId
+   * @param {string} paymentId The stakeeId
    * @returns {Promise<boolean>} True if the the stakee is a block-producer, false otherwise
    * @memberof IConsensusProvider
    */
-  isBlockProducer(paymentId: BigNumber): Promise<boolean>
+  isBlockProducer(paymentId: string, blockHeight?: BN): Promise<boolean>
 
   /**
    * The current reward coefficients for determining reward output
@@ -59,53 +59,51 @@ export interface IConsensusProvider {
    * @returns {Promise<IRewardComponents>}
    * @memberof IConsensusProvider
    */
-  getRewardPercentages(): Promise<IRewardComponents>
+  getRewardPercentages(blockHeight?: BN): Promise<IRewardComponents>
 
   /**
-   * Returns the most recent block in the blockchain, undefined it there is not yet a block
+   * Returns the latest block hash. If no blocks yet exist, it
+   * returns a 32-byte representation of 0
    *
-   * @returns {(Promise<IConsensusBlock | undefined>)}
+   * @returns {Promise<string>}
    * @memberof IConsensusProvider
    */
-  getLatestBlock(): Promise<IConsensusBlock | undefined>
+  getLatestBlockHash(blockHeight?: BN): Promise<string>
 
   /**
    * Given a particular requestId, return the Request
    *
-   * @param {BigNumber} id The request Id of interest ((which should be the hash of request itself))
+   * @param {string} id The request Id of interest ((which should be the hash of request itself))
    * @returns {(Promise<IRequest | undefined>)}
    * @memberof IConsensusProvider
    */
-  getRequestById(id: BigNumber): Promise<IRequest | undefined>
+  getRequestById(id: string, blockHeight?: BN): Promise<IRequest | undefined>
 
   /**
-   * Returns a paginated list of unhandled requests, given a limit and
-   * an optional cursor
+   * Gets a page of recent requests in the system that do not have a response
    *
-   * @param {number} limit The max the number of results to return
-   * @param {BigNumber} cursor An optional cursor value to offset the pagination
-   * @returns {Promise<IRequest[]>}
+   * @returns {Promise<{[id: string]: IRequest}>} A dict where keys are the id of requests, and values are the request
    * @memberof IConsensusProvider
    */
-  getUnhandledRequests(limit: number, cursor?: BigNumber): Promise<IRequest[]>
+  getNextUnhandledRequests(blockHeight?: BN): Promise<{[id: string]: IRequest}>
 
   /**
    * Given a particular requestId, returns the current gas estimate
    *
-   * @param {BigNumber} requestId
-   * @returns {Promise<BigNumber>}
+   * @param {string} requestId
+   * @returns {Promise<BN>}
    * @memberof IConsensusProvider
    */
-  getGasEstimateForRequest(requestId: BigNumber): Promise<BigNumber>
+  getGasEstimateForRequest(requestId: string): Promise<BN>
 
   /**
    * Given a list of requestIds, returns the gas refund amount
    *
-   * @param {BigNumber[]} requestIds A list of requestIds of interest
-   * @returns {Promise<BigNumber>}
+   * @param {string[]} requestIds A list of requestIds of interest
+   * @returns {Promise<BN>}
    * @memberof IConsensusProvider
    */
-  getExpectedGasRefund(requestIds: BigNumber[]): Promise<BigNumber>
+  getExpectedGasRefund(requestIds: string[]): Promise<BN>
 
   /**
    * Returns the total number of requests without responses
@@ -113,7 +111,7 @@ export interface IConsensusProvider {
    * @returns {Promise<number>}
    * @memberof IConsensusProvider
    */
-  getNumRequests(): Promise<number>
+  getNumRequests(blockHeight?: BN): Promise<number>
 
   /**
    * Returns the total number of blocks in the block chain
@@ -121,7 +119,7 @@ export interface IConsensusProvider {
    * @returns {Promise<number>}
    * @memberof IConsensusProvider
    */
-  getNumBlocks(): Promise<number>
+  getNumBlocks(blockHeight?: BN): Promise<number>
 
   /**
    * Returns true iff the `address` passed in can submit a block that
@@ -131,43 +129,64 @@ export interface IConsensusProvider {
    * @returns {Promise<boolean>}
    * @memberof IConsensusProvider
    */
-  canSubmitBlock(address: string): Promise<boolean>
+  canSubmitBlock(address: string, blockHeight?: BN): Promise<boolean>
 
   /**
    * Returns the minimum XYO request bounty
    *
-   * @returns {Promise<number>}
+   * @returns {Promise<BN>}
    * @memberof IConsensusProvider
    */
-  getMinimumXyoRequestBounty(): Promise<number>
+  getMinimumXyoRequestBounty(blockHeight?: BN): Promise<BN>
 
   /**
    * Submits a block to the blockchain
    *
-   * @param {string} blockProducer The address of the block producer
-   * @param {BigNumber} previousBlock The previous blocks hash
-   * @param {BigNumber[]} requests The list of requests inside the block
-   * @param {Buffer} supportingData The supporting data hash
+   * @param {string} previousBlock The previous blocks hash
+   * @param {BN} agreedStakeBlockHeight The block height that the block witnesses agreed upon
+   * @param {string[]} requests The list of requests inside the block
+   * @param {string} supportingData The supporting data hash
    * @param {Buffer} responses A byte-array representation of the responses, positionally coupled with requests
    * @param {string[]} signers The list of signer addresses
-   * @param {Buffer[]} sigR The `R` part of the sig
-   * @param {Buffer[]} sigS The `S` part of the sig
-   * @param {Buffer[]} sigV The `V` part of the sig
-   * @returns {Promise<BigNumber>} Returns the hash the newly created block
+   * @param {string[]} sigR The `R` part of the sig
+   * @param {string[]} sigS The `S` part of the sig
+   * @param {number[]} sigV The `V` part of the sig
+   * @returns {Promise<BN>} Returns the hash the newly created block
    * @memberof IConsensusProvider
    */
 
   submitBlock(
-    blockProducer: string,
-    previousBlock: BigNumber,
-    requests: BigNumber[],
-    supportingData: Buffer, // hash
+    previousBlock: string,
+    agreedStakeBlockHeight: BN,
+    requests: string[],
+    supportingData: string, // hash
     responses: Buffer,
     signers: string[],
-    sigR: Buffer[],
-    sigS: Buffer[],
-    sigV: Buffer[]
-  ): Promise<BigNumber>
+    sigR: string[],
+    sigS: string[],
+    sigV: number[]
+  ): Promise<string>
+
+  /**
+   * Given a previousBlockHash, a list of requests, a supportingDataHash, and responses,
+   * generates an abi encoded hash
+   *
+   * ** NOTE consider adding `account` as parameter if needed
+   *
+   * @param {BN} previousBlock
+   * @param {BN[]} requests
+   * @param {Buffer} supportingData
+   * @param {Buffer} responses
+   * @returns {Promise<string>} The hash value of the ABI encoded block components
+   * @memberof IConsensusProvider
+   */
+  encodeBlock(
+    previousBlock: string,
+    agreedStakeBlockHeight: BN,
+    requests: string[],
+    supportingData: string,
+    responses: Buffer
+  ): Promise<string>
 
   /**
    * Given a previousBlockHash, a list of requests, a supportingDataHash, and responses,
@@ -175,19 +194,11 @@ export interface IConsensusProvider {
    *
    * ** NOTE consider adding `account` as parameter if needed
    *
-   * @param {BigNumber} previousBlock
-   * @param {BigNumber[]} requests
-   * @param {Buffer} supportingData
-   * @param {Buffer} responses
+   * @param {string} block The hash value of the ABI encoded block components
    * @returns {Promise<ISignatureComponents>}
    * @memberof IConsensusProvider
    */
-  generateSignature(
-    previousBlock: BigNumber,
-    requests: BigNumber[],
-    supportingData: Buffer,
-    responses: Buffer
-  ): Promise<ISignatureComponents>
+  signBlock(block: string): Promise<ISignatureComponents>
 
   /**
    * Given a list of responses, generates a response byte-array
@@ -196,7 +207,80 @@ export interface IConsensusProvider {
    * @returns {Promise <Buffer[]>}
    * @memberof IConsensusProvider
    */
-  createResponses(responses: IResponse[]): Promise <Buffer[]>
+  createResponses(responses: IResponse[]): Buffer
+
+  /**
+   * Returns the percentage of the stake required to submit a new block
+   *
+   * Should return an integer value. Such that if the value is 66% this
+   * should return `66`
+   *
+   * @returns {Promise<number>}
+   * @memberof IConsensusProvider
+   */
+  getStakeQuorumPct(blockHeight?: BN): Promise<number>
+
+  /**
+   * Returns the current height of the ethereum chain
+   *
+   * @returns {Promise<BN>}
+   * @memberof IConsensusProvider
+   */
+  getBlockHeight(): Promise<BN>
+
+  /**
+   * The minimum amount blocks built on top of a block to trust it
+   *
+   * @returns {Promise<number>}
+   * @memberof IConsensusProvider
+   */
+  getBlockConfirmationTrustThreshold(): Promise<number>
+
+  /**
+   * Given a particular requestId, returns the block or undefined if none exists
+   *
+   * @param {string} requestId
+   * @returns {Promise<IConsensusBlock | undefined>}
+   * @memberof IConsensusProvider
+   */
+  getBlockForRequest(requestId: string): Promise<IConsensusBlock | undefined>
+
+  /**
+   * Given a particular requestId, returns the supporting data (IPFS hash string)
+   *
+   * @param {string} requestId
+   * @returns {Promise<string | undefined>}
+   * @memberof IConsensusProvider
+   */
+  getSupportingDataForRequest(requestId: string): Promise<string | undefined>
+
+  /**
+   * Sends a request to the smart contract
+   *
+   * @param {string} ipfsHash
+   * @param {BN} bounty
+   * @param {string} bountyFrom
+   * @param {number} requestType
+   * @returns {Promise<IRequest>}
+   * @memberof IConsensusProvider
+   */
+  submitRequest(ipfsHash: string, bounty: BN, bountyFrom: string, requestType: number):
+    Promise<IRequest | undefined>
+}
+
+/**
+ * The stake data object
+ *
+ * @export
+ * @interface IStake
+ */
+export interface IStake {
+  amount: BN
+  stakeBlock: BN
+  unstakeBlock: BN
+  stakee: string
+  staker: string
+  isActivated: boolean
 }
 
 /**
@@ -217,9 +301,10 @@ export interface IRewardComponents {
  * @interface IConsensusBlock
  */
 export interface IConsensusBlock {
-  previousBlock: BigNumber,
+  previousBlock: string
   createdAt: number // Block Height in ethereum blocks
-  supportingData: Buffer
+  supportingData: string
+  stakingBlock: number
   creator: string
 }
 
@@ -230,13 +315,13 @@ export interface IConsensusBlock {
  * @interface IRequest
  */
 export interface IRequest {
-  xyoBounty: number
-  weiMining: number
-  miningProvider: number
-  createdAt: number // Block Height in ethereum blocks
+  request?: string
+  xyoBounty: BN
+  weiMining: BN
+  createdAt: BN // Block Height in ethereum blocks
+  responseBlockNumber: BN
   requestSender: string
   requestType: IRequestType // 1-byte number
-  hasResponse: boolean
 }
 
 /**
@@ -246,7 +331,7 @@ export interface IRequest {
  * @interface IResponse
  */
 export interface IResponse {
-  boolResponse: number
+  boolResponse: boolean
   numResponse: number
   withdrawResponse: number // Block Height in ethereum blocks
 }
@@ -258,9 +343,12 @@ export interface IResponse {
  * @enum {number}
  */
 export enum IRequestType { // something like this maybe, maybe-not
-  Bool = 1,
-  UINT = 2,
-  WITHDRAW = 3
+  DEFAULT = 0,
+  BOOL_COMPLETION = 1,
+  UINT_COMPLETION = 2,
+  WITHDRAW = 3,
+  BOOL = 4,
+  UINT = 5
 }
 
 /**
@@ -270,7 +358,8 @@ export enum IRequestType { // something like this maybe, maybe-not
  * @interface ISignatureComponents
  */
 export interface ISignatureComponents {
-  sigR: Buffer,
-  sigS: Buffer,
-  sigV: Buffer
+  publicKey: string
+  sigR: string,
+  sigS: string,
+  sigV: number
 }

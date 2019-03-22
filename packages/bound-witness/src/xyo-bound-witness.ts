@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-bound-witness.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Wednesday, 23rd January 2019 1:28:49 pm
+ * @Last modified time: Friday, 8th March 2019 12:07:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -13,49 +13,40 @@ import { IXyoBoundWitness, FetterOrWitness, IXyoKeySet, IXyoSignatureSet, IXyoBo
 import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, ParseQuery, IXyoSerializableObject, IParseResult, XyoSerializationService } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
 import { XyoBoundWitnessParty } from './xyo-bound-witness-party'
-import { XyoError, XyoErrors } from "@xyo-network/errors"
 import { XyoFetter } from "./xyo-fetter"
+import { XyoError } from "@xyo-network/errors"
+import { XyoWitness } from "./xyo-witness"
 
 export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWitness {
 
   public get publicKeys(): IXyoKeySet[] {
-    return this.getOrCreate('publicKeys', () => {
-      return this.fetterWitnessPairs.map(fetterWitnessPair => fetterWitnessPair.fetter.keySet)
-    })
+    return this.fetterWitnessPairs.map(fetterWitnessPair => fetterWitnessPair.fetter.keySet)
   }
 
   public get signatures(): IXyoSignatureSet[] {
-    return this.getOrCreate('signatures', () => {
-      return this.fetterWitnessPairs.map(fetterWitnessPair => fetterWitnessPair.witness.signatureSet)
-    })
+    return this.fetterWitnessPairs.map(fetterWitnessPair => fetterWitnessPair.witness.signatureSet)
   }
 
   public get heuristics(): IXyoSerializableObject[][] {
-    return this.getOrCreate('heuristics', () => {
-      return this.fetterWitnessPairs.map(fetterWitnessPair => fetterWitnessPair.fetter.heuristics)
-    })
+    return this.fetterWitnessPairs.map(fetterWitnessPair => fetterWitnessPair.fetter.heuristics)
   }
 
   public get metadata(): IXyoSerializableObject[][] {
-    return this.getOrCreate('metadata', () => {
-      return this.fetterWitnessPairs.map(fetterWitnessPair => fetterWitnessPair.witness.metadata)
-    })
+    return this.fetterWitnessPairs.map(fetterWitnessPair => fetterWitnessPair.witness.metadata)
   }
 
   public get numberOfParties(): number {
-    return this.fetterWitnesses.length / 2
+    return this.fetterWitnesses.reduce((memo, fw) => {
+      return memo + ((fw.schemaObjectId === schema.fetter.id) ? 1 : 0)
+    }, 0)
   }
 
   public get parties(): IXyoBoundWitnessParty[] {
-    return this.getOrCreate('parties', () => {
-      return this.fetterWitnessPairs.map((pair, index) => new XyoBoundWitnessParty(pair.fetter, pair.witness, index))
-    })
+    return this.fetterWitnessPairs.map((pair, index) => new XyoBoundWitnessParty(pair.fetter, pair.witness, index))
   }
 
   private get fetterWitnessPairs (): FetterWitnessPair[] {
-    return this.getOrCreate('FetterWitnessPair', () => {
-      return getFetterWitnessPair(this.fetterWitnesses)
-    })
+    return getFetterWitnessPair(this.fetterWitnesses)
   }
 
   public static deserializer: IXyoDeserializer<IXyoBoundWitness>
@@ -67,12 +58,22 @@ export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWit
     super(schema)
   }
 
+  public stripMetaData(): IXyoBoundWitness {
+    return new XyoBoundWitness(this.fetterWitnesses.map((fw) => {
+      if (fw.schemaObjectId === schema.fetter.id) return fw
+      return new XyoWitness(
+        (fw as IXyoWitness).signatureSet,
+        []
+      )
+    }))
+  }
+
   public getHeuristicFromParty<T extends IXyoSerializableObject>(
     partyIndex: number,
     schemaObjectId: number
   ): T | undefined {
     if (this.parties.length <= partyIndex) {
-      throw new XyoError(`Insufficient number of parties to complete request`, XyoErrors.CRITICAL)
+      throw new XyoError(`Insufficient number of parties to complete request`)
     }
 
     return this.parties[partyIndex].getHeuristic<T>(schemaObjectId)
@@ -83,7 +84,7 @@ export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWit
     schemaObjectId: number
   ): T | undefined {
     if (this.parties.length <= partyIndex) {
-      throw new XyoError(`Insufficient number of parties to complete request`, XyoErrors.CRITICAL)
+      throw new XyoError(`Insufficient number of parties to complete request`)
     }
 
     return this.parties[partyIndex].getMetaDataItem<T>(schemaObjectId)

@@ -22,7 +22,7 @@ const bridgeEntryPoint = async () => {
   const chainRepo = new XyoOriginChainLocalStorageRepository(storageProvider, blockRepo, serializer)
   const logger = new XyoLogger(false, false)
 
-  const tcpPeers: IXyoNetworkAddressProvider =  {
+  const tcpPeers: IXyoNetworkAddressProvider = {
     next: async () => {
       const peer: IXyoTCPNetworkAddress = {
         host: "alpha-peers.xyo.network",

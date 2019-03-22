@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: resolveSerializablesToBuffer.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 6th December 2018 11:36:07 am
+ * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -40,7 +40,7 @@ export function resolveSerializablesToBuffer(
 
   const numberOfSerializerTypes = Object.keys(serializablesById).length
   if (numberOfSerializerTypes === 0) {
-    throw new XyoError(`Serializers do not conform`, XyoErrors.CRITICAL)
+    throw new XyoError(`Serializers do not conform`)
   }
 
   let arraySerializationType: IIterableType

@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Thursday, 7th February 2019 10:57:19 am
+ * @Last modified time: Thursday, 28th February 2019 11:43:56 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoComponentFeatureResponse } from "../@types"
+import { IXyoComponentFeatureResponse, IBlockWitnessRequestDTO } from "../@types"
 import { XyoFetterSet, XyoWitnessSet, IXyoBoundWitnessFragment } from "@xyo-network/bound-witness"
 import { IXyoHash } from "@xyo-network/hashing"
 import { XyoBase } from "@xyo-network/base"
@@ -39,6 +39,10 @@ export class XyoMessageParser extends XyoBase {
 
   public tryParseBoundWitnessFragment(message: Buffer, context: IParseContext): IXyoBoundWitnessFragment | undefined {
     return this.tryParseSerializableObject<IXyoBoundWitnessFragment>(message, context)
+  }
+
+  public tryParseBlockWitnessRequest(message: Buffer, context: IParseContext): IBlockWitnessRequestDTO | undefined {
+    return this.tryParseJSON<IBlockWitnessRequestDTO>(message, context)
   }
 
   private tryParseJSON<T>(message: Buffer, context: any): T| undefined {

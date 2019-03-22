@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-handler.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 12th February 2019 9:03:31 am
+ * @Last modified time: Thursday, 28th February 2019 11:54:34 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,7 +17,7 @@ import { IXyoSerializationService } from "@xyo-network/serialization"
 export abstract class XyoBaseHandler extends XyoBase {
 
   protected readonly messageParser: XyoMessageParser
-  private readonly unsubscribes: {[s: string]: unsubscribeFn } = {}
+  private unsubscribes: {[s: string]: unsubscribeFn } = {}
 
   constructor(protected readonly serializationService: IXyoSerializationService) {
     super()
@@ -26,6 +26,7 @@ export abstract class XyoBaseHandler extends XyoBase {
 
   public unsubscribeAll() {
     Object.values(this.unsubscribes).forEach(u => u())
+    this.unsubscribes = {}
   }
 
   public abstract initialize(): void

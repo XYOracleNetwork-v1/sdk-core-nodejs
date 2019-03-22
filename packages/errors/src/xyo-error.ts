@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-error.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 11th December 2018 9:16:21 am
+ * @Last modified time: Wednesday, 6th March 2019 4:41:30 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -41,7 +41,7 @@ export class XyoError extends XyoBase implements Error {
 
   constructor(
     public readonly message: string,
-    public readonly code: XyoErrors,
+    public readonly code: XyoErrors = XyoErrors.CRITICAL,
     fromOtherError?: Error
   ) {
     super()

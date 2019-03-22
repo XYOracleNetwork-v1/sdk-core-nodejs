@@ -4,12 +4,12 @@
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Monday, 4th March 2019 9:35:31 am
+ * @Last modified time: Wednesday, 13th March 2019 2:55:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { sha256HashDeserializer, XyoStubHash } from '@xyo-network/hashing'
+import { sha256HashDeserializer, sha3HashDeserializer, XyoStubHash } from '@xyo-network/hashing'
 import { XyoStubPublicKey, XyoStubSignature, XyoStubSigner } from '@xyo-network/signing'
 import { XyoEcdsaSignature, XyoEcdsaSecp256k1UnCompressedPublicKey, XyoEcdsaSecp256k1Signer } from '@xyo-network/signing.ecdsa'
 import { XyoRsaPublicKey, rsaWithSha256SignatureDeserializer, XyoRsaShaSigner } from '@xyo-network/signing.rsa'
@@ -56,6 +56,7 @@ function createSerializer(): IXyoSerializationService {
   serializationService.addDeserializer(XyoRsaPublicKey)
   serializationService.addDeserializer(rsaWithSha256SignatureDeserializer)
   serializationService.addDeserializer(sha256HashDeserializer)
+  serializationService.addDeserializer(sha3HashDeserializer)
   serializationService.addDeserializer(XyoKeySet.deserializer)
   serializationService.addDeserializer(XyoSignatureSet.deserializer)
   serializationService.addDeserializer(XyoFetter.deserializer)

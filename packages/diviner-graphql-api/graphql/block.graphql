@@ -1,4 +1,0 @@
-type Block {
-  hash: String,
-  bytes: String
-}

@@ -24,6 +24,12 @@
   "references": [
     {"path": "../base"},
     {"path": "../errors"},
-    {"path": "../consensus"}
+    {"path": "../consensus"},
+    {"path": "../questions"},
+    {"path": "../node-network"},
+    {"path": "../ipfs-client"},
+    {"path": "../content-addressable-service"},
+    {"path": "../block-witness"},
+    {"path": "../meta-list"}
   ]
 }

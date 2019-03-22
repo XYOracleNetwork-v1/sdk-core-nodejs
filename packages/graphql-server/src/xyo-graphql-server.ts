@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-graphql-server.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 10:02:17 am
+ * @Last modified time: Tuesday, 12th March 2019 3:49:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -28,14 +28,13 @@ export class XyoGraphQLServer extends XyoBase {
     resolver: IXyoDataResolver<TSource, TArgs, TContext, TResult>
   ) {
     if (this.graphqlResolvers[route]) {
-      throw new XyoError(`Route ${route} already exists. Will not add`, XyoErrors.CRITICAL)
+      throw new XyoError(`Route ${route} already exists. Will not add`)
     }
 
     this.graphqlResolvers[route] = resolver
   }
 
   public async start (): Promise<void> {
-    this.logInfo(`Starting Graphql server`)
     const { typeDefs, resolvers } = this.initialize()
     this.server = new ApolloServer({
       typeDefs,

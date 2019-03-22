@@ -4,7 +4,7 @@
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node.ts
  * @Last modified by: ryanxyo
- * @Last modified time: Tuesday, 19th February 2019 2:01:07 pm
+ * @Last modified time: Wednesday, 13th March 2019 4:07:06 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -17,7 +17,6 @@ import merge from 'merge'
 
 import { PartialNodeOptions, IXyoNodeOptions } from "./@types"
 import { CatalogueItem } from "@xyo-network/network"
-import { IXyoNodeRunnerDelegate } from "@xyo-network/node-runner"
 import path from 'path'
 import {
   createDirectoryIfNotExists,
@@ -25,14 +24,13 @@ import {
   IXyoProvider,
   IXyoProviderContainer,
   depScope,
-  ProcessManager
+  ProcessManager,
+  IXyoRunnable
 } from "@xyo-network/utils"
 import { resolvers } from './resolvers'
 import { IResolvers } from "./xyo-resolvers-enum"
-import { XyoError, XyoErrors } from "@xyo-network/errors"
-import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
-import { IXyoSerializationService } from '@xyo-network/serialization'
-import { XyoOriginChainStateInMemoryRepository } from '@xyo-network/origin-chain'
+import { XyoError } from "@xyo-network/errors"
+import { XyoBase } from '@xyo-network/base'
 
 export const DEFAULT_NODE_OPTIONS: IXyoNodeOptions = {
   modules: resolvers,
@@ -40,7 +38,15 @@ export const DEFAULT_NODE_OPTIONS: IXyoNodeOptions = {
     nodeRunnerDelegates: {
       enableBoundWitnessServer: true,
       enableGraphQLServer: true,
-      enableQuestionsWorker: true
+      enableQuestionsWorker: true,
+      enableBlockProducer: true,
+      enableBlockWitness: true
+    },
+    blockProducer: {
+      accountAddress: '0x123'
+    },
+    blockWitness: {
+
     },
     data: {
       path: path.resolve('node-db')
@@ -106,13 +112,29 @@ export const DEFAULT_NODE_OPTIONS: IXyoNodeOptions = {
       }
     },
     web3Service: {
-      host: 'http://127.0.0.1:8545',
-      address: 'abc',
+      host: 'https://kovan.infura.io/v3/8f1e6c44394f4366a49095d9cac828e2',
+      address: '0xff710bF860e6D8e4a2b1E2023C1283e890017CDb',
+      privateKey: '5408C9896DD9F6EC03DF446E2FE3909AE7DF18A0B3FA7029DD793379B94FB2BA',
       contracts: {
-        PayOnDelivery: {
-          address: 'need to be replaced'
+        XyStakingConsensus: {
+          ipfsHash: "QmRpytEw449ujLTQzRmyHNoJpYvDtWKktfhKZAciizZYG4",
+          address: '0xBFd89f65C0F7B600e720EC3Cd7Ef392424351f6F',
+        }, XyBlockProducer: {
+          ipfsHash: "QmR9yrmMGGzE5nqHPGxbkBYNvVHnVG8csfJVZtkgWSbeEX",
+          address: '0x6797aceC0E47B7849CDc8F7B5546777681C1d4D1',
+        }, XyGovernance: {
+          ipfsHash: "QmT3zhyoWJ7MA9nqpVP8pSiBaVs5MTqQ2mNNHZ2LbYismQ",
+          address: '0x98d1Df3A49Defd8b28e9Feb71d1c7370457643f0',
         }
       }
+    },
+    contentAddressableService: {
+      host: 'ipfs.layerone.co',
+      port: 5002,
+      protocol: 'https'
+    },
+    transactionRepository: {
+      data: './node-db/transactions'
     }
   }
 }
@@ -131,7 +153,7 @@ class XyoNodeLifeCycle extends BaseLifeCyclable implements IXyoProviderContainer
     [IResolvers.NETWORK_PROCEDURE_CATALOGUE]: 'singleton',
     [IResolvers.NETWORK]: 'singleton',
     [IResolvers.PEER_CONNECTION_DELEGATE]: 'singleton',
-    [IResolvers.NODE_RUNNER_DELEGATES]: 'singleton',
+    [IResolvers.RUNNABLES]: 'singleton',
     [IResolvers.NODE_NETWORK_FROM]: 'singleton',
     [IResolvers.P2P_SERVICE]: 'singleton',
     [IResolvers.DISCOVERY_NETWORK]: 'singleton',
@@ -143,47 +165,50 @@ class XyoNodeLifeCycle extends BaseLifeCyclable implements IXyoProviderContainer
     [IResolvers.ARCHIVIST_NETWORK]: 'singleton',
     [IResolvers.QUESTION_SERVICE]: 'singleton',
     [IResolvers.QUESTIONS_PROVIDER]: 'singleton',
-    [IResolvers.WEB3_SERVICE]: 'singleton'
+    [IResolvers.WEB3_SERVICE]: 'singleton',
+    [IResolvers.CONTENT_ADDRESSABLE_SERVICE]: 'singleton',
+    [IResolvers.CONSENSUS_PROVIDER]: 'singleton',
+    [IResolvers.BLOCK_PRODUCER]: 'singleton',
+    [IResolvers.BLOCK_WITNESS]: 'singleton',
   }
 
   private cachedModules: {[r: string]: any} = {}
 
-  /** Some instance variables for managing the xyo-node loop */
-  private isLooping = false
-  private shouldStopLooping = false
-
   // @ts-ignore
   private opts: IXyoNodeOptions
-  private delegates: IXyoNodeRunnerDelegate[] | undefined
+  private delegates: IXyoRunnable[] | undefined
 
   constructor (private readonly options?: PartialNodeOptions) {
     super()
   }
 
   public async initialize() {
-    this.logInfo(`${this.constructor.name}:initialize`)
-
     await this.resolveOptions()
     await this.createDataDirectory(this.opts)
-    this.delegates = await this.get<IXyoNodeRunnerDelegate[]>(IResolvers.NODE_RUNNER_DELEGATES)
+
+    this.delegates = await this.get<IXyoRunnable[]>(IResolvers.RUNNABLES)
     this.eventEmitter.emit('initialized')
   }
 
   public async start() {
-    this.logInfo(`${this.constructor.name}:started`)
     if (!this.delegates) {
-      throw new XyoError(`No delegates to start`, XyoErrors.CRITICAL)
+      throw new XyoError(`No delegates to start`)
     }
-    await Promise.all(this.delegates.map(d => this.loop(d)))
+
+    this.delegates.map(async (runnable, index) => {
+      this.run(runnable)
+    })
+
     this.eventEmitter.emit('started')
   }
 
   public async stop() {
     this.logInfo(`${this.constructor.name}:stopped`)
-    this.shouldStopLooping = true
+
+    XyoBase.unschedule()
 
     if (this.delegates) {
-      await Promise.all(this.delegates.map(d => d.onStop()))
+      await Promise.all(this.delegates.map(d => d.stop()))
       return
     }
 
@@ -194,7 +219,7 @@ class XyoNodeLifeCycle extends BaseLifeCyclable implements IXyoProviderContainer
   public async get<T>(provider: string): Promise<T> {
     const hasDependency = this.hasDependency(provider)
     if (!hasDependency) {
-      throw new XyoError(`Could not resolve dependency ${provider}`, XyoErrors.CRITICAL)
+      throw new XyoError(`Could not resolve dependency ${provider}`)
     }
 
     const resolvedRecipe = this.opts.modules[provider] as unknown as IXyoProvider<T, any>
@@ -203,10 +228,10 @@ class XyoNodeLifeCycle extends BaseLifeCyclable implements IXyoProviderContainer
     if (instanceLifeCycle === 'singleton') {
       const cachedModule = this.cachedModules[provider]
       if (cachedModule === null) {
-        throw new XyoError(`Circular dependency detected for provider ${provider}`, XyoErrors.CRITICAL)
+        throw new XyoError(`Circular dependency detected for provider ${provider}`)
       }
 
-      if (cachedModule) return cachedModule as T
+      if (cachedModule)return cachedModule as T
     }
 
     this.cachedModules[provider] = null
@@ -215,7 +240,7 @@ class XyoNodeLifeCycle extends BaseLifeCyclable implements IXyoProviderContainer
     const resolvedModule = await resolvedRecipe.get(this, this.opts.config[provider])
 
     if (!resolvedModule) {
-      throw new XyoError(`Could not resolve module ${provider}`, XyoErrors.CRITICAL)
+      throw new XyoError(`Could not resolve module ${provider}`)
     }
 
     this.cachedModules[provider] = (instanceLifeCycle === 'singleton') ? resolvedModule : undefined
@@ -238,7 +263,7 @@ class XyoNodeLifeCycle extends BaseLifeCyclable implements IXyoProviderContainer
 
   public register<T, C>(dep: IResolvers, provider: IXyoProvider<T, C>, scope: depScope): void {
     if (this.cachedModules[dep] !== undefined) {
-      throw new XyoError(`This module has already been resolved, can not be re-registered safely`, XyoErrors.CRITICAL)
+      throw new XyoError(`This module has already been resolved, can not be re-registered safely`)
     }
 
     // @ts-ignore
@@ -246,19 +271,19 @@ class XyoNodeLifeCycle extends BaseLifeCyclable implements IXyoProviderContainer
     this.instanceLifeCycleMap[dep] = scope
   }
 
-  private async loop(delegate: IXyoNodeRunnerDelegate) {
-    if ((this.isLooping && this.shouldStopLooping) || !delegate) {
-      return
-    }
+  private run(runnable: IXyoRunnable) {
+    XyoBase.immediate(async () => {
+      try {
+        await runnable.run()
+      } catch (e) {
+        this.logError(`There was an error in runnable`, e)
+      }
 
-    try {
-      await delegate.run()
-    } catch (err) {
-      this.logError(`There was an uncaught error in the xyo-node loop`, err)
-    }
-
-    setImmediate(() => {
-      this.loop(delegate)
+      if (runnable.type === 'loop') {
+        XyoBase.timeout(async () => {
+          this.run(runnable)
+        }, runnable.getSleepTime())
+      }
     })
   }
 
@@ -281,7 +306,6 @@ class XyoNodeLifeCycle extends BaseLifeCyclable implements IXyoProviderContainer
       dataPath = nodeOptions.config.data.path
     }
 
-    this.logInfo(`Setting Data Directory to ${dataPath}`)
     await createDirectoryIfNotExists(dataPath)
   }
 }
@@ -301,7 +325,7 @@ export class XyoNode extends LifeCycleRunner {
     return (this.lifeCyclable as XyoNodeLifeCycle).hasDependency(provider)
   }
 
-  public async get<T>(provider: IResolvers): Promise<T> {
+  public async get<T>(provider: IResolvers, n: number): Promise<T> {
     return (this.lifeCyclable as XyoNodeLifeCycle).get<T>(provider)
   }
 }
@@ -315,26 +339,6 @@ export async function main() {
       originChainRepository: {
         data: './node-db/origin-chain'
       }
-    },
-    modules: {
-      [IResolvers.ORIGIN_CHAIN_REPOSITORY]: {
-        get: async (container, config) => {
-          const originBlockRepo = await container.get<IXyoOriginBlockRepository>(IResolvers.ORIGIN_BLOCK_REPOSITORY)
-          const serializationService = await container.get<IXyoSerializationService>(IResolvers.SERIALIZATION_SERVICE)
-
-          return new XyoOriginChainStateInMemoryRepository(
-            0, // index
-            [], // hashes
-            [], // public keys
-            originBlockRepo,
-            [],
-            undefined, // next-public-key
-            [], // waiting signers
-            serializationService,
-            undefined // genesis signer
-          )
-        }
-      },
     }
   })
 

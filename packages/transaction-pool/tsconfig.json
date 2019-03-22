@@ -22,6 +22,11 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    {"path": "../utils"}
+    {"path": "../utils"},
+    {"path": "../hashing"},
+    {"path": "../meta-list"},
+    {"path": "../errors"},
+    {"path": "../base"},
+    {"path": "../storage"},
   ]
 }
