@@ -196,6 +196,12 @@
     },
     {
       "path": "wifi-manager"
+    },
+    {
+      "path": "bridge.pi"
+    },
+    {
+      "path": "bridge.pi"
     }
   ],
   "include": [
@@ -259,6 +265,8 @@
     "content-addressable-service/src/**/*.ts",
     "crypto/src/**/*.ts",
     "bridge-ble/src/**/*.ts",
-    "wifi-manager/src/**/*.ts"
+    "wifi-manager/src/**/*.ts",
+    "bridge.pi/src/**/*.ts",
+    "bridge.pi/src/**/*.ts"
   ]
 }

@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/bridge",
-  "version": "0.26.0",
+  "version": "0.31.0",
   "description": "A XYO Network bridge",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
