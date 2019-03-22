@@ -17,191 +17,53 @@ import { XyoLevelDbStorageProvider } from '@xyo-network/storage.leveldb'
 import { IXyoHashProvider, getHashingProvider, IXyoHash } from '@xyo-network/hashing'
 import { XyoBridgeQueue, XyoBridgeOption } from '@xyo-network/bridge-queue-repository'
 import { IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessSuccessListener, IXyoBoundWitnessInteractionFactory, XyoBoundWitnessPayloadProvider, XyoBoundWitnessSuccessListener, XyoBoundWitnessHandlerProvider } from '@xyo-network/peer-interaction'
-import { XyoBridgeBoundWitnessSuccessListener } from '../src/xyo-bridge-bound-witness-success-listener'
+import { XyoBridgeBoundWitnessSuccessListener } from '../xyo-bridge-bound-witness-success-listener'
 import { XyoNodeRunner, IXyoNodeRunnerDelegate } from '@xyo-network/node-runner'
 import { XyoPeerInteractionRouter } from '@xyo-network/peer-interaction-router'
-import { XyoBrideProcedureCatalogue } from '../src/xyo-bridge-procedure-catalogue'
+import { XyoBrideProcedureCatalogue } from '../xyo-bridge-procedure-catalogue'
 import { XyoClientTcpNetwork, IXyoNetworkAddressProvider, IXyoTCPNetworkAddress } from '@xyo-network/network.tcp'
 import { IXyoPeerConnectionDelegate, XyoSimplePeerConnectionDelegate, XyoPeerConnectionHandler, IXyoCatalogueResolver } from '@xyo-network/peer-connections'
 import { IXyoBridgeConfig } from '../@types'
+import { XyoBridge } from '../xyo-bridge'
 
-// const hasher = getHashingProvider('sha256')
-// const scanner = new NobleScan()
-// const bleNetwork = new XyoBluetoothNetwork(scanner)
-// const storageProvider = new XyoLevelDbStorageProvider("./bridge-data/")
-// const bridgeQueueRepo = new XyoStorageBridgeQueueRepository(storageProvider)
-// const bridgeQueue = new XyoBridgeQueue(bridgeQueueRepo)
-// const blockRepo = new XyoOriginBlockRepository(storageProvider, serializer, hasher)
-// const chainRepo = new XyoOriginChainLocalStorageRepository(storageProvider, blockRepo, serializer)
-// const bridgeOption = new XyoBridgeOption(blockRepo, bridgeQueue, hasher)
-// const payloadProvider = new XyoBoundWitnessPayloadProvider()
-// const logger = new XyoLogger(false, false)
+const bridgeEntryPoint = async () => {
+  const hasher = getHashingProvider('sha256')
+  const scanner = new NobleScan()
+  const bleNetwork = new XyoBluetoothNetwork(scanner)
+  const storageProvider = new XyoLevelDbStorageProvider("./bridge-data/")
+  const bridgeQueueRepo = new XyoStorageBridgeQueueRepository(storageProvider)
+  const blockRepo = new XyoOriginBlockRepository(storageProvider, serializer, hasher)
+  const chainRepo = new XyoOriginChainLocalStorageRepository(storageProvider, blockRepo, serializer)
+  const logger = new XyoLogger(false, false)
 
-// const tcpPeers: IXyoNetworkAddressProvider =  {
-//   next: async () => {
-//     const peer: IXyoTCPNetworkAddress = {
-//       host: "alpha-peers.xyo.network",
-//       port: 11000
-//     }
-
-//     return peer
-//   }
-// }
-// const tcpClient = new XyoClientTcpNetwork(tcpPeers)
-
-// setTimeout(main, 2000)
-
-export class XyoBridge {
-
-  public networkDelegate: XyoSimplePeerConnectionDelegate
-  public toNetworkDelegate: XyoSimplePeerConnectionDelegate
-  public bridgeQueue = new XyoBridgeQueue(this.bridgeConfig.bridgeQueueRepo)
-
-  public bridgeOption = new XyoBridgeOption(this.bridgeConfig.blockRepo, this.bridgeQueue, this.bridgeConfig.hasher)
-  public payloadProvider = new XyoBoundWitnessPayloadProvider()
-
-  private networkCatResolver: IXyoCatalogueResolver = {
-    resolveCategory: (catalogueItems: CatalogueItem[]): CatalogueItem | undefined => {
-
-      for (const item of catalogueItems) {
-        if (item === CatalogueItem.GIVE_ORIGIN_CHAIN) {
-          return CatalogueItem.TAKE_ORIGIN_CHAIN
-        }
+  const tcpPeers: IXyoNetworkAddressProvider =  {
+    next: async () => {
+      const peer: IXyoTCPNetworkAddress = {
+        host: "alpha-peers.xyo.network",
+        port: 11000
       }
 
-      for (const item of catalogueItems) {
-        if (item === CatalogueItem.TAKE_ORIGIN_CHAIN) {
-          return CatalogueItem.GIVE_ORIGIN_CHAIN
-        }
-      }
-
-      return CatalogueItem.BOUND_WITNESS
+      return peer
     }
   }
+  const tcpClient = new XyoClientTcpNetwork(tcpPeers)
 
-  private networkRouter = new XyoPeerInteractionRouter()
-
-  private boundWitnessValidator = new XyoBoundWitnessValidator()
-
-  private networkHandler = new XyoPeerConnectionHandler(this.networkRouter, this.networkCatResolver)
-
-  private success = new XyoBridgeBoundWitnessSuccessListener(
-    this.bridgeConfig.hasher,
-    this.boundWitnessValidator,
-    this.bridgeConfig.chainRepo,
-    this.bridgeConfig.blockRepo,
-    this.bridgeQueue,
-    this.bridgeOption
-  )
-
-  private interactionFactory: IXyoBoundWitnessInteractionFactory = {
-    newInstance: (signersForBoundWitness, payload) =>  {
-      return new XyoBoundWitnessInteraction(
-        signersForBoundWitness,
-        payload,
-        serializer,
-        CatalogueItem.BOUND_WITNESS
-      )
-    }
+  const bridgeConfig: IXyoBridgeConfig  = {
+    hasher,
+    storageProvider,
+    bridgeQueueRepo,
+    blockRepo,
+    chainRepo,
+    logger
   }
 
-  private standardBoundWitnessHandlerProvider = new XyoBoundWitnessHandlerProvider(
-    this.bridgeConfig.chainRepo,
-    this.payloadProvider,
-    this.success,
-    this.interactionFactory
-  )
+  const bridge = new XyoBridge(bleNetwork, tcpClient, bridgeConfig)
 
-  constructor(private bridgeFromNetwork: IXyoNetworkProvider,
-              private bridgeToNetwork: IXyoNetworkProvider,
-              private bridgeConfig: IXyoBridgeConfig) {
+  await bridge.init()
 
-    const bridgeProcedureCatalogueCollect = new XyoBrideProcedureCatalogue(
-      [
-        CatalogueItem.GIVE_ORIGIN_CHAIN,
-        CatalogueItem.TAKE_ORIGIN_CHAIN,
-        CatalogueItem.BOUND_WITNESS
-      ]
-    )
-
-    const bridgeProcedureCatalogueSend = new XyoBrideProcedureCatalogue(
-      [
-        CatalogueItem.GIVE_ORIGIN_CHAIN,
-        CatalogueItem.TAKE_ORIGIN_CHAIN,
-      ]
-     )
-
-    this.networkDelegate = new XyoSimplePeerConnectionDelegate(
-      bridgeFromNetwork,
-      bridgeProcedureCatalogueCollect,
-      this.networkHandler
-    )
-
-    this.toNetworkDelegate = new XyoSimplePeerConnectionDelegate(
-      bridgeToNetwork,
-      bridgeProcedureCatalogueSend,
-      this.networkHandler
-    )
-  }
-
-  public mainBridgeLoop = async () => {
-    this.bridgeConfig.logger.info(`Bridge on new cycle`)
-
-    try {
-      const blePipe = await this.networkDelegate.provideConnection()
-      await this.networkDelegate.handlePeerConnection(blePipe)
-
-      const tcpPipe = await this.toNetworkDelegate.provideConnection()
-      await this.toNetworkDelegate.handlePeerConnection(tcpPipe)
-      await tcpPipe.close()
-
-      const blocksToRemove = this.bridgeQueue.getBlocksToRemove()
-
-      for (const block of blocksToRemove) {
-        await this.bridgeConfig.blockRepo.removeOriginBlock(block)
-      }
-
-      await this.bridgeConfig.bridgeQueueRepo.commit()
-
-    } catch (error) {
-      this.bridgeConfig.logger.error(`Uncaught error: ${error}`)
-    }
-
-    this.bridgeConfig.logger.info(`Bridge has block height: ${await this.bridgeConfig.chainRepo.getIndex()}`)
-
-  }
-
-  private async main() {
-    this.payloadProvider.addBoundWitnessOption(CatalogueItem.TAKE_ORIGIN_CHAIN, this.bridgeOption)
-
-    this.networkRouter.use(CatalogueItem.BOUND_WITNESS, () => {
-      return this.standardBoundWitnessHandlerProvider
-    })
-
-    this.networkRouter.use(CatalogueItem.TAKE_ORIGIN_CHAIN, () => {
-      return this.standardBoundWitnessHandlerProvider
-    })
-
-    this.networkRouter.use(CatalogueItem.GIVE_ORIGIN_CHAIN, () => {
-      return this.standardBoundWitnessHandlerProvider
-    })
-
-    await this.bridgeConfig.bridgeQueueRepo.restore()
-
-    if (await this.bridgeConfig.chainRepo.getIndex() === 0) {
-      const newSigner = getSignerProvider("secp256k1-sha256").newInstance()
-
-      this.bridgeConfig.logger
-        .info(`Creating first signer, has public key: ${newSigner.publicKey.getData().toString('hex')}`)
-
-      await this.bridgeConfig.chainRepo.setCurrentSigners([newSigner])
-      const boundWitness = await this.bridgeConfig.chainRepo.createGenesisBlock()
-
-      this.success.onBoundWitnessSuccess(boundWitness, undefined, CatalogueItem.BOUND_WITNESS)
-    }
-
-    while (true) {
-      await this.mainBridgeLoop()
-    }
-  }
+  setTimeout(() => {
+    bridge.start()
+  }, 2000)
 }
+
+bridgeEntryPoint()
