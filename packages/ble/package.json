@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/ble",
-  "version": "0.26.0",
+  "version": "0.31.0",
   "description": "Bluetooth Network for XYO",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -1,13 +1,13 @@
 {
   "name": "@xyo-network/bridge-queue-repository.keyvalue",
-  "version": "0.26.0",
+  "version": "0.31.0",
   "description": "An implementation of the bridge-queue-repository using a key value store.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Carter Harrison",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/bridge-queue-repository": "^0.26.0",
+    "@xyo-network/bridge-queue-repository": "^0.31.0",
     "@xyo-network/storage": "^0.31.0"
   },
   "devDependencies": {
