@@ -51,9 +51,15 @@ export interface IXyoComponentArchivistFeatureDetail {
 export interface IXyoComponentDivinerFeatureDetail {
 }
 
+export interface IXyoComponentBridgeFeatureDetail {
+  bridgeOffloadWeight: number
+  maxBridgeSize: number
+}
+
 export interface IXyoComponentFeatureResponse {
   archivist?: IXyoComponentFeatureDetail<IXyoComponentArchivistFeatureDetail>,
   diviner?: IXyoComponentFeatureDetail<IXyoComponentDivinerFeatureDetail>,
+  bridge?: IXyoComponentFeatureDetail<IXyoComponentBridgeFeatureDetail>,
 }
 
 export interface IXyoComponentFeatureDetail<T extends {}> {

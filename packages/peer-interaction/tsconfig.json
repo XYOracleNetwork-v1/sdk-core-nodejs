@@ -32,6 +32,7 @@
     { "path": "../origin-block-repository"},
     { "path": "../buffer-utils"},
     { "path": "../errors"},
-    { "path": "../origin-chain"}
+    { "path": "../origin-chain"},
+    { "path": "../bridge-queue-repository"}
   ]
 }

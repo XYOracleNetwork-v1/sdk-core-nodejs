@@ -128,7 +128,7 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
     if (!nextAddress) { // If no networkWork address is available, pause for 1sec, then loop again
       return setTimeout(() => {
         this.loop(catalogue, resolve, reject)
-      }, 1000)
+      }, 5000)
     }
 
     try {
@@ -140,122 +140,26 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
       // Take 1sec break an try again
       return setTimeout(() => {
         this.loop(catalogue, resolve, reject)
-      }, 60000)
+      }, 5000)
     }
   }
 
   /** Try to establish a connection for a given networkAddress */
-  private getConnection(nextAddress: IXyoTCPNetworkAddress, catalogue: IXyoNetworkProcedureCatalogue) {
-    return new Promise((resolve, reject) => {
-      const client = net.createConnection(nextAddress.port, nextAddress.host, () => {
-        this.logInfo(`Client Connection made with ${nextAddress.host}:${nextAddress.port}`)
-        const mask = catalogueItemsToMask(catalogue.getCurrentCatalogue())
-        const maskBuffer = Buffer.alloc(4)
+  private async getConnection(nextAddress: IXyoTCPNetworkAddress, catalogue: IXyoNetworkProcedureCatalogue) {
 
-        maskBuffer.writeUInt32BE(mask, 0)
+    const client = await net.createConnection(nextAddress.port, nextAddress.host, () => {
+      this.logInfo(`Client Connection made with ${nextAddress.host}:${nextAddress.port}`)
+    })
 
-        const catalogueSizeBuffer = writeIntegerToBuffer(
-          CATALOGUE_LENGTH_IN_BYTES,
-          CATALOGUE_SIZE_OF_SIZE_BYTES,
-          false
-        )
+    const onError = (err: any) => {
+      this.logError(`An error occurred while getting connection`, err)
+    }
 
-        const tcpSizeBuffer = writeIntegerToBuffer(
-          CATALOGUE_SIZE_OF_PAYLOAD_BYTES + CATALOGUE_SIZE_OF_SIZE_BYTES + maskBuffer.length,
-          CATALOGUE_SIZE_OF_PAYLOAD_BYTES,
-          false
-        )
+    // const onConnect
 
-        const negotiationBuffer = Buffer.concat([
-          tcpSizeBuffer,
-          catalogueSizeBuffer,
-          maskBuffer
-        ])
+    client.on('error', onError)
+    // client.on('connect')
 
-        client.write(negotiationBuffer)
-      })
-
-      const onError = (err: any) => {
-        this.logError(`An error occurred while getting connection`, err)
-        reject(err)
-      }
-
-      client.on('error', onError)
-
-      let data: Buffer | undefined
-      let sizeOfPayload: number | undefined
-      let otherCatalogueItems: CatalogueItem[] | undefined
-      let validCatalogueItems: CatalogueItem[] | undefined
-      let sizeOfCatalogue: number | undefined
-
-      // tslint:disable-next-line:ter-prefer-arrow-callback
-      async function onData(chunk: Buffer) {
-        data = Buffer.concat([
-          data || Buffer.alloc(0),
-          chunk
-        ])
-
-        if (data.length < CATALOGUE_SIZE_OF_PAYLOAD_BYTES) {
-          return
-        }
-
-        if (sizeOfPayload === undefined) {
-          sizeOfPayload = data.readUInt32BE(0)
-        }
-
-        if (data.length < CATALOGUE_SIZE_OF_PAYLOAD_BYTES + CATALOGUE_SIZE_OF_SIZE_BYTES) {
-          return
-        }
-
-        if (sizeOfCatalogue === undefined) {
-          sizeOfCatalogue = data.readUInt8(CATALOGUE_SIZE_OF_PAYLOAD_BYTES)
-        }
-
-        if (
-          otherCatalogueItems === undefined &&
-          data.length >= (CATALOGUE_SIZE_OF_PAYLOAD_BYTES + sizeOfCatalogue)
-        ) {
-          otherCatalogueItems = bufferToCatalogueItems(
-            data.slice(
-              CATALOGUE_SIZE_OF_PAYLOAD_BYTES + CATALOGUE_SIZE_OF_SIZE_BYTES,
-              CATALOGUE_SIZE_OF_PAYLOAD_BYTES + CATALOGUE_SIZE_OF_SIZE_BYTES + sizeOfCatalogue
-            )
-          )
-          if (otherCatalogueItems.length < 1) {
-            client.end()
-            return
-          }
-
-          validCatalogueItems = otherCatalogueItems.filter(catalogueItem => catalogue.canDo(catalogueItem))
-
-          if (validCatalogueItems.length === 0) { // exit early if it its not in the catalogue
-            client.end()
-            return
-          }
-        }
-
-        if (sizeOfPayload === data.length) {
-          client.removeListener('data', onData)
-          client.removeListener('err', onData)
-
-          const appDataIndex = readIntegerFromBuffer(
-            data,
-            CATALOGUE_SIZE_OF_SIZE_BYTES,
-            false,
-            CATALOGUE_SIZE_OF_PAYLOAD_BYTES
-          )
-
-          const appDataStartIndex = CATALOGUE_LENGTH_IN_BYTES +
-          CATALOGUE_SIZE_OF_SIZE_BYTES +
-            appDataIndex
-
-          const appTransfer = data.slice(appDataStartIndex)
-
-          resolve(new XyoTcpConnectionResult(client, appTransfer, validCatalogueItems || []))
-        }
-      }
-
-      client.on('data', onData)
-    }) as Promise<XyoTcpConnectionResult>
+    return new XyoTcpConnectionResult(client, Buffer.alloc(0), [])
   }
 }

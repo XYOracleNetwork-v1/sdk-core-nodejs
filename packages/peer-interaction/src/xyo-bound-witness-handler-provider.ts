@@ -36,14 +36,16 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
     const mutex = await this.tryGetMutex(0)
     try {
       const [payload, signers] = await Promise.all([
-        this.boundWitnessPayloadProvider.getPayload(this.originStateRepository),
+
+        // BRIDGE
+        this.boundWitnessPayloadProvider.getPayload(this.originStateRepository, networkPipe.otherCatalogue![0]),
         this.originStateRepository.getSigners()
       ])
 
       const interaction = this.boundWitnessInteractionFactory.newInstance(signers, payload)
 
       const boundWitness = await interaction.run(networkPipe)
-      await this.boundWitnessSuccessListener.onBoundWitnessSuccess(boundWitness, mutex)
+      await this.boundWitnessSuccessListener.onBoundWitnessSuccess(boundWitness, mutex, networkPipe.otherCatalogue![0])
       return boundWitness
     } finally {
       await this.originStateRepository.releaseMutex(mutex)

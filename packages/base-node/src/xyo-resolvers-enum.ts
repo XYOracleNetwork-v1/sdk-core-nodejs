@@ -15,7 +15,7 @@ export enum IResolvers {
   PEER_CONNECTION_DELEGATE = 'peerConnectionDelegate',
   PEER_TRANSPORT = 'peerTransport',
   NODE_RUNNER_DELEGATES = 'nodeRunnerDelegates',
-  NODE_NETWORK = 'nodeNetwork',
+  NODE_NETWORK_FROM = 'nodeNetworkFrom',
   P2P_SERVICE = 'p2pService',
   DISCOVERY_NETWORK = 'discovery',
   SERIALIZATION_SERVICE = 'serializationService',

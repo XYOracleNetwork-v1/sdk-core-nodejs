@@ -1,6 +1,6 @@
 import { IXyoDescriptor } from '@xyo-network/ble'
 import { XyoLogger } from '@xyo-network/logger'
-import noble from 'noble'
+import noble from '@s524797336/noble-mac'
 
 export class NobleDescriptor implements IXyoDescriptor {
   public logger: XyoLogger = new XyoLogger(false, false)

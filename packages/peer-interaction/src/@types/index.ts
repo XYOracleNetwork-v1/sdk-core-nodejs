@@ -9,10 +9,11 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoNetworkPipe } from '@xyo-network/network'
+import { IXyoNetworkPipe, CatalogueItem } from '@xyo-network/network'
 import { IXyoBoundWitness, IXyoPayload } from '@xyo-network/bound-witness'
 import { IXyoOriginChainRepository } from '@xyo-network/origin-chain'
 import { IXyoSigner } from '@xyo-network/signing'
+import { IXyoSerializableObject } from '@xyo-network/serialization'
 
 /**
  * Since all operations (currently) are done through XyoBoundWitnesses,
@@ -32,7 +33,7 @@ export interface IXyoBoundWitnessHandlerProvider {
 export interface IXyoBoundWitnessPayloadProvider {
 
   /** Returns the payload for the bound-witness given the origin-state of the current chain */
-  getPayload(originState: IXyoOriginChainRepository): Promise<IXyoPayload>
+  getPayload(originState: IXyoOriginChainRepository, choice: CatalogueItem): Promise<IXyoPayload>
 }
 
 /**
@@ -42,7 +43,7 @@ export interface IXyoBoundWitnessPayloadProvider {
  */
 
 export interface IXyoBoundWitnessSuccessListener {
-  onBoundWitnessSuccess(boundWitness: IXyoBoundWitness, mutex: any): Promise<void>
+  onBoundWitnessSuccess(boundWitness: IXyoBoundWitness, mutex: any, choice: CatalogueItem): Promise<void>
 }
 
 /** A generic interface for node-interaction handler */
@@ -53,4 +54,9 @@ export interface IXyoNodeInteraction <T> {
 /** A factory for providing instance of bound-witness interactions */
 export interface IXyoBoundWitnessInteractionFactory {
   newInstance: (signers: IXyoSigner[], payload: IXyoPayload) => IXyoNodeInteraction<IXyoBoundWitness>
+}
+
+export interface IXyoBoundWitnessOption {
+  signed: () => Promise<IXyoSerializableObject | null>,
+  unsigned: () => Promise<IXyoSerializableObject | null>,
 }

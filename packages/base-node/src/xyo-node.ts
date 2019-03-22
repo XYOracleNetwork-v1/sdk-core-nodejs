@@ -132,7 +132,7 @@ class XyoNodeLifeCycle extends BaseLifeCyclable implements IXyoProviderContainer
     [IResolvers.NETWORK]: 'singleton',
     [IResolvers.PEER_CONNECTION_DELEGATE]: 'singleton',
     [IResolvers.NODE_RUNNER_DELEGATES]: 'singleton',
-    [IResolvers.NODE_NETWORK]: 'singleton',
+    [IResolvers.NODE_NETWORK_FROM]: 'singleton',
     [IResolvers.P2P_SERVICE]: 'singleton',
     [IResolvers.DISCOVERY_NETWORK]: 'singleton',
     [IResolvers.PEER_TRANSPORT]: 'singleton',

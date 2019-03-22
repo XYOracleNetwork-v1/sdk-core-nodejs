@@ -21,5 +21,9 @@
     "src/**/*.spec.ts"
   ],
   "include": ["src/**/*"],
-  "references": []
+  "references": [
+    {"path": "../peer-interaction"},
+    {"path": "../bound-witness"},
+    {"path": "../hashing"}
+  ]
 }

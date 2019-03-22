@@ -17,8 +17,8 @@ export class XyoKeySet extends XyoBaseSerializable {
   public static deserializer: IXyoDeserializer<XyoKeySet>
   public schemaObjectId = schema.keySet.id
 
-  constructor (public readonly keys: IXyoPublicKey[]) {
-    super(schema)
+  constructor (public readonly keys: IXyoPublicKey[], org?: Buffer) {
+    super(schema, org)
   }
 
   public getData(): IXyoSerializableObject[] {
@@ -38,7 +38,7 @@ class XyoKeySetDeserializer implements IXyoDeserializer<XyoKeySet> {
     const parseResult = serializationService.parse(data)
     const query = new ParseQuery(parseResult)
     const keys = query.mapChildren(key => serializationService.deserialize(key.readData(true)).hydrate<IXyoPublicKey>())
-    return new XyoKeySet(keys)
+    return new XyoKeySet(keys, data)
   }
 }
 

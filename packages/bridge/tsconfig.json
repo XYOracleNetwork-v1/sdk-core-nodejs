@@ -22,6 +22,10 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    {"path": "../network.ble"}
+    {"path": "../network.ble"},
+    {"path": "../peer-interaction"},
+    {"path": "../peer-interaction-handlers"},
+    {"path": "../bridge-queue-repository"},
+    {"path": "../bridge-queue-repository.keyvalue"}
   ]
 }

@@ -9,23 +9,25 @@
 * @Copyright: Copyright XY | The Findables Company
 */
 
-import { IXyoBoundWitnessSuccessListener } from "./@types"
-import { IXyoBoundWitness, XyoBoundWitnessValidator } from "@xyo-network/bound-witness"
+import { IXyoBoundWitnessSuccessListener, XyoNestedBoundWitnessExtractor } from "@xyo-network/peer-interaction"
+import { IXyoBoundWitness, XyoBoundWitnessValidator, XyoBoundWitness, XyoFetter, XyoWitness, XyoKeySet, XyoSignatureSet } from "@xyo-network/bound-witness"
 import { XyoBase } from "@xyo-network/base"
 import { IXyoHashProvider } from "@xyo-network/hashing"
-import { IXyoOriginChainRepository } from "@xyo-network/origin-chain"
+import { IXyoOriginChainRepository, XyoBridgeBlockSet } from "@xyo-network/origin-chain"
 import { IXyoOriginBlockRepository } from "@xyo-network/origin-block-repository"
-import { XyoNestedBoundWitnessExtractor } from "./xyo-nested-bound-witness-extractor"
 import { CatalogueItem } from "@xyo-network/network"
+import { IXyoSerializableObject } from '@xyo-network/serialization'
+import { XyoBridgeQueue, XyoBridgeOption } from '@xyo-network/bridge-queue-repository'
 
-export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBoundWitnessSuccessListener {
+export class XyoBridgeBoundWitnessSuccessListener extends XyoBase implements IXyoBoundWitnessSuccessListener {
 
-  // BRIDGE
   constructor (
     private readonly hashingProvider: IXyoHashProvider,
     private readonly boundWitnessValidator: XyoBoundWitnessValidator,
     private readonly originChainRepository: IXyoOriginChainRepository,
     private readonly originBlockRepository: IXyoOriginBlockRepository,
+    private readonly bridgeQueue: XyoBridgeQueue,
+    private readonly bridgeOption: XyoBridgeOption
   ) {
     super()
   }
@@ -40,8 +42,14 @@ export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBound
       throw err
     }
 
-    await this.originBlockRepository.addOriginBlock(hashValue, boundWitness)
-    await this.originChainRepository.updateOriginChainState(hashValue, boundWitness, mutex)
+    this.bridgeQueue.addQueueItem(hashValue.serialize())
+
+    const removedSubItemsBlock = this.removeSubBoundWitnesses(boundWitness)
+
+    await this.originBlockRepository.addOriginBlock(hashValue, removedSubItemsBlock)
+
+    await this.boundWitnessValidator.validateBoundWitness(hashValue, boundWitness)
+    await this.originChainRepository.updateOriginChainState(hashValue, removedSubItemsBlock, mutex)
 
     this.logInfo(`${hashValue.serializeHex()} added to Origin-Chain and Origin-Block-Repository`)
     const nestedBoundWitnesses = new XyoNestedBoundWitnessExtractor().extractNestedBoundWitnesses(boundWitness)
@@ -51,10 +59,12 @@ export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBound
       const nestedHashValue = await this.hashingProvider.createHash(nestedBoundWitness.getSigningData())
       const nestedHash = nestedHashValue.serialize() as Buffer
       this.logInfo(`Extracted nested block with hash ${nestedHash.toString('hex')}`)
+      console.log(nestedBoundWitness.serializeHex())
 
       const containsBlock = await this.originBlockRepository.containsOriginBlock(nestedHash)
       if (!containsBlock) {
         try {
+          this.bridgeQueue.addQueueItem(nestedHash)
           await this.boundWitnessValidator.validateBoundWitness(nestedHashValue, nestedBoundWitness)
         } catch (err) {
           this.logError(`Origin block failed validation. Will not add.`, err)
@@ -65,6 +75,35 @@ export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBound
       }
     }, Promise.resolve() as Promise<void>)
 
+    if (choice === CatalogueItem.TAKE_ORIGIN_CHAIN) {
+      this.bridgeOption.onCompleted()
+    }
+
     return
+  }
+
+  private removeSubBoundWitnesses (boundWitness: IXyoBoundWitness): IXyoBoundWitness {
+    // tslint:disable-next-line:prefer-array-literal
+    const newBoundWitnessArray: Array<XyoFetter | XyoWitness> = []
+
+    boundWitness.fetterWitnesses.forEach((fOW) => {
+      if (fOW instanceof XyoWitness) {
+        const newItems: IXyoSerializableObject[] = []
+        const array = fOW.getData() as IXyoSerializableObject[]
+
+        array.forEach((item) => {
+          if (item.schemaObjectId !== XyoBridgeBlockSet.deserializer.schemaObjectId &&
+              item.schemaObjectId !== XyoSignatureSet.deserializer.schemaObjectId) {
+            newItems.push(item)
+          }
+        })
+
+        newBoundWitnessArray.push(new XyoWitness((fOW as XyoWitness).signatureSet, newItems))
+      } else if (fOW instanceof XyoFetter) {
+        newBoundWitnessArray.push(fOW as XyoFetter)
+      }
+    })
+
+    return new XyoBoundWitness(newBoundWitnessArray)
   }
 }

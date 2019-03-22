@@ -12,8 +12,6 @@
 import {
     CatalogueItem,
     IXyoNetworkPipe,
-    CATALOGUE_LENGTH_IN_BYTES,
-    CATALOGUE_SIZE_OF_SIZE_BYTES
   } from '@xyo-network/network'
 
 import { IXyoBoundWitness, IXyoPayload, FetterOrWitness, XyoKeySet, XyoFetter, XyoSignatureSet, XyoWitness, XyoBoundWitnessFragment } from '@xyo-network/bound-witness'
@@ -68,11 +66,13 @@ export class XyoBoundWitnessClientInteraction extends XyoBase implements IXyoNod
     const keySet = new XyoKeySet(this.signers.map(s => s.publicKey))
     const fetter = new XyoFetter(keySet, this.payload.heuristics)
 
+    console.log(fetter.serializeHex())
+
     // this is their fetter
     const transferQuery = this.serializationService.deserialize(networkPipe.initiationData!).query()
 
     // create the bound witness object staring with their fetter
-    const aggregator: Buffer[] = [transferQuery.query([0]).readData(true)]
+    const aggregator: Buffer[] = [transferQuery.getChildAt(0).readData(true)]
 
     // add our fetter to the bound witness
     aggregator.push(fetter.serialize())
@@ -121,23 +121,6 @@ export class XyoBoundWitnessClientInteraction extends XyoBase implements IXyoNod
     const cat = message.buffer.slice(1, sizeOfCat + 1)
 
     return { cat, response }
-  }
-
-  private getFirstMessage() {
-
-    /** Tell the other node this is the catalogue item you chose */
-    const catalogueBuffer = Buffer.alloc(CATALOGUE_LENGTH_IN_BYTES)
-    catalogueBuffer.writeUInt32BE(this.catalogueItem, 0)
-    const sizeOfCatalogueInBytesBuffers = Buffer.alloc(CATALOGUE_SIZE_OF_SIZE_BYTES)
-    sizeOfCatalogueInBytesBuffers.writeUInt8(CATALOGUE_LENGTH_IN_BYTES, 0)
-
-    /** Build the final message */
-    const bytesToSend = Buffer.concat([
-      sizeOfCatalogueInBytesBuffers,
-      catalogueBuffer,
-    ])
-
-    return { bytesToSend }
   }
 
   private async sendMessage(networkPipe: IXyoNetworkPipe, bytesToSend: Buffer): Promise<Buffer> {

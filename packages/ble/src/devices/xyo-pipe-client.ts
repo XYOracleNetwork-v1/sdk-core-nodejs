@@ -29,7 +29,10 @@ export class XyoPipeClient implements IXyoNetworkPipe {
   }
 
   public async tryCreatePipe (): Promise<null | IXyoNetworkPipe> {
-    await this.device.connect()
+    if (this.device.state !== 'connected') {
+      await this.device.connect()
+    }
+
     const services = await this.device.discoverServicesForUuids(["d684352edf36484ebc982d5398c5593e"])
 
     if (services.length === 1) {
@@ -74,12 +77,17 @@ export class XyoPipeClient implements IXyoNetworkPipe {
       let buffer: Buffer
       let bytesReceived = 0
 
+      const timeout = setTimeout(() => {
+        reject("Timeout")
+      }, 20000)
+
       characteristic.on("notification", (data, isNotification) => {
         if (bytesReceived === 0) {
           bytesReceived = data.readUInt32BE(0)
           buffer = data.slice(4, data.length)
 
           if (buffer.length === bytesReceived - 4) {
+            clearTimeout(timeout)
             resolve(buffer)
           }
 
@@ -89,6 +97,7 @@ export class XyoPipeClient implements IXyoNetworkPipe {
         buffer = Buffer.concat([buffer, data])
 
         if (buffer.length === bytesReceived - 4) {
+          clearTimeout(timeout)
           resolve(buffer)
         }
       })

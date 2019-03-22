@@ -29,7 +29,6 @@ export class XyoStorageBridgeQueueRepository implements IXyoBridgeQueueRepositor
     const insertIndex = this.getInsertIndex(item)
     this.memoryBase.splice(insertIndex, 0, item)
     this.memoryBase.join()
-    this.memoryBase.push(item)
   }
 
   public getLowestWeight(n: number): IXyoBridgeQueueItem[] {
@@ -39,7 +38,7 @@ export class XyoStorageBridgeQueueRepository implements IXyoBridgeQueueRepositor
 
     const itemsToReturn: IXyoBridgeQueueItem[] = []
 
-    for (let i = 0; i <= Math.min(n, this.memoryBase.length) - 1; i++) {
+    for (let i = 0; i < Math.min(n, this.memoryBase.length); i++) {
       itemsToReturn.push(this.memoryBase[i])
     }
 
@@ -48,7 +47,7 @@ export class XyoStorageBridgeQueueRepository implements IXyoBridgeQueueRepositor
 
   public incrementWeights(hashes: Buffer[]): void {
     hashes.forEach((hash) => {
-      for (let i = 0; i < this.memoryBase.length - 1; i++) {
+      for (let i = 0; i <= this.memoryBase.length - 1; i++) {
         if (this.memoryBase[i].hash === hash) {
           this.memoryBase[i].weight++
         }
@@ -64,11 +63,23 @@ export class XyoStorageBridgeQueueRepository implements IXyoBridgeQueueRepositor
   }
 
   public async restore () {
-    const encodedState = await this.storage.read(XyoStorageBridgeQueueRepository.QUEUE_KEY)
+    const hasIndex = await this.storage.containsKey(XyoStorageBridgeQueueRepository.QUEUE_KEY)
 
-    if (encodedState) {
-      const string = encodedState.toString("utf8")
-      this.memoryBase = JSON.parse(string)
+    if (hasIndex) {
+      const encodedState = await this.storage.read(XyoStorageBridgeQueueRepository.QUEUE_KEY)
+
+      if (encodedState) {
+        const string = encodedState.toString("utf8")
+        const json =  JSON.parse(string)
+
+        for (let i = 0; i <= json.length - 1; i++) {
+          if (json[i].hash.type === 'Buffer') {
+            json[i].hash = new Buffer(json[i].hash)
+          }
+        }
+
+        this.memoryBase = json
+      }
     }
   }
 

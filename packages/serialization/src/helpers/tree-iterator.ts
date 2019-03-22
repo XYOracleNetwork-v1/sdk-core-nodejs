@@ -10,7 +10,7 @@
  */
 
 import { XyoBaseSerializable } from './base-serializable'
-import { IXyoSerializableObject, IParseResult, IXyoSerializationService, IXyoObjectSchema } from '../@types'
+import { IXyoSerializableObject, IParseResult, IXyoSerializationService, IXyoObjectSchema, IXyoObjectPartialSchema } from '../@types'
 import { ParseQuery } from './parse-query'
 
 export class XyoTreeIterator extends XyoBaseSerializable implements IXyoSerializableObject {
@@ -21,6 +21,7 @@ export class XyoTreeIterator extends XyoBaseSerializable implements IXyoSerializ
     private readonly readableName: string
   ) {
     super(serializationService.schema)
+
   }
 
   get schemaObjectId (): number {

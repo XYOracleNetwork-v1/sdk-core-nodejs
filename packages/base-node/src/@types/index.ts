@@ -42,7 +42,7 @@ export interface IXyoResolvers {
   [IResolvers.NETWORK]: IXyoProvider<IXyoNetworkProvider, IXyoNetworkConfig>
   [IResolvers.PEER_CONNECTION_DELEGATE]: IXyoProvider<IXyoPeerConnectionDelegate, undefined>
   [IResolvers.NODE_RUNNER_DELEGATES]: IXyoProvider<IXyoNodeRunnerDelegate[], undefined>
-  [IResolvers.NODE_NETWORK]: IXyoProvider<IXyoNodeNetwork, IXyoNodeNetworkConfig>
+  [IResolvers.NODE_NETWORK_FROM]: IXyoProvider<IXyoNodeNetwork, IXyoNodeNetworkConfig>
   [IResolvers.P2P_SERVICE]: IXyoProvider<IXyoP2PService, undefined>
   [IResolvers.DISCOVERY_NETWORK]: IXyoProvider<IXyoPeerDiscoveryService, IXyoDiscoveryConfig>
   [IResolvers.TRANSACTION_REPOSITORY]: IXyoProvider<IXyoRepository<IXyoHash, IXyoTransaction<any>>, undefined>

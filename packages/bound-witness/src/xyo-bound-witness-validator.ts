@@ -15,6 +15,7 @@ import { IXyoBoundWitness } from "./@types"
 import { IXyoSignature } from "@xyo-network/signing"
 import { XyoBase } from "@xyo-network/base"
 import { schema } from "@xyo-network/serialization-schema"
+import { XyoSerializationService } from "@xyo-network/serialization"
 
 export class XyoBoundWitnessValidator extends XyoBase {
 
@@ -36,6 +37,7 @@ export class XyoBoundWitnessValidator extends XyoBase {
   }
 
   public async validateBoundWitness(hash: IXyoHash, originBlock: IXyoBoundWitness): Promise<void> {
+
     const signaturesLength = originBlock.signatures.length
     const heuristicsLength = originBlock.heuristics.length
     const metadataLength = originBlock.metadata.length

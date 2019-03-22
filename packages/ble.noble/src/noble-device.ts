@@ -2,7 +2,7 @@ import { IXyoBluetoothDevice, IXyoAdvertisement, IXyoService } from '@xyo-networ
 import { XyoLogger } from '@xyo-network/logger'
 import { NobleAdvertisement } from './noble-advertisement'
 import { NobleService } from './noble-service'
-import noble from 'noble'
+import noble from '@s524797336/noble-mac'
 
 export class NobleDevice implements IXyoBluetoothDevice {
   public logger: XyoLogger = new XyoLogger(false, false)
@@ -51,11 +51,17 @@ export class NobleDevice implements IXyoBluetoothDevice {
     return new Promise((resolve, reject) => {
       this.logger.info(`Trying to connect to device with id: ${this.device.id}`)
 
+      const timeout = setTimeout(() => {
+        reject("Timeout connecting")
+      }, 10000)
+
       this.device.connect((error) => {
         if (error == null) {
+          clearTimeout(timeout)
           this.logger.info(`Connected to device with id: ${this.device.id}`)
           resolve()
         } else {
+          clearTimeout(timeout)
           this.logger.error(`Error connecting to device with id: ${this.device.id}`)
           reject(error)
         }

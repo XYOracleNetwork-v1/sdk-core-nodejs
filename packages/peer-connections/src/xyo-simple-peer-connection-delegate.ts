@@ -49,7 +49,9 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
 
   public async handlePeerConnection(networkPipe: IXyoNetworkPipe) {
     if (networkPipe.otherCatalogue) {
-      return this.peerConnectionHandler.handlePeerConnection(networkPipe)
+      if (networkPipe.otherCatalogue.length > 0) {
+        return this.peerConnectionHandler.handlePeerConnection(networkPipe)
+      }
     }
 
     const pipe = await this.doClientNegotiation(networkPipe)
@@ -95,6 +97,7 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
 
   // todo find a better way of getting the enum from a number
   private getEnumFromValue (value: number): CatalogueItem {
+    console.log(value)
     const allEnums = [
       CatalogueItem.BOUND_WITNESS,
       CatalogueItem.TAKE_ORIGIN_CHAIN,

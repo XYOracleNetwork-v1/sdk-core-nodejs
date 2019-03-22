@@ -31,9 +31,9 @@ export class XyoTcpConnectionResult {
    */
 
   constructor (
-    public readonly socket: net.Socket,
-    public readonly data: Buffer,
-    public readonly catalogueItems: CatalogueItem[]
+    public socket: net.Socket,
+    public data: Buffer,
+    public catalogueItems: CatalogueItem[]
   ) {
 
     this.socketId = Buffer.from(socket.remoteAddress || 'unknown')

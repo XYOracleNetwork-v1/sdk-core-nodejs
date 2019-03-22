@@ -9,19 +9,23 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoSerializableObject, IXyoObjectSchema } from "../@types"
+import { IXyoSerializableObject, IXyoObjectSchema, IXyoObjectPartialSchema, IParseResult } from "../@types"
 import { XyoBase } from "@xyo-network/base"
 import { resolveSerializablesToBuffer } from "./resolveSerializablesToBuffer"
 import { serialize } from "./serialize"
 import { findSchemaById } from "./findSchemaById"
+import { readHeader } from './readHeader'
 
 export abstract class XyoBaseSerializable extends XyoBase implements IXyoSerializableObject {
 
   public abstract schemaObjectId: number
   public srcBuffer: Buffer | null = null
+  public origin: Buffer | undefined
 
-  constructor(private readonly schema: IXyoObjectSchema) {
+  constructor(private readonly schema: IXyoObjectSchema,  origin?: Buffer) {
     super()
+
+    this.origin = origin
   }
 
   public getReadableName(): string {
@@ -44,18 +48,18 @@ export abstract class XyoBaseSerializable extends XyoBase implements IXyoSeriali
       if (result instanceof Buffer) {
         return serialize(
           result,
-          findSchemaById(this.schemaObjectId, this.schema)
+          this.findSchemaById(this.schemaObjectId, this.schema)
         )
       }
 
       if (Array.isArray(result)) {
         const serializationResult = this.serializablesToBuffer(result)
-        return serialize(serializationResult, findSchemaById(this.schemaObjectId, this.schema))
+        return serialize(serializationResult, this.findSchemaById(this.schemaObjectId, this.schema))
       }
 
       return serialize(
         result.serialize(),
-        findSchemaById(this.schemaObjectId, this.schema)
+        this.findSchemaById(this.schemaObjectId, this.schema)
       )
     })()
 
@@ -71,11 +75,37 @@ export abstract class XyoBaseSerializable extends XyoBase implements IXyoSeriali
     return this.serialize().equals(other.serialize())
   }
 
+  public readSelfSchema (): IXyoObjectPartialSchema | undefined {
+    if (this.origin) {
+      return readHeader(this.origin)
+    }
+
+    return undefined
+  }
+
+  public realSchema (): IXyoObjectPartialSchema {
+    return this.findSchemaById(this.schemaObjectId, this.schema)
+  }
+
   protected serializablesToBuffer(serializables: IXyoSerializableObject[]) {
+    if (this.origin) {
+      return this.origin
+    }
+
     return resolveSerializablesToBuffer(
-      this.schemaObjectId,
+      this.findSchemaById(this.schemaObjectId, this.schema),
       this.schema,
       serializables
     )
+  }
+
+  private findSchemaById (id: number, schema: IXyoObjectSchema): IXyoObjectPartialSchema {
+    const selfSchema = this.readSelfSchema()
+
+    if (selfSchema) {
+      return selfSchema
+    }
+
+    return findSchemaById(id, schema)
   }
 }

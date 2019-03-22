@@ -12,6 +12,7 @@
     "@xyo-network/bound-witness": "^0.26.0",
     "@xyo-network/errors": "^0.26.0",
     "@xyo-network/hashing": "^0.26.0",
+    "@xyo-network/network": "^0.31.0",
     "@xyo-network/origin-block-repository": "^0.26.0",
     "@xyo-network/origin-chain": "^0.26.0",
     "@xyo-network/p2p": "^0.26.0",
