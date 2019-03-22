@@ -32,8 +32,7 @@
     "@xyo-network/signing": "0.26.0",
     "@xyo-network/signing.ecdsa": "^0.26.0",
     "@xyo-network/storage.leveldb": "^0.31.0",
-    "@xyo-network/utils": "0.26.0",
-    "noble": "^1.9.1"
+    "@xyo-network/utils": "0.26.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

@@ -9,7 +9,7 @@
   "dependencies": {
     "@xyo-network/ble": "0.26.0",
     "@xyo-network/logger": "0.29.0",
-    "s524797336/noble-mac": "^0.1.2"
+    "@s524797336/noble-mac": "^0.1.2"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
