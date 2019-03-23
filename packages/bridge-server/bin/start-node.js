@@ -6,11 +6,13 @@ const { BridgeServer } = require('../dist/index.js');
 const { PiWifiManager } = require('@xyo-network/wifi-manager');
 const { startBleServices, NetworkService } = require('@xyo-network/bridge-ble');
 
-const wifi = new PiWifiManager()
+const pin = (process.env.PIN || '0000').slice(0, 4)
+const port = Number(process.env.PORT) || 13000
+const wifi = new PiWifiManager(_pin => pin === _pin)
 const networkService = new NetworkService(wifi)
 const server = new BridgeServer({
-  port: Number(process.env.PORT) || 13000,
-  pin: '0000',
+  port,
+  pin,
   wifi
 });
 
