@@ -1,19 +1,19 @@
 {
   "name": "@xyo-network/bound-witness",
-  "version": "0.32.0",
+  "version": "0.33.0",
   "description": "BoundWitness description, interfaces and services for XYO Network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.32.0",
-    "@xyo-network/buffer-utils": "^0.32.0",
-    "@xyo-network/errors": "^0.32.0",
-    "@xyo-network/hashing": "^0.32.0",
-    "@xyo-network/serialization": "^0.32.0",
-    "@xyo-network/serialization-schema": "^0.32.0",
-    "@xyo-network/signing": "^0.32.0"
+    "@xyo-network/base": "^0.33.0",
+    "@xyo-network/buffer-utils": "^0.33.0",
+    "@xyo-network/errors": "^0.33.0",
+    "@xyo-network/hashing": "^0.33.0",
+    "@xyo-network/serialization": "^0.33.0",
+    "@xyo-network/serialization-schema": "^0.33.0",
+    "@xyo-network/signing": "^0.33.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
