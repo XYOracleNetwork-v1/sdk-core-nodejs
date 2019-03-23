@@ -2,8 +2,11 @@ import { IXyoBluetoothDevice } from '../interfaces/xyo-bluetooth-device'
 import { IXyoCharacteristic } from '../interfaces/xyo-characteristic'
 import { IXyoNetworkPipe, IXyoNetworkPeer, CatalogueItem } from '@xyo-network/network'
 import { XyoLogger } from '@xyo-network/logger'
+import { IXyoSerializableObject } from '@xyo-network/serialization'
+import { rssiSerializationProvider } from '@xyo-network/heuristics-common'
 
 export class XyoPipeClient implements IXyoNetworkPipe {
+  public networkHeuristics: IXyoSerializableObject[] = []
   public logger: XyoLogger = new XyoLogger(false, false)
 
   public peer: IXyoNetworkPeer
@@ -45,6 +48,7 @@ export class XyoPipeClient implements IXyoNetworkPipe {
       if (xyoPipeChar.length === 1) {
         this.sessionCharacteristic = characteristics[0]
         await characteristics[0].subscribe()
+        this.networkHeuristics = [rssiSerializationProvider.newInstance(this.device.rssi)]
         return this
       }
 

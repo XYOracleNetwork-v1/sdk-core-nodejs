@@ -11,8 +11,11 @@
 
 import { IXyoNetworkPipe, IXyoNetworkPeer } from './@types'
 import { CatalogueItem } from './catalogue-item'
+import { IXyoSerializableObject } from "@xyo-network/serialization"
 
 export class XyoMockNetworkPipe implements IXyoNetworkPipe {
+  public networkHeuristics: IXyoSerializableObject[] = []
+
   public sendCount = 0
   // @ts-ignore
   public peer: IXyoNetworkPeer = {}

@@ -11,7 +11,8 @@
     "@xyo-network/buffer-utils": "^0.31.0",
     "@xyo-network/errors": "^0.31.0",
     "@xyo-network/logger": "^0.31.0",
-    "@xyo-network/network": "^0.31.0"
+    "@xyo-network/network": "^0.31.0",
+    "@xyo-network/serialization": "0.31.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

@@ -8,7 +8,9 @@
   "license": "MIT",
   "dependencies": {
     "@xyo-network/logger": "^0.29.0",
-    "@xyo-network/network": "^0.29.0"
+    "@xyo-network/network": "^0.31.0",
+    "@xyo-network/serialization": "^0.31.0",
+    "@xyo-network/heuristics-common": "^0.31.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
