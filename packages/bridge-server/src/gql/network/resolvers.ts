@@ -1,7 +1,7 @@
-import { NetworkQuery } from './queries'
-import { NetworkMutation } from './mutations'
+import { networkQuery } from './queries'
+import { networkMutation } from './mutations'
 
 export default () => ({
-  Query: new NetworkQuery(),
-  Mutation: new NetworkMutation()
+  Query: networkQuery(),
+  Mutation: networkMutation()
 })

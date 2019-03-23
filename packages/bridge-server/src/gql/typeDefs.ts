@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
 import networkSchema from './network/schema'
+import configurationSchema from './configuration/schema'
 
 const rootSchema = gql`
 type Query {
@@ -13,5 +14,6 @@ type Mutation {
 
 export default [
   rootSchema,
-  networkSchema
+  networkSchema,
+  configurationSchema
 ]
