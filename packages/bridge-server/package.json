@@ -6,6 +6,10 @@
   "types": "dist/index.d.ts",
   "author": "",
   "license": "MIT",
+  "scripts": {
+    "start": "node ./bin/start-node.js",
+    "stop": "./bin/stop-node.js"
+  },
   "dependencies": {
     "@xyo-network/bridge-ble": "^0.31.0",
     "@xyo-network/wifi-manager": "^0.31.0",

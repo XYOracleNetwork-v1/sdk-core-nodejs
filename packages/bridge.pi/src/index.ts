@@ -7,7 +7,7 @@ import { BridgeServer } from '@xyo-network/bridge-server'
 const piEntryPoint = async () => {
   const port = 13000
   const piWifi = new PiWifiManager()
-  const server = new BridgeServer({ port, wifi: piWifi })
+  const server = new BridgeServer({ port, pin: '0000', wifi: piWifi })
   const networkService = new NetworkService(piWifi)
   await networkService.start()
   await startBleServices(process.env.DISPLAY_NAME || 'XYO Bridge', [
