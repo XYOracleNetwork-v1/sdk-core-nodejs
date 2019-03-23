@@ -73,9 +73,7 @@ const startBridge = async () => {
   }
 
   const bridge = new XyoBridge(bleNetwork, tcpClient, bridgeConfig)
-
   await bridge.init()
-
   setTimeout(() => {
     bridge.start()
   }, 2000)

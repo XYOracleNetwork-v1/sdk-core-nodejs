@@ -64,7 +64,7 @@ export class XyoBoundWitnessClientInteraction extends XyoBase implements IXyoNod
     })
 
     const keySet = new XyoKeySet(this.signers.map(s => s.publicKey))
-    const fetter = new XyoFetter(keySet, this.payload.heuristics)
+    const fetter = new XyoFetter(keySet, this.payload.heuristics.concat(networkPipe.networkHeuristics))
 
     console.log(fetter.serializeHex())
 
