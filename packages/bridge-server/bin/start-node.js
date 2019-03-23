@@ -17,11 +17,9 @@ const server = new BridgeServer({
 });
 
 networkService.start()
-.then(() => startBleServices('XYO Bridge', [
+startBleServices('XYO Bridge', [
   networkService
-]))
-.then(() => {
-  server.start(() => {
-    console.log('Running', server.context.port)
-  })
+])
+server.start(() => {
+  console.log('Running', server.context.port)
 })
