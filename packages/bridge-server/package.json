@@ -6,6 +6,10 @@
   "types": "dist/index.d.ts",
   "author": "",
   "license": "MIT",
+  "bin": {
+    "xyo-bridge-start": "bin/start-node.js",
+    "xyo-bridge-stop": "bin/stop-node.js"
+  },
   "scripts": {
     "start": "node ./bin/start-node.js",
     "stop": "./bin/stop-node.js"
