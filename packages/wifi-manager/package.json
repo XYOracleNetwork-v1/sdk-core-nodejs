@@ -1,13 +1,13 @@
 {
   "name": "@xyo-network/wifi-manager",
-  "version": "0.33.0",
+  "version": "0.34.0",
   "description": "List available ssids and connect to wifi",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/utils": "^0.33.0",
+    "@xyo-network/utils": "^0.34.0",
     "debug": "^4.1.1",
     "lodash": "^4.17.11",
     "rpi-wifi-connection": "^1.0.14"
