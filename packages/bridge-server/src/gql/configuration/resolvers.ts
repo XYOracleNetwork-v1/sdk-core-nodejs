@@ -7,6 +7,6 @@ export default () => ({
   Query: configurationQuery(),
   Mutation: configurationMutation(),
   Archivist: {
-    id: (archivist: IArchivist) => `http://${get(archivist, 'dns')}:${get(archivist, 'port')}`
+    id: (archivist: IArchivist) => archivist.id || `http://${get(archivist, 'dns')}:${get(archivist, 'port')}`
   }
 })

@@ -14,5 +14,5 @@ export interface IBridgeConfigurationManager {
   attachArchivist(dns: string, port: number): Promise<IArchivist>
   detachArchivist(id: string): Promise<IArchivist>
   verifyPin(pin: string): Promise<boolean>
-  updatePin(oldPin: string, newPin: string): Promise<boolean>
+  updatePin(oldPin: string, newPin: string): Promise<string>
 }
