@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/peer-connections",
-  "version": "0.31.0",
+  "version": "0.34.0",
   "description": "A number of utility classes for connecting with other peers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

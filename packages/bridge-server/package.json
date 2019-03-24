@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/bridge-server",
-  "version": "0.31.0",
+  "version": "0.34.0",
   "description": "Server for managing bridge settings",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,8 +11,8 @@
     "stop": "./bin/stop-node.js"
   },
   "dependencies": {
-    "@xyo-network/bridge-ble": "^0.31.0",
-    "@xyo-network/wifi-manager": "^0.31.0",
+    "@xyo-network/bridge-ble": "^0.34.0",
+    "@xyo-network/wifi-manager": "^0.34.0",
     "apollo-server-express": "^2.4.8",
     "express": "^4.16.4",
     "graphql": "^14.1.1",

@@ -20,9 +20,10 @@ export default class NetworkService extends PrimaryService {
   public notifySSID: NotifyStringCharacteristic
   public notifyIP: NotifyStringCharacteristic
   public readScan: ReadStringCharacteristic
+  public validatePin: (pin: string) => Promise<boolean>
   private unsubscribe: () => void
   private logger: Debugger
-  constructor (wifiManager: IWifiManager) {
+  constructor (wifiManager: IWifiManager, validatePin: (pin: string) => Promise<boolean>) {
     const writeConnect = new WriteJSONCharacteristic<IConnect>('connect', WRITE_CONNECT_UUID)
     const notifyStatus = new NotifyStringCharacteristic('status', NOTIFY_STATUS_UUID)
     const notifySSID = new NotifyStringCharacteristic('ssid', NOTIFY_SSID_UUID)
@@ -45,6 +46,7 @@ export default class NetworkService extends PrimaryService {
     this.notifyIP = notifyIP
     this.readScan = readScan
     this.readScan.awaitCurrentValue = this.awaitScan.bind(this)
+    this.validatePin = validatePin
     this.logger = debug('bleno:network')
     this.unsubscribe = () => null
   }
@@ -75,10 +77,10 @@ export default class NetworkService extends PrimaryService {
     this.notifyIP.setCurrentValue(ip)
   }
 
-  private async connect ({ ssid, password }: IConnect) {
+  private async connect ({ ssid, password, pin }: IConnect) {
     try {
       this.updateStatus({ ssid, ip: '' })
-      await this.wifiManager.connect({ ssid, password })
+      await this.wifiManager.connect({ ssid, password, pin })
       const status = await this.wifiManager.getStatus()
       this.updateStatus(status)
     } catch (err) {
