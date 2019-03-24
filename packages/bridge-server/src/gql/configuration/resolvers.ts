@@ -1,4 +1,4 @@
-import { IArchivist } from '../../@types'
+import { IArchivist } from '@xyo-network/bridge-configuration'
 import { configurationQuery } from './queries'
 import { configurationMutation } from './mutations'
 import { get } from 'lodash'

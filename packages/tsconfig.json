@@ -180,6 +180,9 @@
       "path": "wifi-manager"
     },
     {
+      "path": "bridge-configuration"
+    },
+    {
       "path": "bridge-server"
     }
   ],
@@ -239,6 +242,7 @@
     "crypto/src/**/*.ts",
     "bridge-ble/src/**/*.ts",
     "wifi-manager/src/**/*.ts",
-    "bridge-server/src/**/*.ts"
+    "bridge-configuration/src/**/*.ts",
+    "bridge-server/src/**/*.ts",
   ]
 }

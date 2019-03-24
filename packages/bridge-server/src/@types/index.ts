@@ -1,8 +1,10 @@
 import { Express } from 'express'
 import { IWifiManager, IStatus } from '@xyo-network/wifi-manager'
+import { IBridgeConfigurationManager, IArchivist } from '@xyo-network/bridge-configuration'
 
 export interface IContext {
   wifi: IWifiManager
+  configuration: IBridgeConfigurationManager
   port: number
   pin: string
 }
@@ -17,12 +19,6 @@ export interface IConnectArgs {
   ssid: string
   password: string
   pin: string
-}
-
-export interface IArchivist {
-  id?: string
-  dns?: string
-  port?: number
 }
 
 export interface INetworkQuery {
