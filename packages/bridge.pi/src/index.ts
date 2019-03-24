@@ -17,6 +17,7 @@ import { IXyoStorageProvider } from '@xyo-network/storage'
 
 const STORAGE_PASSWORD_KEY = "STORAGE_PASSWORD_KEY"
 const ARCHIVIST_STORAGE_KEY = "ARCHIVIST_STORAGE_KEY"
+const BRIDGE_DEFAULT_PASSWORD = "xyxyo"
 
 const hasher = getHashingProvider('sha256')
 const scanner = new NobleScan()
@@ -46,9 +47,9 @@ const tcpClient = new XyoClientTcpNetwork(tcpPeerSelector)
 
 const startPi = async () => {
   const port = 13000
-  const piWifi = new PiWifiManager()
+  const piWifi = new PiWifiManager(validatePin)
   const server = new BridgeServer({ port, pin: '0000', wifi: piWifi })
-  const networkService = new NetworkService(piWifi)
+  const networkService = new NetworkService(piWifi, validatePin)
 
   await networkService.start()
   await startBleServices(process.env.DISPLAY_NAME || 'XYO Bridge', [
@@ -77,6 +78,10 @@ const startBridge = async () => {
   setTimeout(() => {
     bridge.start()
   }, 2000)
+}
+
+const validatePin = async (pin: string): Promise<boolean> => {
+  return checkIfRightPassword(storageProvider, Buffer.from(pin))
 }
 
 const addArchivist = async (archivist: IXyoTCPNetworkAddress, storage: IXyoStorageProvider) => {
@@ -109,7 +114,13 @@ const storeNewPassword = async (password: Buffer, storage: IXyoStorageProvider) 
 
 const getPassword = async (storage: IXyoStorageProvider) => {
   const key = Buffer.from(STORAGE_PASSWORD_KEY)
-  return storage.read(key)
+  const inStore = storage.read(key)
+
+  if (inStore) {
+    return inStore
+  }
+
+  return Buffer.from(BRIDGE_DEFAULT_PASSWORD)
 }
 
 const hashAndCheckRightPassword = async (storage: IXyoStorageProvider,
