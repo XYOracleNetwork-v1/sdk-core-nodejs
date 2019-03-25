@@ -12,8 +12,6 @@
 import {
     CatalogueItem,
     IXyoNetworkPipe,
-    CATALOGUE_LENGTH_IN_BYTES,
-    CATALOGUE_SIZE_OF_SIZE_BYTES
   } from '@xyo-network/network'
 
 import { IXyoBoundWitness, IXyoPayload, FetterOrWitness, XyoKeySet, XyoFetter, XyoSignatureSet, XyoWitness, XyoBoundWitnessFragment } from '@xyo-network/bound-witness'
@@ -22,7 +20,7 @@ import { IXyoNodeInteraction } from '@xyo-network/peer-interaction'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoSigner } from '@xyo-network/signing'
 import { IXyoSerializationService } from '@xyo-network/serialization'
-import { InnerBoundWitness } from './xyo-inner-bound-witness'
+import { InnerBoundWitness } from '../xyo-inner-bound-witness'
 
   /**
    * An `XyoBoundWitnessInteraction` manages a "session"
@@ -30,14 +28,13 @@ import { InnerBoundWitness } from './xyo-inner-bound-witness'
    */
 
   // tslint:disable-next-line:max-line-length
-export abstract class XyoBoundWitnessClientInteraction extends XyoBase implements IXyoNodeInteraction<IXyoBoundWitness> {
-
-  public abstract catalogueItem: CatalogueItem
+export class XyoBoundWitnessClientInteraction extends XyoBase implements IXyoNodeInteraction<IXyoBoundWitness> {
 
   constructor(
     private readonly signers: IXyoSigner[],
     private readonly payload: IXyoPayload,
-    private readonly serializationService: IXyoSerializationService
+    private readonly serializationService: IXyoSerializationService,
+    public catalogueItem: CatalogueItem
   ) {
     super()
   }
@@ -67,17 +64,15 @@ export abstract class XyoBoundWitnessClientInteraction extends XyoBase implement
     })
 
     const keySet = new XyoKeySet(this.signers.map(s => s.publicKey))
-    const fetter = new XyoFetter(keySet, this.payload.heuristics)
-    const { bytesToSend } = this.getFirstMessage()
-    const encodedResponse = await this.sendMessage(networkPipe, bytesToSend)
+    const fetter = new XyoFetter(keySet, this.payload.heuristics.concat(networkPipe.networkHeuristics))
 
-    const { cat, response } = this.getChoiceAndResponse(encodedResponse)
+    console.log(fetter.serializeHex())
 
     // this is their fetter
-    const transferQuery = this.serializationService.deserialize(response).query()
+    const transferQuery = this.serializationService.deserialize(networkPipe.initiationData!).query()
 
     // create the bound witness object staring with their fetter
-    const aggregator: Buffer[] = [transferQuery.query([0]).readData(true)]
+    const aggregator: Buffer[] = [transferQuery.getChildAt(0).readData(true)]
 
     // add our fetter to the bound witness
     aggregator.push(fetter.serialize())
@@ -94,6 +89,7 @@ export abstract class XyoBoundWitnessClientInteraction extends XyoBase implement
       const signatureSet = new XyoSignatureSet(signatures)
       const witness = new XyoWitness(signatureSet, this.payload.metadata)
       const fragment = new XyoBoundWitnessFragment([fetter, witness])
+      aggregator.push(witness.serialize())
 
       // now we send back the fetter and signature
       const theirSig = await this.sendMessage(networkPipe, fragment.serialize())
@@ -108,9 +104,9 @@ export abstract class XyoBoundWitnessClientInteraction extends XyoBase implement
       const fragmentParts: FetterOrWitness[] = []
 
       aggregator.forEach((item) => {
-        this.serializationService
+        fragmentParts.push(this.serializationService
           .deserialize(item)
-          .hydrate<FetterOrWitness>()
+          .hydrate<FetterOrWitness>())
       })
 
       return new InnerBoundWitness(fragmentParts, signingData)
@@ -125,23 +121,6 @@ export abstract class XyoBoundWitnessClientInteraction extends XyoBase implement
     const cat = message.buffer.slice(1, sizeOfCat + 1)
 
     return { cat, response }
-  }
-
-  private getFirstMessage() {
-
-    /** Tell the other node this is the catalogue item you chose */
-    const catalogueBuffer = Buffer.alloc(CATALOGUE_LENGTH_IN_BYTES)
-    catalogueBuffer.writeUInt32BE(this.catalogueItem, 0)
-    const sizeOfCatalogueInBytesBuffers = Buffer.alloc(CATALOGUE_SIZE_OF_SIZE_BYTES)
-    sizeOfCatalogueInBytesBuffers.writeUInt8(CATALOGUE_LENGTH_IN_BYTES, 0)
-
-    /** Build the final message */
-    const bytesToSend = Buffer.concat([
-      sizeOfCatalogueInBytesBuffers,
-      catalogueBuffer,
-    ])
-
-    return { bytesToSend }
   }
 
   private async sendMessage(networkPipe: IXyoNetworkPipe, bytesToSend: Buffer): Promise<Buffer> {

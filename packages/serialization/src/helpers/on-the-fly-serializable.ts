@@ -13,7 +13,6 @@ import { IXyoSerializableObject, IOnTheFlyGetDataOptions, IXyoObjectSchema } fro
 import { XyoError, XyoErrors } from "@xyo-network/errors"
 
 export class XyoOnTheFlySerializable extends XyoBaseSerializable {
-
   constructor (
     schema: IXyoObjectSchema,
     public readonly schemaObjectId: number,

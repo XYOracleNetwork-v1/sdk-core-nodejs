@@ -81,15 +81,10 @@ export interface IXyoResolvers {
     IXyoNetworkProcedureCatalogueConfig
   >
   [IResolvers.NETWORK]: IXyoProvider<IXyoNetworkProvider, IXyoNetworkConfig>
-  [IResolvers.PEER_CONNECTION_DELEGATE]: IXyoProvider<
-    IXyoPeerConnectionDelegate,
-    undefined
-  >
+  [IResolvers.PEER_CONNECTION_DELEGATE]: IXyoProvider<IXyoPeerConnectionDelegate, undefined>
   [IResolvers.RUNNABLES]: IXyoProvider<IXyoRunnable[], undefined>
-  [IResolvers.NODE_NETWORK]: IXyoProvider<
-    IXyoNodeNetwork,
-    IXyoNodeNetworkConfig
-  >
+  [IResolvers.NODE_NETWORK_FROM]: IXyoProvider<IXyoNodeNetwork, IXyoNodeNetworkConfig>
+
   [IResolvers.P2P_SERVICE]: IXyoProvider<IXyoP2PService, undefined>
   [IResolvers.DISCOVERY_NETWORK]: IXyoProvider<
     IXyoPeerDiscoveryService,

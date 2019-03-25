@@ -11,13 +11,38 @@
 
 import { XyoTcpConnectionResult } from './xyo-tcp-connection-result'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
-import { CatalogueItem, IXyoNetworkPipe } from '@xyo-network/network'
+import { CatalogueItem, IXyoNetworkPipe, IXyoNetworkPeer } from '@xyo-network/network'
 import { XyoBase } from '@xyo-network/base'
+import { IXyoSerializableObject } from "@xyo-network/serialization"
 
 /**
  * A communication pipe using tcp/ip stack
  */
 export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
+
+  public networkHeuristics: IXyoSerializableObject[] = []
+
+  /**
+   * The peers catalogue
+   */
+
+  public otherCatalogue = this.connectionResult.catalogueItems
+
+  /**
+   * Any initiationData that may have been passed with the first part of the connection
+   */
+
+  public initiationData = this.connectionResult.data
+
+  /**
+   * Returns the peer from the other end of the pipe
+   */
+
+  public peer: IXyoNetworkPeer = {
+    getTemporaryPeerId: () => {
+      return this.connectionResult.socketId
+    }
+  }
 
   /**
    * Creates an instance of a XyoTcpNetworkPipe
@@ -27,34 +52,6 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
 
   constructor (private readonly connectionResult: XyoTcpConnectionResult) {
     super()
-  }
-
-  /**
-   * Returns the peer from the other end of the pipe
-   */
-
-  get peer () {
-    return {
-      getTemporaryPeerId: () => {
-        return this.connectionResult.socketId
-      }
-    }
-  }
-
-  /**
-   * The peers catalogue
-   */
-
-  get otherCatalogue (): CatalogueItem[] {
-    return this.connectionResult.catalogueItems
-  }
-
-  /**
-   * Any initiationData that may have been passed with the first part of the connection
-   */
-
-  get initiationData () {
-    return this.connectionResult.data
   }
 
   /**
@@ -81,6 +78,7 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
 
   public send(message: Buffer, awaitResponse?: boolean | undefined): Promise<Buffer | undefined> {
     const networkMessage = this.padBufferWithSize(message)
+
     this.connectionResult.socket.write(networkMessage)
 
     if (typeof awaitResponse === 'boolean' && !awaitResponse) {
@@ -108,6 +106,7 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
 
       this.connectionResult.socket.on('data', listener)
     }) as Promise<Buffer>
+
   }
 
   /**

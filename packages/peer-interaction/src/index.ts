@@ -14,7 +14,8 @@ export {
   IXyoBoundWitnessPayloadProvider,
   IXyoBoundWitnessSuccessListener,
   IXyoNodeInteraction,
-  IXyoBoundWitnessInteractionFactory
+  IXyoBoundWitnessInteractionFactory,
+  IXyoBoundWitnessOption
 } from './@types'
 
 export { XyoBoundWitnessHandlerProvider } from './xyo-bound-witness-handler-provider'

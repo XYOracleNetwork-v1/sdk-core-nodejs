@@ -37,9 +37,9 @@ export class XyoSerializationService extends XyoBase implements IXyoSerializatio
     const result = serializable.serialize()
     const buf = result instanceof Buffer ?
       result :
-      resolveSerializablesToBuffer(serializable.schemaObjectId, this.schema, result)
+      resolveSerializablesToBuffer(serializable.realSchema(), this.schema, result)
 
-    const b = serialize(buf, findSchemaById(serializable.schemaObjectId, this.schema))
+    const b = serialize(buf, serializable.realSchema())
     if (serializationType === 'hex') {
       return b.toString('hex')
     }

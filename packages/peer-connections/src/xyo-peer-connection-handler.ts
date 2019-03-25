@@ -19,6 +19,7 @@ export class XyoPeerConnectionHandler extends XyoBase implements IXyoPeerConnect
     super()
   }
 
+  // this is when a SERVER chooses the flag for the client
   public async handlePeerConnection(networkPipe: IXyoNetworkPipe) {
     if (!networkPipe.otherCatalogue || networkPipe.otherCatalogue.length < 1) {
       this.logInfo(`No catalogue items in other catalogue, closing connection`)

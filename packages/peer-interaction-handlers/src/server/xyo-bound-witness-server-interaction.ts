@@ -22,7 +22,7 @@ import { IXyoNodeInteraction } from '@xyo-network/peer-interaction'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoSigner } from '@xyo-network/signing'
 import { IXyoSerializationService, ParseQuery } from '@xyo-network/serialization'
-import { InnerBoundWitness } from './xyo-inner-bound-witness'
+import { InnerBoundWitness } from '../xyo-inner-bound-witness'
 
 /**
  * An `XyoBoundWitnessInteraction` manages a "session"
@@ -30,14 +30,13 @@ import { InnerBoundWitness } from './xyo-inner-bound-witness'
  */
 
 // tslint:disable-next-line:max-line-length
-export abstract class XyoBoundWitnessServerInteraction extends XyoBase implements IXyoNodeInteraction<IXyoBoundWitness> {
-
-  public abstract catalogueItem: CatalogueItem
+export class XyoBoundWitnessServerInteraction extends XyoBase implements IXyoNodeInteraction<IXyoBoundWitness> {
 
   constructor(
     private readonly signers: IXyoSigner[],
     private readonly payload: IXyoPayload,
-    private readonly serializationService: IXyoSerializationService
+    private readonly serializationService: IXyoSerializationService,
+    public catalogueItem: CatalogueItem
   ) {
     super()
   }

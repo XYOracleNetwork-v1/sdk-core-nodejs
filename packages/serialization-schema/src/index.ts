@@ -47,9 +47,9 @@ export const schema: IXyoObjectSchema = {
     iterableType: 'iterable-typed',
     id: 0x06
   },
-  payload: {
+  paymentKey: {
     sizeIdentifierSize: null,
-    iterableType: 'iterable-typed',
+    iterableType: 'not-iterable',
     id: 0x07
   },
   previousHash: {

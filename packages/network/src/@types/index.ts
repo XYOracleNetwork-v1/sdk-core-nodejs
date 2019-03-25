@@ -10,6 +10,7 @@
  */
 
 import { CatalogueItem } from "../catalogue-item"
+import { IXyoSerializableObject } from "@xyo-network/serialization"
 
 /**
  * The necessary communication interfaces that xyo-nodes will
@@ -72,6 +73,8 @@ export interface IXyoNetworkPipe {
   /** Any data that was initially passed to start an interaction */
   initiationData: Buffer | undefined
 
+  networkHeuristics: IXyoSerializableObject[]
+
   /** A consumer may register a handler for when the other peer disconnects */
   onPeerDisconnect(callback: (hasError: boolean) => void): () => void
 
@@ -80,6 +83,7 @@ export interface IXyoNetworkPipe {
 
   /** Closes the connection to the peer */
   close(): Promise<void>
+
 }
 
 /**

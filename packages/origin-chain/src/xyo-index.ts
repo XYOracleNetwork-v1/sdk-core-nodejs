@@ -19,11 +19,15 @@ export class XyoIndex extends XyoBaseSerializable {
 
   public readonly schemaObjectId = schema.index.id
 
-  constructor (public readonly number: number) {
+  constructor (public readonly number: number, private rIndex?: Buffer) {
     super(schema)
   }
 
   public getData(): Buffer {
+    if (this.rIndex) {
+      return this.rIndex
+    }
+
     return unsignedIntegerToBuffer(this.number)
   }
 
@@ -40,7 +44,7 @@ class XyoIndexDeserializer implements IXyoDeserializer<XyoIndex> {
     const parseResult = serializationService.parse(data)
     const parseQuery = new ParseQuery(parseResult)
     const numberBuffer = parseQuery.readData(false)
-    return new XyoIndex(readIntegerFromBuffer(numberBuffer, numberBuffer.length, false, 0))
+    return new XyoIndex(readIntegerFromBuffer(numberBuffer, numberBuffer.length, false, 0), numberBuffer)
   }
 }
 

@@ -15,6 +15,7 @@ function main () {
     console.log(status)
   })
 
+
   if (!process.env.SKIP_BLE) {
     const { startBleServices, NetworkService } = require('@xyo-network/bridge-ble');
     const networkService = new NetworkService(wifi)

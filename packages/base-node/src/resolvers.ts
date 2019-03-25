@@ -22,12 +22,12 @@ import { IXyoOriginBlockRepository, XyoOriginBlockRepository } from '@xyo-networ
 import { IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessSuccessListener, XyoBoundWitnessPayloadProvider, XyoBoundWitnessSuccessListener, XyoBoundWitnessHandlerProvider, IXyoBoundWitnessInteractionFactory } from '@xyo-network/peer-interaction'
 import { serializer } from '@xyo-network/serializer'
 import { IXyoSigner } from '@xyo-network/signing'
-import { XyoInMemoryStorageProvider } from '@xyo-network/storage'
+import { XyoInMemoryStorageProvider, IXyoStorageProvider } from '@xyo-network/storage'
 import { XyoBoundWitnessValidator, IXyoBoundWitnessValidationOptions } from '@xyo-network/bound-witness'
 import { IXyoNetworkProvider, IXyoNetworkProcedureCatalogue, CatalogueItem, XyoNetworkProcedureCatalogue } from '@xyo-network/network'
 import { XyoServerTcpNetwork } from '@xyo-network/network.tcp'
 import { XyoPeerInteractionRouter } from '@xyo-network/peer-interaction-router'
-import { XyoBoundWitnessTakeOriginChainServerInteraction, XyoBoundWitnessStandardServerInteraction } from '@xyo-network/peer-interaction-handlers'
+import { XyoBoundWitnessInteraction } from '@xyo-network/peer-interaction-handlers'
 import { getSignerProvider } from '@xyo-network/signing.ecdsa'
 import { createDirectoryIfNotExists, IXyoProvider, IXyoRunnable } from '@xyo-network/utils'
 import { IXyoTransaction, IXyoTransactionRepository, XyoTransactionRepository } from '@xyo-network/transaction-pool'
@@ -74,7 +74,7 @@ const runnables: IXyoProvider<IXyoRunnable[], any> = {
       delegates.push(boundWitnessServer)
     }
 
-    const nodes = await container.get<IXyoNodeNetwork>(IResolvers.NODE_NETWORK)
+    const nodes = await container.get<IXyoNodeNetwork>(IResolvers.NODE_NETWORK_FROM) // this will initialize it
     const nodeNet = new XyoNodeNetworkRunnable(async () => nodes)
     delegates.push(nodeNet)
 
@@ -123,7 +123,7 @@ const runnables: IXyoProvider<IXyoRunnable[], any> = {
 const blockProducer: IXyoProvider<XyoBlockProducer, any> = {
   async get(container, config) {
     const consensus = await container.get<IConsensusProvider>(IResolvers.CONSENSUS_PROVIDER)
-    const nodes = await container.get<IXyoNodeNetwork>(IResolvers.NODE_NETWORK)
+    const nodes = await container.get<IXyoNodeNetwork>(IResolvers.NODE_NETWORK_FROM)
     const hasher = getHashingProvider('sha3')
     const transactionRepository = await container.get<IXyoTransactionRepository>(IResolvers.TRANSACTION_REPOSITORY)
     const contentService = await container.get<IXyoContentAddressableService>(
@@ -274,7 +274,7 @@ const originChainRepository: IXyoProvider<IXyoOriginChainRepository, IXyoOriginC
       if (currentIndex === 0) { // create genesis block
         const genesisBlock = await originChainRepo.createGenesisBlock()
         const successListener = await container.get<IXyoBoundWitnessSuccessListener>(IResolvers.BOUND_WITNESS_SUCCESS_LISTENER)
-        await successListener.onBoundWitnessSuccess(genesisBlock, mutex)
+        await successListener.onBoundWitnessSuccess(genesisBlock, mutex, CatalogueItem.BOUND_WITNESS)
       }
     } finally {
       await originChainRepo.releaseMutex(mutex)
@@ -299,7 +299,7 @@ const originBlockRepository: IXyoProvider<IXyoOriginBlockRepository, undefined> 
 }
 
 const boundWitnessPayloadProvider: IXyoProvider<IXyoBoundWitnessPayloadProvider, undefined> = {
-  async get(container) {
+  async get(container, config) {
     return new XyoBoundWitnessPayloadProvider()
   }
 }
@@ -341,10 +341,11 @@ const peerConnectionDelegate: IXyoProvider<IXyoPeerConnectionDelegate, undefined
 
     const standardServerInteractionFactory: IXyoBoundWitnessInteractionFactory = {
       newInstance: (signers, payload) =>  {
-        return new XyoBoundWitnessStandardServerInteraction(
+        return new XyoBoundWitnessInteraction(
           signers,
           payload,
-          serialization
+          serialization,
+          CatalogueItem.BOUND_WITNESS
         )
       }
     }
@@ -358,10 +359,11 @@ const peerConnectionDelegate: IXyoProvider<IXyoPeerConnectionDelegate, undefined
 
     const takeOriginChainServerInteractionFactory: IXyoBoundWitnessInteractionFactory = {
       newInstance: (signers, payload) =>  {
-        return new XyoBoundWitnessTakeOriginChainServerInteraction(
+        return new XyoBoundWitnessInteraction(
           signers,
           payload,
-          serialization
+          serialization,
+          CatalogueItem.TAKE_ORIGIN_CHAIN
         )
       }
     }
@@ -453,7 +455,7 @@ const archivistRepository: IXyoProvider<IXyoArchivistRepository, ISqlConnectionD
 const archivistNetwork: IXyoProvider<IXyoArchivistNetwork, undefined> = {
   async get(container, c) {
     const serialization = await container.get<IXyoSerializationService>(IResolvers.SERIALIZATION_SERVICE)
-    const nodes = await container.get<IXyoNodeNetwork>(IResolvers.NODE_NETWORK)
+    const nodes = await container.get<IXyoNodeNetwork>(IResolvers.NODE_NETWORK_FROM)
     return new XyoArchivistNetwork(serialization, nodes)
   },
   async postInit(newInstance) {
@@ -466,7 +468,7 @@ const questionService: IXyoProvider<IXyoQuestionService, undefined> = {
     const originBlockRepo = await container.get<IXyoOriginBlockRepository>(IResolvers.ORIGIN_BLOCK_REPOSITORY)
     const originChainRepo = await container.get<IXyoOriginChainRepository>(IResolvers.ORIGIN_CHAIN_REPOSITORY)
     const archivists = await container.get<IXyoArchivistNetwork>(IResolvers.ARCHIVIST_NETWORK)
-    const nodes = await container.get<IXyoNodeNetwork>(IResolvers.NODE_NETWORK)
+    const nodes = await container.get<IXyoNodeNetwork>(IResolvers.NODE_NETWORK_FROM)
     const blockPermissionRequestResolver = new XyoBlockPermissionRequestResolver(nodes)
 
     return new XyoQuestionService(
@@ -531,7 +533,7 @@ export const resolvers: IXyoResolvers = {
   [IResolvers.PEER_CONNECTION_DELEGATE]: peerConnectionDelegate,
   [IResolvers.PEER_TRANSPORT]: peerTransport,
   [IResolvers.RUNNABLES]: runnables,
-  [IResolvers.NODE_NETWORK]: nodeNetwork,
+  [IResolvers.NODE_NETWORK_FROM]: nodeNetwork,
   [IResolvers.P2P_SERVICE]: p2pService,
   [IResolvers.DISCOVERY_NETWORK]: discoveryNetwork,
   [IResolvers.TRANSACTION_REPOSITORY]: transactionsRepository,

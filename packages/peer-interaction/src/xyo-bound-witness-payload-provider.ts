@@ -12,8 +12,9 @@
 
 import { XyoBase } from "@xyo-network/base"
 import { IXyoOriginChainRepository, XyoIndex, XyoNextPublicKey, XyoPreviousHash } from "@xyo-network/origin-chain"
-import { IXyoBoundWitnessPayloadProvider } from "./@types"
+import { IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessOption } from "./@types"
 import { IXyoPayload } from "@xyo-network/bound-witness"
+import { CatalogueItem } from '@xyo-network/network'
 import { IXyoSerializableObject } from '@xyo-network/serialization'
 
 export class XyoBoundWitnessPayloadProvider extends XyoBase implements IXyoBoundWitnessPayloadProvider {
@@ -24,12 +25,14 @@ export class XyoBoundWitnessPayloadProvider extends XyoBase implements IXyoBound
   /** A mapping of name to signed-heuristic-providers */
   private readonly signedHeuristicsProviders: {[s: string]: () => Promise<IXyoSerializableObject>} = {}
 
+  private boundWitnessOptions: {[key: string]: IXyoBoundWitnessOption} = {}
+
   /**
    * A helper function for composing the payload values that will go
    * inside a bound witness
    */
 
-  public async getPayload(originState: IXyoOriginChainRepository): Promise<IXyoPayload> {
+  public async getPayload(originState: IXyoOriginChainRepository, choice: CatalogueItem): Promise<IXyoPayload> {
     const signedHeuristics = await this.getHeuristics(true)
     const unsignedHeuristics = await this.getHeuristics(false)
     const unsignedPayload = ([] as IXyoSerializableObject[]).concat(unsignedHeuristics)
@@ -37,6 +40,8 @@ export class XyoBoundWitnessPayloadProvider extends XyoBase implements IXyoBound
     const previousHash = await originState.getPreviousHash()
     const index = await originState.getIndex()
     const nextPublicKey = await originState.getNextPublicKey()
+    const boundWitnessOptionsSigned = await this.getOptionsSigned(choice)
+    const boundWitnessOptionsUnsigned = await this.getOptionsUnsigned(choice)
 
     if (previousHash) {
       signedPayload.push(new XyoPreviousHash(previousHash))
@@ -47,6 +52,14 @@ export class XyoBoundWitnessPayloadProvider extends XyoBase implements IXyoBound
     }
 
     signedPayload.push(new XyoIndex(index))
+
+    boundWitnessOptionsSigned.forEach((item) => {
+      signedPayload.push(item)
+    })
+
+    boundWitnessOptionsUnsigned.forEach((item) => {
+      unsignedPayload.push(item)
+    })
 
     return {
       heuristics: signedPayload,
@@ -83,6 +96,42 @@ export class XyoBoundWitnessPayloadProvider extends XyoBase implements IXyoBound
     } else {
       delete this.unsignedHeuristicsProviders[name]
     }
+  }
+
+  public addBoundWitnessOption (option: CatalogueItem, boundWitnessOption: IXyoBoundWitnessOption) {
+    this.boundWitnessOptions[option] = boundWitnessOption
+  }
+
+  public removeBoundWitnessOption (option: CatalogueItem) {
+    delete this.boundWitnessOptions[option]
+  }
+
+  private async getOptionsSigned (option: CatalogueItem): Promise<IXyoSerializableObject[]> {
+    const optionHandler = this.boundWitnessOptions[option]
+
+    if (optionHandler) {
+      const signedPayload = await optionHandler.signed()
+
+      if (signedPayload) {
+        return [signedPayload]
+      }
+    }
+
+    return []
+  }
+
+  private async getOptionsUnsigned (option: CatalogueItem): Promise<IXyoSerializableObject[]> {
+    const optionHandler = this.boundWitnessOptions[option]
+
+    if (optionHandler) {
+      const unsignedPayload = await optionHandler.unsigned()
+
+      if (unsignedPayload) {
+        return [unsignedPayload]
+      }
+    }
+
+    return []
   }
 
   /**

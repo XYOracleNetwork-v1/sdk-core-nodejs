@@ -12,14 +12,14 @@
 // tslint:disable:ter-indent
 
 import { serializer } from '@xyo-network/serializer'
-import { XyoBoundWitnessStandardServerInteraction } from '@xyo-network/peer-interaction-handlers'
+import { XyoBoundWitnessInteraction } from '@xyo-network/peer-interaction-handlers'
 import { IXyoPayload, XyoBoundWitnessFragment, XyoFetter, XyoKeySet, XyoWitness, XyoSignatureSet, XyoBoundWitnessValidator } from '@xyo-network/bound-witness'
 import { XyoIndex } from '@xyo-network/origin-chain'
 import { rssiSerializationProvider } from '@xyo-network/heuristics-common'
 import { getSignerProvider, XyoEcdsaSignature, XyoEcdsaSecp256k1UnCompressedPublicKey } from '@xyo-network/signing.ecdsa'
 import { getHashingProvider } from '@xyo-network/hashing'
 import { XyoStubPublicKey, XyoStubSignature, XyoStubSigner } from '@xyo-network/signing'
-import { XyoMockNetworkPipe } from '@xyo-network/network'
+import { XyoMockNetworkPipe, CatalogueItem } from '@xyo-network/network'
 
 describe('Server interaction', () => {
   it(`It should leave two parties with the same bound-witness`, async () => {
@@ -62,10 +62,11 @@ describe('Server interaction', () => {
     const clientBoundWitnessFragment = new XyoBoundWitnessFragment(clientFetterWitnesses)
     const clientSerializedBoundWitnessFragment = clientBoundWitnessFragment.serialize()
 
-    const serverInteraction = new XyoBoundWitnessStandardServerInteraction(
+    const serverInteraction = new XyoBoundWitnessInteraction(
       serverSigners,
       serverPayload,
-      serializationService
+      serializationService,
+      CatalogueItem.BOUND_WITNESS
     )
 
     const mockPipe = new XyoMockNetworkPipe({
@@ -257,10 +258,11 @@ describe('Server interaction', () => {
     const clientBoundWitnessFragment = new XyoBoundWitnessFragment(clientFetterWitnesses)
     const clientSerializedBoundWitnessFragment = clientBoundWitnessFragment.serialize()
 
-    const serverInteraction = new XyoBoundWitnessStandardServerInteraction(
+    const serverInteraction = new XyoBoundWitnessInteraction(
       serverSigners,
       serverPayload,
-      serializationService
+      serializationService,
+      CatalogueItem.BOUND_WITNESS
     )
 
     const mockPipe = new XyoMockNetworkPipe({
