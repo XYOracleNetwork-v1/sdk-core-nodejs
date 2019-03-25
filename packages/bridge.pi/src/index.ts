@@ -57,6 +57,7 @@ const startPi = async () => {
   const piWifi = new PiWifiManager(validatePin)
 
   const conf: IBridgeConfigurationManager = {
+    isConfigured,
     getPublicKey: getPublicKeyFromBridge,
     getPaymentKey: getPaymentKeyFromBridge,
     setPaymentKey: setBridgePaymentKey,
@@ -105,6 +106,11 @@ const changePasswordForBridge = async (oldPassword: string, newPassword: string)
   const result = await changePassword(oldPasswordBuffer, newPasswordBuffer, storageProvider, hasher)
 
   return result.toString()
+}
+
+const isConfigured = async (): Promise<boolean> => {
+  const passwordNow = await getPassword(storageProvider)
+  return passwordNow === Buffer.from(BRIDGE_DEFAULT_PASSWORD)
 }
 
 const detachArchivistForBridge = async (id: string): Promise<IArchivist> => {
@@ -279,9 +285,9 @@ const storeNewPassword = async (password: Buffer, storage: IXyoStorageProvider) 
   await storage.write(key, password)
 }
 
-const getPassword = async (storage: IXyoStorageProvider) => {
+const getPassword = async (storage: IXyoStorageProvider): Promise<Buffer> => {
   const key = Buffer.from(STORAGE_PASSWORD_KEY)
-  const inStore = storage.read(key)
+  const inStore = await storage.read(key)
 
   if (inStore) {
     return inStore

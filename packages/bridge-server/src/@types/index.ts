@@ -6,7 +6,7 @@ export interface IContext {
   wifi: IWifiManager
   configuration: IBridgeConfigurationManager
   port: number
-  pin?: string
+  authenticated?: boolean
   authError?: string
 }
 

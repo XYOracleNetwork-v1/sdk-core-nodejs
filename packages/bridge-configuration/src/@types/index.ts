@@ -5,6 +5,7 @@ export interface IArchivist {
 }
 
 export interface IBridgeConfigurationManager {
+  isConfigured(): Promise<boolean>
   getPublicKey(): Promise<string>
   getPaymentKey(): Promise<string>
   setPaymentKey(paymentKey: string): Promise<string>

@@ -35,19 +35,18 @@ export class BridgeServer {
 
   public initContext = async (req: any): Promise<IContext> => {
     const token = get(req, 'req.headers.X-Auth-Token') || get(req, 'req.headers.x-auth-token')
+    let authenticated = false
     let authError = ''
-    let pin = ''
     try {
-      pin = verify(token) as string
-      const valid = this.context.configuration.verifyPin(pin)
-      if (!valid) throw new Error('Invalid')
+      const pin = token && verify(token) as string
+      authenticated = pin ? await this.context.configuration.verifyPin(pin) : false
     } catch (e) {
       authError = e.message
     }
     return {
       ...this.context,
-      authError,
-      pin
+      authenticated,
+      authError
     }
   }
 }
