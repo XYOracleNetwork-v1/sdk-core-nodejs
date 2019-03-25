@@ -1,13 +1,11 @@
 {
   "name": "@xyo-network/bridge-configuration",
-  "version": "0.34.0",
+  "version": "0.35.0",
   "description": "Interface to configure bridge settings",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "",
   "license": "MIT",
-  "dependencies": {
-  },
   "devDependencies": {
     "@types/jest": "^23.3.1",
     "@types/node": "^10.7.1",
