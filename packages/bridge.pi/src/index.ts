@@ -341,4 +341,6 @@ const getPaymentKey = async (storage: IXyoStorageProvider): Promise<Buffer | und
   return storage.read(key)
 }
 
-startPi()
+export function main() {
+  startPi()
+}

@@ -7,11 +7,13 @@
   "author": "Carter Harrison",
   "license": "MIT",
   "scripts": {
-    "start": "node dist/index.js"
+    "start": "bin/start.js"
+  },
+  "bin": {
+    "xyo-pi-bridge": "bin/start.js"
   },
   "dependencies": {
     "@xyo-network/base": "^0.35.0",
-    "@xyo-network/base-node": "^0.35.0",
     "@xyo-network/ble": "^0.35.0",
     "@xyo-network/ble.noble": "^0.35.0",
     "@xyo-network/bound-witness": "^0.35.0",
