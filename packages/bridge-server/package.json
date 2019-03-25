@@ -12,17 +12,19 @@
   },
   "dependencies": {
     "@xyo-network/bridge-ble": "^0.34.0",
-    "@xyo-network/wifi-manager": "^0.34.0",
     "@xyo-network/bridge-configuration": "^0.34.0",
+    "@xyo-network/wifi-manager": "^0.34.0",
     "apollo-server-express": "^2.4.8",
     "express": "^4.16.4",
     "graphql": "^14.1.1",
     "graphql-tag": "^2.10.1",
     "graphql-tools": "^4.0.4",
+    "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
+    "@types/jsonwebtoken": "^8.3.2",
     "@types/node": "^10.7.1",
     "jest": "^23.6.0",
     "ts-jest": "^23.10.5",

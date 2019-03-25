@@ -20,7 +20,7 @@
     "src/**/spec",
     "src/**/*.spec.ts"
   ],
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "app/index.ts"],
   "references": [
     {"path": "../network.ble"},
     {"path": "../peer-interaction"},

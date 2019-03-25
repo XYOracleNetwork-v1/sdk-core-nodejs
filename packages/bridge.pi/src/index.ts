@@ -71,12 +71,9 @@ const startPi = async () => {
   }
 
   const context: IContext = {
+    port,
     wifi: piWifi,
-    configuration: conf,
-    port: 8080,
-
-    // what is this pin?
-    pin: ""
+    configuration: conf
   }
 
   const server = new BridgeServer(context)
@@ -102,11 +99,13 @@ const startBridge = async () => {
   }, 2000)
 }
 
-const changePasswordForBridge = async (oldPassword: string, newPassword: string): Promise<boolean> => {
+const changePasswordForBridge = async (oldPassword: string, newPassword: string): Promise<string> => {
   const oldPasswordBuffer = Buffer.from(oldPassword)
   const newPasswordBuffer = Buffer.from(newPassword)
 
-  return changePassword(oldPasswordBuffer, newPasswordBuffer, storageProvider, hasher)
+  const result = await changePassword(oldPasswordBuffer, newPasswordBuffer, storageProvider, hasher)
+
+  return result.toString()
 }
 
 const detachArchivistForBridge = async (id: string): Promise<IArchivist> => {
