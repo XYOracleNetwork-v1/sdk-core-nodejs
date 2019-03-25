@@ -1,7 +1,7 @@
 import { IBridgeConfigurationManager, IArchivist } from './@types'
 
 // tslint:disable-next-line
-let mockPassword = '0000'
+let mockPassword = ''
 // tslint:disable-next-line
 let mockPublicKey = '000c4114ab1adccbf3205ef2b524fe502fcdd2ee91ce3ea72898c6452cca510039e4ebfa3c7f133bfb415e1835337ecaed48195d576d5720c8cd729543a93e9e9b56ad'
 // tslint:disable-next-line
@@ -60,8 +60,12 @@ export class BridgeConfigurationManager implements IBridgeConfigurationManager {
   }
 
   public async updatePin(oldPin: string, newPin: string): Promise<string> {
-    if (oldPin !== mockPassword) throw new Error('Invalid')
+    if (mockPassword && oldPin !== mockPassword) throw new Error('Invalid')
     mockPassword = newPin
     return newPin
+  }
+
+  public async isConfigured(): Promise<boolean> {
+    return !!mockPassword
   }
 }

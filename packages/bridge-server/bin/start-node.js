@@ -3,14 +3,17 @@
 // tslint:disable
 
 const { BridgeServer } = require('../dist/index.js');
-const { PiWifiManager } = require('@xyo-network/wifi-manager');
+const { NodeWifiManager } = require('@xyo-network/wifi-manager');
 const { BridgeConfigurationManager } = require('@xyo-network/bridge-configuration');
 
 function main () {
   const port = Number(process.env.PORT) || 13000
   const configuration = new BridgeConfigurationManager()
   const verifyPin = configuration.verifyPin.bind(configuration)
-  const wifi = new PiWifiManager(verifyPin)
+  const wifi = new NodeWifiManager(verifyPin)
+  wifi.subscribe((status) => {
+    console.log(status)
+  })
 
   if (!process.env.SKIP_BLE) {
     const { startBleServices, NetworkService } = require('@xyo-network/bridge-ble');

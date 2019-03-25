@@ -8,6 +8,7 @@ export default gql`
   }
 
   extend type Query {
+    isConfigured: Boolean
     getAuthToken(pin: String): String
     publicKey: String
     paymentKey: String

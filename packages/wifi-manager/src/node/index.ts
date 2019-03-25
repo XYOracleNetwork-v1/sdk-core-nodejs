@@ -1,22 +1,32 @@
 import { IWifiManager, IConnect, IStatus } from '../@types'
 import { Subscribe } from '@xyo-network/utils'
+import { getIp } from '../utils'
+import { first } from 'lodash'
 import debug from 'debug'
 
 export default class PiWifiManager extends Subscribe<IStatus> implements IWifiManager {
   public statusInterval = 10000
   private logger = debug('wifi:pi')
-  private wifi = new (require('rpi-wifi-connection') as any)()
+  private wifi = (require('node-wifi') as any)
   private intervalId: any
   private updating = false
+  constructor () {
+    super()
+    this.wifi.init({
+      iface: null
+    })
+  }
   public async getStatus (): Promise<IStatus> {
-    const { ssid, ip, ip_address } = await this.wifi.getStatus('wlan0')
+    const connections = await this.wifi.getCurrentConnections()
+    const { ssid } = first(connections) || { ssid: '' }
+    const ip = getIp() || ''
     return {
       ssid,
-      ip: ip || ip_address
+      ip
     }
   }
   public async connect ({ ssid, password }: IConnect): Promise<undefined> {
-    return this.wifi.connect({ ssid, psk: password })
+    return this.wifi.connect({ ssid, password })
   }
   public async scan (): Promise<IStatus[]> {
     return this.wifi.scan()

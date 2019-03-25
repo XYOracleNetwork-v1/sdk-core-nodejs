@@ -3,6 +3,10 @@ import withAuth from '../decorators/withAuth'
 import { sign } from '../../token'
 
 export const configurationQuery = () => ({
+  isConfigured: async (parent: any, args: any, { configuration }: IContext) => {
+    return configuration.isConfigured()
+  },
+
   getAuthToken: async (parent: any, args: any, { configuration }: IContext) => {
     const valid = await configuration.verifyPin(args.pin)
     if (!valid) throw new Error('Invalid')
