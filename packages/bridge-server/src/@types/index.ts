@@ -6,7 +6,8 @@ export interface IContext {
   wifi: IWifiManager
   configuration: IBridgeConfigurationManager
   port: number
-  pin: string
+  pin?: string
+  authError?: string
 }
 
 export type IExpressApplyRoutes = (app: Express) => void

@@ -8,6 +8,7 @@ export default gql`
   }
 
   extend type Query {
+    getAuthToken(pin: String): String
     publicKey: String
     paymentKey: String
     defaultArchivist: Archivist
@@ -19,6 +20,6 @@ export default gql`
     setDefaultArchivist(id: String): Archivist
     attachArchivist(dns: String, port: Int): Archivist
     detachArchivist(id: String): Archivist
-    updatePin(oldPin: String, newPin: String): Boolean
+    updatePin(oldPin: String, newPin: String): String
   }
 `
