@@ -201,6 +201,9 @@
       "path": "bridge.pi"
     },
     { 
+      "path": "bridge-configuration"
+    },
+    {
       "path": "bridge-server"
     }
   ],
@@ -266,7 +269,7 @@
     "crypto/src/**/*.ts",
     "bridge-ble/src/**/*.ts",
     "wifi-manager/src/**/*.ts",
-    "bridge.pi/src/**/*.ts",
+    "bridge-configuration/src/**/*.ts",
     "bridge-server/src/**/*.ts"
   ]
 }

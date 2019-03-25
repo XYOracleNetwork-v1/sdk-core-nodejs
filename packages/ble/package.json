@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/ble",
-  "version": "0.31.0",
+  "version": "0.34.0",
   "description": "Bluetooth Network for XYO",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,9 +8,9 @@
   "license": "MIT",
   "dependencies": {
     "@xyo-network/logger": "^0.29.0",
-    "@xyo-network/network": "^0.31.0",
-    "@xyo-network/serialization": "^0.31.0",
-    "@xyo-network/heuristics-common": "^0.31.0"
+    "@xyo-network/network": "^0.34.0",
+    "@xyo-network/serialization": "^0.34.0",
+    "@xyo-network/heuristics-common": "^0.34.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

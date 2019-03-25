@@ -7,7 +7,7 @@
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/serialization": "^0.31.0"
+    "@xyo-network/serialization": "^0.34.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

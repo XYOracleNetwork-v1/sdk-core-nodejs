@@ -7,11 +7,11 @@
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/buffer-utils": "^0.31.0",
-    "@xyo-network/errors": "^0.31.0",
-    "@xyo-network/logger": "^0.31.0",
-    "@xyo-network/network": "^0.31.0",
-    "@xyo-network/serialization": "0.31.0",
+    "@xyo-network/buffer-utils": "^0.34.0",
+    "@xyo-network/errors": "^0.34.0",
+    "@xyo-network/logger": "^0.34.0",
+    "@xyo-network/network": "^0.34.0",
+    "@xyo-network/serialization": "0.34.0",
     "@xyo-network/base": "0.34.0"
   },
   "devDependencies": {

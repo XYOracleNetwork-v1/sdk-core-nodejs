@@ -13,6 +13,7 @@
   "dependencies": {
     "@xyo-network/bridge-ble": "^0.34.0",
     "@xyo-network/wifi-manager": "^0.34.0",
+    "@xyo-network/bridge-configuration": "^0.34.0",
     "apollo-server-express": "^2.4.8",
     "express": "^4.16.4",
     "graphql": "^14.1.1",

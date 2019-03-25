@@ -15,8 +15,10 @@ export default gql`
   }
 
   extend type Mutation {
+    setPaymentKey(paymentKey: String): Archivist
     setDefaultArchivist(id: String): Archivist
     attachArchivist(dns: String, port: Int): Archivist
     detachArchivist(id: String): Archivist
+    updatePin(oldPin: String, newPin: String): Boolean
   }
 `

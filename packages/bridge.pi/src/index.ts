@@ -4,7 +4,7 @@ import { startBleServices, NetworkService } from '@xyo-network/bridge-ble'
 import { BridgeServer } from '@xyo-network/bridge-server'
 import { XyoLogger } from '@xyo-network/logger'
 import { XyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
-import { XyoOriginChainLocalStorageRepository } from '@xyo-network/origin-chain'
+import { XyoOriginChainLocalStorageRepository, XyoPaymentKey } from '@xyo-network/origin-chain'
 import { NobleScan } from '@xyo-network/ble.noble'
 import { serializer } from '@xyo-network/serializer'
 import { XyoBluetoothNetwork } from '@xyo-network/network.ble'
@@ -14,9 +14,14 @@ import { getHashingProvider, IXyoHashProvider } from '@xyo-network/hashing'
 import { XyoClientTcpNetwork, IXyoNetworkAddressProvider, IXyoTCPNetworkAddress } from '@xyo-network/network.tcp'
 import { IXyoBridgeConfig, XyoBridge } from '@xyo-network/bridge'
 import { IXyoStorageProvider } from '@xyo-network/storage'
+import { IContext } from '../../bridge-server/dist/@types'
+import { IXyoSerializableObject } from '@xyo-network/serialization'
+import { IBridgeConfigurationManager, IArchivist } from '@xyo-network/bridge-configuration'
+import { XyoBridgeArchivistQueue } from './xyo-bridge-archivist-queue'
 
 const STORAGE_PASSWORD_KEY = "STORAGE_PASSWORD_KEY"
 const ARCHIVIST_STORAGE_KEY = "ARCHIVIST_STORAGE_KEY"
+const PAYMENT_KEY_KEY = "PAYMENT_KEY_KEY"
 const BRIDGE_DEFAULT_PASSWORD = "xyxyo"
 
 const hasher = getHashingProvider('sha256')
@@ -27,6 +32,8 @@ const bridgeQueueRepo = new XyoStorageBridgeQueueRepository(storageProvider)
 const blockRepo = new XyoOriginBlockRepository(storageProvider, serializer, hasher)
 const chainRepo = new XyoOriginChainLocalStorageRepository(storageProvider, blockRepo, serializer)
 const logger = new XyoLogger(false, false)
+const archivistQueue = new XyoBridgeArchivistQueue()
+const tcpClient = new XyoClientTcpNetwork(archivistQueue.tcpPeerSelector)
 
 const defaultArchivists: IXyoTCPNetworkAddress[] = [
   {
@@ -35,20 +42,44 @@ const defaultArchivists: IXyoTCPNetworkAddress[] = [
   }
 ]
 
-const activeArchivists: IXyoTCPNetworkAddress[] = defaultArchivists
-
-const tcpPeerSelector: IXyoNetworkAddressProvider = {
-  next: async () => {
-    return activeArchivists[Math.floor(Math.random() * activeArchivists.length)]
-  }
+const bridgeConfig: IXyoBridgeConfig  = {
+  hasher,
+  storageProvider,
+  bridgeQueueRepo,
+  blockRepo,
+  chainRepo,
+  logger
 }
 
-const tcpClient = new XyoClientTcpNetwork(tcpPeerSelector)
+const bridge = new XyoBridge(bleNetwork, tcpClient, bridgeConfig)
 
 const startPi = async () => {
   const port = 13000
   const piWifi = new PiWifiManager(validatePin)
-  const server = new BridgeServer({ port, pin: '0000', wifi: piWifi })
+
+  const conf: IBridgeConfigurationManager = {
+    getPublicKey: getPublicKeyFromBridge,
+    getPaymentKey: getPaymentKeyFromBridge,
+    setPaymentKey: setBridgePaymentKey,
+    setDefaultArchivist: setDefaultArchivistForBridge,
+    getDefaultArchivist: getDefaultArchivistForBridge,
+    getAttachedArchivists: getAttachedArchivistsForBridge,
+    attachArchivist: attachArchivistToBridge,
+    detachArchivist: detachArchivistForBridge,
+    verifyPin: validatePin,
+    updatePin: changePasswordForBridge
+  }
+
+  const context: IContext = {
+    wifi: piWifi,
+    configuration: conf,
+    port: 8080,
+
+    // what is this pin?
+    pin: ""
+  }
+
+  const server = new BridgeServer(context)
   const networkService = new NetworkService(piWifi, validatePin)
 
   await networkService.start()
@@ -64,20 +95,145 @@ const startPi = async () => {
 }
 
 const startBridge = async () => {
-  const bridgeConfig: IXyoBridgeConfig  = {
-    hasher,
-    storageProvider,
-    bridgeQueueRepo,
-    blockRepo,
-    chainRepo,
-    logger
-  }
-
-  const bridge = new XyoBridge(bleNetwork, tcpClient, bridgeConfig)
+  await restoreArchivists(storageProvider, defaultArchivists)
   await bridge.init()
   setTimeout(() => {
     bridge.start()
   }, 2000)
+}
+
+const changePasswordForBridge = async (oldPassword: string, newPassword: string): Promise<boolean> => {
+  const oldPasswordBuffer = Buffer.from(oldPassword)
+  const newPasswordBuffer = Buffer.from(newPassword)
+
+  return changePassword(oldPasswordBuffer, newPasswordBuffer, storageProvider, hasher)
+}
+
+const detachArchivistForBridge = async (id: string): Promise<IArchivist> => {
+  const allArchivists = archivistQueue.activeArchivists
+
+  for (const archivist of allArchivists) {
+    const archivistId = `${archivist.host}:${archivist.port}`
+
+    if (id === archivistId) {
+      const archivistToRemove: IArchivist = {
+        port: archivist.port,
+        dns: archivist.host,
+        id: archivistId,
+      }
+
+      await removeArchivist(archivist, storageProvider)
+
+      return archivistToRemove
+    }
+  }
+
+  throw Error("No archivist found!")
+}
+
+const attachArchivistToBridge = async (dns: string, port: number): Promise<IArchivist> => {
+  const archivistToAdd: IArchivist = {
+    port,
+    dns,
+    id: `${dns}:${port}`,
+  }
+
+  const tcp: IXyoTCPNetworkAddress = {
+    port,
+    host: dns,
+  }
+
+  await addArchivist(tcp, storageProvider)
+
+  return archivistToAdd
+}
+
+const getAttachedArchivistsForBridge = async (): Promise<IArchivist[]> => {
+  const returnArchivists: IArchivist[] = []
+  const allArchivists = archivistQueue.activeArchivists
+
+  for (const archivist of allArchivists) {
+    const archivistId = `${archivist.host}:${archivist.port}`
+
+    returnArchivists.push({
+      port: archivist.port,
+      dns: archivist.host,
+      id: archivistId,
+    })
+  }
+  return returnArchivists
+}
+
+const getDefaultArchivistForBridge = async (): Promise<IArchivist> => {
+  if (archivistQueue.activeArchivists.length > 0) {
+    return archivistQueue.activeArchivists[0]
+  }
+
+  throw Error("No archivists!")
+}
+
+const setDefaultArchivistForBridge = async (id: string): Promise<IArchivist> => {
+  const allArchivists = archivistQueue.activeArchivists
+
+  for (const archivist of allArchivists) {
+    const archivistId = `${archivist.host}:${archivist.port}`
+
+    if (id === archivistId) {
+      const archivistToRemove: IArchivist = {
+        port: archivist.port,
+        dns: archivist.host,
+        id: archivistId,
+      }
+
+      await removeArchivist(archivist, storageProvider)
+      archivistQueue.activeArchivists.unshift(archivist)
+      await storeArchivists(archivistQueue.activeArchivists, storageProvider)
+
+      return archivistToRemove
+    }
+  }
+
+  throw Error("No archivist found!")
+}
+
+const paymentKeyHeuristicsCreator = (key: XyoPaymentKey): (() => Promise<IXyoSerializableObject>) => {
+  return async () => {
+    return key
+  }
+}
+
+// the key must be a hex value
+const setBridgePaymentKey = async (key: string): Promise<string> => {
+  const encodedKey = Buffer.from(key, "hex")
+  const paymentKey = new XyoPaymentKey(encodedKey)
+  const provider = paymentKeyHeuristicsCreator(paymentKey)
+
+  bridge.payloadProvider.removeHeuristicsProvider("PAYMENT_KEY", true)
+  bridge.payloadProvider.addHeuristicsProvider("PAYMENT_KEY", true, provider)
+
+  await storePaymentKey(encodedKey, storageProvider)
+
+  return key
+}
+
+const getPaymentKeyFromBridge = async (): Promise<string> => {
+  const key = await getPaymentKey(storageProvider)
+
+  if (key) {
+    return key.toString("hex")
+  }
+
+  return "No key set"
+}
+
+const getPublicKeyFromBridge = async (): Promise<string> => {
+  const signer = await chainRepo.getGenesisSigner()
+
+  if (signer) {
+    return signer.serializeHex()
+  }
+
+  return ""
 }
 
 const validatePin = async (pin: string): Promise<boolean> => {
@@ -85,14 +241,14 @@ const validatePin = async (pin: string): Promise<boolean> => {
 }
 
 const addArchivist = async (archivist: IXyoTCPNetworkAddress, storage: IXyoStorageProvider) => {
-  activeArchivists.push(archivist)
-  await storeArchivists(activeArchivists, storage)
+  archivistQueue.activeArchivists.push(archivist)
+  await storeArchivists(archivistQueue.activeArchivists, storage)
 }
 
-const removeArchivists = async (archivistToRemove: IXyoTCPNetworkAddress, storage: IXyoStorageProvider) => {
+const removeArchivist = async (archivistToRemove: IXyoTCPNetworkAddress, storage: IXyoStorageProvider) => {
   const newArchivists: IXyoTCPNetworkAddress[] = []
 
-  activeArchivists.forEach((archivist) => {
+  archivistQueue.activeArchivists.forEach((archivist) => {
     if (archivist.port !== archivistToRemove.port && archivistToRemove.host !== archivist.host) {
       newArchivists.push(archivist)
     }
@@ -102,9 +258,22 @@ const removeArchivists = async (archivistToRemove: IXyoTCPNetworkAddress, storag
 }
 
 const restoreArchivists = async (storage: IXyoStorageProvider,
-                                constArchivists: IXyoTCPNetworkAddress[]): Promise<IXyoTCPNetworkAddress[]> => {
+                                 constArchivists: IXyoTCPNetworkAddress[]): Promise<IXyoTCPNetworkAddress[]> => {
   const archivistsInStorage = await getArchivists(storage)
   return archivistsInStorage.concat(constArchivists)
+}
+
+const changePassword = async (password: Buffer,
+                              newPassword: Buffer,
+                              storage: IXyoStorageProvider,
+                              hash: IXyoHashProvider): Promise<boolean> => {
+
+  if (await hashAndCheckRightPassword(storage, password, hash)) {
+    storeNewPassword(newPassword, storage)
+    return true
+  }
+
+  return false
 }
 
 const storeNewPassword = async (password: Buffer, storage: IXyoStorageProvider) => {
@@ -124,7 +293,8 @@ const getPassword = async (storage: IXyoStorageProvider) => {
 }
 
 const hashAndCheckRightPassword = async (storage: IXyoStorageProvider,
-                                        password: Buffer, hashCreator: IXyoHashProvider) => {
+                                         password: Buffer,
+                                        hashCreator: IXyoHashProvider) => {
   const hashOfPassword = await hashPassword(password, hashCreator)
   return checkIfRightPassword(storage, hashOfPassword)
 }
@@ -155,6 +325,16 @@ const getArchivists = async (storage: IXyoStorageProvider): Promise<IXyoTCPNetwo
   }
 
   return [] as IXyoTCPNetworkAddress[]
+}
+
+const storePaymentKey = async (paymentKey: Buffer, storage: IXyoStorageProvider) => {
+  const key = Buffer.from(PAYMENT_KEY_KEY)
+  storage.write(key, paymentKey)
+}
+
+const getPaymentKey = async (storage: IXyoStorageProvider): Promise<Buffer | undefined> => {
+  const key = Buffer.from(PAYMENT_KEY_KEY)
+  return storage.read(key)
 }
 
 startPi()
