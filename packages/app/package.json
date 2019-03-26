@@ -8,7 +8,7 @@
     "xyo-stop": "bin/stop-node.js"
   },
   "scripts": {
-    "forever": "forever ./bin/start-forever.js",
+    "forever": "forever -m 1 ./bin/start-forever.js",
     "start": "node --inspect --debug ./bin/start-node.js",
     "stop": "./bin/stop-node.js"
   },

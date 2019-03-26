@@ -39,8 +39,14 @@ export class XyoAppLauncher extends XyoBase {
   public config: IAppConfig | undefined
   public yamlConfig: string | undefined
   public startNode = true
-  public password?: string // store pass if passed in start args
 
+  private password?: string
+  private isForever = false
+
+  public setForeverPass(pass: string) {
+    this.password = pass
+    this.isForever = true
+  }
   public async initialize(configName?: string) {
     let writeConfigFile = false
 
@@ -58,6 +64,9 @@ export class XyoAppLauncher extends XyoBase {
         this.yamlConfig = file
         this.config = yaml.safeLoad(file) as IAppConfig
       } else {
+        if (this.isForever) {
+          throw new XyoError(`Config file not found running forever`)
+        }
         this.logInfo(`Could not find a configuration file at ${configPath}`)
         const res = await new AppWizard(rootPath).createConfiguration(
           configName,
@@ -249,34 +258,33 @@ export class XyoAppLauncher extends XyoBase {
       )
     }
     const provider = new XyoCryptoProvider()
+    let tryAgain = false
 
     // password passed in start command
-    if (this.password) {
-      const privateKey = provider.decrypt(
-        this.password,
-        crypto.encryptedKey,
-        crypto.salt,
-      )
-      return privateKey
+    if (!this.password) {
+      tryAgain = true
+      // @ts-ignore
+      const { password } = await prompt<{ password }>({
+        type: 'input',
+        name: 'password',
+        message: 'What is your Diviner password?',
+        validate: promptValidator(validatePassword),
+      })
+      this.password = password
     }
-
-    // @ts-ignore
-    const { password } = await prompt<{ password }>({
-      type: 'input',
-      name: 'password',
-      message: 'What is your Diviner password?',
-      validate: promptValidator(validatePassword),
-    })
 
     try {
       const privateKey = provider.decrypt(
-        password,
+        this.password!,
         crypto.encryptedKey,
         crypto.salt,
       )
       return privateKey
     } catch (e) {
       this.logError(`Incorrect password, try again.`)
+      if (!tryAgain) {
+        process.exit(1)
+      }
     }
     return this.decryptPrivateKey(crypto)
   }
@@ -312,14 +320,14 @@ export async function main(args: string[]) {
   const appLauncher = new XyoAppLauncher()
   try {
     if (path.basename(args[1]) === 'start-forever.js') {
-      if (args.length !== 4) {
-        console.error(`Must run 'forever' with params 'yarn forever [config] [password]'`)
+      if (args.length < 4) {
+        console.error(`Must run 'forever' with params 'yarn forever [config]'`)
         process.exit(1)
         return
       }
-      appLauncher.password = args[3]
+      appLauncher.setForeverPass(args[args.length - 1])
     }
-    await appLauncher.initialize(args.length >= 3 ? args[2] : undefined)
+    await appLauncher.initialize(args[2])
   } catch (err) {
     console.error(`There was an error during initialization. Will exit`, err)
     process.exit(1)
