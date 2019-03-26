@@ -540,6 +540,7 @@ export class XyoScscConsensusProvider extends XyoBase
     const requests = await this.getRequests(requestIds)
 
     requests.map((req1, index) => {
+      if (!req1) return
       const {
         xyoBounty,
         weiMining,

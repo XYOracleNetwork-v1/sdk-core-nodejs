@@ -39,6 +39,7 @@ export class XyoAppLauncher extends XyoBase {
   public config: IAppConfig | undefined
   public yamlConfig: string | undefined
   public startNode = true
+  public password?: string // store pass if passed in start args
 
   public async initialize(configName?: string) {
     let writeConfigFile = false
@@ -125,7 +126,7 @@ export class XyoAppLauncher extends XyoBase {
         featureOptions: {},
       }
     }
-    const decrypt = await this.addPidToPidsFolder()
+    await this.addPidToPidsFolder()
     const newNode = new XyoNode({
       config: {
         nodeRunnerDelegates: {
@@ -243,7 +244,20 @@ export class XyoAppLauncher extends XyoBase {
 
   private async decryptPrivateKey(crypto: IEthCryptoKeys): Promise<string> {
     if (!crypto.encryptedKey || !crypto.salt) {
-      throw (new Error("No private ethereum key saved in configuration, run setup again"))
+      throw new Error(
+        'No private ethereum key saved in configuration, run setup again',
+      )
+    }
+    const provider = new XyoCryptoProvider()
+
+    // password passed in start command
+    if (this.password) {
+      const privateKey = provider.decrypt(
+        this.password,
+        crypto.encryptedKey,
+        crypto.salt,
+      )
+      return privateKey
     }
 
     // @ts-ignore
@@ -253,10 +267,13 @@ export class XyoAppLauncher extends XyoBase {
       message: 'What is your Diviner password?',
       validate: promptValidator(validatePassword),
     })
-    const provider = new XyoCryptoProvider()
 
     try {
-      const privateKey = provider.decrypt(password, crypto.encryptedKey, crypto.salt)
+      const privateKey = provider.decrypt(
+        password,
+        crypto.encryptedKey,
+        crypto.salt,
+      )
       return privateKey
     } catch (e) {
       this.logError(`Incorrect password, try again.`)
@@ -294,6 +311,14 @@ export class XyoAppLauncher extends XyoBase {
 export async function main(args: string[]) {
   const appLauncher = new XyoAppLauncher()
   try {
+    if (path.basename(args[1]) === 'start-forever.js') {
+      if (args.length !== 4) {
+        console.error(`Must run 'forever' with params 'yarn forever [config] [password]'`)
+        process.exit(1)
+        return
+      }
+      appLauncher.password = args[3]
+    }
     await appLauncher.initialize(args.length >= 3 ? args[2] : undefined)
   } catch (err) {
     console.error(`There was an error during initialization. Will exit`, err)

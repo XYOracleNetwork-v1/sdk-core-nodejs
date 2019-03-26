@@ -13,6 +13,7 @@
     "tslint": "tslint -c tslint.json -p packages/tsconfig.json",
     "clean": "node scripts/clean.js",
     "start": "yarn --cwd packages/app start",
+    "forever": "yarn --cwd packages/app forever",
     "start:diviner": "yarn --cwd ./packages/app start diviner",
     "start:archivist": "yarn --cwd ./packages/app start archivist",
     "start:archivist-diviner": "yarn --cwd ./packages/app start archivist-diviner",

@@ -8,7 +8,8 @@
     "xyo-stop": "bin/stop-node.js"
   },
   "scripts": {
-    "start": "node --inspect ./bin/start-node.js",
+    "forever": "forever ./bin/start-forever.js",
+    "start": "node --inspect --debug ./bin/start-node.js",
     "stop": "./bin/stop-node.js"
   },
   "types": "dist/index.d.ts",
@@ -27,7 +28,8 @@
     "joi": "^14.3.1",
     "js-yaml": "^3.12.1",
     "lodash": "^4.17.11",
-    "shelljs": "^0.8.3"
+    "shelljs": "^0.8.3",
+    "forever": "^0.15.3"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
