@@ -1,14 +1,14 @@
 {
   "name": "@xyo-network/signing",
-  "version": "0.36.0",
+  "version": "0.37.0",
   "description": "Signing Types and Services for the XYO Network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/serialization": "^0.36.0",
-    "@xyo-network/serialization-schema": "^0.36.0"
+    "@xyo-network/serialization": "^0.37.0",
+    "@xyo-network/serialization-schema": "^0.37.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",

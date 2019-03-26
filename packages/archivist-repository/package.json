@@ -1,16 +1,16 @@
 {
   "name": "@xyo-network/archivist-repository",
-  "version": "0.36.0",
+  "version": "0.37.0",
   "description": "A data-layer abstraction for archivist responsibilities",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/bound-witness": "^0.36.0",
-    "@xyo-network/hashing": "^0.36.0",
-    "@xyo-network/origin-block-repository": "^0.36.0",
-    "@xyo-network/signing": "^0.36.0"
+    "@xyo-network/bound-witness": "^0.37.0",
+    "@xyo-network/hashing": "^0.37.0",
+    "@xyo-network/origin-block-repository": "^0.37.0",
+    "@xyo-network/signing": "^0.37.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
