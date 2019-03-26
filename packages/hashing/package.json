@@ -1,16 +1,16 @@
 {
   "name": "@xyo-network/hashing",
-  "version": "0.37.0",
+  "version": "0.38.0",
   "description": "Hashing Types and Services for the Xyo Network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.37.0",
-    "@xyo-network/errors": "^0.37.0",
-    "@xyo-network/serialization": "^0.37.0",
-    "@xyo-network/serialization-schema": "^0.37.0",
+    "@xyo-network/base": "^0.38.0",
+    "@xyo-network/errors": "^0.38.0",
+    "@xyo-network/serialization": "^0.38.0",
+    "@xyo-network/serialization-schema": "^0.38.0",
     "eth-lib": "^0.2.8"
   },
   "devDependencies": {
