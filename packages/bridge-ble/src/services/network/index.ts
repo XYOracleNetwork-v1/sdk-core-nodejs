@@ -77,10 +77,10 @@ export default class NetworkService extends PrimaryService {
     this.notifyIP.setCurrentValue(ip)
   }
 
-  private async connect ({ ssid, password, pin }: IConnect) {
+  private async connect ({ ssid, password }: IConnect) {
     try {
       this.updateStatus({ ssid, ip: '' })
-      await this.wifiManager.connect({ ssid, password, pin })
+      await this.wifiManager.connect({ ssid, password })
       const status = await this.wifiManager.getStatus()
       this.updateStatus(status)
     } catch (err) {

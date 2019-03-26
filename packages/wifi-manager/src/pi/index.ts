@@ -8,9 +8,6 @@ export default class PiWifiManager extends Subscribe<IStatus> implements IWifiMa
   private updating = false
   private logger = debug('wifi:pi')
   private wifi = new (require('rpi-wifi-connection') as any)()
-  constructor (public validatePin: (pin: string) => Promise<boolean>) {
-    super()
-  }
   public async getStatus (): Promise<IStatus> {
     const { ssid, ip, ip_address } = await this.wifi.getStatus('wlan0')
     return {
@@ -18,9 +15,7 @@ export default class PiWifiManager extends Subscribe<IStatus> implements IWifiMa
       ip: ip || ip_address
     }
   }
-  public async connect ({ ssid, password, pin }: IConnect): Promise<undefined> {
-    const valid = await this.validatePin(pin)
-    if (!valid) throw new Error('Invalid pin')
+  public async connect ({ ssid, password }: IConnect): Promise<undefined> {
     return this.wifi.connect({ ssid, psk: password })
   }
   public async scan (): Promise<IStatus[]> {

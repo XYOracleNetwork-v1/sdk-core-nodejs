@@ -1,5 +1,4 @@
 export interface IConnect {
-  pin: string
   ssid: string
   password: string
 }

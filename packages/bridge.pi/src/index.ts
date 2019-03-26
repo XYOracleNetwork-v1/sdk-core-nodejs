@@ -54,7 +54,7 @@ const bridge = new XyoBridge(bleNetwork, tcpClient, bridgeConfig)
 
 const startPi = async () => {
   const port = 13000
-  const piWifi = new PiWifiManager(validatePin)
+  const piWifi = new PiWifiManager()
 
   const conf: IBridgeConfigurationManager = {
     isConfigured,
