@@ -1,13 +1,13 @@
 {
   "name": "@xyo-network/wifi-manager",
-  "version": "0.40.0",
+  "version": "0.41.0",
   "description": "List available ssids and connect to wifi",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/utils": "^0.40.0",
+    "@xyo-network/utils": "^0.41.0",
     "debug": "^4.1.1",
     "lodash": "^4.17.11",
     "node-wifi": "2.0.4",

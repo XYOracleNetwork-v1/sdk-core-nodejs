@@ -1,16 +1,16 @@
 {
   "name": "@xyo-network/ble",
-  "version": "0.40.0",
+  "version": "0.41.0",
   "description": "Bluetooth Network for XYO",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Carter Harrison",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/heuristics-common": "^0.40.0",
+    "@xyo-network/heuristics-common": "^0.41.0",
     "@xyo-network/logger": "^0.29.0",
-    "@xyo-network/network": "^0.40.0",
-    "@xyo-network/serialization": "^0.40.0"
+    "@xyo-network/network": "^0.41.0",
+    "@xyo-network/serialization": "^0.41.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
