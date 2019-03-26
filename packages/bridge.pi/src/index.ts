@@ -1,4 +1,3 @@
-
 import { PiWifiManager } from '@xyo-network/wifi-manager'
 // import { startBleServices, NetworkService } from '@xyo-network/bridge-ble'
 import { BridgeServer, IContext } from '@xyo-network/bridge-server'
@@ -111,7 +110,7 @@ const changePasswordForBridge = async (oldPassword: string, newPassword: string)
 
 const isConfigured = async (): Promise<boolean> => {
   const passwordNow = await getPassword(storageProvider)
-  return passwordNow === Buffer.from(BRIDGE_DEFAULT_PASSWORD)
+  return !!Buffer.compare(passwordNow, Buffer.from(BRIDGE_DEFAULT_PASSWORD))
 }
 
 const detachArchivistForBridge = async (id: string): Promise<IArchivist> => {
@@ -305,12 +304,12 @@ const hashAndCheckRightPassword = async (storage: IXyoStorageProvider,
                                          password: Buffer,
                                         hashCreator: IXyoHashProvider) => {
   const hashOfPassword = await hashPassword(password, hashCreator)
-  return checkIfRightPassword(storage, hashOfPassword)
+  return checkIfRightPassword(storage, password)
 }
 
 const checkIfRightPassword = async (storage: IXyoStorageProvider, password: Buffer) => {
   const rightPassword  = await getPassword(storage)
-  return rightPassword === password
+  return !Buffer.compare(rightPassword, password)
 }
 
 const hashPassword = async (password: Buffer, hashCreator: IXyoHashProvider) => {
