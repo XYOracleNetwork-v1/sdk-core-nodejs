@@ -91,7 +91,7 @@ const startPi = async () => {
 }
 
 const startBridge = async () => {
-  await restoreArchivists(storageProvider, defaultArchivists)
+  archivistQueue.activeArchivists = await restoreArchivists(storageProvider, defaultArchivists)
   await bridge.init()
 
   setTimeout(() => {
@@ -258,6 +258,8 @@ const removeArchivist = async (archivistToRemove: IXyoTCPNetworkAddress, storage
     }
   })
 
+  archivistQueue.activeArchivists = newArchivists
+
   await storeArchivists(newArchivists, storage)
 }
 
@@ -273,7 +275,7 @@ const changePassword = async (password: Buffer,
                               hash: IXyoHashProvider): Promise<boolean> => {
 
   if (await hashAndCheckRightPassword(storage, password, hash)) {
-    storeNewPassword(newPassword, storage)
+    storeNewPassword(await hashPassword(newPassword, hash), storage)
     return true
   }
 
@@ -304,7 +306,7 @@ const hashAndCheckRightPassword = async (storage: IXyoStorageProvider,
                                          password: Buffer,
                                         hashCreator: IXyoHashProvider) => {
   const hashOfPassword = await hashPassword(password, hashCreator)
-  return checkIfRightPassword(storage, password)
+  return checkIfRightPassword(storage, hashOfPassword)
 }
 
 const checkIfRightPassword = async (storage: IXyoStorageProvider, password: Buffer) => {
