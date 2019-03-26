@@ -1,6 +1,6 @@
 
 import { PiWifiManager } from '@xyo-network/wifi-manager'
-import { startBleServices, NetworkService } from '@xyo-network/bridge-ble'
+// import { startBleServices, NetworkService } from '@xyo-network/bridge-ble'
 import { BridgeServer, IContext } from '@xyo-network/bridge-server'
 import { XyoLogger } from '@xyo-network/logger'
 import { XyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
@@ -77,12 +77,12 @@ const startPi = async () => {
   }
 
   const server = new BridgeServer(context)
-  const networkService = new NetworkService(piWifi, validatePin)
+  // const networkService = new NetworkService(piWifi, validatePin)
 
-  await networkService.start()
-  await startBleServices(process.env.DISPLAY_NAME || 'XYO Bridge', [
-    networkService
-  ])
+  // await networkService.start()
+  // await startBleServices(process.env.DISPLAY_NAME || 'XYO Bridge', [
+  //   networkService
+  // ])
 
   server.start(() => {
     logger.info(`Server ready at http://localhost:${port}`)
@@ -94,6 +94,7 @@ const startPi = async () => {
 const startBridge = async () => {
   await restoreArchivists(storageProvider, defaultArchivists)
   await bridge.init()
+
   setTimeout(() => {
     bridge.start()
   }, 2000)
@@ -287,10 +288,14 @@ const storeNewPassword = async (password: Buffer, storage: IXyoStorageProvider) 
 
 const getPassword = async (storage: IXyoStorageProvider): Promise<Buffer> => {
   const key = Buffer.from(STORAGE_PASSWORD_KEY)
-  const inStore = await storage.read(key)
+  const hasKey = await storage.containsKey(key)
 
-  if (inStore) {
-    return inStore
+  if (hasKey) {
+    const inStore = await storage.read(key)
+
+    if (inStore) {
+      return inStore
+    }
   }
 
   return Buffer.from(BRIDGE_DEFAULT_PASSWORD)
@@ -321,11 +326,15 @@ const storeArchivists = async (archivists: IXyoTCPNetworkAddress[], storage: IXy
 
 const getArchivists = async (storage: IXyoStorageProvider): Promise<IXyoTCPNetworkAddress[]> => {
   const key = Buffer.from(ARCHIVIST_STORAGE_KEY)
-  const bufferArchivists = await storage.read(key)
+  const hasKey = await storage.containsKey(key)
 
-  if (bufferArchivists) {
-    const stringArchivists = bufferArchivists.toString('utf8')
-    return JSON.parse(stringArchivists) as IXyoTCPNetworkAddress[]
+  if (hasKey) {
+    const bufferArchivists = await storage.read(key)
+
+    if (bufferArchivists) {
+      const stringArchivists = bufferArchivists.toString('utf8')
+      return JSON.parse(stringArchivists) as IXyoTCPNetworkAddress[]
+    }
   }
 
   return [] as IXyoTCPNetworkAddress[]
@@ -338,7 +347,13 @@ const storePaymentKey = async (paymentKey: Buffer, storage: IXyoStorageProvider)
 
 const getPaymentKey = async (storage: IXyoStorageProvider): Promise<Buffer | undefined> => {
   const key = Buffer.from(PAYMENT_KEY_KEY)
-  return storage.read(key)
+  const hasKey = await storage.containsKey(key)
+
+  if (hasKey) {
+    return storage.read(key)
+  }
+
+  return undefined
 }
 
 export function main() {

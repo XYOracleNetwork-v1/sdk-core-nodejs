@@ -2,7 +2,7 @@
 
 console.log("xyo-pi-bridge start")
 
-const { startPi } = require('../dist/index.js');
+const { main } = require('../dist/index.js');
 
 console.log("xyo-pi-bridge imported")
-startPi()
+main()
