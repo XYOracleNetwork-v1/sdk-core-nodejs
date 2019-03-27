@@ -174,16 +174,7 @@
       "path": "ble.noble"
     },
     {
-      "path": "bridge"
-    },
-    {
       "path": "network.ble"
-    },
-    {
-      "path": "bridge-queue-repository"
-    },
-    {
-      "path": "bridge-queue-repository.keyvalue"
     },
     {
       "path": "content-addressable-service"
@@ -196,9 +187,6 @@
     },
     {
       "path": "wifi-manager"
-    },
-    {
-      "path": "bridge.pi"
     },
     { 
       "path": "bridge-configuration"
@@ -261,10 +249,7 @@
     "block-witness/src/**/*.ts",
     "ble/src/**/*.ts",
     "ble.noble/src/**/*.ts",
-    "bridge/src/**/*.ts",
     "network.ble/src/**/*.ts",
-    "bridge-queue-repository/src/**/*.ts",
-    "bridge-queue-repository.keyvalue/src/**/*.ts",
     "content-addressable-service/src/**/*.ts",
     "crypto/src/**/*.ts",
     "bridge-ble/src/**/*.ts",
