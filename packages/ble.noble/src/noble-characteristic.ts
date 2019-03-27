@@ -40,6 +40,8 @@ export class NobleCharacteristic implements IXyoCharacteristic {
   constructor(characteristic: noble.Characteristic) {
     this.characteristic = characteristic
     this.characteristic.on("data", this.onNotify)
+    this.characteristic.on("notify", this.onNotify)
+    this.characteristic.on("broadcast", this.onNotify)
   }
 
   public read(): Promise < Buffer > {
@@ -101,7 +103,7 @@ export class NobleCharacteristic implements IXyoCharacteristic {
     return new Promise((resolve, reject) => {
       this.logger.info(`Trying to subscribe to characteristic with uuid: ${this.characteristic.uuid}`)
 
-      this.characteristic.notify(true, (error) => {
+      this.characteristic.subscribe((error) => {
         if (error == null) {
           this.logger.info(`Successfully subscribed to characteristic with uuid: ${this.characteristic.uuid}`)
           resolve()
