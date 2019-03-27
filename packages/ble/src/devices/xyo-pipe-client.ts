@@ -4,6 +4,7 @@ import { IXyoNetworkPipe, IXyoNetworkPeer, CatalogueItem } from '@xyo-network/ne
 import { XyoLogger } from '@xyo-network/logger'
 import { IXyoSerializableObject } from '@xyo-network/serialization'
 import { rssiSerializationProvider } from '@xyo-network/heuristics-common'
+import { rejects } from 'assert'
 
 export class XyoPipeClient implements IXyoNetworkPipe {
   public networkHeuristics: IXyoSerializableObject[] = []
@@ -32,10 +33,13 @@ export class XyoPipeClient implements IXyoNetworkPipe {
   }
 
   public async tryCreatePipe (): Promise<null | IXyoNetworkPipe> {
-    return new Promise(async (resolve, reject) => {
-      const timeout = setTimeout(() => {
+    const timeout = new Promise<null | IXyoNetworkPipe>((_, reject) => {
+      setTimeout(() => {
         reject("Timeout")
       }, 10000)
+    })
+
+    const promise = new Promise<null | IXyoNetworkPipe>(async (resolve, reject) => {
 
       if (this.device.state !== 'connected') {
         await this.device.connect()
@@ -54,17 +58,16 @@ export class XyoPipeClient implements IXyoNetworkPipe {
           this.sessionCharacteristic = characteristics[0]
           await characteristics[0].subscribe()
           this.networkHeuristics = [rssiSerializationProvider.newInstance(this.device.rssi)]
-          clearTimeout(timeout)
           resolve(this)
         }
 
-        clearTimeout(timeout)
         reject("No XYO pipe characteristic 1")
       }
 
-      clearTimeout(timeout)
       resolve(null)
     })
+
+    return Promise.race([promise, timeout])
   }
 
   public async send (data: Buffer, awaitResponse?: boolean): Promise<Buffer | undefined> {
@@ -86,13 +89,15 @@ export class XyoPipeClient implements IXyoNetworkPipe {
   }
 
   public read (characteristic: IXyoCharacteristic): Promise<Buffer> {
-    return new Promise((resolve, reject) => {
+    const timeout = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject("Timeout")
+      }, 12000)
+    }) as Promise<Buffer>
+
+    const action = new Promise((resolve, reject) => {
       let buffer: Buffer
       let bytesReceived = 0
-
-      const timeout = setTimeout(() => {
-        reject("Timeout")
-      }, 20000)
 
       characteristic.on("notification", (data, isNotification) => {
         if (bytesReceived === 0) {
@@ -100,7 +105,6 @@ export class XyoPipeClient implements IXyoNetworkPipe {
           buffer = data.slice(4, data.length)
 
           if (buffer.length === bytesReceived - 4) {
-            clearTimeout(timeout)
             resolve(buffer)
           }
 
@@ -110,18 +114,22 @@ export class XyoPipeClient implements IXyoNetworkPipe {
         buffer = Buffer.concat([buffer, data])
 
         if (buffer.length === bytesReceived - 4) {
-          clearTimeout(timeout)
           resolve(buffer)
         }
       })
-    })
+    }) as Promise<Buffer>
+
+    return Promise.race([timeout, action])
   }
 
   public async chunkSend (data: Buffer, characteristic: IXyoCharacteristic): Promise<void> {
-    return new Promise(async (resolve, reject) => {
-      const timeout = setTimeout(() => {
+    const timeout = new Promise((resolve, reject) => {
+      setTimeout(() => {
         reject("Timeout")
       }, 10000)
+    })
+
+    const action = new Promise(async (resolve, reject) => {
 
       const chunksToSend = this.chunk(this.addBleSize(data), 20)
       this.logger.info(`Sending entire: ${data.toString('hex')}`)
@@ -130,10 +138,10 @@ export class XyoPipeClient implements IXyoNetworkPipe {
       for (let i = 0; i < chunksToSend.length; i++) {
         await characteristic.write(chunksToSend[i])
       }
-
-      clearTimeout(timeout)
       resolve()
     })
+
+    await Promise.race([timeout, action])
   }
 
   private chunk (data: Buffer, maxSize: number): Buffer[] {
