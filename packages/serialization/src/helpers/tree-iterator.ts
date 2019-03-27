@@ -18,9 +18,10 @@ export class XyoTreeIterator extends XyoBaseSerializable implements IXyoSerializ
   constructor (
     private readonly serializationService: IXyoSerializationService,
     private readonly parseResult: IParseResult,
-    private readonly readableName: string
+    private readonly readableName: string,
+    srcBuffer?: Buffer
   ) {
-    super(serializationService.schema)
+    super(serializationService.schema, srcBuffer)
 
   }
 
