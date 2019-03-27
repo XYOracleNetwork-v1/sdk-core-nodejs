@@ -1,14 +1,14 @@
 {
   "name": "@xyo-network/buffer-utils",
-  "version": "0.46.0",
+  "version": "0.47.0",
   "description": "Utilities for dealing with buffers in the XYO network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/errors": "^0.46.0",
-    "@xyo-network/utils": "^0.46.0",
+    "@xyo-network/errors": "^0.47.0",
+    "@xyo-network/utils": "^0.47.0",
     "bn.js": "^4.11.8"
   },
   "devDependencies": {

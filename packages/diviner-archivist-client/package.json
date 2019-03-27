@@ -1,13 +1,13 @@
 {
   "name": "@xyo-network/diviner-archivist-client",
-  "version": "0.46.0",
+  "version": "0.47.0",
   "description": "Implements a client to communicate with an archivist via graphql",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/meta-list": "^0.46.0"
+    "@xyo-network/meta-list": "^0.47.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
