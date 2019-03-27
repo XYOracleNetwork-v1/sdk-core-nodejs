@@ -38,6 +38,7 @@ export class XyoBluetoothNetwork implements IXyoNetworkProvider {
             }
           }).catch((e) => {
             console.log(`Failed ${e}`)
+            this.scanner.startScan()
             tryingDevice = false
           })
         }
