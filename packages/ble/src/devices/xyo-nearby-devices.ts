@@ -16,10 +16,10 @@ export class XyoNearbyDevices {
       }
     })
 
-    if (this.lastNumberOfDevices !== returnDevices.length) {
-      this.lastNumberOfDevices = returnDevices.length
-      this.logger.info(`${returnDevices.length} + XYO devices in range`)
-    }
+    // if (this.lastNumberOfDevices !== returnDevices.length) {
+    //   this.lastNumberOfDevices = returnDevices.length
+    this.logger.info(`${returnDevices.length} + XYO devices in range`)
+    // }
 
     return returnDevices
   }

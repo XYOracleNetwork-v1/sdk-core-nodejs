@@ -27,7 +27,7 @@ export class XyoBluetoothNetwork implements IXyoNetworkProvider {
 
           randomDevice.tryCreatePipe().then((createdPipe) => {
             if (timeout) {
-              clearTimeout(timeout)
+              clearInterval(timeout)
             }
 
             if (createdPipe) {
@@ -37,6 +37,7 @@ export class XyoBluetoothNetwork implements IXyoNetworkProvider {
               tryingDevice = false
             }
           }).catch((e) => {
+            console.log(`Failed ${e}`)
             tryingDevice = false
           })
         }

@@ -37,6 +37,7 @@ export class XyoPipeClient implements IXyoNetworkPipe {
     const timeout = new Promise<null | IXyoNetworkPipe>((_, reject) => {
       XyoBase.timeout(() => {
         console.log("timeout")
+        this.device.disconnect()
         reject("Timeout")
       }, 10000)
     })
