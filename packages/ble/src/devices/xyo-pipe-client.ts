@@ -103,7 +103,7 @@ export class XyoPipeClient implements IXyoNetworkPipe {
       let buffer: Buffer
       let bytesReceived = 0
 
-      characteristic.on("notification", (data, isNotification) => {
+      const onData = (data: Buffer, isNotification: boolean) => {
         if (bytesReceived === 0) {
           bytesReceived = data.readUInt32BE(0)
           buffer = data.slice(4, data.length)
@@ -120,13 +120,15 @@ export class XyoPipeClient implements IXyoNetworkPipe {
         if (buffer.length === bytesReceived - 4) {
           resolve(buffer)
         }
-      })
-    }) as Promise<Buffer>
+      }
+
+      characteristic.on("notification", onData)
+    }) as Promise < Buffer >
 
     return Promise.race([timeout, action])
   }
 
-  public async chunkSend (data: Buffer, characteristic: IXyoCharacteristic): Promise<void> {
+  public async chunkSend(data: Buffer, characteristic: IXyoCharacteristic): Promise < void > {
     const timeout = new Promise((resolve, reject) => {
       XyoBase.timeout(() => {
         console.log("timeout")
@@ -149,7 +151,7 @@ export class XyoPipeClient implements IXyoNetworkPipe {
     await Promise.race([timeout, action])
   }
 
-  private chunk (data: Buffer, maxSize: number): Buffer[] {
+  private chunk(data: Buffer, maxSize: number): Buffer[] {
     const chunks: Buffer[] = []
     let currentIndex = 0
 
@@ -162,7 +164,7 @@ export class XyoPipeClient implements IXyoNetworkPipe {
     return chunks
   }
 
-  private addBleSize (data: Buffer): Buffer {
+  private addBleSize(data: Buffer): Buffer {
     const buffer = Buffer.alloc(4)
     buffer.writeUInt32BE(data.length + 4, 0)
     return Buffer.concat([buffer, data])
