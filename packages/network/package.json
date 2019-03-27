@@ -1,13 +1,13 @@
 {
   "name": "@xyo-network/network",
-  "version": "0.41.0",
+  "version": "0.42.0",
   "description": "An abstraction around sending messages over a network from node to node in the XYO network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/serialization": "^0.41.0"
+    "@xyo-network/serialization": "^0.42.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
