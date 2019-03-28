@@ -58,8 +58,8 @@ export class XyoPipeClient implements IXyoNetworkPipe {
         })
 
         if (xyoPipeChar.length === 1) {
-          this.sessionCharacteristic = characteristics[0]
-          await characteristics[0].subscribe()
+          this.sessionCharacteristic = xyoPipeChar[0]
+          await xyoPipeChar[0].subscribe()
           this.networkHeuristics = [rssiSerializationProvider.newInstance(this.device.rssi)]
           resolve(this)
         }
