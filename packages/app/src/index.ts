@@ -27,8 +27,8 @@ import yaml, { safeDump } from 'js-yaml'
 import {
   validateConfigFile,
   validatePassword,
-  promptValidator,
   IValidationResult,
+  promptValidator,
 } from './validator'
 import { XyoCryptoProvider } from '@xyo-network/crypto'
 
@@ -40,6 +40,13 @@ export class XyoAppLauncher extends XyoBase {
   public yamlConfig: string | undefined
   public startNode = true
 
+  private password?: string
+  private isForever = false
+
+  public setForeverPass(pass: string) {
+    this.password = pass
+    this.isForever = true
+  }
   public async initialize(configName?: string) {
     let writeConfigFile = false
 
@@ -57,6 +64,9 @@ export class XyoAppLauncher extends XyoBase {
         this.yamlConfig = file
         this.config = yaml.safeLoad(file) as IAppConfig
       } else {
+        if (this.isForever) {
+          throw new XyoError(`Config file not found running forever`)
+        }
         this.logInfo(`Could not find a configuration file at ${configPath}`)
         const res = await new AppWizard(rootPath).createConfiguration(
           configName,
@@ -125,7 +135,7 @@ export class XyoAppLauncher extends XyoBase {
         featureOptions: {},
       }
     }
-    const decrypt = await this.addPidToPidsFolder()
+    await this.addPidToPidsFolder()
     const newNode = new XyoNode({
       config: {
         nodeRunnerDelegates: {
@@ -153,7 +163,7 @@ export class XyoAppLauncher extends XyoBase {
         peerTransport: {
           address: `/ip4/${this.config.ip}/tcp/${this.config.p2pPort}`,
         },
-        nodeNetwork: {
+        nodeNetworkFrom: {
           features,
           shouldServiceBlockPermissionRequests: isArchivist,
         },
@@ -243,23 +253,38 @@ export class XyoAppLauncher extends XyoBase {
 
   private async decryptPrivateKey(crypto: IEthCryptoKeys): Promise<string> {
     if (!crypto.encryptedKey || !crypto.salt) {
-      throw (new Error("No private ethereum key saved in configuration, run setup again"))
+      throw new Error(
+        'No private ethereum key saved in configuration, run setup again',
+      )
+    }
+    const provider = new XyoCryptoProvider()
+    let tryAgain = false
+
+    // password passed in start command
+    if (!this.password) {
+      tryAgain = true
+      // @ts-ignore
+      const { password } = await prompt<{ password }>({
+        type: 'input',
+        name: 'password',
+        message: 'What is your Diviner password?',
+        validate: promptValidator(validatePassword),
+      })
+      this.password = password
     }
 
-    // @ts-ignore
-    const { password } = await prompt<{ password }>({
-      type: 'input',
-      name: 'password',
-      message: 'What is your Diviner password?',
-      validate: promptValidator(validatePassword),
-    })
-    const provider = new XyoCryptoProvider()
-
     try {
-      const privateKey = provider.decrypt(password, crypto.encryptedKey, crypto.salt)
+      const privateKey = provider.decrypt(
+        this.password!,
+        crypto.encryptedKey,
+        crypto.salt,
+      )
       return privateKey
     } catch (e) {
-      this.logError(`Incorrect password, try again.`)
+      this.logError(`Incorrect password,  try again.`, e)
+      if (!tryAgain) {
+        process.exit(1)
+      }
     }
     return this.decryptPrivateKey(crypto)
   }
@@ -294,7 +319,15 @@ export class XyoAppLauncher extends XyoBase {
 export async function main(args: string[]) {
   const appLauncher = new XyoAppLauncher()
   try {
-    await appLauncher.initialize(args.length >= 3 ? args[2] : undefined)
+    if (path.basename(args[1]) === 'start-forever.js') {
+      if (args.length < 4) {
+        console.error(`Must run 'forever' with params 'yarn forever [config]'`)
+        process.exit(1)
+        return
+      }
+      appLauncher.setForeverPass(args[args.length - 1])
+    }
+    await appLauncher.initialize(args[2])
   } catch (err) {
     console.error(`There was an error during initialization. Will exit`, err)
     process.exit(1)
