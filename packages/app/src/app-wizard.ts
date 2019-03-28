@@ -227,7 +227,6 @@ export async function getEthereumAccountAddress(
   const provider = new XyoCryptoProvider()
 
   const { encrypted, salt } = provider.encrypt(password, ethereumPrivateKey)
-  console.log('ENCRYPTED, SALT', encrypted, salt)
   return { salt, address: ethereumAccountAddress, encryptedKey: encrypted }
 }
 
