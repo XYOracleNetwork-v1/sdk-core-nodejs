@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc -b packages",
     "release": "lerna publish",
-    "test": "export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose false --detectOpenHandles",
+    "test": "yarn build && export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose false --detectOpenHandles",
     "tslint": "tslint -c tslint.json -p packages/tsconfig.json",
     "clean": "node scripts/clean.js",
     "start": "yarn --cwd packages/app start",

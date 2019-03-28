@@ -22,6 +22,7 @@ import {
   validatePassword,
   promptValidator,
 } from './validator'
+import { writeFile, createDirectoryIfNotExists } from '@xyo-network/utils'
 import { XyoBase } from '@xyo-network/base'
 import path from 'path'
 import { ISqlConnectionDetails } from '@xyo-network/archivist-repository.sql'
@@ -190,9 +191,11 @@ export async function getEthereumNodeAddress(): Promise<string> {
   return ethereumNodeAddress
 }
 
-export async function getEthereumAccountAddress(): Promise<IEthCryptoKeys> {
+export async function getEthereumAccountAddress(
+  nodeName: string
+): Promise<IEthCryptoKeys> {
   // @ts-ignore
-  const { ethereumAccountAddress } = await prompt<{ ethereumAccountAddress: string }>({
+  const { ethereumAccountAddress } = await prompt<{ethereumAccountAddress: string }>({
     type: 'input',
     name: 'ethereumAccountAddress',
     message: 'What is your Ethereum address? This will start with `0x`',
@@ -211,14 +214,20 @@ export async function getEthereumAccountAddress(): Promise<IEthCryptoKeys> {
   const { password } = await prompt<{ password: string }>({
     type: 'input',
     name: 'password',
-    message: 'Please add a Diviner password. We do not store this.',
+    message: 'Please add a Diviner password.',
     validate: promptValidator(validatePassword),
   })
+
+  const rootPath = path.resolve(__dirname, '..')
+  const configFolder = path.resolve(rootPath, 'config')
+  await createDirectoryIfNotExists(configFolder)
+  const pathToWrite = path.resolve(configFolder, `${nodeName}.password`)
+  await writeFile(pathToWrite, password, 'utf8')
 
   const provider = new XyoCryptoProvider()
 
   const { encrypted, salt } = provider.encrypt(password, ethereumPrivateKey)
-
+  console.log('ENCRYPTED, SALT', encrypted, salt)
   return { salt, address: ethereumAccountAddress, encryptedKey: encrypted }
 }
 
@@ -417,7 +426,7 @@ export class AppWizard extends XyoBase {
       : Promise.resolve(undefined))
 
     const ethKeys = await (components.includes(XyoComponent.DIVINER)
-      ? getEthereumAccountAddress()
+      ? getEthereumAccountAddress(nodeName)
       : Promise.resolve(undefined))
 
     // tslint:disable-next-line:variable-name

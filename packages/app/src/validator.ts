@@ -14,7 +14,7 @@ import path from 'path'
 import { fileExists } from '@xyo-network/utils'
 import { IAppConfig } from './@types'
 
-export async function promptValidator<T>(validator: (val: T) => Promise<IValidationResult>) {
+export function promptValidator<T>(validator: (val: T) => Promise<IValidationResult>) {
   return async (v: T) => {
     const { validates, message } = await validator(v)
     if (validates) return true

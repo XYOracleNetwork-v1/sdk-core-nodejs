@@ -27,8 +27,8 @@ import yaml, { safeDump } from 'js-yaml'
 import {
   validateConfigFile,
   validatePassword,
-  promptValidator,
   IValidationResult,
+  promptValidator,
 } from './validator'
 import { XyoCryptoProvider } from '@xyo-network/crypto'
 
@@ -281,7 +281,7 @@ export class XyoAppLauncher extends XyoBase {
       )
       return privateKey
     } catch (e) {
-      this.logError(`Incorrect password, try again.`)
+      this.logError(`Incorrect password,  try again.`, e)
       if (!tryAgain) {
         process.exit(1)
       }
