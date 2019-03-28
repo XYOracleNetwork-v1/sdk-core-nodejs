@@ -163,7 +163,7 @@ export class XyoAppLauncher extends XyoBase {
         peerTransport: {
           address: `/ip4/${this.config.ip}/tcp/${this.config.p2pPort}`,
         },
-        nodeNetwork: {
+        nodeNetworkFrom: {
           features,
           shouldServiceBlockPermissionRequests: isArchivist,
         },
