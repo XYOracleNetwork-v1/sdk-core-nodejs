@@ -359,7 +359,7 @@ const peerConnectionDelegate: IXyoProvider<IXyoPeerConnectionDelegate, undefined
 
     const takeOriginChainServerInteractionFactory: IXyoBoundWitnessInteractionFactory = {
       newInstance: (signers, payload) =>  {
-        return new XyoBoundWitnessInteraction(
+        return new XyoBoundWitnessServerInteraction(
           signers,
           payload,
           serialization,
