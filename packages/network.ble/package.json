@@ -1,14 +1,14 @@
 {
   "name": "@xyo-network/network.ble",
-  "version": "0.48.0",
+  "version": "0.49.0",
   "description": "Network for talking to other nodes over ble",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Carter Harrison",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/ble": "^0.48.0",
-    "@xyo-network/network": "^0.48.0"
+    "@xyo-network/ble": "^0.49.0",
+    "@xyo-network/network": "^0.49.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
