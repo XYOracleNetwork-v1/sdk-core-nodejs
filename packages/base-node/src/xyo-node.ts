@@ -59,7 +59,7 @@ export const DEFAULT_NODE_OPTIONS: IXyoNodeOptions = {
     peerTransport: {
       address: '/ip4/0.0.0.0/tcp/11500'
     },
-    nodeNetwork: {
+    nodeNetworkFrom: {
       shouldServiceBlockPermissionRequests: true,
       features: {}
     },

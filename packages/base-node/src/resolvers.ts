@@ -153,7 +153,7 @@ const blockProducer: IXyoProvider<XyoBlockProducer, any> = {
 const blockWitness: IXyoProvider<XyoBlockWitness, any> = {
   async get(container, config) {
     const consensus = await container.get<IConsensusProvider>(IResolvers.CONSENSUS_PROVIDER)
-    const nodes = await container.get<IXyoNodeNetwork>(IResolvers.NODE_NETWORK)
+    const nodes = await container.get<IXyoNodeNetwork>(IResolvers.NODE_NETWORK_FROM)
 
     return new XyoBlockWitness(nodes, consensus)
   }
