@@ -20,6 +20,8 @@ import { readHeader } from './helpers/readHeader'
 import { parse } from "./helpers/parse"
 import { XyoTreeIterator } from "./helpers/tree-iterator"
 import { XyoOnTheFlySerializable } from "./helpers/on-the-fly-serializable"
+import { read } from "fs"
+import { XyoFiller } from "./xyo-filler"
 
 export class XyoSerializationService extends XyoBase implements IXyoSerializationService {
 
@@ -35,11 +37,12 @@ export class XyoSerializationService extends XyoBase implements IXyoSerializatio
     serializationType?: "buffer" | "hex" | undefined
   ): BufferOrString {
     const result = serializable.serialize()
+
     const buf = result instanceof Buffer ?
       result :
-      resolveSerializablesToBuffer(serializable.schemaObjectId, this.schema, result)
+      resolveSerializablesToBuffer(serializable.realSchema(), this.schema, result)
 
-    const b = serialize(buf, findSchemaById(serializable.schemaObjectId, this.schema))
+    const b = serialize(buf, serializable.realSchema())
     if (serializationType === 'hex') {
       return b.toString('hex')
     }
@@ -59,7 +62,7 @@ export class XyoSerializationService extends XyoBase implements IXyoSerializatio
     const src = deserializable instanceof Buffer ? deserializable : Buffer.from(deserializable, 'hex')
     const parseResult = this.parse(src)
     const schemaKey = Object.keys(this.schema).find(key => this.schema[key].id === parseResult.id)
-    return new XyoTreeIterator(this, parseResult, schemaKey || 'unknown')
+    return new XyoTreeIterator(this, parseResult, schemaKey || 'unknown', src)
   }
 
   public parse(src: Buffer): IParseResult {
@@ -74,8 +77,10 @@ export class XyoSerializationService extends XyoBase implements IXyoSerializatio
 
     const srcSchema = readHeader(src)
     const recipe = this.recipes[srcSchema.id]
+
+    // this happens when there is a type we do not know about
     if (!recipe) {
-      throw new XyoError(`No recipe exists for ${srcSchema.id}`)
+      return (new XyoFiller(this.schema, src) as IXyoSerializableObject) as T
     }
 
     const deserializationResult = recipe.deserialize(src, this) as T

@@ -9,15 +9,15 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoObjectSchema, IXyoSerializableObject, IIterableType } from "../@types"
-import { findSchemaById } from "./findSchemaById"
+import { IXyoObjectSchema, IXyoSerializableObject, IIterableType, IXyoObjectPartialSchema } from "../@types"
 import { XyoError, XyoErrors } from "@xyo-network/errors"
 import { getHeader } from "./getHeader"
 import { getNumberOfBytesRequiredForSizeBuffer } from "./getNumberOfBytesRequiredForSizeBuffer"
 import { getSizeHeader } from "./getSizeHeader"
+import { readHeader } from "./readHeader"
 
 export function resolveSerializablesToBuffer(
-  schemaId: number,
+  schema: IXyoObjectPartialSchema,
   objectSchema: IXyoObjectSchema,
   serializables: IXyoSerializableObject[]): Buffer {
 
@@ -25,9 +25,8 @@ export function resolveSerializablesToBuffer(
     return Buffer.alloc(0)
   }
 
-  const partialSchema = findSchemaById(schemaId, objectSchema)
-  if (partialSchema.iterableType === 'not-iterable') {
-    throw new XyoError(`Incorrect schema iterable type for ${schemaId}`)
+  if (schema.iterableType === 'not-iterable') {
+    throw new XyoError(`Incorrect schema iterable type for ${schema.id}`, XyoErrors.CRITICAL)
   }
 
   const serializablesById: {[s: string]: number} = {}
@@ -47,21 +46,24 @@ export function resolveSerializablesToBuffer(
   let arraySerializationType: IIterableType
 
   if (numberOfSerializerTypes > 1) {
-    if (partialSchema.iterableType === 'iterable-typed') {
-      throw new XyoError(`Incorrect schema iterable type for ${schemaId}`)
+    if (schema.iterableType === 'iterable-typed') {
+      throw new XyoError(`Incorrect schema iterable type for ${schema.id}`, XyoErrors.CRITICAL)
     }
+
     arraySerializationType = 'iterable-untyped'
   } else { // numberOfSerializerTypes === 1
-    arraySerializationType = partialSchema.iterableType || 'iterable-typed'
+    arraySerializationType = schema.iterableType || 'iterable-typed'
   }
 
   let highestByteAmount = 0
   const components = serializables.reduce((bufferCollection, serializable) => {
     const result = serializable.getData()
+
     if (result instanceof Buffer) {
       highestByteAmount = Math.max(result.length, highestByteAmount)
+
       bufferCollection.push({
-        id: serializable.schemaObjectId,
+        schema: serializable.realSchema(),
         buffer: result
       })
       return bufferCollection
@@ -71,16 +73,18 @@ export function resolveSerializablesToBuffer(
       const resultBuffer = result.serialize()
       highestByteAmount = Math.max(resultBuffer.length, highestByteAmount)
       bufferCollection.push({
-        id: serializable.schemaObjectId,
+        schema: serializable.realSchema(),
         buffer: resultBuffer
       })
       return bufferCollection
     }
 
-    const resolveBuffer = resolveSerializablesToBuffer(serializable.schemaObjectId, objectSchema, result)
+    const schemaOfSub = serializable.realSchema()
+
+    const resolveBuffer = resolveSerializablesToBuffer(schemaOfSub, objectSchema, result)
     highestByteAmount = Math.max(resolveBuffer.length, highestByteAmount)
     bufferCollection.push({
-      id: serializable.schemaObjectId,
+      schema: serializable.realSchema(),
       buffer: resolveBuffer
     })
 
@@ -95,7 +99,7 @@ export function resolveSerializablesToBuffer(
       collection.push(component.buffer)
       return collection
     }, [] as Buffer[])
-    const innerSchema = findSchemaById(components[0].id, objectSchema)
+    const innerSchema = components[0].schema
     return Buffer.concat([
       getHeader(
         highestByteAmount,
@@ -112,7 +116,7 @@ export function resolveSerializablesToBuffer(
 
   // 'iterable-untyped'
   const componentsWithHeaders = components.reduce((collection, component) => {
-    const innerSchema = findSchemaById(component.id, objectSchema)
+    const innerSchema = component.schema
     const componentHeader = getHeader(
       component.buffer.length,
       {
@@ -130,6 +134,6 @@ export function resolveSerializablesToBuffer(
 }
 
 interface IBufferIdPair {
-  id: number
+  schema: IXyoObjectPartialSchema
   buffer: Buffer
 }

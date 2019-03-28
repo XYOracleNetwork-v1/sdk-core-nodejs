@@ -12,6 +12,7 @@
 import { resolveSerializablesToBuffer } from '../helpers/resolveSerializablesToBuffer'
 import { IXyoSerializableObject, IXyoObjectSchema } from '../@types'
 import { XyoBaseSerializable } from '../helpers/base-serializable'
+import { findSchemaById } from '../helpers/findSchemaById'
 
 describe(`Serialization`, () => {
 
@@ -29,7 +30,7 @@ describe(`Serialization`, () => {
       }
     }
     const xCollection = new XCollection(schema, [new X(schema, 1)])
-    const result = resolveSerializablesToBuffer(2, schema, xCollection.getData())
+    const result = resolveSerializablesToBuffer(findSchemaById(2, schema), schema, xCollection.getData())
 
     expect(Buffer.from([
       0x00, // size bits with reserved bits
@@ -53,7 +54,7 @@ describe(`Serialization`, () => {
       }
     }
     const xCollection = new XCollection(schema, [new X(schema, 1), new X(schema, 256), new X(schema, 65536)])
-    const result = resolveSerializablesToBuffer(2, schema, xCollection.getData())
+    const result = resolveSerializablesToBuffer(findSchemaById(2, schema), schema, xCollection.getData())
 
     expect(Buffer.from([
       0x00, // size bits with reserved bits
@@ -88,7 +89,7 @@ describe(`Serialization`, () => {
       }
     }
     const xCollection = new XCollection(schema, [new X(schema, 1)])
-    const result = resolveSerializablesToBuffer(2, schema, xCollection.getData())
+    const result = resolveSerializablesToBuffer(findSchemaById(2, schema), schema, xCollection.getData())
 
     expect(Buffer.from([
       0x00, // size bits with reserved bits
@@ -112,7 +113,7 @@ describe(`Serialization`, () => {
       }
     }
     const xCollection = new XCollection(schema, [new X(schema, 1), new X(schema, 2)])
-    const result = resolveSerializablesToBuffer(2, schema, xCollection.getData())
+    const result = resolveSerializablesToBuffer(findSchemaById(2, schema), schema, xCollection.getData())
 
     expect(Buffer.from([
       0x00, // size bits with reserved bits
@@ -138,7 +139,7 @@ describe(`Serialization`, () => {
       }
     }
     const xCollection = new XCollection(schema, [new X(schema, 1), new X(schema, 2)])
-    const result = resolveSerializablesToBuffer(2, schema, xCollection.getData())
+    const result = resolveSerializablesToBuffer(findSchemaById(2, schema), schema, xCollection.getData())
 
     expect(Buffer.from([
       0x00, // size bits with reserved bits
@@ -171,7 +172,7 @@ describe(`Serialization`, () => {
       }
     }
     const xCollectionSet = new XCollectionSet(schema, [])
-    const result = resolveSerializablesToBuffer(3, schema, xCollectionSet.getData())
+    const result = resolveSerializablesToBuffer(findSchemaById(3, schema), schema, xCollectionSet.getData())
 
     expect(Buffer.from([]).equals(result)).toBe(true)
   })
@@ -196,7 +197,7 @@ describe(`Serialization`, () => {
     }
     const xCollection = new XCollection(schema, [new X(schema, 1), new X(schema, 2)])
     const xCollectionSet = new XCollectionSet(schema, [xCollection])
-    const result = resolveSerializablesToBuffer(3, schema, xCollectionSet.getData())
+    const result = resolveSerializablesToBuffer(findSchemaById(3, schema), schema, xCollectionSet.getData())
 
     expect(Buffer.from([
       0x20, // size bits with reserved bits
@@ -233,7 +234,7 @@ describe(`Serialization`, () => {
     }
     const xCollection = new XCollection(schema, [new X(schema, 1), new X(schema, 2)])
     const xCollectionSet = new XCollectionSet(schema, [xCollection])
-    const result = resolveSerializablesToBuffer(3, schema, xCollectionSet.getData())
+    const result = resolveSerializablesToBuffer(findSchemaById(3, schema), schema, xCollectionSet.getData())
 
     expect(Buffer.from([
       0x30, // size bits with reserved bits

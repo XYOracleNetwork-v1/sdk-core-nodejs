@@ -20,6 +20,7 @@ import { XyoKeySet, XyoFetter, XyoSignatureSet, XyoWitness, XyoBoundWitnessFragm
 import { schema } from '@xyo-network/serialization-schema'
 import { IRequestPermissionForBlockResult } from "@xyo-network/attribution-request"
 import { XyoError, XyoErrors } from "@xyo-network/errors"
+import { CatalogueItem } from "@xyo-network/network"
 import { XyoBase } from "@xyo-network/base"
 
 export class XyoRequestPermissionForBlockHandler extends XyoBaseHandler {
@@ -94,7 +95,12 @@ export class XyoRequestPermissionForBlockHandler extends XyoBaseHandler {
         witnessSet.witnesses[0]
       ])
 
-      await this.boundWitnessSuccessListener.onBoundWitnessSuccess(newBoundWitness, this.mutex)
+      await this.boundWitnessSuccessListener.onBoundWitnessSuccess(
+        newBoundWitness,
+        this.mutex,
+        CatalogueItem.BOUND_WITNESS
+      )
+
       const newBoundWitnessHash = await this.hashProvider.createHash(newBoundWitness.getSigningData())
 
       // Extract out the bridgeBlockSet
@@ -127,7 +133,7 @@ export class XyoRequestPermissionForBlockHandler extends XyoBaseHandler {
     }
 
     const signers = await this.originChainRepository.getSigners()
-    const payload = await this.payloadProvider.getPayload(this.originChainRepository)
+    const payload = await this.payloadProvider.getPayload(this.originChainRepository, CatalogueItem.BOUND_WITNESS)
 
     const keySet = new XyoKeySet(signers.map(s => s.publicKey))
     const fetter = new XyoFetter(keySet, payload.heuristics)

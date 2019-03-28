@@ -12,4 +12,4 @@
 export { XyoServerTcpNetwork } from './xyo-server-tcp-network'
 export { XyoClientTcpNetwork } from './xyo-client-tcp-network'
 
-export { IXyoNetworkAddressProvider } from './@types'
+export { IXyoNetworkAddressProvider, IXyoTCPNetworkAddress } from './@types'

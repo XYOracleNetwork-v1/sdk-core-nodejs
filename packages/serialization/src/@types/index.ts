@@ -80,6 +80,7 @@ export interface IXyoSerializationService {
 }
 
 export interface IXyoSerializableObject {
+  origin: Buffer | undefined
   schemaObjectId: number
   srcBuffer: Buffer | null
   getData(): Buffer | IXyoSerializableObject | IXyoSerializableObject[]
@@ -88,6 +89,7 @@ export interface IXyoSerializableObject {
   getReadableName(): string
   getReadableValue(): any
   isEqual(other: IXyoSerializableObject): boolean
+  realSchema (): IXyoObjectPartialSchema
 }
 
 export interface IXyoDeserializer<T extends IXyoSerializableObject> {

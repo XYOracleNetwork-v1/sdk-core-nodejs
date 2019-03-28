@@ -168,16 +168,19 @@
       "path": "block-witness"
     },
     {
+      "path": "ble"
+    },
+    {
+      "path": "ble.noble"
+    },
+    {
+      "path": "network.ble"
+    },
+    {
       "path": "content-addressable-service"
     },
     {
       "path": "crypto"
-    },
-    {
-      "path": "bridge-ble"
-    },
-    {
-      "path": "wifi-manager"
     }
   ],
   "include": [
@@ -232,9 +235,10 @@
     "consensus/src/**/*.ts",
     "block-producer/src/**/*.ts",
     "block-witness/src/**/*.ts",
+    "ble/src/**/*.ts",
+    "ble.noble/src/**/*.ts",
+    "network.ble/src/**/*.ts",
     "content-addressable-service/src/**/*.ts",
-    "crypto/src/**/*.ts",
-    "bridge-ble/src/**/*.ts",
-    "wifi-manager/src/**/*.ts"
+    "crypto/src/**/*.ts"
   ]
 }

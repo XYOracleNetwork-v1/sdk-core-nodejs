@@ -16,11 +16,13 @@ import { IXyoHashProvider, IXyoHash } from "@xyo-network/hashing"
 import { IXyoOriginChainRepository } from "@xyo-network/origin-chain"
 import { IXyoOriginBlockRepository } from "@xyo-network/origin-block-repository"
 import { XyoNestedBoundWitnessExtractor } from "./xyo-nested-bound-witness-extractor"
+import { CatalogueItem } from "@xyo-network/network"
 import { XyoPair } from '@xyo-network/utils'
 import { IXyoContentAddressableService } from '@xyo-network/content-addressable-service'
 
 export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBoundWitnessSuccessListener {
 
+  // BRIDGE
   constructor (
     private readonly hashingProvider: IXyoHashProvider,
     private readonly boundWitnessValidator: XyoBoundWitnessValidator,
@@ -31,7 +33,7 @@ export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBound
     super()
   }
 
-  public async onBoundWitnessSuccess(boundWitness: IXyoBoundWitness, mutex: any): Promise<void> {
+  public async onBoundWitnessSuccess(boundWitness: IXyoBoundWitness, mutex: any, choice: CatalogueItem): Promise<void> {
     const hashValue = await this.hashingProvider.createHash(boundWitness.getSigningData())
     // tslint:disable-next-line:prefer-array-literal
     const content: Array<XyoPair<IXyoHash, Buffer>> = []

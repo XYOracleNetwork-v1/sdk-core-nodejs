@@ -10,7 +10,7 @@
  */
 
 import { IXyoSignature, IXyoPublicKey } from '@xyo-network/signing'
-import { IXyoSerializableObject } from '@xyo-network/serialization'
+import { IXyoSerializableObject, XyoSerializationService } from '@xyo-network/serialization'
 import { IXyoHash } from '@xyo-network/hashing'
 
 /**

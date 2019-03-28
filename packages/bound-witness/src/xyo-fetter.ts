@@ -21,7 +21,7 @@ export class XyoFetter extends XyoBaseSerializable  implements IXyoFetter {
 
   public constructor (
     public keySet: IXyoKeySet,
-    public heuristics: IXyoSerializableObject[]
+    public heuristics: IXyoSerializableObject[],
   ) {
     super(schema)
   }

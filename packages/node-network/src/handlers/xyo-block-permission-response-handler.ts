@@ -20,6 +20,7 @@ import { IXyoSerializationService } from "@xyo-network/serialization"
 import { schema } from '@xyo-network/serialization-schema'
 import { IXyoP2PService } from "@xyo-network/p2p"
 import { XyoBaseHandler } from "./xyo-base-handler"
+import { CatalogueItem } from "@xyo-network/network"
 
 export class XyoBlockPermissionResponseHandler extends XyoBaseHandler {
 
@@ -180,14 +181,14 @@ export class XyoBlockPermissionResponseHandler extends XyoBaseHandler {
       blocks,
       [hash],
       await this.originChainRepository.getSigners(),
-      await this.payloadProvider.getPayload(this.originChainRepository)
+      await this.payloadProvider.getPayload(this.originChainRepository, CatalogueItem.BOUND_WITNESS)
     )
 
     if (!newBoundWitness) {
       return
     }
 
-    await this.boundWitnessSuccessListener.onBoundWitnessSuccess(newBoundWitness, mutex)
+    await this.boundWitnessSuccessListener.onBoundWitnessSuccess(newBoundWitness, mutex, CatalogueItem.BOUND_WITNESS)
     return
   }
 

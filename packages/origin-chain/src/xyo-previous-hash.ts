@@ -18,11 +18,11 @@ export class XyoPreviousHash extends XyoBaseSerializable {
   public static deserializer: IXyoDeserializer<XyoPreviousHash>
   public readonly schemaObjectId = schema.previousHash.id
 
-  constructor (public readonly hash: IXyoHash) {
-    super(schema)
+  constructor (public readonly hash: IXyoHash, original?: Buffer) {
+    super(schema, original)
   }
 
-  public getData(): IXyoSerializableObject[] {
+  public getData(): IXyoSerializableObject[] | Buffer {
     return [this.hash]
   }
 
@@ -38,9 +38,10 @@ class XyoPreviousHashDeserializer implements IXyoDeserializer<XyoPreviousHash> {
   public deserialize(data: Buffer, serializationService: IXyoSerializationService): XyoPreviousHash {
     const parseResult = serializationService.parse(data)
     const query = new ParseQuery(parseResult)
+
     return new XyoPreviousHash(
-      serializationService
-        .deserialize(query.getChildAt(0).readData(true)).hydrate<IXyoHash>()
+      serializationService.deserialize(query.getChildAt(0).readData(true)).hydrate<IXyoHash>(),
+      data
     )
   }
 }
