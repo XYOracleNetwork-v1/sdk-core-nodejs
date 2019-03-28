@@ -27,7 +27,7 @@ import { XyoBoundWitnessValidator, IXyoBoundWitnessValidationOptions } from '@xy
 import { IXyoNetworkProvider, IXyoNetworkProcedureCatalogue, CatalogueItem, XyoNetworkProcedureCatalogue } from '@xyo-network/network'
 import { XyoServerTcpNetwork } from '@xyo-network/network.tcp'
 import { XyoPeerInteractionRouter } from '@xyo-network/peer-interaction-router'
-import { XyoBoundWitnessInteraction } from '@xyo-network/peer-interaction-handlers'
+import { XyoBoundWitnessInteraction, XyoBoundWitnessServerInteraction } from '@xyo-network/peer-interaction-handlers'
 import { getSignerProvider } from '@xyo-network/signing.ecdsa'
 import { createDirectoryIfNotExists, IXyoProvider, IXyoRunnable } from '@xyo-network/utils'
 import { IXyoTransaction, IXyoTransactionRepository, XyoTransactionRepository } from '@xyo-network/transaction-pool'
@@ -341,7 +341,7 @@ const peerConnectionDelegate: IXyoProvider<IXyoPeerConnectionDelegate, undefined
 
     const standardServerInteractionFactory: IXyoBoundWitnessInteractionFactory = {
       newInstance: (signers, payload) =>  {
-        return new XyoBoundWitnessInteraction(
+        return new XyoBoundWitnessServerInteraction(
           signers,
           payload,
           serialization,
