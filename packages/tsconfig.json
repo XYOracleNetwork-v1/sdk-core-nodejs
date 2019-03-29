@@ -168,15 +168,6 @@
       "path": "block-witness"
     },
     {
-      "path": "ble"
-    },
-    {
-      "path": "ble.noble"
-    },
-    {
-      "path": "network.ble"
-    },
-    {
       "path": "content-addressable-service"
     },
     {
@@ -235,9 +226,6 @@
     "consensus/src/**/*.ts",
     "block-producer/src/**/*.ts",
     "block-witness/src/**/*.ts",
-    "ble/src/**/*.ts",
-    "ble.noble/src/**/*.ts",
-    "network.ble/src/**/*.ts",
     "content-addressable-service/src/**/*.ts",
     "crypto/src/**/*.ts"
   ]
