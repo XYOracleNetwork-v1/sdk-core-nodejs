@@ -20,10 +20,10 @@ import {
   createDirectoryIfNotExists,
 } from '@xyo-network/utils'
 import { XyoBase } from '@xyo-network/base'
-import path from 'path'
+import * as path from 'path'
 import { AppWizard } from './app-wizard'
 import { IAppConfig, IEthCryptoKeys } from './@types'
-import yaml, { safeDump } from 'js-yaml'
+import * as yaml from 'js-yaml'
 import {
   validateConfigFile,
   validatePassword,
@@ -95,7 +95,7 @@ export class XyoAppLauncher extends XyoBase {
       )
     }
     if (writeConfigFile) {
-      this.yamlConfig = safeDump(JSON.parse(JSON.stringify(this.config)))
+      this.yamlConfig = yaml.safeDump(JSON.parse(JSON.stringify(this.config)))
       await this.writeConfigFile(this.yamlConfig, this.config, configFolder)
     }
   }
@@ -348,6 +348,6 @@ export async function main(args: string[]) {
   }
 }
 
-if (require.main === module) {
-  main(process.argv)
-}
+// if (require.main === module) {
+main(process.argv)
+// }

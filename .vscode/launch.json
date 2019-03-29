@@ -48,6 +48,14 @@
       "request": "launch",
       "args": ["${relativeFile}"],
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register"]
+    },
+    {
+      "name": "Launch Archivist",
+      "type": "node",
+      "request": "launch",
+      "args": ["./packages/app/src/index.ts", "start"],
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "console": "integratedTerminal"
     }
   ]
 }
