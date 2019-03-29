@@ -530,12 +530,12 @@ export class XyoScscConsensusProvider extends XyoBase
     }
     const promises = []
 
-    for (let i = start - 1; i >= 0 || promises.length >= batchRequests; i--) {
+    for (let i = start - 1; i >= 0 && promises.length < batchRequests; i--) {
       promises.push(consensus.methods.requestChain(i).call({}, blockHeight))
     }
 
     const requestIds = await Promise.all(promises)
-    console.log('Got Request Ids', requestIds)
+    // console.log('Got Request Ids', requestIds)
     // TODO verify requestIds not in already visited
     const requests = await this.getRequests(requestIds)
 
