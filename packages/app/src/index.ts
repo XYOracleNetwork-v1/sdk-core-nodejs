@@ -45,6 +45,6 @@ export async function main(args: string[]) {
   }
 }
 
-// if (require.main === module) {
-main(process.argv)
-// }
+if (require.main === module) {
+  main(process.argv)
+}
