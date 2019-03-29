@@ -39,7 +39,7 @@
     "manage:ipfs:logs": "docker logs -f --tail 100 ipfs_host"
   },
   "devDependencies": {
-    "@types/web3": "1.0.14",
+    "@types/web3": "1.0.18",
     "@xyo-network/config-tslint": "^0.1.6",
     "enquirer": "^2.3.0",
     "husky": "^1.3.1",
