@@ -8,8 +8,8 @@
     "xyo-stop": "bin/stop-node.js"
   },
   "scripts": {
-    "forever": "forever ./bin/start-forever.js",
-    "start": "node --inspect --debug ./bin/start-node.js",
+    "forever": "forever --max-old-space-size=4096 ./bin/start-forever.js",
+    "start": "node --max-old-space-size=4096 ./bin/start-node.js",
     "stop": "./bin/stop-node.js"
   },
   "types": "dist/index.d.ts",
