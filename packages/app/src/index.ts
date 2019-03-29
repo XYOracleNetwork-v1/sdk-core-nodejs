@@ -103,7 +103,7 @@ export class XyoAppLauncher extends XyoBase {
   public async start() {
     if (!this.config) throw new XyoError(`Config not initialized`)
 
-    const nodeData = path.resolve(this.config.data, "name")
+    const nodeData = path.resolve(this.config.data, this.config.name)
     const isArchivist = Boolean(this.config.archivist)
     const isDiviner = Boolean(this.config.diviner)
 
