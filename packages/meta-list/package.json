@@ -14,5 +14,10 @@
     "ts-node": "^8.0.3",
     "tslint": "^5.12.1",
     "typescript": "^3.2.2"
+  },
+  "dependencies": {
+    "abstract-leveldown": "^6.0.2",
+    "leveldown": "^5.0.0",
+    "levelup": "^4.0.1"
   }
 }

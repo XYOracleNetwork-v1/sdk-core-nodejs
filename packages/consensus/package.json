@@ -12,7 +12,10 @@
     "@xyo-network/ipfs-client": "^0.49.0",
     "@xyo-network/utils": "^0.49.0",
     "@xyo-network/web3-service": "^0.49.0",
-    "ethereumjs-abi": "0.6.7"
+    "abstract-leveldown": "^6.0.2",
+    "ethereumjs-abi": "0.6.7",
+    "leveldown": "^5.0.0",
+    "levelup": "^4.0.1"
   },
   "devDependencies": {
     "@types/ethereumjs-abi": "^0.6.3",

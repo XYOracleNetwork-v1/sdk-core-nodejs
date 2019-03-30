@@ -12,7 +12,10 @@
     "@xyo-network/errors": "^0.49.0",
     "@xyo-network/ipfs-client": "^0.49.0",
     "@xyo-network/utils": "^0.49.0",
+    "abstract-leveldown": "^6.0.2",
     "ethereumjs-tx": "^1.3.7",
+    "leveldown": "^5.0.0",
+    "levelup": "^4.0.1",
     "web3": "^1.0.0-beta.51"
   },
   "devDependencies": {

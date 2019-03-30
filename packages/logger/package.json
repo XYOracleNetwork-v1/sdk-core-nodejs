@@ -7,6 +7,9 @@
   "author": "Ryan Pillsbury",
   "license": "MIT",
   "dependencies": {
+    "abstract-leveldown": "^6.0.2",
+    "leveldown": "^5.0.0",
+    "levelup": "^4.0.1",
     "winston": "^3.1.0",
     "winston-daily-rotate-file": "^3.4.1"
   },
