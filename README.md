@@ -1,12 +1,12 @@
-[logo]: https://www.xy.company/img/home/logo_xy.png
+[logo]: https://cdn.xy.company/img/brand/XY_Logo_GitHub.png
 
-![logo]
+[![logo]](https://xy.company)
 
 # XYO CORE SDK (sdk-core-nodejs)
 
-[![CircleCI](https://circleci.com/gh/XYOracleNetwork/sdk-core-nodejs.svg?style=svg)](https://circleci.com/gh/XYOracleNetwork/sdk-core-nodejs)
-[![Greenkeeper badge](https://badges.greenkeeper.io/XYOracleNetwork/sdk-core-nodejs.svg)](https://greenkeeper.io/)
-[![Maintainability](https://api.codeclimate.com/v1/badges/f6bc63330b1d2422973b/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability)
+[![NPM](https://nodei.co/npm/@xyo-network/sdk-core-node.png)](https://nodei.co/npm/@xyo-network/sdk-core-node/)
+
+[![Build Status](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs.svg?branch=develop)](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs) [![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability)
 
 ## Project Overview
 
@@ -42,6 +42,12 @@ After cloning the repository, change directory to the folder that houses the rep
 
 ```sh
   cd sdk-core-nodejs
+```
+
+You will have to run Lerna to setup the links
+
+```sh
+  lerna bootstrap
 ```
 
 Once you've switched to the repository directory, install the dependencies. We prefer `yarn` but `npm` works just as well.

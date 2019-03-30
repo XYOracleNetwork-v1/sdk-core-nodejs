@@ -16,6 +16,7 @@
     "forever": "yarn --max-old-space-size=4096 --cwd packages/app forever",
     "start:diviner": "yarn --cwd ./packages/app start diviner",
     "start:archivist": "yarn --cwd ./packages/app start archivist",
+    "start:home": "ts-node --project ./packages/app/tsconfig.json  ./packages/app home",
     "start:archivist-diviner": "yarn --cwd ./packages/app start archivist-diviner",
     "start:bridge": "yarn --cwd ./packages/bridge-server start",
     "stop:bridge": "yarn --cwd ./packages/bridge-server stop",
@@ -46,7 +47,7 @@
     "lerna": "^3.10.7",
     "shelljs": "^0.8.3",
     "tslint": "^5.12.1",
-    "typescript": "^3.2.2",
+    "typescript": "^3.4.1",
     "web3": "^1.0.0-beta.40",
     "web3-providers": "^1.0.0-beta.40"
   },

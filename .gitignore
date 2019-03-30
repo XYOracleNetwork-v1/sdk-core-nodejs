@@ -86,3 +86,4 @@ scratch.ts
 scratch.js
 
 payondelivery/
+*.tsbuildinfo
