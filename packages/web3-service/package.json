@@ -13,9 +13,9 @@
     "@xyo-network/ipfs-client": "^0.49.0",
     "@xyo-network/utils": "^0.49.0",
     "ethereumjs-tx": "^1.3.7",
-    "web3": "1.0.0-beta.51",
-    "web3-eth-contract": "1.0.0-beta.51",
-    "web3-providers": "1.0.0-beta.51"
+    "web3": "1.0.0-beta.46",
+    "web3-eth-contract": "1.0.0-beta.46",
+    "web3-providers": "1.0.0-beta.46"
   },
   "devDependencies": {
     "@types/ethereumjs-tx": "^1.0.1",
