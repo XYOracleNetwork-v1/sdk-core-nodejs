@@ -28,9 +28,12 @@ describe('Consensus', async () => {
   // let consensus: any
   // let account: string
 
-  beforeEach(async () => {
+  it('Has no tests', async () => {
     expect(true).toBe(true)
-    /*const configName = 'kevinlocal'
+  })
+
+  /*beforeEach(async () => {
+    const configName = 'kevinlocal'
     const rootPath = path.resolve(__dirname, '../../../app/')
 
     const configFolder = path.resolve(rootPath, 'config')
@@ -56,7 +59,6 @@ describe('Consensus', async () => {
     )
 
     consensus = new XyoScscConsensusProvider(web3Service)*/
-  })
 
   /*async function delay(delayInms: number) {
     // tslint:disable-next-line: no-shadowed-variable
