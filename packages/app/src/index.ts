@@ -44,7 +44,3 @@ export async function main(args: string[]) {
     return
   }
 }
-
-// if (require.main === module) {
-main(process.argv)
-// }

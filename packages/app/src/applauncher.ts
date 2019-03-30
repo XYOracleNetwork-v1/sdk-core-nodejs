@@ -1,5 +1,5 @@
-import { XyoBase } from "@xyo-network/base"
-import { IAppConfig, IEthCryptoKeys } from "./@types"
+import { XyoBase } from '@xyo-network/base'
+import { IAppConfig, IEthCryptoKeys } from './@types'
 import path from 'path'
 import {
   ProcessManager,
@@ -8,18 +8,19 @@ import {
   writeFile,
   createDirectoryIfNotExists,
 } from '@xyo-network/utils'
-import { AppWizard } from "./app-wizard"
+import { AppWizard } from './app-wizard'
 import * as yaml from 'js-yaml'
 import {
   validateConfigFile,
   validatePassword,
   promptValidator,
 } from './validator'
+import { prompt } from 'enquirer'
 
 import { XyoError } from '@xyo-network/errors'
 import { CatalogueItem } from '@xyo-network/network'
 import { IXyoComponentFeatureResponse } from '@xyo-network/node-network'
-import { XyoNode } from "@xyo-network/base-node"
+import { XyoNode } from '@xyo-network/base-node'
 import { XyoCryptoProvider } from '@xyo-network/crypto'
 
 export class XyoAppLauncher extends XyoBase {
@@ -117,13 +118,13 @@ export class XyoAppLauncher extends XyoBase {
       const managedProcessNode = new ProcessManager(newNode)
       managedProcessNode.manage(process)
     } else {
-      throw new XyoError("Failed to Create Node")
+      throw new XyoError('Failed to Create Node')
     }
   }
 
   private async createNode(
     nodeData: string,
-    features: IXyoComponentFeatureResponse
+    features: IXyoComponentFeatureResponse,
   ) {
     if (this.config) {
       return new XyoNode({
@@ -131,17 +132,17 @@ export class XyoAppLauncher extends XyoBase {
           nodeRunnerDelegates: {
             enableBoundWitnessServer: Boolean(this.config.serverPort),
             enableGraphQLServer: Boolean(
-            this.config.graphqlPort && this.config.apis.length > 0,
-          ),
+              this.config.graphqlPort && this.config.apis.length > 0,
+            ),
             enableQuestionsWorker: this.isDiviner,
             enableBlockProducer: this.isDiviner,
             enableBlockWitness: this.isDiviner,
           },
           blockProducer: this.isDiviner
-          ? {
-            accountAddress: this.config.diviner!.ethereum.account.address,
-          }
-          : null,
+            ? {
+              accountAddress: this.config.diviner!.ethereum.account.address,
+            }
+            : null,
           data: {
             path: nodeData,
           },
@@ -158,10 +159,10 @@ export class XyoAppLauncher extends XyoBase {
             shouldServiceBlockPermissionRequests: this.isArchivist,
           },
           network: this.config.serverPort
-          ? {
-            port: this.config.serverPort,
-          }
-          : null,
+            ? {
+              port: this.config.serverPort,
+            }
+            : null,
           originChainRepository: {
             data: path.resolve(nodeData, 'origin-chain'),
           },
@@ -205,14 +206,14 @@ export class XyoAppLauncher extends XyoBase {
   private getArchivistRepositoryConfig() {
     if (this.config) {
       return this.isArchivist
-      ? {
-        host: this.config.archivist!.sql.host,
-        user: this.config.archivist!.sql.user,
-        password: this.config.archivist!.sql.password,
-        database: this.config.archivist!.sql.database,
-        port: this.config.archivist!.sql.port,
-      }
-      : null
+        ? {
+          host: this.config.archivist!.sql.host,
+          user: this.config.archivist!.sql.user,
+          password: this.config.archivist!.sql.password,
+          database: this.config.archivist!.sql.database,
+          port: this.config.archivist!.sql.port,
+        }
+        : null
     }
   }
 
@@ -231,41 +232,41 @@ export class XyoAppLauncher extends XyoBase {
   private getGraphQlConfig() {
     if (this.config) {
       return this.config.graphqlPort && this.config.apis.length > 0
-      ? {
-        port: this.config.graphqlPort,
-        apis: {
-          about: this.config.apis.includes('about'),
-          blockByHash: this.config.apis.includes('blockByHash'),
-          entities: this.config.apis.includes('entities'),
-          blockList: this.config.apis.includes('blockList'),
-          blocksByPublicKey: this.config.apis.includes(
-              'blocksByPublicKey',
-            ),
-          intersections: this.config.apis.includes('intersections'),
-          transactionList: this.config.apis.includes('transactionList'),
-        },
-      }
-      : null
+        ? {
+          port: this.config.graphqlPort,
+          apis: {
+            about: this.config.apis.includes('about'),
+            blockByHash: this.config.apis.includes('blockByHash'),
+            entities: this.config.apis.includes('entities'),
+            blockList: this.config.apis.includes('blockList'),
+            blocksByPublicKey: this.config.apis.includes('blocksByPublicKey'),
+            intersections: this.config.apis.includes('intersections'),
+            transactionList: this.config.apis.includes('transactionList'),
+          },
+        }
+        : null
     }
   }
 
   private async getWeb3ServiceConfig() {
     return this.isDiviner && this.config && this.config.diviner
-    ? {
-      host: this.config.diviner.ethereum.host,
-      address: this.config.diviner.ethereum.account.address,
-      privateKey: this.config.diviner.ethereum.account.privateKey
-          ? this.config.diviner.ethereum.account.privateKey
-          : await this.decryptPrivateKey(
-              this.config.diviner.ethereum.account,
-            ),
-      contracts: this.config.diviner.ethereum.contracts,
-    }
-    : null
+      ? {
+        host: this.config.diviner.ethereum.host,
+        address: this.config.diviner.ethereum.account.address,
+        privateKey: this.config.diviner.ethereum.account.privateKey
+            ? this.config.diviner.ethereum.account.privateKey
+            : await this.decryptPrivateKey(
+                this.config.diviner.ethereum.account,
+              ),
+        contracts: this.config.diviner.ethereum.contracts,
+      }
+      : null
   }
 
   private async showWizard(configName?: string) {
-    const res = await new AppWizard(this.rootPath).createConfiguration(configName)
+    const res = await new AppWizard(this.rootPath).createConfiguration(
+      configName,
+    )
     this.config = (res && res.config) || undefined
     this.startNode = Boolean(res && res.startNode)
     return true
@@ -341,7 +342,7 @@ export class XyoAppLauncher extends XyoBase {
 
   private async writeConfigFile(
     yamlStr: string,
-    config: IAppConfig
+    config: IAppConfig,
   ): Promise<void> {
     await createDirectoryIfNotExists(this.configFolder)
     const pathToWrite = path.resolve(this.configFolder, `${config.name}.yaml`)
