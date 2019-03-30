@@ -4,9 +4,7 @@
 
 # XYO CORE SDK (sdk-core-nodejs)
 
-[![CircleCI](https://circleci.com/gh/XYOracleNetwork/sdk-core-nodejs.svg?style=svg)](https://circleci.com/gh/XYOracleNetwork/sdk-core-nodejs)
-[![Greenkeeper badge](https://badges.greenkeeper.io/XYOracleNetwork/sdk-core-nodejs.svg)](https://greenkeeper.io/)
-[![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability)
+[![Build Status](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs.svg?branch=develop)](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs) [![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability)
 
 ## Project Overview
 

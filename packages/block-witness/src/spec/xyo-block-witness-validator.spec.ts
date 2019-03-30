@@ -9,6 +9,12 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
+describe(`XyoBlockWitnessValidator`, () => {
+  it(`Has no test yet`, async () => {
+    expect(true).toBe(true)
+  })
+})
+
 // import { XyoBlockWitnessValidator } from '../xyo-block-witness-validator'
 // import { BN } from '@xyo-network/utils'
 // import { getHashingProvider, IXyoHashProvider, XyoStubHash } from '@xyo-network/hashing'

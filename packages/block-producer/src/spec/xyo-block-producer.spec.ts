@@ -329,7 +329,7 @@ async function getConsensusProvider(options: {
       }
     },
     getActiveStake: async (paymentId: string) => {
-      console.log(`Payment Id`, paymentId)
+      // console.log(`Payment Id`, paymentId)
       if (options.activeStakeByPaymentId) {
         return options.activeStakeByPaymentId[paymentId]
       }
