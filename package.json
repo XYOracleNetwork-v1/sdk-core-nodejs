@@ -16,6 +16,7 @@
     "forever": "yarn --max-old-space-size=4096 --cwd packages/app forever",
     "start:diviner": "yarn --cwd ./packages/app start diviner",
     "start:archivist": "yarn --cwd ./packages/app start archivist",
+    "start:home": "ts-node --project ./packages/app/tsconfig.json  ./packages/app home",
     "start:archivist-diviner": "yarn --cwd ./packages/app start archivist-diviner",
     "start:bridge": "yarn --cwd ./packages/bridge-server start",
     "stop:bridge": "yarn --cwd ./packages/bridge-server stop",

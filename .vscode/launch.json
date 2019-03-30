@@ -56,6 +56,14 @@
       "args": ["./packages/app/src/index.ts", "archivist"],
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
       "console": "integratedTerminal"
+    },
+    {
+      "name": "Launch Home",
+      "type": "node",
+      "request": "launch",
+      "args": ["./packages/app/src/index.ts", "home"],
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "console": "integratedTerminal"
     }
   ]
 }
