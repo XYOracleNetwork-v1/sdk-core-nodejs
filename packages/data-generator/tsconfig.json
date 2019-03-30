@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+      "target": "es6",
+      "module": "commonjs",
+      "lib": ["esnext"],
+      "declaration": true,
+      "declarationMap": true,
+      "sourceMap": true,
+      "strict": true,
+      "composite": true,
+      "esModuleInterop": true,
+      "noImplicitAny": true,
+      "moduleResolution": "node",
+      "outDir": "dist",
+      "rootDir": "src"
+  },
+  "exclude": [
+    "node_modules",
+    "src/**/test/*",
+    "src/**/spec",
+    "src/**/*.spec.ts"
+  ],
+  "include": ["src/**/*"],
+  "references": [
+    {"path": "../archivist-repository.sql"},
+    {"path": "../base"},
+    {"path": "../bound-witness"},
+    {"path": "../buffer-utils"},
+    {"path": "../errors"},
+    {"path": "../hashing"},
+    {"path": "../heuristics-common"},
+    {"path": "../network"},
+    {"path": "../network.tcp"},
+    {"path": "../origin-block-repository"},
+    {"path": "../origin-chain"},
+    {"path": "../peer-connections"},
+    {"path": "../peer-interaction"},
+    {"path": "../peer-interaction-handlers"},
+    {"path": "../peer-interaction-router"},
+    {"path": "../serialization"},
+    {"path": "../serialization-schema"},
+    {"path": "../serializer"},
+    {"path": "../signing"},
+    {"path": "../signing.ecdsa"},
+    {"path": "../signing.rsa"},
+    {"path": "../storage"}
+  ]
+}

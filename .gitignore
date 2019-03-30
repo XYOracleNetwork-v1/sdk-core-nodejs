@@ -4,6 +4,7 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+package-lock.json
 
 # Runtime data
 pids
@@ -66,3 +67,23 @@ dist/
 # data
 data/
 archivist-db/
+db.json
+diviner-db/
+ipfs/
+sandbox/
+**/node-db/
+**/node-data/
+**/pids/*
+!**/pids/keep
+
+packages/app/config/*
+!packages/app/config/archivist.yaml
+!packages/app/config/diviner.yaml
+!packages/app/config/archivist-diviner.yaml
+
+# Scratch files
+scratch.ts
+scratch.js
+
+payondelivery/
+*.tsbuildinfo

@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+      "target": "es6",
+      "module": "commonjs",
+      "lib": ["esnext"],
+      "declaration": true,
+      "declarationMap": true,
+      "sourceMap": true,
+      "strict": true,
+      "composite": true,
+      "esModuleInterop": true,
+      "noImplicitAny": true,
+      "moduleResolution": "node",
+      "outDir": "dist",
+      "rootDir": "src"
+  },
+  "exclude": [
+    "node_modules",
+    "src/**/test/*",
+    "src/**/spec",
+    "src/**/*.spec.ts"
+  ],
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../hashing"},
+    { "path": "../signing"},
+    { "path": "../signing.ecdsa"},
+    { "path": "../signing.rsa"},
+    { "path": "../origin-chain"},
+    { "path": "../bound-witness"},
+    { "path": "../serialization"},
+    { "path": "../serialization-schema"},
+    { "path": "../heuristics-common"}
+  ]
+}

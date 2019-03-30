@@ -1,0 +1,232 @@
+{
+  "files": [],
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "strict": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "outDir": "dist"
+  },
+  "references": [
+    {
+      "path": "about-me"
+    },
+    {
+      "path": "archivist-network"
+    },
+    {
+      "path": "archivist-repository"
+    },
+    {
+      "path": "archivist-repository.sql"
+    },
+    {
+      "path": "base"
+    },
+    {
+      "path": "base-node"
+    },
+    {
+      "path": "bound-witness"
+    },
+    {
+      "path": "buffer-utils"
+    },
+    {
+      "path": "data-generator"
+    },
+    {
+      "path": "diviner-archivist-client"
+    },
+    {
+      "path": "diviner-archivist-client.graphql"
+    },
+    {
+      "path": "errors"
+    },
+    {
+      "path": "graphql-server"
+    },
+    {
+      "path": "hashing"
+    },
+    {
+      "path": "heuristics"
+    },
+    {
+      "path": "heuristics-common"
+    },
+    {
+      "path": "ipfs-client"
+    },
+    {
+      "path": "logger"
+    },
+    {
+      "path": "meta-list"
+    },
+    {
+      "path": "network"
+    },
+    {
+      "path": "network.tcp"
+    },
+    {
+      "path": "node-network"
+    },
+    {
+      "path": "origin-block-repository"
+    },
+    {
+      "path": "origin-chain"
+    },
+    {
+      "path": "p2p"
+    },
+    {
+      "path": "peer-connections"
+    },
+    {
+      "path": "peer-discovery"
+    },
+    {
+      "path": "peer-interaction"
+    },
+    {
+      "path": "peer-interaction-handlers"
+    },
+    {
+      "path": "peer-interaction-router"
+    },
+    {
+      "path": "questions"
+    },
+    {
+      "path": "serialization"
+    },
+    {
+      "path": "serialization-schema"
+    },
+    {
+      "path": "serializer"
+    },
+    {
+      "path": "signing"
+    },
+    {
+      "path": "signing.ecdsa"
+    },
+    {
+      "path": "signing.rsa"
+    },
+    {
+      "path": "storage"
+    },
+    {
+      "path": "storage.leveldb"
+    },
+    {
+      "path": "web3-question-service"
+    },
+    {
+      "path": "web3-service"
+    },
+    {
+      "path": "attribution-request"
+    },
+    {
+      "path": "attribution-request.node-network"
+    },
+    {
+      "path": "transaction-pool"
+    },
+    {
+      "path": "utils"
+    },
+    {
+      "path": "graphql-apis"
+    },
+    {
+      "path": "app"
+    },
+    {
+      "path": "consensus"
+    },
+    {
+      "path": "block-producer"
+    },
+    {
+      "path": "block-witness"
+    },
+    {
+      "path": "content-addressable-service"
+    },
+    {
+      "path": "crypto"
+    }
+  ],
+  "include": [
+    "about-me/src/**/*.ts",
+    "archivist-network/src/**/*.ts",
+    "archivist-repository/src/**/*.ts",
+    "archivist-repository.sql/src/**/*.ts",
+    "base/src/**/*.ts",
+    "base-node/src/**/*.ts",
+    "bound-witness/src/**/*.ts",
+    "buffer-utils/src/**/*.ts",
+    "data-generator/src/**/*.ts",
+    "diviner-archivist-client/src/**/*.ts",
+    "diviner-archivist-client.graphql/src/**/*.ts",
+    "diviner-graphql-api/src/**/*.ts",
+    "errors/src/**/*.ts",
+    "graphql-server/src/**/*.ts",
+    "hashing/src/**/*.ts",
+    "heuristics/src/**/*.ts",
+    "heuristics-common/src/**/*.ts",
+    "ipfs-client/src/**/*.ts",
+    "logger/src/**/*.ts",
+    "meta-list/src/**/*.ts",
+    "network/src/**/*.ts",
+    "network.tcp/src/**/*.ts",
+    "node-network/src/**/*.ts",
+    "origin-block-repository/src/**/*.ts",
+    "origin-chain/src/**/*.ts",
+    "p2p/src/**/*.ts",
+    "peer-connections/src/**/*.ts",
+    "peer-discovery/src/**/*.ts",
+    "peer-interaction/src/**/*.ts",
+    "peer-interaction-handlers/src/**/*.ts",
+    "peer-interaction-router/src/**/*.ts",
+    "questions/src/**/*.ts",
+    "serialization/src/**/*.ts",
+    "serialization-schema/src/**/*.ts",
+    "serializer/src/**/*.ts",
+    "signing/src/**/*.ts",
+    "signing.ecdsa/src/**/*.ts",
+    "signing.rsa/src/**/*.ts",
+    "storage/src/**/*.ts",
+    "storage.leveldb/src/**/*.ts",
+    "web3-question-service/src/**/*.ts",
+    "web3-service/src/**/*.ts",
+    "attribution-request/src/**/*.ts",
+    "attribution-request.node-network/src/**/*.ts",
+    "transaction-pool/src/**/*.ts",
+    "utils/src/**/*.ts",
+    "graphql-apis/src/**/*.ts",
+    "app/src/**/*.ts",
+    "consensus/src/**/*.ts",
+    "block-producer/src/**/*.ts",
+    "block-witness/src/**/*.ts",
+    "content-addressable-service/src/**/*.ts",
+    "crypto/src/**/*.ts"
+  ]
+}
