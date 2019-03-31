@@ -10,41 +10,61 @@
  */
 
 export { IAppConfig } from './@types'
-import * as path from 'path'
 import { XyoAppLauncher } from './applauncher'
+import commander from 'commander'
+import dotenvExpand from 'dotenv-expand'
 
-export async function main(args: string[]) {
-  const appLauncher = new XyoAppLauncher()
-  try {
-    if (path.basename(args[1]) === 'start-forever.js') {
-      if (args.length < 4) {
-        console.error(`Must run 'forever' with params 'yarn forever [config]'`)
+const getVersion = (): string => {
+  dotenvExpand({
+    parsed: {
+      APP_VERSION:'$npm_package_version',
+      APP_NAME:'$npm_package_name'
+    }
+  })
+
+  return process.env.APP_VERSION || 'Unknown'
+}
+
+export async function main() {
+  const program = commander
+
+  program
+    .version(getVersion())
+    .option("-c, --config [configfile]", "specify config file")
+    .option("-f, --forever [password]", "run forever")
+    .option("-p, --preflight [output]", "generates preflight report")
+    .arguments("[cmd] [target]")
+    .action(async (cmd, target) => {
+      console.log(`Arie: ${cmd}:${target}`)
+      const appLauncher = new XyoAppLauncher()
+      try {
+        if (program.forever && program.password) {
+          appLauncher.setForeverPass(program.password)
+        }
+        await appLauncher.initialize(target || program.configfile)
+      } catch (err) {
+        console.error(`There was an error during initialization. Will exit`, err)
         process.exit(1)
         return
       }
-      appLauncher.setForeverPass(args[args.length - 1])
-    }
-    await appLauncher.initialize(args[2])
-  } catch (err) {
-    console.error(`There was an error during initialization. Will exit`, err)
-    process.exit(1)
-    return
-  }
 
-  if (!appLauncher.startNode) {
-    console.log(`Exiting process after configuration`)
-    process.exit(0)
-  }
+      if (!appLauncher.startNode) {
+        console.log(`Exiting process after configuration`)
+        process.exit(0)
+        return
+      }
 
-  try {
-    await appLauncher.start()
-  } catch (err) {
-    console.error(`There was an error during start. Will exit`, err)
-    process.exit(1)
-    return
-  }
+      try {
+        await appLauncher.start()
+      } catch (err) {
+        console.error(`There was an error during start. Will exit`, err)
+        process.exit(1)
+        return
+      }
+    })
+    .parse(process.argv)
 }
 
 if (require.main === module) {
-  main(process.argv)
+  main()
 }

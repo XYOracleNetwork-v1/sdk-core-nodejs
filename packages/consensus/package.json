@@ -15,12 +15,14 @@
     "abstract-leveldown": "^6.0.2",
     "ethereumjs-abi": "0.6.7",
     "leveldown": "^5.0.0",
-    "levelup": "^4.0.1"
+    "levelup": "^4.0.1",
+    "yargs": "^13.2.2"
   },
   "devDependencies": {
     "@types/ethereumjs-abi": "^0.6.3",
     "@types/jest": "^24.0.11",
     "@types/node": "^11.12.1",
+    "@types/yargs": "^12.0.10",
     "jest": "^24.5.0",
     "js-yaml": "^3.12.1",
     "ts-jest": "^24.0.0",
