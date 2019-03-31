@@ -11,11 +11,11 @@ Implements the archivist repository backed by sql
 Using yarn
 
 ```sh
-  yarn add @xyo-network/archivist-repository.sql
+  yarn add @xyo-network/archivist-repository-sql
 ```
 
 Using npm
 
 ```sh
-  npm install @xyo-network/archivist-repository.sql --save
+  npm install @xyo-network/archivist-repository-sql --save
 ```

@@ -9,7 +9,9 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-export interface ISqlConnectionDetails {
+import { IArchivistRepositoryConfig } from '@xyo-network/archivist-repository'
+
+export interface ISqlArchivistRepositoryConfig extends IArchivistRepositoryConfig {
   host: string,
   user: string,
   password: string,

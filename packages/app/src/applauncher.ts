@@ -8,13 +8,13 @@ import {
   writeFile,
   createDirectoryIfNotExists,
 } from '@xyo-network/utils'
-import { AppWizard } from './app-wizard'
+import { AppWizard } from './wizard'
 import * as yaml from 'js-yaml'
 import {
   validateConfigFile,
   validatePassword,
   promptValidator,
-} from './validator'
+} from './validator/validator'
 import { prompt } from 'enquirer'
 
 import { XyoError } from '@xyo-network/errors'
@@ -40,7 +40,7 @@ export class XyoAppLauncher extends XyoBase {
     this.password = pass
     this.isForever = true
   }
-  public async initialize(configName?: string) {
+  public async initialize({ configName, database = "mysql" }: {configName?: string, database: string}) {
     let writeConfigFile = false
 
     if (configName) {
@@ -205,14 +205,8 @@ export class XyoAppLauncher extends XyoBase {
 
   private getArchivistRepositoryConfig() {
     if (this.config) {
-      return this.isArchivist
-        ? {
-          host: this.config.archivist!.sql.host,
-          user: this.config.archivist!.sql.user,
-          password: this.config.archivist!.sql.password,
-          database: this.config.archivist!.sql.database,
-          port: this.config.archivist!.sql.port,
-        }
+      return this.config.archivist
+        ? this.config.archivist.repository
         : null
     }
   }
@@ -285,7 +279,7 @@ export class XyoAppLauncher extends XyoBase {
     if (!this.password) {
       tryAgain = true
       // @ts-ignore
-      const { password } = await prompt<{ password }>({
+      const { password } = await this.prompt<{ password }>({
         type: 'input',
         name: 'password',
         message: 'What is your Diviner password?',

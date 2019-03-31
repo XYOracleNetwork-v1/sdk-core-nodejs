@@ -12,6 +12,7 @@
 import { IXyoPublicKey } from '@xyo-network/signing'
 import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { IXyoBoundWitness } from '@xyo-network/bound-witness'
+import { IXyoConfig } from '@xyo-network/base'
 
 /**
  * A persistance abstraction for an XyoArchivist. This interface powers
@@ -82,4 +83,8 @@ export interface IXyoOriginBlockResult {
 export interface IXyoOriginBlocksByPublicKeyResult {
   publicKeys: IXyoPublicKey[]
   boundWitnesses: IXyoBoundWitness[]
+}
+
+export interface IArchivistRepositoryConfig extends IXyoConfig {
+  platform: string /* mysql, level, neo4j, etc... */
 }

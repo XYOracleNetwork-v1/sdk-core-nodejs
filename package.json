@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "index.js",
-  "author": "Ryan Pillsbury",
+  "author": "XY Development Team",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -42,17 +42,13 @@
   "devDependencies": {
     "@xyo-network/config-tslint": "^0.1.6",
     "enquirer": "^2.3.0",
-    "lerna": "^3.10.7",
+    "lerna": "^3.13.1",
     "shelljs": "^0.8.3",
     "tslint": "^5.12.1",
     "typescript": "^3.4.1"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "echo \"Build must pass before committing\" && yarn build && yarn tslint"
-    }
-  },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {}
 }

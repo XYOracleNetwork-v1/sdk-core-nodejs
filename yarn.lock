@@ -1283,7 +1283,7 @@
     "@types/events" "*"
     "@types/node" "*"
 
-"@types/yargs@^12.0.1", "@types/yargs@^12.0.10", "@types/yargs@^12.0.2", "@types/yargs@^12.0.9":
+"@types/yargs@^12.0.10", "@types/yargs@^12.0.2", "@types/yargs@^12.0.9":
   version "12.0.10"
   resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-12.0.10.tgz#17a8ec65cd8e88f51b418ceb271af18d3137df67"
   integrity sha512-WsVzTPshvCSbHThUduGGxbmnwcpkgSctHGHTqzWyFg4lYAuV5qXlyFPOsP3OWqCINfmg/8VXP+zJaa4OxEsBQQ==
@@ -1854,6 +1854,11 @@ async@^2.6.1:
   integrity sha512-H1qVYh1MYhEEFLsP97cVKqCGo7KfCyTt6uEWqsTBr9SO84oK9Uwbyd/yCW+6rKJLHksBNUVWZDAjfS+Ccx0Bbg==
   dependencies:
     lodash "^4.17.11"
+
+async@~0.9.0:
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/async/-/async-0.9.2.tgz#aea74d5e61c1f899613bf64bda66d4c78f2fd17d"
+  integrity sha1-rqdNXmHB+JlhO/ZL2mbUx48v0X0=
 
 asynckit@^0.4.0:
   version "0.4.0"
@@ -3128,6 +3133,11 @@ deep-equal@~0.1.0:
   resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-0.1.2.tgz#b246c2b80a570a47c11be1d9bd1070ec878b87ce"
   integrity sha1-skbCuApXCkfBG+HZvRBw7IeLh84=
 
+deep-equal@~0.2.1:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-0.2.2.tgz#84b745896f34c684e98f2ce0e42abaf43bba017d"
+  integrity sha1-hLdFiW80xoTpjyzg5Cq69Du6AX0=
+
 deep-extend@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.6.0.tgz#c4fa7c95404a17a9c3e8ca7e1537312b736330ac"
@@ -4102,15 +4112,17 @@ forever-monitor@~1.7.0:
     utile "~0.2.1"
 
 forever@^0.15.3:
-  version "0.15.3"
-  resolved "https://registry.yarnpkg.com/forever/-/forever-0.15.3.tgz#77d9d7e15fd2f511ad9d84a110c7dd8fc8ecebc2"
-  integrity sha1-d9nX4V/S9RGtnYShEMfdj8js68I=
+  version "0.15.4"
+  resolved "https://registry.yarnpkg.com/forever/-/forever-0.15.4.tgz#62ae44d818102341d7aa143b53e3a4508a8b7980"
+  integrity sha512-Lax6LsoeL5J6LQeDeauB3RTYGiSgbDslu10kcjZ27whJWRY/Z6rgL40frAvhTrzvemSWTFvpuKKGUaxCU3Okyw==
   dependencies:
+    async "~0.2.9"
     cliff "~0.1.9"
     clone "^1.0.2"
     colors "~0.6.2"
     flatiron "~0.4.2"
     forever-monitor "~1.7.0"
+    mkdirp "0.x.x"
     nconf "~0.6.9"
     nssocket "~0.5.1"
     object-assign "^3.0.0"
@@ -4118,8 +4130,7 @@ forever@^0.15.3:
     path-is-absolute "~1.0.0"
     prettyjson "^1.1.2"
     shush "^1.0.0"
-    timespan "~2.3.0"
-    utile "~0.2.1"
+    utile "~0.3.0"
     winston "~0.8.1"
 
 form-data@~2.3.2:
@@ -6057,7 +6068,7 @@ left-pad@^1.3.0:
   resolved "https://registry.yarnpkg.com/left-pad/-/left-pad-1.3.0.tgz#5b8a3a7765dfe001261dde915589e782f8c94d1e"
   integrity sha512-XI5MPzVNApjAyhQzphX8BkmKsKUxD4LdyK24iZeQGinBN9yTQT3bFlCBy/aVx2HrNcqQGsdot8ghrjyrvMCoEA==
 
-lerna@^3.10.7:
+lerna@^3.13.1:
   version "3.13.1"
   resolved "https://registry.yarnpkg.com/lerna/-/lerna-3.13.1.tgz#feaff562176f304bd82329ca29ce46ab6c033463"
   integrity sha512-7kSz8LLozVsoUNTJzJzy+b8TnV9YdviR2Ee2PwGZSlVw3T1Rn7kOAPZjEi+3IWnOPC96zMPHVmjCmzQ4uubalw==
@@ -6111,7 +6122,7 @@ leveldown@^5.0.0:
     napi-macros "~1.8.1"
     node-gyp-build "~3.8.0"
 
-levelup@^4.0.0, levelup@^4.0.1:
+levelup@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/levelup/-/levelup-4.0.1.tgz#26321eb33ec1ddac1f29b1ac82f8b693e2cbf182"
   integrity sha512-l7KXOkINXHgNqmz0v9bxvRnMCUG4gmShFrzFSZXXhcqFnfvKAW8NerVsTICpZtVhGOMAmhY6JsVoVh/tUPBmdg==
@@ -6859,6 +6870,11 @@ ncp@0.4.x:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/ncp/-/ncp-0.4.2.tgz#abcc6cbd3ec2ed2a729ff6e7c1fa8f01784a8574"
   integrity sha1-q8xsvT7C7Spyn/bnwfqPAXhKhXQ=
+
+ncp@1.0.x:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/ncp/-/ncp-1.0.1.tgz#d15367e5cb87432ba117d2bf80fdf45aecfb4246"
+  integrity sha1-0VNn5cuHQyuhF9K/gP30Wuz7QkY=
 
 ndjson@hugomrdias/ndjson#feat/readable-stream3:
   version "1.5.0"
@@ -9290,11 +9306,6 @@ timed-out@^4.0.0, timed-out@^4.0.1:
   resolved "https://registry.yarnpkg.com/timed-out/-/timed-out-4.0.1.tgz#f32eacac5a175bea25d7fab565ab3ed8741ef56f"
   integrity sha1-8y6srFoXW+ol1/q1Zas+2HQe9W8=
 
-timespan@~2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/timespan/-/timespan-2.3.0.tgz#4902ce040bd13d845c8f59b27e9d59bad6f39929"
-  integrity sha1-SQLOBAvRPYRcj1myfp1ZutbzmSk=
-
 tmp@^0.0.33:
   version "0.0.33"
   resolved "https://registry.yarnpkg.com/tmp/-/tmp-0.0.33.tgz#6d34335889768d21b2bcda0aa277ced3b1bfadf9"
@@ -9755,6 +9766,18 @@ utile@0.2.1, utile@0.2.x, utile@~0.2.1:
     i "0.3.x"
     mkdirp "0.x.x"
     ncp "0.4.x"
+    rimraf "2.x.x"
+
+utile@~0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/utile/-/utile-0.3.0.tgz#1352c340eb820e4d8ddba039a4fbfaa32ed4ef3a"
+  integrity sha1-E1LDQOuCDk2N26A5pPv6oy7U7zo=
+  dependencies:
+    async "~0.9.0"
+    deep-equal "~0.2.1"
+    i "0.3.x"
+    mkdirp "0.x.x"
+    ncp "1.0.x"
     rimraf "2.x.x"
 
 utils-merge@1.0.1:

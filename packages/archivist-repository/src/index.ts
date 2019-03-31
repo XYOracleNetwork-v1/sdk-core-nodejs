@@ -16,5 +16,6 @@ export {
   IXyoEntityType,
   IXyoOriginBlockResult,
   IXyoOriginBlocksByPublicKeyResult,
-  IXyoIntersectionsList
+  IXyoIntersectionsList,
+  IArchivistRepositoryConfig
 } from './@types'

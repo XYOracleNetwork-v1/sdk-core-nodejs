@@ -19,6 +19,8 @@ import { IXyoMetaList } from "@xyo-network/meta-list"
 import { XyoIpfsClient } from '@xyo-network/ipfs-client'
 import { XyoBlockWitnessValidator } from "@xyo-network/block-witness"
 
+jest.setTimeout(1000000)
+
 describe('BlockProducer', () => {
 
   it('Block Producer should submit block because it has enough stake themselves', async () => {
