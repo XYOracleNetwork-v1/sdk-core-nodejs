@@ -204,7 +204,8 @@ export class XyoAppLauncher extends XyoBase {
   }
 
   private getArchivistRepositoryConfig() {
-    if (this.config) {
+    return null
+    /*if (this.config) {
       return this.isArchivist
         ? {
           host: this.config.archivist!.sql.host,
@@ -214,7 +215,7 @@ export class XyoAppLauncher extends XyoBase {
           port: this.config.archivist!.sql.port,
         }
         : null
-    }
+    }*/
   }
 
   private getAboutMeConfig() {

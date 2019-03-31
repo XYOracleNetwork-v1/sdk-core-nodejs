@@ -25,7 +25,7 @@ import {
 import { writeFile, createDirectoryIfNotExists } from '@xyo-network/utils'
 import { XyoBase } from '@xyo-network/base'
 import path from 'path'
-import { ISqlConnectionDetails } from '@xyo-network/archivist-repository-sql'
+import { ISqlArchivistRepositoryConfig } from '@xyo-network/archivist-repository-sql'
 import { intersection } from 'lodash'
 import { ICreateConfigResult, IEthCryptoKeys } from './@types'
 import dns from 'dns'
@@ -135,7 +135,7 @@ export async function getXyoComponents(): Promise<XyoComponent[]> {
   return xyoComponents
 }
 
-export async function gatherSQLCredentials(): Promise<ISqlConnectionDetails> {
+export async function gatherSQLCredentials(): Promise<ISqlArchivistRepositoryConfig> {
   const { host, user, password, database, port } = await prompt([
     {
       type: 'input',
@@ -174,6 +174,8 @@ export async function gatherSQLCredentials(): Promise<ISqlConnectionDetails> {
     user,
     password,
     database,
+    name: "MySql",
+    platform: "mysql",
     port: parseInt(port, 10),
   }
 }
