@@ -29,8 +29,367 @@ import { IXyoHash } from '@xyo-network/hashing'
 import { IOriginBlockQueryResult } from '@xyo-network/origin-block-repository'
 import { schema } from '@xyo-network/serialization-schema'
 import { XyoNextPublicKey, XyoIndex, XyoPreviousHash, XyoBridgeHashSet } from '@xyo-network/origin-chain'
+import { OriginBlockByHashQuery } from './queries/originblock-by-hash'
+import { BlocksTheProviderAttributionQuery } from './queries/blocks-that-provider-attribution'
 
 export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistRepository {
+
+  private static qryOriginBlocksByPublicKey = `
+    SELECT
+      CONCAT(pk2.key) as publicKeysForBlock,
+      ob.bytes as originBlockBytes
+    FROM PublicKeys pk
+      JOIN PublicKeys pk2 on pk.publicKeyGroupId = pk2.publicKeyGroupId
+      JOIN KeySignatures k on k.publicKeyId = pk2.id
+      JOIN OriginBlockParties obp on obp.id = k.originBlockPartyId
+      JOIN OriginBlocks ob on ob.id = obp.originBlockId
+    WHERE pk.key = ?
+    GROUP BY ob.id
+    ORDER BY obp.blockIndex;
+  `
+  private static qryIntersection = `
+    SELECT
+      ob1.signedHash as signedHash,
+      obp1.blockIndex as blockIndex
+    FROM PublicKeys pk1
+      JOIN PublicKeys pk1Others on pk1.publicKeyGroupId = pk1Others.publicKeyGroupId
+      JOIN KeySignatures ks1 on ks1.publicKeyId = pk1Others.id
+      JOIN OriginBlockParties obp1 on obp1.id = ks1.originBlockPartyId
+      JOIN OriginBlockParties obp2 on obp2.originBlockId = obp1.originBlockId AND obp2.id != obp1.id
+      JOIN KeySignatures ks2 on ks2.originBlockPartyId = obp2.id
+      JOIN PublicKeys pk2 on pk2.id = ks2.publicKeyId
+      JOIN PublicKeys pk2Others on pk2.publicKeyGroupId = pk2Others.publicKeyGroupId
+      JOIN OriginBlocks ob1 on ob1.id = obp1.originBlockId
+    WHERE pk1.key = ? AND pk2Others.key = ?
+    ORDER BY obp1.blockIndex
+    LIMIT ?
+  `
+
+  private static qryIntersection2 = `
+    SELECT
+      ob1.signedHash as signedHash,
+      obp1.blockIndex as blockIndex
+    FROM PublicKeys pk1
+      JOIN PublicKeys pk1Others on pk1.publicKeyGroupId = pk1Others.publicKeyGroupId
+      JOIN KeySignatures ks1 on ks1.publicKeyId = pk1Others.id
+      JOIN OriginBlockParties obp1 on obp1.id = ks1.originBlockPartyId
+      JOIN OriginBlockParties obp2 on obp2.originBlockId = obp1.originBlockId AND obp2.id != obp1.id
+      JOIN KeySignatures ks2 on ks2.originBlockPartyId = obp2.id
+      JOIN PublicKeys pk2 on pk2.id = ks2.publicKeyId
+      JOIN PublicKeys pk2Others on pk2.publicKeyGroupId = pk2Others.publicKeyGroupId
+      JOIN OriginBlocks ob1 on ob1.id = obp1.originBlockId
+    WHERE pk1.key = ? AND pk2Others.key = ? AND obp1.blockIndex > ?
+    ORDER BY obp1.blockIndex
+    LIMIT ?
+  `
+
+  private static qryTotalSize = `
+    SELECT
+      COUNT(ob1.id) as totalSize
+    FROM PublicKeys pk1
+      JOIN PublicKeys pk1Others on pk1.publicKeyGroupId = pk1Others.publicKeyGroupId
+      JOIN KeySignatures ks1 on ks1.publicKeyId = pk1Others.id
+      JOIN OriginBlockParties obp1 on obp1.id = ks1.originBlockPartyId
+      JOIN OriginBlockParties obp2 on obp2.originBlockId = obp1.originBlockId AND obp2.id != obp1.id
+      JOIN KeySignatures ks2 on ks2.originBlockPartyId = obp2.id
+      JOIN PublicKeys pk2 on pk2.id = ks2.publicKeyId
+      JOIN PublicKeys pk2Others on pk2.publicKeyGroupId = pk2Others.publicKeyGroupId
+      JOIN OriginBlocks ob1 on ob1.id = obp1.originBlockId
+    WHERE pk1.key = ? AND pk2Others.key = ?
+    ORDER BY obp1.blockIndex
+  `
+
+  private static qryTotalSize2 = `
+    SELECT
+      COUNT(pkg.id) as totalSize
+    FROM PublicKeyGroups pkg;
+  `
+
+  private static qryTotalSize3 = `
+    SELECT
+      COUNT(ob.id) as totalSize
+    FROM OriginBlocks ob;
+  `
+
+  private static qryEntities = `
+    SELECT
+      entities.publicKeyGroupId as publicKeyGroupId,
+      obp1.blockIndex as minIndex,
+      obp2.blockIndex as maxIndex,
+      pk1.key as publicKey,
+      pk2.key as mostRecentKey,
+      entities.allPublicKeys as allPublicKeys,
+      entities.publicKeyGroupId as hash
+    FROM
+      (
+        SELECT
+          pkg.id as publicKeyGroupId,
+          MIN(obp.blockIndex) as minBlockIndex,
+          MAX(obp.blockIndex) as maxBlockIndex,
+          COUNT(DISTINCT obp.id) as numberOfBlocks,
+          GROUP_CONCAT(DISTINCT pk.key) as allPublicKeys
+        FROM PublicKeyGroups pkg
+          JOIN PublicKeys pk on pk.publicKeyGroupId = pkg.id
+          JOIN KeySignatures ks on ks.publicKeyId = pk.id
+          JOIN OriginBlockParties obp on obp.id = ks.originBlockPartyId
+        GROUP BY pkg.id
+        LIMIT ?
+      ) as entities
+
+      JOIN PublicKeys pk1 on pk1.publicKeyGroupId = entities.publicKeyGroupId
+      JOIN KeySignatures ks1 on ks1.publicKeyId = pk1.id
+      JOIN OriginBlockParties obp1 on obp1.id = ks1.originBlockPartyId AND obp1.blockIndex = entities.minBlockIndex
+      JOIN PublicKeys pk2 on pk2.publicKeyGroupId = entities.publicKeyGroupId
+      JOIN KeySignatures ks2 on ks2.publicKeyId = pk2.id
+      JOIN OriginBlockParties obp2 on obp2.id = ks2.originBlockPartyId AND obp2.blockIndex = entities.maxBlockIndex
+    GROUP BY entities.publicKeyGroupId
+    ORDER BY entities.publicKeyGroupId;
+  `
+
+  private static qryEntities2 = `
+    SELECT
+      entities.publicKeyGroupId as publicKeyGroupId,
+      obp1.blockIndex as minIndex,
+      obp2.blockIndex as maxIndex,
+      pk1.key as publicKey,
+      pk2.key as mostRecentKey,
+      entities.allPublicKeys as allPublicKeys,
+      entities.publicKeyGroupId as hash
+    FROM
+      (
+        SELECT
+          pkg.id as publicKeyGroupId,
+          MIN(obp.blockIndex) as minBlockIndex,
+          MAX(obp.blockIndex) as maxBlockIndex,
+          COUNT(DISTINCT obp.id) as numberOfBlocks,
+          GROUP_CONCAT(DISTINCT pk.key) as allPublicKeys
+        FROM PublicKeyGroups pkg
+          JOIN PublicKeys pk on pk.publicKeyGroupId = pkg.id
+          JOIN KeySignatures ks on ks.publicKeyId = pk.id
+          JOIN OriginBlockParties obp on obp.id = ks.originBlockPartyId
+        WHERE pkg.id > ?
+        GROUP BY pkg.id
+        LIMIT ?
+      ) as entities
+
+      JOIN PublicKeys pk1 on pk1.publicKeyGroupId = entities.publicKeyGroupId
+      JOIN KeySignatures ks1 on ks1.publicKeyId = pk1.id
+      JOIN OriginBlockParties obp1 on obp1.id = ks1.originBlockPartyId AND obp1.blockIndex = entities.minBlockIndex
+      JOIN PublicKeys pk2 on pk2.publicKeyGroupId = entities.publicKeyGroupId
+      JOIN KeySignatures ks2 on ks2.publicKeyId = pk2.id
+      JOIN OriginBlockParties obp2 on obp2.id = ks2.originBlockPartyId AND obp2.blockIndex = entities.maxBlockIndex
+    GROUP BY entities.publicKeyGroupId
+    ORDER BY entities.publicKeyGroupId;
+  `
+
+  private static qryDeletePayloadItems = `
+    DELETE p FROM PayloadItems p
+      JOIN OriginBlockParties obp on obp.id = p.originBlockPartyId
+      JOIN OriginBlocks ob on ob.id = obp.originBlockId
+    WHERE ob.signedHash = ?;
+  `
+
+  private static qryDeleteKeySignatures = `
+    DELETE k FROM KeySignatures k
+      JOIN OriginBlockParties obp on obp.id = k.originBlockPartyId
+      JOIN OriginBlocks ob on ob.id = obp.originBlockId
+    WHERE ob.signedHash = ?;
+  `
+
+  private static qryDeleteBlockParties = `
+    UPDATE OriginBlockParties obp2
+      JOIN OriginBlockParties obp on obp.id = obp2.previousOriginBlockPartyId
+      JOIN OriginBlocks ob on ob.id = obp.originBlockId
+      SET obp2.previousOriginBlockPartyId = NULL
+    WHERE ob.signedHash = ?;
+  `
+
+  private static qryDeleteBlockParties2 = `
+    DELETE obp FROM OriginBlockParties obp
+      JOIN OriginBlocks ob on ob.id = obp.originBlockId
+    WHERE ob.signedHash = ?;
+  `
+
+  private static qryDeleteOriginBlocks = `
+    DELETE ob FROM OriginBlocks ob
+    WHERE ob.signedHash = ?;
+  `
+
+  private static qryDeletePublicKeys = `
+    DELETE pk FROM PublicKeys pk
+      LEFT JOIN OriginBlockParties obp on obp.nextPublicKeyId = pk.id
+      LEFT JOIN KeySignatures ks on ks.publicKeyId = pk.id
+    WHERE obp.id IS NULL AND ks.publicKeyId IS NULL;
+  `
+
+  private static qryDeletePublicKeyGroups = `
+    DELETE pkg FROM PublicKeyGroups pkg
+      LEFT JOIN PublicKeys pk on pk.publicKeyGroupId = pkg.id
+    WHERE pk.id IS NULL;
+  `
+
+  private static qryContainsOriginBlock = `
+    SELECT
+    COUNT(ob.id) > 0 as containsOriginBlock
+      FROM OriginBlocks ob
+    WHERE ob.signedHash = ?
+  `
+
+  private static qryAllOriginBlockHashes = `
+    SELECT
+      signedHash
+    FROM OriginBlocks;
+  `
+
+  private static qryOriginBlocks = `
+    SELECT
+      ob.bytes as bytes
+    FROM OriginBlocks ob
+    ORDER BY ob.id
+    LIMIT ?
+  `
+
+  private static qryOriginBlocks2 = `
+    SELECT
+      ob.bytes as bytes
+    FROM OriginBlocks ob
+      JOIN OriginBlocks ob2 on ob2.signedHash = ?
+    WHERE ob.id > ob2.id
+    ORDER BY ob.id
+    LIMIT ?
+  `
+
+  private static qryExistingKeys = `
+    SELECT
+      pk.id as id,
+      pk.key as \`key\`,
+      pk.publicKeyGroupId as publicKeyGroupId
+    FROM PublicKeys pk
+    WHERE pk.key in (?)
+  `
+
+  private static qryAggrigateKeys = `
+    UPDATE PublicKeys pk
+      SET pk.publicKeyGroupId = ?
+    WHERE pk.publicKeyGroupId IN (?)
+  `
+
+  private static qryDeleteKeys = `
+    DELETE FROM PublicKeyGroups WHERE id IN (?)
+  `
+
+  private static qryInsertOriginBlocks = `
+    INSERT INTO OriginBlocks(signedHash, signedBytes, bytes, bridgedFromBlock, meta)
+    VALUES(?, ?, ?, ?, ?);
+  `
+
+  private static qryCreatePublicKeyGroup = `
+    INSERT INTO PublicKeyGroups() VALUES()
+  `
+
+  private static qryPublicKeyGroupsByKey = `
+    SELECT id, publicKeyGroupId FROM PublicKeys WHERE \`key\` = ? LIMIT 1
+  `
+
+  private static qryUpdatePublicKeys = `
+    UPDATE PublicKeys SET publicKeyGroupId = ? WHERE publicKeyGroupId = ?
+  `
+
+  private static qryInsertPublicKeys = `
+    INSERT INTO PublicKeys(\`key\`, publicKeyGroupId)
+    VALUES(?, ?)
+  `
+
+  private static qryDeletePublicKeyGroup = `
+    DELETE FROM PublicKeyGroups WHERE id = ?
+  `
+
+  private static qryPreviousOriginBlockParties = `
+    SELECT
+      obp.id as id
+      FROM OriginBlockParties obp
+      JOIN OriginBlocks ob on ob.id = obp.originBlockId
+      LEFT JOIN KeySignatures k on k.originBlockPartyId = obp.id
+      LEFT JOIN PublicKeys pk on pk.id = k.publicKeyId
+      LEFT JOIN PublicKeys npk on npk.id = obp.nextPublicKeyId
+      WHERE obp.blockIndex = ? AND
+      ob.signedHash = ? AND
+      (
+        pk.key IN (?) OR npk.key IN (?)
+      )
+    GROUP BY obp.id
+    LIMIT 1;
+  `
+
+  private static qryAllBlockPartyIds = `
+    SELECT
+      obp.id
+    FROM OriginBlockParties obp
+  `
+
+  private static qryInsertBlockParties = `
+    INSERT INTO OriginBlockParties (
+      originBlockId,
+      positionalIndex,
+      blockIndex,
+      bridgeHashSet,
+      payloadBytes,
+      nextPublicKeyId,
+      previousOriginBlockHash,
+      previousOriginBlockPartyId
+    )
+    VALUES
+      (?, ?, ?, ?, ?, ?, ?, ?);
+  `
+
+  private static qryInsertKeySignatures = `
+    INSERT INTO KeySignatures(
+      publicKeyId,
+      originBlockPartyId,
+      signature,
+      positionalIndex
+    )
+    VALUES(?, ?, ?, ?)
+  `
+
+  private static qryInsertPayloadItems = `
+    INSERT INTO PayloadItems(
+      originBlockPartyId,
+      isSigned,
+      schemaObjectId,
+      bytes,
+      positionalIndex
+    )
+    VALUES(?, ?, ?, ?, ?)
+    `
+
+  private static qryUpdateBlockParties = `
+    UPDATE OriginBlockParties
+    SET previousOriginBlockPartyId = ?
+    WHERE id IN (
+      SELECT
+        id
+      FROM (
+        SELECT
+          obp2.id as id
+        FROM OriginBlockParties obp2
+          JOIN (
+            SELECT
+              obp.id as originBlockId,
+              ob.signedHash as signedHash,
+              k.publicKeyId as publicKeyId,
+              obp.nextPublicKeyId as nextPublicKeyId
+            FROM OriginBlockParties obp
+              JOIN OriginBlocks ob on ob.id = obp.originBlockId
+              JOIN KeySignatures k on k.originBlockPartyId = obp.id
+            WHERE obp.id = ?
+          ) as other on other.signedHash = obp2.previousOriginBlockHash
+          LEFT JOIN KeySignatures k2 on k2.originBlockPartyId = obp2.id
+        WHERE other.nextPublicKeyId = k2.publicKeyId OR other.publicKeyId = k2.publicKeyId
+        GROUP BY obp2.id
+      ) as OriginBlockPartyIdsToUpdate
+    );
+  `
 
   constructor(
     private readonly sqlService: SqlService,
@@ -40,19 +399,9 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
   }
 
   public async getOriginBlocksByPublicKey(publicKey: IXyoPublicKey): Promise<IXyoOriginBlocksByPublicKeyResult> {
-    const results = await this.sqlService.query<Array<{publicKeysForBlock: string, originBlockBytes: Buffer}>>(`
-      SELECT
-        CONCAT(pk2.key) as publicKeysForBlock,
-        ob.bytes as originBlockBytes
-      FROM PublicKeys pk
-        JOIN PublicKeys pk2 on pk.publicKeyGroupId = pk2.publicKeyGroupId
-        JOIN KeySignatures k on k.publicKeyId = pk2.id
-        JOIN OriginBlockParties obp on obp.id = k.originBlockPartyId
-        JOIN OriginBlocks ob on ob.id = obp.originBlockId
-      WHERE pk.key = ?
-      GROUP BY ob.id
-      ORDER BY obp.blockIndex;
-    `, [publicKey.serializeHex()])
+    const results = await this.sqlService.query<Array<{publicKeysForBlock: string, originBlockBytes: Buffer}>>(
+      XyoArchivistSqlRepository.qryOriginBlocksByPublicKey, [publicKey.serializeHex()]
+    )
 
     const reducer: {
       publicKeys: {
@@ -95,57 +444,14 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
     let getIntersectionsQuery: Promise<QResult>
 
     if (!cursor) {
-      getIntersectionsQuery = this.sqlService.query<QResult>(`
-        SELECT
-        ob1.signedHash as signedHash,
-        obp1.blockIndex as blockIndex
-        FROM PublicKeys pk1
-          JOIN PublicKeys pk1Others on pk1.publicKeyGroupId = pk1Others.publicKeyGroupId
-          JOIN KeySignatures ks1 on ks1.publicKeyId = pk1Others.id
-          JOIN OriginBlockParties obp1 on obp1.id = ks1.originBlockPartyId
-          JOIN OriginBlockParties obp2 on obp2.originBlockId = obp1.originBlockId AND obp2.id != obp1.id
-          JOIN KeySignatures ks2 on ks2.originBlockPartyId = obp2.id
-          JOIN PublicKeys pk2 on pk2.id = ks2.publicKeyId
-          JOIN PublicKeys pk2Others on pk2.publicKeyGroupId = pk2Others.publicKeyGroupId
-          JOIN OriginBlocks ob1 on ob1.id = obp1.originBlockId
-        WHERE pk1.key = ? AND pk2Others.key = ?
-        ORDER BY obp1.blockIndex
-        LIMIT ?
-      `, [publicKeyA, publicKeyB, limit + 1])
+      getIntersectionsQuery = this.sqlService.query<QResult>(
+        XyoArchivistSqlRepository.qryIntersection, [publicKeyA, publicKeyB, limit + 1])
     } else {
-      getIntersectionsQuery = this.sqlService.query<QResult>(`
-        SELECT
-          ob1.signedHash as signedHash,
-          obp1.blockIndex as blockIndex
-        FROM PublicKeys pk1
-          JOIN PublicKeys pk1Others on pk1.publicKeyGroupId = pk1Others.publicKeyGroupId
-          JOIN KeySignatures ks1 on ks1.publicKeyId = pk1Others.id
-          JOIN OriginBlockParties obp1 on obp1.id = ks1.originBlockPartyId
-          JOIN OriginBlockParties obp2 on obp2.originBlockId = obp1.originBlockId AND obp2.id != obp1.id
-          JOIN KeySignatures ks2 on ks2.originBlockPartyId = obp2.id
-          JOIN PublicKeys pk2 on pk2.id = ks2.publicKeyId
-          JOIN PublicKeys pk2Others on pk2.publicKeyGroupId = pk2Others.publicKeyGroupId
-          JOIN OriginBlocks ob1 on ob1.id = obp1.originBlockId
-        WHERE pk1.key = ? AND pk2Others.key = ? AND obp1.blockIndex > ?
-        ORDER BY obp1.blockIndex
-        LIMIT ?
-      `, [publicKeyA, publicKeyB, parseInt(cursor, 10), limit + 1])
+      getIntersectionsQuery = this.sqlService.query<QResult>(
+        XyoArchivistSqlRepository.qryIntersection2, [publicKeyA, publicKeyB, parseInt(cursor, 10), limit + 1])
     }
-    const totalSizeQuery = this.sqlService.query<Array<{totalSize: number}>>(`
-      SELECT
-        COUNT(ob1.id) as totalSize
-      FROM PublicKeys pk1
-        JOIN PublicKeys pk1Others on pk1.publicKeyGroupId = pk1Others.publicKeyGroupId
-        JOIN KeySignatures ks1 on ks1.publicKeyId = pk1Others.id
-        JOIN OriginBlockParties obp1 on obp1.id = ks1.originBlockPartyId
-        JOIN OriginBlockParties obp2 on obp2.originBlockId = obp1.originBlockId AND obp2.id != obp1.id
-        JOIN KeySignatures ks2 on ks2.originBlockPartyId = obp2.id
-        JOIN PublicKeys pk2 on pk2.id = ks2.publicKeyId
-        JOIN PublicKeys pk2Others on pk2.publicKeyGroupId = pk2Others.publicKeyGroupId
-        JOIN OriginBlocks ob1 on ob1.id = obp1.originBlockId
-      WHERE pk1.key = ? AND pk2Others.key = ?
-      ORDER BY obp1.blockIndex
-    `, [publicKeyA, publicKeyB])
+    const totalSizeQuery = this.sqlService.query<Array<{totalSize: number}>>(
+      XyoArchivistSqlRepository.qryTotalSize, [publicKeyA, publicKeyB])
 
     const [intersectionResults, totalSizeResults] = await Promise.all([getIntersectionsQuery, totalSizeQuery])
     const totalSize = _.chain(totalSizeResults).first().get('totalSize').value() as number
@@ -172,83 +478,14 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
     let getEntitiesQuery: Promise<QResult> | undefined
 
     if (!offsetCursor) {
-      getEntitiesQuery = this.sqlService.query<QResult>(`
-        SELECT
-          entities.publicKeyGroupId as publicKeyGroupId,
-          obp1.blockIndex as minIndex,
-          obp2.blockIndex as maxIndex,
-          pk1.key as publicKey,
-          pk2.key as mostRecentKey,
-          entities.allPublicKeys as allPublicKeys,
-          entities.publicKeyGroupId as hash
-        FROM
-          (
-            SELECT
-              pkg.id as publicKeyGroupId,
-              MIN(obp.blockIndex) as minBlockIndex,
-              MAX(obp.blockIndex) as maxBlockIndex,
-              COUNT(DISTINCT obp.id) as numberOfBlocks,
-              GROUP_CONCAT(DISTINCT pk.key) as allPublicKeys
-            FROM PublicKeyGroups pkg
-              JOIN PublicKeys pk on pk.publicKeyGroupId = pkg.id
-              JOIN KeySignatures ks on ks.publicKeyId = pk.id
-              JOIN OriginBlockParties obp on obp.id = ks.originBlockPartyId
-            GROUP BY pkg.id
-            LIMIT ?
-          ) as entities
-
-          JOIN PublicKeys pk1 on pk1.publicKeyGroupId = entities.publicKeyGroupId
-          JOIN KeySignatures ks1 on ks1.publicKeyId = pk1.id
-          JOIN OriginBlockParties obp1 on obp1.id = ks1.originBlockPartyId AND obp1.blockIndex = entities.minBlockIndex
-          JOIN PublicKeys pk2 on pk2.publicKeyGroupId = entities.publicKeyGroupId
-          JOIN KeySignatures ks2 on ks2.publicKeyId = pk2.id
-          JOIN OriginBlockParties obp2 on obp2.id = ks2.originBlockPartyId AND obp2.blockIndex = entities.maxBlockIndex
-        GROUP BY entities.publicKeyGroupId
-        ORDER BY entities.publicKeyGroupId;
-      `, [limit + 1])
+      getEntitiesQuery = this.sqlService.query<QResult>(
+        XyoArchivistSqlRepository.qryEntities, [limit + 1])
     } else {
-      getEntitiesQuery = this.sqlService.query<QResult>(`
-        SELECT
-          entities.publicKeyGroupId as publicKeyGroupId,
-          obp1.blockIndex as minIndex,
-          obp2.blockIndex as maxIndex,
-          pk1.key as publicKey,
-          pk2.key as mostRecentKey,
-          entities.allPublicKeys as allPublicKeys,
-          entities.publicKeyGroupId as hash
-        FROM
-          (
-            SELECT
-              pkg.id as publicKeyGroupId,
-              MIN(obp.blockIndex) as minBlockIndex,
-              MAX(obp.blockIndex) as maxBlockIndex,
-              COUNT(DISTINCT obp.id) as numberOfBlocks,
-              GROUP_CONCAT(DISTINCT pk.key) as allPublicKeys
-            FROM PublicKeyGroups pkg
-              JOIN PublicKeys pk on pk.publicKeyGroupId = pkg.id
-              JOIN KeySignatures ks on ks.publicKeyId = pk.id
-              JOIN OriginBlockParties obp on obp.id = ks.originBlockPartyId
-            WHERE pkg.id > ?
-            GROUP BY pkg.id
-            LIMIT ?
-          ) as entities
-
-          JOIN PublicKeys pk1 on pk1.publicKeyGroupId = entities.publicKeyGroupId
-          JOIN KeySignatures ks1 on ks1.publicKeyId = pk1.id
-          JOIN OriginBlockParties obp1 on obp1.id = ks1.originBlockPartyId AND obp1.blockIndex = entities.minBlockIndex
-          JOIN PublicKeys pk2 on pk2.publicKeyGroupId = entities.publicKeyGroupId
-          JOIN KeySignatures ks2 on ks2.publicKeyId = pk2.id
-          JOIN OriginBlockParties obp2 on obp2.id = ks2.originBlockPartyId AND obp2.blockIndex = entities.maxBlockIndex
-        GROUP BY entities.publicKeyGroupId
-        ORDER BY entities.publicKeyGroupId;
-      `, [offsetCursor, limit + 1])
+      getEntitiesQuery = this.sqlService.query<QResult>(
+        XyoArchivistSqlRepository.qryEntities2, [offsetCursor, limit + 1])
     }
 
-    const totalSizeQuery = this.sqlService.query<Array<{totalSize: number}>>(`
-      SELECT
-        COUNT(pkg.id) as totalSize
-      FROM PublicKeyGroups pkg;
-    `)
+    const totalSizeQuery = this.sqlService.query<Array<{totalSize: number}>>(XyoArchivistSqlRepository.qryTotalSize2)
 
     const [entitiesResults, totalSizeResults] = await Promise.all([getEntitiesQuery, totalSizeQuery])
     const totalSize = _.chain(totalSizeResults).first().get('totalSize').value() as number
@@ -291,70 +528,31 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
   public async removeOriginBlock(hash: Buffer): Promise<void> {
     const hexHash = hash.toString('hex')
 
-    await this.sqlService.query(`
-      DELETE p FROM PayloadItems p
-        JOIN OriginBlockParties obp on obp.id = p.originBlockPartyId
-        JOIN OriginBlocks ob on ob.id = obp.originBlockId
-      WHERE ob.signedHash = ?;
-    `, [hexHash])
+    await this.sqlService.query(XyoArchivistSqlRepository.qryDeletePayloadItems, [hexHash])
 
-    await this.sqlService.query(`
-      DELETE k FROM KeySignatures k
-        JOIN OriginBlockParties obp on obp.id = k.originBlockPartyId
-        JOIN OriginBlocks ob on ob.id = obp.originBlockId
-      WHERE ob.signedHash = ?;
-    `, [hexHash])
+    await this.sqlService.query(XyoArchivistSqlRepository.qryDeleteKeySignatures, [hexHash])
 
-    await this.sqlService.query(`
-      UPDATE OriginBlockParties obp2
-        JOIN OriginBlockParties obp on obp.id = obp2.previousOriginBlockPartyId
-        JOIN OriginBlocks ob on ob.id = obp.originBlockId
-        SET obp2.previousOriginBlockPartyId = NULL
-      WHERE ob.signedHash = ?;
-    `, [hexHash])
+    await this.sqlService.query(XyoArchivistSqlRepository.qryDeleteBlockParties, [hexHash])
 
-    await this.sqlService.query(`
-      DELETE obp FROM OriginBlockParties obp
-        JOIN OriginBlocks ob on ob.id = obp.originBlockId
-      WHERE ob.signedHash = ?;
-    `, [hexHash])
+    await this.sqlService.query(XyoArchivistSqlRepository.qryDeleteBlockParties2, [hexHash])
 
-    await this.sqlService.query(`
-      DELETE ob FROM OriginBlocks ob
-      WHERE ob.signedHash = ?;
-    `, [hexHash])
+    await this.sqlService.query(XyoArchivistSqlRepository.qryDeleteOriginBlocks, [hexHash])
 
-    await this.sqlService.query(`
-      DELETE pk FROM PublicKeys pk
-        LEFT JOIN OriginBlockParties obp on obp.nextPublicKeyId = pk.id
-        LEFT JOIN KeySignatures ks on ks.publicKeyId = pk.id
-      WHERE obp.id IS NULL AND ks.publicKeyId IS NULL;
-    `)
+    await this.sqlService.query(XyoArchivistSqlRepository.qryDeletePublicKeys)
 
-    await this.sqlService.query(`
-      DELETE pkg FROM PublicKeyGroups pkg
-        LEFT JOIN PublicKeys pk on pk.publicKeyGroupId = pkg.id
-      WHERE pk.id IS NULL;
-    `)
+    await this.sqlService.query(XyoArchivistSqlRepository.qryDeletePublicKeyGroups)
   }
 
   public async containsOriginBlock(hash: Buffer): Promise<boolean> {
-    const result = await this.sqlService.query<Array<{containsOriginBlock: number}>>(`
-      SELECT
-        COUNT(ob.id) > 0 as containsOriginBlock
-      FROM OriginBlocks ob
-      WHERE ob.signedHash = ?
-    `, [hash.toString('hex')])
+    const result = await this.sqlService.query<Array<{containsOriginBlock: number}>>(
+      XyoArchivistSqlRepository.qryContainsOriginBlock, [hash.toString('hex')])
 
     return Boolean(result[0].containsOriginBlock)
   }
 
   public async getAllOriginBlockHashes(): Promise<Buffer[]> {
-    const result = await this.sqlService.query<Array<{signedHash: string}>>(`
-      SELECT
-        signedHash
-      FROM OriginBlocks;
-    `)
+    const result = await this.sqlService.query<Array<{signedHash: string}>>(
+      XyoArchivistSqlRepository.qryAllOriginBlockHashes)
 
     return result.map(item => Buffer.from(item.signedHash, 'hex'))
   }
@@ -431,64 +629,26 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
   }
 
   public async getOriginBlockByHash(hash: Buffer): Promise<IXyoBoundWitness | undefined> {
-    const result = await this.sqlService.query<Array<{bytes: Buffer}>>(`
-      SELECT
-        ob.bytes as bytes
-      FROM OriginBlocks ob
-      WHERE signedHash = ?
-      LIMIT 1;
-    `, [hash.toString('hex')])
-
-    return _.chain(result)
-      .map(item => this.serializationService.deserialize(item.bytes).hydrate<IXyoBoundWitness>())
-      .first()
-      .value()
+    return new OriginBlockByHashQuery(this.sqlService, this.serializationService).send({ hash })
   }
 
   public async getBlocksThatProviderAttribution(hash: Buffer): Promise<{[h: string]: IXyoBoundWitness}> {
-    const results = await this.sqlService.query<Array<{bytes: Buffer, originBlockHash: string}>>(`
-      SELECT
-        ob.bytes as bytes,
-        ob.signedHash as originBlockHash
-      FROM OriginBlockAttributions oba
-        JOIN OriginBlocks ob on ob.signedHash = oba.sourceSignedHash
-      WHERE oba.providesAttributionForSignedHash = ?;
-    `, [hash.toString('hex')])
-
-    return results.reduce((memo: {[h: string]: IXyoBoundWitness}, result) => {
-      memo[result.originBlockHash] = this.serializationService.deserialize(result.bytes).hydrate()
-      return memo
-    }, {})
+    return new BlocksTheProviderAttributionQuery(this.sqlService, this.serializationService).send({ hash })
   }
 
   public async getOriginBlocks(limit: number, offsetHash?: Buffer | undefined): Promise<IOriginBlockQueryResult> {
     let originBlockQuery: Promise<Array<{bytes: Buffer}>> | undefined
 
     if (!offsetHash) {
-      originBlockQuery = this.sqlService.query<Array<{bytes: Buffer}>>(`
-        SELECT
-          ob.bytes as bytes
-        FROM OriginBlocks ob
-        ORDER BY ob.id
-        LIMIT ?
-      `, [limit + 1])
+      originBlockQuery = this.sqlService.query<Array<{bytes: Buffer}>>(
+        XyoArchivistSqlRepository.qryOriginBlocks, [limit + 1])
     } else {
-      originBlockQuery = this.sqlService.query<Array<{bytes: Buffer}>>(`
-        SELECT
-          ob.bytes as bytes
-        FROM OriginBlocks ob
-          JOIN OriginBlocks ob2 on ob2.signedHash = ?
-        WHERE ob.id > ob2.id
-        ORDER BY ob.id
-        LIMIT ?
-      `, [offsetHash.toString('hex'), limit + 1])
+      originBlockQuery = this.sqlService.query<Array<{bytes: Buffer}>>(
+        XyoArchivistSqlRepository.qryOriginBlocks2, [offsetHash.toString('hex'), limit + 1])
     }
 
-    const totalSizeQuery = this.sqlService.query<Array<{totalSize: number}>>(`
-      SELECT
-        COUNT(ob.id) as totalSize
-      FROM OriginBlocks ob;
-    `)
+    const totalSizeQuery = this.sqlService.query<Array<{totalSize: number}>>(
+      XyoArchivistSqlRepository.qryTotalSize3)
 
     const [originBlockResults, totalSizeResults] = await Promise.all([originBlockQuery, totalSizeQuery])
     const totalSize = _.chain(totalSizeResults).first().get('totalSize').value() as number
@@ -535,14 +695,8 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
   ): Promise<{publicKeyGroupId: number, publicKeyIds: number[]}> {
     try {
       const pks = _.chain(publicKeySet).map(pk => pk.serializeHex()).value()
-      const existingKeys = await this.sqlService.query<Array<{id: number, key: string, publicKeyGroupId: number}>>(`
-        SELECT
-          pk.id as id,
-          pk.key as \`key\`,
-          pk.publicKeyGroupId as publicKeyGroupId
-        FROM PublicKeys pk
-        WHERE pk.key in (?)
-      `, [pks])
+      const existingKeys = await this.sqlService.query<Array<{id: number, key: string, publicKeyGroupId: number}>>(
+        XyoArchivistSqlRepository.qryExistingKeys, [pks])
 
       if (existingKeys.length === 0) {
         const publicKeyGroupId = await this.createNewPublicKeyGroup()
@@ -567,12 +721,8 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
         const sortedKeys = _.chain(keysGroupedByPublicKeyGroupId).keys().sortBy().value()
         const firstKey = _.chain(sortedKeys).first().parseInt(10).value()
         const otherKeys = _.chain(sortedKeys).drop(1).map(sk => parseInt(sk, 10)).value()
-        await this.sqlService.query(`
-          UPDATE PublicKeys pk
-            SET pk.publicKeyGroupId = ?
-          WHERE pk.publicKeyGroupId IN (?)
-        `, [firstKey, otherKeys])
-        await this.sqlService.query(`DELETE FROM PublicKeyGroups WHERE id IN (?)`, [otherKeys])
+        await this.sqlService.query(XyoArchivistSqlRepository.qryAggrigateKeys, [firstKey, otherKeys])
+        await this.sqlService.query(XyoArchivistSqlRepository.qryDeleteKeys, [otherKeys])
         return firstKey
       }
 
@@ -647,18 +797,17 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
     bridgedFromOriginBlockHash?: IXyoHash
   ): Promise<number> {
     try {
-      const id = (await this.sqlService.query<{insertId: number}>(`
-        INSERT INTO OriginBlocks(signedHash, signedBytes, bytes, bridgedFromBlock, meta)
-        VALUES(?, ?, ?, ?, ?);
-      `, [
-        hash.serializeHex(),
-        originBlock.getSigningData(),
-        originBlock.serialize(),
-        (
-          bridgedFromOriginBlockHash &&
-          bridgedFromOriginBlockHash.serializeHex()) || null,
-        JSON.stringify(originBlock.getReadableValue(), null, 2)
-      ])).insertId
+      const id = (await this.sqlService.query<{insertId: number}>(
+        XyoArchivistSqlRepository.qryInsertOriginBlocks, [
+          hash.serializeHex(),
+          originBlock.getSigningData(),
+          originBlock.serialize(),
+          (
+            bridgedFromOriginBlockHash &&
+            bridgedFromOriginBlockHash.serializeHex()) || null,
+          JSON.stringify(originBlock.getReadableValue(), null, 2)
+        ]
+      )).insertId
 
       this.logInfo(`Created new origin block with id ${id}`)
       return id
@@ -669,7 +818,7 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
   }
 
   private async createNewPublicKeyGroup(): Promise<number> {
-    return (await this.sqlService.query<{insertId: number}>(`INSERT INTO PublicKeyGroups() VALUES()`)).insertId
+    return (await this.sqlService.query<{insertId: number}>(XyoArchivistSqlRepository.qryCreatePublicKeyGroup)).insertId
   }
 
   private async getUpdateOrCreatePublicKey(
@@ -678,9 +827,8 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
   ): Promise<number> {
     const hexKey = typeof key === 'string' ? key : key.serializeHex()
 
-    const publicKeyMatches = (await this.sqlService.query<Array<{id: number, publicKeyGroupId: number}>>(`
-      SELECT id, publicKeyGroupId FROM PublicKeys WHERE \`key\` = ? LIMIT 1
-    `, [hexKey]))
+    const publicKeyMatches = (await this.sqlService.query<Array<{id: number, publicKeyGroupId: number}>>(
+      XyoArchivistSqlRepository.qryPublicKeyGroupsByKey, [hexKey]))
 
     const publicKey = _.chain(publicKeyMatches).first().value()
     if (publicKey) {
@@ -689,19 +837,17 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
       }
       // Self heal out of turn blocks
       await this.sqlService.query(
-        `UPDATE PublicKeys SET publicKeyGroupId = ? WHERE publicKeyGroupId = ?`,
+        XyoArchivistSqlRepository.qryUpdatePublicKeys,
         [publicKeyGroupId, publicKey.publicKeyGroupId]
       )
 
-      await this.sqlService.query(`DELETE FROM PublicKeyGroups WHERE id = ?`, [publicKey.publicKeyGroupId])
+      await this.sqlService.query(XyoArchivistSqlRepository.qryDeletePublicKeyGroup, [publicKey.publicKeyGroupId])
 
       return publicKey.id
     }
 
-    return (await this.sqlService.query<{insertId: number}>(`
-      INSERT INTO PublicKeys(\`key\`, publicKeyGroupId)
-      VALUES(?, ?)
-    `, [hexKey, publicKeyGroupId])).insertId
+    return (await this.sqlService.query<{insertId: number}>(
+      XyoArchivistSqlRepository.qryInsertPublicKeys, [hexKey, publicKeyGroupId])).insertId
   }
 
   private async tryCreateOriginBlockParties(
@@ -737,52 +883,22 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
 
         let previousOriginBlockPartyId: number | undefined
 
-        const previousOriginBlockPartyIds = await this.sqlService.query<Array<{id: number}>>(`
-          SELECT
-            obp.id as id
-          FROM OriginBlockParties obp
-            JOIN OriginBlocks ob on ob.id = obp.originBlockId
-            LEFT JOIN KeySignatures k on k.originBlockPartyId = obp.id
-            LEFT JOIN PublicKeys pk on pk.id = k.publicKeyId
-            LEFT JOIN PublicKeys npk on npk.id = obp.nextPublicKeyId
-          WHERE obp.blockIndex = ? AND
-            ob.signedHash = ? AND
-            (
-              pk.key IN (?) OR npk.key IN (?)
-            )
-          GROUP BY obp.id
-          LIMIT 1;
-        `, [
-          blockIndex.number - 1,
-          previousOriginBlockHash,
-          publicKeys,
-          publicKeys,
-        ])
+        const previousOriginBlockPartyIds = await this.sqlService.query<Array<{id: number}>>(
+          XyoArchivistSqlRepository.qryPreviousOriginBlockParties, [
+            blockIndex.number - 1,
+            previousOriginBlockHash,
+            publicKeys,
+            publicKeys,
+          ])
 
         if (previousOriginBlockPartyIds.length) {
           previousOriginBlockPartyId = _.chain(previousOriginBlockPartyIds).first().get('id').value()
         }
 
-        await this.sqlService.query(`
-          SELECT
-            obp.id
-          FROM OriginBlockParties obp
-        `)
+        await this.sqlService.query(XyoArchivistSqlRepository.qryAllBlockPartyIds)
 
-        const insertId = (await this.sqlService.query<{insertId: number}>(`
-          INSERT INTO OriginBlockParties (
-            originBlockId,
-            positionalIndex,
-            blockIndex,
-            bridgeHashSet,
-            payloadBytes,
-            nextPublicKeyId,
-            previousOriginBlockHash,
-            previousOriginBlockPartyId
-          )
-          VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?);
-        `, [
+        const insertId = (await this.sqlService.query<{insertId: number}>(
+          XyoArchivistSqlRepository.qryInsertBlockParties, [
           originBlockId,
           currentIndex,
           blockIndex.number,
@@ -816,15 +932,8 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
   ) {
     return publicKeyIds.reduce(async (promiseChain, publicKeyId, currentIndex) => {
       const ids = await promiseChain
-      const insertId = (await this.sqlService.query<{insertId: number}>(`
-        INSERT INTO KeySignatures(
-          publicKeyId,
-          originBlockPartyId,
-          signature,
-          positionalIndex
-        )
-        VALUES(?, ?, ?, ?)
-      `, [
+      const insertId = (await this.sqlService.query<{insertId: number}>(
+        XyoArchivistSqlRepository.qryInsertKeySignatures, [
         publicKeyId,
         originBlockPartyId,
         this.serializationService.serialize(signatures[currentIndex], 'hex') as string,
@@ -845,16 +954,8 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
   private createPayloadItemReducer(originBlockPartyId: number, isSigned: boolean) {
     return async (promiseChain: Promise<number[]>, payloadItem: IXyoSerializableObject, currentIndex: number) => {
       const ids = await promiseChain
-      const newId = (await this.sqlService.query<{insertId: number}>(`
-        INSERT INTO PayloadItems(
-          originBlockPartyId,
-          isSigned,
-          schemaObjectId,
-          bytes,
-          positionalIndex
-        )
-        VALUES(?, ?, ?, ?, ?)
-      `, [
+      const newId = (await this.sqlService.query<{insertId: number}>(
+        XyoArchivistSqlRepository.qryInsertPayloadItems, [
         originBlockPartyId,
         isSigned,
         payloadItem.schemaObjectId,
@@ -918,34 +1019,8 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
   }
 
   private async linkPreviousInsertOriginBlockParties(originBlockPartyId: number) {
-    const result = await this.sqlService.query(`
-      UPDATE OriginBlockParties
-        SET previousOriginBlockPartyId = ?
-      WHERE id IN (
-        SELECT
-          id
-        FROM (
-          SELECT
-            obp2.id as id
-          FROM OriginBlockParties obp2
-            JOIN (
-              SELECT
-                obp.id as originBlockId,
-                ob.signedHash as signedHash,
-                k.publicKeyId as publicKeyId,
-                obp.nextPublicKeyId as nextPublicKeyId
-              FROM OriginBlockParties obp
-                JOIN OriginBlocks ob on ob.id = obp.originBlockId
-                JOIN KeySignatures k on k.originBlockPartyId = obp.id
-              WHERE obp.id = ?
-            ) as other on other.signedHash = obp2.previousOriginBlockHash
-            LEFT JOIN KeySignatures k2 on k2.originBlockPartyId = obp2.id
-          WHERE other.nextPublicKeyId = k2.publicKeyId OR other.publicKeyId = k2.publicKeyId
-          GROUP BY obp2.id
-        ) as OriginBlockPartyIdsToUpdate
-      );
-    `, [originBlockPartyId, originBlockPartyId])
-
+    const result = await this.sqlService.query(
+      XyoArchivistSqlRepository.qryUpdateBlockParties, [originBlockPartyId, originBlockPartyId])
     return
   }
 }
