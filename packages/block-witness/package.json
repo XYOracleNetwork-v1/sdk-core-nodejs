@@ -6,6 +6,7 @@
   "types": "dist/index.d.ts",
   "author": "Ryan",
   "license": "MIT",
+
   "dependencies": {
     "@xyo-network/base": "^0.49.0",
     "@xyo-network/bound-witness": "^0.49.0",

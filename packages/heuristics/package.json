@@ -4,8 +4,9 @@
   "description": "Helper utility for creating heuristics that are serializable / deserializable",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "author": "Ryan Pillsbury",
+  "author": "XY Development Team",
   "license": "MIT",
+
   "dependencies": {
     "@xyo-network/buffer-utils": "^0.49.0",
     "@xyo-network/errors": "^0.49.0",

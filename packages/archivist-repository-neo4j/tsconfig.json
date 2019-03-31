@@ -22,13 +22,14 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    {"path": "../base-node"},
+    {"path": "../archivist-repository"},
     {"path": "../base"},
-    {"path": "../errors"},
-    {"path": "../archivist-repository.sql"},
-    {"path": "../node-network"},
-    {"path": "../network"},
-    {"path": "../utils"},
-    {"path": "../crypto"}
+    {"path": "../bound-witness"},
+    {"path": "../hashing"},
+    {"path": "../origin-block-repository"},
+    {"path": "../origin-chain"},
+    {"path": "../serialization"},
+    {"path": "../serialization-schema"},
+    {"path": "../signing"}
   ]
 }

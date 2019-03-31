@@ -6,7 +6,7 @@
 
 [![NPM](https://nodei.co/npm/@xyo-network/sdk-core-node.png)](https://nodei.co/npm/@xyo-network/sdk-core-node/)
 
-[![Build Status](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs.svg?branch=develop)](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs) [![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability) [![BCH compliance](https://bettercodehub.com/edge/badge/XYOracleNetwork/sdk-core-nodejs?branch=develop)](https://bettercodehub.com/) [![Greenkeeper badge](https://badges.greenkeeper.io/XYOracleNetwork/sdk-core-nodejs.svg)](https://greenkeeper.io/)
+[![Build Status](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs.svg?branch=develop)](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs) [![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability) [![BCH compliance](https://bettercodehub.com/edge/badge/XYOracleNetwork/sdk-core-nodejs?branch=develop)](https://bettercodehub.com/) [![Greenkeeper badge](https://badges.greenkeeper.io/XYOracleNetwork/sdk-core-nodejs.svg)](https://greenkeeper.io/) [![DepShield Badge](https://depshield.sonatype.org/badges/XYOracleNetwork/sdk-core-nodejs/depshield.svg)](https://depshield.github.io)
 
 ## Project Overview
 
@@ -100,7 +100,7 @@ All packages have their own README files as well. These are the README files tha
 - [app](packages/app/README.md)
 - [archivist-network](packages/archivist-network/README.md)
 - [archivist-repository](packages/archivist-repository/README.md)
-- [archivist-repository.sql](packages/archivist-repository.sql/README.md)
+- [archivist-repository-sql](packages/archivist-repository-sql/README.md)
 - [attribution-request](packages/attribution-request/README.md)
 - [attribution-request.node-network](packages/attribution-request.node-network/README.md)
 - [base](packages/base/README.md)

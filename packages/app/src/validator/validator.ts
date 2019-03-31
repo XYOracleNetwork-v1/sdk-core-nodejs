@@ -12,7 +12,7 @@
 import Joi from 'joi'
 import path from 'path'
 import { fileExists } from '@xyo-network/utils'
-import { IAppConfig } from './@types'
+import { IAppConfig } from '../@types'
 
 export function promptValidator<T>(validator: (val: T) => Promise<IValidationResult>) {
   return async (v: T) => {

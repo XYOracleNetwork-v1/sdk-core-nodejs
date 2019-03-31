@@ -402,9 +402,13 @@ export const base58 = {
 
 export async function fileExists(pathToFile: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
-    fs.access(pathToFile, fs.constants.F_OK, (err) => {
-      return resolve(!Boolean(err))
-    })
+    try {
+      fs.access(pathToFile, fs.constants.F_OK, (err) => {
+        resolve(!Boolean(err))
+      })
+    } catch (ex) {
+      reject(ex)
+    }
   })
 }
 

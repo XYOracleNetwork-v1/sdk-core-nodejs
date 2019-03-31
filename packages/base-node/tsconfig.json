@@ -48,7 +48,7 @@
     {"path": "../transaction-pool"},
     {"path": "../storage.leveldb"},
     {"path": "../archivist-repository"},
-    {"path": "../archivist-repository.sql"},
+    {"path": "../archivist-repository-sql"},
     {"path": "../graphql-apis"},
     {"path": "../graphql-server"},
     {"path": "../about-me"},

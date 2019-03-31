@@ -6,7 +6,7 @@
         "packages/about-me/package.json",
         "packages/app/package.json",
         "packages/archivist-network/package.json",
-        "packages/archivist-repository.sql/package.json",
+        "packages/archivist-repository-sql/package.json",
         "packages/archivist-repository/package.json",
         "packages/attribution-request.node-network/package.json",
         "packages/attribution-request/package.json",

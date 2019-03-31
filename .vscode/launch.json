@@ -53,7 +53,8 @@
       "name": "Launch Archivist",
       "type": "node",
       "request": "launch",
-      "args": ["./packages/app/src/index.ts", "archivist"],
+      "args": ["src/index.ts", "start", "archivist"],
+      "cwd": "${workspaceFolder}/packages/app",
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
       "console": "integratedTerminal"
     },
@@ -61,7 +62,17 @@
       "name": "Launch Home",
       "type": "node",
       "request": "launch",
-      "args": ["./packages/app/src/index.ts", "home"],
+      "args": ["src/index.ts", "home"],
+      "cwd": "${workspaceFolder}/packages/app",
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Launch Default",
+      "type": "node",
+      "request": "launch",
+      "args": ["src/index.ts"],
+      "cwd": "${workspaceFolder}/packages/app",
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
       "console": "integratedTerminal"
     }

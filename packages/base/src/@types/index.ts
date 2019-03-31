@@ -8,3 +8,7 @@
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
+
+export interface IXyoConfig {
+  name: string
+}

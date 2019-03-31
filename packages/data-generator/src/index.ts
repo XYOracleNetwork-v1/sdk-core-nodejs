@@ -28,7 +28,7 @@ import { IXyoSerializableObject, XyoBaseSerializable } from '@xyo-network/serial
 import { XyoGps, rssiSerializationProvider, XyoJSONBlob } from '@xyo-network/heuristics-common'
 import { IXyoHash, getHashingProvider, XyoHash, IXyoHashProvider } from '@xyo-network/hashing'
 import { XyoIndex, XyoPreviousHash, XyoBridgeHashSet } from '@xyo-network/origin-chain'
-import { createArchivistSqlRepository } from '@xyo-network/archivist-repository.sql'
+import { createArchivistSqlRepository } from '@xyo-network/archivist-repository-sql'
 import { serializer } from '@xyo-network/serializer'
 
 const dataSet: IXyoInteraction[] = [
@@ -231,6 +231,8 @@ async function main(args: Arguments<any>) {
   }, Promise.resolve(genesisBlocks))
 
   const repo = await createArchivistSqlRepository({
+    name: 'MySql',
+    platform: 'mysql',
     host: args.host as string,
     user: args.user as string,
     password: args.password as string,

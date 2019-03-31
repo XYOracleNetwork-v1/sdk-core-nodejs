@@ -4,8 +4,9 @@
   "description": "A shared Xyo Logging implementation for the XYO services",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "author": "Ryan Pillsbury",
+  "author": "XY Development Team",
   "license": "MIT",
+  
   "dependencies": {
     "winston": "^3.1.0",
     "winston-daily-rotate-file": "^3.4.1"

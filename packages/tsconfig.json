@@ -27,7 +27,7 @@
       "path": "archivist-repository"
     },
     {
-      "path": "archivist-repository.sql"
+      "path": "archivist-repository-sql"
     },
     {
       "path": "base"
@@ -178,7 +178,7 @@
     "about-me/src/**/*.ts",
     "archivist-network/src/**/*.ts",
     "archivist-repository/src/**/*.ts",
-    "archivist-repository.sql/src/**/*.ts",
+    "archivist-repository-sql/src/**/*.ts",
     "base/src/**/*.ts",
     "base-node/src/**/*.ts",
     "bound-witness/src/**/*.ts",

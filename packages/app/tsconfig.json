@@ -25,7 +25,7 @@
     {"path": "../base-node"},
     {"path": "../base"},
     {"path": "../errors"},
-    {"path": "../archivist-repository.sql"},
+    {"path": "../archivist-repository-sql"},
     {"path": "../node-network"},
     {"path": "../network"},
     {"path": "../utils"},
