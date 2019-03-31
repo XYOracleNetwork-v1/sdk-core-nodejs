@@ -30,18 +30,18 @@ export async function main() {
 
   program
     .version(getVersion())
-    .option("-c, --config [configfile]", "specify config file")
-    .option("-f, --forever [password]", "run forever")
-    .option("-p, --preflight [output]", "generates preflight report")
+    .option("-c, --config [config]", "specify config file")
+    .option("-f, --forever [forever]", "run forever")
+    .option("-p, --preflight [preflight]", "generates preflight report")
+    .option("-d, --database [database]", "type of database to use", /^(mysql|level|neo4j)$/i)
     .arguments("[cmd] [target]")
     .action(async (cmd, target) => {
-      console.log(`Arie: ${cmd}:${target}`)
       const appLauncher = new XyoAppLauncher()
       try {
-        if (program.forever && program.password) {
-          appLauncher.setForeverPass(program.password)
+        if (program.forever) {
+          appLauncher.setForeverPass(program.forever)
         }
-        await appLauncher.initialize(target || program.configfile)
+        await appLauncher.initialize({ configName: target || program.config, database: program.database })
       } catch (err) {
         console.error(`There was an error during initialization. Will exit`, err)
         process.exit(1)

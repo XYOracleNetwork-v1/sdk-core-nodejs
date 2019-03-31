@@ -10,3 +10,4 @@
  */
 
 export { XyoBase } from './xyo-base'
+export { IXyoConfig } from './@types'

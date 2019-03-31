@@ -25,7 +25,7 @@ import {
 import { writeFile, createDirectoryIfNotExists } from '@xyo-network/utils'
 import { XyoBase } from '@xyo-network/base'
 import path from 'path'
-import { ISqlConnectionDetails } from '@xyo-network/archivist-repository.sql'
+import { ISqlConnectionDetails } from '@xyo-network/archivist-repository-sql'
 import { intersection } from 'lodash'
 import { ICreateConfigResult, IEthCryptoKeys } from './@types'
 import dns from 'dns'
@@ -477,7 +477,10 @@ export class AppWizard extends XyoBase {
         name: nodeName,
         archivist: components.includes(XyoComponent.ARCHIVIST)
           ? {
-            sql: sqlCredentials!,
+            repository: {
+              name: "MySql",
+              platform: "mysql"
+            }
           }
           : null,
         diviner:
@@ -520,4 +523,10 @@ export class AppWizard extends XyoBase {
 enum XyoComponent {
   ARCHIVIST = 'archivist',
   DIVINER = 'diviner',
+}
+
+enum XyoDatabase {
+  MYSQL = 'mysql',
+  LEVEL = 'level',
+  NEO4J = 'neo4j',
 }

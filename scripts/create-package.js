@@ -72,6 +72,7 @@ async function main() {
   "types": "dist/index.d.ts",
   "author": "${user.trim()}",
   "license": "MIT",
+
   "dependencies": {
   },
   "devDependencies": {

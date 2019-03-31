@@ -8,7 +8,7 @@ import {
   writeFile,
   createDirectoryIfNotExists,
 } from '@xyo-network/utils'
-import { AppWizard } from './app-wizard'
+import { AppWizard } from './wizard'
 import * as yaml from 'js-yaml'
 import {
   validateConfigFile,
@@ -40,7 +40,7 @@ export class XyoAppLauncher extends XyoBase {
     this.password = pass
     this.isForever = true
   }
-  public async initialize(configName?: string) {
+  public async initialize({ configName, database = "mysql" }: {configName?: string, database: string}) {
     let writeConfigFile = false
 
     if (configName) {

@@ -9,7 +9,8 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { ISqlConnectionDetails } from '@xyo-network/archivist-repository.sql'
+import { IArchivistRepositoryConfig } from '@xyo-network/archivist-repository'
+
 export interface IEthCryptoKeys {
   address: string
   privateKey?: string
@@ -31,7 +32,7 @@ export interface IAppConfig {
   apis: string[]
   bootstrapNodes: string[]
   archivist: {
-    sql: ISqlConnectionDetails
+    repository: IArchivistRepositoryConfig
   } | null
   diviner: {
     ethereum: {

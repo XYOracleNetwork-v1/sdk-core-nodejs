@@ -12,7 +12,7 @@
 import { default as mysql, Connection, MysqlError } from 'mysql'
 import { XyoBase } from '@xyo-network/base'
 import fs from 'fs'
-import { ISqlConnectionDetails } from './@types'
+import { ISqlArchivistRepositoryConfig } from './@types'
 
 export class SqlService extends XyoBase {
   public static tryCreateSqlService = tryCreateSqlService
@@ -145,7 +145,7 @@ interface ISqlTransaction {
 }
 
 async function tryCreateSqlService(
-  connectionDetails: ISqlConnectionDetails,
+  connectionDetails: ISqlArchivistRepositoryConfig,
   schemaPath?: string
 ): Promise<SqlService> {
   const sqlService = new SqlService(connectionDetails)
@@ -186,7 +186,7 @@ async function tryCreateSqlService(
   return sqlService
 }
 
-async function createDatabaseWithSchema(connectionDetails: ISqlConnectionDetails, schema: string) {
+async function createDatabaseWithSchema(connectionDetails: ISqlArchivistRepositoryConfig, schema: string) {
   const tmpSqlService = new SqlService({
     host: connectionDetails.host,
     user: connectionDetails.user,
