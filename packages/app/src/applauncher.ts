@@ -14,7 +14,7 @@ import {
   validateConfigFile,
   validatePassword,
   promptValidator,
-} from './validator'
+} from './validator/validator'
 import { prompt } from 'enquirer'
 
 import { XyoError } from '@xyo-network/errors'
@@ -204,18 +204,11 @@ export class XyoAppLauncher extends XyoBase {
   }
 
   private getArchivistRepositoryConfig() {
-    return null
-    /*if (this.config) {
-      return this.isArchivist
-        ? {
-          host: this.config.archivist!.sql.host,
-          user: this.config.archivist!.sql.user,
-          password: this.config.archivist!.sql.password,
-          database: this.config.archivist!.sql.database,
-          port: this.config.archivist!.sql.port,
-        }
+    if (this.config) {
+      return this.config.archivist
+        ? this.config.archivist.repository
         : null
-    }*/
+    }
   }
 
   private getAboutMeConfig() {
@@ -286,7 +279,7 @@ export class XyoAppLauncher extends XyoBase {
     if (!this.password) {
       tryAgain = true
       // @ts-ignore
-      const { password } = await prompt<{ password }>({
+      const { password } = await this.prompt<{ password }>({
         type: 'input',
         name: 'password',
         message: 'What is your Diviner password?',

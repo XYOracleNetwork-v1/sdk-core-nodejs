@@ -9,383 +9,28 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { prompt } from 'enquirer'
-import {
-  validateNodeName,
-  validateDataPath,
-  validateIpAddress,
-  IValidationResult,
-  validatePort,
-  validateURL,
-  validateHexString,
-  validateMultiAddress,
-  validatePassword,
-  promptValidator,
-} from './validator'
-import { writeFile, createDirectoryIfNotExists } from '@xyo-network/utils'
 import { XyoBase } from '@xyo-network/base'
 import path from 'path'
-import { ISqlArchivistRepositoryConfig } from '@xyo-network/archivist-repository-sql'
 import { intersection } from 'lodash'
-import { ICreateConfigResult, IEthCryptoKeys } from './@types'
-import dns from 'dns'
-import { XyoCryptoProvider } from '@xyo-network/crypto'
-
-export async function getNameOfNode(
-  configNameSuggest?: string,
-): Promise<string> {
-  // @ts-ignore
-  const { nodeName } = await prompt<{ nodeName: string }>({
-    type: 'input',
-    message: `What would you like to name your XYO Node?`,
-    name: 'nodeName',
-    initial: configNameSuggest,
-    validate: promptValidator(validateNodeName),
-  })
-
-  return nodeName
-}
-
-export async function getDataPath(initial: string): Promise<string> {
-  // @ts-ignore
-  const { dataPath } = await prompt<{ dataPath: string }>({
-    initial,
-    type: 'input',
-    message: 'Where would you like to store your data?',
-    name: 'dataPath',
-    validate: promptValidator(validateDataPath),
-  })
-
-  return dataPath
-}
-
-export async function getPublicIpAddress(): Promise<string> {
-  // @ts-ignore
-  const { ipAddress } = await prompt<{ ipAddress: string }>({
-    initial: '0.0.0.0',
-    type: 'input',
-    message: `What is your public ip address?`,
-    name: 'ipAddress',
-    validate: promptValidator(validateIpAddress),
-  })
-
-  return ipAddress
-}
-
-export async function getPort(message: string, initial: number) {
-  // @ts-ignore
-  const { port } = await prompt<{ port: number }>({
-    message,
-    type: 'input',
-    initial: `${initial}`,
-    name: 'port',
-    float: false,
-    validate: promptValidator(validatePort),
-  })
-
-  return parseInt(port, 10)
-}
-
-export async function doActAsServer() {
-  // @ts-ignore
-  const { actAsServer } = await prompt<{ actAsServer: string }>({
-    initial: true,
-    type: 'confirm',
-    message: `Do you want your node to act as a server for doing bound-witnesses?`,
-    name: 'actAsServer',
-  })
-
-  return actAsServer
-}
-
-export async function confirmCreateConfigWizard() {
-  // @ts-ignore
-  const { confirmWizard } = await prompt<{ confirmWizard: string }>({
-    initial: true,
-    type: 'confirm',
-    message: `No config found, would you like to create one now?`,
-    name: 'confirmWizard',
-  })
-
-  return confirmWizard
-}
-
-export async function getXyoComponents(): Promise<XyoComponent[]> {
-  const { components } = await prompt<{ components: string }>({
-    initial: true,
-    type: 'select',
-    choices: [
-      XyoComponent.ARCHIVIST,
-      XyoComponent.DIVINER,
-      `${XyoComponent.ARCHIVIST} and ${XyoComponent.DIVINER}`,
-    ],
-    message: `Which component features do you want your Xyo Node to support?`,
-    name: 'components',
-  })
-
-  // @ts-ignore
-  const xyoComponents: XyoComponent[] = []
-  if (components.includes(XyoComponent.ARCHIVIST)) {
-    xyoComponents.push(XyoComponent.ARCHIVIST)
-  }
-  if (components.includes(XyoComponent.DIVINER)) {
-    xyoComponents.push(XyoComponent.DIVINER)
-  }
-
-  return xyoComponents
-}
-
-export async function gatherSQLCredentials(): Promise<ISqlArchivistRepositoryConfig> {
-  const { host, user, password, database, port } = await prompt([
-    {
-      type: 'input',
-      name: 'host',
-      message: 'Enter the `host` value for your MySQL database',
-      initial: '127.0.0.1',
-    },
-    {
-      type: 'input',
-      name: 'user',
-      message: 'Enter the `user` value for your MySQL database',
-      initial: 'admin',
-    },
-    {
-      type: 'input',
-      name: 'password',
-      message: 'Enter the `password` value for your MySQL database',
-      initial: 'password',
-    },
-    {
-      type: 'input',
-      name: 'database',
-      message: 'Enter the `database` value for your MySQL database',
-      initial: 'Xyo',
-    },
-    {
-      type: 'input',
-      name: 'port',
-      message: 'Enter the `port` value for your MySQL database',
-      initial: '3306',
-    },
-  ])
-
-  return {
-    host,
-    user,
-    password,
-    database,
-    name: "MySql",
-    platform: "mysql",
-    port: parseInt(port, 10),
-  }
-}
-
-export async function getEthereumNodeAddress(): Promise<string> {
-  // @ts-ignore
-  const { ethereumNodeAddress } = await prompt({
-    type: 'input',
-    name: 'ethereumNodeAddress',
-    initial: 'http://127.0.0.1:8545',
-    message: 'What is your Ethereum Node address?',
-    validate: promptValidator(validateURL),
-  })
-
-  return ethereumNodeAddress
-}
-
-export async function getEthereumAccountAddress(
-  nodeName: string
-): Promise<IEthCryptoKeys> {
-  // @ts-ignore
-  const { ethereumAccountAddress } = await prompt<{ethereumAccountAddress: string }>({
-    type: 'input',
-    name: 'ethereumAccountAddress',
-    message: 'What is your Ethereum address? This will start with `0x`',
-    validate: promptValidator(validateHexString),
-  })
-
-  // @ts-ignore
-  const { ethereumPrivateKey } = await prompt<{ ethereumPrivateKey: string }>({
-    type: 'input',
-    name: 'ethereumPrivateKey',
-    message:
-      'What is your Ethereum Private key? Diviners encrypt private keys and store encrypted copy locally.',
-  })
-
-  // @ts-ignore
-  const { password } = await prompt<{ password: string }>({
-    type: 'input',
-    name: 'password',
-    message: 'Please add a Diviner password.',
-    validate: promptValidator(validatePassword),
-  })
-
-  const rootPath = path.resolve(__dirname, '..')
-  const configFolder = path.resolve(rootPath, 'config')
-  await createDirectoryIfNotExists(configFolder)
-  const pathToWrite = path.resolve(configFolder, `${nodeName}.password`)
-  await writeFile(pathToWrite, password, 'utf8')
-
-  const provider = new XyoCryptoProvider()
-
-  const { encrypted, salt } = provider.encrypt(password, ethereumPrivateKey)
-  return { salt, address: ethereumAccountAddress, encryptedKey: encrypted }
-}
-
-export async function getContractConfig(contract: string) {
-  // @ts-ignore
-  const { contractAddr } = await prompt<{ contractAddr: string }>({
-    type: 'input',
-    name: 'contractAddr',
-    message: `What is the ${contract} contract address? This will start with \`0x\``,
-    validate: promptValidator(validateHexString),
-  })
-
-  const { ipfsAddr } = await prompt<{ ipfsAddr: string }>({
-    type: 'input',
-    name: 'ipfsAddr',
-    message: `What is the ${contract} IPFS address? This will start with \`Qm\``,
-  })
-
-  return { contractAddr, ipfsAddr }
-}
-
-export async function getIPFSConfig() {
-  const { ipfsHost } = await prompt<{ ipfsHost: string }>({
-    type: 'input',
-    name: 'ipfsHost',
-    message: 'What is the IPFS host value',
-    initial: 'ipfs.layerone.co',
-  })
-
-  const ipfsPort = await getPort('What is the IPFS port value', 5002)
-
-  const { ipfsProtocol } = await prompt<{ ipfsProtocol: string }>({
-    initial: 'https',
-    type: 'select',
-    choices: ['https', 'http'],
-    message: `What is the IPFS protocol?`,
-    name: 'ipfsProtocol',
-  })
-
-  return { ipfsHost, ipfsPort, ipfsProtocol }
-}
-
-export async function getApiChoices(options: string[]): Promise<string[]> {
-  const { choices } = await prompt<{ choices: string[] }>({
-    type: 'multiselect',
-    name: 'choices',
-    message:
-      'Which GraphQL api endpoints would you like to support? ' +
-      '(use space-bar to toggle selection. Press enter once finished)',
-    choices: options,
-    initial: options,
-  })
-
-  return choices
-}
-
-export async function getBootstrapNodes(): Promise<string[]> {
-  const bootstrapNodes: string[] = []
-  const { confirmAddBootstrapNodes } = await prompt<{
-    confirmAddBootstrapNodes: boolean
-  }>({
-    type: 'confirm',
-    name: 'confirmAddBootstrapNodes',
-    message: 'Do you want to add bootstrap nodes?',
-    initial: true,
-  })
-
-  if (!confirmAddBootstrapNodes) return bootstrapNodes
-
-  const dnsResults: string[] = await new Promise((resolve, reject) => {
-    dns.lookup('peers.xyo.network', { all: true }, (err, results) => {
-      if (err) return []
-      return resolve(
-        results.map((r) => {
-          return `/ip4/${r.address}/tcp/11500`
-        }),
-      )
-    })
-  })
-
-  if (dnsResults.length) {
-    const { choices } = await prompt<{ choices: string[] }>({
-      type: 'multiselect',
-      name: 'choices',
-      message:
-        'These addresses were found on the `peers.xyo.network` DNS record.' +
-        'You can select and deselect each address by pressing spacebar',
-      choices: dnsResults,
-      initial: dnsResults,
-    })
-
-    bootstrapNodes.push(...choices)
-  }
-
-  await getMultiAddrEntry(bootstrapNodes)
-
-  // Returns the unique keys
-  return Object.keys(
-    bootstrapNodes.reduce((memo: { [s: string]: boolean }, k) => {
-      memo[k] = true
-      return memo
-    }, {}),
-  )
-}
-
-export async function getMultiAddrEntry(
-  bootstrapNodes: string[],
-): Promise<void> {
-  const { confirmAddIndividualIps } = await prompt<{
-    confirmAddIndividualIps: boolean
-  }>({
-    type: 'confirm',
-    name: 'confirmAddIndividualIps',
-    message: 'Do you want to add any more individual bootstrap nodes?',
-    initial: false,
-  })
-
-  if (!confirmAddIndividualIps) return
-
-  // @ts-ignore
-  const { ipAddress } = await prompt<{ ipAddress: string }>({
-    type: 'input',
-    message: `What is the address value of the bootstrap node? Should look something like /ip4/127.0.0.1/tcp/11500`,
-    name: 'ipAddress',
-    validate: promptValidator(validateMultiAddress),
-  })
-
-  bootstrapNodes.push(ipAddress)
-  await getMultiAddrEntry(bootstrapNodes)
-}
-
-export async function getGraphQLPort(): Promise<number | undefined> {
-  // @ts-ignore
-  const { confirmGraphQL } = await prompt<{ confirmGraphQL: boolean }>({
-    initial: true,
-    type: 'confirm',
-    message: `Do you want your node to have a GraphQL server`,
-    name: 'confirmGraphQL',
-  })
-
-  if (!confirmGraphQL) {
-    return undefined
-  }
-
-  return getPort('What port should your GraphQL server run on?', 11001)
-}
-
-export async function startNodeAfterInitialize() {
-  const { start } = await prompt<{ start: boolean }>({
-    message: 'Do you want to start the node after configuration is complete?',
-    initial: true,
-    type: 'confirm',
-    name: 'start',
-  })
-
-  return start
-}
+import { ICreateConfigResult, IEthCryptoKeys, IArchivistConfig, IDivinerConfig } from './@types'
+import { CreateConfigWizard } from './wizard/create-config'
+import { NodeNameWizard } from './wizard/nodename'
+import { DataPathWizard } from './wizard/datapath'
+import { PublicIpAddressWizard } from './wizard/public-ip-address'
+import { PortWizard } from './wizard/port'
+import { BootstrapWizard } from './wizard/bootstrap'
+import { ActAsServerWizard } from './wizard/act-as-server'
+import { IpfsWizard, IIpfsConfig } from './wizard/ipfs.'
+import { ComponentsWizard, XyoComponent } from './wizard/components'
+import { SqlWizard } from './wizard/sql'
+import { EthereumNodeAddressWizard } from './wizard/ethereum-node-address'
+import { EthereumAccountWizard } from './wizard/ethereum-account'
+import { ContractWizard, IContractConfig } from './wizard/contract'
+import { ISqlArchivistRepositoryConfig } from '../../archivist-repository-sql/dist'
+import { GraphqlWizard } from './wizard/graphql'
+import { ApiWizard } from './wizard/api'
+import { AutostartWizard } from './wizard/autostart'
+import { IArchivistRepositoryConfig } from '@xyo-network/archivist-repository'
 
 export class AppWizard extends XyoBase {
   constructor(private readonly rootPath: string) {
@@ -395,57 +40,48 @@ export class AppWizard extends XyoBase {
   public async createConfiguration(
     configNameSuggest?: string,
   ): Promise<ICreateConfigResult | undefined> {
-    const doWizard = await confirmCreateConfigWizard()
+    const doWizard = await new CreateConfigWizard().start()
     if (!doWizard) return undefined
-    const nodeName = await getNameOfNode(configNameSuggest)
-    const dataPath = await getDataPath(path.resolve(this.rootPath, 'node-data'))
-    const ip = await getPublicIpAddress()
-    const p2pPort = await getPort(
+    const nodeName = await new NodeNameWizard(configNameSuggest).start()
+    const dataPath = await new DataPathWizard(path.resolve(this.rootPath, 'node-data')).start()
+    const ip = await new PublicIpAddressWizard().start()
+    const p2pPort = await new PortWizard(
       `What port would you like to use for your peer to peer protocol?`,
       11500,
-    )
-    const bootstrapNodes = await getBootstrapNodes()
-    const actAsServer = await doActAsServer()
+    ).start()
+    const bootstrapNodes = await new BootstrapWizard().start()
+    const actAsServer = await new ActAsServerWizard().start()
 
     const serverPort = await (actAsServer
-      ? getPort(
+      ? new PortWizard(
           `What port would you like to use for your peer to peer protocol?`,
           11000,
-        )
+        ).start()
       : Promise.resolve(undefined))
 
-    const { ipfsHost, ipfsPort, ipfsProtocol } = await getIPFSConfig()
+    const ipfs = await new IpfsWizard().start()
 
-    const components = await getXyoComponents()
+    const components = await new ComponentsWizard().start()
+    let sqlCredentials: ISqlArchivistRepositoryConfig | undefined
+    let ethereumNodeAddress: string | undefined
+    let ethKeys: IEthCryptoKeys | undefined
+    let xyStakingConsensus: IContractConfig | undefined
+    let xyGovernance: IContractConfig | undefined
+    let xyBlockProducer: IContractConfig | undefined
 
-    const sqlCredentials = await (components.includes(XyoComponent.ARCHIVIST)
-      ? gatherSQLCredentials()
-      : Promise.resolve(undefined))
+    if (components.includes(XyoComponent.ARCHIVIST)) {
+      sqlCredentials = await new SqlWizard().start()
+    }
 
-    const ethereumNodeAddress = await (components.includes(XyoComponent.DIVINER)
-      ? getEthereumNodeAddress()
-      : Promise.resolve(undefined))
+    if (components.includes(XyoComponent.DIVINER)) {
+      ethereumNodeAddress = await new EthereumNodeAddressWizard().start()
+      ethKeys = await new EthereumAccountWizard(nodeName).start()
+      xyStakingConsensus = await new ContractWizard('XyStakingConsensus').start()
+      xyGovernance = await new ContractWizard('XyGovernance').start()
+      xyBlockProducer = await new ContractWizard('XyBlockProducer').start()
+    }
 
-    const ethKeys = await (components.includes(XyoComponent.DIVINER)
-      ? getEthereumAccountAddress(nodeName)
-      : Promise.resolve(undefined))
-
-    // tslint:disable-next-line:variable-name
-    const XyStakingConsensus = await (components.includes(XyoComponent.DIVINER)
-      ? getContractConfig('XyStakingConsensus')
-      : Promise.resolve(undefined))
-
-    // tslint:disable-next-line:variable-name
-    const XyGovernance = await (components.includes(XyoComponent.DIVINER)
-      ? getContractConfig('XyGovernance')
-      : Promise.resolve(undefined))
-
-    // tslint:disable-next-line:variable-name
-    const XyBlockProducer = await (components.includes(XyoComponent.DIVINER)
-      ? getContractConfig('XyBlockProducer')
-      : Promise.resolve(undefined))
-
-    const graphQLPort = await getGraphQLPort()
+    const graphQLPort = await new GraphqlWizard().start()
     const apiOptions = [
       { name: 'about', exclusiveTo: [] },
       { name: 'blockByHash', exclusiveTo: [] },
@@ -462,9 +98,47 @@ export class AppWizard extends XyoBase {
       .map(a => a.name)
 
     const apis = await (graphQLPort
-      ? getApiChoices(apiOptions)
+      ? new ApiWizard(apiOptions).start()
       : (Promise.resolve([]) as Promise<string[]>))
-    const startNode = await startNodeAfterInitialize()
+
+    const startNode = await new AutostartWizard().start()
+
+    let archivist: IArchivistConfig | undefined
+    if (components.includes(XyoComponent.ARCHIVIST) && sqlCredentials) {
+      archivist = {
+        repository: sqlCredentials
+      }
+    }
+
+    let diviner: IDivinerConfig | undefined
+    if (
+      components.includes(XyoComponent.DIVINER) &&
+      ethKeys &&
+      xyStakingConsensus &&
+      xyGovernance &&
+      xyBlockProducer
+    ) {
+      diviner = {
+        ethereum: {
+          host: ethereumNodeAddress!,
+          account: ethKeys,
+          contracts: {
+            XyStakingConsensus: {
+              ipfsHash: xyStakingConsensus.ipfsAddr,
+              address: xyStakingConsensus.contractAddr,
+            },
+            XyGovernance: {
+              ipfsHash: xyGovernance.ipfsAddr,
+              address: xyGovernance.contractAddr,
+            },
+            XyBlockProducer: {
+              ipfsHash: xyBlockProducer.ipfsAddr,
+              address: xyBlockProducer.contractAddr,
+            },
+          },
+        },
+      }
+    }
 
     return {
       startNode,
@@ -473,62 +147,14 @@ export class AppWizard extends XyoBase {
         p2pPort,
         apis,
         bootstrapNodes,
-        serverPort: serverPort || null,
-        graphqlPort: graphQLPort || null,
+        serverPort,
+        archivist,
+        diviner,
+        ipfs,
+        graphqlPort: graphQLPort,
         data: dataPath,
         name: nodeName,
-        archivist: components.includes(XyoComponent.ARCHIVIST)
-          ? {
-            repository: {
-              name: "MySql",
-              platform: "mysql"
-            }
-          }
-          : null,
-        diviner:
-          components.includes(XyoComponent.DIVINER) &&
-          ethKeys &&
-          XyStakingConsensus &&
-          XyGovernance &&
-          XyBlockProducer
-            ? {
-              ethereum: {
-                host: ethereumNodeAddress!,
-                account: ethKeys,
-                contracts: {
-                  XyStakingConsensus: {
-                    ipfsHash: XyStakingConsensus.ipfsAddr,
-                    address: XyStakingConsensus.contractAddr,
-                  },
-                  XyGovernance: {
-                    ipfsHash: XyGovernance.ipfsAddr,
-                    address: XyGovernance.contractAddr,
-                  },
-                  XyBlockProducer: {
-                    ipfsHash: XyBlockProducer.ipfsAddr,
-                    address: XyBlockProducer.contractAddr,
-                  },
-                },
-              },
-            }
-            : null,
-        ipfs: {
-          host: ipfsHost,
-          port: String(ipfsPort),
-          protocol: ipfsProtocol,
-        },
       },
     }
   }
-}
-
-enum XyoComponent {
-  ARCHIVIST = 'archivist',
-  DIVINER = 'diviner',
-}
-
-enum XyoDatabase {
-  MYSQL = 'mysql',
-  LEVEL = 'level',
-  NEO4J = 'neo4j',
 }

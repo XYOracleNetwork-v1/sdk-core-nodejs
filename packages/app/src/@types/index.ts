@@ -22,35 +22,41 @@ export interface ICreateConfigResult {
   config: IAppConfig
 }
 
+export interface IArchivistConfig {
+  repository: IArchivistRepositoryConfig
+}
+
+export interface IDivinerConfig {
+  ethereum: {
+    host: string
+    account: IEthCryptoKeys
+    contracts: {
+      [s: string]: {
+        ipfsHash: string
+        address: string
+      }
+    }
+  }
+}
+
+export interface IIpfsConfig {
+  host: string
+  port: number
+  protocol: string
+}
+
 export interface IAppConfig {
   ip: string
   p2pPort: number
-  serverPort: number | null
+  serverPort?: number
   data: string
   name: string
-  graphqlPort: number | null
+  graphqlPort?: number
   apis: string[]
   bootstrapNodes: string[]
-  archivist: {
-    repository: IArchivistRepositoryConfig
-  } | null
-  diviner: {
-    ethereum: {
-      host: string
-      account: IEthCryptoKeys
-      contracts: {
-        [s: string]: {
-          ipfsHash: string
-          address: string
-        }
-      }
-    }
-  } | null
-  ipfs: {
-    host: string
-    port: string
-    protocol: string
-  }
+  archivist?: IArchivistConfig,
+  diviner?: IDivinerConfig,
+  ipfs: IIpfsConfig
 }
 export interface IEthContractAddressIPFS {
   ipfsHash: string
