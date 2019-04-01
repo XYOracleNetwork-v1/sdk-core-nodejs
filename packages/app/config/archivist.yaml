@@ -13,7 +13,9 @@ graphqlPort: 11001
 data: ./node-data
 name: archivist
 archivist:
-  sql:
+  repository:
+    name: "MySql"
+    platform: "sql"
     host: 127.0.0.1
     user: admin
     password: password
