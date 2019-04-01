@@ -35,156 +35,12 @@ import { OriginBlocksWithOffsetQuery } from './queries/originblocks-offset'
 import { OriginBlocksQuery } from './queries/originblocks'
 import { ExistingKeysQuery } from './queries/existing-keys'
 import { OriginBlocksByPublicKeyQuery } from './queries/originblocks-by-publickey'
+import { IntersectionsQuery } from './queries/intersections'
+import { IntersectionsWithCursorQuery } from './queries/intersections-with-cursor'
+import { EntitiesQueryWithCursor } from './queries/entities-with-cursor'
+import { EntitiesQuery } from './queries/entities'
 
 export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistRepository {
-
-  private static qryOriginBlocksByPublicKey = `
-    SELECT
-      CONCAT(pk2.key) as publicKeysForBlock,
-      ob.bytes as originBlockBytes
-    FROM PublicKeys pk
-      JOIN PublicKeys pk2 on pk.publicKeyGroupId = pk2.publicKeyGroupId
-      JOIN KeySignatures k on k.publicKeyId = pk2.id
-      JOIN OriginBlockParties obp on obp.id = k.originBlockPartyId
-      JOIN OriginBlocks ob on ob.id = obp.originBlockId
-    WHERE pk.key = ?
-    GROUP BY ob.id
-    ORDER BY obp.blockIndex;
-  `
-  private static qryIntersection = `
-    SELECT
-      ob1.signedHash as signedHash,
-      obp1.blockIndex as blockIndex
-    FROM PublicKeys pk1
-      JOIN PublicKeys pk1Others on pk1.publicKeyGroupId = pk1Others.publicKeyGroupId
-      JOIN KeySignatures ks1 on ks1.publicKeyId = pk1Others.id
-      JOIN OriginBlockParties obp1 on obp1.id = ks1.originBlockPartyId
-      JOIN OriginBlockParties obp2 on obp2.originBlockId = obp1.originBlockId AND obp2.id != obp1.id
-      JOIN KeySignatures ks2 on ks2.originBlockPartyId = obp2.id
-      JOIN PublicKeys pk2 on pk2.id = ks2.publicKeyId
-      JOIN PublicKeys pk2Others on pk2.publicKeyGroupId = pk2Others.publicKeyGroupId
-      JOIN OriginBlocks ob1 on ob1.id = obp1.originBlockId
-    WHERE pk1.key = ? AND pk2Others.key = ?
-    ORDER BY obp1.blockIndex
-    LIMIT ?
-  `
-
-  private static qryIntersection2 = `
-    SELECT
-      ob1.signedHash as signedHash,
-      obp1.blockIndex as blockIndex
-    FROM PublicKeys pk1
-      JOIN PublicKeys pk1Others on pk1.publicKeyGroupId = pk1Others.publicKeyGroupId
-      JOIN KeySignatures ks1 on ks1.publicKeyId = pk1Others.id
-      JOIN OriginBlockParties obp1 on obp1.id = ks1.originBlockPartyId
-      JOIN OriginBlockParties obp2 on obp2.originBlockId = obp1.originBlockId AND obp2.id != obp1.id
-      JOIN KeySignatures ks2 on ks2.originBlockPartyId = obp2.id
-      JOIN PublicKeys pk2 on pk2.id = ks2.publicKeyId
-      JOIN PublicKeys pk2Others on pk2.publicKeyGroupId = pk2Others.publicKeyGroupId
-      JOIN OriginBlocks ob1 on ob1.id = obp1.originBlockId
-    WHERE pk1.key = ? AND pk2Others.key = ? AND obp1.blockIndex > ?
-    ORDER BY obp1.blockIndex
-    LIMIT ?
-  `
-
-  private static qryTotalSize = `
-    SELECT
-      COUNT(ob1.id) as totalSize
-    FROM PublicKeys pk1
-      JOIN PublicKeys pk1Others on pk1.publicKeyGroupId = pk1Others.publicKeyGroupId
-      JOIN KeySignatures ks1 on ks1.publicKeyId = pk1Others.id
-      JOIN OriginBlockParties obp1 on obp1.id = ks1.originBlockPartyId
-      JOIN OriginBlockParties obp2 on obp2.originBlockId = obp1.originBlockId AND obp2.id != obp1.id
-      JOIN KeySignatures ks2 on ks2.originBlockPartyId = obp2.id
-      JOIN PublicKeys pk2 on pk2.id = ks2.publicKeyId
-      JOIN PublicKeys pk2Others on pk2.publicKeyGroupId = pk2Others.publicKeyGroupId
-      JOIN OriginBlocks ob1 on ob1.id = obp1.originBlockId
-    WHERE pk1.key = ? AND pk2Others.key = ?
-    ORDER BY obp1.blockIndex
-  `
-
-  private static qryTotalSize2 = `
-    SELECT
-      COUNT(pkg.id) as totalSize
-    FROM PublicKeyGroups pkg;
-  `
-
-  private static qryTotalSize3 = `
-    SELECT
-      COUNT(ob.id) as totalSize
-    FROM OriginBlocks ob;
-  `
-
-  private static qryEntities = `
-    SELECT
-      entities.publicKeyGroupId as publicKeyGroupId,
-      obp1.blockIndex as minIndex,
-      obp2.blockIndex as maxIndex,
-      pk1.key as publicKey,
-      pk2.key as mostRecentKey,
-      entities.allPublicKeys as allPublicKeys,
-      entities.publicKeyGroupId as hash
-    FROM
-      (
-        SELECT
-          pkg.id as publicKeyGroupId,
-          MIN(obp.blockIndex) as minBlockIndex,
-          MAX(obp.blockIndex) as maxBlockIndex,
-          COUNT(DISTINCT obp.id) as numberOfBlocks,
-          GROUP_CONCAT(DISTINCT pk.key) as allPublicKeys
-        FROM PublicKeyGroups pkg
-          JOIN PublicKeys pk on pk.publicKeyGroupId = pkg.id
-          JOIN KeySignatures ks on ks.publicKeyId = pk.id
-          JOIN OriginBlockParties obp on obp.id = ks.originBlockPartyId
-        GROUP BY pkg.id
-        LIMIT ?
-      ) as entities
-
-      JOIN PublicKeys pk1 on pk1.publicKeyGroupId = entities.publicKeyGroupId
-      JOIN KeySignatures ks1 on ks1.publicKeyId = pk1.id
-      JOIN OriginBlockParties obp1 on obp1.id = ks1.originBlockPartyId AND obp1.blockIndex = entities.minBlockIndex
-      JOIN PublicKeys pk2 on pk2.publicKeyGroupId = entities.publicKeyGroupId
-      JOIN KeySignatures ks2 on ks2.publicKeyId = pk2.id
-      JOIN OriginBlockParties obp2 on obp2.id = ks2.originBlockPartyId AND obp2.blockIndex = entities.maxBlockIndex
-    GROUP BY entities.publicKeyGroupId
-    ORDER BY entities.publicKeyGroupId;
-  `
-
-  private static qryEntities2 = `
-    SELECT
-      entities.publicKeyGroupId as publicKeyGroupId,
-      obp1.blockIndex as minIndex,
-      obp2.blockIndex as maxIndex,
-      pk1.key as publicKey,
-      pk2.key as mostRecentKey,
-      entities.allPublicKeys as allPublicKeys,
-      entities.publicKeyGroupId as hash
-    FROM
-      (
-        SELECT
-          pkg.id as publicKeyGroupId,
-          MIN(obp.blockIndex) as minBlockIndex,
-          MAX(obp.blockIndex) as maxBlockIndex,
-          COUNT(DISTINCT obp.id) as numberOfBlocks,
-          GROUP_CONCAT(DISTINCT pk.key) as allPublicKeys
-        FROM PublicKeyGroups pkg
-          JOIN PublicKeys pk on pk.publicKeyGroupId = pkg.id
-          JOIN KeySignatures ks on ks.publicKeyId = pk.id
-          JOIN OriginBlockParties obp on obp.id = ks.originBlockPartyId
-        WHERE pkg.id > ?
-        GROUP BY pkg.id
-        LIMIT ?
-      ) as entities
-
-      JOIN PublicKeys pk1 on pk1.publicKeyGroupId = entities.publicKeyGroupId
-      JOIN KeySignatures ks1 on ks1.publicKeyId = pk1.id
-      JOIN OriginBlockParties obp1 on obp1.id = ks1.originBlockPartyId AND obp1.blockIndex = entities.minBlockIndex
-      JOIN PublicKeys pk2 on pk2.publicKeyGroupId = entities.publicKeyGroupId
-      JOIN KeySignatures ks2 on ks2.publicKeyId = pk2.id
-      JOIN OriginBlockParties obp2 on obp2.id = ks2.originBlockPartyId AND obp2.blockIndex = entities.maxBlockIndex
-    GROUP BY entities.publicKeyGroupId
-    ORDER BY entities.publicKeyGroupId;
-  `
 
   private static qryDeletePayloadItems = `
     DELETE p FROM PayloadItems p
@@ -243,33 +99,6 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
     SELECT
       signedHash
     FROM OriginBlocks;
-  `
-
-  private static qryOriginBlocks = `
-    SELECT
-      ob.bytes as bytes
-    FROM OriginBlocks ob
-    ORDER BY ob.id
-    LIMIT ?
-  `
-
-  private static qryOriginBlocks2 = `
-    SELECT
-      ob.bytes as bytes
-    FROM OriginBlocks ob
-      JOIN OriginBlocks ob2 on ob2.signedHash = ?
-    WHERE ob.id > ob2.id
-    ORDER BY ob.id
-    LIMIT ?
-  `
-
-  private static qryExistingKeys = `
-    SELECT
-      pk.id as id,
-      pk.key as \`key\`,
-      pk.publicKeyGroupId as publicKeyGroupId
-    FROM PublicKeys pk
-    WHERE pk.key in (?)
   `
 
   private static qryAggrigateKeys = `
@@ -412,89 +241,22 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
     limit: number,
     cursor: string | undefined
   ): Promise<IXyoIntersectionsList> {
-    type QResult = Array<{signedHash: string, blockIndex: number}>
-    let getIntersectionsQuery: Promise<QResult>
 
     if (!cursor) {
-      getIntersectionsQuery = this.sqlService.query<QResult>(
-        XyoArchivistSqlRepository.qryIntersection, [publicKeyA, publicKeyB, limit + 1])
-    } else {
-      getIntersectionsQuery = this.sqlService.query<QResult>(
-        XyoArchivistSqlRepository.qryIntersection2, [publicKeyA, publicKeyB, parseInt(cursor, 10), limit + 1])
+      return new IntersectionsQuery(
+        this.sqlService, this.serializationService).send({ publicKeyA, publicKeyB, limit })
     }
-    const totalSizeQuery = this.sqlService.query<Array<{totalSize: number}>>(
-      XyoArchivistSqlRepository.qryTotalSize, [publicKeyA, publicKeyB])
-
-    const [intersectionResults, totalSizeResults] = await Promise.all([getIntersectionsQuery, totalSizeQuery])
-    const totalSize = _.chain(totalSizeResults).first().get('totalSize').value() as number
-    const hasNextPage = intersectionResults.length === (limit + 1)
-    if (hasNextPage) {
-      intersectionResults.pop()
-    }
-
-    const list = _.chain(intersectionResults)
-      .map(result => result.signedHash)
-      .value()
-
-    const cursorId = _.chain(intersectionResults).last().get('blockIndex').value() as number | undefined
-    return {
-      list,
-      hasNextPage,
-      totalSize,
-      cursor: cursorId ? String(cursorId) : undefined
-    }
+    return new IntersectionsWithCursorQuery(
+      this.sqlService, this.serializationService).send({ publicKeyA, publicKeyB, limit, cursor })
   }
 
-  public async getEntities(limit: number, offsetCursor?: string | undefined): Promise<IXyoEntitiesList> {
-    type QResult = Array<{publicKey: string, hash: string, allPublicKeys: string, maxIndex: number}>
-    let getEntitiesQuery: Promise<QResult> | undefined
-
-    if (!offsetCursor) {
-      getEntitiesQuery = this.sqlService.query<QResult>(
-        XyoArchivistSqlRepository.qryEntities, [limit + 1])
-    } else {
-      getEntitiesQuery = this.sqlService.query<QResult>(
-        XyoArchivistSqlRepository.qryEntities2, [offsetCursor, limit + 1])
+  public async getEntities(limit: number, cursor?: string | undefined): Promise<IXyoEntitiesList> {
+    if (!cursor) {
+      return new EntitiesQuery(
+        this.sqlService, this.serializationService).send({ limit })
     }
-
-    const totalSizeQuery = this.sqlService.query<Array<{totalSize: number}>>(XyoArchivistSqlRepository.qryTotalSize2)
-
-    const [entitiesResults, totalSizeResults] = await Promise.all([getEntitiesQuery, totalSizeQuery])
-    const totalSize = _.chain(totalSizeResults).first().get('totalSize').value() as number
-    const hasNextPage = entitiesResults.length === (limit + 1)
-    if (hasNextPage) {
-      entitiesResults.pop()
-    }
-
-    const list = _.chain(entitiesResults)
-      .map((result) => {
-        return {
-          firstKnownPublicKey: this.serializationService
-            .deserialize(result.publicKey)
-            .hydrate<IXyoPublicKey>(),
-          type: {
-            sentinel: parseInt(result.publicKey.substr(12, 2), 16) > 128,
-            archivist: parseInt(result.publicKey.substr(14, 2), 16) > 128,
-            bridge: parseInt(result.publicKey.substr(16, 2), 16) > 128,
-            diviner: parseInt(result.publicKey.substr(18, 2), 16) > 128
-          },
-          mostRecentIndex: result.maxIndex,
-          allPublicKeys: _.chain(result.allPublicKeys).split(',')
-            .map(str => this.serializationService
-              .deserialize(str.trim())
-              .hydrate<IXyoPublicKey>())
-            .value()
-        }
-      })
-      .value()
-
-    const cursorId = _.chain(entitiesResults).last().get('hash').value() as number | undefined
-    return {
-      list,
-      hasNextPage,
-      totalSize,
-      cursor: cursorId ? String(cursorId) : undefined
-    }
+    return new EntitiesQueryWithCursor(
+      this.sqlService, this.serializationService).send({ limit, cursor })
   }
 
   public async removeOriginBlock(hash: Buffer): Promise<void> {
