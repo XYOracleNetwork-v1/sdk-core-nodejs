@@ -2,10 +2,9 @@ import { SqlQuery } from "./query"
 import { SqlService } from "../sql-service"
 import { IXyoSerializationService } from "@xyo-network/serialization"
 import _ from 'lodash'
-import { IXyoIntersectionsList, IXyoEntitiesList } from "@xyo-network/archivist-repository"
-import { OriginChainBlockCountQuery } from "./originchainblockcount"
+import { IXyoEntitiesList } from "@xyo-network/archivist-repository"
 import { IXyoPublicKey } from "@xyo-network/signing"
-import { PublicKeyGroupCountQuery } from "./publickeygroupcount"
+import { CountPublicKeyGroupsQuery } from "./publickeygroups"
 
 // tslint:disable:prefer-array-literal
 
@@ -58,7 +57,7 @@ export class EntitiesQuery extends SqlQuery {
     getEntitiesQuery = this.sql.query<QResult>(
         this.query, [limit + 1])
 
-    const totalSizeQuery = new PublicKeyGroupCountQuery(this.sql, this.serialization).send()
+    const totalSizeQuery = new CountPublicKeyGroupsQuery(this.sql, this.serialization).send()
 
     const [entitiesResults, totalSize] = await Promise.all([getEntitiesQuery, totalSizeQuery])
     const hasNextPage = entitiesResults.length === (limit + 1)

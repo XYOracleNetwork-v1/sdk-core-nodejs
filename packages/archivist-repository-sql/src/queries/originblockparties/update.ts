@@ -6,7 +6,7 @@ import { IXyoSignature, IXyoPublicKey } from "@xyo-network/signing"
 
 // tslint:disable:prefer-array-literal
 
-export class UpdateBlockPartiesQuery extends SqlQuery {
+export class UpdateOriginBlockPartiesQuery extends SqlQuery {
 
   constructor(sql: SqlService, serialization: IXyoSerializationService) {
     super(sql, `

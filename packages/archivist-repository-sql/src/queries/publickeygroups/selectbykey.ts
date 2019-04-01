@@ -5,7 +5,7 @@ import _ from 'lodash'
 
 // tslint:disable:prefer-array-literal
 
-export class SelectPublicKeyGroupsByIdQuery extends SqlQuery {
+export class SelectPublicKeyGroupsByKeyQuery extends SqlQuery {
 
   constructor(sql: SqlService, serialization: IXyoSerializationService) {
     super(sql, `

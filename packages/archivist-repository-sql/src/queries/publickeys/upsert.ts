@@ -1,15 +1,15 @@
-import { SqlQuery } from "./query"
-import { SqlService } from "../sql-service"
+import { SqlQuery } from "../query"
+import { SqlService } from "../../sql-service"
 import { IXyoSerializationService } from "@xyo-network/serialization"
 import _ from 'lodash'
 import { IXyoPublicKey } from "@xyo-network/signing"
-import { UpdatePublicKeysQuery } from "./updatepublickeys"
-import { InsertPublicKeysQuery } from "./insertpublickeys"
-import { SelectPublicKeyGroupsByIdQuery, DeletePublicKeyGroupQuery } from "./publickeygroups"
+import { RelinkPublicKeysQuery } from "./relinkall"
+import { InsertPublicKeysQuery } from "./insert"
+import { SelectPublicKeyGroupsByKeyQuery, DeletePublicKeyGroupQuery } from "../publickeygroups"
 
 // tslint:disable:prefer-array-literal
 
-export class UpsertPublicKeyQuery extends SqlQuery {
+export class UpsertPublicKeysQuery extends SqlQuery {
 
   constructor(sql: SqlService, serialization: IXyoSerializationService) {
     super(sql, ``, // this is a meta query, so no sql
@@ -24,7 +24,7 @@ export class UpsertPublicKeyQuery extends SqlQuery {
   ) {
     const hexKey = typeof key === 'string' ? key : key.serializeHex()
 
-    const publicKeyMatches = await new SelectPublicKeyGroupsByIdQuery(this.sql, this.serialization).send(
+    const publicKeyMatches = await new SelectPublicKeyGroupsByKeyQuery(this.sql, this.serialization).send(
       { hexKey }
     )
 
@@ -35,7 +35,7 @@ export class UpsertPublicKeyQuery extends SqlQuery {
       }
 
       // Self heal out of turn blocks
-      await new UpdatePublicKeysQuery(this.sql, this.serialization).send(
+      await new RelinkPublicKeysQuery(this.sql, this.serialization).send(
         { publicKeyGroupIdNew: publicKeyGroupId,
           publicKeyGroupIdOld: publicKey.publicKeyGroupId
         }

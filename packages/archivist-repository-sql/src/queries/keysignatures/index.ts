@@ -1,0 +1,1 @@
+export { InsertKeySignaturesQuery } from './insert'

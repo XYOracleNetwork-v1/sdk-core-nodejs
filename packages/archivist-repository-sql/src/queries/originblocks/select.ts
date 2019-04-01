@@ -1,33 +1,31 @@
-import { SqlQuery } from "./query"
-import { SqlService } from "../sql-service"
+import { SqlQuery } from "../query"
+import { SqlService } from "../../sql-service"
 import { IXyoSerializationService } from "@xyo-network/serialization"
 import { IXyoBoundWitness } from '@xyo-network/bound-witness'
 import _ from 'lodash'
-import { OriginBlockCountQuery } from "./originblockcount"
+import { CountOriginBlocksQuery } from "./count"
 
 // tslint:disable:prefer-array-literal
 
-export class OriginBlocksWithOffsetQuery extends SqlQuery {
+export class SelectOriginBlocksQuery extends SqlQuery {
 
   constructor(sql: SqlService, serialization: IXyoSerializationService) {
     super(sql, `
       SELECT
         ob.bytes as bytes
       FROM OriginBlocks ob
-        JOIN OriginBlocks ob2 on ob2.signedHash = ?
-      WHERE ob.id > ob2.id
       ORDER BY ob.id
       LIMIT ?
     `,
     serialization)
   }
 
-  public async send({ limit, offsetHash }: {limit: number, offsetHash: Buffer}): Promise<any> {
+  public async send({ limit }: {limit: number}): Promise<any> {
     const originBlockQuery = this.sql.query<Array<{bytes: Buffer}>>(
-      this.query, [offsetHash.toString('hex'), limit + 1])
+      this.query, [limit + 1])
 
     const [originBlockResults, totalSize] =
-      await Promise.all([originBlockQuery, new OriginBlockCountQuery(this.sql, this.serialization).send()])
+      await Promise.all([originBlockQuery, new CountOriginBlocksQuery(this.sql, this.serialization).send()])
 
     const hasNextPage = originBlockResults.length === (limit + 1)
 

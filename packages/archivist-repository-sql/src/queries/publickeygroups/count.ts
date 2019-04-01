@@ -1,17 +1,17 @@
-import { SqlQuery } from "./query"
-import { SqlService } from "../sql-service"
+import { SqlQuery } from "../query"
+import { SqlService } from "../../sql-service"
 import { IXyoSerializationService } from "@xyo-network/serialization"
 import _ from 'lodash'
 
 // tslint:disable:prefer-array-literal
 
-export class OriginBlockCountQuery extends SqlQuery {
+export class CountPublicKeyGroupsQuery extends SqlQuery {
 
   constructor(sql: SqlService, serialization: IXyoSerializationService) {
     super(sql, `
       SELECT
-        COUNT(ob.id) as totalSize
-      FROM OriginBlocks ob;
+        COUNT(pkg.id) as totalSize
+      FROM PublicKeyGroups pkg;
     `,
     serialization)
   }

@@ -1,3 +1,4 @@
 export { InsertPublicKeyGroupQuery } from './insert'
 export { DeletePublicKeyGroupQuery } from './delete'
-export { SelectPublicKeyGroupsByIdQuery } from './selectbyid'
+export { SelectPublicKeyGroupsByKeyQuery } from './selectbykey'
+export { CountPublicKeyGroupsQuery } from './count'

@@ -1,15 +1,14 @@
-import { SqlQuery } from "./query"
-import { SqlService } from "../sql-service"
+import { SqlQuery } from "../query"
+import { SqlService } from "../../sql-service"
 import { IXyoSerializationService } from "@xyo-network/serialization"
 import _ from 'lodash'
-import { IXyoSignature, IXyoPublicKey } from "@xyo-network/signing"
 
 // tslint:disable:prefer-array-literal
 
 // This seems to update the GroupId, which is the earliest known public key for
 // a PoO chain
 
-export class UpdatePublicKeysQuery extends SqlQuery {
+export class RelinkPublicKeysQuery extends SqlQuery {
 
   constructor(sql: SqlService, serialization: IXyoSerializationService) {
     super(sql, `

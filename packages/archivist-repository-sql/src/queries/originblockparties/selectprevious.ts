@@ -1,11 +1,11 @@
-import { SqlQuery } from "./query"
-import { SqlService } from "../sql-service"
+import { SqlQuery } from "../query"
+import { SqlService } from "../../sql-service"
 import { IXyoSerializationService } from "@xyo-network/serialization"
 import _ from 'lodash'
 
 // tslint:disable:prefer-array-literal
 
-export class PreviousOriginBlockPartyIdQuery extends SqlQuery {
+export class SelectPreviousOriginBlockPartiesQuery extends SqlQuery {
 
   constructor(sql: SqlService, serialization: IXyoSerializationService) {
     super(sql, `

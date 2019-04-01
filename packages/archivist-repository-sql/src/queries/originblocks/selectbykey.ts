@@ -1,5 +1,5 @@
-import { SqlQuery } from "./query"
-import { SqlService } from "../sql-service"
+import { SqlQuery } from "../query"
+import { SqlService } from "../../sql-service"
 import { IXyoSerializationService } from "@xyo-network/serialization"
 import { IXyoBoundWitness } from '@xyo-network/bound-witness'
 import _ from 'lodash'
@@ -7,7 +7,7 @@ import { IXyoPublicKey } from "@xyo-network/signing"
 
 // tslint:disable:prefer-array-literal
 
-export class OriginBlocksByPublicKeyQuery extends SqlQuery {
+export class SelectOriginBlocksByKeyQuery extends SqlQuery {
 
   constructor(sql: SqlService, serialization: IXyoSerializationService) {
     super(sql, `

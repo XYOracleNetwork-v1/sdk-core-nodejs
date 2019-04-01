@@ -5,7 +5,7 @@ import _ from 'lodash'
 
 // tslint:disable:prefer-array-literal
 
-export class InsertBlockPartiesQuery extends SqlQuery {
+export class InsertOriginBlockPartiesQuery extends SqlQuery {
 
   constructor(sql: SqlService, serialization: IXyoSerializationService) {
     super(sql, `

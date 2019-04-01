@@ -5,9 +5,8 @@ import { IXyoBoundWitness } from '@xyo-network/bound-witness'
 import _ from 'lodash'
 import { schema } from '@xyo-network/serialization-schema'
 import { XyoNextPublicKey, XyoIndex, XyoPreviousHash } from '@xyo-network/origin-chain'
-import { PreviousOriginBlockPartyIdQuery } from "./previousoriginblockpartyid"
-import { UpsertPublicKeyQuery } from "./upsertpublickey"
-import { SelectAllBlockPartyIdsQuery, InsertBlockPartiesQuery } from "./originblockparties"
+import { SelectAllOriginBlockPartyIdsQuery, InsertOriginBlockPartiesQuery, SelectPreviousOriginBlockPartiesQuery } from "./originblockparties"
+import { UpsertPublicKeysQuery } from "./publickeys"
 
 // tslint:disable:prefer-array-literal
 
@@ -37,7 +36,7 @@ export class CreateOriginBlockPartiesQuery extends SqlQuery {
 
         let nextPublicKeyId: number | undefined
         if (nextPublicKey) {
-          nextPublicKeyId = await new UpsertPublicKeyQuery(this.sql, this.serialization).send(
+          nextPublicKeyId = await new UpsertPublicKeysQuery(this.sql, this.serialization).send(
             {
               key: (nextPublicKey as XyoNextPublicKey).publicKey,
               publicKeyGroupId: publicKeyGroupIds[currentIndex]
@@ -53,16 +52,16 @@ export class CreateOriginBlockPartiesQuery extends SqlQuery {
 
         const publicKeys = originBlock.publicKeys[currentIndex].keys.map(pk => pk.serializeHex())
 
-        const previousOriginBlockPartyId = await new PreviousOriginBlockPartyIdQuery(
+        const previousOriginBlockPartyId = await new SelectPreviousOriginBlockPartiesQuery(
           this.sql, this.serialization).send(
           { publicKeys,
             blockIndex: blockIndex.number - 1,
             previousHash: previousOriginBlockHash }
           )
 
-        await new SelectAllBlockPartyIdsQuery(this.sql, this.serialization).send()
+        await new SelectAllOriginBlockPartyIdsQuery(this.sql, this.serialization).send()
 
-        const insertId = await new InsertBlockPartiesQuery(this.sql, this.serialization).send(
+        const insertId = await new InsertOriginBlockPartiesQuery(this.sql, this.serialization).send(
           {
             originBlockId,
             nextPublicKeyId,

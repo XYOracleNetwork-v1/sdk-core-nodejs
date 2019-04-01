@@ -29,22 +29,19 @@ import { IXyoHash } from '@xyo-network/hashing'
 import { IOriginBlockQueryResult } from '@xyo-network/origin-block-repository'
 import { schema } from '@xyo-network/serialization-schema'
 import { XyoBridgeHashSet } from '@xyo-network/origin-chain'
-import { OriginBlockByHashQuery } from './queries/originblock-by-hash'
-import { BlocksTheProviderAttributionQuery } from './queries/blocks-that-provider-attribution'
-import { OriginBlocksWithOffsetQuery } from './queries/originblocks-offset'
-import { OriginBlocksQuery } from './queries/originblocks'
-import { ExistingKeysQuery } from './queries/existing-keys'
-import { OriginBlocksByPublicKeyQuery } from './queries/originblocks-by-publickey'
+import { BlocksTheProviderAttributionQuery } from './queries/originblockattributions/selectbyhash'
 import { IntersectionsQuery } from './queries/intersections'
-import { IntersectionsWithCursorQuery } from './queries/intersections-with-cursor'
-import { EntitiesQueryWithCursor } from './queries/entities-with-cursor'
+import { IntersectionsWithCursorQuery } from './queries/intersectionswithcursor'
+import { EntitiesQueryWithCursor } from './queries/entitieswithcursor'
 import { EntitiesQuery } from './queries/entities'
-import { CreateKeySignaturesQuery } from './queries/createkeysignatures'
+import { InsertKeySignaturesQuery } from './queries/keysignatures'
 import { CreateOriginBlockPartiesQuery } from './queries/createoriginblockparties'
 import { InsertPayloadItemsQuery } from './queries/payloaditems/insert'
-import { UpsertPublicKeyQuery } from './queries/upsertpublickey'
+import { UpsertPublicKeysQuery, SelectPublicKeysByKeysQuery } from './queries/publickeys'
 import { InsertPublicKeyGroupQuery } from './queries/publickeygroups'
-import { UpdateBlockPartiesQuery, UnlinkBlockPartiesQuery, DeleteBlockPartiesQuery } from './queries/originblockparties'
+import { UpdateOriginBlockPartiesQuery, UnlinkOriginBlockPartiesQuery, DeleteOriginBlockPartiesQuery } from './queries/originblockparties'
+import { SelectOriginBlocksByKeyQuery, SelectOriginBlocksByHashQuery, SelectOriginBlocksWithOffsetQuery, SelectOriginBlocksQuery } from './queries/originblocks'
+import { DeletePayloadItemsQuery } from './queries/payloaditems'
 
 export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistRepository {
 
@@ -120,7 +117,7 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
   }
 
   public async getOriginBlocksByPublicKey(publicKey: IXyoPublicKey): Promise<IXyoOriginBlocksByPublicKeyResult> {
-    return new OriginBlocksByPublicKeyQuery(this.sqlService, this.serializationService).send({ publicKey })
+    return new SelectOriginBlocksByKeyQuery(this.sqlService, this.serializationService).send({ publicKey })
   }
 
   public async getIntersections(
@@ -150,15 +147,17 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
   public async removeOriginBlock(hash: Buffer): Promise<void> {
     const hexHash = hash.toString('hex')
 
-    await this.sqlService.query(XyoArchivistSqlRepository.qryDeletePayloadItems, [hexHash])
-
-    await this.sqlService.query(XyoArchivistSqlRepository.qryDeleteKeySignatures, [hexHash])
-
-    await new UnlinkBlockPartiesQuery(this.sqlService, this.serializationService).send(
+    await new DeletePayloadItemsQuery(this.sqlService, this.serializationService).send(
       { hash: hexHash }
     )
 
-    await new DeleteBlockPartiesQuery(this.sqlService, this.serializationService).send(
+    await this.sqlService.query(XyoArchivistSqlRepository.qryDeleteKeySignatures, [hexHash])
+
+    await new UnlinkOriginBlockPartiesQuery(this.sqlService, this.serializationService).send(
+      { hash: hexHash }
+    )
+
+    await new DeleteOriginBlockPartiesQuery(this.sqlService, this.serializationService).send(
       { hash: hexHash }
     )
 
@@ -257,7 +256,7 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
   }
 
   public async getOriginBlockByHash(hash: Buffer): Promise<IXyoBoundWitness | undefined> {
-    return new OriginBlockByHashQuery(this.sqlService, this.serializationService).send({ hash })
+    return new SelectOriginBlocksByHashQuery(this.sqlService, this.serializationService).send({ hash })
   }
 
   public async getBlocksThatProviderAttribution(hash: Buffer): Promise<{[h: string]: IXyoBoundWitness}> {
@@ -267,9 +266,10 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
   public async getOriginBlocks(limit: number, offsetHash?: Buffer | undefined): Promise<IOriginBlockQueryResult> {
 
     if (offsetHash) {
-      return new OriginBlocksWithOffsetQuery(this.sqlService, this.serializationService).send({ limit, offsetHash })
+      return new SelectOriginBlocksWithOffsetQuery(
+        this.sqlService, this.serializationService).send({ limit, offsetHash })
     }
-    return new OriginBlocksQuery(this.sqlService, this.serializationService).send({ limit })
+    return new SelectOriginBlocksQuery(this.sqlService, this.serializationService).send({ limit })
   }
 
   private async tryCreatePublicKeys(originBlock: IXyoBoundWitness) {
@@ -297,13 +297,13 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
   ): Promise<{publicKeyGroupId: number, publicKeyIds: number[]}> {
     try {
       const pks = _.chain(publicKeySet).map(key => key.serializeHex()).value()
-      const existingKeys = await new ExistingKeysQuery(this.sqlService, this.serializationService).send(pks)
+      const existingKeys = await new SelectPublicKeysByKeysQuery(this.sqlService, this.serializationService).send(pks)
 
       if (existingKeys.length === 0) {
         const publicKeyGroupId = await this.createNewPublicKeyGroup()
         const publicKeyIds = await publicKeySet.reduce(async (idCollectionPromise, key) => {
           const ids = await idCollectionPromise
-          const newId = await new UpsertPublicKeyQuery(this.sqlService, this.serializationService).send(
+          const newId = await new UpsertPublicKeysQuery(this.sqlService, this.serializationService).send(
             {
               key,
               publicKeyGroupId
@@ -346,7 +346,7 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
           keysThatNeedToBeCreated,
           async (promiseChain, keyThatNeedToBeCreated) => {
             const ids = await promiseChain
-            const newId = await new UpsertPublicKeyQuery(this.sqlService, this.serializationService).send(
+            const newId = await new UpsertPublicKeysQuery(this.sqlService, this.serializationService).send(
               {
                 publicKeyGroupId,
                 key: keyThatNeedToBeCreated
@@ -464,7 +464,7 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
     try {
       const ids = await publicKeySets.reduce(async (promiseChain, publicKeySet, currentIndex) => {
         const collections = await promiseChain
-        const newIds = await new CreateKeySignaturesQuery(this.sqlService, this.serializationService).send(
+        const newIds = await new InsertKeySignaturesQuery(this.sqlService, this.serializationService).send(
           { publicKeyIds: publicKeySet.publicKeyIds,
             originBlockPartyId: originBlockParties[currentIndex],
             signatures: originBlock.signatures[currentIndex].signatures }
@@ -508,7 +508,7 @@ export class XyoArchivistSqlRepository extends XyoBase implements IXyoArchivistR
   }
 
   private async linkPreviousInsertOriginBlockParties(originBlockPartyId: number) {
-    await new UpdateBlockPartiesQuery(this.sqlService, this.serializationService).send(
+    await new UpdateOriginBlockPartiesQuery(this.sqlService, this.serializationService).send(
       { originBlockPartyId }
     )
   }
