@@ -7,23 +7,24 @@ import { OriginBlockCountQuery } from "./originblockcount"
 
 // tslint:disable:prefer-array-literal
 
-export class OriginBlocksQuery extends SqlQuery {
+export class OriginBlocksWithOffsetQuery extends SqlQuery {
 
   constructor(sql: SqlService, serialization: IXyoSerializationService) {
     super(sql, `
-      SELECT ob.bytes as bytes
+      SELECT
+        ob.bytes as bytes
       FROM OriginBlocks ob
-      WHERE signedHash = ?
-      LIMIT 1;
+        JOIN OriginBlocks ob2 on ob2.signedHash = ?
+      WHERE ob.id > ob2.id
+      ORDER BY ob.id
+      LIMIT ?
     `,
     serialization)
   }
 
-  public async send({ limit }: {limit: number}): Promise<any> {
-    let originBlockQuery: Promise<Array<{bytes: Buffer}>> | undefined
-
-    originBlockQuery = this.sql.query<Array<{bytes: Buffer}>>(
-      this.query, [limit + 1])
+  public async send({ limit, offsetHash }: {limit: number, offsetHash: Buffer}): Promise<any> {
+    const originBlockQuery = this.sql.query<Array<{bytes: Buffer}>>(
+      this.query, [offsetHash.toString('hex'), limit + 1])
 
     const [originBlockResults, totalSize] =
       await Promise.all([originBlockQuery, new OriginBlockCountQuery(this.sql, this.serialization).send()])

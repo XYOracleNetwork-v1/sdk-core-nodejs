@@ -1,8 +1,8 @@
 import { SqlQuery } from "./query"
 import { SqlService } from "../sql-service"
 import { IXyoSerializationService } from "@xyo-network/serialization"
-import { IXyoBoundWitness } from "../../../bound-witness/dist"
 import _ from 'lodash'
+import { IXyoBoundWitness } from '@xyo-network/bound-witness'
 
 // tslint:disable:prefer-array-literal
 
