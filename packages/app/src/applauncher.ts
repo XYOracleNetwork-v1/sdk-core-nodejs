@@ -56,7 +56,7 @@ export class XyoAppLauncher extends XyoBase {
         writeConfigFile = await this.showWizard(configName)
       }
     } else {
-      this.logInfo(`No configuration passed in not found`)
+      this.logInfo(`No configuration passed in`)
       writeConfigFile = await this.showWizard()
     }
 

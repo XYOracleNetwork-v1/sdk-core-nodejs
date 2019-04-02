@@ -26,11 +26,10 @@ import { SqlWizard } from './wizard/sql'
 import { EthereumNodeAddressWizard } from './wizard/ethereum-node-address'
 import { EthereumAccountWizard } from './wizard/ethereum-account'
 import { ContractWizard, IContractConfig } from './wizard/contract'
-import { ISqlArchivistRepositoryConfig } from '../../archivist-repository-sql/dist'
+import { ISqlArchivistRepositoryConfig } from '@xyo-network/archivist-repository-sql'
 import { GraphqlWizard } from './wizard/graphql'
 import { ApiWizard } from './wizard/api'
 import { AutostartWizard } from './wizard/autostart'
-import { IArchivistRepositoryConfig } from '@xyo-network/archivist-repository'
 
 export class AppWizard extends XyoBase {
   constructor(private readonly rootPath: string) {
