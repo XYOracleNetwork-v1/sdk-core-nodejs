@@ -6,7 +6,9 @@
 
 [![NPM](https://nodei.co/npm/@xyo-network/sdk-core-node.png)](https://nodei.co/npm/@xyo-network/sdk-core-node/)
 
-[![Build Status](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs.svg?branch=develop)](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs) [![Greenkeeper badge](https://badges.greenkeeper.io/XYOracleNetwork/sdk-core-nodejs.svg)](https://greenkeeper.io/) [![DepShield Badge](https://depshield.sonatype.org/badges/XYOracleNetwork/sdk-core-nodejs/depshield.svg)](https://depshield.github.io) [![David Badge](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs/status.svg)](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs) [![David Badge](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs/dev-status.svg)](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs)
+[![Build Status](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs.svg?branch=develop)](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs) [![Greenkeeper badge](https://badges.greenkeeper.io/XYOracleNetwork/sdk-core-nodejs.svg)](https://greenkeeper.io/) [![DepShield Badge](https://depshield.sonatype.org/badges/XYOracleNetwork/sdk-core-nodejs/depshield.svg)](https://depshield.github.io)
+
+[![David Badge](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs/status.svg)](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs) [![David Badge](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs/dev-status.svg)](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs)
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1f31c7fa87694b8eab91a2d71f74b697)](https://www.codacy.com/app/arietrouw/sdk-core-nodejs?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=XYOracleNetwork/sdk-core-nodejs&amp;utm_campaign=Badge_Grade) [![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability) [![BCH compliance](https://bettercodehub.com/edge/badge/XYOracleNetwork/sdk-core-nodejs?branch=develop)](https://bettercodehub.com/results/XYOracleNetwork/sdk-core-nodejs)
 
