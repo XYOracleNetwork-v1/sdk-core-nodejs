@@ -1,4 +1,5 @@
-[logo]: https://www.xy.company/img/home/logo_xy.png
+[logo]: https://cdn.xy.company/img/brand/XY_Logo_GitHub.png
+
 
 ![logo]
 
