@@ -9,10 +9,9 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoNetworkProvider, IXyoNetworkProcedureCatalogue, IXyoNetworkPeer, IXyoNetworkPipe, CATALOGUE_LENGTH_IN_BYTES, CATALOGUE_SIZE_OF_SIZE_BYTES, CatalogueItem } from '@xyo-network/network'
+import { IXyoNetworkProvider, IXyoNetworkProcedureCatalogue, IXyoNetworkPeer, IXyoNetworkPipe, CATALOGUE_LENGTH_IN_BYTES, CATALOGUE_SIZE_OF_SIZE_BYTES, CatalogueItem, bufferToCatalogueItems } from '@xyo-network/network'
 import { IXyoPeerConnectionDelegate, IXyoPeerConnectionHandler } from './@types'
 import { XyoBase } from '@xyo-network/base'
-import { object } from 'joi'
 
 export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeerConnectionDelegate {
 
@@ -33,47 +32,68 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
   }
 
   public async doClientNegotiation (networkPipe: IXyoNetworkPipe) {
+    const pipe = networkPipe
     const firstMessage = this.getFirstMessage(this.combineCatalogueItems(this.catalogue.getCurrentCatalogue()))
-    const encodedResponse = await networkPipe.send(firstMessage.bytesToSend, true)
+    const encodedResponse = await pipe.send(firstMessage.bytesToSend, true)
 
     if (encodedResponse) {
-      const { catNum, response } = this.getChoiceAndResponse(encodedResponse)
+      const { serversChoices, response } = this.getChoiceAndResponse(encodedResponse)
 
-      networkPipe.initiationData = response
-      networkPipe.otherCatalogue = [catNum]
-      return networkPipe
+      if (serversChoices.length !== 1) {
+        // this is thrown when the server chooses more than one item
+        throw Error("Invalid choice!")
+      }
+
+      pipe.initiationData = response
+
+      const serversChoice = serversChoices[0]
+      return { pipe, serversChoice }
     }
 
     throw Error("No response!")
   }
 
   public async handlePeerConnection(networkPipe: IXyoNetworkPipe) {
-    if (networkPipe.otherCatalogue) {
-      if (networkPipe.otherCatalogue.length > 0) {
-        return this.peerConnectionHandler.handlePeerConnection(networkPipe)
-      }
-    }
+    const initiationData = networkPipe.initiationData
 
-    const pipe = await this.doClientNegotiation(networkPipe)
-    return this.peerConnectionHandler.handlePeerConnection(pipe)
+    if (initiationData) {
+      // is a server, networkPipe.initiationData is the clients catalogue
+      const clientCatalogueItems = this.getClientCatalogue(initiationData)
+      return this.peerConnectionHandler.handlePeerConnection(networkPipe, undefined, clientCatalogueItems)
+    }
+    // is a client, networkPipe.initiationData is null, so we must send them our catalogue
+    // the pipe here is the new pipe with contained data (the servers response)
+    const { pipe, serversChoice } = await this.doClientNegotiation(networkPipe)
+    return this.peerConnectionHandler.handlePeerConnection(pipe, serversChoice, undefined)
   }
 
   private getFirstMessage(catalogue: CatalogueItem) {
 
-    /** Tell the other node this is the catalogue item you chose */
+    // Tell the other node this is the catalogue item you chose
     const catalogueBuffer = Buffer.alloc(CATALOGUE_LENGTH_IN_BYTES)
     const sizeOfCatalogueInBytesBuffers = Buffer.alloc(CATALOGUE_SIZE_OF_SIZE_BYTES)
 
     catalogueBuffer.writeUInt32BE(catalogue, 0)
     sizeOfCatalogueInBytesBuffers.writeUInt8(CATALOGUE_LENGTH_IN_BYTES, 0)
 
-    /** Build the final message */
+    // Build the final message
     const bytesToSend = Buffer.concat([
       sizeOfCatalogueInBytesBuffers,
       catalogueBuffer,
     ])
 
     return { bytesToSend }
+  }
+
+  private getClientCatalogue (bytes: Buffer): CatalogueItem[] {
+    if (bytes.length < 2) {
+      return []
+    }
+
+    const sizeOfCatalogue = bytes.readUInt8(0)
+    const encodedCatalogue = bytes.slice(1, sizeOfCatalogue)
+
+    return bufferToCatalogueItems(encodedCatalogue)
   }
 
   private combineCatalogueItems(items: CatalogueItem[]): number {
@@ -89,30 +109,30 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
   private getChoiceAndResponse(message: Buffer) {
     const sizeOfCat = message.readUInt8(0)
     const response = message.slice(1 + sizeOfCat, message.length)
-    const cat = message.readInt8(sizeOfCat)
-    const catNum = this.getEnumFromValue(cat)
+    const cat = message.slice(1, sizeOfCat)
+    const serversChoices = bufferToCatalogueItems(cat)
 
-    return { catNum, response }
+    return { serversChoices, response }
   }
 
-  // todo find a better way of getting the enum from a number
-  private getEnumFromValue (value: number): CatalogueItem {
-    console.log(value)
-    const allEnums = [
-      CatalogueItem.BOUND_WITNESS,
-      CatalogueItem.TAKE_ORIGIN_CHAIN,
-      CatalogueItem.GIVE_ORIGIN_CHAIN,
-      CatalogueItem.TAKE_REQUESTED_BLOCKS,
-      CatalogueItem.GIVE_REQUESTED_BLOCKS]
+  // // todo find a better way of getting the enum from a number
+  // private getEnumFromValue (value: number): CatalogueItem {
+  //   console.log(value)
+  //   const allEnums = [
+  //     CatalogueItem.BOUND_WITNESS,
+  //     CatalogueItem.TAKE_ORIGIN_CHAIN,
+  //     CatalogueItem.GIVE_ORIGIN_CHAIN,
+  //     CatalogueItem.TAKE_REQUESTED_BLOCKS,
+  //     CatalogueItem.GIVE_REQUESTED_BLOCKS]
 
-    let i = 0
-    for (const index of allEnums) {
-      if (index === value) {
-        return allEnums[i]
-      }
-      i++
-    }
+  //   let i = 0
+  //   for (const index of allEnums) {
+  //     if (index === value) {
+  //       return allEnums[i]
+  //     }
+  //     i++
+  //   }
 
-    throw Error(`Invalid Catalogue Item: ${value}`)
-  }
+  //   throw Error(`Invalid Catalogue Item: ${value}`)
+  // }
 }

@@ -23,16 +23,10 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
   public networkHeuristics: IXyoSerializableObject[] = []
 
   /**
-   * The peers catalogue
-   */
-
-  public otherCatalogue = this.connectionResult.catalogueItems
-
-  /**
    * Any initiationData that may have been passed with the first part of the connection
    */
 
-  public initiationData = this.connectionResult.data
+  public initiationData = this.connectionResult.initiationData
 
   /**
    * Returns the peer from the other end of the pipe

@@ -27,13 +27,11 @@ export class XyoTcpConnectionResult {
    *
    * @param socket The socket underpinning the TCP connection
    * @param data The payload of everything from the tcp request, outside the tcp protocol sizing headers
-   * @param catalogueItems A list of catalogue items
    */
 
   constructor (
     public socket: net.Socket,
-    public data: Buffer,
-    public catalogueItems: CatalogueItem[]
+    public initiationData: Buffer | undefined,
   ) {
 
     this.socketId = Buffer.from(socket.remoteAddress || 'unknown')

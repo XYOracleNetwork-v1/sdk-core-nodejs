@@ -162,6 +162,6 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
     client.on('error', onError)
     // client.on('connect')
 
-    return new XyoTcpConnectionResult(client, Buffer.alloc(0), [])
+    return new XyoTcpConnectionResult(client, undefined)
   }
 }

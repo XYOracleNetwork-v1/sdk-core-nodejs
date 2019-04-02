@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoNetworkPipe } from '@xyo-network/network'
+import { IXyoNetworkPipe, CatalogueItem } from '@xyo-network/network'
 import { IXyoPeerConnectionHandler, IXyoCatalogueResolver, IXyoCategoryRouter } from './@types'
 import { XyoBase } from '@xyo-network/base'
 
@@ -20,14 +20,18 @@ export class XyoPeerConnectionHandler extends XyoBase implements IXyoPeerConnect
   }
 
   // this is when a SERVER chooses the flag for the client
-  public async handlePeerConnection(networkPipe: IXyoNetworkPipe) {
-    if (!networkPipe.otherCatalogue || networkPipe.otherCatalogue.length < 1) {
-      this.logInfo(`No catalogue items in other catalogue, closing connection`)
+  public async handlePeerConnection(
+    networkPipe: IXyoNetworkPipe,
+    choice: CatalogueItem | undefined,
+    toChoose: CatalogueItem[] | undefined) {
+
+    if (choice && toChoose) {
+      this.logInfo(`Can not choose and have a choice`)
       await networkPipe.close()
       return
     }
 
-    const category = this.categoryResolver.resolveCategory(networkPipe.otherCatalogue)
+    const category = this.resolveCategory(choice, toChoose)
 
     if (!category) {
       this.logInfo(`Unable to resolve a category ${category}, closing connection`)
@@ -36,6 +40,7 @@ export class XyoPeerConnectionHandler extends XyoBase implements IXyoPeerConnect
     }
 
     const handler = this.router.getHandler(category)
+
     if (!handler) {
       this.logInfo(`Could not find handler for category ${category}, closing connection`)
       await networkPipe.close()
@@ -43,5 +48,17 @@ export class XyoPeerConnectionHandler extends XyoBase implements IXyoPeerConnect
     }
 
     await handler.handle(networkPipe)
+  }
+
+  private resolveCategory (choice: CatalogueItem | undefined, toChoose: CatalogueItem[] | undefined) {
+    if (choice) {
+      return choice
+    }
+
+    if (toChoose) {
+      return this.categoryResolver.resolveCategory(toChoose)
+    }
+
+    return undefined
   }
 }
