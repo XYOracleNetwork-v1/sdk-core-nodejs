@@ -41,6 +41,8 @@ export async function main() {
         if (program.forever) {
           appLauncher.setForeverPass(program.forever)
         }
+        console.log(`Command: ${cmd}`)
+        console.log(`Target: ${target}`)
         await appLauncher.initialize({ configName: target || program.config, database: program.database })
       } catch (err) {
         console.error(`There was an error during initialization. Will exit`, err)
