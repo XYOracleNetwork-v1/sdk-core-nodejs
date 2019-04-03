@@ -279,7 +279,7 @@ export class XyoAppLauncher extends XyoBase {
     if (!this.password) {
       tryAgain = true
       // @ts-ignore
-      const { password } = await this.prompt<{ password }>({
+      const { password } = await prompt<{ password }>({
         type: 'input',
         name: 'password',
         message: 'What is your Diviner password?',

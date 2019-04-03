@@ -22,14 +22,14 @@ import { BootstrapWizard } from './wizard/bootstrap'
 import { ActAsServerWizard } from './wizard/act-as-server'
 import { IpfsWizard, IIpfsConfig } from './wizard/ipfs.'
 import { ComponentsWizard, XyoComponent } from './wizard/components'
-import { SqlWizard } from './wizard/sql'
+import { RepositoryWizard } from './wizard/repository'
 import { EthereumNodeAddressWizard } from './wizard/ethereum-node-address'
 import { EthereumAccountWizard } from './wizard/ethereum-account'
 import { ContractWizard, IContractConfig } from './wizard/contract'
-import { ISqlArchivistRepositoryConfig } from '@xyo-network/archivist-repository-sql'
 import { GraphqlWizard } from './wizard/graphql'
 import { ApiWizard } from './wizard/api'
 import { AutostartWizard } from './wizard/autostart'
+import { IArchivistRepositoryConfig } from '@xyo-network/archivist-repository'
 
 export class AppWizard extends XyoBase {
   constructor(private readonly rootPath: string) {
@@ -61,7 +61,7 @@ export class AppWizard extends XyoBase {
     const ipfs = await new IpfsWizard().start()
 
     const components = await new ComponentsWizard().start()
-    let sqlCredentials: ISqlArchivistRepositoryConfig | undefined
+    let repositoryConfig: IArchivistRepositoryConfig | undefined
     let ethereumNodeAddress: string | undefined
     let ethKeys: IEthCryptoKeys | undefined
     let xyStakingConsensus: IContractConfig | undefined
@@ -69,7 +69,7 @@ export class AppWizard extends XyoBase {
     let xyBlockProducer: IContractConfig | undefined
 
     if (components.includes(XyoComponent.ARCHIVIST)) {
-      sqlCredentials = await new SqlWizard().start()
+      repositoryConfig = await new RepositoryWizard().start()
     }
 
     if (components.includes(XyoComponent.DIVINER)) {
@@ -103,9 +103,9 @@ export class AppWizard extends XyoBase {
     const startNode = await new AutostartWizard().start()
 
     let archivist: IArchivistConfig | undefined
-    if (components.includes(XyoComponent.ARCHIVIST) && sqlCredentials) {
+    if (components.includes(XyoComponent.ARCHIVIST) && repositoryConfig) {
       archivist = {
-        repository: sqlCredentials
+        repository: repositoryConfig
       }
     }
 

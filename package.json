@@ -1,6 +1,6 @@
 {
   "name": "xyo-core",
-  "version": "0.2.0",
+  "version": "0.50.10",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "index.js",
   "author": "XY Development Team",
@@ -12,7 +12,7 @@
     "test": "yarn build && export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose false --detectOpenHandles",
     "tslint": "tslint -c tslint.json -p packages/tsconfig.json",
     "clean": "node scripts/clean.js",
-    "start": "yarn build && yarn --cwd packages/app start",
+    "start": "ts-node --project ./packages/app/tsconfig.json ./packages/app start",
     "forever": "yarn --max-old-space-size=4096 --cwd packages/app forever",
     "start:diviner": "ts-node --project ./packages/app/tsconfig.json ./packages/app start diviner",
     "start:archivist": "ts-node --project ./packages/app/tsconfig.json ./packages/app start archivist",

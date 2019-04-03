@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoNetworkPipe } from '@xyo-network/network'
+import { IXyoNetworkPipe, CatalogueItem } from '@xyo-network/network'
 import { IXyoBoundWitness } from '@xyo-network/bound-witness'
 import { IXyoOriginChainRepository, IXyoOriginChainMutex } from '@xyo-network/origin-chain'
 import { XyoBase } from '@xyo-network/base'
@@ -32,20 +32,20 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
     super()
   }
 
-  public async handle(networkPipe: IXyoNetworkPipe): Promise<IXyoBoundWitness> {
+  public async handle(networkPipe: IXyoNetworkPipe, didInit: boolean): Promise<IXyoBoundWitness> {
     const mutex = await this.tryGetMutex(0)
     try {
       const [payload, signers] = await Promise.all([
 
         // BRIDGE
-        this.boundWitnessPayloadProvider.getPayload(this.originStateRepository, networkPipe.otherCatalogue![0]),
+        this.boundWitnessPayloadProvider.getPayload(this.originStateRepository, CatalogueItem.BOUND_WITNESS),
         this.originStateRepository.getSigners()
       ])
 
       const interaction = this.boundWitnessInteractionFactory.newInstance(signers, payload)
 
-      const boundWitness = await interaction.run(networkPipe)
-      await this.boundWitnessSuccessListener.onBoundWitnessSuccess(boundWitness, mutex, networkPipe.otherCatalogue![0])
+      const boundWitness = await interaction.run(networkPipe, didInit)
+      await this.boundWitnessSuccessListener.onBoundWitnessSuccess(boundWitness, mutex, CatalogueItem.BOUND_WITNESS)
       return boundWitness
     } finally {
       await this.originStateRepository.releaseMutex(mutex)
