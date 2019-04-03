@@ -10,7 +10,7 @@
   "dependencies": {
     "@xyo-network/buffer-utils": "^0.49.0",
     "@xyo-network/heuristics": "^0.49.0",
-    "@xyo-network/serialization": "^0.49.0",
+    "@xyo-network/serialization": "^0.50.0",
     "@xyo-network/serialization-schema": "^0.49.0"
   },
   "devDependencies": {
