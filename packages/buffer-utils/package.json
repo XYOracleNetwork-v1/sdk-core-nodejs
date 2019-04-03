@@ -8,7 +8,7 @@
   "license": "MIT",
 
   "dependencies": {
-    "@xyo-network/errors": "^0.49.0",
+    "@xyo-network/errors": "^0.50.0",
     "@xyo-network/utils": "^0.49.0",
     "bn.js": "^4.11.8"
   },
