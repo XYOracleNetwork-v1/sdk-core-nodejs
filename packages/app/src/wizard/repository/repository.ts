@@ -1,4 +1,8 @@
-import { Wizard } from "./base"
+import { Wizard } from "../base"
+import { IArchivistRepositoryConfig } from "@xyo-network/archivist-repository"
+import { SqlRepositoryWizard } from "./sql"
+import { LevelRepositoryWizard } from "./level"
+import { Neo4jRepositoryWizard } from "./neo4j"
 
 export enum XyoRepository {
   MYSQL = 'mysql',
@@ -8,7 +12,7 @@ export enum XyoRepository {
 
 export class RepositoryWizard extends Wizard {
 
-  public async start(): Promise<XyoRepository[]> {
+  public async start(): Promise<IArchivistRepositoryConfig | undefined> {
     const { components } = await this.prompt<{ components: string }>({
       initial: true,
       type: 'select',
@@ -25,17 +29,17 @@ export class RepositoryWizard extends Wizard {
     const xyoComponents: XyoComponent[] = []
 
     if (components.includes(XyoRepository.MYSQL)) {
-      xyoComponents.push(XyoRepository.MYSQL)
+      return new SqlRepositoryWizard().start()
     }
 
     if (components.includes(XyoRepository.LEVEL)) {
-      xyoComponents.push(XyoRepository.LEVEL)
+      return new LevelRepositoryWizard().start()
     }
 
     if (components.includes(XyoRepository.NEO4J)) {
-      xyoComponents.push(XyoRepository.NEO4J)
+      return new Neo4jRepositoryWizard().start()
     }
 
-    return xyoComponents
+    return
   }
 }

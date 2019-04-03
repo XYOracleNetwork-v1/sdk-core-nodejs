@@ -1,5 +1,5 @@
 {
-  "name": "@xyo-network/archivist-repository.neo4j",
+  "name": "@xyo-network/archivist-repository-neo4j",
   "version": "0.49.0",
   "description": "A data-layer abstraction for archivist responsibilities using Node4J",
   "main": "dist/index.js",

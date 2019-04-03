@@ -1,8 +1,8 @@
-import { Wizard } from "./base"
-import { ISqlArchivistRepositoryConfig } from '@xyo-network/archivist-repository-sql'
+import { Wizard } from "../base"
+import { IArchivistRepositoryConfig } from '@xyo-network/archivist-repository'
 
-export class SqlWizard extends Wizard {
-  public async start(): Promise<ISqlArchivistRepositoryConfig> {
+export class Neo4jRepositoryWizard extends Wizard {
+  public async start(): Promise<IArchivistRepositoryConfig> {
     const { host, user, password, database, port } = await this.prompt([
       {
         type: 'input',
@@ -37,13 +37,8 @@ export class SqlWizard extends Wizard {
     ])
 
     return {
-      host,
-      user,
-      password,
-      database,
-      name: "MySql",
-      platform: "mysql",
-      port: parseInt(port, 10),
+      name: "Neo4j",
+      platform: "neo4j",
     }
   }
 }
