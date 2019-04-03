@@ -11,6 +11,7 @@
 
 import { XyoArchivistNeo4jRepository } from "./xyo-neo4j-archivist-repository"
 import { IXyoSerializationService } from "@xyo-network/serialization"
+import { INeo4jArchivistRepositoryConfig } from './@types'
 import path from 'path'
 
 export async function createArchivistNeo4jRepository(
@@ -19,3 +20,5 @@ export async function createArchivistNeo4jRepository(
   const repo = new XyoArchivistNeo4jRepository(serializationService)
   return repo
 }
+
+export { INeo4jArchivistRepositoryConfig } from './@types'

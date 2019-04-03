@@ -11,6 +11,7 @@
 
 import { XyoArchivistLevelRepository } from "./xyo-level-archivist-repository"
 import { IXyoSerializationService } from "@xyo-network/serialization"
+import { ILevelArchivistRepositoryConfig } from './@types'
 import path from 'path'
 
 export async function createArchivistLevelRepository(
@@ -19,3 +20,5 @@ export async function createArchivistLevelRepository(
   const repo = new XyoArchivistLevelRepository(serializationService)
   return repo
 }
+
+export { ILevelArchivistRepositoryConfig } from './@types'
