@@ -67,9 +67,6 @@ export interface IXyoNetworkPipe {
   /** A representation of the peer on the other side of the pipe */
   peer: IXyoNetworkPeer
 
-  /** The catalogue of operations that the peer can perform */
-  otherCatalogue: CatalogueItem[] | undefined
-
   /** Any data that was initially passed to start an interaction */
   initiationData: Buffer | undefined
 

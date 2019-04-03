@@ -12,11 +12,7 @@
 import {
   IXyoNetworkProvider,
   IXyoNetworkProcedureCatalogue,
-  IXyoNetworkPipe,
-  CatalogueItem,
-  bufferToCatalogueItems,
-  CATALOGUE_SIZE_OF_SIZE_BYTES,
-  CATALOGUE_SIZE_OF_PAYLOAD_BYTES
+  IXyoNetworkPipe
 } from '@xyo-network/network'
 
 import { XyoTcpConnectionResult } from './xyo-tcp-connection-result'
@@ -165,9 +161,6 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
 
         let data: Buffer | undefined
         let sizeOfPayload: number | undefined
-        let sizeOfCatalogue: number | undefined
-        let otherCatalogueItems: CatalogueItem[] | undefined
-        let validCatalogueItems: CatalogueItem[] | undefined
 
         const onData = (chunk: Buffer) => {
           this.scheduleDisconnect(c)
@@ -176,48 +169,13 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
             chunk
           ])
 
-          if (data.length < CATALOGUE_SIZE_OF_PAYLOAD_BYTES) {
+          if (data.length < 4) {
             return
           }
 
           if (sizeOfPayload === undefined) {
             sizeOfPayload = data.readUInt32BE(0)
             this.logInfo(`Expecting message of size ${sizeOfPayload}`)
-          }
-
-          if (data.length < CATALOGUE_SIZE_OF_PAYLOAD_BYTES + CATALOGUE_SIZE_OF_SIZE_BYTES) {
-            return
-          }
-
-          if (sizeOfCatalogue === undefined) {
-            sizeOfCatalogue = data.readUInt8(CATALOGUE_SIZE_OF_PAYLOAD_BYTES)
-          }
-
-          if (
-            otherCatalogueItems === undefined &&
-            data.length >= (CATALOGUE_SIZE_OF_PAYLOAD_BYTES + CATALOGUE_SIZE_OF_SIZE_BYTES + sizeOfCatalogue)
-          ) {
-            otherCatalogueItems = bufferToCatalogueItems(
-              data.slice(
-                CATALOGUE_SIZE_OF_PAYLOAD_BYTES + CATALOGUE_SIZE_OF_SIZE_BYTES,
-                CATALOGUE_SIZE_OF_PAYLOAD_BYTES + CATALOGUE_SIZE_OF_SIZE_BYTES + sizeOfCatalogue
-              )
-            )
-            if (otherCatalogueItems.length < 1) {
-              this.connection = undefined
-              this.cancelDisconnect()
-              c.end()
-              return
-            }
-
-            validCatalogueItems = otherCatalogueItems.filter(catalogueItem => catalogue.canDo(catalogueItem))
-
-            if (validCatalogueItems.length === 0) { // exit early if it its not in the catalogue
-              this.connection = undefined
-              this.cancelDisconnect()
-              c.end()
-              return
-            }
           }
 
           if (data.length > sizeOfPayload) { // too many, corrupt payload
@@ -235,20 +193,12 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
             c.removeListener('error', onError)
             server.removeListener('connection', onConnection)
             this.connection = undefined
-            const appDataIndex = readIntegerFromBuffer(
-              data,
-              CATALOGUE_SIZE_OF_SIZE_BYTES,
-              false,
-              CATALOGUE_SIZE_OF_PAYLOAD_BYTES + CATALOGUE_SIZE_OF_SIZE_BYTES
-            )
 
-            const trimmedData: Buffer = data.slice(
-              CATALOGUE_SIZE_OF_PAYLOAD_BYTES +
-              CATALOGUE_SIZE_OF_SIZE_BYTES +
-              appDataIndex
-            )
-
-            return resolve(new XyoTcpConnectionResult(c, trimmedData, validCatalogueItems || []))
+            // chop of the size that the client sent
+            const dataReceivedWithoutSize = data.slice(4)
+            console.log(dataReceivedWithoutSize)
+            const tcpConnectResult = new XyoTcpConnectionResult(c, dataReceivedWithoutSize)
+            return resolve(tcpConnectResult)
           }
         }
 

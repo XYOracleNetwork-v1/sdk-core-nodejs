@@ -31,7 +31,11 @@ export interface IXyoPeerConnectionDelegate {
  */
 export interface IXyoPeerConnectionHandler {
   /** Handles peer connection, handler should call `close` on the pipe when done handling */
-  handlePeerConnection(networkPipe: IXyoNetworkPipe): Promise<void>
+  handlePeerConnection(
+    networkPipe: IXyoNetworkPipe,
+    choice: CatalogueItem | undefined,
+    toChoose: CatalogueItem[] | undefined
+  ): Promise<void>
 }
 
 /**

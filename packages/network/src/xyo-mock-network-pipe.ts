@@ -21,9 +21,6 @@ export class XyoMockNetworkPipe implements IXyoNetworkPipe {
   public peer: IXyoNetworkPeer = {}
 
   // @ts-ignore
-  public otherCatalogue: CatalogueItem[]
-
-  // @ts-ignore
   public initiationData: Buffer
 
   constructor(
