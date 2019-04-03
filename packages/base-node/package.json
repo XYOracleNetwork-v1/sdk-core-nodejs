@@ -8,7 +8,7 @@
   "license": "MIT",
 
   "dependencies": {
-    "@xyo-network/about-me": "^0.49.0",
+    "@xyo-network/about-me": "^0.50.0",
     "@xyo-network/archivist-network": "^0.49.0",
     "@xyo-network/archivist-repository": "^0.49.0",
     "@xyo-network/archivist-repository-sql": "^0.49.0",
