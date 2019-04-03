@@ -15,7 +15,7 @@
     "@xyo-network/buffer-utils": "^0.49.0",
     "@xyo-network/errors": "^0.49.0",
     "@xyo-network/hashing": "^0.49.0",
-    "@xyo-network/heuristics-common": "^0.49.0",
+    "@xyo-network/heuristics-common": "^0.50.0",
     "@xyo-network/network": "^0.49.0",
     "@xyo-network/network.tcp": "^0.49.0",
     "@xyo-network/origin-block-repository": "^0.49.0",
