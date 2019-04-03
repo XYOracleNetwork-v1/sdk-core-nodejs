@@ -59,12 +59,22 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
     if (initiationData) {
       // is a server, networkPipe.initiationData is the clients catalogue
       const clientCatalogueItems = this.getClientCatalogue(initiationData)
-      return this.peerConnectionHandler.handlePeerConnection(networkPipe, undefined, clientCatalogueItems)
+      return this.peerConnectionHandler.handlePeerConnection(
+        networkPipe,
+        undefined,
+        clientCatalogueItems,
+        initiationData === undefined
+      )
     }
     // is a client, networkPipe.initiationData is null, so we must send them our catalogue
     // the pipe here is the new pipe with contained data (the servers response)
     const { pipe, serversChoice } = await this.doClientNegotiation(networkPipe)
-    return this.peerConnectionHandler.handlePeerConnection(pipe, serversChoice, undefined)
+    return this.peerConnectionHandler.handlePeerConnection(
+      pipe,
+      serversChoice,
+      undefined,
+      initiationData === undefined
+      )
   }
 
   private getFirstMessage(catalogue: CatalogueItem) {

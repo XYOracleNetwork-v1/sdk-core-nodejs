@@ -24,7 +24,7 @@ import { IXyoSerializableObject } from '@xyo-network/serialization'
 export interface IXyoBoundWitnessHandlerProvider {
 
   /** Given a `IXyoNetworkPipe` performs an operation that resolves to an `XyoBoundWitness` */
-  handle(networkPipe: IXyoNetworkPipe): Promise<IXyoBoundWitness>
+  handle(networkPipe: IXyoNetworkPipe, didInit: boolean): Promise<IXyoBoundWitness>
 }
 
 /**
@@ -48,7 +48,7 @@ export interface IXyoBoundWitnessSuccessListener {
 
 /** A generic interface for node-interaction handler */
 export interface IXyoNodeInteraction <T> {
-  run(networkPipe: IXyoNetworkPipe): Promise<T>
+  run(networkPipe: IXyoNetworkPipe, didInit: boolean): Promise<T>
 }
 
 /** A factory for providing instance of bound-witness interactions */

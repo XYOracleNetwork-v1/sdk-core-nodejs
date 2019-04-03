@@ -42,7 +42,11 @@ export class XyoBoundWitnessClientInteraction extends XyoBase implements IXyoNod
   /**
    * Does a bound witness with another node
    */
-  public async run(networkPipe: IXyoNetworkPipe): Promise<IXyoBoundWitness> {
+  public async run(networkPipe: IXyoNetworkPipe, didInit: boolean): Promise<IXyoBoundWitness> {
+    if (!didInit) {
+      throw new Error("Server init can not be used in a client interaction!")
+    }
+
     return new Promise(async (resolve, reject) => {
       try {
         resolve(await this.performInteraction(networkPipe))

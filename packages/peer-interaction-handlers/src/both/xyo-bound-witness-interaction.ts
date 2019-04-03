@@ -51,21 +51,21 @@ export class XyoBoundWitnessInteraction extends XyoBase implements IXyoNodeInter
   /**
    * Does a bound witness with another node
    */
-  public async run(networkPipe: IXyoNetworkPipe): Promise<IXyoBoundWitness> {
+  public async run(networkPipe: IXyoNetworkPipe, didInit: boolean): Promise<IXyoBoundWitness> {
     return new Promise(async (resolve, reject) => {
       try {
-        resolve(await this.performInteraction(networkPipe))
+        resolve(await this.performInteraction(networkPipe, didInit))
       } catch (err) {
         reject(err)
       }
     }) as Promise<IXyoBoundWitness>
   }
 
-  public async performInteraction(networkPipe: IXyoNetworkPipe) {
-    if (networkPipe.initiationData) {
-      return this.clientHandler.run(networkPipe)
+  public async performInteraction(networkPipe: IXyoNetworkPipe, didInit: boolean) {
+    if (didInit) {
+      return this.clientHandler.run(networkPipe, didInit)
     }
 
-    return this.serverHandler.run(networkPipe)
+    return this.serverHandler.run(networkPipe, didInit)
   }
 }

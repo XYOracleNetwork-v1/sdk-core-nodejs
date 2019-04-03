@@ -32,7 +32,7 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
     super()
   }
 
-  public async handle(networkPipe: IXyoNetworkPipe): Promise<IXyoBoundWitness> {
+  public async handle(networkPipe: IXyoNetworkPipe, didInit: boolean): Promise<IXyoBoundWitness> {
     const mutex = await this.tryGetMutex(0)
     try {
       const [payload, signers] = await Promise.all([
@@ -44,7 +44,7 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
 
       const interaction = this.boundWitnessInteractionFactory.newInstance(signers, payload)
 
-      const boundWitness = await interaction.run(networkPipe)
+      const boundWitness = await interaction.run(networkPipe, didInit)
       await this.boundWitnessSuccessListener.onBoundWitnessSuccess(boundWitness, mutex, CatalogueItem.BOUND_WITNESS)
       return boundWitness
     } finally {
