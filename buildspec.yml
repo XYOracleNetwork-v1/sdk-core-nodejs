@@ -25,7 +25,8 @@ phases:
       - echo Build completed on `date`
   post_build:
     commands:
-      - echo Publish completed (not really!) on `date`
+      - yarn lerna publish
+      - echo Publish completed on `date`
 
 artifacts:
   files:
