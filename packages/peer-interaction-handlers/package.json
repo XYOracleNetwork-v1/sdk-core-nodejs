@@ -14,7 +14,7 @@
     "@xyo-network/bound-witness": "^0.49.0",
     "@xyo-network/errors": "^0.49.0",
     "@xyo-network/network": "^0.49.0",
-    "@xyo-network/peer-interaction": "^0.49.0",
+    "@xyo-network/peer-interaction": "^0.50.0",
     "@xyo-network/serialization": "^0.49.0",
     "@xyo-network/serialization-schema": "^0.49.0",
     "@xyo-network/signing": "^0.49.0"
