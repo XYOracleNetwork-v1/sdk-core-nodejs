@@ -1,13 +1,13 @@
 {
   "name": "@xyo-network/base",
-  "version": "0.50.3",
+  "version": "0.50.4",
   "description": "A base class for the Xyo Network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/logger": "^0.50.3",
+    "@xyo-network/logger": "^0.50.4",
     "fast-safe-stringify": "^2.0.6"
   },
   "devDependencies": {
