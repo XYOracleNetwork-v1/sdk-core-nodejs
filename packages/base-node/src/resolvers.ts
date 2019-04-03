@@ -35,7 +35,7 @@ import { IResolvers } from './xyo-resolvers-enum'
 import { XyoLevelDbStorageProvider } from '@xyo-network/storage.leveldb'
 import { buildGraphQLServer } from '@xyo-network/graphql-apis'
 import { XyoAboutMeService } from '@xyo-network/about-me'
-import { IXyoArchivistRepository } from '@xyo-network/archivist-repository'
+import { IXyoArchivistRepository, IArchivistRepositoryConfig } from '@xyo-network/archivist-repository'
 import { createArchivistSqlRepository, ISqlArchivistRepositoryConfig } from '@xyo-network/archivist-repository-sql'
 import { XyoError } from '@xyo-network/errors'
 import { XyoGraphQLServer } from '@xyo-network/graphql-server'
@@ -441,11 +441,11 @@ const aboutMe: IXyoProvider<XyoAboutMeService, IXyoAboutMeConfig> = {
   }
 }
 
-const archivistRepository: IXyoProvider<IXyoArchivistRepository, ISqlArchivistRepositoryConfig> = {
+const archivistRepository: IXyoProvider<IXyoArchivistRepository, IArchivistRepositoryConfig> = {
   async get(container, config) {
-    if (config && config.database && config.user && config.password && config.port && config.host) {
+    if (config) {
       const serialization = await container.get<IXyoSerializationService>(IResolvers.SERIALIZATION_SERVICE)
-      return createArchivistSqlRepository(config, serialization)
+      return createArchivistSqlRepository(config as ISqlArchivistRepositoryConfig, serialization)
     }
 
     throw new XyoError(`Archivist repository lacks sql config, can not instantiate`)
