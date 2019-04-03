@@ -12,7 +12,7 @@
     "@xyo-network/block-witness": "^0.49.0",
     "@xyo-network/consensus": "^0.49.0",
     "@xyo-network/content-addressable-service": "^0.49.0",
-    "@xyo-network/errors": "^0.49.0",
+    "@xyo-network/errors": "^0.50.0",
     "@xyo-network/hashing": "^0.49.0",
     "@xyo-network/ipfs-client": "^0.49.0",
     "@xyo-network/meta-list": "^0.49.0",
