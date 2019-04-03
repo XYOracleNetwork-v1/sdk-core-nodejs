@@ -30,7 +30,7 @@
     "@xyo-network/signing": "^0.49.0",
     "@xyo-network/signing.ecdsa": "^0.49.0",
     "@xyo-network/signing.rsa": "^0.49.0",
-    "@xyo-network/storage": "^0.49.0",
+    "@xyo-network/storage": "^0.50.0",
     "yargs": "^13.2.2"
   },
   "devDependencies": {
