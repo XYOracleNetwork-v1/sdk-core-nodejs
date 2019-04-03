@@ -10,8 +10,8 @@
  */
 
 import { XyoTcpConnectionResult } from './xyo-tcp-connection-result'
-import { XyoError, XyoErrors } from '@xyo-network/errors'
-import { CatalogueItem, IXyoNetworkPipe, IXyoNetworkPeer } from '@xyo-network/network'
+import { XyoError } from '@xyo-network/errors'
+import { IXyoNetworkPipe, IXyoNetworkPeer } from '@xyo-network/network'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoSerializableObject } from "@xyo-network/serialization"
 
@@ -23,16 +23,10 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
   public networkHeuristics: IXyoSerializableObject[] = []
 
   /**
-   * The peers catalogue
-   */
-
-  public otherCatalogue = this.connectionResult.catalogueItems
-
-  /**
    * Any initiationData that may have been passed with the first part of the connection
    */
 
-  public initiationData = this.connectionResult.data
+  public initiationData = this.connectionResult.initiationData
 
   /**
    * Returns the peer from the other end of the pipe

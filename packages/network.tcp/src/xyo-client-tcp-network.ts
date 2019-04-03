@@ -17,21 +17,10 @@ import {
 import net from 'net'
 
 import {
-  CatalogueItem,
-  catalogueItemsToMask,
-  bufferToCatalogueItems,
   IXyoNetworkProvider,
   IXyoNetworkProcedureCatalogue,
   IXyoNetworkPipe,
-  CATALOGUE_SIZE_OF_PAYLOAD_BYTES,
-  CATALOGUE_SIZE_OF_SIZE_BYTES,
-  CATALOGUE_LENGTH_IN_BYTES
 } from "@xyo-network/network"
-
-import {
-  writeIntegerToBuffer,
-  readIntegerFromBuffer
-} from "@xyo-network/buffer-utils"
 
 import {
   XyoTcpConnectionResult
@@ -162,6 +151,6 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
     client.on('error', onError)
     // client.on('connect')
 
-    return new XyoTcpConnectionResult(client, Buffer.alloc(0), [])
+    return new XyoTcpConnectionResult(client, undefined)
   }
 }
