@@ -1,17 +1,17 @@
 {
   "name": "@xyo-network/consensus",
-  "version": "0.50.5",
+  "version": "0.50.7",
   "description": "Provides consensus datapoints",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.50.5",
-    "@xyo-network/errors": "^0.50.5",
-    "@xyo-network/ipfs-client": "^0.50.5",
-    "@xyo-network/utils": "^0.50.5",
-    "@xyo-network/web3-service": "^0.50.5",
+    "@xyo-network/base": "^0.50.7",
+    "@xyo-network/errors": "^0.50.7",
+    "@xyo-network/ipfs-client": "^0.50.7",
+    "@xyo-network/utils": "^0.50.7",
+    "@xyo-network/web3-service": "^0.50.7",
     "ethereumjs-abi": "0.6.7"
   },
   "devDependencies": {
