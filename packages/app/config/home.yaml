@@ -11,18 +11,13 @@ bootstrapNodes: []
 serverPort: 11000
 graphqlPort: 11001
 data: ./node-data
-name: archivist
+name: home
 archivist:
   repository:
-    name: "MySql"
-    platform: "sql"
-    host: 127.0.0.1
-    user: admin
-    password: password
-    database: Xyo
-    port: 3306
+    name: "LevelDB"
+    platform: "level"
 diviner: null
 ipfs:
-  host: ipfs.xyo.network
+  host: ipfs.xy.company
   port: '5002'
   protocol: https

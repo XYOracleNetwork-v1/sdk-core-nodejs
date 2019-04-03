@@ -13,7 +13,7 @@ export enum XyoRepository {
 export class RepositoryWizard extends Wizard {
 
   public async start(): Promise<IArchivistRepositoryConfig | undefined> {
-    const { components } = await this.prompt<{ components: string }>({
+    const { repository } = await this.prompt<{ repository: string }>({
       initial: true,
       type: 'select',
       choices: [
@@ -25,18 +25,15 @@ export class RepositoryWizard extends Wizard {
       name: 'repository',
     })
 
-    // @ts-ignore
-    const xyoComponents: XyoComponent[] = []
-
-    if (components.includes(XyoRepository.MYSQL)) {
+    if (repository.includes(XyoRepository.MYSQL)) {
       return new SqlRepositoryWizard().start()
     }
 
-    if (components.includes(XyoRepository.LEVEL)) {
+    if (repository.includes(XyoRepository.LEVEL)) {
       return new LevelRepositoryWizard().start()
     }
 
-    if (components.includes(XyoRepository.NEO4J)) {
+    if (repository.includes(XyoRepository.NEO4J)) {
       return new Neo4jRepositoryWizard().start()
     }
 
