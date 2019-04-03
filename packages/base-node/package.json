@@ -33,7 +33,7 @@
     "@xyo-network/origin-block-repository": "^0.49.0",
     "@xyo-network/origin-chain": "^0.49.0",
     "@xyo-network/p2p": "^0.49.0",
-    "@xyo-network/peer-connections": "^0.49.0",
+    "@xyo-network/peer-connections": "^0.50.0",
     "@xyo-network/peer-interaction": "^0.49.0",
     "@xyo-network/peer-interaction-handlers": "^0.49.0",
     "@xyo-network/peer-interaction-router": "^0.49.0",
