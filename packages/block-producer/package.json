@@ -16,7 +16,7 @@
     "@xyo-network/hashing": "^0.49.0",
     "@xyo-network/ipfs-client": "^0.49.0",
     "@xyo-network/meta-list": "^0.49.0",
-    "@xyo-network/node-network": "^0.49.0",
+    "@xyo-network/node-network": "^0.50.0",
     "@xyo-network/questions": "^0.49.0",
     "@xyo-network/transaction-pool": "^0.49.0",
     "@xyo-network/utils": "^0.49.0"
