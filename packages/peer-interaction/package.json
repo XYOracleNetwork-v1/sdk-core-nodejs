@@ -16,7 +16,7 @@
     "@xyo-network/hashing": "^0.49.0",
     "@xyo-network/network": "^0.49.0",
     "@xyo-network/origin-block-repository": "^0.49.0",
-    "@xyo-network/origin-chain": "^0.49.0",
+    "@xyo-network/origin-chain": "^0.50.0",
     "@xyo-network/serialization": "^0.49.0",
     "@xyo-network/serialization-schema": "^0.49.0",
     "@xyo-network/signing": "^0.49.0",
