@@ -11,7 +11,7 @@
     "@xyo-network/base": "^0.49.0",
     "@xyo-network/content-addressable-service": "^0.49.0",
     "@xyo-network/errors": "^0.49.0",
-    "@xyo-network/ipfs-client": "^0.49.0",
+    "@xyo-network/ipfs-client": "^0.50.0",
     "@xyo-network/utils": "^0.49.0",
     "ethereumjs-tx": "^1.3.7",
     "web3": "^1.0.0-beta.51"
