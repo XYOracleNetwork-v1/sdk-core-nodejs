@@ -1,6 +1,6 @@
 {
   "name": "xyo-core",
-  "version": "0.2.0",
+  "version": "0.50.4",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "index.js",
   "author": "XY Development Team",

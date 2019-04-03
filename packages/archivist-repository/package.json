@@ -1,17 +1,17 @@
 {
   "name": "@xyo-network/archivist-repository",
-  "version": "0.50.0",
+  "version": "0.50.3",
   "description": "A data-layer abstraction for archivist responsibilities",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.50.0",
-    "@xyo-network/bound-witness": "^0.50.0",
-    "@xyo-network/hashing": "^0.50.0",
-    "@xyo-network/origin-block-repository": "^0.50.0",
-    "@xyo-network/signing": "^0.50.0"
+    "@xyo-network/base": "^0.50.3",
+    "@xyo-network/bound-witness": "^0.50.3",
+    "@xyo-network/hashing": "^0.50.3",
+    "@xyo-network/origin-block-repository": "^0.50.3",
+    "@xyo-network/signing": "^0.50.3"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
