@@ -90,8 +90,7 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
       return []
     }
 
-    const sizeOfCatalogue = bytes.readUInt8(0)
-    const encodedCatalogue = bytes.slice(1, sizeOfCatalogue)
+    const encodedCatalogue = bytes.slice(1)
 
     return bufferToCatalogueItems(encodedCatalogue)
   }

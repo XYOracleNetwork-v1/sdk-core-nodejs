@@ -10,8 +10,8 @@
  */
 
 import { XyoTcpConnectionResult } from './xyo-tcp-connection-result'
-import { XyoError, XyoErrors } from '@xyo-network/errors'
-import { CatalogueItem, IXyoNetworkPipe, IXyoNetworkPeer } from '@xyo-network/network'
+import { XyoError } from '@xyo-network/errors'
+import { IXyoNetworkPipe, IXyoNetworkPeer } from '@xyo-network/network'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoSerializableObject } from "@xyo-network/serialization"
 

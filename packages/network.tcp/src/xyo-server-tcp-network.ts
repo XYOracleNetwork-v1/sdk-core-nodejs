@@ -12,11 +12,7 @@
 import {
   IXyoNetworkProvider,
   IXyoNetworkProcedureCatalogue,
-  IXyoNetworkPipe,
-  CatalogueItem,
-  bufferToCatalogueItems,
-  CATALOGUE_SIZE_OF_SIZE_BYTES,
-  CATALOGUE_SIZE_OF_PAYLOAD_BYTES
+  IXyoNetworkPipe
 } from '@xyo-network/network'
 
 import { XyoTcpConnectionResult } from './xyo-tcp-connection-result'
@@ -199,9 +195,9 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
             this.connection = undefined
 
             // chop of the size that the client sent
-            const dataReceivedWithoutSize = data.slice(4, data.length)
+            const dataReceivedWithoutSize = data.slice(4)
+            console.log(dataReceivedWithoutSize)
             const tcpConnectResult = new XyoTcpConnectionResult(c, dataReceivedWithoutSize)
-
             return resolve(tcpConnectResult)
           }
         }

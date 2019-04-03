@@ -10,7 +10,6 @@
  */
 
 import net from 'net'
-import { CatalogueItem } from '@xyo-network/network'
 
 /**
  * A simple data-encapsulation class meant to represent the
