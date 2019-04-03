@@ -23,7 +23,8 @@ export class XyoPeerConnectionHandler extends XyoBase implements IXyoPeerConnect
   public async handlePeerConnection(
     networkPipe: IXyoNetworkPipe,
     choice: CatalogueItem | undefined,
-    toChoose: CatalogueItem[] | undefined) {
+    toChoose: CatalogueItem[] | undefined,
+    didInit: boolean) {
 
     if (choice && toChoose) {
       this.logInfo(`Can not choose and have a choice`)
@@ -47,7 +48,7 @@ export class XyoPeerConnectionHandler extends XyoBase implements IXyoPeerConnect
       return
     }
 
-    await handler.handle(networkPipe)
+    await handler.handle(networkPipe, didInit)
   }
 
   private resolveCategory (choice: CatalogueItem | undefined, toChoose: CatalogueItem[] | undefined) {

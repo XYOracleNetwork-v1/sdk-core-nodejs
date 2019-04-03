@@ -34,7 +34,8 @@ export interface IXyoPeerConnectionHandler {
   handlePeerConnection(
     networkPipe: IXyoNetworkPipe,
     choice: CatalogueItem | undefined,
-    toChoose: CatalogueItem[] | undefined
+    toChoose: CatalogueItem[] | undefined,
+    didInit: boolean
   ): Promise<void>
 }
 
@@ -62,7 +63,7 @@ export interface IXyoCatalogueResolver {
 export interface IXyoBoundWitnessHandlerProvider {
 
   /** Given a `IXyoNetworkPipe` performs an operation that resolves to an `XyoBoundWitness` */
-  handle(networkPipe: IXyoNetworkPipe): Promise<IXyoBoundWitness>
+  handle(networkPipe: IXyoNetworkPipe, didInit: boolean): Promise<IXyoBoundWitness>
 }
 
 /**

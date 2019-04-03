@@ -128,7 +128,7 @@ describe('Server interaction', () => {
       ])
     ])
 
-    const resultingBoundWitness = await serverInteraction.run(mockPipe)
+    const resultingBoundWitness = await serverInteraction.run(mockPipe, false)
     expect(resultingBoundWitness.numberOfParties).toBe(2)
 
     expect(resultingBoundWitness.parties[0].keySet.keys[0].serialize()).toEqual(serverPublicKey.serialize())
@@ -274,7 +274,7 @@ describe('Server interaction', () => {
       }
     }, [])
 
-    const resultingBoundWitness = await serverInteraction.run(mockPipe)
+    const resultingBoundWitness = await serverInteraction.run(mockPipe, false)
     expect(resultingBoundWitness.numberOfParties).toBe(2)
 
     expect(resultingBoundWitness.parties[0].keySet.keys[0].serialize()).toEqual(serverPublicKey.serialize())
