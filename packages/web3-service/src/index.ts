@@ -88,12 +88,12 @@ export class XyoWeb3Service extends XyoBase {
     const web3 = await this.getOrInitializeWeb3()
     const from = this.accountAddress
     const nonce = await web3.eth.getTransactionCount(from)
-    const gasLimit = web3.utils.toHex(3000000)
+    const gas = web3.utils.toHex(3000000)
     const gasPrice = web3.utils.toHex(5 * 1e9) // 5 gwei
     const txParams = {
       from,
       nonce,
-      gasLimit,
+      gas,
       gasPrice,
       to: params.to,
       value: params.value || 0,
@@ -118,12 +118,12 @@ export class XyoWeb3Service extends XyoBase {
     const web3 = await this.getOrInitializeWeb3()
     const from = this.accountAddress
     const nonce = await web3.eth.getTransactionCount(from)
-    const gasLimit = web3.utils.toHex(3000000)
+    const gas = web3.utils.toHex(3000000)
     const gasPrice = web3.utils.toHex(5 * 1e9) // 5 gwei
     const txParams = {
       from,
       nonce,
-      gasLimit,
+      gas,
       gasPrice,
       to: params.to,
       value: params.value || 0,
