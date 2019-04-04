@@ -60,17 +60,22 @@ describe('Consensus', () => {
 
   async function delay(delayInms: number) {
     // tslint:disable-next-line: no-shadowed-variable
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       setTimeout(() => {
         resolve(2)
       }, delayInms)
     })
   }
 
-  it('Has no tests', async () => {
-    expect(true).toBe(true)
+  it('should sign stuff', async () => {
+    const message = 'howdy'
+    const result = await consensus.signBlock(message)
+    const web3 = await web3Service.getOrInitializeWeb3()
+    const recovered = await web3.eth.accounts.recover(message, result.signature)
+    expect(result.publicKey).toEqual(recovered)
   })
 
+  /*
   it('should submit a request if supplied new and valid ipfs hash', async () => {
     // TODO randomize ipfs hash
     const ipfs = 'QmRNGw6uafhyT75MquUfbGSXfmBbnjtJUosZq9CbSxRTiT'
@@ -129,14 +134,6 @@ describe('Consensus', () => {
     console.log('getStakeQuorumPct', result)
   })
 
-  it.only('should sign stuff', async () => {
-    const message = 'howdy'
-    const result = await consensus.signBlock(message)
-    const web3 = await web3Service.getOrInitializeWeb3()
-    const recovered = await web3.eth.accounts.recover(message, result.signature)
-    expect(result.publicKey).toEqual(recovered)
-  })
-
   it('canSubmitBlock', async () => {
     const result = await consensus.canSubmitBlock(
       '0xF816F48b6841DE40285Ba5BD5eF6aACC1cb15A12',
@@ -165,4 +162,5 @@ describe('Consensus', () => {
     console.log('TEST RESULT', result)
     expect(encodeBlock).toEqual(result)
   })
+  */
 })
