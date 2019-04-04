@@ -129,7 +129,7 @@ export const DEFAULT_NODE_OPTIONS: IXyoNodeOptions = {
       }
     },
     contentAddressableService: {
-      host: 'ipfs.xyo.network',
+      host: 'ipfs.layerone.co',
       port: 5002,
       protocol: 'https'
     },

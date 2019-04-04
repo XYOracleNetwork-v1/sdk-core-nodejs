@@ -118,7 +118,7 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
   private getChoiceAndResponse(message: Buffer) {
     const sizeOfCat = message.readUInt8(0)
     const response = message.slice(1 + sizeOfCat, message.length)
-    const cat = message.slice(1, sizeOfCat)
+    const cat = message.slice(1, sizeOfCat + 1)
     const serversChoices = bufferToCatalogueItems(cat)
 
     return { serversChoices, response }

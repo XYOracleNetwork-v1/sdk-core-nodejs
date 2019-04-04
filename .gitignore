@@ -80,7 +80,6 @@ packages/app/config/*
 !packages/app/config/archivist.yaml
 !packages/app/config/diviner.yaml
 !packages/app/config/archivist-diviner.yaml
-!packages/app/config/home.yaml
 
 # Scratch files
 scratch.ts

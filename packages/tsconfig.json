@@ -27,12 +27,6 @@
       "path": "archivist-repository"
     },
     {
-      "path": "archivist-repository-level"
-    },
-    {
-      "path": "archivist-repository-neo4j"
-    },
-    {
       "path": "archivist-repository-sql"
     },
     {
