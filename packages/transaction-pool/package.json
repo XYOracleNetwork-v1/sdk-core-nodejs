@@ -1,18 +1,18 @@
 {
   "name": "@xyo-network/transaction-pool",
-  "version": "0.50.11",
+  "version": "0.50.12",
   "description": "Aggregates transactions across different nodes in the network so that they can go into a block",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.50.11",
-    "@xyo-network/errors": "^0.50.11",
-    "@xyo-network/hashing": "^0.50.11",
-    "@xyo-network/meta-list": "^0.50.11",
-    "@xyo-network/storage": "^0.50.11",
-    "@xyo-network/utils": "^0.50.11"
+    "@xyo-network/base": "^0.50.12",
+    "@xyo-network/errors": "^0.50.12",
+    "@xyo-network/hashing": "^0.50.12",
+    "@xyo-network/meta-list": "^0.50.12",
+    "@xyo-network/storage": "^0.50.12",
+    "@xyo-network/utils": "^0.50.12"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",

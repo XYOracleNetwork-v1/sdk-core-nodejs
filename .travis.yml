@@ -1,6 +1,18 @@
 language: node_js
 node_js:
-  - "10"
-install: 
-  - yarn install
-  - yarn build
+- 10
+cache:
+  yarn: true
+  directories:
+  - node_modules
+addons:
+  sonarcloud:
+    organization: "xyo-network"
+install:
+- yarn install
+script:
+- yarn build
+- sonar-scanner
+env:
+  global:
+  - secure: JqRcHmEa0tgERopqCKfxFKv8fHjzcKSmoOewce1Us/Wqk2yfQedIA9VCBQztRQs/TaLkPCWJ83596skDaBJBHgPiH0gR8RjY3GYRx6ST427HKfnjSgs0wuIqxmrKBevcbN2p0dEDx8sbRpGnP2nrhfxk1CWCGVLQIXc45n6UT5CyOSOrsBDtlJUYdQH3lhc/vQIiQgBiaPr73Py7N03qodiVqM4ntkMPcKpjn2wFE4Xd6oBkb9DIvdB/bC5cNQC9Ca//1+hhT0ST88q7shK3aK519dCxdpcAHcrVcKJ7yUnLQ8FXefZVFjtuQUWK8bDxfrTnT92CUJ6ER7Mg5ZveBCE2H9hXNTYrySmY4ezW6Uia14msqFDN7w0Rrz/+V8C1Nw284xgFTo/S6o65LIA/jWMAENO0vJJPKshrgSMLc1KR3GZtA/LzqPg1vP93NywNOWSqNnZzFI0r7noT/DlTJVzMa4AihI+mHIqOR5kXHzvCmhZ3N0cCNjllvoo626Ke25Fgvz7HQQM01WPqrkmY2/2D/4eQ1lYLk9es+z53ERRQaHC6TTWkdnazh95bC9flDMHvkKrtZp0OJNVeQHkm1s4RC32CjLnmMExdGxJQfE3TrwvHJxWyquJLQNx7IZQvAltOPL/PMiI0GfyrNpnUJFa9GIp71kXL+KSeMfKqf8c=
