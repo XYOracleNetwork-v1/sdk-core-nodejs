@@ -1,17 +1,17 @@
 {
   "name": "@xyo-network/web3-question-service",
-  "version": "0.50.11",
+  "version": "0.50.12",
   "description": "Provides services for retrieving questions and providing answer using web3 services",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.50.11",
-    "@xyo-network/consensus": "^0.50.11",
-    "@xyo-network/content-addressable-service": "^0.50.11",
-    "@xyo-network/questions": "^0.50.11",
-    "@xyo-network/utils": "^0.50.11"
+    "@xyo-network/base": "^0.50.12",
+    "@xyo-network/consensus": "^0.50.12",
+    "@xyo-network/content-addressable-service": "^0.50.12",
+    "@xyo-network/questions": "^0.50.12",
+    "@xyo-network/utils": "^0.50.12"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
