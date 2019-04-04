@@ -241,22 +241,21 @@ export class XyoScscConsensusProvider extends XyoBase
   }
 
   public async signBlock(block: string): Promise<ISignatureComponents> {
-    this.logInfo(`Sign Block ${block}`)
-    const signedMessage = await this.web3Service.signMessage(block)
-    const sig = signedMessage
-    console.log('Signed message', signedMessage)
-    // TODO Clean (this is broken in web3 beta 48):
+    const signature = await this.web3Service.signMessage(block)
+    const sig = signature
+
     const r = `${sig.slice(0, 66)}`
     const s = `0x${sig.slice(66, 130)}`
     const v = parseInt(sig.slice(130, 132), 16)
-    const signature: ISignatureComponents = {
+    const sigComponents: ISignatureComponents = {
+      signature,
       sigR: r,
       sigS: s,
       sigV: v,
       publicKey: this.web3Service.accountAddress,
     }
 
-    return signature
+    return sigComponents
   }
 
   public async submitBlock(
@@ -482,16 +481,14 @@ export class XyoScscConsensusProvider extends XyoBase
     if (val instanceof BN) return val.toNumber()
     if (typeof val === 'number') return val
     if (typeof val === 'string') return parseInt(val, 10)
-
-    throw new XyoError(`Could not parse number ${val}`)
+    return (val as BN).toNumber()
   }
 
   private coerceBN(val: BN | number | string): BN {
     if (val instanceof BN) return val
     if (typeof val === 'number') return new BN(val)
     if (typeof val === 'string') return new BN(val)
-
-    throw new XyoError(`Could not parse BN ${val}`)
+    return val as BN
   }
 
   private getIpfsHashFromBytes32(bytes32Hex: string) {

@@ -362,4 +362,5 @@ export interface ISignatureComponents {
   sigR: string,
   sigS: string,
   sigV: number
+  signature?: string
 }
