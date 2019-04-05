@@ -11,6 +11,7 @@
 
 import { CatalogueItem } from './catalogue-item'
 import { IXyoNetworkProcedureCatalogue } from './@types'
+import { number } from 'joi'
 
 export { CatalogueItem } from './catalogue-item'
 export { XyoMockNetworkPipe } from './xyo-mock-network-pipe'
@@ -40,11 +41,7 @@ export const CATALOGUE_SIZE_OF_PAYLOAD_BYTES = 4
  */
 
 export function bufferToCatalogueItems(buffer: Buffer): CatalogueItem[] {
-  if (buffer.length < 4) {
-    return []
-  }
-
-  const values = buffer.readUInt32BE(0)
+  const values = readNumberFromBufferCatalogue(buffer)
 
   return [
     (CatalogueItem.BOUND_WITNESS & values) > 0 ? CatalogueItem.BOUND_WITNESS : null,
@@ -52,6 +49,22 @@ export function bufferToCatalogueItems(buffer: Buffer): CatalogueItem[] {
     (CatalogueItem.GIVE_ORIGIN_CHAIN & values) > 0 ? CatalogueItem.GIVE_ORIGIN_CHAIN : null
   ]
   .filter(catalogueItem => catalogueItem !== null) as CatalogueItem[]
+}
+
+const readNumberFromBufferCatalogue = (buffer: Buffer): number => {
+  if (buffer.length === 4) {
+    return buffer.readUInt32BE(0)
+  }
+
+  if (buffer.length === 2) {
+    return buffer.readUInt16BE(0)
+  }
+
+  if (buffer.length === 1) {
+    return buffer.readUInt8(0)
+  }
+
+  return 0
 }
 
 /** Returns a number, which is feature-mask representing CatalogueItems */
