@@ -12,7 +12,7 @@
     "test": "yarn build && export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose false --detectOpenHandles",
     "tslint": "tslint -c tslint.json -p packages/tsconfig.json",
     "clean": "node scripts/clean.js",
-    "start": "yarn build && yarn --cwd packages/app start",
+    "start": "ts-node --project ./packages/app/tsconfig.json  ./packages/app start",
     "forever": "yarn --max-old-space-size=4096 --cwd packages/app forever",
     "start:diviner": "yarn --cwd ./packages/app start diviner",
     "start:archivist": "yarn --cwd ./packages/app start archivist",
