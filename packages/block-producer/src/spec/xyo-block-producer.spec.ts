@@ -399,7 +399,7 @@ async function getAvailableValidatedTransactions(
 
 async function getContentService() {
   return new XyoIpfsClient({
-    host: 'ipfs.layerone.co',
+    host: 'ipfs.xyo.network',
     port: '5002',
     protocol: 'https'
   })

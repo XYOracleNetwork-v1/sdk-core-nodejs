@@ -14,7 +14,7 @@ export class IpfsWizard extends Wizard {
       type: 'input',
       name: 'ipfsHost',
       message: 'What is the IPFS host value',
-      initial: 'ipfs.layerone.co',
+      initial: 'ipfs.xyo.network',
     })
 
     const port = await (new PortWizard('What is the IPFS port value', 5002).start())
