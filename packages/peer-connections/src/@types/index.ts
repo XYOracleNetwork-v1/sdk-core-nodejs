@@ -63,7 +63,7 @@ export interface IXyoCatalogueResolver {
 export interface IXyoBoundWitnessHandlerProvider {
 
   /** Given a `IXyoNetworkPipe` performs an operation that resolves to an `XyoBoundWitness` */
-  handle(networkPipe: IXyoNetworkPipe, didInit: boolean): Promise<IXyoBoundWitness>
+  handle(networkPipe: IXyoNetworkPipe, didInit: boolean, choice: CatalogueItem): Promise<IXyoBoundWitness>
 }
 
 /**

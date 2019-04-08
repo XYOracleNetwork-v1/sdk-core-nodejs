@@ -9,7 +9,7 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoNetworkPipe, CatalogueItem } from '@xyo-network/network'
+import { IXyoNetworkPipe, CatalogueItem, flipChoice } from '@xyo-network/network'
 import { IXyoPeerConnectionHandler, IXyoCatalogueResolver, IXyoCategoryRouter } from './@types'
 import { XyoBase } from '@xyo-network/base'
 
@@ -40,6 +40,7 @@ export class XyoPeerConnectionHandler extends XyoBase implements IXyoPeerConnect
       return
     }
 
+    // this choice also needs to be flipped
     const handler = this.router.getHandler(category)
 
     if (!handler) {
@@ -48,7 +49,13 @@ export class XyoPeerConnectionHandler extends XyoBase implements IXyoPeerConnect
       return
     }
 
-    await handler.handle(networkPipe, didInit)
+    let correctAsymmetricCategory = category
+
+    if (toChoose) {
+      correctAsymmetricCategory = flipChoice(category)
+    }
+
+    await handler.handle(networkPipe, didInit, correctAsymmetricCategory)
   }
 
   private resolveCategory (choice: CatalogueItem | undefined, toChoose: CatalogueItem[] | undefined) {
