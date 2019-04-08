@@ -40,6 +40,7 @@ export class XyoPeerConnectionHandler extends XyoBase implements IXyoPeerConnect
       return
     }
 
+    // this choice also needs to be flipped
     const handler = this.router.getHandler(category)
 
     if (!handler) {
@@ -48,6 +49,7 @@ export class XyoPeerConnectionHandler extends XyoBase implements IXyoPeerConnect
       return
     }
 
+    // choice needs to go here, flipped for the server
     await handler.handle(networkPipe, didInit)
   }
 
@@ -57,6 +59,7 @@ export class XyoPeerConnectionHandler extends XyoBase implements IXyoPeerConnect
     }
 
     if (toChoose) {
+      // flip asymmetric here
       return this.categoryResolver.resolveCategory(toChoose)
     }
 

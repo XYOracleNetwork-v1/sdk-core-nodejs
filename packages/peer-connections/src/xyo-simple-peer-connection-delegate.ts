@@ -63,6 +63,7 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
         networkPipe,
         undefined,
         clientCatalogueItems,
+        // this is false
         initiationData === undefined
       )
     }
@@ -73,6 +74,7 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
       pipe,
       serversChoice,
       undefined,
+      // this is true
       initiationData === undefined
       )
   }
@@ -123,25 +125,4 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
 
     return { serversChoices, response }
   }
-
-  // // todo find a better way of getting the enum from a number
-  // private getEnumFromValue (value: number): CatalogueItem {
-  //   console.log(value)
-  //   const allEnums = [
-  //     CatalogueItem.BOUND_WITNESS,
-  //     CatalogueItem.TAKE_ORIGIN_CHAIN,
-  //     CatalogueItem.GIVE_ORIGIN_CHAIN,
-  //     CatalogueItem.TAKE_REQUESTED_BLOCKS,
-  //     CatalogueItem.GIVE_REQUESTED_BLOCKS]
-
-  //   let i = 0
-  //   for (const index of allEnums) {
-  //     if (index === value) {
-  //       return allEnums[i]
-  //     }
-  //     i++
-  //   }
-
-  //   throw Error(`Invalid Catalogue Item: ${value}`)
-  // }
 }
