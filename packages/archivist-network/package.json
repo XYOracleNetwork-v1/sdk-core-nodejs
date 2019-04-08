@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/archivist-network",
-  "version": "0.51.0",
+  "version": "0.52.0",
   "description": "Asks the archivist network at large for data",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,15 +10,15 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@xyo-network/base": "^0.51.0",
-    "@xyo-network/bound-witness": "^0.51.0",
-    "@xyo-network/diviner-archivist-client": "^0.51.0",
-    "@xyo-network/diviner-archivist-client.graphql": "^0.51.0",
-    "@xyo-network/errors": "^0.51.0",
-    "@xyo-network/hashing": "^0.51.0",
-    "@xyo-network/node-network": "^0.51.0",
-    "@xyo-network/p2p": "^0.51.0",
-    "@xyo-network/serialization": "^0.51.0"
+    "@xyo-network/base": "^0.52.0",
+    "@xyo-network/bound-witness": "^0.52.0",
+    "@xyo-network/diviner-archivist-client": "^0.52.0",
+    "@xyo-network/diviner-archivist-client.graphql": "^0.52.0",
+    "@xyo-network/errors": "^0.52.0",
+    "@xyo-network/hashing": "^0.52.0",
+    "@xyo-network/node-network": "^0.52.0",
+    "@xyo-network/p2p": "^0.52.0",
+    "@xyo-network/serialization": "^0.52.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
