@@ -11,7 +11,6 @@
 
 import { CatalogueItem } from './catalogue-item'
 import { IXyoNetworkProcedureCatalogue } from './@types'
-import { number } from 'joi'
 
 export { CatalogueItem } from './catalogue-item'
 export { XyoMockNetworkPipe } from './xyo-mock-network-pipe'
@@ -49,6 +48,18 @@ export function bufferToCatalogueItems(buffer: Buffer): CatalogueItem[] {
     (CatalogueItem.GIVE_ORIGIN_CHAIN & values) > 0 ? CatalogueItem.GIVE_ORIGIN_CHAIN : null
   ]
   .filter(catalogueItem => catalogueItem !== null) as CatalogueItem[]
+}
+
+export function flipChoice(choice: CatalogueItem): CatalogueItem {
+  if (CatalogueItem.GIVE_ORIGIN_CHAIN === choice) {
+    return CatalogueItem.TAKE_ORIGIN_CHAIN
+  }
+
+  if (CatalogueItem.TAKE_ORIGIN_CHAIN === choice) {
+    return CatalogueItem.GIVE_ORIGIN_CHAIN
+  }
+
+  return choice
 }
 
 const readNumberFromBufferCatalogue = (buffer: Buffer): number => {
