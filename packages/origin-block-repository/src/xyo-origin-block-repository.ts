@@ -120,12 +120,17 @@ export class XyoOriginBlockRepository implements IXyoOriginBlockRepository {
   }
 
   public async getOriginBlockByHash(hash: Buffer): Promise<IXyoBoundWitness | undefined> {
-    const result = await this.originBlocksStorageProvider.read(hash)
-    if (!result) {
+    try {
+      const result = await this.originBlocksStorageProvider.read(hash)
+      if (!result) {
+        return undefined
+      }
+
+      return this.serializationService.deserialize(result).hydrate<IXyoBoundWitness>()
+    } catch (error) {
+      // there was an error getting the key, so return undefined
       return undefined
     }
-
-    return this.serializationService.deserialize(result).hydrate<IXyoBoundWitness>()
   }
 
   public async getBlocksThatProviderAttribution(hash: Buffer): Promise<{[h: string]: IXyoBoundWitness}>  {
