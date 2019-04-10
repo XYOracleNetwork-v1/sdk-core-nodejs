@@ -1,16 +1,16 @@
 {
   "name": "@xyo-network/heuristics-common",
-  "version": "0.53.0",
+  "version": "0.54.0",
   "description": "A number of common heuristics used in the XYO protocol",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/buffer-utils": "^0.53.0",
-    "@xyo-network/heuristics": "^0.53.0",
-    "@xyo-network/serialization": "^0.53.0",
-    "@xyo-network/serialization-schema": "^0.53.0"
+    "@xyo-network/buffer-utils": "^0.54.0",
+    "@xyo-network/heuristics": "^0.54.0",
+    "@xyo-network/serialization": "^0.54.0",
+    "@xyo-network/serialization-schema": "^0.54.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
