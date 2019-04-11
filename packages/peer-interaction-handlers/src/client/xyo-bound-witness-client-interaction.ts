@@ -119,14 +119,6 @@ export class XyoBoundWitnessClientInteraction extends XyoBase implements IXyoNod
     throw new XyoError(`Peer disconnected in xyo-bound-witness-interaction`, XyoErrors.CRITICAL)
   }
 
-  private getChoiceAndResponse (message: Buffer) {
-    const sizeOfCat = message.readUInt8(0)
-    const response = message.slice(1 + sizeOfCat, message.length)
-    const cat = message.buffer.slice(1, sizeOfCat + 1)
-
-    return { cat, response }
-  }
-
   private async sendMessage(networkPipe: IXyoNetworkPipe, bytesToSend: Buffer): Promise<Buffer> {
     try {
       let response: Buffer | undefined

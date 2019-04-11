@@ -22,8 +22,8 @@ export class XyoFetter extends XyoBaseSerializable  implements IXyoFetter {
   public constructor (
     public keySet: IXyoKeySet,
     public heuristics: IXyoSerializableObject[],
-  ) {
-    super(schema)
+    origin?: Buffer) {
+    super(schema, origin)
   }
 
   public getData(): IXyoSerializableObject | IXyoSerializableObject[] | Buffer {
@@ -58,6 +58,7 @@ class XyoFetterDeserializer implements IXyoDeserializer<IXyoFetter> {
     const childrenCount = query.getChildrenCount()
     let childIndex = 1
     const heuristics: IXyoSerializableObject[] = []
+
     while (childIndex < childrenCount) {
       const heuristicChild = query.getChildAt(childIndex)
       const heuristic = serializationService.deserialize(heuristicChild.readData(true)).hydrate()
@@ -65,7 +66,7 @@ class XyoFetterDeserializer implements IXyoDeserializer<IXyoFetter> {
       childIndex += 1
     }
 
-    return new XyoFetter(keySet, heuristics)
+    return new XyoFetter(keySet, heuristics, data)
   }
 }
 

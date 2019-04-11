@@ -54,12 +54,15 @@ class XyoWitnessDeserializer implements IXyoDeserializer<IXyoWitness> {
     const parseResult = serializationService.parse(data)
     const query = new ParseQuery(parseResult)
     const signatureSetItem = query.getChildAt(0)
+
     const signatureSet = serializationService
       .deserialize(signatureSetItem.readData(true))
       .hydrate<IXyoSignatureSet>()
+
     const childrenCount = query.getChildrenCount()
     let childIndex = 1
     const metadata: IXyoSerializableObject[] = []
+
     while (childIndex < childrenCount) {
       const metadataChild = query.getChildAt(childIndex)
       const heuristic = serializationService.deserialize(metadataChild.readData(true)).hydrate()

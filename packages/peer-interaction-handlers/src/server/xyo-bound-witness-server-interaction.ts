@@ -97,17 +97,18 @@ export class XyoBoundWitnessServerInteraction extends XyoBase implements IXyoNod
       unregister()
 
       /** Close the connection */
+
       await networkPipe.close()
 
-      const fragmentParts = transferQuery
-        .reduceChildren((memo, parseResult) => {
-          memo.push(
+      const fragmentParts = transferQuery.reduceChildren((memo, parseResult) => {
+        memo.push(
             this.serializationService
               .deserialize(new ParseQuery(parseResult).readData(true))
               .hydrate<FetterOrWitness>()
           )
-          return memo
-        }, [fetter] as FetterOrWitness[])
+
+        return memo
+      }, [fetter] as FetterOrWitness[])
       fragmentParts.push(witness)
       return new InnerBoundWitness(fragmentParts, signingData)
     }
