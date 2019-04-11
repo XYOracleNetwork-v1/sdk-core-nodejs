@@ -38,6 +38,10 @@ export abstract class XyoBaseSerializable extends XyoBase implements IXyoSeriali
   public abstract getData(): Buffer | IXyoSerializableObject | IXyoSerializableObject[]
 
   public serialize(): Buffer {
+    if (this.origin) {
+      return this.origin
+    }
+
     if (this.srcBuffer) {
       return this.srcBuffer
     }

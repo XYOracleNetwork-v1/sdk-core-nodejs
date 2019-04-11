@@ -85,6 +85,7 @@ export class XyoSerializationService extends XyoBase implements IXyoSerializatio
 
     const deserializationResult = recipe.deserialize(src, this) as T
     deserializationResult.srcBuffer = src
+    deserializationResult.origin = src
     return deserializationResult
   }
 

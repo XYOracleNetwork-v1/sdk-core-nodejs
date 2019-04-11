@@ -18,6 +18,7 @@ export function parse(src: Buffer, schema: IXyoObjectSchema): IParseResult {
   const partialSchema = readHeader(src)
   const data = sliceItem(src, 0, partialSchema, true)
   const headerBytes = src.slice(0, 2 + partialSchema.sizeIdentifierSize!)
+
   if (partialSchema.iterableType === 'not-iterable') {
     return {
       data,
