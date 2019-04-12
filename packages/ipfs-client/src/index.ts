@@ -62,9 +62,9 @@ export class XyoIpfsClient extends XyoBase implements IXyoIpfsClient {
     return new Promise((resolve, reject) => {
       this.ipfs.add(v, { pin: true }, (err, resultItems) => {
         if (err) return reject(err)
-
+        console.log("IPFS Result Items", err, resultItems, v)
         if (resultItems.length !== 1) {
-          throw new XyoError(`There was an error adding data to ipfs`)
+          throw new XyoError(`There was an error adding data to ipfs`, resultItems.length)
         }
 
         return resolve(resultItems[0].hash)
