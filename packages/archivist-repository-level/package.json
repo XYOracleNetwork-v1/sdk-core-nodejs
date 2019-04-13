@@ -1,5 +1,5 @@
 {
-  "name": "@xyo-network/archivist-repositor-level",
+  "name": "@xyo-network/archivist-repository-level",
   "version": "0.55.1",
   "description": "A data-layer abstraction for archivist responsibilities using LevelDB",
   "main": "dist/index.js",

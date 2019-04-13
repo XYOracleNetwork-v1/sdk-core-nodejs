@@ -37,7 +37,6 @@ import { buildGraphQLServer } from '@xyo-network/graphql-apis'
 import { XyoAboutMeService } from '@xyo-network/about-me'
 import { IXyoArchivistRepository } from '@xyo-network/archivist-repository'
 import { createArchivistSqlRepository, ISqlArchivistRepositoryConfig } from '@xyo-network/archivist-repository-sql'
-import { createArchivistDynamoRepository, IDynamoArchivistRepositoryConfig } from '@xyo-network/archivist-repository-dynamo'
 import { XyoError } from '@xyo-network/errors'
 import { XyoGraphQLServer } from '@xyo-network/graphql-server'
 import { IXyoArchivistNetwork, XyoArchivistNetwork } from '@xyo-network/archivist-network'
@@ -288,7 +287,7 @@ const originChainRepository: IXyoProvider<IXyoOriginChainRepository, IXyoOriginC
 const originBlockRepository: IXyoProvider<IXyoOriginBlockRepository, undefined> = {
   async get(container, c) {
     try {
-      const archivistRepo = await container.get<IXyoArchivistRepository>(IResolvers.ARCHIVIST_REPOSITORY)
+      const archivistRepo = await container.get<IXyoArchivistRepository>(IResolvers.ARCHIVIST_REPOSITORY_SQL)
       return archivistRepo
     } catch (err) {
       const storageProvider = new XyoInMemoryStorageProvider()
@@ -442,7 +441,7 @@ const aboutMe: IXyoProvider<XyoAboutMeService, IXyoAboutMeConfig> = {
   }
 }
 
-const archivistRepository: IXyoProvider<IXyoArchivistRepository, ISqlArchivistRepositoryConfig> = {
+const archivistRepositorySql: IXyoProvider<IXyoArchivistRepository, ISqlArchivistRepositoryConfig> = {
   async get(container, config) {
     if (config && config.database && config.user && config.password && config.port && config.host) {
       const serialization = await container.get<IXyoSerializationService>(IResolvers.SERIALIZATION_SERVICE)
@@ -539,7 +538,7 @@ export const resolvers: IXyoResolvers = {
   [IResolvers.DISCOVERY_NETWORK]: discoveryNetwork,
   [IResolvers.TRANSACTION_REPOSITORY]: transactionsRepository,
   [IResolvers.ABOUT_ME_SERVICE]: aboutMe,
-  [IResolvers.ARCHIVIST_REPOSITORY]: archivistRepository,
+  [IResolvers.ARCHIVIST_REPOSITORY_SQL]: archivistRepositorySql,
   [IResolvers.ARCHIVIST_NETWORK]: archivistNetwork,
   [IResolvers.GRAPHQL]: graphql,
   [IResolvers.QUESTION_SERVICE]: questionService,
