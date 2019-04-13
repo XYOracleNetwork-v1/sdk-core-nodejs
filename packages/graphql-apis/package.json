@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/graphql-apis",
-  "version": "0.55.0",
+  "version": "0.55.1",
   "description": "The routines for resolving a graphql query or mutation",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,8 +8,8 @@
   "license": "MIT",
   "dependencies": {
     "@xyo-network/about-me": "^0.55.0",
-    "@xyo-network/archivist-network": "^0.55.0",
-    "@xyo-network/archivist-repository": "^0.55.0",
+    "@xyo-network/archivist-network": "^0.55.1",
+    "@xyo-network/archivist-repository": "^0.55.1",
     "@xyo-network/base": "^0.55.0",
     "@xyo-network/bound-witness": "^0.55.0",
     "@xyo-network/graphql-server": "^0.55.0",

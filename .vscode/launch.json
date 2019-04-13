@@ -59,6 +59,15 @@
       "console": "integratedTerminal"
     },
     {
+      "name": "Launch Dynamo Archivist",
+      "type": "node",
+      "request": "launch",
+      "args": ["src/index.ts", "start", "archivist-dynamo"],
+      "cwd": "${workspaceFolder}/packages/app",
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "console": "integratedTerminal"
+    },
+    {
       "name": "Launch Home",
       "type": "node",
       "request": "launch",

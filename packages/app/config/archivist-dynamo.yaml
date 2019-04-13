@@ -14,13 +14,8 @@ data: ./node-data
 name: archivist
 archivist:
   repository:
-    name: "MySql"
-    platform: "sql"
-    host: 127.0.0.1
-    user: admin
-    password: password
-    database: Xyo
-    port: 3306
+    name: "DynamoDB"
+    platform: "dynamo"
 diviner: null
 ipfs:
   host: ipfs.xyo.network

@@ -33,7 +33,7 @@ export async function main() {
     .option("-c, --config [config]", "specify config file")
     .option("-f, --forever [forever]", "run forever")
     .option("-p, --preflight [preflight]", "generates preflight report")
-    .option("-d, --database [database]", "type of database to use", /^(mysql|level|neo4j)$/i)
+    .option("-d, --database [database]", "type of database to use", /^(mysql|level|neo4j|dynamo)$/i)
     .arguments("[cmd] [target]")
     .action(async (cmd, target) => {
       const appLauncher = new XyoAppLauncher()

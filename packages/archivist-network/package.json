@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/archivist-network",
-  "version": "0.55.0",
+  "version": "0.55.1",
   "description": "Asks the archivist network at large for data",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,7 +16,7 @@
     "@xyo-network/diviner-archivist-client.graphql": "^0.55.0",
     "@xyo-network/errors": "^0.55.0",
     "@xyo-network/hashing": "^0.55.0",
-    "@xyo-network/node-network": "^0.55.0",
+    "@xyo-network/node-network": "^0.55.1",
     "@xyo-network/p2p": "^0.55.0",
     "@xyo-network/serialization": "^0.55.0"
   },

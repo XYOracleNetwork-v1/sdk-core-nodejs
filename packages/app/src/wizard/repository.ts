@@ -4,6 +4,7 @@ export enum XyoRepository {
   MYSQL = 'mysql',
   LEVEL = 'level',
   NEO4J = 'neo4j',
+  DYNAMO = 'dynamo',
 }
 
 export class RepositoryWizard extends Wizard {
@@ -16,6 +17,7 @@ export class RepositoryWizard extends Wizard {
         XyoRepository.MYSQL,
         XyoRepository.LEVEL,
         XyoRepository.NEO4J,
+        XyoRepository.DYNAMO,
       ],
       message: `What type of repository?`,
       name: 'repository',

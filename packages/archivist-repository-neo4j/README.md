@@ -2,20 +2,20 @@
 
 ![logo]
 
-# Archivist Repository SQL
+# Archivist Repository Neo4J
 
-Implements the archivist repository backed by sql
+Implements the archivist repository backed by neo4j
 
 ## Install
 
 Using yarn
 
 ```sh
-  yarn add @xyo-network/archivist-repository-sql
+  yarn add @xyo-network/archivist-repository-neo4j
 ```
 
 Using npm
 
 ```sh
-  npm install @xyo-network/archivist-repository-sql --save
+  npm install @xyo-network/archivist-repository-neo4j --save
 ```

@@ -9,10 +9,6 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-export interface ISqlConnectionDetails {
-  host: string,
-  user: string,
-  password: string,
-  database: string,
-  port: number
+export interface INeo4jConnectionDetails {
+  host: string
 }

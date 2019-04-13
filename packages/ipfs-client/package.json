@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/ipfs-client",
-  "version": "0.55.0",
+  "version": "0.55.1",
   "description": "Wraps an ipfs client",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

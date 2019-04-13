@@ -86,5 +86,5 @@ export interface IXyoOriginBlocksByPublicKeyResult {
 }
 
 export interface IArchivistRepositoryConfig extends IXyoConfig {
-  platform: string /* mysql, level, neo4j, etc... */
+  platform: string /* mysql, level, neo4j, dynamo etc... */
 }
