@@ -16,6 +16,7 @@
     "@xyo-network/serialization": "^0.55.0",
     "@xyo-network/serialization-schema": "^0.55.0",
     "@xyo-network/signing": "^0.55.0",
+    "aws-sdk": "^2.437.0",
     "lodash": "^4.17.11"
   },
   "devDependencies": {

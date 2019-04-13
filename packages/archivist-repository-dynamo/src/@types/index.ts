@@ -10,5 +10,5 @@
  */
 
 export interface IDynamoArchivistRepositoryConfig {
-  host: string
+  tableName: string
 }

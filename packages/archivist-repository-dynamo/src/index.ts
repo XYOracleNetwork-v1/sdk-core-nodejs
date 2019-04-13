@@ -11,12 +11,13 @@
 
 import { XyoArchivistDynamoRepository } from "./xyo-dynamo-archivist-repository"
 import { IXyoSerializationService } from "@xyo-network/serialization"
-import path from 'path'
+import { IDynamoArchivistRepositoryConfig } from './@types'
 
 export async function createArchivistDynamoRepository(
+  config: IDynamoArchivistRepositoryConfig,
   serializationService: IXyoSerializationService
 ) {
-  const repo = new XyoArchivistDynamoRepository(serializationService)
+  const repo = new XyoArchivistDynamoRepository(serializationService, config.tableName)
   return repo
 }
 
