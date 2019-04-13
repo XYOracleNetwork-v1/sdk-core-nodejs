@@ -19,3 +19,5 @@ export async function createArchivistNeo4jRepository(
   const repo = new XyoArchivistNeo4jRepository(serializationService)
   return repo
 }
+
+export { INeo4jArchivistRepositoryConfig } from './@types'

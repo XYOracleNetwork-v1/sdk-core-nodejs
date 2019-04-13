@@ -19,3 +19,5 @@ export async function createArchivistLevelRepository(
   const repo = new XyoArchivistLevelRepository(serializationService)
   return repo
 }
+
+export { ILevelArchivistRepositoryConfig } from './@types'

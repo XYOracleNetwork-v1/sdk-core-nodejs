@@ -19,3 +19,5 @@ export async function createArchivistDynamoRepository(
   const repo = new XyoArchivistDynamoRepository(serializationService)
   return repo
 }
+
+export { IDynamoArchivistRepositoryConfig } from './@types'
