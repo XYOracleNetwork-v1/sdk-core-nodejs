@@ -9,6 +9,6 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-export interface ILevelConnectionDetails {
+export interface ILevelArchivistRepositoryConfig {
   host: string
 }

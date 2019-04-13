@@ -9,6 +9,6 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-export interface INeo4jConnectionDetails {
+export interface INeo4jArchivistRepositoryConfig {
   host: string
 }

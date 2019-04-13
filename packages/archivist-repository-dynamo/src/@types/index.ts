@@ -9,6 +9,6 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-export interface IDynamoConnectionDetails {
+export interface IDynamoArchivistRepositoryConfig {
   host: string
 }
