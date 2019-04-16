@@ -10,6 +10,7 @@
  */
 
 // tslint:disable:max-line-length
+// tslint:disable:no-implicit-dependencies
 
 import { IXyoResolvers, IXyoDiscoveryConfig, IXyoNodeNetworkConfig, IXyoPeerTransportConfig, IXyoNetworkConfig, IXyoNetworkProcedureCatalogueConfig, IXyoOriginChainConfig, IXyoAboutMeConfig, IXyoGraphQLConfig, IXyoWeb3ServiceConfig } from './@types'
 import { IXyoPeerConnectionDelegate, XyoSimplePeerConnectionDelegate, XyoPeerConnectionHandler } from '@xyo-network/peer-connections'

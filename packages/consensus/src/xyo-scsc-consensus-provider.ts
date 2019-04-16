@@ -3,7 +3,6 @@
  * @Date:   Monday, 25th February 2019 10:15:15 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-scsc-consensus-provider.ts
- 
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */

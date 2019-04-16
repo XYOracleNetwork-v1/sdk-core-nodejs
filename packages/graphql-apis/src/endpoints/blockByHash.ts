@@ -3,7 +3,7 @@
  * @Date:   Thursday, 14th February 2019 1:52:34 pm
  * @Email:  developer@xyfindables.com
  * @Filename: blockByHash.ts
- 
+
  * @Last modified time: Friday, 22nd February 2019 2:23:24 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -66,27 +66,27 @@ export default class XyoGetBlockByHashResolver extends XyoBase implements IXyoDa
     return {
       humanReadable: block.getReadableValue(),
       bytes: block.serializeHex(),
-      publicKeys: block.publicKeys.map((keyset) => {
+      publicKeys: block.publicKeys.map((keyset: any) => {
         return {
-          array: keyset.keys.map((key) => {
+          array: keyset.keys.map((key: any) => {
             return {
               value: key.serializeHex(),
             }
           })
         }
       }),
-      signatures: block.signatures.map((sigSet) => {
+      signatures: block.signatures.map((sigSet: any) => {
         return {
-          array: sigSet.signatures.map((sig) => {
+          array: sigSet.signatures.map((sig: any) => {
             return {
               value: sig.serializeHex()
             }
           })
         }
       }),
-      heuristics: block.heuristics.map((heuristicSet) => {
+      heuristics: block.heuristics.map((heuristicSet: any) => {
         return {
-          array: heuristicSet.map((heuristic) => {
+          array: heuristicSet.map((heuristic: any) => {
             return {
               value: heuristic.serializeHex()
             }

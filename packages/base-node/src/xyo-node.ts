@@ -44,23 +44,3 @@ export class XyoNode extends LifeCycleRunner {
     return (this.lifeCyclable as XyoNodeLifeCycle).get<T>(provider)
   }
 }
-
-export async function main() {
-  const newNode = new XyoNode({
-    config: {
-      data: {
-        path: './node-db'
-      },
-      originChainRepository: {
-        data: './node-db/origin-chain'
-      }
-    }
-  })
-
-  const managedProcessNode = new ProcessManager(newNode)
-  managedProcessNode.manage(process)
-}
-
-if (require.main === module) {
-  main()
-}
