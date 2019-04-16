@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Friday, 7th December 2018 11:05:37 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-uncompressed-public-key-deserializer.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

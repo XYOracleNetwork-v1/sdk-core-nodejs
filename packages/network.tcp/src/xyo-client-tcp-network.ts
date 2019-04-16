@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 26th September 2018 3:01:22 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-client-tcp-network.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Wednesday, 6th March 2019 2:56:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 29th November 2018 4:40:40 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-stub-signer.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Thursday, 13th December 2018 10:18:13 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

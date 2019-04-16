@@ -32,6 +32,7 @@ export class XyoAppLauncher extends XyoBase {
   private isForever = false
   private isDiviner = false
   private isArchivist = false
+  private origins = 1
 
   private rootPath = path.resolve(__dirname, '..')
   private configFolder = path.resolve(this.rootPath, 'config')
@@ -97,6 +98,7 @@ export class XyoAppLauncher extends XyoBase {
         featureType: 'archivist',
         supportsFeature: true,
         featureOptions: {
+          origins: this.config.origins || 1,
           graphqlHost: this.config.ip,
           graphqlPort: this.config.graphqlPort,
           boundWitnessHost: this.config.ip,

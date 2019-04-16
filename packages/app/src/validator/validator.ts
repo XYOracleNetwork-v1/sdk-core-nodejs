@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Friday, 15th February 2019 11:31:50 am
  * @Email:  developer@xyfindables.com
  * @Filename: validator.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Tuesday, 19th February 2019 3:28:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 19th February 2019 10:54:17 am
  * @Email:  developer@xyfindables.com
  * @Filename: transactionList.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Monday, 11th March 2019 3:51:22 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

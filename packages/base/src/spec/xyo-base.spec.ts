@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 19th November 2018 11:55:09 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base.spec.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Monday, 19th November 2018 5:47:39 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 20th November 2018 11:18:23 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-peer-connection-handler.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Tuesday, 20th November 2018 11:24:59 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

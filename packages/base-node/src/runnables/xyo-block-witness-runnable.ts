@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 4th March 2019 1:36:37 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-block-witness-runnable.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Wednesday, 13th March 2019 4:01:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

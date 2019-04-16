@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 29th November 2018 4:44:14 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-stub-public-key.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Wednesday, 12th December 2018 1:37:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

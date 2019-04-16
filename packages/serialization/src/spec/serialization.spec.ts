@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 26th November 2018 1:26:31 pm
  * @Email:  developer@xyfindables.com
  * @Filename: serialization.spec.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Wednesday, 12th December 2018 1:58:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

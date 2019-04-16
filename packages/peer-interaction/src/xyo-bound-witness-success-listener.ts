@@ -1,9 +1,9 @@
 /*
-* @Author: XY | The Findables Company <ryanxyo>
+* @Author: XY | The Findables Company <xyo-network>
 * @Date:   Thursday, 7th February 2019 11:32:52 am
 * @Email:  developer@xyfindables.com
 * @Filename: xyo-bound-witness-success-listener.ts
-* @Last modified by: ryanxyo
+
 * @Last modified time: Thursday, 7th February 2019 11:33:33 am
 * @License: All Rights Reserved
 * @Copyright: Copyright XY | The Findables Company

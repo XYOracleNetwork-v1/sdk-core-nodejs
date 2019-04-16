@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 20th November 2018 1:17:17 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-local-file-storage-provider.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Tuesday, 11th December 2018 9:58:50 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

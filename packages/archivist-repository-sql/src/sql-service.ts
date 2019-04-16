@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 3rd December 2018 1:18:49 pm
  * @Email:  developer@xyfindables.com
  * @Filename: sql-service.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Tuesday, 12th March 2019 3:47:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

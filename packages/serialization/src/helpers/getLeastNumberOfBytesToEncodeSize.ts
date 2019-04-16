@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 28th November 2018 5:00:34 pm
  * @Email:  developer@xyfindables.com
  * @Filename: getLeastNumberOfBytesToEncodeSize.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Wednesday, 28th November 2018 5:00:37 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

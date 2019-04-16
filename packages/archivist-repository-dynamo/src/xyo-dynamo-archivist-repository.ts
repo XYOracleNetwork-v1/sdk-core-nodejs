@@ -1,5 +1,5 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 3rd December 2018 1:20:45 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-neo4j-archivist-repository.ts

@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 28th November 2018 10:46:28 am
  * @Email:  developer@xyfindables.com
  * @Filename: parse.spec.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Wednesday, 12th December 2018 11:16:10 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

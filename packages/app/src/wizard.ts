@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Friday, 15th February 2019 11:27:20 am
  * @Email:  developer@xyfindables.com
  * @Filename: app-wizard.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Wednesday, 13th March 2019 4:26:29 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

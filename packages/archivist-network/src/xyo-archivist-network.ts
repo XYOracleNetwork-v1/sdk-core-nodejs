@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 28th January 2019 12:00:40 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-archivist-network.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Tuesday, 12th March 2019 3:47:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

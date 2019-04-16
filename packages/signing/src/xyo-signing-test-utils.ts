@@ -1,11 +1,11 @@
 import { IXyoSignerProvider, IXyoSigner } from "./@types"
 
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Friday, 14th December 2018 12:21:03 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signing-test-utils.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Friday, 14th December 2018 12:21:41 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

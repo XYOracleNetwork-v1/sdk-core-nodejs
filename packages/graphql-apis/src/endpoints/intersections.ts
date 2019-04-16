@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 14th February 2019 2:57:04 pm
  * @Email:  developer@xyfindables.com
  * @Filename: intersections.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Thursday, 14th February 2019 2:58:36 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

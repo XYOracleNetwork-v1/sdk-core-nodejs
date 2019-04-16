@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 20th December 2018 12:04:14 pm
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Tuesday, 12th March 2019 12:44:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

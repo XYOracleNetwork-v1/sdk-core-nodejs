@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 25th February 2019 10:15:15 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-scsc-consensus-provider.ts
- * @Last modified by: ryanxyo
+ 
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */

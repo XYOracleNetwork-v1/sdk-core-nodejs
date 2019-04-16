@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 20th November 2018 1:11:43 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-in-memory-storage-provider.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Friday, 22nd February 2019 2:18:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

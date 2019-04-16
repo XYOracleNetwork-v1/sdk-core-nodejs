@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 5th February 2019 11:56:51 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-block-permission-request-resolver.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Wednesday, 6th March 2019 2:47:07 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

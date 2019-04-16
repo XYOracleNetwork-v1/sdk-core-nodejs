@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 19th November 2018 3:23:49 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-error.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Wednesday, 6th March 2019 4:41:30 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

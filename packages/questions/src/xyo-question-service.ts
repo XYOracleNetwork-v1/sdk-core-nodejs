@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Friday, 21st December 2018 11:33:04 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-question-service.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Friday, 8th February 2019 12:39:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

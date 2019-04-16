@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 14th February 2019 2:11:32 pm
  * @Email:  developer@xyfindables.com
  * @Filename: blockList.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Tuesday, 19th February 2019 10:55:05 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

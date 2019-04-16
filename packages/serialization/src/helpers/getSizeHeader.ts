@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 28th November 2018 4:57:39 pm
  * @Email:  developer@xyfindables.com
  * @Filename: getSizeHeader.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Wednesday, 28th November 2018 5:17:42 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

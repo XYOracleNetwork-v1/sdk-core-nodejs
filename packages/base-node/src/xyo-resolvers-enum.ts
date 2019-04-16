@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 13th February 2019 10:28:51 am
  * @Email:  developer@xyfindables.com
  * @Filename: resolvers-enum
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Monday, 4th March 2019 12:50:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

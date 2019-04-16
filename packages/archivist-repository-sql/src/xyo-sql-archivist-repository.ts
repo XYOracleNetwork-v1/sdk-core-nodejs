@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 3rd December 2018 1:20:45 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-sql-archivist-repository.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Wednesday, 6th February 2019 10:04:16 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

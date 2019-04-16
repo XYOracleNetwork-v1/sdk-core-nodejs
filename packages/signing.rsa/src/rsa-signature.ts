@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 20th November 2018 3:35:36 pm
  * @Email:  developer@xyfindables.com
  * @Filename: rsa-signature.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Wednesday, 12th December 2018 1:54:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

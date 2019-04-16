@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 14th February 2019 2:25:39 pm
  * @Email:  developer@xyfindables.com
  * @Filename: entities.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Thursday, 14th February 2019 2:26:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

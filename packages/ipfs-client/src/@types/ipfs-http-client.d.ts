@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 20th December 2018 12:11:45 pm
  * @Email:  developer@xyfindables.com
  * @Filename: ipfs-http-client.d.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Thursday, 7th March 2019 9:54:44 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

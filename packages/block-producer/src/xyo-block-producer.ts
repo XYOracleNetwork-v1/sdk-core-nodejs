@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Friday, 22nd February 2019 11:43:26 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-block-producer.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Tuesday, 12th March 2019 2:30:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

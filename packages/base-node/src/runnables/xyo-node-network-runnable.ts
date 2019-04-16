@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 4th March 2019 1:20:12 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node-network-runnable.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Wednesday, 13th March 2019 4:01:58 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

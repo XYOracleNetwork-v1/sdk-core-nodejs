@@ -8,6 +8,7 @@ apis:
   - blocksByPublicKey
   - entities
 bootstrapNodes: []
+origins: 1
 serverPort: 11000
 graphqlPort: 11001
 data: ./node-data

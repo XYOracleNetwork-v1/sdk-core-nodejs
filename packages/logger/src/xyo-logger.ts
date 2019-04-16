@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 19th November 2018 11:27:43 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-logger.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Friday, 7th December 2018 11:50:59 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

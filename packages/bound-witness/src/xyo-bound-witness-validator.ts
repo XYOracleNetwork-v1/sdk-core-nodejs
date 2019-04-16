@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 20th November 2018 5:10:50 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-validator.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Thursday, 7th March 2019 3:53:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 13th December 2018 9:58:27 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-chain-local-storage-repository.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Wednesday, 6th March 2019 1:52:49 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

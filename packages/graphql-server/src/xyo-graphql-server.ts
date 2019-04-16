@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 19th December 2018 11:17:53 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-graphql-server.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Tuesday, 12th March 2019 3:49:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

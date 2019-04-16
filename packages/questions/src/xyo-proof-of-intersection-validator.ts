@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 28th February 2019 6:24:26 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-proof-of-intersection-validator.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Friday, 8th March 2019 2:25:34 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

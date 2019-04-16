@@ -1,9 +1,9 @@
 /*
-* @Author: XY | The Findables Company <ryanxyo>
+* @Author: XY | The Findables Company <xyo-network>
 * @Date:   Thursday, 13th December 2018 1:17:30 pm
 * @Email:  developer@xyfindables.com
 * @Filename: process-manager.ts
-* @Last modified by: ryanxyo
+
 * @Last modified time: Friday, 15th February 2019 10:35:41 am
 * @License: All Rights Reserved
 * @Copyright: Copyright XY | The Findables Company

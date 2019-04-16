@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 31st January 2019 1:16:05 pm
  * @Email:  developer@xyfindables.com
  * @Filename: manage-ipfs.js
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Friday, 1st February 2019 12:35:17 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
