@@ -1,12 +1,13 @@
 /*
- * @Author: XY | The Findables Company <xyo-network>
- * @Date:   Friday, 15th February 2019 11:31:50 am
- * @Email:  developer@xyfindables.com
- * @Filename: validator.ts
- 
- * @Last modified time: Tuesday, 19th February 2019 3:28:02 pm
- * @License: All Rights Reserved
- * @Copyright: Copyright XY | The Findables Company
+ * File: validator.ts
+ * Project: @xyo-network/app
+ * File Created: Tuesday, 16th April 2019 9:19:05 am
+ * Author: XYO Development Team (support@xyo.network)
+ * -----
+ * Last Modified: Tuesday, 16th April 2019 9:56:06 am
+ * Modified By: XYO Development Team (support@xyo.network>)
+ * -----
+ * Copyright 2017 - 2019 XY - The Persistent Company
  */
 
 import Joi from 'joi'

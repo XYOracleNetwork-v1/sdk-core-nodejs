@@ -1,3 +1,15 @@
+/*
+ * File: applauncher.ts
+ * Project: @xyo-network/app
+ * File Created: Tuesday, 16th April 2019 9:19:05 am
+ * Author: XYO Development Team (support@xyo.network)
+ * -----
+ * Last Modified: Tuesday, 16th April 2019 9:54:47 am
+ * Modified By: XYO Development Team (support@xyo.network>)
+ * -----
+ * Copyright 2017 - 2019 XY - The Persistent Company
+ */
+
 import { XyoBase } from '@xyo-network/base'
 import { IAppConfig, IEthCryptoKeys } from './@types'
 import path from 'path'

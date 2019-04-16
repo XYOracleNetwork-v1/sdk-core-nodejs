@@ -1,12 +1,13 @@
 /*
- * @Author: XY | The Findables Company <xyo-network>
- * @Date:   Friday, 15th February 2019 11:27:20 am
- * @Email:  developer@xyfindables.com
- * @Filename: app-wizard.ts
- 
- * @Last modified time: Wednesday, 13th March 2019 4:26:29 pm
- * @License: All Rights Reserved
- * @Copyright: Copyright XY | The Findables Company
+ * File: wizard.ts
+ * Project: @xyo-network/app
+ * File Created: Tuesday, 16th April 2019 9:19:05 am
+ * Author: XYO Development Team (support@xyo.network)
+ * -----
+ * Last Modified: Tuesday, 16th April 2019 9:56:19 am
+ * Modified By: XYO Development Team (support@xyo.network>)
+ * -----
+ * Copyright 2017 - 2019 XY - The Persistent Company
  */
 
 import { XyoBase } from '@xyo-network/base'

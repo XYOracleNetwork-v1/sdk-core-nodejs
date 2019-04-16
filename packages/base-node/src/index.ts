@@ -1,14 +1,25 @@
-import { DEFAULT_NODE_OPTIONS } from './default-node-options'
+/*
+ * File: index.ts
+ * Project: @xyo-network/base-node
+ * File Created: Tuesday, 16th April 2019 9:19:05 am
+ * Author: XYO Development Team (support@xyo.network)
+ * -----
+ * Last Modified: Tuesday, 16th April 2019 9:57:51 am
+ * Modified By: XYO Development Team (support@xyo.network>)
+ * -----
+ * Copyright 2017 - 2019 XY - The Persistent Company
+ */
 
 /*
- * @Author: XY | The Findables Company <xyo-network>
- * @Date:   Friday, 15th February 2019 10:22:17 am
- * @Email:  developer@xyfindables.com
- * @Filename: index.ts
- 
- * @Last modified time: Friday, 15th February 2019 10:36:44 am
- * @License: All Rights Reserved
- * @Copyright: Copyright XY | The Findables Company
+ * File: index.ts
+ * Project: @xyo-network/base-node
+ * File Created: Tuesday, 16th April 2019 9:19:05 am
+ * Author: XYO Development Team (support@xyo.network)
+ * -----
+ * Last Modified: Tuesday, 16th April 2019 9:57:48 am
+ * Modified By: XYO Development Team (support@xyo.network>)
+ * -----
+ * Copyright 2017 - 2019 XY - The Persistent Company
  */
 
 export {
@@ -32,5 +43,5 @@ export {
 
 export { resolvers } from './resolvers'
 export { IResolvers } from './xyo-resolvers-enum'
-export { main, XyoNode } from './xyo-node'
+export { XyoNode } from './xyo-node'
 export { DEFAULT_NODE_OPTIONS } from './default-node-options'
