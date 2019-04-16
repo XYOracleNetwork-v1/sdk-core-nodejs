@@ -24,7 +24,7 @@ import { IXyoSerializableObject } from '@xyo-network/serialization'
 export interface IXyoBoundWitnessHandlerProvider {
 
   /** Given a `IXyoNetworkPipe` performs an operation that resolves to an `XyoBoundWitness` */
-  handle(networkPipe: IXyoNetworkPipe, didInit: boolean, choice: CatalogueItem): Promise<IXyoBoundWitness>
+  handle(networkPipe: IXyoNetworkPipe, didInit: boolean, choice: CatalogueItem): Promise<IXyoBoundWitness | undefined>
 }
 
 /**

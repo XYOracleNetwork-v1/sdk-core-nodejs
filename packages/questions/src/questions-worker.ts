@@ -62,7 +62,7 @@ export class QuestionsWorker extends XyoBase {
         this.logInfo('Found intersection!', q.getId!())
         await this.handleQuestionAnswered(q.getId!(), q, proof.answer)
       } else {
-        this.logInfo('No intersection found, retrying', q.getId!())
+        this.logInfo(`No intersection found, retrying question: ${q.getId!()}`)
       }
 
       return

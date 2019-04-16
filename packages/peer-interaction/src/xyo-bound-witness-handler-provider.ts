@@ -35,7 +35,7 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
   public async handle(
       networkPipe: IXyoNetworkPipe,
       didInit: boolean,
-      choice: CatalogueItem): Promise<IXyoBoundWitness> {
+      choice: CatalogueItem): Promise<IXyoBoundWitness | undefined> {
 
     const mutex = await this.tryGetMutex(0)
     try {
@@ -49,6 +49,9 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
       const boundWitness = await interaction.run(networkPipe, didInit)
       await this.boundWitnessSuccessListener.onBoundWitnessSuccess(boundWitness, mutex, choice)
       return boundWitness
+    } catch (e) {
+      this.logError("Bound witness handle error", e)
+      return
     } finally {
       await this.originStateRepository.releaseMutex(mutex)
     }

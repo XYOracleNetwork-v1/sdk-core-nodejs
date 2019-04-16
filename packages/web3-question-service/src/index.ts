@@ -29,7 +29,7 @@ export class Web3QuestionService extends XyoBase implements IQuestionsProvider {
 
   constructor(
     private readonly consensusProvider: IConsensusProvider,
-    private readonly requestResolver: IXyoContentAddressableService,
+    private readonly contentService: IXyoContentAddressableService,
   ) {
     super()
   }
@@ -70,7 +70,7 @@ export class Web3QuestionService extends XyoBase implements IQuestionsProvider {
 
     this.alreadyFetchedQuestions[questionId] = true
     try {
-      const resolvedQuestionBuffer = await this.requestResolver.get(questionId)
+      const resolvedQuestionBuffer = await this.contentService.get(questionId)
       if (!resolvedQuestionBuffer) return
       const resolvedQuestion = JSON.parse(
         resolvedQuestionBuffer.toString(),
