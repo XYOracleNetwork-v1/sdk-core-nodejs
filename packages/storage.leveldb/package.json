@@ -1,13 +1,13 @@
 {
   "name": "@xyo-network/storage.leveldb",
-  "version": "0.55.0",
+  "version": "0.57.0",
   "description": "Implements the storage provider interface using the LevelDB",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/storage": "^0.55.0",
+    "@xyo-network/storage": "^0.57.0",
     "abstract-leveldown": "^6.0.2",
     "leveldown": "^5.0.0",
     "levelup": "^4.0.0",

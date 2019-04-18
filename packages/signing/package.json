@@ -1,14 +1,14 @@
 {
   "name": "@xyo-network/signing",
-  "version": "0.55.0",
+  "version": "0.57.0",
   "description": "Signing Types and Services for the XYO Network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/serialization": "^0.55.0",
-    "@xyo-network/serialization-schema": "^0.55.0"
+    "@xyo-network/serialization": "^0.57.0",
+    "@xyo-network/serialization-schema": "^0.57.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",

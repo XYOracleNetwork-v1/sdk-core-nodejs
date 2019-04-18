@@ -1,17 +1,17 @@
 {
   "name": "@xyo-network/ipfs-client",
-  "version": "0.55.0",
+  "version": "0.57.0",
   "description": "Wraps an ipfs client",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.55.0",
-    "@xyo-network/content-addressable-service": "^0.55.0",
-    "@xyo-network/errors": "^0.55.0",
-    "@xyo-network/serialization": "^0.55.0",
-    "@xyo-network/utils": "^0.55.0",
+    "@xyo-network/base": "^0.57.0",
+    "@xyo-network/content-addressable-service": "^0.57.0",
+    "@xyo-network/errors": "^0.57.0",
+    "@xyo-network/serialization": "^0.57.0",
+    "@xyo-network/utils": "^0.57.0",
     "ipfs-http-client": "^30.1.1"
   },
   "devDependencies": {

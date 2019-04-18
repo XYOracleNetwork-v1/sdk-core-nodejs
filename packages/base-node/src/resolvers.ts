@@ -256,7 +256,7 @@ const originChainRepository: IXyoProvider<IXyoOriginChainRepository, IXyoOriginC
     const originBlockRepo = await container.get<IXyoOriginBlockRepository>(IResolvers.ORIGIN_BLOCK_REPOSITORY)
     const serialization = await container.get<IXyoSerializationService>(IResolvers.SERIALIZATION_SERVICE)
     await createDirectoryIfNotExists(config.data)
-    const db = XyoLevelDbStorageProvider.createStore(config.data)
+    const db = await XyoLevelDbStorageProvider.createStore(config.data)
     return new XyoOriginChainLocalStorageRepository(db, originBlockRepo, serialization)
   },
   async postInit(originChainRepo, container, c) {
@@ -413,7 +413,7 @@ const signersProvider: IXyoProvider<IXyoSigner[], undefined> = {
 const transactionsRepository: IXyoProvider<IXyoTransactionRepository, any> = {
   async get(container, config) {
     await createDirectoryIfNotExists(config.data)
-    const transactionDb = XyoLevelDbStorageProvider.createStore(config.data)
+    const transactionDb = await XyoLevelDbStorageProvider.createStore(config.data)
     return new XyoTransactionRepository(transactionDb)
   }
 }

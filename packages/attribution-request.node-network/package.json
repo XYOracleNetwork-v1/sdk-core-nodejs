@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/attribution-request.node-network",
-  "version": "0.55.0",
+  "version": "0.57.0",
   "description": "Uses the node network to satisfy an attribution request",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -10,12 +10,12 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@xyo-network/attribution-request": "^0.55.0",
-    "@xyo-network/base": "^0.55.0",
-    "@xyo-network/bound-witness": "^0.55.0",
-    "@xyo-network/hashing": "^0.55.0",
-    "@xyo-network/node-network": "^0.55.0",
-    "@xyo-network/signing": "^0.55.0"
+    "@xyo-network/attribution-request": "^0.57.0",
+    "@xyo-network/base": "^0.57.0",
+    "@xyo-network/bound-witness": "^0.57.0",
+    "@xyo-network/hashing": "^0.57.0",
+    "@xyo-network/node-network": "^0.57.0",
+    "@xyo-network/signing": "^0.57.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",

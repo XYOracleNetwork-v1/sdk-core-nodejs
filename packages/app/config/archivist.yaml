@@ -17,8 +17,8 @@ archivist:
     name: "MySql"
     platform: "sql"
     host: 127.0.0.1
-    user: admin
-    password: password
+    user: root
+    password: "1337"
     database: Xyo
     port: 3306
 diviner: null

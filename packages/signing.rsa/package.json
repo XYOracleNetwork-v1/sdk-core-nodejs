@@ -1,17 +1,17 @@
 {
   "name": "@xyo-network/signing.rsa",
-  "version": "0.55.0",
+  "version": "0.57.0",
   "description": "Provides RSA signing services",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.55.0",
-    "@xyo-network/errors": "^0.55.0",
-    "@xyo-network/serialization": "^0.55.0",
-    "@xyo-network/serialization-schema": "^0.55.0",
-    "@xyo-network/signing": "^0.55.0",
+    "@xyo-network/base": "^0.57.0",
+    "@xyo-network/errors": "^0.57.0",
+    "@xyo-network/serialization": "^0.57.0",
+    "@xyo-network/serialization-schema": "^0.57.0",
+    "@xyo-network/signing": "^0.57.0",
     "node-rsa": "^1.0.1"
   },
   "devDependencies": {

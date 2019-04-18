@@ -1,18 +1,18 @@
 {
   "name": "@xyo-network/origin-block-repository",
-  "version": "0.55.0",
+  "version": "0.57.0",
   "description": "An abstraction over a collection of origin blocks and subsequently accessing them",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/bound-witness": "^0.55.0",
-    "@xyo-network/hashing": "^0.55.0",
-    "@xyo-network/origin-chain": "^0.55.0",
-    "@xyo-network/serialization": "^0.55.0",
-    "@xyo-network/serialization-schema": "^0.55.0",
-    "@xyo-network/storage": "^0.55.0"
+    "@xyo-network/bound-witness": "^0.57.0",
+    "@xyo-network/hashing": "^0.57.0",
+    "@xyo-network/origin-chain": "^0.57.0",
+    "@xyo-network/serialization": "^0.57.0",
+    "@xyo-network/serialization-schema": "^0.57.0",
+    "@xyo-network/storage": "^0.57.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",

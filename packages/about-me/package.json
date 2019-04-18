@@ -1,16 +1,16 @@
 {
   "name": "@xyo-network/about-me",
-  "version": "0.55.0",
+  "version": "0.57.0",
   "description": "Provides a service for sharing information about oneself with other nodes in the XYO network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.55.0",
-    "@xyo-network/peer-discovery": "^0.55.0",
-    "@xyo-network/signing": "^0.55.0",
-    "@xyo-network/utils": "^0.55.0",
+    "@xyo-network/base": "^0.57.0",
+    "@xyo-network/peer-discovery": "^0.57.0",
+    "@xyo-network/signing": "^0.57.0",
+    "@xyo-network/utils": "^0.57.0",
     "lodash": "^4.17.11"
   },
   "devDependencies": {

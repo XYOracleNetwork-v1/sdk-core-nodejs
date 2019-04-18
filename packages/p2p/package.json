@@ -1,14 +1,14 @@
 {
   "name": "@xyo-network/p2p",
-  "version": "0.55.0",
+  "version": "0.57.0",
   "description": "A peer to peer network module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.55.0",
-    "@xyo-network/utils": "^0.55.0",
+    "@xyo-network/base": "^0.57.0",
+    "@xyo-network/utils": "^0.57.0",
     "multiaddr": "^6.0.3"
   },
   "devDependencies": {

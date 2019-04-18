@@ -1,16 +1,16 @@
 {
   "name": "@xyo-network/hashing",
-  "version": "0.55.0",
+  "version": "0.57.0",
   "description": "Hashing Types and Services for the Xyo Network",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.55.0",
-    "@xyo-network/errors": "^0.55.0",
-    "@xyo-network/serialization": "^0.55.0",
-    "@xyo-network/serialization-schema": "^0.55.0",
+    "@xyo-network/base": "^0.57.0",
+    "@xyo-network/errors": "^0.57.0",
+    "@xyo-network/serialization": "^0.57.0",
+    "@xyo-network/serialization-schema": "^0.57.0",
     "eth-lib": "^0.2.8"
   },
   "devDependencies": {

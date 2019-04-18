@@ -1,15 +1,15 @@
 {
   "name": "@xyo-network/utils",
-  "version": "0.55.0",
+  "version": "0.57.0",
   "description": "Provides utility functionality",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Ryan",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.55.0",
-    "@xyo-network/errors": "^0.55.0",
-    "@xyo-network/meta-list": "^0.55.0",
+    "@xyo-network/base": "^0.57.0",
+    "@xyo-network/errors": "^0.57.0",
+    "@xyo-network/meta-list": "^0.57.0",
     "bn.js": "^4.11.8",
     "bs58": "^4.0.1"
   },

@@ -1,13 +1,13 @@
 {
   "name": "@xyo-network/diviner-archivist-client",
-  "version": "0.55.0",
+  "version": "0.57.0",
   "description": "Implements a client to communicate with an archivist via graphql",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/meta-list": "^0.55.0"
+    "@xyo-network/meta-list": "^0.57.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
