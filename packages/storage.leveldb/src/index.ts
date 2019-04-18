@@ -179,13 +179,14 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
 
 const cache: { [s: string]: XyoLevelDbStorageProvider } = {}
 
-function getLevelDbStore(storeLocation: string) {
+async function getLevelDbStore(storeLocation: string) {
   const store = cache[storeLocation]
   if (store) {
     return store
   }
 
   const newStore = new XyoLevelDbStorageProvider(storeLocation)
+  await newStore.restore()
   cache[storeLocation] = newStore
   return newStore
 }
