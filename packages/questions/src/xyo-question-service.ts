@@ -3,7 +3,7 @@
  * @Date:   Friday, 21st December 2018 11:33:04 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-question-service.ts
- 
+
  * @Last modified time: Friday, 8th February 2019 12:39:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -16,8 +16,8 @@ import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { IXyoOriginChainRepository, XyoBridgeHashSet } from '@xyo-network/origin-chain'
 import { IXyoBoundWitness } from '@xyo-network/bound-witness'
 import { IXyoPublicKey } from '@xyo-network/signing'
-import { IXyoArchivistNetwork } from '@xyo-network/archivist-network'
 import { IBlockPermissionRequestResolver } from '@xyo-network/attribution-request'
+import { IXyoArchivistNetwork } from '@xyo-network/sdk-archivist-nodejs'
 
 export class XyoQuestionService extends XyoBase implements IXyoQuestionService {
 

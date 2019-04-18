@@ -25,8 +25,6 @@
     {"path": "../about-me"},
     {"path": "../utils"},
     {"path": "../origin-block-repository"},
-    {"path": "../archivist-repository"},
-    {"path": "../archivist-network"},
     {"path": "../bound-witness"},
     {"path": "../base"},
     {"path": "../signing"},

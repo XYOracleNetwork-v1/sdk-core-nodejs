@@ -1,5 +1,5 @@
 import { Wizard } from "./base"
-import { ISqlArchivistRepositoryConfig } from '@xyo-network/archivist-repository-sql'
+import { ISqlArchivistRepositoryConfig } from '@xyo-network/sdk-archivist-nodejs'
 
 export class SqlWizard extends Wizard {
   public async start(): Promise<ISqlArchivistRepositoryConfig> {

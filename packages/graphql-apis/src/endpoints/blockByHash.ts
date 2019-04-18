@@ -12,10 +12,10 @@ import { IXyoDataResolver } from "@xyo-network/graphql-server"
 import { GraphQLResolveInfo } from "graphql"
 import { IXyoHashProvider, IXyoHash } from "@xyo-network/hashing"
 import { IXyoOriginBlockRepository } from "@xyo-network/origin-block-repository"
-import { IXyoArchivistNetwork } from '@xyo-network/archivist-network'
 import { IXyoBoundWitness } from "@xyo-network/bound-witness"
 import { IXyoSerializationService } from "@xyo-network/serialization"
 import { XyoBase } from "@xyo-network/base"
+import { IXyoArchivistRepository, IXyoArchivistNetwork } from '@xyo-network/sdk-archivist-nodejs'
 
 export const serviceDependencies = [
   `originBlockRepository`,

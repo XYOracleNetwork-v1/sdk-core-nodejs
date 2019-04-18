@@ -3,15 +3,15 @@
  * @Date:   Thursday, 14th February 2019 2:25:39 pm
  * @Email:  developer@xyfindables.com
  * @Filename: entities.ts
- 
+
  * @Last modified time: Thursday, 14th February 2019 2:26:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoDataResolver } from "@xyo-network/graphql-server"
-import { IXyoArchivistRepository } from "@xyo-network/archivist-repository"
 import { GraphQLResolveInfo } from "graphql"
+import { IXyoArchivistRepository } from '@xyo-network/sdk-archivist-nodejs'
 
 export const serviceDependencies = [`archivistRepository`]
 
@@ -34,10 +34,10 @@ export default class GetEntitiesResolver implements IXyoDataResolver<any, any, a
         hasNextPage: result.hasNextPage,
         endCursor: result.cursor ? result.cursor : undefined
       },
-      items: result.list.map((listItem) => {
+      items: result.list.map((listItem: any) => {
         return {
           firstKnownPublicKey: listItem.firstKnownPublicKey.serializeHex(),
-          allPublicKeys: (listItem.allPublicKeys || []).map(pk => pk.serializeHex()),
+          allPublicKeys: (listItem.allPublicKeys || []).map((pk: any) => pk.serializeHex()),
           type: listItem.type,
           mostRecentIndex: listItem.mostRecentIndex
         }

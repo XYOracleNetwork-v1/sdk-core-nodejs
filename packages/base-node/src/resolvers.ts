@@ -3,7 +3,7 @@
  * @Date:   Friday, 8th February 2019 1:51:34 pm
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- 
+
  * @Last modified time: Wednesday, 13th March 2019 4:03:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -36,12 +36,8 @@ import { IResolvers } from './xyo-resolvers-enum'
 import { XyoLevelDbStorageProvider } from '@xyo-network/storage.leveldb'
 import { buildGraphQLServer } from '@xyo-network/graphql-apis'
 import { XyoAboutMeService } from '@xyo-network/about-me'
-import { IXyoArchivistRepository } from '@xyo-network/archivist-repository'
-import { createArchivistDynamoRepository, IDynamoArchivistRepositoryConfig } from '@xyo-network/archivist-repository-dynamo'
-import { createArchivistSqlRepository, ISqlArchivistRepositoryConfig } from '@xyo-network/archivist-repository-sql'
 import { XyoError } from '@xyo-network/errors'
 import { XyoGraphQLServer } from '@xyo-network/graphql-server'
-import { IXyoArchivistNetwork, XyoArchivistNetwork } from '@xyo-network/archivist-network'
 import { IXyoQuestionService, XyoQuestionService, IQuestionsProvider, QuestionsWorker } from '@xyo-network/questions'
 import { XyoBlockPermissionRequestResolver } from '@xyo-network/attribution-request.node-network'
 import { XyoWeb3Service } from '@xyo-network/web3-service'
@@ -57,6 +53,13 @@ import { XyoQuestionsWorkerRunnable } from './runnables/xyo-questions-worker-run
 import { XyoBlockProducerRunnable } from './runnables/xyo-block-producer-runnable'
 import { XyoBlockWitnessRunnable } from './runnables/xyo-block-witness-runnable'
 import { IXyoContentAddressableService } from '@xyo-network/content-addressable-service'
+import {
+  ISqlArchivistRepositoryConfig,
+  IXyoArchivistNetwork,
+  IXyoArchivistRepository,
+  XyoArchivistNetwork,
+  createArchivistSqlRepository
+} from '@xyo-network/sdk-archivist-nodejs'
 
 const graphql: IXyoProvider<XyoGraphQLServer, IXyoGraphQLConfig> = {
   async get(container, config) {

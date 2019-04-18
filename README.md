@@ -98,9 +98,6 @@ All packages have their own README files as well. These are the README files tha
 
 - [about-me](packages/about-me/README.md)
 - [app](packages/app/README.md)
-- [archivist-network](packages/archivist-network/README.md)
-- [archivist-repository](packages/archivist-repository/README.md)
-- [archivist-repository-sql](packages/archivist-repository-sql/README.md)
 - [attribution-request](packages/attribution-request/README.md)
 - [attribution-request.node-network](packages/attribution-request.node-network/README.md)
 - [base](packages/base/README.md)

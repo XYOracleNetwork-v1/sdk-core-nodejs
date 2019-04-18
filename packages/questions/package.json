@@ -7,7 +7,6 @@
   "author": "XY Development Team",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/archivist-network": "^0.55.1",
     "@xyo-network/attribution-request": "^0.55.0",
     "@xyo-network/base": "^0.55.0",
     "@xyo-network/bound-witness": "^0.55.0",
@@ -19,6 +18,7 @@
     "@xyo-network/origin-block-repository": "^0.55.0",
     "@xyo-network/origin-chain": "^0.55.0",
     "@xyo-network/peer-interaction": "^0.55.0",
+    "@xyo-network/sdk-archivist-nodejs": "^0.2.9",
     "@xyo-network/serialization": "^0.55.0",
     "@xyo-network/signing": "^0.55.0",
     "@xyo-network/transaction-pool": "^0.55.0",

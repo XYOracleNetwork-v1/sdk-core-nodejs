@@ -3,7 +3,7 @@
  * @Date:   Thursday, 24th January 2019 1:14:03 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-questions-service.spec.ts
- 
+
  * @Last modified time: Thursday, 7th March 2019 4:42:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -17,8 +17,8 @@ import { IXyoHasIntersectedQuestion } from '../@types'
 import { XyoStubHash, IXyoHash } from '@xyo-network/hashing'
 import { IXyoBoundWitness, XyoBoundWitness, XyoKeySet, XyoFetter, XyoSignatureSet, XyoWitness } from '@xyo-network/bound-witness'
 import { XyoStubPublicKey, XyoStubSignature, XyoStubSigner } from '@xyo-network/signing'
-import { IXyoArchivistNetwork } from '@xyo-network/archivist-network'
 import { XyoBoundWitnessPayloadProvider } from '@xyo-network/peer-interaction'
+import { IXyoArchivistNetwork } from '@xyo-network/sdk-archivist-nodejs'
 
 describe('Questions Service', () => {
   it('Should not provide an answer if no supporting data exists', async () => {

@@ -3,13 +3,12 @@
  * @Date:   Friday, 15th February 2019 4:57:38 pm
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- 
  * @Last modified time: Wednesday, 6th March 2019 4:04:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IArchivistRepositoryConfig } from '@xyo-network/archivist-repository'
+import { IArchivistRepositoryConfig } from '@xyo-network/sdk-archivist-nodejs'
 
 export interface IEthCryptoKeys {
   address: string

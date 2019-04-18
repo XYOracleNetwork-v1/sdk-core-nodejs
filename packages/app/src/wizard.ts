@@ -4,7 +4,7 @@
  * File Created: Tuesday, 16th April 2019 9:19:05 am
  * Author: XYO Development Team (support@xyo.network)
  * -----
- * Last Modified: Tuesday, 16th April 2019 9:56:19 am
+ * Last Modified: Wednesday, 17th April 2019 8:45:46 pm
  * Modified By: XYO Development Team (support@xyo.network>)
  * -----
  * Copyright 2017 - 2019 XY - The Persistent Company
@@ -27,10 +27,10 @@ import { SqlWizard } from './wizard/sql'
 import { EthereumNodeAddressWizard } from './wizard/ethereum-node-address'
 import { EthereumAccountWizard } from './wizard/ethereum-account'
 import { ContractWizard, IContractConfig } from './wizard/contract'
-import { ISqlArchivistRepositoryConfig } from '@xyo-network/archivist-repository-sql'
 import { GraphqlWizard } from './wizard/graphql'
 import { ApiWizard } from './wizard/api'
 import { AutostartWizard } from './wizard/autostart'
+import { ISqlArchivistRepositoryConfig } from '@xyo-network/sdk-archivist-nodejs'
 
 export class AppWizard extends XyoBase {
   constructor(private readonly rootPath: string) {

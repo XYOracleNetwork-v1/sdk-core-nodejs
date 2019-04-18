@@ -3,14 +3,14 @@
  * @Date:   Thursday, 14th February 2019 2:57:04 pm
  * @Email:  developer@xyfindables.com
  * @Filename: intersections.ts
- 
+
  * @Last modified time: Thursday, 14th February 2019 2:58:36 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import { IXyoDataResolver } from "@xyo-network/graphql-server"
-import { IXyoArchivistRepository } from "@xyo-network/archivist-repository"
+import { IXyoArchivistRepository } from "@xyo-network/sdk-archivist-nodejs"
 import { GraphQLResolveInfo } from "graphql"
 
 export const serviceDependencies = [`archivistRepository`]

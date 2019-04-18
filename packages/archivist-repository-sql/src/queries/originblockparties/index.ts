@@ -1,6 +1,0 @@
-export { InsertOriginBlockPartiesQuery } from './insert'
-export { UpdateOriginBlockPartiesQuery } from './update'
-export { SelectAllOriginBlockPartyIdsQuery } from './selectall'
-export { DeleteOriginBlockPartiesQuery } from './delete'
-export { UnlinkOriginBlockPartiesQuery } from './unlink'
-export { SelectPreviousOriginBlockPartiesQuery } from './selectprevious'

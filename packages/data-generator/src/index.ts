@@ -3,7 +3,7 @@
  * @Date:   Friday, 14th December 2018 4:26:55 pm
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- 
+
  * @Last modified time: Wednesday, 13th March 2019 2:52:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -28,8 +28,8 @@ import { IXyoSerializableObject, XyoBaseSerializable } from '@xyo-network/serial
 import { XyoGps, rssiSerializationProvider, XyoJSONBlob } from '@xyo-network/heuristics-common'
 import { IXyoHash, getHashingProvider, XyoHash, IXyoHashProvider } from '@xyo-network/hashing'
 import { XyoIndex, XyoPreviousHash, XyoBridgeHashSet } from '@xyo-network/origin-chain'
-import { createArchivistSqlRepository } from '@xyo-network/archivist-repository-sql'
 import { serializer } from '@xyo-network/serializer'
+import { createArchivistSqlRepository } from '@xyo-network/sdk-archivist-nodejs'
 
 const dataSet: IXyoInteraction[] = [
   {

@@ -3,7 +3,7 @@
  * @Date:   Thursday, 14th February 2019 2:50:26 pm
  * @Email:  developer@xyfindables.com
  * @Filename: blocksByPublicKey.ts
- 
+
  * @Last modified time: Thursday, 14th February 2019 2:53:21 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -11,10 +11,10 @@
 
 import { IXyoHashProvider } from '@xyo-network/hashing'
 import { IXyoDataResolver } from "@xyo-network/graphql-server"
-import { IXyoArchivistRepository } from '@xyo-network/archivist-repository'
 import { IXyoSerializationService } from '@xyo-network/serialization'
 import { IXyoPublicKey } from '@xyo-network/signing'
 import { XyoBase } from '@xyo-network/base'
+import { IXyoArchivistRepository } from '@xyo-network/sdk-archivist-nodejs'
 
 export const serviceDependencies = [`archivistRepository`, `hashProvider`, `serializationService`]
 
@@ -54,31 +54,31 @@ export default class XyoGetBlocksByPublicKeyResolver extends XyoBase implements 
         this.serializationService.deserialize(Buffer.from(publicKey, 'hex')).hydrate<IXyoPublicKey>()
       )
 
-      const serializedBoundWitnesses = await Promise.all(blocksByPublicKeySet.boundWitnesses.map(async (block) => {
+      const serializedBoundWitnesses = await Promise.all(blocksByPublicKeySet.boundWitnesses.map(async (block: any) => {
         return {
           humanReadable: block.getReadableValue(),
           bytes: block.serializeHex(),
-          publicKeys: block.publicKeys.map((keyset) => {
+          publicKeys: block.publicKeys.map((keyset: any) => {
             return {
-              array: keyset.keys.map((key) => {
+              array: keyset.keys.map((key: any) => {
                 return {
                   value: key.serializeHex()
                 }
               })
             }
           }),
-          signatures: block.signatures.map((sigSet) => {
+          signatures: block.signatures.map((sigSet: any) => {
             return {
-              array: sigSet.signatures.map((sig) => {
+              array: sigSet.signatures.map((sig: any) => {
                 return {
                   value: sig.serializeHex()
                 }
               })
             }
           }),
-          heuristics: block.heuristics.map((heuristicSet) => {
+          heuristics: block.heuristics.map((heuristicSet: any) => {
             return {
-              array: heuristicSet.map((heuristic) => {
+              array: heuristicSet.map((heuristic: any) => {
                 return {
                   value: heuristic.serializeHex()
                 }
@@ -91,7 +91,7 @@ export default class XyoGetBlocksByPublicKeyResolver extends XyoBase implements 
 
       return {
         blocks: serializedBoundWitnesses,
-        keySet: blocksByPublicKeySet.publicKeys.map((publicKeyItem) => {
+        keySet: blocksByPublicKeySet.publicKeys.map((publicKeyItem: any) => {
           return publicKeyItem.serializeHex()
         })
       }
