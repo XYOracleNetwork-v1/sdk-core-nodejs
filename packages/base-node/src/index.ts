@@ -1,22 +1,10 @@
 /*
  * File: index.ts
  * Project: @xyo-network/base-node
- * File Created: Tuesday, 16th April 2019 9:19:05 am
+ * File Created: Wednesday, 17th April 2019 9:10:14 pm
  * Author: XYO Development Team (support@xyo.network)
  * -----
- * Last Modified: Tuesday, 16th April 2019 9:57:51 am
- * Modified By: XYO Development Team (support@xyo.network>)
- * -----
- * Copyright 2017 - 2019 XY - The Persistent Company
- */
-
-/*
- * File: index.ts
- * Project: @xyo-network/base-node
- * File Created: Tuesday, 16th April 2019 9:19:05 am
- * Author: XYO Development Team (support@xyo.network)
- * -----
- * Last Modified: Tuesday, 16th April 2019 9:57:48 am
+ * Last Modified: Thursday, 18th April 2019 1:30:53 pm
  * Modified By: XYO Development Team (support@xyo.network>)
  * -----
  * Copyright 2017 - 2019 XY - The Persistent Company
