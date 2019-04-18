@@ -36,7 +36,7 @@ import { IXyoSerializationService, XyoSerializationService } from '@xyo-network/
 import { schema } from '@xyo-network/serialization-schema'
 import { rssiSerializationProvider, XyoUnixTime, latitudeSerializationProvider, longitudeSerializationProvider, XyoGps, XyoJSONBlob } from '@xyo-network/heuristics-common'
 
-function createSerializer(): IXyoSerializationService {
+function  createSerializer(): IXyoSerializationService {
   const serializationService = new XyoSerializationService(schema)
 
   serializationService.addDeserializer(XyoEcdsaSignature.deserializer)

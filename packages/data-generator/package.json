@@ -21,7 +21,7 @@
     "@xyo-network/peer-interaction": "^0.55.2-alpha.0",
     "@xyo-network/peer-interaction-handlers": "^0.55.2-alpha.0",
     "@xyo-network/peer-interaction-router": "^0.55.2-alpha.0",
-    "@xyo-network/sdk-archivist-nodejs": "^0.2.9",
+    "@xyo-network/sdk-archivist-nodejs": "^0.2.13",
     "@xyo-network/serialization": "^0.55.2-alpha.0",
     "@xyo-network/serialization-schema": "^0.55.2-alpha.0",
     "@xyo-network/serializer": "^0.55.2-alpha.0",

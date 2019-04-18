@@ -13,7 +13,7 @@
     "@xyo-network/graphql-server": "^0.55.2-alpha.0",
     "@xyo-network/hashing": "^0.55.2-alpha.0",
     "@xyo-network/origin-block-repository": "^0.55.2-alpha.0",
-    "@xyo-network/sdk-archivist-nodejs": "^0.2.9",
+    "@xyo-network/sdk-archivist-nodejs": "^0.2.13",
     "@xyo-network/serialization": "^0.55.2-alpha.0",
     "@xyo-network/signing": "^0.55.2-alpha.0",
     "@xyo-network/transaction-pool": "^0.55.2-alpha.0",
