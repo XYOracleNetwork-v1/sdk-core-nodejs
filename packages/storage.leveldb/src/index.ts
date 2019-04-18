@@ -20,27 +20,22 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
   }
 
   private levelDbDirectory: string
-  private db: LevelUp<LevelDown> | undefined
+  private db: LevelUp<LevelDown>
+  private syncWrite = false
 
-  constructor (levelDbDirectory: string) {
+  constructor (levelDbDirectory: string, syncWrite?: boolean) {
+    if (syncWrite) {
+      this.syncWrite = syncWrite
+    }
+
     this.levelDbDirectory = levelDbDirectory
-  }
-
-  public async restore () {
-    return new Promise((resolve, reject) => {
-      (leveldown as any).repair(this.levelDbDirectory, (error: string) => {
-        // todo find correct types for leveldown
-        this.db = levelup(leveldown(this.levelDbDirectory))
-        resolve(error)
-      })
-
-    })
+    this.db = levelup(leveldown(this.levelDbDirectory))
   }
 
   public async write(key: Buffer, value: Buffer): Promise<undefined> {
     return new Promise((resolve, reject) => {
       if (this.db) {
-        this.db.put(key, value, (err) => {
+        this.db.put(key, value, { sync: this.syncWrite }, (err) => {
           if (err) {
             return reject(err)
           }
@@ -186,7 +181,6 @@ async function getLevelDbStore(storeLocation: string) {
   }
 
   const newStore = new XyoLevelDbStorageProvider(storeLocation)
-  await newStore.restore()
   cache[storeLocation] = newStore
   return newStore
 }
