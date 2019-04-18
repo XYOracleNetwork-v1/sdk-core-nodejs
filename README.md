@@ -6,7 +6,7 @@
 
 [![NPM](https://nodei.co/npm/@xyo-network/sdk-core-node.png)](https://nodei.co/npm/@xyo-network/sdk-core-node/)
 
-[![Build Status](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs.svg?branch=develop)](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs) [![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability) [![BCH compliance](https://bettercodehub.com/edge/badge/XYOracleNetwork/sdk-core-nodejs?branch=develop)](https://bettercodehub.com/results/XYOracleNetwork/sdk-core-nodejs) [![Greenkeeper badge](https://badges.greenkeeper.io/XYOracleNetwork/sdk-core-nodejs.svg)](https://greenkeeper.io/) [![DepShield Badge](https://depshield.sonatype.org/badges/XYOracleNetwork/sdk-core-nodejs/depshield.svg)](https://depshield.github.io) [![David Badge](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs/status.svg)](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs) [![David Badge](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs/dev-status.svg)](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs)
+[![Build Status](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs.svg?branch=develop)](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs) [![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability) [![BCH compliance](https://bettercodehub.com/edge/badge/XYOracleNetwork/sdk-core-nodejs?branch=develop)](https://bettercodehub.com/results/XYOracleNetwork/sdk-core-nodejs) [![DepShield Badge](https://depshield.sonatype.org/badges/XYOracleNetwork/sdk-core-nodejs/depshield.svg)](https://depshield.github.io) [![David Badge](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs/status.svg)](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs) [![David Badge](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs/dev-status.svg)](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs)
 
 ## Project Overview
 
@@ -97,7 +97,6 @@ i.e. Where the test file is `test/integration/lib.spec.ts`
 All packages have their own README files as well. These are the README files that will be found on their respective npm package pages as well.
 
 - [about-me](packages/about-me/README.md)
-- [app](packages/app/README.md)
 - [attribution-request](packages/attribution-request/README.md)
 - [attribution-request.node-network](packages/attribution-request.node-network/README.md)
 - [base](packages/base/README.md)

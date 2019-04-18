@@ -76,12 +76,6 @@ sandbox/
 **/pids/*
 !**/pids/keep
 
-packages/app/config/*
-!packages/app/config/archivist.yaml
-!packages/app/config/archivist-dynamo.yaml
-!packages/app/config/diviner.yaml
-!packages/app/config/archivist-diviner.yaml
-
 # Scratch files
 scratch.ts
 scratch.js
