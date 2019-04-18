@@ -3,18 +3,18 @@
  * @Date:   Wednesday, 28th November 2018 5:45:13 pm
  * @Email:  developer@xyfindables.com
  * @Filename: resolveSerializablesToBuffer.ts
- 
+
  * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoObjectSchema, IXyoSerializableObject, IIterableType, IXyoObjectPartialSchema } from "../@types"
-import { XyoError, XyoErrors } from "@xyo-network/errors"
-import { getHeader } from "./getHeader"
-import { getNumberOfBytesRequiredForSizeBuffer } from "./getNumberOfBytesRequiredForSizeBuffer"
-import { getSizeHeader } from "./getSizeHeader"
-import { readHeader } from "./readHeader"
+import { IXyoObjectSchema, IXyoSerializableObject, IIterableType, IXyoObjectPartialSchema } from '../@types'
+import { XyoError, XyoErrors } from '@xyo-network/errors'
+import { getHeader } from './getHeader'
+import { getNumberOfBytesRequiredForSizeBuffer } from './getNumberOfBytesRequiredForSizeBuffer'
+import { getSizeHeader } from './getSizeHeader'
+import { readHeader } from './readHeader'
 
 export function resolveSerializablesToBuffer(
   schema: IXyoObjectPartialSchema,
@@ -40,7 +40,7 @@ export function resolveSerializablesToBuffer(
 
   const numberOfSerializerTypes = Object.keys(serializablesById).length
   if (numberOfSerializerTypes === 0) {
-    throw new XyoError(`Serializers do not conform`)
+    throw new XyoError('Serializers do not conform')
   }
 
   let arraySerializationType: IIterableType

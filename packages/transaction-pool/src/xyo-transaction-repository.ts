@@ -9,9 +9,9 @@
 * @Copyright: Copyright XY | The Findables Company
 */
 
-import { XyoBase } from "@xyo-network/base"
-import { IXyoStorageProvider } from "@xyo-network/storage"
-import { IXyoTransactionRepository, IXyoTransaction } from "./@types"
+import { XyoBase } from '@xyo-network/base'
+import { IXyoStorageProvider } from '@xyo-network/storage'
+import { IXyoTransactionRepository, IXyoTransaction } from './@types'
 
 export class XyoTransactionRepository extends XyoBase implements IXyoTransactionRepository {
 

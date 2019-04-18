@@ -3,14 +3,14 @@
  * @Date:   Wednesday, 28th November 2018 5:52:23 pm
  * @Email:  developer@xyfindables.com
  * @Filename: parse-query.ts
- 
+
  * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IParseResult, IXyoSerializableObject } from "../@types"
-import { XyoError, XyoErrors } from "@xyo-network/errors"
+import { IParseResult, IXyoSerializableObject } from '../@types'
+import { XyoError, XyoErrors } from '@xyo-network/errors'
 
 export class ParseQuery {
 
@@ -36,7 +36,7 @@ export class ParseQuery {
 
   public mapChildren<T>(callbackfn: (value: ParseQuery, index?: number) => T) {
     if (this.isReadable()) {
-      throw new XyoError(`No children to map`)
+      throw new XyoError('No children to map')
     }
 
     return (this.parseResult.data as IParseResult[]).map((item, index) => {
@@ -46,11 +46,11 @@ export class ParseQuery {
 
   public getChildAt(index: number): ParseQuery {
     if (this.isReadable()) {
-      throw new XyoError(`No children to map`)
+      throw new XyoError('No children to map')
     }
 
     if (index > (this.parseResult.data as IParseResult[]).length) {
-      throw new XyoError(`Index out of range`)
+      throw new XyoError('Index out of range')
     }
 
     return new ParseQuery((this.parseResult.data as IParseResult[])[index])
@@ -58,7 +58,7 @@ export class ParseQuery {
 
   public reduceChildren<T>(reducer: (aggregator: T, item: IParseResult, index: number) => T, startingValue: T) {
     if (this.isReadable()) {
-      throw new XyoError(`No children to map`)
+      throw new XyoError('No children to map')
     }
 
     return (this.parseResult.data as IParseResult[]).reduce(reducer, startingValue)

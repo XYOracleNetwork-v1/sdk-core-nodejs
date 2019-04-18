@@ -3,14 +3,14 @@
  * @Date:   Monday, 10th December 2018 9:59:58 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-hash.ts
- 
+
  * @Last modified time: Wednesday, 12th December 2018 1:37:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBaseHash } from "./xyo-base-hash"
-import { IXyoHash, IXyoHashProvider } from "./@types"
+import { XyoBaseHash } from './xyo-base-hash'
+import { IXyoHash, IXyoHashProvider } from './@types'
 import { schema } from '@xyo-network/serialization-schema'
 
 export class XyoHash extends XyoBaseHash implements IXyoHash {

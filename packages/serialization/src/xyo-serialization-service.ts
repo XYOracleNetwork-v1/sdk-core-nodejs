@@ -3,25 +3,25 @@
  * @Date:   Tuesday, 20th November 2018 5:51:48 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-serialization-service.ts
- 
+
  * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { BufferOrString, IXyoSerializationService, IXyoSerializableObject, IXyoDeserializer, IXyoObjectSchema, IParseResult, IOnTheFlyGetDataOptions } from "./@types"
+import { BufferOrString, IXyoSerializationService, IXyoSerializableObject, IXyoDeserializer, IXyoObjectSchema, IParseResult, IOnTheFlyGetDataOptions } from './@types'
 
 import { XyoBase } from '@xyo-network/base'
-import { resolveSerializablesToBuffer } from "./helpers/resolveSerializablesToBuffer"
+import { resolveSerializablesToBuffer } from './helpers/resolveSerializablesToBuffer'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { serialize } from './helpers/serialize'
 import { findSchemaById } from './helpers/findSchemaById'
 import { readHeader } from './helpers/readHeader'
-import { parse } from "./helpers/parse"
-import { XyoTreeIterator } from "./helpers/tree-iterator"
-import { XyoOnTheFlySerializable } from "./helpers/on-the-fly-serializable"
-import { read } from "fs"
-import { XyoFiller } from "./xyo-filler"
+import { parse } from './helpers/parse'
+import { XyoTreeIterator } from './helpers/tree-iterator'
+import { XyoOnTheFlySerializable } from './helpers/on-the-fly-serializable'
+import { read } from 'fs'
+import { XyoFiller } from './xyo-filler'
 
 export class XyoSerializationService extends XyoBase implements IXyoSerializationService {
 
@@ -34,7 +34,7 @@ export class XyoSerializationService extends XyoBase implements IXyoSerializatio
 
   public serialize(
     serializable: IXyoSerializableObject,
-    serializationType?: "buffer" | "hex" | undefined
+    serializationType?: 'buffer' | 'hex' | undefined
   ): BufferOrString {
     const result = serializable.serialize()
 

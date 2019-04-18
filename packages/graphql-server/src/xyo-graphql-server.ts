@@ -3,7 +3,7 @@
  * @Date:   Wednesday, 19th December 2018 11:17:53 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-graphql-server.ts
- 
+
  * @Last modified time: Tuesday, 12th March 2019 3:49:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -46,11 +46,11 @@ export class XyoGraphQLServer extends XyoBase {
   }
 
   public async stop (): Promise<void> {
-    this.logInfo(`Stopping Graphql server`)
+    this.logInfo('Stopping Graphql server')
     if (this.server) {
       await this.server.stop()
     }
-    this.logInfo(`Stopped Graphql server`)
+    this.logInfo('Stopped Graphql server')
   }
 
   private initialize () {

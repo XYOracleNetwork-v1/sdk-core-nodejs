@@ -3,14 +3,14 @@
  * @Date:   Monday, 10th December 2018 10:43:28 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-fetter.ts
- 
+
  * @Last modified time: Wednesday, 12th December 2018 1:50:19 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoFetter, IXyoKeySet } from "./@types"
-import { XyoBaseSerializable, IXyoSerializableObject, IXyoDeserializer, ParseQuery, IXyoSerializationService } from "@xyo-network/serialization"
+import { IXyoFetter, IXyoKeySet } from './@types'
+import { XyoBaseSerializable, IXyoSerializableObject, IXyoDeserializer, ParseQuery, IXyoSerializationService } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
 
 export class XyoFetter extends XyoBaseSerializable  implements IXyoFetter {

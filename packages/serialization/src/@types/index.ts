@@ -3,13 +3,13 @@
  * @Date:   Wednesday, 21st November 2018 3:22:35 pm
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- 
+
  * @Last modified time: Friday, 14th December 2018 12:09:06 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoTreeIterator } from "../helpers/tree-iterator"
+import { XyoTreeIterator } from '../helpers/tree-iterator'
 export interface IXyoObjectPartialSchema {
 
   /**

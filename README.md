@@ -100,7 +100,6 @@ All packages have their own README files as well. These are the README files tha
 - [attribution-request](packages/attribution-request/README.md)
 - [attribution-request.node-network](packages/attribution-request.node-network/README.md)
 - [base](packages/base/README.md)
-- [base-node](packages/base-node/README.md)
 - [block-witness](packages/block-witness/README.md)
 - [bound-witness](packages/bound-witness/README.md)
 - [buffer-utils](packages/buffer-utils/README.md)

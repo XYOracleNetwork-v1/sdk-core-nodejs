@@ -21,7 +21,7 @@ export class XyoFiller extends XyoBaseSerializable implements IXyoSerializableOb
   }
 
   public getReadableValue(): any {
-    return "Unknown"
+    return 'Unknown'
   }
 
 }

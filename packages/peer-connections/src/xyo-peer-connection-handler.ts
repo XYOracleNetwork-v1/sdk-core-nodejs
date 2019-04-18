@@ -3,7 +3,7 @@
  * @Date:   Tuesday, 20th November 2018 11:18:23 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-peer-connection-handler.ts
- 
+
  * @Last modified time: Tuesday, 20th November 2018 11:24:59 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -27,7 +27,7 @@ export class XyoPeerConnectionHandler extends XyoBase implements IXyoPeerConnect
     didInit: boolean) {
 
     if (choice && toChoose) {
-      this.logInfo(`Can not choose and have a choice`)
+      this.logInfo('Can not choose and have a choice')
       await networkPipe.close()
       return
     }

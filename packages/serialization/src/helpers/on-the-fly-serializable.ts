@@ -3,14 +3,14 @@
  * @Date:   Wednesday, 5th December 2018 11:11:11 am
  * @Email:  developer@xyfindables.com
  * @Filename: on-the-fly-serializable.ts
- 
+
  * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
-import { XyoBaseSerializable } from "./base-serializable"
-import { IXyoSerializableObject, IOnTheFlyGetDataOptions, IXyoObjectSchema } from "../@types"
-import { XyoError, XyoErrors } from "@xyo-network/errors"
+import { XyoBaseSerializable } from './base-serializable'
+import { IXyoSerializableObject, IOnTheFlyGetDataOptions, IXyoObjectSchema } from '../@types'
+import { XyoError, XyoErrors } from '@xyo-network/errors'
 
 export class XyoOnTheFlySerializable extends XyoBaseSerializable {
   constructor (
@@ -48,7 +48,7 @@ export class XyoOnTheFlySerializable extends XyoBaseSerializable {
       return this.dataOptions.fn()
     }
 
-    throw new XyoError(`No option implemented for OnTheFlySerializable`)
+    throw new XyoError('No option implemented for OnTheFlySerializable')
   }
 
 }

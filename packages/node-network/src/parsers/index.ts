@@ -3,17 +3,17 @@
  * @Date:   Tuesday, 5th February 2019 1:45:34 pm
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- 
+
  * @Last modified time: Thursday, 28th February 2019 11:43:56 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoComponentFeatureResponse, IBlockWitnessRequestDTO } from "../@types"
-import { XyoFetterSet, XyoWitnessSet, IXyoBoundWitnessFragment } from "@xyo-network/bound-witness"
-import { IXyoHash } from "@xyo-network/hashing"
-import { XyoBase } from "@xyo-network/base"
-import { IXyoSerializationService, IXyoSerializableObject } from "@xyo-network/serialization"
+import { IXyoComponentFeatureResponse, IBlockWitnessRequestDTO } from '../@types'
+import { XyoFetterSet, XyoWitnessSet, IXyoBoundWitnessFragment } from '@xyo-network/bound-witness'
+import { IXyoHash } from '@xyo-network/hashing'
+import { XyoBase } from '@xyo-network/base'
+import { IXyoSerializationService, IXyoSerializableObject } from '@xyo-network/serialization'
 
 export class XyoMessageParser extends XyoBase {
 

@@ -9,8 +9,8 @@
  * @Copyright: Copyright XY | The Findables Company
  */
 
-describe(`XyoBlockWitnessValidator`, () => {
-  it(`Has no test yet`, async () => {
+describe('XyoBlockWitnessValidator', () => {
+  it('Has no test yet', async () => {
     expect(true).toBe(true)
   })
 })

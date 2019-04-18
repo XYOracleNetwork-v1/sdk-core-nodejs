@@ -10,17 +10,17 @@
 * @Copyright: Copyright XY | The Findables Company
 */
 
-import { IXyoOriginBlockRepository } from "@xyo-network/origin-block-repository"
-import { IXyoOriginChainRepository, IBlockInOriginChainResult, XyoBridgeHashSet, XyoBridgeBlockSet } from "@xyo-network/origin-chain"
-import { IXyoHash } from "@xyo-network/hashing"
-import { IXyoBoundWitness, IXyoPayload, XyoKeySet, XyoFetter, XyoFetterSet, IXyoFetter, XyoWitness, XyoWitnessSet, XyoSignatureSet, XyoBoundWitness } from "@xyo-network/bound-witness"
-import { IXyoSigner } from "@xyo-network/signing"
-import { IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessSuccessListener } from "@xyo-network/peer-interaction"
-import { IXyoSerializationService } from "@xyo-network/serialization"
+import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
+import { IXyoOriginChainRepository, IBlockInOriginChainResult, XyoBridgeHashSet, XyoBridgeBlockSet } from '@xyo-network/origin-chain'
+import { IXyoHash } from '@xyo-network/hashing'
+import { IXyoBoundWitness, IXyoPayload, XyoKeySet, XyoFetter, XyoFetterSet, IXyoFetter, XyoWitness, XyoWitnessSet, XyoSignatureSet, XyoBoundWitness } from '@xyo-network/bound-witness'
+import { IXyoSigner } from '@xyo-network/signing'
+import { IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessSuccessListener } from '@xyo-network/peer-interaction'
+import { IXyoSerializationService } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
-import { IXyoP2PService } from "@xyo-network/p2p"
-import { XyoBaseHandler } from "./xyo-base-handler"
-import { CatalogueItem } from "@xyo-network/network"
+import { IXyoP2PService } from '@xyo-network/p2p'
+import { XyoBaseHandler } from './xyo-base-handler'
+import { CatalogueItem } from '@xyo-network/network'
 
 export class XyoBlockPermissionResponseHandler extends XyoBaseHandler {
 

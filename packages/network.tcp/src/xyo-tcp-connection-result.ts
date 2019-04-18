@@ -3,7 +3,7 @@
  * @Date:   Thursday, 13th September 2018 11:42:46 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-connection-result.ts
- 
+
  * @Last modified time: Tuesday, 20th November 2018 10:25:28 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

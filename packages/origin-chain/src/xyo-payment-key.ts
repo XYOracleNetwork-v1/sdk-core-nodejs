@@ -1,4 +1,4 @@
-import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, IXyoSerializableObject } from "@xyo-network/serialization"
+import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, IXyoSerializableObject } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
 
 export class XyoPaymentKey extends XyoBaseSerializable {

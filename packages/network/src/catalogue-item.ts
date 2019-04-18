@@ -3,7 +3,7 @@
  * @Date:   Tuesday, 11th December 2018 9:33:01 am
  * @Email:  developer@xyfindables.com
  * @Filename: catalogue-item.ts
- 
+
  * @Last modified time: Tuesday, 22nd January 2019 10:19:26 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

@@ -3,18 +3,18 @@
  * @Date:   Tuesday, 20th November 2018 5:10:50 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-validator.ts
- 
+
  * @Last modified time: Thursday, 7th March 2019 3:53:33 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoError, XyoErrors } from "@xyo-network/errors"
-import { IXyoHash } from "@xyo-network/hashing"
-import { IXyoBoundWitness } from "./@types"
-import { IXyoSignature } from "@xyo-network/signing"
-import { XyoBase } from "@xyo-network/base"
-import { schema } from "@xyo-network/serialization-schema"
+import { XyoError, XyoErrors } from '@xyo-network/errors'
+import { IXyoHash } from '@xyo-network/hashing'
+import { IXyoBoundWitness } from './@types'
+import { IXyoSignature } from '@xyo-network/signing'
+import { XyoBase } from '@xyo-network/base'
+import { schema } from '@xyo-network/serialization-schema'
 
 export class XyoBoundWitnessValidator extends XyoBase {
 
@@ -45,7 +45,7 @@ export class XyoBoundWitnessValidator extends XyoBase {
     if (this.options.validateHash && hash) {
       const validates = await hash.verifyHash(signingData)
       if (!validates) {
-        throw new XyoError(`Hash does not match signing data`, XyoErrors.INVALID_PARAMETERS)
+        throw new XyoError('Hash does not match signing data', XyoErrors.INVALID_PARAMETERS)
       }
     }
 
@@ -58,7 +58,7 @@ export class XyoBoundWitnessValidator extends XyoBase {
         signaturesLength !== keysLength
       )
     ) {
-      throw new XyoError(`Party fields mismatch`, XyoErrors.INVALID_PARAMETERS)
+      throw new XyoError('Party fields mismatch', XyoErrors.INVALID_PARAMETERS)
     }
 
     if (this.options.checkIndexExists) {
@@ -79,7 +79,7 @@ export class XyoBoundWitnessValidator extends XyoBase {
         this.options.checkCountOfSignaturesMatchPublicKeysCount &&
         signatureSet.signatures.length !== originBlock.publicKeys[outerIndex].keys.length
       ) {
-        throw new XyoError(`There was a mismatch in keys and signatures length`, XyoErrors.INVALID_PARAMETERS)
+        throw new XyoError('There was a mismatch in keys and signatures length', XyoErrors.INVALID_PARAMETERS)
       }
 
       if (!this.options.validateSignatures) {

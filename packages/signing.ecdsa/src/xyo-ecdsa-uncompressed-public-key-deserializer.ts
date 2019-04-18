@@ -3,7 +3,7 @@
  * @Date:   Friday, 7th December 2018 11:05:37 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-uncompressed-public-key-deserializer.ts
- 
+
  * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -22,7 +22,7 @@ export class XyoEcdsaUncompressedPublicKeyDeserializer implements IXyoDeserializ
     const parseResult = serializationService.parse(data)
 
     if (parseResult.dataBytes.length !== 64) {
-      throw new XyoError(`Could not deserialize XyoEcdsaSecp256k1UnCompressedPublicKey`)
+      throw new XyoError('Could not deserialize XyoEcdsaSecp256k1UnCompressedPublicKey')
     }
 
     return new XyoEcdsaSecp256k1UnCompressedPublicKey(

@@ -3,7 +3,7 @@
  * @Date:   Thursday, 20th December 2018 12:04:14 pm
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- 
+
  * @Last modified time: Tuesday, 12th March 2019 12:44:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -62,9 +62,9 @@ export class XyoIpfsClient extends XyoBase implements IXyoIpfsClient {
     return new Promise((resolve, reject) => {
       this.ipfs.add(v, { pin: true }, (err, resultItems) => {
         if (err) return reject(err)
-        console.log("IPFS Result Items", err, resultItems, v)
+        console.log('IPFS Result Items', err, resultItems, v)
         if (resultItems.length !== 1) {
-          throw new XyoError(`There was an error adding data to ipfs`, resultItems.length)
+          throw new XyoError('There was an error adding data to ipfs', resultItems.length)
         }
 
         return resolve(resultItems[0].hash)

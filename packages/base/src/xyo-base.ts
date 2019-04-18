@@ -3,13 +3,13 @@
  * @Date:   Friday, 21st September 2018 10:33:23 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base.ts
- 
+
  * @Last modified time: Wednesday, 6th March 2019 4:29:22 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoLogger } from "@xyo-network/logger"
+import { XyoLogger } from '@xyo-network/logger'
 import safeStringify from 'fast-safe-stringify'
 
 /**

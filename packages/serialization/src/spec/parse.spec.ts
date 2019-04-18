@@ -3,14 +3,14 @@
  * @Date:   Wednesday, 28th November 2018 10:46:28 am
  * @Email:  developer@xyfindables.com
  * @Filename: parse.spec.ts
- 
+
  * @Last modified time: Wednesday, 12th December 2018 11:16:10 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { parse } from "../helpers/parse"
-import { IParseResult } from "../@types"
+import { parse } from '../helpers/parse'
+import { IParseResult } from '../@types'
 
 describe('Parsing', () => {
 
@@ -24,7 +24,7 @@ describe('Parsing', () => {
 
     const result = parse(src, {})
     if (!result) {
-      throw new Error(`Result should be defined`)
+      throw new Error('Result should be defined')
     }
 
     expect((result.data as Buffer).equals(Buffer.from([0x01]))).toBe(true)
@@ -46,7 +46,7 @@ describe('Parsing', () => {
 
     const result = parse(src, {})
     if (!result) {
-      throw new Error(`Result should be defined`)
+      throw new Error('Result should be defined')
     }
 
     expect(result.data).toBeInstanceOf(Array)
@@ -74,7 +74,7 @@ describe('Parsing', () => {
 
     const result = parse(src, {})
     if (!result) {
-      throw new Error(`Result should be defined`)
+      throw new Error('Result should be defined')
     }
 
     expect(result.data).toBeInstanceOf(Array)
@@ -106,7 +106,7 @@ describe('Parsing', () => {
 
     const result = parse(src, {})
     if (!result) {
-      throw new Error(`Result should be defined`)
+      throw new Error('Result should be defined')
     }
 
     expect(result.data).toBeInstanceOf(Array)
@@ -154,7 +154,7 @@ describe('Parsing', () => {
 
     const result = parse(src, {})
     if (!result) {
-      throw new Error(`Result should be defined`)
+      throw new Error('Result should be defined')
     }
 
     expect(result.data).toBeInstanceOf(Array)
@@ -204,7 +204,7 @@ describe('Parsing', () => {
     ])
     const result = parse(src, {})
     if (!result) {
-      throw new Error(`Result should be defined`)
+      throw new Error('Result should be defined')
     }
     expect(result.data).toBeInstanceOf(Array)
     expect((result.data[0] as IParseResult).data).toBeInstanceOf(Array)

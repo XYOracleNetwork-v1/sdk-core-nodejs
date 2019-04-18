@@ -3,16 +3,16 @@
  * @Date:   Tuesday, 20th November 2018 1:17:17 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-local-file-storage-provider.ts
- 
+
  * @Last modified time: Tuesday, 11th December 2018 9:58:50 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
-import { IXyoStorageProvider } from "./@types"
-import { XyoInMemoryStorageProvider } from "./xyo-in-memory-storage-provider"
+import { IXyoStorageProvider } from './@types'
+import { XyoInMemoryStorageProvider } from './xyo-in-memory-storage-provider'
 import { existsSync, readFileSync, writeFileSync } from 'fs'
-import { XyoError } from "@xyo-network/errors"
-import { XyoBase } from "@xyo-network/base"
+import { XyoError } from '@xyo-network/errors'
+import { XyoBase } from '@xyo-network/base'
 
 /**
  * Providers a very simple StorageProvider implementation over a file-system.

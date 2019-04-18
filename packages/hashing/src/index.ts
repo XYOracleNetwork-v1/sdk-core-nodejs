@@ -3,7 +3,7 @@
  * @Date:   Tuesday, 20th November 2018 1:46:53 pm
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- 
+
  * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -49,14 +49,14 @@ export function getHashingProvider(hashType: HASH_TYPE): IXyoHashProvider {
   let hashProvider: IXyoHashProvider | undefined
 
   switch (hashType) {
-    case "sha256":
+    case 'sha256':
       hashProvider = new XyoNativeBaseHashProvider('sha256', schema.sha256Hash.id)
       break
-    case "sha3":
+    case 'sha3':
       hashProvider = new XyoSha3HashProvider()
       break
     default:
-      throw new XyoError(`This should never happen`)
+      throw new XyoError('This should never happen')
   }
 
   hashProvidersByType[hashType] = hashProvider

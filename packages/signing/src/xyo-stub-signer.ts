@@ -3,14 +3,14 @@
  * @Date:   Thursday, 29th November 2018 4:40:40 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-stub-signer.ts
- 
+
  * @Last modified time: Thursday, 13th December 2018 10:18:13 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoSigner, IXyoPublicKey, IXyoSignature } from "./@types"
-import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, ParseQuery } from "@xyo-network/serialization"
+import { IXyoSigner, IXyoPublicKey, IXyoSignature } from './@types'
+import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, ParseQuery } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
 export class XyoStubSigner extends XyoBaseSerializable implements IXyoSigner {
 

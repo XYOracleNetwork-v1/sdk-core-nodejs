@@ -3,7 +3,7 @@
  * @Date:   Tuesday, 20th November 2018 2:08:19 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-ecdsa-secp256k1-signer.ts
- 
+
  * @Last modified time: Thursday, 13th December 2018 10:37:26 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

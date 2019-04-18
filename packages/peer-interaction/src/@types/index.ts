@@ -3,7 +3,7 @@
  * @Date:   Tuesday, 20th November 2018 4:41:19 pm
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- 
+
  * @Last modified time: Tuesday, 19th February 2019 6:00:48 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

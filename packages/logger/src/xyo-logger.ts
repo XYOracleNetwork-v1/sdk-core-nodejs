@@ -3,14 +3,14 @@
  * @Date:   Monday, 19th November 2018 11:27:43 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-logger.ts
- 
+
  * @Last modified time: Friday, 7th December 2018 11:50:59 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import winston from 'winston'
-import DailyRotateFile from "winston-daily-rotate-file"
+import DailyRotateFile from 'winston-daily-rotate-file'
 
 /**
  * A central logger for the Xyo core

@@ -3,7 +3,7 @@
  * @Date:   Monday, 26th November 2018 1:26:31 pm
  * @Email:  developer@xyfindables.com
  * @Filename: serialization.spec.ts
- 
+
  * @Last modified time: Wednesday, 12th December 2018 1:58:10 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -14,9 +14,9 @@ import { IXyoSerializableObject, IXyoObjectSchema } from '../@types'
 import { XyoBaseSerializable } from '../helpers/base-serializable'
 import { findSchemaById } from '../helpers/findSchemaById'
 
-describe(`Serialization`, () => {
+describe('Serialization', () => {
 
-  it(`Should serialize typed simple collection`, () => {
+  it('Should serialize typed simple collection', () => {
     const schema: IXyoObjectSchema = {
       x: {
         id: 1,
@@ -40,7 +40,7 @@ describe(`Serialization`, () => {
     ]).equals(result)).toBe(true)
   })
 
-  it(`Should serialize typed simple collection using high watermark for size encoding`, () => {
+  it('Should serialize typed simple collection using high watermark for size encoding', () => {
     const schema: IXyoObjectSchema = {
       x: {
         id: 1,
@@ -75,7 +75,7 @@ describe(`Serialization`, () => {
     ]).equals(result)).toBe(true)
   })
 
-  it(`Should serialize untyped simple collection`, () => {
+  it('Should serialize untyped simple collection', () => {
     const schema: IXyoObjectSchema = {
       x: {
         id: 1,
@@ -99,7 +99,7 @@ describe(`Serialization`, () => {
     ]).equals(result)).toBe(true)
   })
 
-  it(`Should serialize typed simple collection with 2 objects`, () => {
+  it('Should serialize typed simple collection with 2 objects', () => {
     const schema: IXyoObjectSchema = {
       x: {
         id: 1,
@@ -125,7 +125,7 @@ describe(`Serialization`, () => {
     ]).equals(result)).toBe(true)
   })
 
-  it(`Should serialize untyped simple collection with 2 objects`, () => {
+  it('Should serialize untyped simple collection with 2 objects', () => {
     const schema: IXyoObjectSchema = {
       x: {
         id: 1,
@@ -153,7 +153,7 @@ describe(`Serialization`, () => {
     ]).equals(result)).toBe(true)
   })
 
-  it(`Should serialize a collection of untyped collections with 0 objects`, () => {
+  it('Should serialize a collection of untyped collections with 0 objects', () => {
     const schema: IXyoObjectSchema = {
       x: {
         id: 1,
@@ -177,7 +177,7 @@ describe(`Serialization`, () => {
     expect(Buffer.from([]).equals(result)).toBe(true)
   })
 
-  it(`Should serialize a collection of untyped collections 2 objects`, () => {
+  it('Should serialize a collection of untyped collections 2 objects', () => {
     const schema: IXyoObjectSchema = {
       x: {
         id: 1,
@@ -214,7 +214,7 @@ describe(`Serialization`, () => {
     ]).equals(result)).toBe(true)
   })
 
-  it(`Should serialize a collection of typed collections 2 objects`, () => {
+  it('Should serialize a collection of typed collections 2 objects', () => {
     const schema: IXyoObjectSchema = {
       x: {
         id: 1,

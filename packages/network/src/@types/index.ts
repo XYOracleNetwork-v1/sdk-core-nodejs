@@ -3,14 +3,14 @@
  * @Date:   Tuesday, 11th December 2018 9:32:12 am
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- 
+
  * @Last modified time: Wednesday, 13th February 2019 1:28:35 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { CatalogueItem } from "../catalogue-item"
-import { IXyoSerializableObject } from "@xyo-network/serialization"
+import { CatalogueItem } from '../catalogue-item'
+import { IXyoSerializableObject } from '@xyo-network/serialization'
 
 /**
  * The necessary communication interfaces that xyo-nodes will

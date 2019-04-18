@@ -3,7 +3,7 @@
  * @Date:   Tuesday, 20th November 2018 4:43:55 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-handler-provider.ts
- 
+
  * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -57,7 +57,7 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
   private async tryGetMutex(currentTry: number): Promise<IXyoOriginChainMutex> {
     const mutex = await this.originStateRepository.acquireMutex()
     if (mutex) return mutex
-    if (currentTry === 3) throw new XyoError(`Could not acquire mutex for origin chain`)
+    if (currentTry === 3) throw new XyoError('Could not acquire mutex for origin chain')
     return new Promise((resolve, reject) => {
       XyoBase.timeout(() => {
         this.tryGetMutex(currentTry + 1).then(resolve).catch(reject)

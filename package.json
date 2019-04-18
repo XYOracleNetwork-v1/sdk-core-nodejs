@@ -10,7 +10,7 @@
     "build": "tsc -b packages",
     "release": "lerna publish",
     "test": "yarn build && export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose false --detectOpenHandles",
-    "tslint": "tslint -c tslint.json -p packages/tsconfig.json",
+    "lint": "tslint -c tslint.json -p packages/tsconfig.json",
     "clean": "node scripts/clean.js",
     "start:bridge": "yarn --cwd ./packages/bridge-server start",
     "stop:bridge": "yarn --cwd ./packages/bridge-server stop",

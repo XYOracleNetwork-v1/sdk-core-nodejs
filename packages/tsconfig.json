@@ -24,9 +24,6 @@
       "path": "base"
     },
     {
-      "path": "base-node"
-    },
-    {
       "path": "bound-witness"
     },
     {
@@ -152,7 +149,6 @@
     "archivist-repository/src/**/*.ts",
     "archivist-repository-sql/src/**/*.ts",
     "base/src/**/*.ts",
-    "base-node/src/**/*.ts",
     "bound-witness/src/**/*.ts",
     "buffer-utils/src/**/*.ts",
     "diviner-archivist-client/src/**/*.ts",

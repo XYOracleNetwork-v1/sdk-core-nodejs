@@ -9,14 +9,14 @@
 * @Copyright: Copyright XY | The Findables Company
 */
 
-import { IXyoBoundWitnessSuccessListener } from "./@types"
-import { IXyoBoundWitness, XyoBoundWitnessValidator } from "@xyo-network/bound-witness"
-import { XyoBase } from "@xyo-network/base"
-import { IXyoHashProvider, IXyoHash } from "@xyo-network/hashing"
-import { IXyoOriginChainRepository } from "@xyo-network/origin-chain"
-import { IXyoOriginBlockRepository } from "@xyo-network/origin-block-repository"
-import { XyoNestedBoundWitnessExtractor } from "./xyo-nested-bound-witness-extractor"
-import { CatalogueItem } from "@xyo-network/network"
+import { IXyoBoundWitnessSuccessListener } from './@types'
+import { IXyoBoundWitness, XyoBoundWitnessValidator } from '@xyo-network/bound-witness'
+import { XyoBase } from '@xyo-network/base'
+import { IXyoHashProvider, IXyoHash } from '@xyo-network/hashing'
+import { IXyoOriginChainRepository } from '@xyo-network/origin-chain'
+import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
+import { XyoNestedBoundWitnessExtractor } from './xyo-nested-bound-witness-extractor'
+import { CatalogueItem } from '@xyo-network/network'
 import { XyoPair } from '@xyo-network/utils'
 import { IXyoContentAddressableService } from '@xyo-network/content-addressable-service'
 
@@ -40,7 +40,7 @@ export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBound
     try {
       await this.boundWitnessValidator.validateBoundWitness(hashValue, boundWitness)
     } catch (err) {
-      this.logError(`Origin block failed validation. Will not add.`, err)
+      this.logError('Origin block failed validation. Will not add.', err)
       throw err
     }
 
@@ -63,7 +63,7 @@ export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBound
         try {
           await this.boundWitnessValidator.validateBoundWitness(nestedHashValue, nestedBoundWitness)
         } catch (err) {
-          this.logError(`Origin block failed validation. Will not add.`, err)
+          this.logError('Origin block failed validation. Will not add.', err)
           throw err
         }
 

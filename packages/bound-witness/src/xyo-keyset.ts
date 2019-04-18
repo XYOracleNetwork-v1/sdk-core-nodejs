@@ -3,15 +3,15 @@
  * @Date:   Monday, 10th December 2018 10:08:31 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-keyset.ts
- 
+
  * @Last modified time: Wednesday, 12th December 2018 1:50:46 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBaseSerializable, IXyoSerializableObject, IXyoDeserializer, IXyoSerializationService, ParseQuery } from "@xyo-network/serialization"
+import { XyoBaseSerializable, IXyoSerializableObject, IXyoDeserializer, IXyoSerializationService, ParseQuery } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
-import { IXyoPublicKey } from "@xyo-network/signing"
+import { IXyoPublicKey } from '@xyo-network/signing'
 
 export class XyoKeySet extends XyoBaseSerializable {
   public static deserializer: IXyoDeserializer<XyoKeySet>

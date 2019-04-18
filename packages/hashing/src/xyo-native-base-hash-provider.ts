@@ -3,7 +3,7 @@
  * @Date:   Tuesday, 20th November 2018 1:43:51 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-native-base-hash-provider.ts
- 
+
  * @Last modified time: Wednesday, 6th March 2019 4:44:38 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

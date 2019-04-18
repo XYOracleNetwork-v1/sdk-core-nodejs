@@ -3,13 +3,13 @@
  * @Date:   Tuesday, 20th November 2018 11:37:53 am
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- 
+
  * @Last modified time: Tuesday, 11th December 2018 9:56:53 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoError } from "@xyo-network/errors"
+import { XyoError } from '@xyo-network/errors'
 
 /**
  * The interface for storage in the system. Provides a simple

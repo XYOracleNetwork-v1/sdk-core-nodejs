@@ -3,31 +3,31 @@
  * @Date:   Monday, 28th January 2019 5:30:48 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-node-network.ts
- 
+
  * @Last modified time: Tuesday, 12th March 2019 3:48:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoNodeNetwork, IXyoComponentFeatureResponse, IBlockWitnessRequestDTO } from "./@types"
-import { IXyoP2PService } from "@xyo-network/p2p"
-import { unsubscribeFn, BN } from "@xyo-network/utils"
-import { IRequestPermissionForBlockResult } from "@xyo-network/attribution-request"
-import { XyoBase } from "@xyo-network/base"
-import { IXyoHash, IXyoHashProvider } from "@xyo-network/hashing"
-import { IXyoSerializationService } from "@xyo-network/serialization"
-import { XyoMessageParser } from "./parsers"
+import { IXyoNodeNetwork, IXyoComponentFeatureResponse, IBlockWitnessRequestDTO } from './@types'
+import { IXyoP2PService } from '@xyo-network/p2p'
+import { unsubscribeFn, BN } from '@xyo-network/utils'
+import { IRequestPermissionForBlockResult } from '@xyo-network/attribution-request'
+import { XyoBase } from '@xyo-network/base'
+import { IXyoHash, IXyoHashProvider } from '@xyo-network/hashing'
+import { IXyoSerializationService } from '@xyo-network/serialization'
+import { XyoMessageParser } from './parsers'
 import { IXyoOriginChainRepository } from '@xyo-network/origin-chain'
-import { IXyoOriginBlockRepository } from "@xyo-network/origin-block-repository"
+import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
 import { IXyoBoundWitnessSuccessListener, IXyoBoundWitnessPayloadProvider } from '@xyo-network/peer-interaction'
-import { XyoBlockPermissionResponseHandler } from "./handlers/xyo-block-permission-response-handler"
-import { XyoRequestPermissionForBlockHandler } from "./handlers/xyo-request-permission-for-block-handler"
+import { XyoBlockPermissionResponseHandler } from './handlers/xyo-block-permission-response-handler'
+import { XyoRequestPermissionForBlockHandler } from './handlers/xyo-request-permission-for-block-handler'
 
 import { IXyoTransaction, IXyoTransactionRepository } from '@xyo-network/transaction-pool'
-import { XyoReceivedTransactionHandler } from "./handlers/xyo-received-transaction-handler"
-import { XyoWitnessRequestHandler } from "./handlers/xyo-witness-requester-handler"
-import { IConsensusProvider } from "@xyo-network/consensus"
-import { XyoError } from "@xyo-network/errors"
+import { XyoReceivedTransactionHandler } from './handlers/xyo-received-transaction-handler'
+import { XyoWitnessRequestHandler } from './handlers/xyo-witness-requester-handler'
+import { IConsensusProvider } from '@xyo-network/consensus'
+import { XyoError } from '@xyo-network/errors'
 
 export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
 
@@ -64,7 +64,7 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
       !this.originChainRepository ||
       !this.originBlockRepository
     ) {
-      throw new XyoError(`Insufficient dependencies`)
+      throw new XyoError('Insufficient dependencies')
     }
 
     const handler = new XyoBlockPermissionResponseHandler(
@@ -98,7 +98,7 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
 
   public listenForTransactions(): unsubscribeFn {
     if (!this.transactionsRepository) {
-      throw new XyoError(`Insufficient dependencies`)
+      throw new XyoError('Insufficient dependencies')
     }
 
     const handler = new XyoReceivedTransactionHandler(
@@ -141,7 +141,7 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
 
   public listenForBlockWitnessRequests(consensusProvider: IConsensusProvider): unsubscribeFn {
     if (!this.blockWitnessValidator) {
-      throw new XyoError(`Insufficient dependencies`)
+      throw new XyoError('Insufficient dependencies')
     }
 
     const handler = new XyoWitnessRequestHandler(
@@ -157,7 +157,7 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
 
   // tslint:disable-next-line:prefer-array-literal
   public getTransactions(): Promise<Array<IXyoTransaction<any>>> {
-    throw new Error("Method not implemented.")
+    throw new Error('Method not implemented.')
   }
 
   public requestFeatures(callback: (publicKey: string, featureRequest: IXyoComponentFeatureResponse) => void)
@@ -185,7 +185,7 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
       !this.payloadProvider ||
       !this.boundWitnessSuccessListener
     ) {
-      throw new XyoError(`Insufficient dependencies`)
+      throw new XyoError('Insufficient dependencies')
     }
 
     const req = new XyoRequestPermissionForBlockHandler(

@@ -4,15 +4,15 @@
  * @Date:   Monday, 10th December 2018 9:19:54 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bridge-hash-set.ts
- 
+
  * @Last modified time: Tuesday, 5th February 2019 10:11:51 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBaseSerializable, IXyoSerializableObject, IXyoDeserializer, IXyoSerializationService, ParseQuery } from "@xyo-network/serialization"
+import { XyoBaseSerializable, IXyoSerializableObject, IXyoDeserializer, IXyoSerializationService, ParseQuery } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
-import { IXyoHash } from "@xyo-network/hashing"
+import { IXyoHash } from '@xyo-network/hashing'
 
 export class XyoBridgeHashSet extends XyoBaseSerializable {
   public static deserializer: IXyoDeserializer<XyoBridgeHashSet>

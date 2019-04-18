@@ -1,14 +1,14 @@
-import { XyoBaseHandler } from "./xyo-base-handler"
-import { IXyoSerializationService } from "@xyo-network/serialization"
-import { IXyoP2PService } from "@xyo-network/p2p"
-import { IXyoTransactionRepository, IXyoTransaction } from "@xyo-network/transaction-pool"
+import { XyoBaseHandler } from './xyo-base-handler'
+import { IXyoSerializationService } from '@xyo-network/serialization'
+import { IXyoP2PService } from '@xyo-network/p2p'
+import { IXyoTransactionRepository, IXyoTransaction } from '@xyo-network/transaction-pool'
 
 /*
  * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 12th February 2019 9:21:59 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-received-transaction-handler.ts
- 
+
  * @Last modified time: Monday, 11th March 2019 3:49:01 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

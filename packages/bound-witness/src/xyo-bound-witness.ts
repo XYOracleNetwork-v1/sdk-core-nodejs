@@ -3,19 +3,19 @@
  * @Date:   Monday, 26th November 2018 2:52:10 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-bound-witness.ts
- 
+
  * @Last modified time: Friday, 8th March 2019 12:07:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoBoundWitness, FetterOrWitness, IXyoKeySet, IXyoSignatureSet, IXyoBoundWitnessParty, IXyoFetter, IXyoWitness } from "./@types"
+import { IXyoBoundWitness, FetterOrWitness, IXyoKeySet, IXyoSignatureSet, IXyoBoundWitnessParty, IXyoFetter, IXyoWitness } from './@types'
 import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, ParseQuery, IXyoSerializableObject, IParseResult, XyoSerializationService } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
 import { XyoBoundWitnessParty } from './xyo-bound-witness-party'
-import { XyoFetter } from "./xyo-fetter"
-import { XyoError } from "@xyo-network/errors"
-import { XyoWitness } from "./xyo-witness"
+import { XyoFetter } from './xyo-fetter'
+import { XyoError } from '@xyo-network/errors'
+import { XyoWitness } from './xyo-witness'
 
 export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWitness {
 
@@ -73,7 +73,7 @@ export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWit
     schemaObjectId: number
   ): T | undefined {
     if (this.parties.length <= partyIndex) {
-      throw new XyoError(`Insufficient number of parties to complete request`)
+      throw new XyoError('Insufficient number of parties to complete request')
     }
 
     return this.parties[partyIndex].getHeuristic<T>(schemaObjectId)
@@ -84,7 +84,7 @@ export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWit
     schemaObjectId: number
   ): T | undefined {
     if (this.parties.length <= partyIndex) {
-      throw new XyoError(`Insufficient number of parties to complete request`)
+      throw new XyoError('Insufficient number of parties to complete request')
     }
 
     return this.parties[partyIndex].getMetaDataItem<T>(schemaObjectId)

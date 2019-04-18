@@ -3,7 +3,7 @@
  * @Date:   Wednesday, 28th November 2018 5:28:12 pm
  * @Email:  developer@xyfindables.com
  * @Filename: serialize.spec.ts
- 
+
  * @Last modified time: Wednesday, 28th November 2018 5:28:37 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

@@ -3,14 +3,14 @@
  * @Date:   Thursday, 29th November 2018 4:44:14 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-stub-public-key.ts
- 
+
  * @Last modified time: Wednesday, 12th December 2018 1:37:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoPublicKey } from "./@types"
-import { schema } from "@xyo-network/serialization-schema"
+import { IXyoPublicKey } from './@types'
+import { schema } from '@xyo-network/serialization-schema'
 import { XyoBaseSerializable, IXyoSerializationService } from '@xyo-network/serialization'
 
 export class XyoStubPublicKey extends XyoBaseSerializable implements IXyoPublicKey {

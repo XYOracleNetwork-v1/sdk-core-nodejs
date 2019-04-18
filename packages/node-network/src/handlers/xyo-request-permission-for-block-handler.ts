@@ -10,18 +10,18 @@
 * @Copyright: Copyright XY | The Findables Company
 */
 
-import { XyoBaseHandler } from "./xyo-base-handler"
-import { IXyoSerializationService } from "@xyo-network/serialization"
-import { IXyoP2PService } from "@xyo-network/p2p"
-import { IXyoHash, IXyoHashProvider } from "@xyo-network/hashing"
+import { XyoBaseHandler } from './xyo-base-handler'
+import { IXyoSerializationService } from '@xyo-network/serialization'
+import { IXyoP2PService } from '@xyo-network/p2p'
+import { IXyoHash, IXyoHashProvider } from '@xyo-network/hashing'
 import { XyoBridgeBlockSet, IXyoOriginChainRepository } from '@xyo-network/origin-chain'
 import { IXyoBoundWitnessSuccessListener, IXyoBoundWitnessPayloadProvider } from '@xyo-network/peer-interaction'
-import { XyoKeySet, XyoFetter, XyoSignatureSet, XyoWitness, XyoBoundWitnessFragment, XyoBoundWitness, IXyoBoundWitness, IXyoFetterSet, IXyoFetter, IXyoWitness } from "@xyo-network/bound-witness"
+import { XyoKeySet, XyoFetter, XyoSignatureSet, XyoWitness, XyoBoundWitnessFragment, XyoBoundWitness, IXyoBoundWitness, IXyoFetterSet, IXyoFetter, IXyoWitness } from '@xyo-network/bound-witness'
 import { schema } from '@xyo-network/serialization-schema'
-import { IRequestPermissionForBlockResult } from "@xyo-network/attribution-request"
-import { XyoError, XyoErrors } from "@xyo-network/errors"
-import { CatalogueItem } from "@xyo-network/network"
-import { XyoBase } from "@xyo-network/base"
+import { IRequestPermissionForBlockResult } from '@xyo-network/attribution-request'
+import { XyoError, XyoErrors } from '@xyo-network/errors'
+import { CatalogueItem } from '@xyo-network/network'
+import { XyoBase } from '@xyo-network/base'
 
 export class XyoRequestPermissionForBlockHandler extends XyoBaseHandler {
 
@@ -171,7 +171,7 @@ export class XyoRequestPermissionForBlockHandler extends XyoBaseHandler {
   private async tryGetMutex(currentTry: number) {
     const mutex = await this.originChainRepository.acquireMutex()
     if (mutex) return mutex
-    if (currentTry === 3) throw new XyoError(`Could not acquire mutex for origin chain`)
+    if (currentTry === 3) throw new XyoError('Could not acquire mutex for origin chain')
     return new Promise((resolve, reject) => {
       XyoBase.timeout(() => {
         this.tryGetMutex(currentTry + 1).then(resolve).catch(reject)

@@ -3,7 +3,7 @@
  * @Date:   Friday, 14th December 2018 12:33:07 pm
  * @Email:  developer@xyfindables.com
  * @Filename: ecdsa-signer.spec.ts
- 
+
  * @Last modified time: Friday, 14th December 2018 12:36:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
