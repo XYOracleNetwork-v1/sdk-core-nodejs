@@ -15,7 +15,6 @@
     "@xyo-network/hashing": "^0.55.2-alpha.0",
     "@xyo-network/node-network": "^0.55.2-alpha.0",
     "@xyo-network/origin-chain": "^0.55.2-alpha.0",
-    "@xyo-network/questions": "^0.55.2-alpha.0",
     "@xyo-network/serialization": "^0.55.2-alpha.0",
     "@xyo-network/serialization-schema": "^0.55.2-alpha.0",
     "@xyo-network/serializer": "^0.55.2-alpha.0",

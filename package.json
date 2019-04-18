@@ -18,7 +18,6 @@
     "deploy:bridge": "scp ./bridge-server.zip pi@$IP:~/Documents && ssh pi@$IP \"rm -rf Documents/bridge-server && unzip Documents/bridge-server.zip -d Documents/bridge-server\"",
     "create:package": "node scripts/create-package.js",
     "web3": "node --experimental-repl-await scripts/web3-repl.js",
-    "mock-data": "node packages/data-generator/dist/index.js --host=127.0.0.1 --user=admin --password=password --database=Xyo --port=3306",
     "manage:db": "node scripts/manage-xyo-db.js",
     "manage:db:logs": "docker logs -f --tail 100 XyoDb",
     "manage:ganache": "node scripts/manage-ganache.js",

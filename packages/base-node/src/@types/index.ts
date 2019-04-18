@@ -3,7 +3,7 @@
  * @Date:   Friday, 8th February 2019 12:54:30 pm
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- 
+
  * @Last modified time: Thursday, 14th February 2019 10:33:42 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -59,10 +59,6 @@ export interface IXyoResolvers {
   [IResolvers.ORIGIN_CHAIN_REPOSITORY]: IXyoProvider<
     IXyoOriginChainRepository,
     IXyoOriginChainConfig
-  >
-  [IResolvers.ORIGIN_BLOCK_REPOSITORY]: IXyoProvider<
-    IXyoOriginBlockRepository,
-    undefined
   >
   [IResolvers.BOUND_WITNESS_PAYLOAD_PROVIDER]: IXyoProvider<
     IXyoBoundWitnessPayloadProvider,

@@ -3,7 +3,7 @@
  * @Date:   Thursday, 7th March 2019 12:00:54 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-block-witness-validator.ts
- 
+
  * @Last modified time: Tuesday, 12th March 2019 1:31:29 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -13,13 +13,13 @@ import { BN } from "@xyo-network/utils"
 import { XyoBase } from "@xyo-network/base"
 import { XyoError } from "@xyo-network/errors"
 import { IXyoSerializationService } from "@xyo-network/serialization"
-import { IXyoBlockTransfer } from "@xyo-network/questions"
 import { IXyoBoundWitness, XyoBoundWitnessValidator } from "@xyo-network/bound-witness"
 import { schema } from '@xyo-network/serialization-schema'
 import { XyoBridgeHashSet } from "@xyo-network/origin-chain"
 import { IXyoHashProvider } from "@xyo-network/hashing"
 import { IConsensusProvider } from "@xyo-network/consensus"
 import { IXyoContentAddressableService } from "@xyo-network/content-addressable-service"
+import { IXyoBlockTransfer } from "./@types"
 
 export class XyoBlockWitnessValidator extends XyoBase {
 
