@@ -3,7 +3,7 @@
  * @Date:   Wednesday, 13th February 2019 10:28:51 am
  * @Email:  developer@xyfindables.com
  * @Filename: resolvers-enum
- 
+
  * @Last modified time: Monday, 4th March 2019 12:50:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -27,8 +27,7 @@ export enum IResolvers {
   BOUND_WITNESS_VALIDATOR = 'boundWitnessValidator',
   TRANSACTION_REPOSITORY = 'transactionRepository',
   NETWORK_PROCEDURE_CATALOGUE = 'networkProcedureCatalogue',
-  ARCHIVIST_REPOSITORY_SQL = 'archivistRepositorySql',
-  ARCHIVIST_REPOSITORY_DYNAMO = 'archivistRepositoryDynamo',
+  ARCHIVIST_REPOSITORY = 'archivistRepository',
   ARCHIVIST_NETWORK = 'archivistNetwork',
   QUESTION_SERVICE = 'questionService',
   QUESTIONS_PROVIDER = 'questionsProvider',
