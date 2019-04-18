@@ -1,13 +1,13 @@
 {
   "name": "@xyo-network/crypto",
-  "version": "0.55.2-alpha.0",
+  "version": "0.55.6-alpha.0",
   "description": "Cryptographic functionality including ciphering and deciphering",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "Kevin Weiler",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.55.2-alpha.0"
+    "@xyo-network/base": "^0.55.6-alpha.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
