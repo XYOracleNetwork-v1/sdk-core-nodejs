@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 28th January 2019 5:15:58 pm
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Monday, 11th March 2019 3:50:11 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -52,13 +52,6 @@ export interface IXyoNodeNetwork {
   listenForBlockWitnessRequests(consensusProvider: IConsensusProvider): unsubscribeFn
 }
 
-export interface IXyoComponentArchivistFeatureDetail {
-  graphqlHost: string
-  graphqlPort: number
-  boundWitnessHost: string
-  boundWitnessPort: number
-}
-
 // tslint:disable-next-line:no-empty-interface
 export interface IXyoComponentDivinerFeatureDetail {
 }
@@ -69,15 +62,17 @@ export interface IXyoComponentBridgeFeatureDetail {
 }
 
 export interface IXyoComponentFeatureResponse {
-  archivist?: IXyoComponentFeatureDetail<IXyoComponentArchivistFeatureDetail>,
-  diviner?: IXyoComponentFeatureDetail<IXyoComponentDivinerFeatureDetail>,
-  bridge?: IXyoComponentFeatureDetail<IXyoComponentBridgeFeatureDetail>,
+  archivist?: IXyoComponentFeatureDetail,
+  diviner?: IXyoComponentFeatureDetail,
+  bridge?: IXyoComponentFeatureDetail
 }
 
-export interface IXyoComponentFeatureDetail<T extends {}> {
+export interface IXyoComponentFeatureDetail {
   featureType: string
   supportsFeature: boolean,
-  featureOptions: T
+  featureOptions: {
+
+  }
 }
 
 export interface IBlockWitnessRequestDTO {

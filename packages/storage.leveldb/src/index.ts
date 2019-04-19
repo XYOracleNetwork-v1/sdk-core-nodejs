@@ -20,22 +20,27 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
   }
 
   private levelDbDirectory: string
-  private db: LevelUp<LevelDown>
-  private syncWrite = false
+  private db: LevelUp<LevelDown> | undefined
 
-  constructor (levelDbDirectory: string, syncWrite?: boolean) {
-    if (syncWrite) {
-      this.syncWrite = syncWrite
-    }
-
+  constructor (levelDbDirectory: string) {
     this.levelDbDirectory = levelDbDirectory
-    this.db = levelup(leveldown(this.levelDbDirectory))
+  }
+
+  public async restore () {
+    return new Promise((resolve, reject) => {
+      (leveldown as any).repair(this.levelDbDirectory, (error: string) => {
+        // todo find correct types for leveldown
+        this.db = levelup(leveldown(this.levelDbDirectory))
+        resolve(error)
+      })
+
+    })
   }
 
   public async write(key: Buffer, value: Buffer): Promise<undefined> {
     return new Promise((resolve, reject) => {
       if (this.db) {
-        this.db.put(key, value, { sync: this.syncWrite }, (err) => {
+        this.db.put(key, value, (err) => {
           if (err) {
             return reject(err)
           }
@@ -43,7 +48,7 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
           return resolve()
         })
       } else {
-        return reject("no db")
+        return reject('no db')
       }
 
     }) as Promise<undefined>
@@ -60,7 +65,7 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
           return resolve(value as Buffer)
         })
       } else {
-        return reject("no db")
+        return reject('no db')
       }
     }) as Promise<Buffer | undefined>
   }
@@ -77,7 +82,7 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
           return resolve(keys)
         })
       } else {
-        return reject("no db")
+        return reject('no db')
       }
 
     }) as Promise<Buffer[]>
@@ -94,7 +99,7 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
           return resolve(undefined)
         })
       } else {
-        return reject("no db")
+        return reject('no db')
       }
 
     }) as Promise<void>
@@ -165,7 +170,7 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
           }
         })
       } else {
-        reject("no db")
+        reject('no db')
       }
     }) as Promise<IXyoStorageIterationResult>
   }

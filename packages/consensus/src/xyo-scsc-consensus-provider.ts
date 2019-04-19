@@ -1,9 +1,8 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 25th February 2019 10:15:15 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-scsc-consensus-provider.ts
- * @Last modified by: ryanxyo
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
@@ -233,7 +232,7 @@ export class XyoScscConsensusProvider extends XyoBase
       responses,
     ]
     const hash = this.solidityHashString(
-      [`bytes32`, `uint`, ...bytes32Arr, `bytes32`, `bytes`],
+      ['bytes32', 'uint', ...bytes32Arr, 'bytes32', 'bytes'],
       args,
     )
 
@@ -270,7 +269,7 @@ export class XyoScscConsensusProvider extends XyoBase
     sigV: number[],
   ): Promise<string> {
     console.log(
-      `Submit block args`,
+      'Submit block args',
       JSON.stringify(
         {
           previousBlock,
@@ -441,11 +440,11 @@ export class XyoScscConsensusProvider extends XyoBase
     this.web3Service.padLeft(str, len)
 
   private solidityHashString(types: string[], values: any[]): string {
-    return `0x${soliditySHA3(types, values).toString(`hex`)}`
+    return `0x${soliditySHA3(types, values).toString('hex')}`
   }
 
   private solidityPackString(types: string[], values: any[]): string {
-    return `0x${solidityPack(types, values).toString(`hex`)}`
+    return `0x${solidityPack(types, values).toString('hex')}`
   }
 
   private async getGovernanceParam(

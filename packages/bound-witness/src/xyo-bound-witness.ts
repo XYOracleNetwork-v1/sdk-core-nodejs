@@ -1,21 +1,21 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 26th November 2018 2:52:10 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base-bound-witness.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Friday, 8th March 2019 12:07:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoBoundWitness, FetterOrWitness, IXyoKeySet, IXyoSignatureSet, IXyoBoundWitnessParty, IXyoFetter, IXyoWitness } from "./@types"
+import { IXyoBoundWitness, FetterOrWitness, IXyoKeySet, IXyoSignatureSet, IXyoBoundWitnessParty, IXyoFetter, IXyoWitness } from './@types'
 import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, ParseQuery, IXyoSerializableObject, IParseResult, XyoSerializationService } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
 import { XyoBoundWitnessParty } from './xyo-bound-witness-party'
-import { XyoFetter } from "./xyo-fetter"
-import { XyoError } from "@xyo-network/errors"
-import { XyoWitness } from "./xyo-witness"
+import { XyoFetter } from './xyo-fetter'
+import { XyoError } from '@xyo-network/errors'
+import { XyoWitness } from './xyo-witness'
 
 export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWitness {
 
@@ -38,7 +38,7 @@ export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWit
   public get numberOfParties(): number {
     return this.fetterWitnesses.reduce((memo, fw) => {
       return memo + ((fw.schemaObjectId === schema.fetter.id) ? 1 : 0)
-    }, 0)
+    },                                 0)
   }
 
   public get parties(): IXyoBoundWitnessParty[] {
@@ -73,7 +73,7 @@ export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWit
     schemaObjectId: number
   ): T | undefined {
     if (this.parties.length <= partyIndex) {
-      throw new XyoError(`Insufficient number of parties to complete request`)
+      throw new XyoError('Insufficient number of parties to complete request')
     }
 
     return this.parties[partyIndex].getHeuristic<T>(schemaObjectId)
@@ -84,7 +84,7 @@ export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWit
     schemaObjectId: number
   ): T | undefined {
     if (this.parties.length <= partyIndex) {
-      throw new XyoError(`Insufficient number of parties to complete request`)
+      throw new XyoError('Insufficient number of parties to complete request')
     }
 
     return this.parties[partyIndex].getMetaDataItem<T>(schemaObjectId)
@@ -117,11 +117,11 @@ export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWit
           heuristics: this.heuristics[partyIndex].reduce((memo: {[s: string]: any}, heuristic) => {
             memo[heuristic.getReadableName()] = heuristic.getReadableValue()
             return memo
-          }, {}),
+          },                                             {}),
           metadata: this.metadata[partyIndex].reduce((memo: {[s: string]: any}, metadata) => {
             memo[metadata.getReadableName()] = metadata.getReadableValue()
             return memo
-          }, {}),
+          },                                         {}),
         }
       })
     }
@@ -141,14 +141,15 @@ const getSigningDataFromFetterWitnesses = (fetterWitnessPairs: FetterOrWitness[]
 }
 
 const getFetterWitnessPair = (fetterOrWitnesses: FetterOrWitness[]) => {
-  const result = fetterOrWitnesses.reduce((memo, fetterOrWitness, index) => {
-    if (index < fetterOrWitnesses.length / 2) {
-      memo.fetters.push(fetterOrWitness as IXyoFetter)
-    } else {
-      memo.witnesses.push(fetterOrWitness as IXyoWitness)
-    }
-    return memo
-  },
+  const result = fetterOrWitnesses.reduce(
+    (memo, fetterOrWitness, index) => {
+      if (index < fetterOrWitnesses.length / 2) {
+        memo.fetters.push(fetterOrWitness as IXyoFetter)
+      } else {
+        memo.witnesses.push(fetterOrWitness as IXyoWitness)
+      }
+      return memo
+    },
     {
       fetters: [] as IXyoFetter[],
       witnesses: [] as IXyoWitness[]
@@ -177,7 +178,8 @@ class XyoBoundWitnessDeserializer implements IXyoDeserializer<IXyoBoundWitness> 
         item => serializationService
           .deserialize(item.readData(true))
           .hydrate<IXyoFetter | IXyoWitness>()
-      ), data
+      ),
+      data
     )
   }
 }

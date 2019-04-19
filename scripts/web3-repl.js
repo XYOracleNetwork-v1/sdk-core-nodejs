@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Friday, 1st February 2019 2:59:46 pm
  * @Email:  developer@xyfindables.com
  * @Filename: web3-repl
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Friday, 1st February 2019 3:30:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

@@ -1,19 +1,19 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 5th December 2018 10:30:22 am
  * @Email:  developer@xyfindables.com
  * @Filename: base-serializable.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Friday, 14th December 2018 12:09:57 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoSerializableObject, IXyoObjectSchema, IXyoObjectPartialSchema, IParseResult } from "../@types"
-import { XyoBase } from "@xyo-network/base"
-import { resolveSerializablesToBuffer } from "./resolveSerializablesToBuffer"
-import { serialize } from "./serialize"
-import { findSchemaById } from "./findSchemaById"
+import { IXyoSerializableObject, IXyoObjectSchema, IXyoObjectPartialSchema, IParseResult } from '../@types'
+import { XyoBase } from '@xyo-network/base'
+import { resolveSerializablesToBuffer } from './resolveSerializablesToBuffer'
+import { serialize } from './serialize'
+import { findSchemaById } from './findSchemaById'
 import { readHeader } from './readHeader'
 
 export abstract class XyoBaseSerializable extends XyoBase implements IXyoSerializableObject {

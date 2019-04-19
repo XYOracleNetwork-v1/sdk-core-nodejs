@@ -1,9 +1,9 @@
 
-import { XyoPeerTransport, XyoPeerDiscoveryService, XyoP2PService } from "../"
-import { encodeXyoTopicBuffer, decodeXyoTopicBuffer } from "../xyo-topic-buffer"
-import { XyoPeerConnection } from "../xyo-peer-connection"
-import { Socket } from "net"
-import { EventEmitter } from "events"
+import { XyoPeerTransport, XyoPeerDiscoveryService, XyoP2PService } from '../'
+import { encodeXyoTopicBuffer, decodeXyoTopicBuffer } from '../xyo-topic-buffer'
+import { XyoPeerConnection } from '../xyo-peer-connection'
+import { Socket } from 'net'
+import { EventEmitter } from 'events'
 
 interface IPeer {
   publicKey: string
@@ -42,8 +42,8 @@ const peer3 = {
   peers: [peer1]
 }
 
-describe(`P2P`, () => {
-  it(`Should encode a topic buffer`, () => {
+describe('P2P', () => {
+  it('Should encode a topic buffer', () => {
     const topic = 'topic'
     const message = 'Hello World'
     const buff = encodeXyoTopicBuffer(topic, Buffer.from(message))
@@ -83,7 +83,7 @@ describe(`P2P`, () => {
     expect(buff.toJSON().data).toEqual(expectedBuff)
   })
 
-  it(`Should decode multiple topic buffers`, () => {
+  it('Should decode multiple topic buffers', () => {
     const buff = encodeXyoTopicBuffer('topic1', Buffer.from('foo'))
     expect(decodeXyoTopicBuffer(buff)).toEqual({
       topic: 'topic1',
@@ -126,18 +126,18 @@ describe(`P2P`, () => {
     emitter.emit('data', message4)
   })
 
-  it(`Should create a transport`, () => {
+  it('Should create a transport', () => {
     const transport = new XyoPeerTransport()
     transport.initialize(peer1.address)
     expect(transport).toBeInstanceOf(XyoPeerTransport)
   })
 
-  it(`Should concat buffers`, () => {
+  it('Should concat buffers', () => {
     const buff = Buffer.concat([Buffer.from('hello'), Buffer.from(';'), Buffer.from('world')])
     expect(buff.toString().split(';')).toEqual(['hello', 'world'])
   })
 
-  it(`Should communicate`, async (done) => {
+  it('Should communicate', async (done) => {
     const transport = new XyoPeerTransport()
     transport.initialize(peer1.address)
 
@@ -185,7 +185,7 @@ describe(`P2P`, () => {
     })
   })
 
-  it(`Should discover peers`, async (done) => {
+  it('Should discover peers', async (done) => {
     const transport1 = new XyoPeerTransport()
     transport1.initialize(peer1.address)
     const discovery1 = new XyoPeerDiscoveryService(transport1)
@@ -217,7 +217,7 @@ describe(`P2P`, () => {
     })
   })
 
-  it(`Should create a new P2P Service`, async (done) => {
+  it('Should create a new P2P Service', async (done) => {
     const transport1 = new XyoPeerTransport()
     transport1.initialize(peer1.address)
     const discovery1 = new XyoPeerDiscoveryService(transport1)

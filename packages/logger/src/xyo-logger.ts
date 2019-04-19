@@ -1,16 +1,16 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 19th November 2018 11:27:43 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-logger.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Friday, 7th December 2018 11:50:59 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
 import winston from 'winston'
-import DailyRotateFile from "winston-daily-rotate-file"
+import winstonDailyRotateFile from 'winston-daily-rotate-file'
 
 /**
  * A central logger for the Xyo core
@@ -27,7 +27,7 @@ export class XyoLogger {
       const transports = []
 
       if (dailyRotateInfoLogs) {
-        transports.push(new DailyRotateFile({
+        transports.push(new winstonDailyRotateFile({
           dirname: 'logs/info',
           datePattern: 'YYYY-MM-DD-HH',
           zippedArchive: true,
@@ -38,7 +38,7 @@ export class XyoLogger {
       }
 
       if (dailyRotateErrorLogs) {
-        transports.push(new DailyRotateFile({
+        transports.push(new winstonDailyRotateFile({
           dirname: 'logs/error',
           datePattern: 'YYYY-MM-DD-HH',
           zippedArchive: true,
@@ -84,7 +84,7 @@ export class XyoLogger {
             `${item.stack || item.message}` :
             item.toString()
         ])
-      }, []).join('\n')
+      },                          []).join('\n')
 
       return `${message}\n${metaMsg}`
     }

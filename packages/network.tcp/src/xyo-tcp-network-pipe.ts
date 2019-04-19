@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 13th September 2018 11:40:42 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network-pipe.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -13,7 +13,7 @@ import { XyoTcpConnectionResult } from './xyo-tcp-connection-result'
 import { XyoError } from '@xyo-network/errors'
 import { IXyoNetworkPipe, IXyoNetworkPeer } from '@xyo-network/network'
 import { XyoBase } from '@xyo-network/base'
-import { IXyoSerializableObject } from "@xyo-network/serialization"
+import { IXyoSerializableObject } from '@xyo-network/serialization'
 
 /**
  * A communication pipe using tcp/ip stack
@@ -86,7 +86,7 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
         timeout = undefined
 
         return resolve(data)
-      }, (err: any) => {
+      },                                   (err: any) => {
         if (timeout) timeout()
         timeout = undefined
         reject(err)
@@ -96,7 +96,7 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
         this.connectionResult.socket.removeListener('data', listener)
         await this.close()
         reject(new XyoError('Connection timed out after sending message'))
-      }, 3000)
+      },                        3000)
 
       this.connectionResult.socket.on('data', listener)
     }) as Promise<Buffer>
@@ -143,7 +143,7 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
       if (data === undefined) {
         if (chunk.length < 4) {
           this.connectionResult.socket.end()
-          return reject(new XyoError(`Corrupt payload`))
+          return reject(new XyoError('Corrupt payload'))
         }
 
         sizeOfPayload = chunk.readUInt32BE(0)

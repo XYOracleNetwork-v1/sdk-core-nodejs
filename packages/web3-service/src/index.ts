@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Friday, 21st December 2018 12:55:40 pm
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 13th March 2019 9:30:10 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -20,7 +20,7 @@ import { IXyoContentAddressableService } from '@xyo-network/content-addressable-
 import { XyoBase } from '@xyo-network/base'
 import { XyoError } from '@xyo-network/errors'
 import { WebsocketProvider } from 'web3-providers'
-import TX from 'ethereumjs-tx'
+import ethereumjsTx from 'ethereumjs-tx'
 
 export class XyoWeb3Service extends XyoBase {
   private web3: Web3 | undefined
@@ -63,7 +63,7 @@ export class XyoWeb3Service extends XyoBase {
 
   public padLeft(hexString: string, toLength: number): string {
     if (!hexString) {
-      return "0x0000000000000000000000000000000000000000000000000000000000000000"
+      return '0x0000000000000000000000000000000000000000000000000000000000000000'
     }
     if (!this.web3) {
       const padded = hexString.startsWith('0x') ?
@@ -99,7 +99,7 @@ export class XyoWeb3Service extends XyoBase {
       value: params.value || 0,
       data: params.data,
     }
-    const tx = new TX(txParams)
+    const tx = new ethereumjsTx(txParams)
     tx.sign(Buffer.from(this.accountPrivateKey!, 'hex'))
     const serializedTx = tx.serialize()
     console.log('serializedTx : ', serializedTx)
@@ -129,7 +129,7 @@ export class XyoWeb3Service extends XyoBase {
       value: params.value || 0,
       data: params.data.toString(),
     }
-    const tx = new TX(txParams)
+    const tx = new ethereumjsTx(txParams)
     tx.sign(Buffer.from(this.accountPrivateKey!, 'hex'))
     const serializedTx = tx.serialize()
     console.log('serializedTx : ', serializedTx)
@@ -155,7 +155,7 @@ export class XyoWeb3Service extends XyoBase {
     if (this.accountPrivateKey) {
       const account = this.web3.eth.accounts.privateKeyToAccount(`0x${this.accountPrivateKey}`)
       if (account.address.toLowerCase() !== this.accountAddress.toLowerCase()) {
-        throw new XyoError(`Invalid Eth crypto key pair`)
+        throw new XyoError('Invalid Eth crypto key pair')
       }
 
       this.web3.eth.accounts.wallet.add(account)

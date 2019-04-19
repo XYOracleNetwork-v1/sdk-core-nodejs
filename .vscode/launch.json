@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Friday, 17th August 2018 9:56:29 am
  * @Email:  developer@xyfindables.com
  * @Filename: launch.json
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Tuesday, 27th November 2018 11:14:49 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -54,6 +54,15 @@
       "type": "node",
       "request": "launch",
       "args": ["src/index.ts", "start", "archivist"],
+      "cwd": "${workspaceFolder}/packages/app",
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Launch Dynamo Archivist",
+      "type": "node",
+      "request": "launch",
+      "args": ["src/index.ts", "start", "archivist-dynamo"],
       "cwd": "${workspaceFolder}/packages/app",
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
       "console": "integratedTerminal"

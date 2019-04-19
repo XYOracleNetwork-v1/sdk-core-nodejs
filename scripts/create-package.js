@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 31st January 2019 4:42:52 pm
  * @Email:  developer@xyfindables.com
  * @Filename: create-package.js
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Thursday, 31st January 2019 5:39:47 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

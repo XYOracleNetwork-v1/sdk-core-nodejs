@@ -1,16 +1,16 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 28th November 2018 4:56:24 pm
  * @Email:  developer@xyfindables.com
  * @Filename: serialize.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 28th November 2018 5:17:05 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoObjectPartialSchema } from "../@types"
-import { getHeader } from "./getHeader"
+import { IXyoObjectPartialSchema } from '../@types'
+import { getHeader } from './getHeader'
 
 /**
  * Serializes an arbitrary buffer in accordance with the XYO packing protocol

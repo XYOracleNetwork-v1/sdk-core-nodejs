@@ -35,7 +35,7 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
   public async handle(
       networkPipe: IXyoNetworkPipe,
       didInit: boolean,
-      choice: CatalogueItem): Promise<IXyoBoundWitness> {
+      choice: CatalogueItem): Promise<IXyoBoundWitness | undefined> {
 
     const mutex = await this.tryGetMutex(0)
     try {
@@ -49,6 +49,9 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
       const boundWitness = await interaction.run(networkPipe, didInit)
       await this.boundWitnessSuccessListener.onBoundWitnessSuccess(boundWitness, mutex, choice)
       return boundWitness
+    } catch (e) {
+      this.logError('Bound witness handle error', e)
+      return
     } finally {
       await this.originStateRepository.releaseMutex(mutex)
     }
@@ -57,11 +60,11 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
   private async tryGetMutex(currentTry: number): Promise<IXyoOriginChainMutex> {
     const mutex = await this.originStateRepository.acquireMutex()
     if (mutex) return mutex
-    if (currentTry === 3) throw new XyoError(`Could not acquire mutex for origin chain`)
+    if (currentTry === 3) throw new XyoError('Could not acquire mutex for origin chain')
     return new Promise((resolve, reject) => {
       XyoBase.timeout(() => {
         this.tryGetMutex(currentTry + 1).then(resolve).catch(reject)
-      }, 100 * (currentTry + 1)) // linear back-off
+      },              100 * (currentTry + 1)) // linear back-off
     })
   }
 }

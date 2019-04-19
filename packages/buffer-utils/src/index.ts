@@ -1,16 +1,16 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 20th November 2018 10:04:37 am
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoError, XyoErrors } from "@xyo-network/errors"
-import { BN } from "@xyo-network/utils"
+import { XyoError, XyoErrors } from '@xyo-network/errors'
+import { BN } from '@xyo-network/utils'
 
 /** A helper function to write a number to a buffer that supports multiple sizes and signings */
 export function writeIntegerToBuffer(
@@ -35,7 +35,7 @@ export function writeIntegerToBuffer(
         buf.writeInt32BE(numberToWrite, bufOffset)
         return buf
       default:
-        throw new XyoError(`Could not write number to buffer`)
+        throw new XyoError('Could not write number to buffer')
     }
   }
 
@@ -58,7 +58,7 @@ export function writeIntegerToBuffer(
       }
       return buf
     default:
-      throw new XyoError(`Could not write number to buffer`)
+      throw new XyoError('Could not write number to buffer')
   }
 }
 
@@ -75,7 +75,7 @@ export function readIntegerFromBuffer(buffer: Buffer, bytes: number, isSigned: b
       case 4:
         return buffer.readInt32BE(bufOffset)
       default:
-        throw new XyoError(`Could not read number from buffer`)
+        throw new XyoError('Could not read number from buffer')
     }
   }
 
@@ -89,7 +89,7 @@ export function readIntegerFromBuffer(buffer: Buffer, bytes: number, isSigned: b
     case 8:
       return new BN(buffer.slice(bufOffset || 0, bufOffset + bytes)).toNumber()
     default:
-      throw new XyoError(`Could not read number from buffer`)
+      throw new XyoError('Could not read number from buffer')
   }
 }
 

@@ -21,28 +21,13 @@
       "path": "about-me"
     },
     {
-      "path": "archivist-network"
-    },
-    {
-      "path": "archivist-repository"
-    },
-    {
-      "path": "archivist-repository-sql"
-    },
-    {
       "path": "base"
-    },
-    {
-      "path": "base-node"
     },
     {
       "path": "bound-witness"
     },
     {
       "path": "buffer-utils"
-    },
-    {
-      "path": "data-generator"
     },
     {
       "path": "diviner-archivist-client"
@@ -108,9 +93,6 @@
       "path": "peer-interaction-router"
     },
     {
-      "path": "questions"
-    },
-    {
       "path": "serialization"
     },
     {
@@ -135,9 +117,6 @@
       "path": "storage.leveldb"
     },
     {
-      "path": "web3-question-service"
-    },
-    {
       "path": "web3-service"
     },
     {
@@ -153,16 +132,7 @@
       "path": "utils"
     },
     {
-      "path": "graphql-apis"
-    },
-    {
-      "path": "app"
-    },
-    {
       "path": "consensus"
-    },
-    {
-      "path": "block-producer"
     },
     {
       "path": "block-witness"
@@ -176,14 +146,11 @@
   ],
   "include": [
     "about-me/src/**/*.ts",
-    "archivist-network/src/**/*.ts",
     "archivist-repository/src/**/*.ts",
     "archivist-repository-sql/src/**/*.ts",
     "base/src/**/*.ts",
-    "base-node/src/**/*.ts",
     "bound-witness/src/**/*.ts",
     "buffer-utils/src/**/*.ts",
-    "data-generator/src/**/*.ts",
     "diviner-archivist-client/src/**/*.ts",
     "diviner-archivist-client.graphql/src/**/*.ts",
     "diviner-graphql-api/src/**/*.ts",
@@ -206,7 +173,6 @@
     "peer-interaction/src/**/*.ts",
     "peer-interaction-handlers/src/**/*.ts",
     "peer-interaction-router/src/**/*.ts",
-    "questions/src/**/*.ts",
     "serialization/src/**/*.ts",
     "serialization-schema/src/**/*.ts",
     "serializer/src/**/*.ts",
@@ -215,16 +181,13 @@
     "signing.rsa/src/**/*.ts",
     "storage/src/**/*.ts",
     "storage.leveldb/src/**/*.ts",
-    "web3-question-service/src/**/*.ts",
     "web3-service/src/**/*.ts",
     "attribution-request/src/**/*.ts",
     "attribution-request.node-network/src/**/*.ts",
     "transaction-pool/src/**/*.ts",
     "utils/src/**/*.ts",
-    "graphql-apis/src/**/*.ts",
     "app/src/**/*.ts",
     "consensus/src/**/*.ts",
-    "block-producer/src/**/*.ts",
     "block-witness/src/**/*.ts",
     "content-addressable-service/src/**/*.ts",
     "crypto/src/**/*.ts"

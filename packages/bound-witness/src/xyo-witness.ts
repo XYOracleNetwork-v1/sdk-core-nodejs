@@ -1,16 +1,16 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 10th December 2018 10:43:28 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-witness.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 12th December 2018 1:53:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoSignatureSet, IXyoWitness } from "./@types"
-import { XyoBaseSerializable, IXyoSerializableObject, IXyoDeserializer, ParseQuery, IXyoSerializationService } from "@xyo-network/serialization"
+import { IXyoSignatureSet, IXyoWitness } from './@types'
+import { XyoBaseSerializable, IXyoSerializableObject, IXyoDeserializer, ParseQuery, IXyoSerializationService } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
 
 export class XyoWitness extends XyoBaseSerializable  implements IXyoWitness {

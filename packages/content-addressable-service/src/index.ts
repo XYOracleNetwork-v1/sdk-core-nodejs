@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Friday, 8th March 2019 1:32:51 pm
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Friday, 8th March 2019 2:58:53 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -66,10 +66,10 @@ export class XyoLocalContentService extends XyoBase implements IXyoContentAddres
 }
 
 export function contentAddressableToString(contentAddress: IContentAddress): string {
-  if (!contentAddress) throw new XyoError(`contentAddress must be a value`)
+  if (!contentAddress) throw new XyoError('contentAddress must be a value')
   if (typeof contentAddress === 'string') return contentAddress
   if (contentAddress instanceof Buffer) return contentAddress.toString()
   if (contentAddress.schemaObjectId) return contentAddress.serialize().toString()
 
-  throw new XyoError(`Could not convert contentAddressable to string`)
+  throw new XyoError('Could not convert contentAddressable to string')
 }

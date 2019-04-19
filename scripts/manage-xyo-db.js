@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 30th January 2019 1:54:36 pm
  * @Email:  developer@xyfindables.com
  * @Filename: create-xyo-db.js
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Tuesday, 5th February 2019 11:14:02 am
  * @License: All Rights Reserved 
  * @Copyright: Copyright XY | The Findables Company

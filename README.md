@@ -6,7 +6,7 @@
 
 [![NPM](https://nodei.co/npm/@xyo-network/sdk-core-node.png)](https://nodei.co/npm/@xyo-network/sdk-core-node/)
 
-[![Build Status](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs.svg?branch=develop)](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs) [![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability) [![BCH compliance](https://bettercodehub.com/edge/badge/XYOracleNetwork/sdk-core-nodejs?branch=develop)](https://bettercodehub.com/results/XYOracleNetwork/sdk-core-nodejs) [![Greenkeeper badge](https://badges.greenkeeper.io/XYOracleNetwork/sdk-core-nodejs.svg)](https://greenkeeper.io/) [![DepShield Badge](https://depshield.sonatype.org/badges/XYOracleNetwork/sdk-core-nodejs/depshield.svg)](https://depshield.github.io) [![David Badge](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs/status.svg)](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs) [![David Badge](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs/dev-status.svg)](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs)
+[![Build Status](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs.svg?branch=develop)](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs) [![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability) [![BCH compliance](https://bettercodehub.com/edge/badge/XYOracleNetwork/sdk-core-nodejs?branch=develop)](https://bettercodehub.com/results/XYOracleNetwork/sdk-core-nodejs) [![DepShield Badge](https://depshield.sonatype.org/badges/XYOracleNetwork/sdk-core-nodejs/depshield.svg)](https://depshield.github.io) [![David Badge](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs/status.svg)](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs) [![David Badge](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs/dev-status.svg)](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs)
 
 ## Project Overview
 
@@ -97,20 +97,13 @@ i.e. Where the test file is `test/integration/lib.spec.ts`
 All packages have their own README files as well. These are the README files that will be found on their respective npm package pages as well.
 
 - [about-me](packages/about-me/README.md)
-- [app](packages/app/README.md)
-- [archivist-network](packages/archivist-network/README.md)
-- [archivist-repository](packages/archivist-repository/README.md)
-- [archivist-repository-sql](packages/archivist-repository-sql/README.md)
 - [attribution-request](packages/attribution-request/README.md)
 - [attribution-request.node-network](packages/attribution-request.node-network/README.md)
 - [base](packages/base/README.md)
-- [base-node](packages/base-node/README.md)
-- [block-producer](packages/block-producer/README.md)
 - [block-witness](packages/block-witness/README.md)
 - [bound-witness](packages/bound-witness/README.md)
 - [buffer-utils](packages/buffer-utils/README.md)
 - [consensus](packages/consensus/README.md)
-- [data-generator](packages/data-generator/README.md)
 - [diviner-archivist-client](packages/diviner-archivist-client/README.md)
 - [diviner-archivist-client.graphql](packages/diviner-archivist-client.graphql/README.md)
 - [errors](packages/errors/README.md)
@@ -133,7 +126,6 @@ All packages have their own README files as well. These are the README files tha
 - [peer-interaction](packages/peer-interaction/README.md)
 - [peer-interaction-handlers](packages/peer-interaction-handlers/README.md)
 - [peer-interaction-router](packages/peer-interaction-router/README.md)
-- [questions](packages/questions/README.md)
 - [serialization](packages/serialization/README.md)
 - [serialization-schema](packages/serialization-schema/README.md)
 - [serializer](packages/serializer/README.md)
@@ -144,7 +136,6 @@ All packages have their own README files as well. These are the README files tha
 - [storage.leveldb](packages/storage.leveldb/README.md)
 - [transaction-pool](packages/transaction-pool/README.md)
 - [utils](packages/utils/README.md)
-- [web3-question-service](packages/web3-question-service/README.md)
 - [web3-service](packages/web3-service/README.md)
 
 ## Developer Guide

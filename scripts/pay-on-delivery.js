@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Friday, 1st February 2019 1:58:31 pm
  * @Email:  developer@xyfindables.com
  * @Filename: pay-on-delivery.js
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Tuesday, 5th February 2019 10:33:36 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

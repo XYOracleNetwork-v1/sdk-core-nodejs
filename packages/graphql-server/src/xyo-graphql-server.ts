@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 19th December 2018 11:17:53 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-graphql-server.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Tuesday, 12th March 2019 3:49:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -13,7 +13,7 @@ import { ApolloServer, gql, IResolvers } from 'apollo-server'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoDataResolver } from './@types'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
-import GraphQLJSON from 'graphql-type-json'
+import graphqlTypeJson from 'graphql-type-json'
 
 export class XyoGraphQLServer extends XyoBase {
   public server: ApolloServer | undefined
@@ -46,11 +46,11 @@ export class XyoGraphQLServer extends XyoBase {
   }
 
   public async stop (): Promise<void> {
-    this.logInfo(`Stopping Graphql server`)
+    this.logInfo('Stopping Graphql server')
     if (this.server) {
       await this.server.stop()
     }
-    this.logInfo(`Stopped Graphql server`)
+    this.logInfo('Stopped Graphql server')
   }
 
   private initialize () {
@@ -62,10 +62,10 @@ export class XyoGraphQLServer extends XyoBase {
         return (this.graphqlResolvers[route] as IXyoDataResolver).resolve(obj, args, context, info)
       }
       return router
-    }, {})
+    },                                                                         {})
 
     const resolvers: IResolvers = {
-      JSON: GraphQLJSON,
+      JSON: graphqlTypeJson,
       Query: compiledRouter
     }
 

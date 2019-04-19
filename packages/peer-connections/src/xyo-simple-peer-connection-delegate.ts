@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 20th November 2018 11:29:03 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-simple-peer-connection-delegate.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Friday, 7th December 2018 11:44:25 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -41,7 +41,7 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
 
       if (serversChoices.length !== 1) {
         // this is thrown when the server chooses more than one item
-        throw Error("Invalid choice!")
+        throw Error('Invalid choice!')
       }
 
       pipe.initiationData = response
@@ -50,7 +50,7 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
       return { pipe, serversChoice }
     }
 
-    throw Error("No response!")
+    throw Error('No response!')
   }
 
   public async handlePeerConnection(networkPipe: IXyoNetworkPipe) {

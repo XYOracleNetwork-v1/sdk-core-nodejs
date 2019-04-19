@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 25th February 2019 10:20:31 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-scsc-consensus-provider.spec.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 13th March 2019 3:09:06 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -20,7 +20,7 @@ import {
 import { XyoWeb3Service } from '@xyo-network/web3-service'
 import { BN, fileExists, readFile } from '@xyo-network/utils'
 import path from 'path'
-import yaml from 'js-yaml'
+import jsYaml from 'js-yaml'
 
 jest.setTimeout(1000000)
 

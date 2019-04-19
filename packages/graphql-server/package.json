@@ -1,17 +1,17 @@
 {
   "name": "@xyo-network/graphql-server",
-  "version": "0.57.0",
+  "version": "0.55.8-alpha.0",
   "description": "Basic GraphQL xyo wrapper",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "MIT",
   "dependencies": {
-    "@xyo-network/base": "^0.57.0",
-    "@xyo-network/errors": "^0.57.0",
+    "@xyo-network/base": "^0.55.8-alpha.0",
+    "@xyo-network/errors": "^0.55.8-alpha.0",
     "apollo-server": "^2.1.0",
     "graphql": "^14.2.1",
-    "graphql-type-json": "^0.2.1"
+    "graphql-type-json": "^0.3.0"
   },
   "devDependencies": {
     "@types/graphql": "^14.0.0",
@@ -22,6 +22,6 @@
     "ts-jest": "^24.0.0",
     "ts-node": "^8.0.3",
     "tslint": "^5.12.1",
-    "typescript": "^3.2.2"
+    "typescript": "^3.4.4"
   }
 }

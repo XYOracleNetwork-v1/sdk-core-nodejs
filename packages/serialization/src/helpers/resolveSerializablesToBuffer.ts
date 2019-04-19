@@ -1,20 +1,20 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 28th November 2018 5:45:13 pm
  * @Email:  developer@xyfindables.com
  * @Filename: resolveSerializablesToBuffer.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoObjectSchema, IXyoSerializableObject, IIterableType, IXyoObjectPartialSchema } from "../@types"
-import { XyoError, XyoErrors } from "@xyo-network/errors"
-import { getHeader } from "./getHeader"
-import { getNumberOfBytesRequiredForSizeBuffer } from "./getNumberOfBytesRequiredForSizeBuffer"
-import { getSizeHeader } from "./getSizeHeader"
-import { readHeader } from "./readHeader"
+import { IXyoObjectSchema, IXyoSerializableObject, IIterableType, IXyoObjectPartialSchema } from '../@types'
+import { XyoError, XyoErrors } from '@xyo-network/errors'
+import { getHeader } from './getHeader'
+import { getNumberOfBytesRequiredForSizeBuffer } from './getNumberOfBytesRequiredForSizeBuffer'
+import { getSizeHeader } from './getSizeHeader'
+import { readHeader } from './readHeader'
 
 export function resolveSerializablesToBuffer(
   schema: IXyoObjectPartialSchema,
@@ -36,11 +36,11 @@ export function resolveSerializablesToBuffer(
     group += 1
     grouper[serializable.schemaObjectId] = group
     return grouper
-  }, serializablesById)
+  },                   serializablesById)
 
   const numberOfSerializerTypes = Object.keys(serializablesById).length
   if (numberOfSerializerTypes === 0) {
-    throw new XyoError(`Serializers do not conform`)
+    throw new XyoError('Serializers do not conform')
   }
 
   let arraySerializationType: IIterableType
@@ -89,7 +89,7 @@ export function resolveSerializablesToBuffer(
     })
 
     return bufferCollection
-  }, [] as IBufferIdPair[])
+  },                                      [] as IBufferIdPair[])
 
   if (arraySerializationType === 'iterable-typed') {
     const bufferSize = getNumberOfBytesRequiredForSizeBuffer(highestByteAmount)
@@ -98,7 +98,7 @@ export function resolveSerializablesToBuffer(
       collection.push(sizeBuffer)
       collection.push(component.buffer)
       return collection
-    }, [] as Buffer[])
+    },                                           [] as Buffer[])
     const innerSchema = components[0].schema
     return Buffer.concat([
       getHeader(
@@ -128,7 +128,7 @@ export function resolveSerializablesToBuffer(
     collection.push(componentHeader)
     collection.push(component.buffer)
     return collection
-  }, [] as Buffer[])
+  },                                              [] as Buffer[])
 
   return Buffer.concat(componentsWithHeaders)
 }

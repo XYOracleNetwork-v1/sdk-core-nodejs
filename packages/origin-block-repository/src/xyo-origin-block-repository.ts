@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 21st November 2018 1:56:39 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-origin-block-repository.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 6th February 2019 10:20:08 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -143,7 +143,7 @@ export class XyoOriginBlockRepository implements IXyoOriginBlockRepository {
       const h = await this.hashingProvider.createHash(result.getSigningData())
       memo[h.serializeHex()] = result
       return memo
-    }, Promise.resolve({}))
+    },                 Promise.resolve({}))
   }
 
   private async recursivelyGetAllBlocksThatProvideAttribution(

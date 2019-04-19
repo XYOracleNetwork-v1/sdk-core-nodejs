@@ -1,17 +1,17 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 20th November 2018 1:25:50 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-key-value-database.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Tuesday, 11th December 2018 9:58:22 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoStorageProvider } from "./@types"
+import { IXyoStorageProvider } from './@types'
 import { XyoError } from '@xyo-network/errors'
-import { XyoBase } from "@xyo-network/base"
+import { XyoBase } from '@xyo-network/base'
 
 /**
  * Provides namespaces for an otherwise non-namespaced storage-provider

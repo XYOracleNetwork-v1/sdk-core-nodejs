@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 11th December 2018 2:11:17 pm
  * @Email:  developer@xyfindables.com
  * @Filename: clean.js
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Wednesday, 12th December 2018 2:00:38 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

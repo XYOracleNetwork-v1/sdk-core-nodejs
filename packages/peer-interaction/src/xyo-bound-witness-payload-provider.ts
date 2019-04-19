@@ -1,19 +1,19 @@
 
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 21st November 2018 1:25:45 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-wit
- * @Last modified by: ryanxyo
+
  * @Last modified time: Monday, 10th December 2018 2:26:27 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBase } from "@xyo-network/base"
-import { IXyoOriginChainRepository, XyoIndex, XyoNextPublicKey, XyoPreviousHash } from "@xyo-network/origin-chain"
-import { IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessOption } from "./@types"
-import { IXyoPayload } from "@xyo-network/bound-witness"
+import { XyoBase } from '@xyo-network/base'
+import { IXyoOriginChainRepository, XyoIndex, XyoNextPublicKey, XyoPreviousHash } from '@xyo-network/origin-chain'
+import { IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessOption } from './@types'
+import { IXyoPayload } from '@xyo-network/bound-witness'
 import { CatalogueItem } from '@xyo-network/network'
 import { IXyoSerializableObject } from '@xyo-network/serialization'
 

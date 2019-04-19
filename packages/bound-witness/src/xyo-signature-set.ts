@@ -1,17 +1,17 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 10th December 2018 10:08:31 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-signature-set.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 12th December 2018 1:51:09 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBaseSerializable, IXyoSerializableObject, IXyoDeserializer, IXyoSerializationService, ParseQuery } from "@xyo-network/serialization"
+import { XyoBaseSerializable, IXyoSerializableObject, IXyoDeserializer, IXyoSerializationService, ParseQuery } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
-import { IXyoSignature } from "@xyo-network/signing"
+import { IXyoSignature } from '@xyo-network/signing'
 
 export class XyoSignatureSet extends XyoBaseSerializable {
   public static deserializer: IXyoDeserializer<XyoSignatureSet>
