@@ -5,6 +5,7 @@
   "main": "index.js",
   "author": "XY Development Team",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "build": "tsc -b packages",
     "release": "lerna publish",
