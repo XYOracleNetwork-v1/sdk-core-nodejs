@@ -29,12 +29,12 @@
     "manage:ipfs:logs": "docker logs -f --tail 100 ipfs_host"
   },
   "devDependencies": {
-    "@xyo-network/config-tslint": "^0.1.6",
+    "@xyo-network/config-tslint": "^0.1.12",
     "enquirer": "^2.3.0",
     "lerna": "^3.13.1",
     "shelljs": "^0.8.3",
     "tslint": "^5.12.1",
-    "typescript": "^3.4.1"
+    "typescript": "^3.4.4"
   },
   "workspaces": [
     "packages/*"
