@@ -1,5 +1,12 @@
 {
   "extends": ["tslint:latest", "@xyo-network/config-tslint"],
   "rules": {
+    "import-name": [
+      true, {
+        "lodash": "_",
+        "web3": "Web3",
+        "graphqlTag": "gql"
+      }
+    ]
   }
 }

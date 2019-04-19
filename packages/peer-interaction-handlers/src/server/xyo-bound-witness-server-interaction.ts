@@ -108,7 +108,7 @@ export class XyoBoundWitnessServerInteraction extends XyoBase implements IXyoNod
           )
 
         return memo
-      }, [fetter] as FetterOrWitness[])
+      },                                                 [fetter] as FetterOrWitness[])
       fragmentParts.push(witness)
       return new InnerBoundWitness(fragmentParts, signingData)
     }

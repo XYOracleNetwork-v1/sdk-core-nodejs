@@ -11,7 +11,7 @@
 
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { IXyoObjectPartialSchema } from '../@types'
-import BN from 'bn.js'
+import bnJs from 'bn.js'
 
 export function getDataBytes(src: Buffer, partialSchema: IXyoObjectPartialSchema, srcIncludesHeader: boolean) {
   const headerOffset = srcIncludesHeader ? 2 : 0
@@ -51,7 +51,7 @@ function getNumberOfBytesIncludingSize(src: Buffer, offset: number, sizeIdentifi
       if (src.length < (offset + 8)) {
         throw new XyoError('sizeIdentifierSize could not be read')
       }
-      return new BN(src.slice(offset, offset + 8).toString('hex'), 16).toNumber()
+      return new bnJs(src.slice(offset, offset + 8).toString('hex'), 16).toNumber()
     default:
       throw new XyoError('sizeIdentifierSize could not be resolved')
   }

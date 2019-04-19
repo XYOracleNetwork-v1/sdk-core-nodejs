@@ -16,7 +16,7 @@ import gql from 'graphql-tag'
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import fetch from 'cross-fetch'
+import crossFetch from 'cross-fetch'
 
 export class XyoDivinerArchivistGraphQLClient extends XyoBase implements IXyoDivinerArchivistClient {
 

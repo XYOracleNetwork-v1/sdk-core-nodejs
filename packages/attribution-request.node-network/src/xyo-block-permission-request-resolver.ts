@@ -34,7 +34,7 @@ export class XyoBlockPermissionRequestResolver extends XyoBase implements IBlock
           resolve(undefined)
           unsubscribeFn()
         }
-      }, timeout)
+      },              timeout)
 
       const unsubscribeFn = this.nodeNetwork.requestPermissionForBlock(hash, (pk, permission) => {
         if (resolved) {

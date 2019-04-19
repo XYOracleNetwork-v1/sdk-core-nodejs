@@ -115,7 +115,7 @@ export class XyoRequestPermissionForBlockHandler extends XyoBaseHandler {
           const h = await this.hashProvider.createHash(bw.getSigningData())
           memo[h.serializeHex()] = bw
           return memo
-        }, Promise.resolve({}))
+        },      Promise.resolve({}))
 
       // Callback
       this.callback(witnessSetPk, {
@@ -175,7 +175,7 @@ export class XyoRequestPermissionForBlockHandler extends XyoBaseHandler {
     return new Promise((resolve, reject) => {
       XyoBase.timeout(() => {
         this.tryGetMutex(currentTry + 1).then(resolve).catch(reject)
-      }, 100 * (currentTry + 1)) // linear back-off
+      },              100 * (currentTry + 1)) // linear back-off
     })
   }
 }

@@ -21,8 +21,8 @@ export class XyoEcdsaSignatureDeserializer implements IXyoDeserializer<XyoEcdsaS
     const parseResult = serializationService.parse(data)
 
     return new XyoEcdsaSignature(parseResult.dataBytes,
-      this.schemaObjectId,
-      this.signerProvider.verifySign.bind(this.signerProvider)
+                                 this.schemaObjectId,
+                                 this.signerProvider.verifySign.bind(this.signerProvider)
     )
   }
 }

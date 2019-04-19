@@ -90,8 +90,8 @@ export class XyoNodeNetwork extends XyoBase implements IXyoNodeNetwork {
     this.unsubscribeComponentFeature = this.p2pService.subscribe('component-feature:request', (senderPublicKey) => {
       this.logInfo(`Received component-feature:request from ${senderPublicKey}`)
       this.p2pService.publishMessageToPeer('component-feature:response',
-        featureJSON,
-        senderPublicKey
+                                           featureJSON,
+                                           senderPublicKey
       )
     })
   }

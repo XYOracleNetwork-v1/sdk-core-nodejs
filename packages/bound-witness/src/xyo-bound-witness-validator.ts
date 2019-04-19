@@ -98,8 +98,8 @@ export class XyoBoundWitnessValidator extends XyoBase {
             `Could not validate signature at index [${outerIndex}][${innerIndex}]`, XyoErrors.INVALID_PARAMETERS
           )
         }
-      }, Promise.resolve() as Promise<void>)
-    }, Promise.resolve() as Promise<void>)
+      },                                    Promise.resolve() as Promise<void>)
+    },                                  Promise.resolve() as Promise<void>)
   }
 }
 

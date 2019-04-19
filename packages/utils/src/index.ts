@@ -29,8 +29,8 @@ export { ProcessManager } from './process-manager'
 
 /// <reference path="./@types/bs58.d.ts" />
 import bs58 from 'bs58'
-import BigNumber = require('bn.js')
-export { BigNumber as BN }
+import bnJs = require('bn.js')
+export { bnJs as BN }
 
 import { promisify } from 'util'
 import fs from 'fs'

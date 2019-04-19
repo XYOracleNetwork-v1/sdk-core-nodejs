@@ -162,7 +162,7 @@ export class XyoBlockWitnessValidator extends XyoBase {
             m.failed = true
             return m
           }
-        }, Promise.resolve({
+        },      Promise.resolve({
           failed: false,
           pks: [boundWitness.parties[0].keySet.keys[0], boundWitness.parties[1].keySet.keys[0]]
         })

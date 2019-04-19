@@ -36,7 +36,7 @@ export function resolveSerializablesToBuffer(
     group += 1
     grouper[serializable.schemaObjectId] = group
     return grouper
-  }, serializablesById)
+  },                   serializablesById)
 
   const numberOfSerializerTypes = Object.keys(serializablesById).length
   if (numberOfSerializerTypes === 0) {
@@ -89,7 +89,7 @@ export function resolveSerializablesToBuffer(
     })
 
     return bufferCollection
-  }, [] as IBufferIdPair[])
+  },                                      [] as IBufferIdPair[])
 
   if (arraySerializationType === 'iterable-typed') {
     const bufferSize = getNumberOfBytesRequiredForSizeBuffer(highestByteAmount)
@@ -98,7 +98,7 @@ export function resolveSerializablesToBuffer(
       collection.push(sizeBuffer)
       collection.push(component.buffer)
       return collection
-    }, [] as Buffer[])
+    },                                           [] as Buffer[])
     const innerSchema = components[0].schema
     return Buffer.concat([
       getHeader(
@@ -128,7 +128,7 @@ export function resolveSerializablesToBuffer(
     collection.push(componentHeader)
     collection.push(component.buffer)
     return collection
-  }, [] as Buffer[])
+  },                                              [] as Buffer[])
 
   return Buffer.concat(componentsWithHeaders)
 }

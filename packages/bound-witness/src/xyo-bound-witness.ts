@@ -38,7 +38,7 @@ export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWit
   public get numberOfParties(): number {
     return this.fetterWitnesses.reduce((memo, fw) => {
       return memo + ((fw.schemaObjectId === schema.fetter.id) ? 1 : 0)
-    }, 0)
+    },                                 0)
   }
 
   public get parties(): IXyoBoundWitnessParty[] {
@@ -117,11 +117,11 @@ export class XyoBoundWitness extends XyoBaseSerializable implements IXyoBoundWit
           heuristics: this.heuristics[partyIndex].reduce((memo: {[s: string]: any}, heuristic) => {
             memo[heuristic.getReadableName()] = heuristic.getReadableValue()
             return memo
-          }, {}),
+          },                                             {}),
           metadata: this.metadata[partyIndex].reduce((memo: {[s: string]: any}, metadata) => {
             memo[metadata.getReadableName()] = metadata.getReadableValue()
             return memo
-          }, {}),
+          },                                         {}),
         }
       })
     }
@@ -141,14 +141,15 @@ const getSigningDataFromFetterWitnesses = (fetterWitnessPairs: FetterOrWitness[]
 }
 
 const getFetterWitnessPair = (fetterOrWitnesses: FetterOrWitness[]) => {
-  const result = fetterOrWitnesses.reduce((memo, fetterOrWitness, index) => {
-    if (index < fetterOrWitnesses.length / 2) {
-      memo.fetters.push(fetterOrWitness as IXyoFetter)
-    } else {
-      memo.witnesses.push(fetterOrWitness as IXyoWitness)
-    }
-    return memo
-  },
+  const result = fetterOrWitnesses.reduce(
+    (memo, fetterOrWitness, index) => {
+      if (index < fetterOrWitnesses.length / 2) {
+        memo.fetters.push(fetterOrWitness as IXyoFetter)
+      } else {
+        memo.witnesses.push(fetterOrWitness as IXyoWitness)
+      }
+      return memo
+    },
     {
       fetters: [] as IXyoFetter[],
       witnesses: [] as IXyoWitness[]
@@ -177,7 +178,8 @@ class XyoBoundWitnessDeserializer implements IXyoDeserializer<IXyoBoundWitness> 
         item => serializationService
           .deserialize(item.readData(true))
           .hydrate<IXyoFetter | IXyoWitness>()
-      ), data
+      ),
+      data
     )
   }
 }

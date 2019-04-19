@@ -1,18 +1,19 @@
+/*
+ * File: xyo-received-transaction-handler.ts
+ * Project: @xyo-network/node-network
+ * File Created: Friday, 19th April 2019 11:18:35 am
+ * Author: XYO Development Team (support@xyo.network)
+ * -----
+ * Last Modified: Friday, 19th April 2019 11:46:48 am
+ * Modified By: XYO Development Team (support@xyo.network>)
+ * -----
+ * Copyright 2017 - 2019 XY - The Persistent Company
+ */
+
 import { XyoBaseHandler } from './xyo-base-handler'
 import { IXyoSerializationService } from '@xyo-network/serialization'
 import { IXyoP2PService } from '@xyo-network/p2p'
 import { IXyoTransactionRepository, IXyoTransaction } from '@xyo-network/transaction-pool'
-
-/*
- * @Author: XY | The Findables Company <xyo-network>
- * @Date:   Tuesday, 12th February 2019 9:21:59 am
- * @Email:  developer@xyfindables.com
- * @Filename: xyo-received-transaction-handler.ts
-
- * @Last modified time: Monday, 11th March 2019 3:49:01 pm
- * @License: All Rights Reserved
- * @Copyright: Copyright XY | The Findables Company
- */
 
 export class XyoReceivedTransactionHandler extends XyoBaseHandler {
 
@@ -27,18 +28,18 @@ export class XyoReceivedTransactionHandler extends XyoBaseHandler {
   public initialize(): void {
     const topic = 'transaction:share'
     this.addUnsubscribe(topic,
-      this.p2pService.subscribe(topic, async (pk, message) => {
-        const jsonMsg = JSON.parse(message.toString()) as {id: string, transaction: IXyoTransaction<any>}
-        const alreadyExists = await this.transactionsRepository.contains(jsonMsg.id)
-        if (alreadyExists) return
+                        this.p2pService.subscribe(topic, async (pk, message) => {
+                          const jsonMsg = JSON.parse(message.toString()) as {id: string, transaction: IXyoTransaction<any>}
+                          const alreadyExists = await this.transactionsRepository.contains(jsonMsg.id)
+                          if (alreadyExists) return
 
-        try {
-          await this.transactionsRepository.add(jsonMsg.id, jsonMsg.transaction)
-        } catch (err) {
-          this.logError(`There was an issue parsing transaction from public key ${pk}`)
-          // non-critical error, so swallow it
-        }
-      })
+                          try {
+                            await this.transactionsRepository.add(jsonMsg.id, jsonMsg.transaction)
+                          } catch (err) {
+                            this.logError(`There was an issue parsing transaction from public key ${pk}`)
+                            // non-critical error, so swallow it
+                          }
+                        })
     )
   }
 }

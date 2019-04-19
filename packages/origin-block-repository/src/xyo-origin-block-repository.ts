@@ -143,7 +143,7 @@ export class XyoOriginBlockRepository implements IXyoOriginBlockRepository {
       const h = await this.hashingProvider.createHash(result.getSigningData())
       memo[h.serializeHex()] = result
       return memo
-    }, Promise.resolve({}))
+    },                 Promise.resolve({}))
   }
 
   private async recursivelyGetAllBlocksThatProvideAttribution(

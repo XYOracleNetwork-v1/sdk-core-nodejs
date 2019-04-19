@@ -10,7 +10,7 @@
  */
 
 import winston from 'winston'
-import DailyRotateFile from 'winston-daily-rotate-file'
+import winstonDailyRotateFile from 'winston-daily-rotate-file'
 
 /**
  * A central logger for the Xyo core
@@ -27,7 +27,7 @@ export class XyoLogger {
       const transports = []
 
       if (dailyRotateInfoLogs) {
-        transports.push(new DailyRotateFile({
+        transports.push(new winstonDailyRotateFile({
           dirname: 'logs/info',
           datePattern: 'YYYY-MM-DD-HH',
           zippedArchive: true,
@@ -38,7 +38,7 @@ export class XyoLogger {
       }
 
       if (dailyRotateErrorLogs) {
-        transports.push(new DailyRotateFile({
+        transports.push(new winstonDailyRotateFile({
           dirname: 'logs/error',
           datePattern: 'YYYY-MM-DD-HH',
           zippedArchive: true,
@@ -84,7 +84,7 @@ export class XyoLogger {
             `${item.stack || item.message}` :
             item.toString()
         ])
-      }, []).join('\n')
+      },                          []).join('\n')
 
       return `${message}\n${metaMsg}`
     }

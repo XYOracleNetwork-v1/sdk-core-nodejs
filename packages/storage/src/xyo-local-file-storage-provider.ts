@@ -67,7 +67,7 @@ function getOrCreateDb(dataFile: string): {[s: string]: Buffer} {
     return Object.keys(json).reduce((memo: {[s: string]: Buffer}, k) => {
       memo[k] = Buffer.from(json[k])
       return memo
-    }, {})
+    },                              {})
   }
 
   writeFileSync(dataFile, XyoBase.stringify({}), 'utf8')
@@ -78,7 +78,7 @@ function persist(dataFile: string, data: {[s: string]: Buffer}) {
   const transform = Object.keys(data).reduce((memo: {[s: string]: string}, key) => {
     memo[key] = data[key].toString()
     return memo
-  }, {})
+  },                                         {})
 
   writeFileSync(dataFile, XyoBase.stringify(transform), 'utf8')
 }

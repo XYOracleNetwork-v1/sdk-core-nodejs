@@ -86,7 +86,7 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
         timeout = undefined
 
         return resolve(data)
-      }, (err: any) => {
+      },                                   (err: any) => {
         if (timeout) timeout()
         timeout = undefined
         reject(err)
@@ -96,7 +96,7 @@ export class XyoTcpNetworkPipe extends XyoBase implements IXyoNetworkPipe {
         this.connectionResult.socket.removeListener('data', listener)
         await this.close()
         reject(new XyoError('Connection timed out after sending message'))
-      }, 3000)
+      },                        3000)
 
       this.connectionResult.socket.on('data', listener)
     }) as Promise<Buffer>

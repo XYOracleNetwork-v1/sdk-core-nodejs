@@ -29,7 +29,7 @@ export class ParseQuery {
       }
 
       throw new XyoError(`Data can not be queried at index ${indexInArray}`)
-    }, this.parseResult)
+    },                                             this.parseResult)
 
     return new ParseQuery(queriedParseResult)
   }

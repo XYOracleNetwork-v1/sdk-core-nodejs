@@ -222,6 +222,6 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
       this.logInfo('Connection timed out while negotiating')
       this.connection = undefined
       c.end()
-    }, 3000)
+    },                                       3000)
   }
 }

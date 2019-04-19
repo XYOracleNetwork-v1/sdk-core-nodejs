@@ -13,7 +13,7 @@ import { ApolloServer, gql, IResolvers } from 'apollo-server'
 import { XyoBase } from '@xyo-network/base'
 import { IXyoDataResolver } from './@types'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
-import GraphQLJSON from 'graphql-type-json'
+import graphqlTypeJson from 'graphql-type-json'
 
 export class XyoGraphQLServer extends XyoBase {
   public server: ApolloServer | undefined
@@ -62,10 +62,10 @@ export class XyoGraphQLServer extends XyoBase {
         return (this.graphqlResolvers[route] as IXyoDataResolver).resolve(obj, args, context, info)
       }
       return router
-    }, {})
+    },                                                                         {})
 
     const resolvers: IResolvers = {
-      JSON: GraphQLJSON,
+      JSON: graphqlTypeJson,
       Query: compiledRouter
     }
 

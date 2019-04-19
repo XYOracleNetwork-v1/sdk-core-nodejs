@@ -322,7 +322,7 @@ export class XyoOriginChainStateInMemoryRepository extends XyoBase implements IX
       this.addBlockToInteractionData(block, hash, m)
       return m
 
-    }, Promise.resolve(data)
+    },                   Promise.resolve(data)
   )
   }
 

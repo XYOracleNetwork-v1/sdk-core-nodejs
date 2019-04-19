@@ -125,7 +125,7 @@ export class XyoBlockPermissionResponseHandler extends XyoBaseHandler {
         }
 
         return undefined
-      }, Promise.resolve(undefined))
+      },      Promise.resolve(undefined))
   }
 
   private async tryResolveProofOfAttribution(

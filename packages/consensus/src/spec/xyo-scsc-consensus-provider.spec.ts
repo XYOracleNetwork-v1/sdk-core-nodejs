@@ -20,7 +20,7 @@ import {
 import { XyoWeb3Service } from '@xyo-network/web3-service'
 import { BN, fileExists, readFile } from '@xyo-network/utils'
 import path from 'path'
-import yaml from 'js-yaml'
+import jsYaml from 'js-yaml'
 
 jest.setTimeout(1000000)
 

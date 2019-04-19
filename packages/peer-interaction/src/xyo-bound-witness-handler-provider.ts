@@ -64,7 +64,7 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
     return new Promise((resolve, reject) => {
       XyoBase.timeout(() => {
         this.tryGetMutex(currentTry + 1).then(resolve).catch(reject)
-      }, 100 * (currentTry + 1)) // linear back-off
+      },              100 * (currentTry + 1)) // linear back-off
     })
   }
 }

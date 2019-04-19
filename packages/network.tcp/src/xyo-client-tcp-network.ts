@@ -117,7 +117,7 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
     if (!nextAddress) { // If no networkWork address is available, pause for 1sec, then loop again
       XyoBase.timeout(() => {
         this.loop(catalogue, resolve, reject)
-      }, 1000)
+      },              1000)
       return
     }
 
@@ -130,7 +130,7 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
       // Take 1sec break an try again
       XyoBase.timeout(() => {
         this.loop(catalogue, resolve, reject)
-      }, 5000)
+      },              5000)
       return
     }
   }

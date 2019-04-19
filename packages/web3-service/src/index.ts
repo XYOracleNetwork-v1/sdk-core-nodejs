@@ -20,7 +20,7 @@ import { IXyoContentAddressableService } from '@xyo-network/content-addressable-
 import { XyoBase } from '@xyo-network/base'
 import { XyoError } from '@xyo-network/errors'
 import { WebsocketProvider } from 'web3-providers'
-import TX from 'ethereumjs-tx'
+import ethereumjsTx from 'ethereumjs-tx'
 
 export class XyoWeb3Service extends XyoBase {
   private web3: Web3 | undefined

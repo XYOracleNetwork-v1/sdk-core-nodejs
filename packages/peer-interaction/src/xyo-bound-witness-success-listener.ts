@@ -72,7 +72,7 @@ export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBound
         content.push(new XyoPair(nestedHashValue, bwToPersist.serialize()))
         await this.originBlockRepository.addOriginBlock(nestedHashValue, bwToPersist, hashValue)
       }
-    }, Promise.resolve() as Promise<void>)
+    },                                Promise.resolve() as Promise<void>)
 
     // Fire and forget
     Promise.all(content.map(async ({ k, v }) => {

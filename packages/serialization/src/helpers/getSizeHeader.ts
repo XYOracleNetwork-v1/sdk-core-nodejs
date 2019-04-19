@@ -10,7 +10,7 @@
  */
 
 import { XyoError, XyoErrors } from '@xyo-network/errors'
-import BN from 'bn.js'
+import bnJs from 'bn.js'
 
 export function getSizeHeader(byteLength: number, bytesRequired: number) {
   let sizeBuffer = Buffer.alloc(bytesRequired)
@@ -26,7 +26,7 @@ export function getSizeHeader(byteLength: number, bytesRequired: number) {
       sizeBuffer.writeUInt32BE(byteLength + 4, 0)
       break
     case 8:
-      sizeBuffer = new BN(byteLength + 8).toBuffer('be', 8)
+      sizeBuffer = new bnJs(byteLength + 8).toBuffer('be', 8)
       break
     default:
       throw new XyoError(`Could not serialize because size ${bytesRequired}`, XyoErrors.INVALID_PARAMETERS)
