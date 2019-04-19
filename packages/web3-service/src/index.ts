@@ -99,7 +99,7 @@ export class XyoWeb3Service extends XyoBase {
       value: params.value || 0,
       data: params.data,
     }
-    const tx = new TX(txParams)
+    const tx = new ethereumjsTx(txParams)
     tx.sign(Buffer.from(this.accountPrivateKey!, 'hex'))
     const serializedTx = tx.serialize()
     console.log('serializedTx : ', serializedTx)
@@ -129,7 +129,7 @@ export class XyoWeb3Service extends XyoBase {
       value: params.value || 0,
       data: params.data.toString(),
     }
-    const tx = new TX(txParams)
+    const tx = new ethereumjsTx(txParams)
     tx.sign(Buffer.from(this.accountPrivateKey!, 'hex'))
     const serializedTx = tx.serialize()
     console.log('serializedTx : ', serializedTx)
