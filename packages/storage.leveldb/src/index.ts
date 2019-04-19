@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <xyo-network>
+ * @Author: XY | The Findables Company <ryanxyo>
  * @Date:   Thursday, 13th December 2018 9:34:47 am
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
-
+ * @Last modified by: ryanxyo
  * @Last modified time: Friday, 8th March 2019 3:54:44 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -19,59 +19,89 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
     return getLevelDbStore(location)
   }
 
-  private db: LevelUp<LevelDown>
+  private levelDbDirectory: string
+  private db: LevelUp<LevelDown> | undefined
 
   constructor (levelDbDirectory: string) {
-    this.db = levelup(leveldown(levelDbDirectory))
+    this.levelDbDirectory = levelDbDirectory
+  }
+
+  public async restore () {
+    return new Promise((resolve, reject) => {
+      (leveldown as any).repair(this.levelDbDirectory, (error: string) => {
+        // todo find correct types for leveldown
+        this.db = levelup(leveldown(this.levelDbDirectory))
+        resolve(error)
+      })
+
+    })
   }
 
   public async write(key: Buffer, value: Buffer): Promise<undefined> {
     return new Promise((resolve, reject) => {
-      this.db.put(key, value, (err) => {
-        if (err) {
-          return reject(err)
-        }
+      if (this.db) {
+        this.db.put(key, value, (err) => {
+          if (err) {
+            return reject(err)
+          }
 
-        return resolve()
-      })
+          return resolve()
+        })
+      } else {
+        return reject('no db')
+      }
+
     }) as Promise<undefined>
   }
 
   public async read(key: Buffer): Promise<Buffer | undefined> {
     return new Promise((resolve, reject) => {
-      this.db.get(key, (err, value) => {
-        if (err) {
-          return reject(err)
-        }
+      if (this.db) {
+        this.db.get(key, (err, value) => {
+          if (err) {
+            return reject(err)
+          }
 
-        return resolve(value as Buffer)
-      })
+          return resolve(value as Buffer)
+        })
+      } else {
+        return reject('no db')
+      }
     }) as Promise<Buffer | undefined>
   }
 
   public async getAllKeys(): Promise<Buffer[]> {
     return new Promise((resolve, reject) => {
-      const keys: Buffer[] = []
-      this.db.createKeyStream()
+      if (this.db) {
+        const keys: Buffer[] = []
+        this.db.createKeyStream()
         .on('data', (data) => {
           keys.push(data as Buffer)
         })
         .on('end', () => {
           return resolve(keys)
         })
+      } else {
+        return reject('no db')
+      }
 
     }) as Promise<Buffer[]>
   }
 
   public async delete(key: Buffer): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.db.del(key, (err) => {
-        if (err) {
-          return reject(err)
-        }
+      if (this.db) {
+        this.db.del(key, (err) => {
+          if (err) {
+            return reject(err)
+          }
 
-        return resolve(undefined)
-      })
+          return resolve(undefined)
+        })
+      } else {
+        return reject('no db')
+      }
+
     }) as Promise<void>
   }
 
@@ -102,7 +132,8 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
       const values: IXyoBufferKeyValuePair[] = []
       let promiseResolved = false
 
-      this.db.createReadStream(readOptions)
+      if (this.db) {
+        this.db.createReadStream(readOptions)
         .on('data', (data) => {
           values.push(data as IXyoBufferKeyValuePair)
         })
@@ -138,6 +169,9 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
             })
           }
         })
+      } else {
+        reject('no db')
+      }
     }) as Promise<IXyoStorageIterationResult>
   }
 

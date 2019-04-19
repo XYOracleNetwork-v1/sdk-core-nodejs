@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <xyo-network>
+ * @Author: XY | The Findables Company <ryanxyo>
  * @Date:   Tuesday, 20th November 2018 4:43:55 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-handler-provider.ts
-
+ * @Last modified by: ryanxyo
  * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -35,7 +35,7 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
   public async handle(
       networkPipe: IXyoNetworkPipe,
       didInit: boolean,
-      choice: CatalogueItem): Promise<IXyoBoundWitness> {
+      choice: CatalogueItem): Promise<IXyoBoundWitness | undefined> {
 
     const mutex = await this.tryGetMutex(0)
     try {
@@ -49,6 +49,9 @@ export class XyoBoundWitnessHandlerProvider extends XyoBase implements IXyoBound
       const boundWitness = await interaction.run(networkPipe, didInit)
       await this.boundWitnessSuccessListener.onBoundWitnessSuccess(boundWitness, mutex, choice)
       return boundWitness
+    } catch (e) {
+      this.logError('Bound witness handle error', e)
+      return
     } finally {
       await this.originStateRepository.releaseMutex(mutex)
     }

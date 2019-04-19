@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <xyo-network>
+ * @Author: XY | The Findables Company <ryanxyo>
  * @Date:   Tuesday, 20th November 2018 10:46:01 am
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
-
+ * @Last modified by: ryanxyo
  * @Last modified time: Tuesday, 20th November 2018 11:26:42 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -63,7 +63,7 @@ export interface IXyoCatalogueResolver {
 export interface IXyoBoundWitnessHandlerProvider {
 
   /** Given a `IXyoNetworkPipe` performs an operation that resolves to an `XyoBoundWitness` */
-  handle(networkPipe: IXyoNetworkPipe, didInit: boolean, choice: CatalogueItem): Promise<IXyoBoundWitness>
+  handle(networkPipe: IXyoNetworkPipe, didInit: boolean, choice: CatalogueItem): Promise<IXyoBoundWitness | undefined>
 }
 
 /**

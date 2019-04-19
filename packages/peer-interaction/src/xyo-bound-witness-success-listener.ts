@@ -1,9 +1,9 @@
 /*
-* @Author: XY | The Findables Company <xyo-network>
+* @Author: XY | The Findables Company <ryanxyo>
 * @Date:   Thursday, 7th February 2019 11:32:52 am
 * @Email:  developer@xyfindables.com
 * @Filename: xyo-bound-witness-success-listener.ts
-
+* @Last modified by: ryanxyo
 * @Last modified time: Thursday, 7th February 2019 11:33:33 am
 * @License: All Rights Reserved
 * @Copyright: Copyright XY | The Findables Company
@@ -28,7 +28,7 @@ export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBound
     private readonly boundWitnessValidator: XyoBoundWitnessValidator,
     private readonly originChainRepository: IXyoOriginChainRepository,
     private readonly originBlockRepository: IXyoOriginBlockRepository,
-    private readonly contentAddressableService: IXyoContentAddressableService
+    private readonly contentService: IXyoContentAddressableService
   ) {
     super()
   }
@@ -77,7 +77,7 @@ export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBound
     // Fire and forget
     Promise.all(content.map(async ({ k, v }) => {
       try {
-        const b58Key = await this.contentAddressableService.add(v)
+        const b58Key = await this.contentService.add(v)
         this.logInfo(`Successfully upload bound witness with hash ${k.serializeHex()}, address is: ${b58Key}`)
       } catch (err) {
         // log and swallow error
