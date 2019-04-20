@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 26th September 2018 3:01:22 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-client-tcp-network.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 6th March 2019 2:56:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -12,7 +12,7 @@
 import {
   IXyoNetworkAddressProvider,
   IXyoTCPNetworkAddress
-} from "./@types"
+} from './@types'
 
 import net from 'net'
 
@@ -20,19 +20,19 @@ import {
   IXyoNetworkProvider,
   IXyoNetworkProcedureCatalogue,
   IXyoNetworkPipe,
-} from "@xyo-network/network"
+} from '@xyo-network/network'
 
 import {
   XyoTcpConnectionResult
-} from "./xyo-tcp-connection-result"
+} from './xyo-tcp-connection-result'
 
 import {
   XyoBase
-} from "@xyo-network/base"
+} from '@xyo-network/base'
 
 import {
   XyoTcpNetworkPipe
-} from "./xyo-tcp-network-pipe"
+} from './xyo-tcp-network-pipe'
 
 /**
  * This is not a production-ready TCP client. It was built to test the TCP server.
@@ -68,7 +68,7 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
    */
 
   public async find(catalogue: IXyoNetworkProcedureCatalogue): Promise<IXyoNetworkPipe> {
-    this.logInfo(`Attempting to find peers`)
+    this.logInfo('Attempting to find peers')
 
     // Start looping and resolve promise once a network pipe is created
     return new Promise((resolve, reject) => {
@@ -101,23 +101,23 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
     resolve: (networkPipe: IXyoNetworkPipe) => void,
     reject: (error?: any) => void
   ) {
-    this.logInfo(`Run loop entered`)
+    this.logInfo('Run loop entered')
 
     if (this.shouldStopPromise) { // If shouldStopPromise is set, exit loop
-      this.logInfo(`Run loop will end`)
+      this.logInfo('Run loop will end')
       this.isLooping = false
       reject() // reject, could not find peer
       this.shouldStopPromise()
       return
     }
 
-    this.logInfo(`Will try to find next address`)
+    this.logInfo('Will try to find next address')
 
     const nextAddress = await this.networkAddressProvider.next() // get next networkAddress to try
     if (!nextAddress) { // If no networkWork address is available, pause for 1sec, then loop again
       XyoBase.timeout(() => {
         this.loop(catalogue, resolve, reject)
-      }, 1000)
+      },              1000)
       return
     }
 
@@ -126,11 +126,11 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
       const connectionResult = await this.getConnection(nextAddress, catalogue)
       return resolve(new XyoTcpNetworkPipe(connectionResult))
     } catch (err) {
-      this.logError(`There was an error creating client connection`, err)
+      this.logError('There was an error creating client connection', err)
       // Take 1sec break an try again
       XyoBase.timeout(() => {
         this.loop(catalogue, resolve, reject)
-      }, 5000)
+      },              5000)
       return
     }
   }
@@ -143,7 +143,7 @@ export class XyoClientTcpNetwork extends XyoBase implements IXyoNetworkProvider 
     })
 
     const onError = (err: any) => {
-      this.logError(`An error occurred while getting connection`, err)
+      this.logError('An error occurred while getting connection', err)
     }
 
     // const onConnect

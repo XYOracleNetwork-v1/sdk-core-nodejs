@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 6th December 2018 5:36:11 pm
  * @Email:  developer@xyfindables.com
  * @Filename: tree-iterator.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 12th December 2018 1:28:00 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

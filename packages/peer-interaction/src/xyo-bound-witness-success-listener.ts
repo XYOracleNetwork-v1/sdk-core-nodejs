@@ -9,14 +9,14 @@
 * @Copyright: Copyright XY | The Findables Company
 */
 
-import { IXyoBoundWitnessSuccessListener } from "./@types"
-import { IXyoBoundWitness, XyoBoundWitnessValidator } from "@xyo-network/bound-witness"
-import { XyoBase } from "@xyo-network/base"
-import { IXyoHashProvider, IXyoHash } from "@xyo-network/hashing"
-import { IXyoOriginChainRepository } from "@xyo-network/origin-chain"
-import { IXyoOriginBlockRepository } from "@xyo-network/origin-block-repository"
-import { XyoNestedBoundWitnessExtractor } from "./xyo-nested-bound-witness-extractor"
-import { CatalogueItem } from "@xyo-network/network"
+import { IXyoBoundWitnessSuccessListener } from './@types'
+import { IXyoBoundWitness, XyoBoundWitnessValidator } from '@xyo-network/bound-witness'
+import { XyoBase } from '@xyo-network/base'
+import { IXyoHashProvider, IXyoHash } from '@xyo-network/hashing'
+import { IXyoOriginChainRepository } from '@xyo-network/origin-chain'
+import { IXyoOriginBlockRepository } from '@xyo-network/origin-block-repository'
+import { XyoNestedBoundWitnessExtractor } from './xyo-nested-bound-witness-extractor'
+import { CatalogueItem } from '@xyo-network/network'
 import { XyoPair } from '@xyo-network/utils'
 import { IXyoContentAddressableService } from '@xyo-network/content-addressable-service'
 
@@ -28,7 +28,7 @@ export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBound
     private readonly boundWitnessValidator: XyoBoundWitnessValidator,
     private readonly originChainRepository: IXyoOriginChainRepository,
     private readonly originBlockRepository: IXyoOriginBlockRepository,
-    private readonly contentAddressableService: IXyoContentAddressableService
+    private readonly contentService: IXyoContentAddressableService
   ) {
     super()
   }
@@ -40,7 +40,7 @@ export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBound
     try {
       await this.boundWitnessValidator.validateBoundWitness(hashValue, boundWitness)
     } catch (err) {
-      this.logError(`Origin block failed validation. Will not add.`, err)
+      this.logError('Origin block failed validation. Will not add.', err)
       throw err
     }
 
@@ -63,7 +63,7 @@ export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBound
         try {
           await this.boundWitnessValidator.validateBoundWitness(nestedHashValue, nestedBoundWitness)
         } catch (err) {
-          this.logError(`Origin block failed validation. Will not add.`, err)
+          this.logError('Origin block failed validation. Will not add.', err)
           throw err
         }
 
@@ -72,12 +72,12 @@ export class XyoBoundWitnessSuccessListener extends XyoBase implements IXyoBound
         content.push(new XyoPair(nestedHashValue, bwToPersist.serialize()))
         await this.originBlockRepository.addOriginBlock(nestedHashValue, bwToPersist, hashValue)
       }
-    }, Promise.resolve() as Promise<void>)
+    },                                Promise.resolve() as Promise<void>)
 
     // Fire and forget
     Promise.all(content.map(async ({ k, v }) => {
       try {
-        const b58Key = await this.contentAddressableService.add(v)
+        const b58Key = await this.contentService.add(v)
         this.logInfo(`Successfully upload bound witness with hash ${k.serializeHex()}, address is: ${b58Key}`)
       } catch (err) {
         // log and swallow error

@@ -1,16 +1,16 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 7th March 2019 12:06:28 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-block-witness-validator.spec.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Monday, 11th March 2019 1:11:55 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-describe(`XyoBlockWitnessValidator`, () => {
-  it(`Has no test yet`, async () => {
+describe('XyoBlockWitnessValidator', () => {
+  it('Has no test yet', async () => {
     expect(true).toBe(true)
   })
 })
@@ -18,7 +18,6 @@ describe(`XyoBlockWitnessValidator`, () => {
 // import { XyoBlockWitnessValidator } from '../xyo-block-witness-validator'
 // import { BN } from '@xyo-network/utils'
 // import { getHashingProvider, IXyoHashProvider, XyoStubHash } from '@xyo-network/hashing'
-// import { IProofOfIntersectionAnswer, IIntersectionRequest } from '@xyo-network/questions'
 // import {
 //   XyoBoundWitness,
 //   XyoKeySet,

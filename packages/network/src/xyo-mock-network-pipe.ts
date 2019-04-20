@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 29th November 2018 4:23:34 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-mock-network-pipe.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Tuesday, 11th December 2018 9:34:57 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -11,7 +11,7 @@
 
 import { IXyoNetworkPipe, IXyoNetworkPeer } from './@types'
 import { CatalogueItem } from './catalogue-item'
-import { IXyoSerializableObject } from "@xyo-network/serialization"
+import { IXyoSerializableObject } from '@xyo-network/serialization'
 
 export class XyoMockNetworkPipe implements IXyoNetworkPipe {
   public networkHeuristics: IXyoSerializableObject[] = []

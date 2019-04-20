@@ -1,15 +1,15 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 20th November 2018 11:18:23 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-peer-connection-handler.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Tuesday, 20th November 2018 11:24:59 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoNetworkPipe, CatalogueItem } from '@xyo-network/network'
+import { IXyoNetworkPipe, CatalogueItem, flipChoice } from '@xyo-network/network'
 import { IXyoPeerConnectionHandler, IXyoCatalogueResolver, IXyoCategoryRouter } from './@types'
 import { XyoBase } from '@xyo-network/base'
 
@@ -27,7 +27,7 @@ export class XyoPeerConnectionHandler extends XyoBase implements IXyoPeerConnect
     didInit: boolean) {
 
     if (choice && toChoose) {
-      this.logInfo(`Can not choose and have a choice`)
+      this.logInfo('Can not choose and have a choice')
       await networkPipe.close()
       return
     }
@@ -40,6 +40,7 @@ export class XyoPeerConnectionHandler extends XyoBase implements IXyoPeerConnect
       return
     }
 
+    // this choice also needs to be flipped
     const handler = this.router.getHandler(category)
 
     if (!handler) {
@@ -48,7 +49,13 @@ export class XyoPeerConnectionHandler extends XyoBase implements IXyoPeerConnect
       return
     }
 
-    await handler.handle(networkPipe, didInit)
+    let correctAsymmetricCategory = category
+
+    if (toChoose) {
+      correctAsymmetricCategory = flipChoice(category)
+    }
+
+    await handler.handle(networkPipe, didInit, correctAsymmetricCategory)
   }
 
   private resolveCategory (choice: CatalogueItem | undefined, toChoose: CatalogueItem[] | undefined) {

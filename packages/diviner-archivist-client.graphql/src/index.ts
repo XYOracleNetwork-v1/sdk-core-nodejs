@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 19th December 2018 4:41:14 pm
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Friday, 22nd February 2019 2:38:28 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -16,7 +16,7 @@ import gql from 'graphql-tag'
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import fetch from 'cross-fetch'
+import crossFetch from 'cross-fetch'
 
 export class XyoDivinerArchivistGraphQLClient extends XyoBase implements IXyoDivinerArchivistClient {
 

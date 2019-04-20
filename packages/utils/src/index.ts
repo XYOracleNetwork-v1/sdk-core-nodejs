@@ -29,10 +29,10 @@ export { ProcessManager } from './process-manager'
 
 /// <reference path="./@types/bs58.d.ts" />
 import bs58 from 'bs58'
-import BigNumber = require('bn.js')
-export { BigNumber as BN }
+import bnJs = require('bn.js')
+export { bnJs as BN }
 
-import { promisify } from "util"
+import { promisify } from 'util'
 import fs from 'fs'
 import { ILifeCyclable, ILifeCycleEvent, asyncPureFn, IXyoRepository, parameterizedFactoryFn } from './@types'
 import { XyoBase } from '@xyo-network/base'
@@ -248,7 +248,7 @@ export abstract class XyoDaemon extends XyoBase {
   private looping = false
 
   public async start(): Promise<void> {
-    this.logInfo("Starting Daemon!")
+    this.logInfo('Starting Daemon!')
     return this.runner(3000)
   }
 
@@ -294,7 +294,7 @@ export abstract class XyoDaemon extends XyoBase {
         await runReq
       }
     } catch (err) {
-      this.logError(`There was an error in the block-producer loop`, err)
+      this.logError('There was an error in the block-producer loop', err)
       errorOccurred = true
     }
 
@@ -338,7 +338,7 @@ export class LifeCycleRunner {
 
   public async initialize(): Promise<void> {
     if (!this.canInitialize()) {
-      throw new XyoError(`Already initialized, can not initialize again`)
+      throw new XyoError('Already initialized, can not initialize again')
     }
 
     this.state = null
@@ -354,7 +354,7 @@ export class LifeCycleRunner {
 
   public async start(): Promise<void> {
     if (!this.canStart()) {
-      throw new XyoError(`Not yet initialized, can not start`)
+      throw new XyoError('Not yet initialized, can not start')
     }
 
     await this.lifeCyclable.preStart()
@@ -369,7 +369,7 @@ export class LifeCycleRunner {
 
   public async stop(): Promise<void> {
     if (!this.canStop()) {
-      throw new XyoError(`Not yet started, can not stop`)
+      throw new XyoError('Not yet started, can not stop')
     }
 
     await this.lifeCyclable.preStop()

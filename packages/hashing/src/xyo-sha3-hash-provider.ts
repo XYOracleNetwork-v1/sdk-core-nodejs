@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 26th February 2019 12:13:50 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-sha3-hash-provider.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Tuesday, 26th February 2019 12:40:40 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -14,7 +14,7 @@
 import { hash as ethLibHash } from 'eth-lib'
 import { IXyoHashProvider, IXyoHash } from './@types'
 import { XyoHash } from './xyo-hash'
-import { schema } from "@xyo-network/serialization-schema"
+import { schema } from '@xyo-network/serialization-schema'
 
 export class XyoSha3HashProvider implements IXyoHashProvider {
 

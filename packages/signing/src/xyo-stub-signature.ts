@@ -1,17 +1,17 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 29th November 2018 4:46:25 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-stub-signature.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Friday, 14th December 2018 12:31:06 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoSignature, IXyoPublicKey } from "./@types"
+import { IXyoSignature, IXyoPublicKey } from './@types'
 import { XyoBaseSerializable, IXyoSerializationService } from '@xyo-network/serialization'
-import { schema } from "@xyo-network/serialization-schema"
+import { schema } from '@xyo-network/serialization-schema'
 
 export class XyoStubSignature extends XyoBaseSerializable  implements IXyoSignature {
 

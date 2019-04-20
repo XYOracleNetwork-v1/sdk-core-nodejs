@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 20th November 2018 2:06:46 pm
  * @Email:  developer@xyfindables.com
  * @Filename: elliptic.d.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Tuesday, 20th November 2018 2:06:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

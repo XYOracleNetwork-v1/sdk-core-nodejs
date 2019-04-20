@@ -1,15 +1,15 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 20th November 2018 3:26:17 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-rsa-sha
- * @Last modified by: ryanxyo
+
  * @Last modified time: Monday, 26th November 2018 3:37:31 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import NodeRSA from 'node-rsa'
+import nodeRsa from 'node-rsa'
 
 import { IXyoSignerProvider, IXyoSignature, IXyoPublicKey } from '@xyo-network/signing'
 import { XyoRsaPublicKey } from './xyo-rsa-public-key'
@@ -34,13 +34,13 @@ export class XyoRsaShaSignerProvider extends XyoBase implements IXyoSignerProvid
    */
 
   public newInstance(fromPrivateKey?: any): XyoRsaShaSigner {
-    let key: NodeRSA
+    let key: nodeRsa
 
     if (fromPrivateKey) {
-      key = new NodeRSA(fromPrivateKey, 'pkcs8-private-pem')
+      key = new nodeRsa(fromPrivateKey, 'pkcs8-private-pem')
       key.setOptions({ signingScheme: this.signingScheme })
     } else {
-      key = new NodeRSA({ b: 2048 })
+      key = new nodeRsa({ b: 2048 })
       key.setOptions({ signingScheme: this.signingScheme })
     }
 
@@ -72,7 +72,7 @@ export class XyoRsaShaSignerProvider extends XyoBase implements IXyoSignerProvid
 
   public async verifySign(signature: IXyoSignature, data: Buffer, publicKey: IXyoPublicKey): Promise<boolean> {
     const rsaPubKey = publicKey as XyoRsaPublicKey
-    const key = new NodeRSA()
+    const key = new nodeRsa()
     key.setOptions({ signingScheme: this.signingScheme })
     key.importKey({
       n: rsaPubKey.modulus,

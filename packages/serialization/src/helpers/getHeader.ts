@@ -1,18 +1,18 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 28th November 2018 4:58:38 pm
  * @Email:  developer@xyfindables.com
  * @Filename: getHeader.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { IXyoObjectPartialSchema } from "../@types"
+import { IXyoObjectPartialSchema } from '../@types'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
-import { getSizeHeader } from "./getSizeHeader"
-import { getLeastNumberOfBytesToEncodeSize } from "./getLeastNumberOfBytesToEncodeSize"
+import { getSizeHeader } from './getSizeHeader'
+import { getLeastNumberOfBytesToEncodeSize } from './getLeastNumberOfBytesToEncodeSize'
 
 /**
  * Builds a dynamic header based on the size of bytes for a schema
@@ -46,7 +46,7 @@ export function getHeader(byteLength: number, scheme: IXyoObjectPartialSchema, w
             return { numberToEncode: 3, bytesRequired: 8 }
         }
       default:
-        throw new XyoError(`This should never happen exception`)
+        throw new XyoError('This should never happen exception')
     }
   })()
 

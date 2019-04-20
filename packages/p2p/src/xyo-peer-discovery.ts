@@ -1,9 +1,9 @@
-import { IXyoPeerTransport, IXyoPeerConnection, IXyoPeerDiscoveryService, IXyoPeerDiscoveryConfig } from "./@types"
+import { IXyoPeerTransport, IXyoPeerConnection, IXyoPeerDiscoveryService, IXyoPeerDiscoveryConfig } from './@types'
 import { XyoPubSub } from './xyo-pub-sub'
-import { encodeXyoTopicBuffer, decodeXyoTopicBuffer } from "./xyo-topic-buffer"
-import { XyoPeerConnectionPool } from "./xyo-peer-connection-pool"
-import { XyoBase } from "@xyo-network/base"
-import { Callback } from "@xyo-network/utils"
+import { encodeXyoTopicBuffer, decodeXyoTopicBuffer } from './xyo-topic-buffer'
+import { XyoPeerConnectionPool } from './xyo-peer-connection-pool'
+import { XyoBase } from '@xyo-network/base'
+import { Callback } from '@xyo-network/utils'
 
 enum Attrs {
   address = 'address',
@@ -28,7 +28,7 @@ export class XyoPeerDiscoveryService extends XyoBase implements IXyoPeerDiscover
     this.address = config.address
 
     this.onDiscovery((connection) => {
-      this.logInfo(`Discovered Peer`)
+      this.logInfo('Discovered Peer')
       this.pool.addPeerConnection(connection)
     })
     this.onDisconnected((connection) => {
@@ -87,7 +87,7 @@ export class XyoPeerDiscoveryService extends XyoBase implements IXyoPeerDiscover
   }
 
   public stop() {
-    this.logInfo(`Stopping discovery`)
+    this.logInfo('Stopping discovery')
     this.running = false
     this.transport.stop()
   }

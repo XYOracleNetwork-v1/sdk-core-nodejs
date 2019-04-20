@@ -1,23 +1,24 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 28th November 2018 5:51:34 pm
  * @Email:  developer@xyfindables.com
  * @Filename: parse.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 12th December 2018 1:23:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { readHeader } from "./readHeader"
-import { sliceItem } from "./sliceItem"
-import { IParseResult, IXyoObjectSchema } from "../@types"
-import { XyoOnTheFlySerializable } from "./on-the-fly-serializable"
+import { readHeader } from './readHeader'
+import { sliceItem } from './sliceItem'
+import { IParseResult, IXyoObjectSchema } from '../@types'
+import { XyoOnTheFlySerializable } from './on-the-fly-serializable'
 
 export function parse(src: Buffer, schema: IXyoObjectSchema): IParseResult {
   const partialSchema = readHeader(src)
   const data = sliceItem(src, 0, partialSchema, true)
   const headerBytes = src.slice(0, 2 + partialSchema.sizeIdentifierSize!)
+
   if (partialSchema.iterableType === 'not-iterable') {
     return {
       data,

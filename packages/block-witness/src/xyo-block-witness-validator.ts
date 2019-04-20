@@ -1,25 +1,25 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 7th March 2019 12:00:54 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-block-witness-validator.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Tuesday, 12th March 2019 1:31:29 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { BN } from "@xyo-network/utils"
-import { XyoBase } from "@xyo-network/base"
-import { XyoError } from "@xyo-network/errors"
-import { IXyoSerializationService } from "@xyo-network/serialization"
-import { IXyoBlockTransfer } from "@xyo-network/questions"
-import { IXyoBoundWitness, XyoBoundWitnessValidator } from "@xyo-network/bound-witness"
+import { BN } from '@xyo-network/utils'
+import { XyoBase } from '@xyo-network/base'
+import { XyoError } from '@xyo-network/errors'
+import { IXyoSerializationService } from '@xyo-network/serialization'
+import { IXyoBoundWitness, XyoBoundWitnessValidator } from '@xyo-network/bound-witness'
 import { schema } from '@xyo-network/serialization-schema'
-import { XyoBridgeHashSet } from "@xyo-network/origin-chain"
-import { IXyoHashProvider } from "@xyo-network/hashing"
-import { IConsensusProvider } from "@xyo-network/consensus"
-import { IXyoContentAddressableService } from "@xyo-network/content-addressable-service"
+import { XyoBridgeHashSet } from '@xyo-network/origin-chain'
+import { IXyoHashProvider } from '@xyo-network/hashing'
+import { IConsensusProvider } from '@xyo-network/consensus'
+import { IXyoContentAddressableService } from '@xyo-network/content-addressable-service'
+import { IXyoBlockTransfer } from './@types'
 
 export class XyoBlockWitnessValidator extends XyoBase {
 
@@ -66,18 +66,18 @@ export class XyoBlockWitnessValidator extends XyoBase {
     responses: Buffer
   ) {
     const supportingData = await this.tryResolveSupportingData(supportingDataHash)
-    if (supportingData.length !== requests.length) throw new XyoError(`Corrupt Data`)
+    if (supportingData.length !== requests.length) throw new XyoError('Corrupt Data')
     const resolvedRequests = await Promise.all(requests.map((req) => {
       return this.contentService.get(req)
     }))
 
     const res = await Promise.all(resolvedRequests.map(async (req, index) => {
-      if (!req) throw new XyoError(`Could not resolve request`)
+      if (!req) throw new XyoError('Could not resolve request')
 
       const json = JSON.parse(req.toString())
-      if (json.type !== 'intersection') throw new XyoError(`Only intersection requests are supported`)
+      if (json.type !== 'intersection') throw new XyoError('Only intersection requests are supported')
       const supportingDataItem = supportingData[index]
-      if (!supportingDataItem.hash) throw new XyoError(`No hash provided in proof`)
+      if (!supportingDataItem.hash) throw new XyoError('No hash provided in proof')
       const resolvedIntersectionBytes = await this.contentService.get(supportingDataItem.hash)
       if (!resolvedIntersectionBytes) throw new XyoError(`Could not resolve hash ${supportingDataItem.hash}`)
 
@@ -162,19 +162,19 @@ export class XyoBlockWitnessValidator extends XyoBase {
             m.failed = true
             return m
           }
-        }, Promise.resolve({
+        },      Promise.resolve({
           failed: false,
           pks: [boundWitness.parties[0].keySet.keys[0], boundWitness.parties[1].keySet.keys[0]]
         })
       )
 
-      if (failed) throw new XyoError(`Could not validate transfers`)
+      if (failed) throw new XyoError('Could not validate transfers')
 
       return Buffer.alloc(1, 1)
     }))
 
     const myAnswer = Buffer.concat(res)
-    if (!myAnswer.equals(responses)) throw new XyoError(`Different answers`)
+    if (!myAnswer.equals(responses)) throw new XyoError('Different answers')
 
     return true
   }
@@ -182,10 +182,10 @@ export class XyoBlockWitnessValidator extends XyoBase {
   private async tryResolveSupportingData(supportingDataHash: string): Promise<any[]> {
     try {
       const res = await this.contentService.get(supportingDataHash)
-      if (!res) throw new XyoError(`Could not resolve supporting data hash`)
+      if (!res) throw new XyoError('Could not resolve supporting data hash')
       return JSON.parse(res.toString()) as any[]
     } catch (e) {
-      this.logError(`Could not resolve supporting data hash`, e)
+      this.logError('Could not resolve supporting data hash', e)
       throw e
     }
   }

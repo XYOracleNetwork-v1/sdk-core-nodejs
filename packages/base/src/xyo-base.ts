@@ -1,16 +1,16 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Friday, 21st September 2018 10:33:23 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-base.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 6th March 2019 4:29:22 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoLogger } from "@xyo-network/logger"
-import safeStringify from 'fast-safe-stringify'
+import { XyoLogger } from '@xyo-network/logger'
+import fastSafeStringify from 'fast-safe-stringify'
 
 /**
  * A general purpose base class that can be used to incorporate
@@ -29,13 +29,13 @@ export abstract class XyoBase {
   public static logger: XyoLogger
 
   public static stringify(value: any): string {
-    return safeStringify(value, (key, v) => {
+    return fastSafeStringify(value, (key: any, v: any) => {
       if (v === '[Circular]') {
         return
       }
 
       return v
-    }, 2)
+    },                       2)
   }
 
   public static unschedule() {
@@ -73,7 +73,7 @@ export abstract class XyoBase {
       delete this.timeoutIds[key]
       if (description) XyoBase.logger.info(`Scheduler resolved: ${description} after ${timeMs}ms`)
       fn()
-    }, timeMs)
+    },                  timeMs)
     aggregator[key] = t
     return () => {
       delete aggregator[key]

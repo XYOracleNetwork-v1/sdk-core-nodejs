@@ -1,6 +1,6 @@
 {
   "name": "xyo-core",
-  "version": "0.50.10",
+  "version": "0.2.1",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "index.js",
   "author": "XY Development Team",
@@ -10,23 +10,15 @@
     "build": "tsc -b packages",
     "release": "lerna publish",
     "test": "yarn build && export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose false --detectOpenHandles",
-    "tslint": "tslint -c tslint.json -p packages/tsconfig.json",
+    "lint": "tslint -c tslint.json -p packages/tsconfig.json",
     "clean": "node scripts/clean.js",
-    "start": "ts-node --project ./packages/app/tsconfig.json ./packages/app start",
-    "forever": "yarn --max-old-space-size=4096 --cwd packages/app forever",
-    "start:diviner": "ts-node --project ./packages/app/tsconfig.json ./packages/app start diviner",
-    "start:archivist": "ts-node --project ./packages/app/tsconfig.json ./packages/app start archivist",
-    "start:home": "ts-node --project ./packages/app/tsconfig.json ./packages/app start home",
-    "start:archivist-diviner": "ts-node --project ./packages/app/tsconfig.json  ./packages/app start archivist-diviner",
+    "license": "yarn license-checker --onlyAllow 'MIT;BSD-2-Clause;BSD-3-Clause;Apache-2.0;ISC;Unlicense;UNKNOWN;BSD*;CC0-1.0' --excludePackages 'colors@0.6.2'",
+    "start:bridge": "yarn --cwd ./packages/bridge-server start",
+    "stop:bridge": "yarn --cwd ./packages/bridge-server stop",
     "package:bridge": "rm -rf ./bridge-server.zip && zip -r -X bridge-server.zip .",
     "deploy:bridge": "scp ./bridge-server.zip pi@$IP:~/Documents && ssh pi@$IP \"rm -rf Documents/bridge-server && unzip Documents/bridge-server.zip -d Documents/bridge-server\"",
-    "stop": "ts-node --project ./packages/app/tsconfig.json ./packages/app stop",
-    "stop:diviner": "ts-node --project ./packages/app/tsconfig.json ./packages/app stop diviner",
-    "stop:archivist": "ts-node --project ./packages/app/tsconfig.json ./packages/app stop archivist",
-    "stop:archivist-diviner": "ts-node --project ./packages/app/tsconfig.json ./packages/app stop archivist-diviner",
     "create:package": "node scripts/create-package.js",
     "web3": "node --experimental-repl-await scripts/web3-repl.js",
-    "mock-data": "node packages/data-generator/dist/index.js --host=127.0.0.1 --user=admin --password=password --database=Xyo --port=3306",
     "manage:db": "node scripts/manage-xyo-db.js",
     "manage:db:logs": "docker logs -f --tail 100 XyoDb",
     "manage:ganache": "node scripts/manage-ganache.js",
@@ -38,12 +30,13 @@
     "manage:ipfs:logs": "docker logs -f --tail 100 ipfs_host"
   },
   "devDependencies": {
-    "@xyo-network/config-tslint": "^0.1.6",
+    "@xyo-network/config-tslint": "^0.1.12",
     "enquirer": "^2.3.0",
     "lerna": "^3.13.1",
+    "license-checker": "^25.0.1",
     "shelljs": "^0.8.3",
     "tslint": "^5.12.1",
-    "typescript": "^3.4.1"
+    "typescript": "^3.4.4"
   },
   "workspaces": [
     "packages/*"

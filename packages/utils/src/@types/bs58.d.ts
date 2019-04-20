@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 25th February 2019 12:46:48 pm
  * @Email:  developer@xyfindables.com
  * @Filename: bs58.d.ts
- * @Last modified by: ryanxyo
+ 
  * @Last modified time: Monday, 25th February 2019 12:49:23 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

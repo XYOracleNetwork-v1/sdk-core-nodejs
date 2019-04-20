@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 10th December 2018 1:47:35 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-party.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 6th March 2019 1:41:18 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

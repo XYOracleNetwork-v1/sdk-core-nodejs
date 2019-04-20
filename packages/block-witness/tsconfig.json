@@ -26,7 +26,6 @@
     { "path": "../errors" },
     { "path": "../base" },
     { "path": "../node-network" },
-    { "path": "../questions" },
     { "path": "../hashing" },
     { "path": "../bound-witness" },
     { "path": "../origin-chain" },

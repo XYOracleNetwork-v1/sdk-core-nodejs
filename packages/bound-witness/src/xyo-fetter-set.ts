@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 10th December 2018 11:18:52 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-fetter-set.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 12th December 2018 1:49:02 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company

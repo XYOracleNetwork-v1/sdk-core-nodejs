@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 21st November 2018 9:50:32 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-bound-witness-server-interaction.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Tuesday, 5th February 2019 2:37:22 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -44,7 +44,7 @@ export class XyoBoundWitnessClientInteraction extends XyoBase implements IXyoNod
    */
   public async run(networkPipe: IXyoNetworkPipe, didInit: boolean): Promise<IXyoBoundWitness> {
     if (!didInit) {
-      throw new Error("Server init can not be used in a client interaction!")
+      throw new Error('Server init can not be used in a client interaction!')
     }
 
     return new Promise(async (resolve, reject) => {
@@ -57,14 +57,14 @@ export class XyoBoundWitnessClientInteraction extends XyoBase implements IXyoNod
   }
 
   public async performInteraction(networkPipe: IXyoNetworkPipe) {
-    this.logInfo(`Starting bound witness`)
+    this.logInfo('Starting bound witness')
     let disconnected = false
       /**
        * Listener for if and when the peer disconnects
        */
     const unregister = networkPipe.onPeerDisconnect(() => {
       disconnected = true
-      this.logInfo(`Peer disconnected in xyo-bound-witness-interaction`)
+      this.logInfo('Peer disconnected in xyo-bound-witness-interaction')
     })
 
     const keySet = new XyoKeySet(this.signers.map(s => s.publicKey))
@@ -83,7 +83,7 @@ export class XyoBoundWitnessClientInteraction extends XyoBase implements IXyoNod
 
     // at this point the bound witness data has been collected so we get the signing data
     const signingData = Buffer.concat(aggregator)
-    this.logInfo(`Signing Data`, signingData.toString('hex'))
+    this.logInfo('Signing Data', signingData.toString('hex'))
 
     const signatures = await Promise.all(this.signers.map((signer) => {
       return signer.signData(signingData)
@@ -116,15 +116,7 @@ export class XyoBoundWitnessClientInteraction extends XyoBase implements IXyoNod
       return new InnerBoundWitness(fragmentParts, signingData)
     }
 
-    throw new XyoError(`Peer disconnected in xyo-bound-witness-interaction`, XyoErrors.CRITICAL)
-  }
-
-  private getChoiceAndResponse (message: Buffer) {
-    const sizeOfCat = message.readUInt8(0)
-    const response = message.slice(1 + sizeOfCat, message.length)
-    const cat = message.buffer.slice(1, sizeOfCat + 1)
-
-    return { cat, response }
+    throw new XyoError('Peer disconnected in xyo-bound-witness-interaction', XyoErrors.CRITICAL)
   }
 
   private async sendMessage(networkPipe: IXyoNetworkPipe, bytesToSend: Buffer): Promise<Buffer> {
@@ -132,11 +124,11 @@ export class XyoBoundWitnessClientInteraction extends XyoBase implements IXyoNod
       let response: Buffer | undefined
       response = await networkPipe.send(bytesToSend)
       if (!response) {
-        throw new XyoError(`Unexpected undefined response in bound witness interaction`, XyoErrors.CRITICAL)
+        throw new XyoError('Unexpected undefined response in bound witness interaction', XyoErrors.CRITICAL)
       }
       return response
     } catch (err) {
-      this.logError(`Failed BoundWitnessTransfer on step 1`, err)
+      this.logError('Failed BoundWitnessTransfer on step 1', err)
       throw err
     }
   }

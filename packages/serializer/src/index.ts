@@ -1,9 +1,8 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Monday, 17th December 2018 11:15:22 am
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- * @Last modified by: ryanxyo
  * @Last modified time: Wednesday, 13th March 2019 2:55:16 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -36,7 +35,7 @@ import { IXyoSerializationService, XyoSerializationService } from '@xyo-network/
 import { schema } from '@xyo-network/serialization-schema'
 import { rssiSerializationProvider, XyoUnixTime, latitudeSerializationProvider, longitudeSerializationProvider, XyoGps, XyoJSONBlob } from '@xyo-network/heuristics-common'
 
-function createSerializer(): IXyoSerializationService {
+function  createSerializer(): IXyoSerializationService {
   const serializationService = new XyoSerializationService(schema)
 
   serializationService.addDeserializer(XyoEcdsaSignature.deserializer)

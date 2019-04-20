@@ -1,17 +1,17 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Friday, 7th December 2018 12:11:28 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-next-public-key.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 23rd January 2019 12:38:37 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, IXyoSerializableObject } from "@xyo-network/serialization"
+import { XyoBaseSerializable, IXyoDeserializer, IXyoSerializationService, IXyoSerializableObject } from '@xyo-network/serialization'
 import { schema } from '@xyo-network/serialization-schema'
-import { IXyoPublicKey } from "@xyo-network/signing"
+import { IXyoPublicKey } from '@xyo-network/signing'
 
 export class XyoNextPublicKey extends XyoBaseSerializable {
 

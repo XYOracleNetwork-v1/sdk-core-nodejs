@@ -20,10 +20,10 @@ export class XyoCryptoProvider extends XyoBase implements IXyoCryptoProvider {
     password: string,
     salt: string,
     verifyText: string,
-    cypherText: string,
+    cypherData: string,
   ): boolean {
     const { encrypted } = this._encrypt(password, verifyText, salt)
-    return encrypted === cypherText
+    return encrypted === cypherData
   }
 
   public decrypt(password: string, cypherText: string, salt: string): string {

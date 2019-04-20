@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 20th November 2018 11:29:03 am
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-simple-peer-connection-delegate.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Friday, 7th December 2018 11:44:25 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -41,7 +41,7 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
 
       if (serversChoices.length !== 1) {
         // this is thrown when the server chooses more than one item
-        throw Error("Invalid choice!")
+        throw Error('Invalid choice!')
       }
 
       pipe.initiationData = response
@@ -50,7 +50,7 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
       return { pipe, serversChoice }
     }
 
-    throw Error("No response!")
+    throw Error('No response!')
   }
 
   public async handlePeerConnection(networkPipe: IXyoNetworkPipe) {
@@ -63,6 +63,7 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
         networkPipe,
         undefined,
         clientCatalogueItems,
+        // this is false
         initiationData === undefined
       )
     }
@@ -73,6 +74,7 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
       pipe,
       serversChoice,
       undefined,
+      // this is true
       initiationData === undefined
       )
   }
@@ -118,30 +120,9 @@ export class XyoSimplePeerConnectionDelegate extends XyoBase implements IXyoPeer
   private getChoiceAndResponse(message: Buffer) {
     const sizeOfCat = message.readUInt8(0)
     const response = message.slice(1 + sizeOfCat, message.length)
-    const cat = message.slice(1, sizeOfCat)
+    const cat = message.slice(1, sizeOfCat + 1)
     const serversChoices = bufferToCatalogueItems(cat)
 
     return { serversChoices, response }
   }
-
-  // // todo find a better way of getting the enum from a number
-  // private getEnumFromValue (value: number): CatalogueItem {
-  //   console.log(value)
-  //   const allEnums = [
-  //     CatalogueItem.BOUND_WITNESS,
-  //     CatalogueItem.TAKE_ORIGIN_CHAIN,
-  //     CatalogueItem.GIVE_ORIGIN_CHAIN,
-  //     CatalogueItem.TAKE_REQUESTED_BLOCKS,
-  //     CatalogueItem.GIVE_REQUESTED_BLOCKS]
-
-  //   let i = 0
-  //   for (const index of allEnums) {
-  //     if (index === value) {
-  //       return allEnums[i]
-  //     }
-  //     i++
-  //   }
-
-  //   throw Error(`Invalid Catalogue Item: ${value}`)
-  // }
 }

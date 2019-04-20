@@ -1,22 +1,22 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 20th November 2018 3:24:51 pm
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Thursday, 13th December 2018 10:45:58 am
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
  */
 
-import { XyoRsaShaSignerProvider } from "./xyo-rsa-sha-signer-provider"
+import { XyoRsaShaSignerProvider } from './xyo-rsa-sha-signer-provider'
 import { XyoError, XyoErrors } from '@xyo-network/errors'
 import { schema } from '@xyo-network/serialization-schema'
-import { IXyoDeserializer, IXyoSerializationService } from "@xyo-network/serialization"
-import { XyoRsaSignature } from "./rsa-signature"
-import { XyoRsaShaSigner } from "./xyo-rsa-sha-signer"
+import { IXyoDeserializer, IXyoSerializationService } from '@xyo-network/serialization'
+import { XyoRsaSignature } from './rsa-signature'
+import { XyoRsaShaSigner } from './xyo-rsa-sha-signer'
 
-export { XyoRsaShaSigner } from "./xyo-rsa-sha-signer"
+export { XyoRsaShaSigner } from './xyo-rsa-sha-signer'
 
 /** The types of signing algorithm supported */
 type SignerProviderType = (
@@ -42,7 +42,7 @@ export function getSignerProvider(signerProviderType: SignerProviderType): XyoRs
   let signerProvider: XyoRsaShaSignerProvider
   switch (signerProviderType) {
     case 'rsa-sha256':
-      signerProvider = new XyoRsaShaSignerProvider("pkcs1-sha256", schema.rsaWithSha256Signature.id)
+      signerProvider = new XyoRsaShaSignerProvider('pkcs1-sha256', schema.rsaWithSha256Signature.id)
       break
     default:
       throw new XyoError(`Could not resolve signer provider type ${signerProviderType}`, XyoErrors.INVALID_PARAMETERS)

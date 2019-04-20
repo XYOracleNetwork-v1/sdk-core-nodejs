@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Wednesday, 28th November 2018 4:57:09 pm
  * @Email:  developer@xyfindables.com
  * @Filename: getNumberOfBytesRequiredForSizeBuffer.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 6th March 2019 4:42:51 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -39,7 +39,7 @@ export function getNumberOfBytesRequiredForSizeBuffer(
             return { numberToEncode: 3, bytesRequired: 8 }
         }
       default:
-        throw new XyoError(`This should never happen exception`)
+        throw new XyoError('This should never happen exception')
     }
   })()
 

@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Thursday, 6th September 2018 12:49:41 pm
  * @Email:  developer@xyfindables.com
  * @Filename: xyo-tcp-network.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 6th March 2019 3:02:54 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -84,7 +84,7 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
     }
 
     const onConnectionError = (err: Error) => {
-      this.logInfo(`An error occurred on an open TCP connection`, err)
+      this.logInfo('An error occurred on an open TCP connection', err)
       this.connection = undefined
     }
 
@@ -135,7 +135,7 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
         this.logInfo(`Server Connection made with ${c.remoteAddress || 'unknown ip'}`)
 
         if (this.connection) { // Prevents multiple connections
-          this.logInfo(`Connection already exists, will close incoming connection`)
+          this.logInfo('Connection already exists, will close incoming connection')
           c.end()
           return
         }
@@ -151,7 +151,7 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
 
         // tslint:disable-next-line:ter-prefer-arrow-callback
         const onError = (err: Error) => {
-          this.logError(`An error error getting a connection`, err)
+          this.logError('An error error getting a connection', err)
           this.cancelDisconnect()
           this.connection = undefined
         }
@@ -219,9 +219,9 @@ export class XyoServerTcpNetwork extends XyoBase implements IXyoNetworkProvider 
   private scheduleDisconnect(c: net.Socket) {
     this.cancelDisconnect()
     this.disconnectTimeout = XyoBase.timeout(() => {
-      this.logInfo(`Connection timed out while negotiating`)
+      this.logInfo('Connection timed out while negotiating')
       this.connection = undefined
       c.end()
-    }, 3000)
+    },                                       3000)
   }
 }

@@ -1,9 +1,9 @@
 /*
- * @Author: XY | The Findables Company <ryanxyo>
+ * @Author: XY | The Findables Company <xyo-network>
  * @Date:   Tuesday, 20th November 2018 10:18:42 am
  * @Email:  developer@xyfindables.com
  * @Filename: index.ts
- * @Last modified by: ryanxyo
+
  * @Last modified time: Wednesday, 13th February 2019 1:28:15 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -40,11 +40,7 @@ export const CATALOGUE_SIZE_OF_PAYLOAD_BYTES = 4
  */
 
 export function bufferToCatalogueItems(buffer: Buffer): CatalogueItem[] {
-  if (buffer.length < 4) {
-    return []
-  }
-
-  const values = buffer.readUInt32BE(0)
+  const values = readNumberFromBufferCatalogue(buffer)
 
   return [
     (CatalogueItem.BOUND_WITNESS & values) > 0 ? CatalogueItem.BOUND_WITNESS : null,
@@ -52,6 +48,34 @@ export function bufferToCatalogueItems(buffer: Buffer): CatalogueItem[] {
     (CatalogueItem.GIVE_ORIGIN_CHAIN & values) > 0 ? CatalogueItem.GIVE_ORIGIN_CHAIN : null
   ]
   .filter(catalogueItem => catalogueItem !== null) as CatalogueItem[]
+}
+
+export function flipChoice(choice: CatalogueItem): CatalogueItem {
+  if (CatalogueItem.GIVE_ORIGIN_CHAIN === choice) {
+    return CatalogueItem.TAKE_ORIGIN_CHAIN
+  }
+
+  if (CatalogueItem.TAKE_ORIGIN_CHAIN === choice) {
+    return CatalogueItem.GIVE_ORIGIN_CHAIN
+  }
+
+  return choice
+}
+
+const readNumberFromBufferCatalogue = (buffer: Buffer): number => {
+  if (buffer.length === 4) {
+    return buffer.readUInt32BE(0)
+  }
+
+  if (buffer.length === 2) {
+    return buffer.readUInt16BE(0)
+  }
+
+  if (buffer.length === 1) {
+    return buffer.readUInt8(0)
+  }
+
+  return 0
 }
 
 /** Returns a number, which is feature-mask representing CatalogueItems */
