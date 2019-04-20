@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/crypto",
-  "version": "0.55.9-alpha.0",
+  "version": "0.60.1",
   "description": "Cryptographic functionality including ciphering and deciphering",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
