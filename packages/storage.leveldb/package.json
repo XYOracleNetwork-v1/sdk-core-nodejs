@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/storage.leveldb",
-  "version": "0.55.9-alpha.0",
+  "version": "0.60.2",
   "description": "Implements the storage provider interface using the LevelDB",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
