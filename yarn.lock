@@ -1098,7 +1098,7 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/bn.js@*", "@types/bn.js@^4.11.3", "@types/bn.js@^4.11.4":
+"@types/bn.js@*", "@types/bn.js@^4.11.4":
   version "4.11.5"
   resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-4.11.5.tgz#40e36197433f78f807524ec623afcf0169ac81dc"
   integrity sha512-AEAZcIZga0JgVMHNtl1CprA/hXX7/wPt79AgR4XqaDt7jyj3QWYw6LPoOiznPtugDmlubUnAahMs2PFxGcQrng==
@@ -1359,6 +1359,17 @@
     "@xyo-network/signing" "^0.55.9-alpha.0"
     "@xyo-network/signing.ecdsa" "^0.55.9-alpha.0"
     "@xyo-network/signing.rsa" "^0.55.9-alpha.0"
+
+"@xyo-network/utils@^0.55.9-alpha.0":
+  version "0.55.9-alpha.0"
+  resolved "https://registry.yarnpkg.com/@xyo-network/utils/-/utils-0.55.9-alpha.0.tgz#716d4700200de2bf0f91c85413a8b84f5fa271bb"
+  integrity sha512-A13ltvQK5OMtM8nlM14krJtsu9yB6Xh/ML8KjDUX0wW8ceR1ULNaxK3nxpjuttYq7GkJGDYh9tOkWh5bvm14+Q==
+  dependencies:
+    "@xyo-network/base" "^0.55.9-alpha.0"
+    "@xyo-network/errors" "^0.55.9-alpha.0"
+    "@xyo-network/meta-list" "^0.55.9-alpha.0"
+    bn.js "^4.11.8"
+    bs58 "^4.0.1"
 
 JSONStream@^1.0.4, JSONStream@^1.3.4:
   version "1.3.5"

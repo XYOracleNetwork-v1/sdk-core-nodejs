@@ -25,7 +25,6 @@
     {"path": "../base"},
     {"path": "../web3-service"},
     {"path": "../errors"},
-    {"path": "../utils"},
     {"path": "../ipfs-client"}
   ]
 }

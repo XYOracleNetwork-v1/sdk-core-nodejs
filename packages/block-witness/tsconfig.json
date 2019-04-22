@@ -22,7 +22,6 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    { "path": "../utils" },
     { "path": "../errors" },
     { "path": "../base" },
     { "path": "../node-network" },

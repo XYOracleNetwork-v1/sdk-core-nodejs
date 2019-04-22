@@ -22,7 +22,6 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    {"path": "../utils"},
     {"path": "../base"},
     {"path": "../hashing"},
     {"path": "../errors"},

@@ -25,6 +25,5 @@
     {"path": "../base"},
     {"path": "../content-addressable-service"},
     {"path": "../errors"},
-    {"path": "../utils"}
   ]
 }

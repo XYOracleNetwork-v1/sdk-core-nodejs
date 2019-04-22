@@ -114,9 +114,6 @@
       "path": "transaction-pool"
     },
     {
-      "path": "utils"
-    },
-    {
       "path": "consensus"
     },
     {
@@ -165,7 +162,6 @@
     "attribution-request/src/**/*.ts",
     "attribution-request.node-network/src/**/*.ts",
     "transaction-pool/src/**/*.ts",
-    "utils/src/**/*.ts",
     "app/src/**/*.ts",
     "consensus/src/**/*.ts",
     "block-witness/src/**/*.ts",

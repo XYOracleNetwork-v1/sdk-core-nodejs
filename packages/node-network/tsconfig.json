@@ -30,7 +30,6 @@
     {"path": "../origin-block-repository"},
     {"path": "../peer-interaction"},
     {"path": "../transaction-pool"},
-    {"path": "../utils"},
     {"path": "../errors"},
     {"path": "../consensus"},
     {"path": "../base"}

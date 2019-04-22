@@ -30,7 +30,6 @@
     { "path": "../origin-block-repository"},
     { "path": "../errors"},
     { "path": "../origin-chain"},
-    { "path": "../utils"},
     { "path": "../content-addressable-service"},
   ]
 }
