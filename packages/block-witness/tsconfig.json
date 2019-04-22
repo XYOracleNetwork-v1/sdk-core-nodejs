@@ -29,11 +29,8 @@
     { "path": "../hashing" },
     { "path": "../bound-witness" },
     { "path": "../origin-chain" },
-    { "path": "../serializer" },
     { "path": "../signing" },
     { "path": "../signing.ecdsa" },
-    { "path": "../serialization" },
-    { "path": "../serialization-schema" },
     { "path": "../content-addressable-service" },
     { "path": "../storage" },
     { "path": "../consensus" }

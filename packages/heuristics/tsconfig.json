@@ -22,8 +22,6 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    { "path": "../serialization"},
     { "path": "../errors"},
-    { "path": "../buffer-utils"}
   ]
 }

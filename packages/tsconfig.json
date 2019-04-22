@@ -27,9 +27,6 @@
       "path": "bound-witness"
     },
     {
-      "path": "buffer-utils"
-    },
-    {
       "path": "diviner-archivist-client"
     },
     {
@@ -75,9 +72,6 @@
       "path": "origin-chain"
     },
     {
-      "path": "p2p"
-    },
-    {
       "path": "peer-connections"
     },
     {
@@ -91,15 +85,6 @@
     },
     {
       "path": "peer-interaction-router"
-    },
-    {
-      "path": "serialization"
-    },
-    {
-      "path": "serialization-schema"
-    },
-    {
-      "path": "serializer"
     },
     {
       "path": "signing"
@@ -150,7 +135,6 @@
     "archivist-repository-sql/src/**/*.ts",
     "base/src/**/*.ts",
     "bound-witness/src/**/*.ts",
-    "buffer-utils/src/**/*.ts",
     "diviner-archivist-client/src/**/*.ts",
     "diviner-archivist-client.graphql/src/**/*.ts",
     "diviner-graphql-api/src/**/*.ts",
@@ -167,15 +151,11 @@
     "node-network/src/**/*.ts",
     "origin-block-repository/src/**/*.ts",
     "origin-chain/src/**/*.ts",
-    "p2p/src/**/*.ts",
     "peer-connections/src/**/*.ts",
     "peer-discovery/src/**/*.ts",
     "peer-interaction/src/**/*.ts",
     "peer-interaction-handlers/src/**/*.ts",
     "peer-interaction-router/src/**/*.ts",
-    "serialization/src/**/*.ts",
-    "serialization-schema/src/**/*.ts",
-    "serializer/src/**/*.ts",
     "signing/src/**/*.ts",
     "signing.ecdsa/src/**/*.ts",
     "signing.rsa/src/**/*.ts",

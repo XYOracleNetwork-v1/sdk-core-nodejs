@@ -24,11 +24,8 @@
   "references": [
     { "path": "../base"},
     { "path": "../bound-witness"},
-    { "path": "../buffer-utils"},
     { "path": "../errors"},
     { "path": "../hashing"},
-    { "path": "../serialization"},
-    { "path": "../serialization-schema"},
     { "path": "../signing"},
     { "path": "../storage"}
   ]

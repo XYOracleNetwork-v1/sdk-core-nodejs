@@ -23,7 +23,6 @@
   "include": ["src/**/*"],
   "references": [
     { "path": "../logger"},
-    { "path": "../buffer-utils"},
     { "path": "../errors"},
     { "path": "../base"},
     { "path": "../network"}

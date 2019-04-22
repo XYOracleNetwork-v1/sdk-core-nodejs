@@ -27,6 +27,5 @@
     {"path": "../hashing"},
     {"path": "../errors"},
     {"path": "../storage"},
-    {"path": "../serialization"},
   ]
 }

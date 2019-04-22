@@ -25,7 +25,6 @@
     {"path": "../base"},
     {"path": "../errors"},
     {"path": "../utils"},
-    {"path": "../serialization"},
     {"path": "../content-addressable-service"}
   ]
 }

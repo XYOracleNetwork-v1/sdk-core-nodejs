@@ -1098,7 +1098,7 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/bn.js@*", "@types/bn.js@^4.11.2", "@types/bn.js@^4.11.3", "@types/bn.js@^4.11.4":
+"@types/bn.js@*", "@types/bn.js@^4.11.3", "@types/bn.js@^4.11.4":
   version "4.11.5"
   resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-4.11.5.tgz#40e36197433f78f807524ec623afcf0169ac81dc"
   integrity sha512-AEAZcIZga0JgVMHNtl1CprA/hXX7/wPt79AgR4XqaDt7jyj3QWYw6LPoOiznPtugDmlubUnAahMs2PFxGcQrng==
@@ -1302,6 +1302,15 @@
   resolved "https://registry.yarnpkg.com/@types/zen-observable/-/zen-observable-0.8.0.tgz#8b63ab7f1aa5321248aad5ac890a485656dcea4d"
   integrity sha512-te5lMAWii1uEJ4FwLjzdlbw3+n0FZNOvFXHxQDKeT0dilh7HOzdMzV2TrJVUzq8ep7J4Na8OUYPRLSQkJHAlrg==
 
+"@xyo-network/buffer-utils@^0.55.9-alpha.0":
+  version "0.55.9-alpha.0"
+  resolved "https://registry.yarnpkg.com/@xyo-network/buffer-utils/-/buffer-utils-0.55.9-alpha.0.tgz#95e39038e5cf78754952c4b6e9428f6f4b0283d0"
+  integrity sha512-bXy1OAsrC/bZLs1R6Kpje/uNRDKcmmm9YGJS4P/ancnJflt1pgu9NhBkCRAiqMgRWpRG+Mwc3jJWvDUYq9YIBg==
+  dependencies:
+    "@xyo-network/errors" "^0.55.9-alpha.0"
+    "@xyo-network/utils" "^0.55.9-alpha.0"
+    bn.js "^4.11.8"
+
 "@xyo-network/config-tslint@^0.1.12":
   version "0.1.12"
   resolved "https://registry.yarnpkg.com/@xyo-network/config-tslint/-/config-tslint-0.1.12.tgz#537bf8dfeafafcca81e328615117062f79e78a03"
@@ -1310,6 +1319,46 @@
     tslint-config-airbnb "^5.11.0"
     tslint-react "^3.6.0"
     tsutils "^3.5.0"
+
+"@xyo-network/p2p@^0.55.9-alpha.0":
+  version "0.55.9-alpha.0"
+  resolved "https://registry.yarnpkg.com/@xyo-network/p2p/-/p2p-0.55.9-alpha.0.tgz#92a824c5838d3cd621944c6cc46fba442698f7cd"
+  integrity sha512-RHeRBO839VXzhwgoj51rgM9/uPq+smg8E9LS4+fJMdacw5LU9ykOI9KEKbUSEz7Vb0BX7Zplp/X3npJ0kDzSJw==
+  dependencies:
+    "@xyo-network/base" "^0.55.9-alpha.0"
+    "@xyo-network/utils" "^0.55.9-alpha.0"
+    multiaddr "^6.0.3"
+
+"@xyo-network/serialization-schema@^0.55.9-alpha.0":
+  version "0.55.9-alpha.0"
+  resolved "https://registry.yarnpkg.com/@xyo-network/serialization-schema/-/serialization-schema-0.55.9-alpha.0.tgz#45a93f67a572ab7cec3a6ea6be9841c6a3deb5c2"
+  integrity sha512-rKoiK4NMWcKTTIr4GHIWeh05hMva0x9QAJceKiQaysS6rIWVdodK7bWmq0t7/oSC51N9JHzJ7BH//YeyVOiYDQ==
+  dependencies:
+    "@xyo-network/serialization" "^0.55.9-alpha.0"
+
+"@xyo-network/serialization@^0.55.9-alpha.0":
+  version "0.55.9-alpha.0"
+  resolved "https://registry.yarnpkg.com/@xyo-network/serialization/-/serialization-0.55.9-alpha.0.tgz#8f26ba567baa93a73ca0098a19669a7398aa8f58"
+  integrity sha512-FmZTmvG3tuwajvTuDAbfoC9FSMyzar8wm/2kvPvCsV80rXcqNhBrT2R2JudWC2gKuNMls7xPEIc1A1U9fpB7yA==
+  dependencies:
+    "@xyo-network/base" "^0.55.9-alpha.0"
+    "@xyo-network/errors" "^0.55.9-alpha.0"
+    bn.js "^4.11.8"
+
+"@xyo-network/serializer@^0.55.9-alpha.0":
+  version "0.55.9-alpha.0"
+  resolved "https://registry.yarnpkg.com/@xyo-network/serializer/-/serializer-0.55.9-alpha.0.tgz#d59a29aa247d960fce513eadd3af61606687e3d9"
+  integrity sha512-9AJsLqLcaxDMTouxT6ySeny93H5CybFx8PRP7BCLjFqRs0dcGC/sxVB9i2EHPZLAbSUdo5euN9yGL97Op+maEw==
+  dependencies:
+    "@xyo-network/bound-witness" "^0.55.9-alpha.0"
+    "@xyo-network/hashing" "^0.55.9-alpha.0"
+    "@xyo-network/heuristics-common" "^0.55.9-alpha.0"
+    "@xyo-network/origin-chain" "^0.55.9-alpha.0"
+    "@xyo-network/serialization" "^0.55.9-alpha.0"
+    "@xyo-network/serialization-schema" "^0.55.9-alpha.0"
+    "@xyo-network/signing" "^0.55.9-alpha.0"
+    "@xyo-network/signing.ecdsa" "^0.55.9-alpha.0"
+    "@xyo-network/signing.rsa" "^0.55.9-alpha.0"
 
 JSONStream@^1.0.4, JSONStream@^1.3.4:
   version "1.3.5"
