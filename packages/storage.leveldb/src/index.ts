@@ -24,6 +24,7 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
 
   constructor (levelDbDirectory: string) {
     this.levelDbDirectory = levelDbDirectory
+    this.db = levelup(leveldown(this.levelDbDirectory))
   }
 
   public async restore () {
@@ -48,7 +49,7 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
           return resolve()
         })
       } else {
-        return reject('no db')
+        return reject('write: no db')
       }
 
     }) as Promise<undefined>
@@ -65,7 +66,7 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
           return resolve(value as Buffer)
         })
       } else {
-        return reject('no db')
+        return reject('read: no db')
       }
     }) as Promise<Buffer | undefined>
   }
@@ -82,7 +83,7 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
           return resolve(keys)
         })
       } else {
-        return reject('no db')
+        return reject('getAllKeys: no db')
       }
 
     }) as Promise<Buffer[]>
@@ -99,7 +100,7 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
           return resolve(undefined)
         })
       } else {
-        return reject('no db')
+        return reject('delete: no db')
       }
 
     }) as Promise<void>
@@ -170,7 +171,7 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
           }
         })
       } else {
-        reject('no db')
+        reject('iterate: no db')
       }
     }) as Promise<IXyoStorageIterationResult>
   }
