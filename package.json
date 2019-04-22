@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "tsc -b packages",
+    "build": "tsc -b",
     "release": "lerna publish",
     "test": "yarn build && export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose false --detectOpenHandles",
     "lint": "tslint -c tslint.json -p packages/tsconfig.json",
