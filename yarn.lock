@@ -716,6 +716,11 @@
     universal-user-agent "^2.0.0"
     url-template "^2.0.8"
 
+"@types/node@11.13.6":
+  version "11.13.6"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.13.6.tgz#37ec75690830acb0d74ce3c6c43caab787081e85"
+  integrity sha512-Xoo/EBzEe8HxTSwaZNLZjaW6M6tA/+GmD3/DZ6uo8qSaolE/9Oarko0oV1fVfrLqOz0tx0nXJB4rdD5c+vixLw==
+
 "@xyo-network/config-tslint@^0.1.12":
   version "0.1.12"
   resolved "https://registry.yarnpkg.com/@xyo-network/config-tslint/-/config-tslint-0.1.12.tgz#537bf8dfeafafcca81e328615117062f79e78a03"
