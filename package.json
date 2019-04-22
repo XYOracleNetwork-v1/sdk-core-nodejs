@@ -22,5 +22,7 @@
     "tslint": "^5.12.1",
     "typescript": "^3.4.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@xyo-network/object-model": "^0.4.0"
+  }
 }
