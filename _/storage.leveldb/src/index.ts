@@ -24,6 +24,7 @@ export class XyoLevelDbStorageProvider implements IXyoIterableStorageProvider {
 
   constructor (levelDbDirectory: string) {
     this.levelDbDirectory = levelDbDirectory
+    this.db = levelup(leveldown(this.levelDbDirectory))
   }
 
   public async restore () {

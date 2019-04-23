@@ -14,16 +14,26 @@
     "license": "yarn license-checker --onlyAllow 'MIT;BSD-2-Clause;BSD-3-Clause;Apache-2.0;ISC;Unlicense;UNKNOWN;BSD*;CC0-1.0' --excludePackages 'colors@0.6.2'"
   },
   "devDependencies": {
+    "@types/node": "11.13.6",
     "@xyo-network/config-tslint": "^0.1.12",
     "enquirer": "^2.3.0",
     "lerna": "^3.13.1",
     "license-checker": "^25.0.1",
     "shelljs": "^0.8.3",
-    "@types/node": "11.13.6",
     "tslint": "^5.12.1",
-    "typescript": "^3.4.4"
+    "ts-jest": "^24.0.0",
+    "typescript": "^3.4.4",
+    "jest": "^24.7.1",
+    "@types/jest": "^24.0.11"
   },
   "dependencies": {
-    "@xyo-network/object-model": "^0.4.0"
+    "@xyo-network/object-model": "^0.4.0",
+    "elliptic": "^6.4.1"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/_/",
+      "/src/"
+    ]
   }
 }

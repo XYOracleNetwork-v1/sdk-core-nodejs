@@ -3,7 +3,7 @@
  * @Date:   Tuesday, 20th November 2018 2:06:46 pm
  * @Email:  developer@xyfindables.com
  * @Filename: elliptic.d.ts
- 
+
  * @Last modified time: Tuesday, 20th November 2018 2:06:50 pm
  * @License: All Rights Reserved
  * @Copyright: Copyright XY | The Findables Company
@@ -25,40 +25,39 @@ declare module 'elliptic' {
     | 'p521'
     | 'curve25519'
     | 'ed25519'
-  ;
 
   class EllipticPoint {
-    toBuffer(): Buffer
+    public toBuffer(): Buffer
   }
 
   class EllipticPublicKey {
-    x: EllipticPoint;
-    y: EllipticPoint
+    public x: EllipticPoint
+    public y: EllipticPoint
   }
 
   class EllipticSignature {
-    r: BN;
-    s: BN;
+    public r: BN
+    public s: BN
   }
 
   class BN {
-    toBuffer(): Buffer;
+    public toBuffer(): Buffer
   }
 
   class EllipticKey {
-    sign(message: Array<any> | Buffer | string): EllipticSignature;
-    getPublic(): EllipticPublicKey;
-    getPublic(encoding: string): string;
-    getPrivate(encoding: string): string;
-    _importPublic(publicKey: EllipticPublicKey): void;
-    verify(message: Buffer, signature: Uint8Array): Promise<boolean>;
+    public sign(message: any[] | Buffer | string): EllipticSignature
+    public getPublic(): EllipticPublicKey
+    public getPublic(encoding: string): string
+    public getPrivate(encoding: string): string
+    public _importPublic(publicKey: EllipticPublicKey): void
+    public verify(message: Buffer, signature: Uint8Array): Promise<boolean>
   }
 
   class EllipticCurve {
     constructor(preset: CurvePreset);
-    genKeyPair(): EllipticKey;
-    keyFromPublic(publicKey: string, type: 'hex'): EllipticKey;
-    keyFromPrivate(privateKey: string, type: 'hex'): EllipticKey;
+    public genKeyPair(): EllipticKey
+    public keyFromPublic(publicKey: string, type: 'hex'): EllipticKey
+    public keyFromPrivate(privateKey: string, type: 'hex'): EllipticKey
   }
 
   export {

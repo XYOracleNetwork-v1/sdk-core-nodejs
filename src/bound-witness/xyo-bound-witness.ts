@@ -1,6 +1,7 @@
 import { XyoIterableStructure, XyoStructure } from '@xyo-network/object-model'
 import { XyoObjectSchema } from '../schema'
 import { IXyoHasher } from '../hashing/xyo-hasher'
+import { IXyoSigner } from '../signing/xyo-signer'
 
 export class XyoBoundWitness extends XyoIterableStructure {
 
@@ -21,6 +22,10 @@ export class XyoBoundWitness extends XyoIterableStructure {
 
   public getHash (hasher: IXyoHasher): XyoStructure {
     return hasher.hash(this.getSigningData())
+  }
+
+  public sign (signer: IXyoSigner): XyoStructure {
+    return signer.sign(this.getSigningData())
   }
 
   public getSigningData (): Buffer {

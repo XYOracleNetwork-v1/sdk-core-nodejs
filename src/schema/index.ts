@@ -34,4 +34,6 @@ export class XyoObjectSchema {
   public static LAT = new XyoSchema(28, 0x80)
   public static LNG = new XyoSchema(29, 0x80)
   public static BLE_POWER_LEVEL = new XyoSchema(30, 0x80)
+
+  public static EC_PRIVATE_KEY = new XyoSchema(0xff, 0x80)
 }
