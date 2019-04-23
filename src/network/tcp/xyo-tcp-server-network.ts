@@ -17,6 +17,12 @@ export class XyoServerTcpNetwork {
     let currentSize = 0
     let currentBuffer = Buffer.alloc(0)
 
+    const cleanup = () => {
+      socket.removeAllListeners('data')
+      socket.removeAllListeners('close')
+      socket.removeAllListeners('end')
+    }
+
     socket.on('data', (data: Buffer) => {
       currentSize += data.length
       currentBuffer = Buffer.concat([currentBuffer, data])
@@ -27,8 +33,12 @@ export class XyoServerTcpNetwork {
 
       if (currentSize >= waitSize) {
         this.onInternalPipeCreated(socket, currentBuffer.slice(4))
+        cleanup()
       }
     })
+
+    socket.on('close', cleanup)
+    socket.on('end', cleanup)
   }
 
   private onInternalPipeCreated (socket: net.Socket, data: Buffer) {

@@ -39,6 +39,7 @@ export class XyoTcpPipe implements IXyoNetworkPipe {
         if (!hasResumed) {
           hasResumed = true
           this.socket.end()
+          this.socket.removeAllListeners()
           reject('timeout')
         }
       }
@@ -53,6 +54,7 @@ export class XyoTcpPipe implements IXyoNetworkPipe {
 
         if (currentSize >= waitSize && !hasResumed) {
           hasResumed = true
+          this.socket.removeAllListeners()
           resolve(currentBuffer)
         }
       })
@@ -60,6 +62,7 @@ export class XyoTcpPipe implements IXyoNetworkPipe {
       this.socket.on('close', () => {
         if (!hasResumed) {
           hasResumed = true
+          this.socket.removeAllListeners()
           reject('Socket closed while waiting for write')
         }
       })
