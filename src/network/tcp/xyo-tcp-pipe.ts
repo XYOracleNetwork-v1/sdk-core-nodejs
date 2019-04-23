@@ -30,9 +30,18 @@ export class XyoTcpPipe implements IXyoNetworkPipe {
 
   private waitForMessage (): Promise<Buffer> {
     return new Promise((resolve, reject) => {
+      let hasResumed = false
       let waitSize: number
       let currentSize = 0
       let currentBuffer = Buffer.alloc(0)
+
+      const onTimeout = () => {
+        if (!hasResumed) {
+          hasResumed = true
+          this.socket.end()
+          reject('timeout')
+        }
+      }
 
       this.socket.on('data', (data: Buffer) => {
         currentSize += data.length
@@ -42,14 +51,20 @@ export class XyoTcpPipe implements IXyoNetworkPipe {
           waitSize = currentBuffer.readUInt32BE(0)
         }
 
-        if (currentSize >= waitSize) {
+        if (currentSize >= waitSize && !hasResumed) {
+          hasResumed = true
           resolve(currentBuffer)
         }
       })
 
       this.socket.on('close', () => {
-        reject('Socket closed while waiting for write')
+        if (!hasResumed) {
+          hasResumed = true
+          reject('Socket closed while waiting for write')
+        }
       })
+
+      setTimeout(onTimeout, 7_500)
     })
   }
 
