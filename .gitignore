@@ -82,3 +82,6 @@ scratch.js
 
 payondelivery/
 *.tsbuildinfo
+
+# state file for tests
+test-state.json
