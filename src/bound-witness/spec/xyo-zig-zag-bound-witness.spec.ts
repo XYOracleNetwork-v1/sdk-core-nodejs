@@ -26,18 +26,20 @@ describe('XyoZigZagBoundWitness', () => {
     const aliceToBobTwo = boundWitnessAlice.incomingData(bobToAliceOne, false)
     boundWitnessBob.incomingData(aliceToBobTwo, false)
 
-    console.log(boundWitnessAlice.getNumberOfFetters())
-    console.log(boundWitnessAlice.getNumberOfWitnesses())
-
     expect(boundWitnessAlice.getIsCompleted()).toBe(true)
     expect(boundWitnessAlice.getNumberOfParties()).toBe(2)
-    // expect(boundWitnessAlice.getNumberOfWitnesses()).toBe(2)
-    // expect(boundWitnessAlice.getNumberOfFetters()).toBe(2)
+    expect(boundWitnessAlice.getNumberOfWitnesses()).toBe(2)
+    expect(boundWitnessAlice.getNumberOfFetters()).toBe(2)
 
-    // expect(boundWitnessBob.getIsCompleted()).toBe(true)
-    // expect(boundWitnessBob.getNumberOfParties()).toBe(2)
-    // expect(boundWitnessBob.getNumberOfWitnesses()).toBe(2)
-    // expect(boundWitnessBob.getNumberOfFetters()).toBe(2)
+    expect(boundWitnessBob.getIsCompleted()).toBe(true)
+    expect(boundWitnessBob.getNumberOfParties()).toBe(2)
+    expect(boundWitnessBob.getNumberOfWitnesses()).toBe(2)
+    expect(boundWitnessBob.getNumberOfFetters()).toBe(2)
+
+    const aliceBytes = boundWitnessAlice.getContents().getContentsCopy().toString('hex')
+    const bobBytes = boundWitnessBob.getContents().getContentsCopy().toString('hex')
+
+    expect(aliceBytes).toEqual(bobBytes)
   })
 
 })
