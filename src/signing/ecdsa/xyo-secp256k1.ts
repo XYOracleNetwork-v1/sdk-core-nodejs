@@ -3,7 +3,10 @@ import { XyoStructure, XyoBuffer } from '@xyo-network/object-model'
 import { ec as EC, EllipticKey } from 'elliptic'
 import { XyoObjectSchema } from '../../schema'
 
-class XyoSecp2556k1 implements IXyoSigner {
+const ec = new EC('secp256k1')
+
+export class XyoSecp2556k1 implements IXyoSigner {
+
   private key: EllipticKey
 
   constructor(key?: EllipticKey) {
@@ -12,7 +15,7 @@ class XyoSecp2556k1 implements IXyoSigner {
       return
     }
 
-    this.key = new EllipticKey()
+    this.key = ec.genKeyPair()
   }
 
   public sign (data: Buffer): XyoStructure {

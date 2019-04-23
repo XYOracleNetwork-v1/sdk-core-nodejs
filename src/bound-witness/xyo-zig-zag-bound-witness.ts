@@ -68,10 +68,10 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
     const witnesses = this.getId(XyoObjectSchema.WITNESS.id)
 
     const x = numberOfWitnesses + 1
-    const y = fetters.length + 1
+    const y = fetters.length - 1
 
     if (x <= y) {
-      for (let i = x; i < y; i++) {
+      for (let i = x; i <= y ; i++) {
         toSendBack.push(fetters[i])
       }
     }
@@ -91,7 +91,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
           fetters.push(item)
           break
         case XyoObjectSchema.WITNESS.id:
-          fetters.push(item)
+          witness.push(item)
           break
         default:
           throw new Error('Must be fetter or witness')
@@ -110,7 +110,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
       return XyoIterableStructure.newIterable(XyoObjectSchema.FETTER_SET, fetters)
     }
 
-    return XyoIterableStructure.newIterable(XyoObjectSchema.BW_FRAGMENT, fetters)
+    return XyoIterableStructure.newIterable(XyoObjectSchema.BW_FRAGMENT, items)
   }
 
   private addTransfer (transfer: XyoIterableStructure) {

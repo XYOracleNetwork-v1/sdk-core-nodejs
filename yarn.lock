@@ -376,10 +376,10 @@
     tslint-react "^3.6.0"
     tsutils "^3.5.0"
 
-"@xyo-network/object-model@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@xyo-network/object-model/-/object-model-0.5.0.tgz#8c0f3de724adc56b142e32e9195dcbeb1ddc876a"
-  integrity sha512-b1LM8j+OoDT1QwWGtfkeSQ95tbjETHYekZztSbqFGMVdQVNEjksYlriN303nkimMakTnCh1rXQDvnQTfdv2K4A==
+"@xyo-network/object-model@^0.5.6":
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/@xyo-network/object-model/-/object-model-0.5.6.tgz#41fabf5bd366fb9e23d2ccd383abdd4193f5cc1d"
+  integrity sha512-IgzXwHEIZfmq+FhyREeDbJIwHeuL22DOTgPdaIbtwhX74PB6ZBjsr+h6MJsXXd+h1cGs+jWVndnnllEg3IxpBQ==
 
 abab@^2.0.0:
   version "2.0.0"
@@ -1053,7 +1053,7 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
 
-elliptic@^6.4.1:
+elliptic@6.4.2:
   version "6.4.1"
   resolved "https://registry.yarnpkg.com/elliptic/-/elliptic-6.4.1.tgz#c2d0b7776911b86722c632c3c06c60f2f819939a"
   integrity sha512-BsXLz5sqX8OHcsh7CqBMztyXARmGQ3LWPtGjJi6DiJHq5C/qvi9P3OqgswKSDftbu8+IoI/QDTAm2fFnQ9SZSQ==
