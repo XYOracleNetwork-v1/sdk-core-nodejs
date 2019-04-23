@@ -3,6 +3,7 @@ import net from 'net'
 import { XyoTcpPipe } from './xyo-tcp-pipe'
 
 export class XyoServerTcpNetwork {
+  public onPipeCreated: ((pipe: XyoTcpPipe) => void) | undefined
   public server: net.Server
   public port: number
 
@@ -32,6 +33,10 @@ export class XyoServerTcpNetwork {
 
   private onInternalPipeCreated (socket: net.Socket, data: Buffer) {
     const socketPipe = new XyoTcpPipe(socket, data)
-  }
+    const callback = this.onPipeCreated
 
+    if (callback) {
+      callback(socketPipe)
+    }
+  }
 }
