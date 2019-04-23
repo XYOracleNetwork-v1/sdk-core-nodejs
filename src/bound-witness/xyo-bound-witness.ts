@@ -1,9 +1,20 @@
-import { XyoIterableStructure, XyoStructure } from '@xyo-network/object-model'
+import { XyoIterableStructure, XyoStructure, XyoSchema } from '@xyo-network/object-model'
 import { XyoObjectSchema } from '../schema'
 import { IXyoHasher } from '../hashing/xyo-hasher'
 import { IXyoSigner } from '../signing/xyo-signer'
 
 export class XyoBoundWitness extends XyoIterableStructure {
+
+  public static createMasterArrayWithSubArray (masterSchema: XyoSchema, subSchema: XyoSchema, masterItems: XyoStructure[], subItems: XyoStructure[]): XyoIterableStructure {
+    const sub = XyoIterableStructure.newIterable(subSchema, subItems)
+    const itemsInMaster: XyoStructure[] = [sub]
+
+    for (const materItem of masterItems) {
+      itemsInMaster.push(materItem)
+    }
+
+    return XyoIterableStructure.newIterable(masterSchema, itemsInMaster)
+  }
 
   public getIsCompleted (): boolean {
     if (this.getId(XyoObjectSchema.WITNESS.id).length !== 0) {
@@ -70,6 +81,14 @@ export class XyoBoundWitness extends XyoIterableStructure {
     }
 
     return undefined
+  }
+
+  protected addToLedger (item: XyoStructure) {
+    if (this.getIsCompleted()) {
+      throw new Error('Bound witness is completed')
+    }
+
+    this.addElement(item)
   }
 
   private getWitnessFetterBoundary (): number {
