@@ -1,5 +1,6 @@
 
 import net from 'net'
+import { XyoTcpPipe } from './xyo-tcp-pipe'
 
 export class XyoServerTcpNetwork {
   public server: net.Server
@@ -30,7 +31,7 @@ export class XyoServerTcpNetwork {
   }
 
   private onInternalPipeCreated (socket: net.Socket, data: Buffer) {
-
+    const socketPipe = new XyoTcpPipe(socket, data)
   }
 
 }

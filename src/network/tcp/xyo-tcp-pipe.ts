@@ -24,6 +24,10 @@ export class XyoTcpPipe implements IXyoNetworkPipe {
     return undefined
   }
 
+  public async close() {
+    this.socket.end()
+  }
+
   private waitForMessage (): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       let waitSize: number
