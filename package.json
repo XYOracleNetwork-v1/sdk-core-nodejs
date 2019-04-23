@@ -17,7 +17,6 @@
     "@types/node": "11.13.6",
     "@xyo-network/config-tslint": "^0.1.12",
     "enquirer": "^2.3.0",
-    "lerna": "^3.13.1",
     "license-checker": "^25.0.1",
     "shelljs": "^0.8.3",
     "tslint": "^5.12.1",
