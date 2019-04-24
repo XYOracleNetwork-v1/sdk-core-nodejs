@@ -33,9 +33,9 @@ export class XyoZigZagBoundWitnessSession extends XyoZigZagBoundWitness {
     const returnData = this.incomingData(transfer, this.cycles === 0 && didHaveData)
 
     if (this.cycles === 0 && !didHaveData) {
-      response = await this.handler.sendChoicePacket(this.choice, returnData.getContents().getContentsCopy())
+      response = await this.handler.sendChoicePacket(this.choice, returnData.getAll().getContentsCopy())
     } else {
-      response = await this.handler.pipe.send(returnData.getContents().getContentsCopy(), this.cycles === 0)
+      response = await this.handler.pipe.send(returnData.getAll().getContentsCopy(), this.cycles === 0)
 
       if (this.cycles === 0 && !response) {
         throw new Error('Response is null')

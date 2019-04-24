@@ -10,7 +10,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
   private hasSentFetter = false
 
   constructor(signers: IXyoSigner[], signedPayload: XyoStructure[], unsignedPayload: XyoStructure[]) {
-    super(XyoIterableStructure.newIterable(XyoObjectSchema.BW, []).getContents())
+    super(XyoIterableStructure.newIterable(XyoObjectSchema.BW, []).getAll())
 
     this.signers = signers
     this.signedPayload = signedPayload

@@ -119,7 +119,7 @@ export class XyoBoundWitness extends XyoIterableStructure {
     let offsetIndex = 0
 
     for (const fetter of fetters) {
-      offsetIndex += fetter.getContents().getSize()
+      offsetIndex += fetter.getAll().getSize()
     }
 
     return offsetIndex

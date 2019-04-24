@@ -15,16 +15,16 @@ function testOriginStateRepository(repo: IXyoOriginStateRepository) {
       repo.putIndex(testIndex0)
       repo.putPreviousHash(testPreviousHash0)
 
-      expect(repo.getPreviousHash()!.getContents().getContentsCopy().toString('hex')).toBe(testPreviousHash0!.getContents().getContentsCopy().toString('hex'))
-      expect(repo.getIndex()!.getContents().getContentsCopy().toString('hex')).toBe(testIndex0!.getContents().getContentsCopy().toString('hex'))
+      expect(repo.getPreviousHash()!.getAll().getContentsCopy().toString('hex')).toBe(testPreviousHash0!.getAll().getContentsCopy().toString('hex'))
+      expect(repo.getIndex()!.getAll().getContentsCopy().toString('hex')).toBe(testIndex0!.getAll().getContentsCopy().toString('hex'))
 
       await repo.commit()
 
       repo.putIndex(testIndex1)
       repo.putPreviousHash(testPreviousHash1)
 
-      expect(repo.getPreviousHash()!.getContents().getContentsCopy().toString('hex')).toBe(testPreviousHash1!.getContents().getContentsCopy().toString('hex'))
-      expect(repo.getIndex()!.getContents().getContentsCopy().toString('hex')).toBe(testIndex1!.getContents().getContentsCopy().toString('hex'))
+      expect(repo.getPreviousHash()!.getAll().getContentsCopy().toString('hex')).toBe(testPreviousHash1!.getAll().getContentsCopy().toString('hex'))
+      expect(repo.getIndex()!.getAll().getContentsCopy().toString('hex')).toBe(testIndex1!.getAll().getContentsCopy().toString('hex'))
 
     })
   })

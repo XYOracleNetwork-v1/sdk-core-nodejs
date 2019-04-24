@@ -23,11 +23,11 @@ export class XyoBoundWitnessSuccessListener {
     const hash = boundWitness.getHash(this.hasher)
     this.state.addOriginBlock(hash)
     await this.state.repo.commit()
-    await this.blockRepository.addOriginBlock(hash.getContents().getContentsCopy(), rootBlockWithoutBridgedBlocks.getContents().getContentsCopy())
+    await this.blockRepository.addOriginBlock(hash.getAll().getContentsCopy(), rootBlockWithoutBridgedBlocks.getAll().getContentsCopy())
 
     for (const subBlock of bridgeBlocks) {
       const subHash = subBlock.getHash(this.hasher)
-      await this.blockRepository.addOriginBlock(subHash.getContents().getContentsCopy(), subBlock.getContents().getContentsCopy())
+      await this.blockRepository.addOriginBlock(subHash.getAll().getContentsCopy(), subBlock.getAll().getContentsCopy())
     }
   }
 
@@ -48,7 +48,7 @@ export class XyoBoundWitnessSuccessListener {
             const blockIt = witnessItem.newIterator()
 
             while (blockIt.hasNext()) {
-              toReturn.push(new XyoBoundWitness(blockIt.next().value.getContents()))
+              toReturn.push(new XyoBoundWitness(blockIt.next().value.getAll()))
             }
           }
         }

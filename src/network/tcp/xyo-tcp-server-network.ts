@@ -11,6 +11,7 @@ export class XyoServerTcpNetwork {
   constructor(port: number) {
     this.port = port
     this.server = net.createServer(this.connectionListener.bind(this))
+    this.server.listen(port)
   }
 
   private connectionListener (socket: net.Socket) {

@@ -6,7 +6,7 @@ import { XyoObjectSchema } from '../schema'
 export class XyoOriginState {
 
   public static createNextPublicKey (publicKey: XyoStructure): XyoStructure {
-    return XyoStructure.newInstance(XyoObjectSchema.NEXT_PUBLIC_KEY, publicKey.getContents())
+    return XyoStructure.newInstance(XyoObjectSchema.NEXT_PUBLIC_KEY, publicKey.getAll())
   }
 
   public static createPreviousHash (hash: XyoStructure): XyoStructure {
@@ -54,7 +54,7 @@ export class XyoOriginState {
   }
 
   public addSigner (signer: IXyoSigner) {
-    const index = this.getIndex().getContents().getContentsCopy().readUInt32BE(0)
+    const index = this.getIndex().getAll().getContentsCopy().readUInt32BE(0)
 
     if (index === 0) {
       this.repo.addSigner(signer)
@@ -81,7 +81,7 @@ export class XyoOriginState {
   }
 
   private incrementIndex () {
-    const index = this.getIndex().getContents().getContentsCopy().readUInt32BE(0)
+    const index = this.getIndex().getAll().getContentsCopy().readUInt32BE(0)
     const newIndex = XyoOriginState.createIndex(index + 1)
     this.repo.putIndex(newIndex)
   }

@@ -42,8 +42,8 @@ describe('XyoBoundWitness', () => {
     const buffer = new XyoBuffer(bytes)
     const boundWitness = new XyoBoundWitness(buffer)
 
-    const fetter0 = boundWitness.getFetterOfParty(0)!.getContents().getContentsCopy().toString('hex')
-    const fetter1 = boundWitness.getFetterOfParty(1)!.getContents().getContentsCopy().toString('hex')
+    const fetter0 = boundWitness.getFetterOfParty(0)!.getAll().getContentsCopy().toString('hex')
+    const fetter1 = boundWitness.getFetterOfParty(1)!.getAll().getContentsCopy().toString('hex')
 
     expect(fetter0).toBe(fetter0Bytes.toString('hex'))
     expect(fetter1).toBe(fetter1Bytes.toString('hex'))

@@ -99,11 +99,11 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
     let indexString: string | undefined
 
     if (this.previousHashCache) {
-      previousHashString = this.previousHashCache.getContents().getContentsCopy().toString('base64')
+      previousHashString = this.previousHashCache.getAll().getContentsCopy().toString('base64')
     }
 
     if (this.indexCache) {
-      indexString = this.indexCache.getContents().getContentsCopy().toString('base64')
+      indexString = this.indexCache.getAll().getContentsCopy().toString('base64')
     }
 
     const state: IXyoFileOriginState = {

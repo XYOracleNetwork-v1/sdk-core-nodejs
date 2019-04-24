@@ -25,7 +25,7 @@
     "typescript": "^3.4.4"
   },
   "dependencies": {
-    "@xyo-network/object-model": "^0.5.7",
+    "@xyo-network/object-model": "^0.5.9",
     "elliptic": "6.4.1"
   },
   "files": [
