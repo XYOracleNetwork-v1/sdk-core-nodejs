@@ -21,13 +21,14 @@ const main = () => {
   const successListener = new XyoBoundWitnessSuccessListener(hasher, state, blockRepo)
   const payloadProvider = new XyoOriginPayloadConstructor(state)
   const handler = new XyoZigZagBoundWitnessHander(payloadProvider)
-  const signers = [ new XyoSecp2556k1() ]
+
+  state.addSigner(new XyoSecp2556k1())
 
   tcpNetwork.onPipeCreated = async (pipe) => {
     console.log('New request!')
     try {
       const networkHandle = new XyoNetworkHandler(pipe)
-      const boundWitness = await handler.boundWitness(networkHandle, testProcedureCatalogue, signers)
+      const boundWitness = await handler.boundWitness(networkHandle, testProcedureCatalogue, state.getSigners())
 
       if (boundWitness) {
         console.log(`Created bound witness with hash: ${boundWitness.getHash(hasher).getAll().getContentsCopy().toString('hex')}`)
