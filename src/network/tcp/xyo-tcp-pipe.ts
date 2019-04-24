@@ -56,7 +56,7 @@ export class XyoTcpPipe implements IXyoNetworkPipe {
         if (currentSize >= waitSize && !hasResumed) {
           hasResumed = true
           this.socket.removeAllListeners()
-          resolve(currentBuffer)
+          resolve(currentBuffer.slice(4))
         }
       })
 

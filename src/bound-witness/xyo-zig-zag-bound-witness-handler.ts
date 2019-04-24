@@ -18,7 +18,7 @@ export class XyoZigZagBoundWitnessHander implements IXyoBoundWitnessHander {
   }
 
   public async boundWitness (handler: XyoNetworkHandler, catalogue: IXyoProcedureCatalogue, signers: IXyoSigner[]): Promise<XyoBoundWitness | undefined> {
-    if (this.currentBoundWitnessSession !== null) {
+    if (this.currentBoundWitnessSession !== undefined) {
       throw new Error('Bound witness is already in session')
     }
 

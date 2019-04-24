@@ -15,6 +15,10 @@ export class XyoMemoryBlockRepository implements IXyoOriginBlockRepository {
     return this.blockMapping.get(hash.toString('base64'))
   }
 
+  public async addOriginBlocks(originBlocks: Buffer): Promise<void> {
+    throw new Error('Not implemented')
+  }
+
   public async getOriginBlocks(limit?: number, offset?: Buffer): Promise<Buffer[]> {
     throw new Error('Not implemented')
   }

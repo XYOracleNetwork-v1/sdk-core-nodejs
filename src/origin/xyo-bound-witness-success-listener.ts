@@ -11,9 +11,9 @@ export class XyoBoundWitnessSuccessListener {
   private state: XyoOriginState
   private blockRepository: IXyoOriginBlockRepository
 
-  constructor(hasher: IXyoHasher, stateRepo: IXyoOriginStateRepository, blockRepo: IXyoOriginBlockRepository) {
+  constructor(hasher: IXyoHasher, state: XyoOriginState, blockRepo: IXyoOriginBlockRepository) {
     this.hasher = hasher
-    this.state = new XyoOriginState(stateRepo)
+    this.state = state
     this.blockRepository = blockRepo
   }
 
