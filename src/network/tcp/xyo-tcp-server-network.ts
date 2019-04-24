@@ -1,6 +1,7 @@
 
 import net from 'net'
 import { XyoTcpPipe } from './xyo-tcp-pipe'
+import { XyoAdvertisePacket } from '../xyo-advertise-packet'
 
 export class XyoServerTcpNetwork {
   public onPipeCreated: ((pipe: XyoTcpPipe) => void) | undefined
@@ -42,7 +43,7 @@ export class XyoServerTcpNetwork {
   }
 
   private onInternalPipeCreated (socket: net.Socket, data: Buffer) {
-    const socketPipe = new XyoTcpPipe(socket, data)
+    const socketPipe = new XyoTcpPipe(socket, new XyoAdvertisePacket(data))
     const callback = this.onPipeCreated
 
     if (callback) {

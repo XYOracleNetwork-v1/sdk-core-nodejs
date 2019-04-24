@@ -1,16 +1,17 @@
 import net from 'net'
 import { IXyoNetworkPipe } from '../xyo-network-pipe'
+import { XyoAdvertisePacket } from '../xyo-advertise-packet'
 
 export class XyoTcpPipe implements IXyoNetworkPipe {
   private socket: net.Socket
-  private initData: Buffer | undefined
+  private initData: XyoAdvertisePacket | undefined
 
-  constructor (socket: net.Socket, initData: Buffer | undefined) {
+  constructor (socket: net.Socket, initData: XyoAdvertisePacket | undefined) {
     this.socket = socket
     this.initData = initData
   }
 
-  public getInitiationData (): Buffer | undefined {
+  public getInitiationData (): XyoAdvertisePacket | undefined {
     return this.initData
   }
 

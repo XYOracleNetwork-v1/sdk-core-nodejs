@@ -1,7 +1,7 @@
-import { XyoZigZagBoundWitness } from '../xyo-zig-zag-bound-witness'
-import { XyoNetworkHandler } from '../../network/xyo-network-handler'
+import { XyoZigZagBoundWitness } from './xyo-zig-zag-bound-witness'
+import { XyoNetworkHandler } from '../network/xyo-network-handler'
 import { XyoStructure, XyoIterableStructure, XyoBuffer } from '@xyo-network/object-model'
-import { IXyoSigner } from '../../signing/xyo-signer'
+import { IXyoSigner } from '../signing/xyo-signer'
 
 export class XyoZigZagBoundWitnessSession extends XyoZigZagBoundWitness {
   private handler: XyoNetworkHandler
