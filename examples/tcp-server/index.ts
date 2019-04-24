@@ -38,6 +38,8 @@ const main = () => {
       console.log(`Error creating bound witness: ${error}`)
     }
   }
+
+  tcpNetwork.startListening()
 }
 
 main()
