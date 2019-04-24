@@ -15,18 +15,18 @@ export class XyoMemoryBlockRepository implements IXyoOriginBlockRepository {
     this.blockMapping.delete(hash.toString('base64'))
   }
 
-  public async addOriginBlock(originBlock: Buffer): Promise<void> {
-    const boundWitness = new XyoBoundWitness(originBlock)
+  public async addOriginBlock(block: Buffer): Promise<void> {
+    const boundWitness = new XyoBoundWitness(block)
     const hash = boundWitness.getHash(this.hasher).getAll().getContentsCopy()
-    this.blockMapping.set(hash.toString('base64'), originBlock)
+    this.blockMapping.set(hash.toString('base64'), block)
   }
 
   public async getOriginBlock(hash: Buffer): Promise<Buffer | undefined> {
     return this.blockMapping.get(hash.toString('base64'))
   }
 
-  public async addOriginBlocks(originBlocks: Buffer): Promise<void> {
-    const structure = new XyoIterableStructure(originBlocks)
+  public async addOriginBlocks(blocks: Buffer): Promise<void> {
+    const structure = new XyoIterableStructure(blocks)
     const blockIt = structure.newIterator()
 
     while (blockIt.hasNext()) {
