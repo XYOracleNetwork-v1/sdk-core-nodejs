@@ -1,8 +1,9 @@
 {
   "name": "@xyo-network/sdk-core-nodejs",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "A workspace to aggregated nodejs XYO projects",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "MIT",
   "scripts": {
@@ -31,6 +32,10 @@
     "dist",
     "bin"
   ],
+  "engineStrict": true,
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "jest": {
     "testPathIgnorePatterns": [
       "/_/",
