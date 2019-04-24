@@ -1,7 +1,5 @@
 import { IXyoOriginBlockRepository } from './xyo-origin-block-repository'
 import { XyoIterableStructure } from '@xyo-network/object-model'
-import { XyoBoundWitness } from '../bound-witness'
-import { IXyoHasher } from '../hashing'
 
 export class XyoMemoryBlockRepository implements IXyoOriginBlockRepository {
   private blockMapping: Map<string, Buffer> = new Map()
