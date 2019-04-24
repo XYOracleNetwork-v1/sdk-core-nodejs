@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/sdk-core-nodejs",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "index.js",
   "author": "XY Development Team",
@@ -27,6 +27,10 @@
     "@xyo-network/object-model": "^0.5.6",
     "elliptic": "6.4.1"
   },
+  "files": [
+    "dist",
+    "bin"
+  ],
   "jest": {
     "testPathIgnorePatterns": [
       "/_/",
