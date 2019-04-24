@@ -4,20 +4,13 @@ import { XyoBoundWitness } from '../bound-witness'
 import { IXyoHasher } from '../hashing'
 
 export class XyoMemoryBlockRepository implements IXyoOriginBlockRepository {
-  private hasher: IXyoHasher
   private blockMapping: Map<string, Buffer> = new Map()
-
-  constructor(hasher: IXyoHasher) {
-    this.hasher = hasher
-  }
 
   public async removeOriginBlock(hash: Buffer): Promise<void> {
     this.blockMapping.delete(hash.toString('base64'))
   }
 
-  public async addOriginBlock(block: Buffer): Promise<void> {
-    const boundWitness = new XyoBoundWitness(block)
-    const hash = boundWitness.getHash(this.hasher).getAll().getContentsCopy()
+  public async addOriginBlock(hash: Buffer, block: Buffer): Promise<void> {
     this.blockMapping.set(hash.toString('base64'), block)
   }
 
@@ -25,13 +18,16 @@ export class XyoMemoryBlockRepository implements IXyoOriginBlockRepository {
     return this.blockMapping.get(hash.toString('base64'))
   }
 
-  public async addOriginBlocks(blocks: Buffer): Promise<void> {
-    const structure = new XyoIterableStructure(blocks)
-    const blockIt = structure.newIterator()
+  public async addOriginBlocks(hashes: Buffer, blocks: Buffer): Promise<void> {
+    const blockStructure = new XyoIterableStructure(blocks)
+    const hashesStructure = new XyoIterableStructure(hashes)
+    const blockIt = blockStructure.newIterator()
+    const hashIt = hashesStructure.newIterator()
 
     while (blockIt.hasNext()) {
-      const block = blockIt.next()
-      this.addOriginBlock(block.value.getAll().getContentsCopy())
+      const block = blockIt.next().value
+      const hash = hashIt.next().value
+      this.addOriginBlock(hash.getAll().getContentsCopy(), block.getAll().getContentsCopy())
     }
   }
 

@@ -3,7 +3,7 @@ import { XyoOriginState } from './xyo-origin-state'
 import { IXyoOriginBlockRepository } from '../persist/xyo-origin-block-repository'
 import { IXyoOriginStateRepository } from '../persist/xyo-origin-state-repository'
 import { XyoBoundWitness } from '../bound-witness'
-import { XyoIterableStructure, XyoStructure } from '@xyo-network/object-model'
+import { XyoIterableStructure, XyoStructure, XyoSchema } from '@xyo-network/object-model'
 import { XyoObjectSchema } from '../schema'
 
 export class XyoBoundWitnessSuccessListener {
@@ -18,32 +18,33 @@ export class XyoBoundWitnessSuccessListener {
   }
 
   public async onBoundWitnessCompleted (boundWitness: XyoBoundWitness) {
-    const bridgeBlocks = this.getBridgeBlocks(boundWitness)
+    const bridgeBlocks = this.getNestedObjectType(boundWitness, XyoObjectSchema.WITNESS, XyoObjectSchema.BRIDGE_BLOCK_SET)
+    const bridgeBlocksHashes = this.getNestedObjectType(boundWitness, XyoObjectSchema.FETTER, XyoObjectSchema.BRIDGE_HASH_SET)
     const rootBlockWithoutBridgedBlocks = this.removeBridgeBlocks(boundWitness)
     const hash = boundWitness.getHash(this.hasher)
     this.state.addOriginBlock(hash)
     await this.state.repo.commit()
-    await this.blockRepository.addOriginBlock(rootBlockWithoutBridgedBlocks.getAll().getContentsCopy())
+    await this.blockRepository.addOriginBlock(hash.getAll().getContentsCopy(), rootBlockWithoutBridgedBlocks.getAll().getContentsCopy())
 
-    if (bridgeBlocks) {
-      await this.blockRepository.addOriginBlocks(bridgeBlocks.getAll().getContentsCopy())
+    if (bridgeBlocks && bridgeBlocksHashes) {
+      await this.blockRepository.addOriginBlocks(bridgeBlocksHashes.getAll().getContentsCopy(), bridgeBlocks.getAll().getContentsCopy())
     }
   }
 
-  private getBridgeBlocks (boundWitness: XyoBoundWitness): XyoStructure | undefined {
+  private getNestedObjectType (boundWitness: XyoBoundWitness, rootSchema: XyoSchema, subSchema: XyoSchema): XyoStructure | undefined {
     const it = boundWitness.newIterator()
 
     while (it.hasNext()) {
       const bwItem = it.next().value
 
-      if (bwItem.getSchema().id === XyoObjectSchema.WITNESS.id && bwItem instanceof XyoIterableStructure) {
-        const witnessIt = bwItem.newIterator()
+      if (bwItem.getSchema().id === rootSchema.id && bwItem instanceof XyoIterableStructure) {
+        const fetterIt = bwItem.newIterator()
 
-        while (witnessIt.hasNext()) {
-          const witnessItem = witnessIt.next().value
+        while (fetterIt.hasNext()) {
+          const fetterItem = fetterIt.next().value
 
-          if (witnessItem.getSchema().id === XyoObjectSchema.BRIDGE_BLOCK_SET.id) {
-            return witnessItem
+          if (fetterItem.getSchema().id === subSchema.id) {
+            return fetterItem
           }
         }
       }
