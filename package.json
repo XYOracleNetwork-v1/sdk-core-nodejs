@@ -1,11 +1,10 @@
 {
   "name": "@xyo-network/core",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "index.js",
   "author": "XY Development Team",
   "license": "MIT",
-  "private": true,
   "scripts": {
     "build": "tsc -b",
     "test": "yarn build && export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose false --detectOpenHandles",
@@ -13,16 +12,16 @@
     "license": "yarn license-checker --onlyAllow 'MIT;BSD-2-Clause;BSD-3-Clause;Apache-2.0;ISC;Unlicense;UNKNOWN;BSD*;CC0-1.0' --excludePackages 'colors@0.6.2'"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.11",
     "@types/node": "11.13.6",
     "@xyo-network/config-tslint": "^0.1.12",
     "enquirer": "^2.3.0",
+    "jest": "^24.7.1",
     "license-checker": "^25.0.1",
     "shelljs": "^0.8.3",
-    "tslint": "^5.12.1",
     "ts-jest": "^24.0.0",
-    "typescript": "^3.4.4",
-    "jest": "^24.7.1",
-    "@types/jest": "^24.0.11"
+    "tslint": "^5.12.1",
+    "typescript": "^3.4.4"
   },
   "dependencies": {
     "@xyo-network/object-model": "^0.5.6",
