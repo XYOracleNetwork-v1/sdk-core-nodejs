@@ -10,7 +10,6 @@
     "build": "tsc -b",
     "test": "yarn build && export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose false --detectOpenHandles",
     "lint": "tslint -c tslint.json -p packages/tsconfig.json",
-    "clean": "node scripts/clean.js",
     "license": "yarn license-checker --onlyAllow 'MIT;BSD-2-Clause;BSD-3-Clause;Apache-2.0;ISC;Unlicense;UNKNOWN;BSD*;CC0-1.0' --excludePackages 'colors@0.6.2'"
   },
   "devDependencies": {
