@@ -1,8 +1,8 @@
 import { IXyoPayloadConstructor } from './xyo-payload-constructor'
-import { IXyoBoundWitnessPayload } from '../huerestics/xyo-payload'
+import { IXyoBoundWitnessPayload } from '../heuristics'
 import { XyoOriginState } from './xyo-origin-state'
 import { XyoStructure } from '@xyo-network/object-model'
-import { IXyoHeuristicGetter } from '../huerestics/xyo-huerestic-getter'
+import { IXyoHeuristicGetter } from '../heuristics/xyo-heuristic-getter'
 
 export class XyoOriginPayloadConstructor implements IXyoPayloadConstructor {
   private originState: XyoOriginState

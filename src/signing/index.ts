@@ -1,1 +1,2 @@
-import { IXyoSigner } from './xyo-signer'
+export { IXyoSigner } from './xyo-signer'
+export * from './ecdsa'
