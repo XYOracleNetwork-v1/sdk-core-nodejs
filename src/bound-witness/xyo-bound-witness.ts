@@ -23,6 +23,29 @@ export class XyoBoundWitness extends XyoIterableStructure {
     return false
   }
 
+  // [party index][key index]
+  public getPublicKeys (): XyoStructure[][] {
+    const keysets: XyoStructure[][] = []
+    const fetters = this.getId(XyoObjectSchema.FETTER.id) as XyoIterableStructure[]
+
+    for (const fetter of fetters) {
+      const keyset: XyoStructure[] = []
+      const partyKeySet = fetter.getId(XyoObjectSchema.KEY_SET.id) as XyoIterableStructure[]
+
+      if (partyKeySet.length > 0) {
+        const keysetIt = partyKeySet[0].newIterator()
+
+        while (keysetIt.hasNext()) {
+          keyset.push(keysetIt.next().value)
+        }
+      }
+
+      keysets.push(keyset)
+    }
+
+    return keysets
+  }
+
   public getNumberOfFetters (): number {
     return this.getId(XyoObjectSchema.FETTER.id).length
   }
