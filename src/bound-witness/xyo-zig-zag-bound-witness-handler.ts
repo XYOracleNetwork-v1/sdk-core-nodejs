@@ -7,14 +7,15 @@ import { XyoIterableStructure, XyoBuffer, XyoStructure } from '@xyo-network/obje
 import { IXyoBoundWitnessHander } from './xyo-bound-witness-handler'
 import { XyoCatalogueFlags } from '../network/xyo-catalogue-flags'
 import { IXyoSigner } from '../signing/xyo-signer'
-
-export interface IXyoBoundWitnessPayload {
-  signed: XyoStructure[]
-  unsigned: XyoStructure[]
-}
+import { IXyoPayloadConstructor } from '../origin/xyo-payload-constructor'
 
 export class XyoZigZagBoundWitnessHander implements IXyoBoundWitnessHander {
+  private payloadProvider: IXyoPayloadConstructor
   private currentBoundWitnessSession: XyoZigZagBoundWitnessSession | undefined
+
+  constructor(payloadProvider: IXyoPayloadConstructor) {
+    this.payloadProvider = payloadProvider
+  }
 
   public async boundWitness (handler: XyoNetworkHandler, catalogue: IXyoProcedureCatalogue, signers: IXyoSigner[]): Promise<XyoBoundWitness | undefined> {
     if (this.currentBoundWitnessSession !== null) {
@@ -40,18 +41,9 @@ export class XyoZigZagBoundWitnessHander implements IXyoBoundWitnessHander {
     return this.handleBoundWitness(startingData, handler, choice, signers)
   }
 
-  private async getPayloads (choice: Buffer): Promise<IXyoBoundWitnessPayload> {
-    const payload: IXyoBoundWitnessPayload = {
-      signed: [],
-      unsigned: []
-    }
-
-    return payload
-  }
-
   private async handleBoundWitness (startingData: XyoIterableStructure | undefined, handler: XyoNetworkHandler, choice: Buffer, signers: IXyoSigner[])
   : Promise<XyoBoundWitness | undefined> {
-    const payloads = await this.getPayloads(choice)
+    const payloads = await this.payloadProvider.getPayloads(choice)
     const boundWitness = new XyoZigZagBoundWitnessSession(handler, payloads.signed, payloads.unsigned, signers, XyoCatalogueFlags.flip(choice))
     this.currentBoundWitnessSession = boundWitness
 
