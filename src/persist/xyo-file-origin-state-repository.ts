@@ -11,11 +11,21 @@ interface IXyoFileOriginState {
 export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
   private indexCache: XyoStructure | undefined
   private previousHashCache: XyoStructure | undefined
-  private signersCache: IXyoSigner[] | undefined
+  private signersCache: IXyoSigner[] = []
   private statePath: string
 
   constructor (statePath: string) {
     this.statePath = statePath
+  }
+
+  public addSigner (signer: IXyoSigner) {
+    this.signersCache.push(signer)
+  }
+
+  public removeOldestSigner () {
+    if (this.signersCache.length > 0) {
+      this.signersCache.shift()
+    }
   }
 
   public putIndex (index: XyoStructure): void {
