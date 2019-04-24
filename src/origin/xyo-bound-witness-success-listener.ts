@@ -3,7 +3,7 @@ import { XyoOriginState } from './xyo-origin-state'
 import { IXyoOriginBlockRepository } from '../persist/xyo-origin-block-repository'
 import { IXyoOriginStateRepository } from '../persist/xyo-origin-state-repository'
 import { XyoBoundWitness } from '../bound-witness'
-import { XyoIterableStructure, XyoStructure, XyoSchema } from '@xyo-network/object-model'
+import { XyoIterableStructure, XyoStructure } from '@xyo-network/object-model'
 import { XyoObjectSchema } from '../schema'
 
 export class XyoBoundWitnessSuccessListener {

@@ -1,4 +1,5 @@
-import { IXyoBoundWitnessPayload } from '../heuristics/xyo-payload'
+
+import { IXyoBoundWitnessPayload } from '../heuristics'
 
 export interface IXyoPayloadConstructor {
   getPayloads (choice: Buffer): Promise<IXyoBoundWitnessPayload>
