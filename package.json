@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/sdk-core-nodejs",
-  "version": "0.61.0-alpha.0",
+  "version": "0.61.0-alpha-1",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,8 +20,8 @@
     "jest": "^24.7.1",
     "license-checker": "^25.0.1",
     "shelljs": "^0.8.3",
-    "ts-node": "8.1.0",
     "ts-jest": "^24.0.0",
+    "ts-node": "8.1.0",
     "tslint": "^5.12.1",
     "typescript": "^3.4.4"
   },
