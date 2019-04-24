@@ -1,5 +1,5 @@
 {
-  "name": "xyo-core",
+  "name": "@xyo-network/core",
   "version": "0.2.1",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "index.js",
