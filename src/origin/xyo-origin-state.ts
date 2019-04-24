@@ -54,7 +54,7 @@ export class XyoOriginState {
   }
 
   public addSigner (signer: IXyoSigner) {
-    const index = this.getIndex().getAll().getContentsCopy().readUInt32BE(0)
+    const index = this.getIndex().getValue().getContentsCopy().readUInt32BE(0)
 
     if (index === 0) {
       this.repo.addSigner(signer)
@@ -81,7 +81,7 @@ export class XyoOriginState {
   }
 
   private incrementIndex () {
-    const index = this.getIndex().getAll().getContentsCopy().readUInt32BE(0)
+    const index = this.getIndex().getValue().getContentsCopy().readUInt32BE(0)
     const newIndex = XyoOriginState.createIndex(index + 1)
     this.repo.putIndex(newIndex)
   }
