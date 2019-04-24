@@ -1,13 +1,23 @@
 import { IXyoOriginBlockRepository } from './xyo-origin-block-repository'
+import { XyoIterableStructure } from '@xyo-network/object-model'
+import { XyoBoundWitness } from '../bound-witness'
+import { IXyoHasher } from '../hashing'
 
 export class XyoMemoryBlockRepository implements IXyoOriginBlockRepository {
+  private hasher: IXyoHasher
   private blockMapping: Map<string, Buffer> = new Map()
+
+  constructor(hasher: IXyoHasher) {
+    this.hasher = hasher
+  }
 
   public async removeOriginBlock(hash: Buffer): Promise<void> {
     this.blockMapping.delete(hash.toString('base64'))
   }
 
-  public async addOriginBlock(hash: Buffer, originBlock: Buffer): Promise<void> {
+  public async addOriginBlock(originBlock: Buffer): Promise<void> {
+    const boundWitness = new XyoBoundWitness(originBlock)
+    const hash = boundWitness.getHash(this.hasher).getAll().getContentsCopy()
     this.blockMapping.set(hash.toString('base64'), originBlock)
   }
 
@@ -16,7 +26,13 @@ export class XyoMemoryBlockRepository implements IXyoOriginBlockRepository {
   }
 
   public async addOriginBlocks(originBlocks: Buffer): Promise<void> {
-    throw new Error('Not implemented')
+    const structure = new XyoIterableStructure(originBlocks)
+    const blockIt = structure.newIterator()
+
+    while (blockIt.hasNext()) {
+      const block = blockIt.next()
+      this.addOriginBlock(block.value.getAll().getContentsCopy())
+    }
   }
 
   public async getOriginBlocks(limit?: number, offset?: Buffer): Promise<Buffer[]> {

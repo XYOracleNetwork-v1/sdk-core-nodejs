@@ -23,7 +23,7 @@ export class XyoBoundWitnessSuccessListener {
     const hash = boundWitness.getHash(this.hasher)
     this.state.addOriginBlock(hash)
     await this.state.repo.commit()
-    await this.blockRepository.addOriginBlock(hash.getAll().getContentsCopy(), rootBlockWithoutBridgedBlocks.getAll().getContentsCopy())
+    await this.blockRepository.addOriginBlock(rootBlockWithoutBridgedBlocks.getAll().getContentsCopy())
 
     if (bridgeBlocks) {
       await this.blockRepository.addOriginBlocks(bridgeBlocks.getAll().getContentsCopy())
