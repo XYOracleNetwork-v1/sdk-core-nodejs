@@ -31,5 +31,5 @@ function testOriginStateRepository(repo: IXyoOriginStateRepository) {
 }
 
 const path = './test-state.json'
-const repo =  new XyoFileOriginStateRepository(path)
-testOriginStateRepository(repo)
+const repository =  new XyoFileOriginStateRepository(path)
+testOriginStateRepository(repository)

@@ -1,3 +1,4 @@
+
 import { IXyoBoundWitnessPayload } from '../heuristics'
 
 export interface IXyoPayloadConstructor {
