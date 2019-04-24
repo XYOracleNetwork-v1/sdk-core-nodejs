@@ -36,7 +36,7 @@ export class XyoZigZagBoundWitnessHander implements IXyoBoundWitnessHander {
     }
 
     const adv = new XyoChoicePacket(response)
-    const startingData = new XyoIterableStructure(XyoBuffer.wrapBuffer(adv.getResponse()))
+    const startingData = new XyoIterableStructure(new XyoBuffer(adv.getResponse()))
     const choice = adv.getChoice()
     return this.handleBoundWitness(startingData, handler, choice, signers)
   }

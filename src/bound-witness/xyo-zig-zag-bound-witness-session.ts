@@ -43,7 +43,7 @@ export class XyoZigZagBoundWitnessSession extends XyoZigZagBoundWitness {
     }
 
     if (response) {
-      return new XyoIterableStructure(XyoBuffer.wrapBuffer(response))
+      return new XyoIterableStructure(new XyoBuffer(response))
     }
 
     return undefined

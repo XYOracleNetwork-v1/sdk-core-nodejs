@@ -71,11 +71,11 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
 
     if (currentState) {
       if (currentState.index) {
-        this.indexCache = new XyoStructure(XyoBuffer.wrapBuffer(Buffer.from(currentState.index, 'base64')))
+        this.indexCache = new XyoStructure(new XyoBuffer(Buffer.from(currentState.index, 'base64')))
       }
 
       if (currentState.previousHash) {
-        this.previousHashCache = new XyoStructure(XyoBuffer.wrapBuffer(Buffer.from(currentState.previousHash, 'base64')))
+        this.previousHashCache = new XyoStructure(new XyoBuffer(Buffer.from(currentState.previousHash, 'base64')))
       }
     }
   }

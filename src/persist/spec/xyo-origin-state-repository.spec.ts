@@ -6,11 +6,11 @@ import { XyoFileOriginStateRepository } from '../xyo-file-origin-state-repositor
 function testOriginStateRepository(repo: IXyoOriginStateRepository) {
   describe('IXyoOriginStateRepository interface', () => {
     it('Should validate', async () => {
-      const testIndex0 = XyoStructure.newInstance(XyoObjectSchema.INDEX, XyoBuffer.wrapBuffer(Buffer.from('00')))
-      const testIndex1 = XyoStructure.newInstance(XyoObjectSchema.INDEX, XyoBuffer.wrapBuffer(Buffer.from('01')))
+      const testIndex0 = XyoStructure.newInstance(XyoObjectSchema.INDEX, new XyoBuffer(Buffer.from('00')))
+      const testIndex1 = XyoStructure.newInstance(XyoObjectSchema.INDEX, new XyoBuffer(Buffer.from('01')))
 
-      const testPreviousHash0 = XyoStructure.newInstance(XyoObjectSchema.PREVIOUS_HASH, XyoBuffer.wrapBuffer(Buffer.from('00')))
-      const testPreviousHash1 = XyoStructure.newInstance(XyoObjectSchema.PREVIOUS_HASH, XyoBuffer.wrapBuffer(Buffer.from('01')))
+      const testPreviousHash0 = XyoStructure.newInstance(XyoObjectSchema.PREVIOUS_HASH, new XyoBuffer(Buffer.from('00')))
+      const testPreviousHash1 = XyoStructure.newInstance(XyoObjectSchema.PREVIOUS_HASH, new XyoBuffer(Buffer.from('01')))
 
       repo.putIndex(testIndex0)
       repo.putPreviousHash(testPreviousHash0)

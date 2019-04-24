@@ -31,7 +31,7 @@ export class XyoSecp2556k1 implements IXyoSigner {
       sBuffer
     ])
 
-    return XyoStructure.newInstance(XyoObjectSchema.SIGNATURE_SET, XyoBuffer.wrapBuffer(value))
+    return XyoStructure.newInstance(XyoObjectSchema.SIGNATURE_SET, new XyoBuffer(value))
   }
 
   public getPublicKey (): XyoStructure {
@@ -44,12 +44,12 @@ export class XyoSecp2556k1 implements IXyoSigner {
       this.writePointTo32ByteBuffer(y)
     ])
 
-    return XyoStructure.newInstance(XyoObjectSchema.EC_PUBLIC_KEY, XyoBuffer.wrapBuffer(buffer))
+    return XyoStructure.newInstance(XyoObjectSchema.EC_PUBLIC_KEY, new XyoBuffer(buffer))
   }
 
   public getPrivateKey (): XyoStructure {
     const privateKey = this.key.getPrivate('hex')
-    const buffer = XyoBuffer.wrapBuffer(Buffer.from(privateKey, 'hex'))
+    const buffer = new XyoBuffer(Buffer.from(privateKey, 'hex'))
 
     return XyoStructure.newInstance(XyoObjectSchema.EC_PRIVATE_KEY, buffer)
   }

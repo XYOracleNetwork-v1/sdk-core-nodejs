@@ -376,10 +376,10 @@
     tslint-react "^3.6.0"
     tsutils "^3.5.0"
 
-"@xyo-network/object-model@^0.5.6":
-  version "0.5.6"
-  resolved "https://registry.yarnpkg.com/@xyo-network/object-model/-/object-model-0.5.6.tgz#41fabf5bd366fb9e23d2ccd383abdd4193f5cc1d"
-  integrity sha512-IgzXwHEIZfmq+FhyREeDbJIwHeuL22DOTgPdaIbtwhX74PB6ZBjsr+h6MJsXXd+h1cGs+jWVndnnllEg3IxpBQ==
+"@xyo-network/object-model@^0.5.7":
+  version "0.5.7"
+  resolved "https://registry.yarnpkg.com/@xyo-network/object-model/-/object-model-0.5.7.tgz#1f1fb0a7c0fd2da05d5473ca07ff25ebb7c6dc80"
+  integrity sha512-hGuZuoDokttckHy5yHh6GrEwh4zia826xUqhJsJ+Yje7Qc5KfJ12KHDoqP+dE6OptFiK1XK5P/HVk+u8/bFIpQ==
 
 abab@^2.0.0:
   version "2.0.0"

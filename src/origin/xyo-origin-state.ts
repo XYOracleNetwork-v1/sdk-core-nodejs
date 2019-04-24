@@ -16,7 +16,7 @@ export class XyoOriginState {
   public static createIndex (index: number): XyoStructure {
     const numberBuffer = Buffer.alloc(4)
     numberBuffer.writeUInt32BE(index, 0)
-    return XyoStructure.newInstance(XyoObjectSchema.INDEX, XyoBuffer.wrapBuffer(numberBuffer))
+    return XyoStructure.newInstance(XyoObjectSchema.INDEX, new XyoBuffer(numberBuffer))
   }
 
   public repo: IXyoOriginStateRepository
