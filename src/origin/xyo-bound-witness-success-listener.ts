@@ -6,7 +6,7 @@ import { XyoBoundWitness } from '../bound-witness'
 import { XyoIterableStructure, XyoStructure, XyoSchema } from '@xyo-network/object-model'
 import { XyoObjectSchema } from '../schema'
 
-export class XyoOriginChain {
+export class XyoBoundWitnessSuccessListener {
   private hasher: IXyoHasher
   private state: XyoOriginState
   private blockRepository: IXyoOriginBlockRepository
