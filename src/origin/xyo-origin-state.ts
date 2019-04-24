@@ -27,6 +27,10 @@ export class XyoOriginState {
     this.repo = repo
   }
 
+  public getIndexAsNumber (): number {
+    return this.getIndex().getValue().getContentsCopy().readUInt32BE(0)
+  }
+
   public getNextPublicKey (): XyoStructure | undefined {
     return this.nextPublicKey
   }

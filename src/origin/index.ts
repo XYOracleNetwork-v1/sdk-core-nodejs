@@ -2,3 +2,4 @@ export { XyoBoundWitnessSuccessListener } from './xyo-bound-witness-success-list
 export { XyoOriginPayloadConstructor } from './xyo-origin-payload-constructor'
 export { XyoOriginState } from './xyo-origin-state'
 export { IXyoPayloadConstructor } from './xyo-payload-constructor'
+export { XyoGenesisBlockCreator } from './xyo-genesis-block-creator'

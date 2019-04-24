@@ -25,14 +25,12 @@ export class XyoBoundWitnessSuccessListener {
     await this.state.repo.commit()
     await this.blockRepository.addOriginBlock(hash.getAll().getContentsCopy(), rootBlockWithoutBridgedBlocks.getAll().getContentsCopy())
 
-    for (const subBlock of bridgeBlocks) {
-      const subHash = subBlock.getHash(this.hasher)
-      await this.blockRepository.addOriginBlock(subHash.getAll().getContentsCopy(), subBlock.getAll().getContentsCopy())
+    if (bridgeBlocks) {
+      await this.blockRepository.addOriginBlocks(bridgeBlocks.getAll().getContentsCopy())
     }
   }
 
-  private getBridgeBlocks (boundWitness: XyoBoundWitness): XyoBoundWitness[] {
-    const toReturn: XyoBoundWitness[] = []
+  private getBridgeBlocks (boundWitness: XyoBoundWitness): XyoStructure | undefined {
     const it = boundWitness.newIterator()
 
     while (it.hasNext()) {
@@ -44,18 +42,14 @@ export class XyoBoundWitnessSuccessListener {
         while (witnessIt.hasNext()) {
           const witnessItem = witnessIt.next().value
 
-          if (witnessItem.getSchema().id === XyoObjectSchema.BRIDGE_BLOCK_SET.id && witnessItem instanceof XyoIterableStructure) {
-            const blockIt = witnessItem.newIterator()
-
-            while (blockIt.hasNext()) {
-              toReturn.push(new XyoBoundWitness(blockIt.next().value.getAll()))
-            }
+          if (witnessItem.getSchema().id === XyoObjectSchema.BRIDGE_BLOCK_SET.id) {
+            return witnessItem
           }
         }
       }
     }
 
-    return toReturn
+    return
   }
 
   private removeBridgeBlocks (boundWitness: XyoBoundWitness): XyoIterableStructure {

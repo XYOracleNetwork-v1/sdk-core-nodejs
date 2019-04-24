@@ -1,4 +1,4 @@
-import { XyoServerTcpNetwork, XyoFileOriginStateRepository, XyoMemoryBlockRepository, XyoZigZagBoundWitnessHander, XyoOriginPayloadConstructor, XyoBoundWitnessSuccessListener, XyoOriginState, XyoSha256, IXyoProcedureCatalogue, XyoNetworkHandler, XyoSecp2556k1 } from '../../dist'
+import { XyoServerTcpNetwork, XyoFileOriginStateRepository, XyoMemoryBlockRepository, XyoZigZagBoundWitnessHander, XyoOriginPayloadConstructor, XyoBoundWitnessSuccessListener, XyoOriginState, XyoSha256, IXyoProcedureCatalogue, XyoNetworkHandler, XyoSecp2556k1, XyoGenesisBlockCreator } from '../../dist'
 
 const testProcedureCatalogue: IXyoProcedureCatalogue = {
   getEncodedCanDo: () => {
@@ -12,7 +12,7 @@ const testProcedureCatalogue: IXyoProcedureCatalogue = {
   }
 }
 
-const main = () => {
+const main = async () => {
   const tcpNetwork = new XyoServerTcpNetwork(4141)
   const stateRepo = new XyoFileOriginStateRepository('./test-state.json')
   const blockRepo = new XyoMemoryBlockRepository()
@@ -23,6 +23,12 @@ const main = () => {
   const handler = new XyoZigZagBoundWitnessHander(payloadProvider)
 
   state.addSigner(new XyoSecp2556k1())
+
+  if (state.getIndexAsNumber() === 0) {
+    const genesisBlock =  await XyoGenesisBlockCreator.create(state.getSigners(), payloadProvider)
+    console.log(`Created genesis block with hash: ${genesisBlock.getHash(hasher).getAll().getContentsCopy().toString('hex')}`)
+    successListener.onBoundWitnessCompleted(genesisBlock)
+  }
 
   tcpNetwork.onPipeCreated = async (pipe) => {
     console.log('New request!')

@@ -1,6 +1,6 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
   "tslint.autoFixOnSave": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
   "psi-header.changes-tracking": {
     "isActive": true,
     "autoHeader": "manualSave"
@@ -34,6 +34,5 @@
   "cSpell.words": [
     "hasher",
     "repo"
-  ]
-
+  ],
 }
