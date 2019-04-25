@@ -13,15 +13,15 @@ export class XyoServerTcpNetwork {
     this.server = net.createServer(this.connectionListener.bind(this))
   }
 
-  public startListening () {
+  public startListening() {
     this.server.listen(this.port)
   }
 
-  public stopListening () {
+  public stopListening() {
     this.server.close()
   }
 
-  private connectionListener (socket: net.Socket) {
+  private connectionListener(socket: net.Socket) {
     let waitSize: number
     let currentSize = 0
     let currentBuffer = Buffer.alloc(0)
@@ -50,7 +50,7 @@ export class XyoServerTcpNetwork {
     socket.on('end', cleanup)
   }
 
-  private onInternalPipeCreated (socket: net.Socket, data: Buffer) {
+  private onInternalPipeCreated(socket: net.Socket, data: Buffer) {
     const socketPipe = new XyoTcpPipe(socket, new XyoAdvertisePacket(data))
     const callback = this.onPipeCreated
 

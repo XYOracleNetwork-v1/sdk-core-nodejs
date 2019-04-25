@@ -52,7 +52,7 @@ export class XyoSecp2556k1 implements IXyoSigner {
     this.key = ec.genKeyPair()
   }
 
-  public sign (data: Buffer): XyoStructure {
+  public sign(data: Buffer): XyoStructure {
     const signature = this.key.sign(data)
 
     const rBuffer = signature.r.toBuffer()
@@ -68,7 +68,7 @@ export class XyoSecp2556k1 implements IXyoSigner {
     return XyoStructure.newInstance(XyoObjectSchema.SIGNATURE_SET, new XyoBuffer(value))
   }
 
-  public getPublicKey (): XyoStructure {
+  public getPublicKey(): XyoStructure {
     const key = this.key.getPublic()
     const x = key.x.toBuffer()
     const y = key.y.toBuffer()
@@ -81,7 +81,7 @@ export class XyoSecp2556k1 implements IXyoSigner {
     return XyoStructure.newInstance(XyoObjectSchema.EC_PUBLIC_KEY, new XyoBuffer(buffer))
   }
 
-  public getPrivateKey (): XyoStructure {
+  public getPrivateKey(): XyoStructure {
     const privateKey = this.key.getPrivate('hex')
     const buffer = new XyoBuffer(Buffer.from(privateKey, 'hex'))
 

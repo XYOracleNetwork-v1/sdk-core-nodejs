@@ -12,7 +12,7 @@ export class XyoOriginPayloadConstructor implements IXyoPayloadConstructor {
     this.originState = originState
   }
 
-  public addHeuristicGetter (key: string, getter: IXyoHeuristicGetter) {
+  public addHeuristicGetter(key: string, getter: IXyoHeuristicGetter) {
     this.heuristicGetters.set(key, getter)
   }
 
@@ -33,7 +33,7 @@ export class XyoOriginPayloadConstructor implements IXyoPayloadConstructor {
     return payload
   }
 
-  private getAllHeuristics (): XyoStructure[] {
+  private getAllHeuristics(): XyoStructure[] {
     const toReturn: XyoStructure[] = []
 
     this.heuristicGetters.forEach((value, _) => {

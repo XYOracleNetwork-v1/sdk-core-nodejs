@@ -6,7 +6,7 @@ export class XyoAdvertisePacket {
     this.data = data
   }
 
-  public getChoice () {
+  public getChoice() {
     if (this.data.length === 0) {
       throw new Error('getChoice: Out of index, can`t be 0')
     }

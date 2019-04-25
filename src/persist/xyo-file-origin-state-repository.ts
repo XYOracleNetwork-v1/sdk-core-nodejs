@@ -14,37 +14,37 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
   private signersCache: IXyoSigner[] = []
   private statePath: string
 
-  constructor (statePath: string) {
+  constructor(statePath: string) {
     this.statePath = statePath
   }
 
-  public addSigner (signer: IXyoSigner) {
+  public addSigner(signer: IXyoSigner) {
     this.signersCache.push(signer)
   }
 
-  public removeOldestSigner () {
+  public removeOldestSigner() {
     if (this.signersCache.length > 0) {
       this.signersCache.shift()
     }
   }
 
-  public putIndex (index: XyoStructure): void {
+  public putIndex(index: XyoStructure): void {
     this.indexCache = index
   }
 
-  public putPreviousHash (previousHash: XyoStructure): void {
+  public putPreviousHash(previousHash: XyoStructure): void {
     this.previousHashCache = previousHash
   }
 
-  public getIndex (): XyoStructure | undefined {
+  public getIndex(): XyoStructure | undefined {
     return this.indexCache
   }
 
-  public getPreviousHash (): XyoStructure | undefined {
+  public getPreviousHash(): XyoStructure | undefined {
     return this.previousHashCache
   }
 
-  public getSigners (): IXyoSigner[] {
+  public getSigners(): IXyoSigner[] {
     if (this.signersCache) {
       return this.signersCache
     }
@@ -52,7 +52,7 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
     return []
   }
 
-  public commit (): Promise<void> {
+  public commit(): Promise<void> {
     const state = this.getCurrentFileState()
 
     return new Promise((resolve, reject) => {
@@ -66,7 +66,7 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
     })
   }
 
-  public async restore (): Promise<void> {
+  public async restore(): Promise<void> {
     const currentState = await this.readCurrentFileState()
 
     if (currentState) {
@@ -80,7 +80,7 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
     }
   }
 
-  private readCurrentFileState (): Promise<IXyoFileOriginState | undefined> {
+  private readCurrentFileState(): Promise<IXyoFileOriginState | undefined> {
     return new Promise((resolve, reject) => {
       fs.readFile(this.statePath, (error, data) => {
         if (error) {
@@ -94,7 +94,7 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
     })
   }
 
-  private getCurrentFileState (): IXyoFileOriginState {
+  private getCurrentFileState(): IXyoFileOriginState {
     let previousHashString: string | undefined
     let indexString: string | undefined
 

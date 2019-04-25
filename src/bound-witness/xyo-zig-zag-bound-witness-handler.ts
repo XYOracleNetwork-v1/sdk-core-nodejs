@@ -17,7 +17,7 @@ export class XyoZigZagBoundWitnessHander implements IXyoBoundWitnessHander {
     this.payloadProvider = payloadProvider
   }
 
-  public async boundWitness (handler: XyoNetworkHandler, catalogue: IXyoProcedureCatalogue, signers: IXyoSigner[]): Promise<XyoBoundWitness | undefined> {
+  public async boundWitness(handler: XyoNetworkHandler, catalogue: IXyoProcedureCatalogue, signers: IXyoSigner[]): Promise<XyoBoundWitness | undefined> {
     if (this.currentBoundWitnessSession !== undefined) {
       throw new Error('Bound witness is already in session')
     }
@@ -41,7 +41,7 @@ export class XyoZigZagBoundWitnessHander implements IXyoBoundWitnessHander {
     return this.handleBoundWitness(startingData, handler, choice, signers)
   }
 
-  private async handleBoundWitness (startingData: XyoIterableStructure | undefined, handler: XyoNetworkHandler, choice: Buffer, signers: IXyoSigner[])
+  private async handleBoundWitness(startingData: XyoIterableStructure | undefined, handler: XyoNetworkHandler, choice: Buffer, signers: IXyoSigner[])
   : Promise<XyoBoundWitness | undefined> {
     const payloads = await this.payloadProvider.getPayloads(choice)
     const boundWitness = new XyoZigZagBoundWitnessSession(handler, payloads.signed, payloads.unsigned, signers, XyoCatalogueFlags.flip(choice))
