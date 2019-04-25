@@ -30,20 +30,39 @@ export class XyoBoundWitness extends XyoIterableStructure {
 
     for (const fetter of fetters) {
       const keyset: XyoStructure[] = []
-      const partyKeySet = fetter.getId(XyoObjectSchema.KEY_SET.id) as XyoIterableStructure[]
+      const partyKeySets = fetter.getId(XyoObjectSchema.KEY_SET.id) as XyoIterableStructure[]
 
-      if (partyKeySet.length > 0) {
-        const keysetIt = partyKeySet[0].newIterator()
-
+      for (const partyKeySet of partyKeySets) {
+        const keysetIt = partyKeySet.newIterator()
         while (keysetIt.hasNext()) {
           keyset.push(keysetIt.next().value)
         }
       }
-
       keysets.push(keyset)
     }
 
     return keysets
+  }
+
+  // [party index][key index]
+  public getSignatures (): XyoStructure[][] {
+    const signatureSets: XyoStructure[][] = []
+    const witnesses = this.getId(XyoObjectSchema.WITNESS.id) as XyoIterableStructure[]
+
+    for (const fetter of witnesses) {
+      const signatureSet: XyoStructure[] = []
+      const partySignatureSets = fetter.getId(XyoObjectSchema.SIGNATURE_SET.id) as XyoIterableStructure[]
+
+      for (const partySignatureSet of partySignatureSets) {
+        const signatureSetIt = partySignatureSet.newIterator()
+        while (signatureSetIt.hasNext()) {
+          signatureSet.push(signatureSetIt.next().value)
+        }
+      }
+      signatureSets.push(signatureSet)
+    }
+
+    return signatureSets
   }
 
   public getNumberOfFetters (): number {
