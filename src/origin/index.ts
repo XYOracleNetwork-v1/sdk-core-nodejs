@@ -1,4 +1,4 @@
-export { XyoBoundWitnessSuccessListener } from './xyo-bound-witness-success-listener'
+export { XyoBoundWitnessInserter } from './xyo-bound-witness-inserter'
 export { XyoOriginPayloadConstructor } from './xyo-origin-payload-constructor'
 export { XyoOriginState } from './xyo-origin-state'
 export { IXyoPayloadConstructor } from './xyo-payload-constructor'

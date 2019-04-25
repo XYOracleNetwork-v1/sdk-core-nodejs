@@ -6,7 +6,7 @@ import { XyoBoundWitness } from '../bound-witness'
 import { XyoIterableStructure, XyoStructure, XyoSchema } from '@xyo-network/object-model'
 import { XyoObjectSchema } from '../schema'
 
-export class XyoBoundWitnessSuccessListener {
+export class XyoBoundWitnessInserter {
   private hasher: IXyoHasher
   private state: XyoOriginState
   private blockRepository: IXyoOriginBlockRepository
@@ -17,7 +17,7 @@ export class XyoBoundWitnessSuccessListener {
     this.blockRepository = blockRepo
   }
 
-  public async onBoundWitnessCompleted(boundWitness: XyoBoundWitness) {
+  public async insert(boundWitness: XyoBoundWitness) {
     const bridgeBlocks = this.getNestedObjectType(boundWitness, XyoObjectSchema.WITNESS, XyoObjectSchema.BRIDGE_BLOCK_SET)
     const bridgeBlocksHashes = this.getNestedObjectType(boundWitness, XyoObjectSchema.FETTER, XyoObjectSchema.BRIDGE_HASH_SET)
     const rootBlockWithoutBridgedBlocks = this.removeBridgeBlocks(boundWitness)

@@ -18,7 +18,7 @@ const main = async () => {
   const blockRepo = new XyoMemoryBlockRepository()
   const state = new XyoOriginState(stateRepo)
   const hasher = new XyoSha256()
-  const successListener = new XyoBoundWitnessSuccessListener(hasher, state, blockRepo)
+  const successListener = new XyoBoundWitnessInserter(hasher, state, blockRepo)
   const payloadProvider = new XyoOriginPayloadConstructor(state)
   const handler = new XyoZigZagBoundWitnessHander(payloadProvider)
 
@@ -27,7 +27,7 @@ const main = async () => {
   if (state.getIndexAsNumber() === 0) {
     const genesisBlock =  await XyoGenesisBlockCreator.create(state.getSigners(), payloadProvider)
     console.log(`Created genesis block with hash: ${genesisBlock.getHash(hasher).getAll().getContentsCopy().toString('hex')}`)
-    successListener.onBoundWitnessCompleted(genesisBlock)
+    successListener.insert(genesisBlock)
   }
 
   tcpNetwork.onPipeCreated = async (pipe) => {
@@ -38,7 +38,7 @@ const main = async () => {
 
       if (boundWitness) {
         console.log(`Created bound witness with hash: ${boundWitness.getHash(hasher).getAll().getContentsCopy().toString('hex')}`)
-        successListener.onBoundWitnessCompleted(boundWitness)
+        successListener.insert(boundWitness)
       }
     } catch (error) {
       console.log(`Error creating bound witness: ${error}`)
