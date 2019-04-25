@@ -15,7 +15,7 @@ export class XyoZigZagBoundWitnessSession extends XyoZigZagBoundWitness {
     this.choice = choice
   }
 
-  public async doBoundWitness (transfer: XyoIterableStructure | undefined): Promise<void> {
+  public async doBoundWitness(transfer: XyoIterableStructure | undefined): Promise<void> {
     if (!this.getIsCompleted()) {
       const response = await this.sendAndReceive(transfer !== undefined, transfer)
 
@@ -28,7 +28,7 @@ export class XyoZigZagBoundWitnessSession extends XyoZigZagBoundWitness {
     }
   }
 
-  private async sendAndReceive (didHaveData: boolean, transfer: XyoIterableStructure | undefined) {
+  private async sendAndReceive(didHaveData: boolean, transfer: XyoIterableStructure | undefined) {
     let response: Buffer | undefined
     const returnData = this.incomingData(transfer, this.cycles === 0 && didHaveData)
 

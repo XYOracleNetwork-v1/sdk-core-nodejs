@@ -17,7 +17,7 @@ export class XyoBoundWitnessSuccessListener {
     this.blockRepository = blockRepo
   }
 
-  public async onBoundWitnessCompleted (boundWitness: XyoBoundWitness) {
+  public async onBoundWitnessCompleted(boundWitness: XyoBoundWitness) {
     const bridgeBlocks = this.getNestedObjectType(boundWitness, XyoObjectSchema.WITNESS, XyoObjectSchema.BRIDGE_BLOCK_SET)
     const bridgeBlocksHashes = this.getNestedObjectType(boundWitness, XyoObjectSchema.FETTER, XyoObjectSchema.BRIDGE_HASH_SET)
     const rootBlockWithoutBridgedBlocks = this.removeBridgeBlocks(boundWitness)
@@ -31,7 +31,7 @@ export class XyoBoundWitnessSuccessListener {
     }
   }
 
-  private getNestedObjectType (boundWitness: XyoBoundWitness, rootSchema: XyoSchema, subSchema: XyoSchema): XyoStructure | undefined {
+  private getNestedObjectType(boundWitness: XyoBoundWitness, rootSchema: XyoSchema, subSchema: XyoSchema): XyoStructure | undefined {
     const it = boundWitness.newIterator()
 
     while (it.hasNext()) {
@@ -53,7 +53,7 @@ export class XyoBoundWitnessSuccessListener {
     return
   }
 
-  private removeBridgeBlocks (boundWitness: XyoBoundWitness): XyoIterableStructure {
+  private removeBridgeBlocks(boundWitness: XyoBoundWitness): XyoIterableStructure {
     const newLedgerItems: XyoStructure[] = []
     const it = boundWitness.newIterator()
 

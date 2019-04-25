@@ -5,7 +5,7 @@ import { XyoFileOriginStateRepository } from '../xyo-file-origin-state-repositor
 
 function testOriginStateRepository(repo: IXyoOriginStateRepository) {
   describe('IXyoOriginStateRepository interface', () => {
-    it('Should validate', async () => {
+    it('Should validate', async() => {
       const testIndex0 = XyoStructure.newInstance(XyoObjectSchema.INDEX, new XyoBuffer(Buffer.from('00')))
       const testIndex1 = XyoStructure.newInstance(XyoObjectSchema.INDEX, new XyoBuffer(Buffer.from('01')))
 

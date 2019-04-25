@@ -29,7 +29,7 @@ export class XyoMemoryBlockRepository implements IXyoOriginBlockRepository {
     }
   }
 
-  public async getOriginBlocks(limit?: number, offset?: Buffer): Promise<Buffer[]> {
+  public async getOriginBlocks(limit?: number, offset?: Buffer): Promise<{items: Buffer[], total: number}> {
     throw new Error('Not implemented')
   }
 }

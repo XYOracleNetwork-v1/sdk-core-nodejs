@@ -6,7 +6,7 @@ export class XyoChoicePacket {
     this.data = data
   }
 
-  public getChoice (): Buffer {
+  public getChoice(): Buffer {
     const sizeOfChoice = this.getSizeOfChoice()
 
     if (sizeOfChoice + 1 > this.data.length) {
@@ -16,7 +16,7 @@ export class XyoChoicePacket {
     return this.data.slice(1, sizeOfChoice + 1)
   }
 
-  public getResponse (): Buffer {
+  public getResponse(): Buffer {
     const sizeOfChoice = this.getSizeOfChoice()
 
     if (sizeOfChoice + 1 > this.data.length) {
@@ -26,7 +26,7 @@ export class XyoChoicePacket {
     return this.data.slice(1 + sizeOfChoice)
   }
 
-  private getSizeOfChoice (): number {
+  private getSizeOfChoice(): number {
     if (this.data.length === 0) {
       throw new Error('getSizeOfChoice: Out of index')
     }

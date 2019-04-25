@@ -6,16 +6,16 @@ export class XyoTcpPipe implements IXyoNetworkPipe {
   private socket: net.Socket
   private initData: XyoAdvertisePacket | undefined
 
-  constructor (socket: net.Socket, initData: XyoAdvertisePacket | undefined) {
+  constructor(socket: net.Socket, initData: XyoAdvertisePacket | undefined) {
     this.socket = socket
     this.initData = initData
   }
 
-  public getInitiationData (): XyoAdvertisePacket | undefined {
+  public getInitiationData(): XyoAdvertisePacket | undefined {
     return this.initData
   }
 
-  public async send (data: Buffer, waitForResponse: boolean): Promise<Buffer | undefined> {
+  public async send(data: Buffer, waitForResponse: boolean): Promise<Buffer | undefined> {
     await this.sendData(data)
 
     if (waitForResponse) {
@@ -29,7 +29,7 @@ export class XyoTcpPipe implements IXyoNetworkPipe {
     this.socket.end()
   }
 
-  private waitForMessage (): Promise<Buffer> {
+  private waitForMessage(): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       let hasResumed = false
       let waitSize: number
@@ -72,7 +72,7 @@ export class XyoTcpPipe implements IXyoNetworkPipe {
     })
   }
 
-  private sendData (data: Buffer): Promise<void> {
+  private sendData(data: Buffer): Promise<void> {
     return new Promise((resolve, reject) => {
       const sizeBuffer = Buffer.alloc(4)
       sizeBuffer.writeUInt32BE(data.length + 4, 0)

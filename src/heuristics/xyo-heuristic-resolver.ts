@@ -3,7 +3,7 @@ import { XyoIterableStructure } from '@xyo-network/object-model'
 import { XyoObjectSchema } from '../schema'
 
 export interface IXyoHeuristicResolver {
-  resolve (heuristic: Buffer): IXyoHumanHeuristic
+  resolve(heuristic: Buffer): IXyoHumanHeuristic
 }
 
 export interface IXyoHumanHeuristic {
@@ -13,15 +13,15 @@ export interface IXyoHumanHeuristic {
 
 export class XyoHumanHeuristicResolver {
 
-  public static addResolver (forId: number, resolver: IXyoHeuristicResolver) {
+  public static addResolver(forId: number, resolver: IXyoHeuristicResolver) {
     XyoHumanHeuristicResolver.resolvers.set(forId, resolver)
   }
 
-  public static removeResolver (forId: number) {
+  public static removeResolver(forId: number) {
     XyoHumanHeuristicResolver.resolvers.delete(forId)
   }
 
-  public static resolve (boundWitness: XyoIterableStructure): IXyoHumanHeuristic[][] {
+  public static resolve(boundWitness: XyoIterableStructure): IXyoHumanHeuristic[][] {
     const bwIt = boundWitness.newIterator()
     const partyHeuristics: IXyoHumanHeuristic[][] = []
 

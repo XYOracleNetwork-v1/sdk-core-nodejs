@@ -4,7 +4,7 @@ export class XyoCatalogueFlags {
   public static TAKE_ORIGIN_CHAIN = 2
   public static GIVE_ORIGIN_CHAIN = 4
 
-  public static flip (flags: Buffer): Buffer {
+  public static flip(flags: Buffer): Buffer {
     if (flags.length === 0) {
       return flags
     }

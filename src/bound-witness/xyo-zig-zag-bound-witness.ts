@@ -17,7 +17,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
     this.unsignedPayload = unsignedPayload
   }
 
-  public incomingData (transfer: XyoIterableStructure | undefined, endpoint: boolean): XyoIterableStructure {
+  public incomingData(transfer: XyoIterableStructure | undefined, endpoint: boolean): XyoIterableStructure {
     if (transfer) {
       this.addTransfer(transfer)
     }
@@ -36,7 +36,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
     return this.encodeTransfer([])
   }
 
-  private getNumberOfWitnessesFromTransfer (transfer: XyoIterableStructure | undefined) {
+  private getNumberOfWitnessesFromTransfer(transfer: XyoIterableStructure | undefined) {
     if (transfer) {
       return transfer.getId(XyoObjectSchema.WITNESS.id).length
     }
@@ -44,7 +44,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
     return 0
   }
 
-  private getReturnFromIncoming (numberOfWitnesses: number, endpoint: boolean) {
+  private getReturnFromIncoming(numberOfWitnesses: number, endpoint: boolean) {
     if (numberOfWitnesses === 0 && !endpoint) {
       const elements: XyoStructure[] = []
       const it = this.newIterator()
@@ -59,7 +59,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
     return this.passAndSign(numberOfWitnesses)
   }
 
-  private passAndSign (numberOfWitnesses: number): XyoIterableStructure {
+  private passAndSign(numberOfWitnesses: number): XyoIterableStructure {
     const toSendBack: XyoStructure[] = []
 
     this.signBoundWitness(this.unsignedPayload)
@@ -81,7 +81,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
     return this.encodeTransfer(toSendBack)
   }
 
-  private encodeTransfer (items: XyoStructure[]) {
+  private encodeTransfer(items: XyoStructure[]) {
     const fetters: XyoStructure[] = []
     const witness: XyoStructure[] = []
 
@@ -101,7 +101,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
     return this.encodeFettersAndWitnessesForTransfer(fetters, witness, items)
   }
 
-  private encodeFettersAndWitnessesForTransfer (fetters: XyoStructure[], witness: XyoStructure[], items: XyoStructure[]): XyoIterableStructure {
+  private encodeFettersAndWitnessesForTransfer(fetters: XyoStructure[], witness: XyoStructure[], items: XyoStructure[]): XyoIterableStructure {
     if (fetters.length === 0 && witness.length !== 0) {
       return XyoIterableStructure.newIterable(XyoObjectSchema.WITNESS_SET, witness)
     }
@@ -113,7 +113,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
     return XyoIterableStructure.newIterable(XyoObjectSchema.BW_FRAGMENT, items)
   }
 
-  private addTransfer (transfer: XyoIterableStructure) {
+  private addTransfer(transfer: XyoIterableStructure) {
     XyoIterableStructure.validate(transfer)
 
     const it = transfer.newIterator()
@@ -123,7 +123,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
     }
   }
 
-  private getPublicKeysOfSigners (): XyoStructure[] {
+  private getPublicKeysOfSigners(): XyoStructure[] {
     const publicKeys: XyoStructure[] = []
 
     for (const signer of this.signers) {
@@ -133,7 +133,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
     return publicKeys
   }
 
-  private signBoundWitness (payload: XyoStructure[]) {
+  private signBoundWitness(payload: XyoStructure[]) {
     const signatures: XyoStructure[] = []
 
     for (const signer of this.signers) {
