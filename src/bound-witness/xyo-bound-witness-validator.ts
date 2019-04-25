@@ -25,7 +25,7 @@ export class XyoBoundWitnessValidator {
         return false
       }
 
-      for (let j = 0; j < publicKeysParty.length; j++) {
+      for (let j = 0; j < publicKeys.length; j++) {
         const publicKey = publicKeys[j]
         const signature = signatures[j]
         const signatureValidator = this.signatureValidators.get(signature.getSchema().id)
