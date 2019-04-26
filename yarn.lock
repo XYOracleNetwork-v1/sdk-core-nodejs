@@ -335,6 +335,20 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/bn.js@*":
+  version "4.11.5"
+  resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-4.11.5.tgz#40e36197433f78f807524ec623afcf0169ac81dc"
+  integrity sha512-AEAZcIZga0JgVMHNtl1CprA/hXX7/wPt79AgR4XqaDt7jyj3QWYw6LPoOiznPtugDmlubUnAahMs2PFxGcQrng==
+  dependencies:
+    "@types/node" "*"
+
+"@types/elliptic@^6.4.6":
+  version "6.4.6"
+  resolved "https://registry.yarnpkg.com/@types/elliptic/-/elliptic-6.4.6.tgz#16fe24b8a47d98377eb97e683fa47c5831bcb4a4"
+  integrity sha512-rAQEVgU0P+VWWTjUw3yGlVeDezyObfjfWq1d1noDOKB1VldM1u6Uvz4Va6eGkWUSDRFfDCOQmiRvqHRO8EvZGg==
+  dependencies:
+    "@types/bn.js" "*"
+
 "@types/istanbul-lib-coverage@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.0.tgz#1eb8c033e98cf4e1a4cedcaf8bcafe8cb7591e85"
@@ -352,7 +366,7 @@
   dependencies:
     "@types/jest-diff" "*"
 
-"@types/node@11.13.7":
+"@types/node@*", "@types/node@11.13.7":
   version "11.13.7"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-11.13.7.tgz#85dbb71c510442d00c0631f99dae957ce44fd104"
   integrity sha512-suFHr6hcA9mp8vFrZTgrmqW2ZU3mbWsryQtQlY/QvwTISCw7nw/j+bCQPPohqmskhmqa5wLNuMHTTsc+xf1MQg==

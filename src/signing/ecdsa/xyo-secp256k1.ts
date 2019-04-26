@@ -1,13 +1,13 @@
 import { IXyoSigner, XyoSignatureVerify } from '../xyo-signer'
 import { XyoStructure, XyoBuffer } from '@xyo-network/object-model'
-import { ec as EC, EllipticKey } from 'elliptic'
+import elliptic from 'elliptic'
 import { XyoObjectSchema } from '../../schema'
 
-const ec = new EC('secp256k1')
+const ec = new elliptic.ec('secp256k1')
 
 export class XyoSecp2556k1 implements IXyoSigner {
 
-  public static verify: XyoSignatureVerify = (publicKey: Buffer, signature: Buffer, data: Buffer): Promise<boolean> => {
+  public static verify: XyoSignatureVerify = async(publicKey: Buffer, signature: Buffer, data: Buffer): Promise<boolean> => {
     const signatureStructure = new XyoStructure(new XyoBuffer(signature))
     const publicKeyStructure = new XyoStructure(new XyoBuffer(publicKey))
     const derSignature = XyoSecp2556k1.buildDerSignature(signatureStructure.getValue().getContentsCopy())
@@ -34,16 +34,16 @@ export class XyoSecp2556k1 implements IXyoSigner {
     const sourceBufferSizeBuffer = Buffer.alloc(1)
     sourceBufferSizeBuffer.writeUInt8(source.length, 0)
 
-    return new Uint8Array(Buffer.concat([
+    return Buffer.concat([
       Buffer.from([0x30]),
       sourceBufferSizeBuffer,
       source
-    ]))
+    ]).toString('hex')
   }
 
-  private key: EllipticKey
+  private key: elliptic.ec.KeyPair
 
-  constructor(key?: EllipticKey) {
+  constructor(key?: elliptic.ec.KeyPair) {
     if (key) {
       this.key = key
       return
@@ -82,7 +82,7 @@ export class XyoSecp2556k1 implements IXyoSigner {
   }
 
   public getPrivateKey(): XyoStructure {
-    const privateKey = this.key.getPrivate('hex')
+    const privateKey = this.key.getPrivate('hex').toString()
     const buffer = new XyoBuffer(Buffer.from(privateKey, 'hex'))
 
     return XyoStructure.newInstance(XyoObjectSchema.EC_PRIVATE_KEY, buffer)
