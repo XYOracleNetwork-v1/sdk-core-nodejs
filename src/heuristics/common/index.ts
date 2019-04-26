@@ -189,6 +189,7 @@ export const timeResolver: IXyoHeuristicResolver = {
 export const addAllDefaults = () => {
   XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.BLE_POWER_LEVEL.id, rssiAt1MResolver)
   XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.EC_PUBLIC_KEY.id, secp256K1PublicKeyResolver)
+  XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.EC_SIGNATURE.id, secp256K1SignatureResolver)
   XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.INDEX.id, indexResolver)
   XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.LAT.id, latResolver)
   XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.LNG.id, lngResolver)
