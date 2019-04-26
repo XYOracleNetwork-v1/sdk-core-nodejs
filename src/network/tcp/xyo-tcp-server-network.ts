@@ -2,13 +2,15 @@
 import net from 'net'
 import { XyoTcpPipe } from './xyo-tcp-pipe'
 import { XyoAdvertisePacket } from '../xyo-advertise-packet'
+import { XyoBase } from '@xyo-network/sdk-base-nodejs'
 
-export class XyoServerTcpNetwork {
+export class XyoServerTcpNetwork extends XyoBase {
   public onPipeCreated: ((pipe: XyoTcpPipe) => void) | undefined
   public server: net.Server
   public port: number
 
   constructor(port: number) {
+    super()
     this.port = port
     this.server = net.createServer(this.connectionListener.bind(this))
   }
@@ -22,6 +24,7 @@ export class XyoServerTcpNetwork {
   }
 
   private connectionListener(socket: net.Socket) {
+    this.logInfo(`New connection made with ${socket.remoteAddress}:${socket.remotePort}`)
     let waitSize: number
     let currentSize = 0
     let currentBuffer = Buffer.alloc(0)
