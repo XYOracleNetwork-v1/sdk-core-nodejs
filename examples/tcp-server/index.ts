@@ -1,24 +1,14 @@
-import { XyoServerTcpNetwork, XyoFileOriginStateRepository, XyoMemoryBlockRepository, XyoZigZagBoundWitnessHander, XyoOriginPayloadConstructor, XyoBoundWitnessSuccessListener, XyoOriginState, XyoSha256, IXyoProcedureCatalogue, XyoNetworkHandler, XyoSecp2556k1, XyoGenesisBlockCreator } from '../../dist'
+import { XyoServerTcpNetwork, XyoFileOriginStateRepository, XyoMemoryBlockRepository, XyoZigZagBoundWitnessHander, XyoOriginPayloadConstructor, XyoBoundWitnessInserter, XyoOriginState, XyoSha256, IXyoProcedureCatalogue, XyoNetworkHandler, XyoSecp2556k1, XyoGenesisBlockCreator, XyoCatalogueFlags } from '../../dist'
+import  { archivistProcedureCatalogue } from './archivist-catalogue'
+import { XyoBase } from '@xyo-network/sdk-base-nodejs'
 
-const testProcedureCatalogue: IXyoProcedureCatalogue = {
-  getEncodedCanDo: () => {
-    return Buffer.from('01', 'hex')
-  },
-  choose: () => {
-    return Buffer.from('01', 'hex')
-  },
-  canDo: (buffer: Buffer) => {
-    return true
-  }
-}
-
-const main = async () => {
+const main = async() => {
   const tcpNetwork = new XyoServerTcpNetwork(4141)
   const stateRepo = new XyoFileOriginStateRepository('./test-state.json')
   const blockRepo = new XyoMemoryBlockRepository()
   const state = new XyoOriginState(stateRepo)
   const hasher = new XyoSha256()
-  const successListener = new XyoBoundWitnessSuccessListener(hasher, state, blockRepo)
+  const originChainInserter = new XyoBoundWitnessInserter(hasher, state, blockRepo)
   const payloadProvider = new XyoOriginPayloadConstructor(state)
   const handler = new XyoZigZagBoundWitnessHander(payloadProvider)
 
@@ -27,18 +17,17 @@ const main = async () => {
   if (state.getIndexAsNumber() === 0) {
     const genesisBlock =  await XyoGenesisBlockCreator.create(state.getSigners(), payloadProvider)
     console.log(`Created genesis block with hash: ${genesisBlock.getHash(hasher).getAll().getContentsCopy().toString('hex')}`)
-    successListener.onBoundWitnessCompleted(genesisBlock)
+    originChainInserter.insert(genesisBlock)
   }
 
-  tcpNetwork.onPipeCreated = async (pipe) => {
+  tcpNetwork.onPipeCreated = async(pipe) => {
     console.log('New request!')
     try {
       const networkHandle = new XyoNetworkHandler(pipe)
-      const boundWitness = await handler.boundWitness(networkHandle, testProcedureCatalogue, state.getSigners())
+      const boundWitness = await handler.boundWitness(networkHandle, archivistProcedureCatalogue, state.getSigners())
 
       if (boundWitness) {
-        console.log(`Created bound witness with hash: ${boundWitness.getHash(hasher).getAll().getContentsCopy().toString('hex')}`)
-        successListener.onBoundWitnessCompleted(boundWitness)
+        originChainInserter.insert(boundWitness)
       }
     } catch (error) {
       console.log(`Error creating bound witness: ${error}`)
