@@ -342,12 +342,26 @@
   dependencies:
     "@types/node" "*"
 
+"@types/bn.js@*":
+  version "4.11.5"
+  resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-4.11.5.tgz#40e36197433f78f807524ec623afcf0169ac81dc"
+  integrity sha512-AEAZcIZga0JgVMHNtl1CprA/hXX7/wPt79AgR4XqaDt7jyj3QWYw6LPoOiznPtugDmlubUnAahMs2PFxGcQrng==
+  dependencies:
+    "@types/node" "*"
+
 "@types/bs58@4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/bs58/-/bs58-4.0.0.tgz#baec75cb007b419ede3ec6b3410d2c8f14c92fc5"
   integrity sha512-gYX+MHD4G/R+YGYwdhG5gbJj4LsEQGr3Vg6gVDAbe7xC5Bn8dNNG2Lpo6uDX/rT5dE7VBj0rGEFuV8L0AEx4Rg==
   dependencies:
     "@types/base-x" "*"
+
+"@types/elliptic@^6.4.6":
+  version "6.4.6"
+  resolved "https://registry.yarnpkg.com/@types/elliptic/-/elliptic-6.4.6.tgz#16fe24b8a47d98377eb97e683fa47c5831bcb4a4"
+  integrity sha512-rAQEVgU0P+VWWTjUw3yGlVeDezyObfjfWq1d1noDOKB1VldM1u6Uvz4Va6eGkWUSDRFfDCOQmiRvqHRO8EvZGg==
+  dependencies:
+    "@types/bn.js" "*"
 
 "@types/istanbul-lib-coverage@^2.0.0":
   version "2.0.0"
