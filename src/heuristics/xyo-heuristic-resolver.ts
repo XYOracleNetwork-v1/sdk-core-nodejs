@@ -1,5 +1,5 @@
 import { XyoBoundWitness } from '../bound-witness'
-import { XyoIterableStructure } from '@xyo-network/object-model'
+import { XyoIterableStructure, XyoStructure, XyoBuffer } from '@xyo-network/object-model'
 import { XyoObjectSchema } from '../schema'
 
 export interface IXyoHeuristicResolver {
@@ -21,38 +21,33 @@ export class XyoHumanHeuristicResolver {
     XyoHumanHeuristicResolver.resolvers.delete(forId)
   }
 
-  public static resolve(boundWitness: XyoIterableStructure): IXyoHumanHeuristic[][] {
-    const bwIt = boundWitness.newIterator()
-    const partyHeuristics: IXyoHumanHeuristic[][] = []
+  public static resolve(any: Buffer): any {
+    const item = new XyoStructure(new XyoBuffer(any))
 
-    while (bwIt.hasNext()) {
-      const bwItem = bwIt.next().value
+    if (item.getSchema().getIsIterable()) {
+      const children: any[] = []
+      const iterableItem = new XyoIterableStructure(new XyoBuffer(any)).newIterator()
 
-      if (bwItem instanceof XyoIterableStructure && bwItem.getSchema().id === XyoObjectSchema.FETTER.id) {
-        const bwItemIt = bwItem.newIterator()
-        const heuristics: IXyoHumanHeuristic[] = []
-
-        while (bwItemIt.hasNext()) {
-          const item =  bwItemIt.next().value
-          try {
-
-            const resolver = XyoHumanHeuristicResolver.resolvers.get(item.getSchema().id)
-
-            if (resolver) {
-              heuristics.push(resolver.resolve(item.getAll().getContentsCopy()))
-            }
-          } catch (error) {
-            // a byte error as happened, so do not add the IXyoHumanHeuristic
-          }
-        }
-
-        partyHeuristics.push(heuristics)
+      while (iterableItem.hasNext()) {
+        const subItem = iterableItem.next().value
+        children.push(XyoHumanHeuristicResolver.resolve(subItem.getAll().getContentsCopy()))
       }
+
+      return children
     }
 
-    return partyHeuristics
+    const resolver = XyoHumanHeuristicResolver.resolvers.get(item.getSchema().id)
+
+    if (resolver) {
+      return resolver.resolve(item.getAll().getContentsCopy())
+    }
+
+    return {
+      name: 'unknown',
+      value: any.toString('base64')
+    }
   }
 
-  private static resolvers: Map<number, IXyoHeuristicResolver>
+  private static resolvers: Map<number, IXyoHeuristicResolver> = new Map()
 
 }
