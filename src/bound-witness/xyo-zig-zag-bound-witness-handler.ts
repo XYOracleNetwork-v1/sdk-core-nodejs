@@ -18,27 +18,32 @@ export class XyoZigZagBoundWitnessHander implements IXyoBoundWitnessHander {
   }
 
   public async boundWitness(handler: XyoNetworkHandler, catalogue: IXyoProcedureCatalogue, signers: IXyoSigner[]): Promise<XyoBoundWitness | undefined> {
-    if (this.currentBoundWitnessSession !== undefined) {
-      throw new Error('Bound witness is already in session')
+    try {
+      if (this.currentBoundWitnessSession !== undefined) {
+        throw new Error('Bound witness is already in session')
+      }
+
+      const initData = handler.pipe.getInitiationData()
+
+      if (initData) {
+        const serverChoice = catalogue.choose(initData.getChoice())
+        return this.handleBoundWitness(undefined, handler, XyoCatalogueFlags.flip(serverChoice), signers)
+      }
+
+      const response = await handler.sendCataloguePacket(catalogue.getEncodedCanDo())
+
+      if (!response) {
+        throw new Error('Response is undefined')
+      }
+
+      const adv = new XyoChoicePacket(response)
+      const startingData = new XyoIterableStructure(new XyoBuffer(adv.getResponse()))
+      const choice = adv.getChoice()
+      return this.handleBoundWitness(startingData, handler, choice, signers)
+    } catch (error) {
+      this.currentBoundWitnessSession = undefined
+      throw error
     }
-
-    const initData = handler.pipe.getInitiationData()
-
-    if (initData) {
-      const serverChoice = catalogue.choose(initData.getChoice())
-      return this.handleBoundWitness(undefined, handler, XyoCatalogueFlags.flip(serverChoice), signers)
-    }
-
-    const response = await handler.sendCataloguePacket(catalogue.getEncodedCanDo())
-
-    if (!response) {
-      throw new Error('Response is undefined')
-    }
-
-    const adv = new XyoChoicePacket(response)
-    const startingData = new XyoIterableStructure(new XyoBuffer(adv.getResponse()))
-    const choice = adv.getChoice()
-    return this.handleBoundWitness(startingData, handler, choice, signers)
   }
 
   private async handleBoundWitness(startingData: XyoIterableStructure | undefined, handler: XyoNetworkHandler, choice: Buffer, signers: IXyoSigner[])
