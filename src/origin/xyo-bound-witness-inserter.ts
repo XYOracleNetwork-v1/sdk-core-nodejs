@@ -5,13 +5,16 @@ import { IXyoOriginStateRepository } from '../persist/xyo-origin-state-repositor
 import { XyoBoundWitness } from '../bound-witness'
 import { XyoIterableStructure, XyoStructure, XyoSchema } from '@xyo-network/object-model'
 import { XyoObjectSchema } from '../schema'
+import { XyoBase } from '@xyo-network/sdk-base-nodejs'
+import bs58 from 'bs58'
 
-export class XyoBoundWitnessInserter {
+export class XyoBoundWitnessInserter extends XyoBase {
   private hasher: IXyoHasher
   private state: XyoOriginState
   private blockRepository: IXyoOriginBlockRepository
 
   constructor(hasher: IXyoHasher, state: XyoOriginState, blockRepo: IXyoOriginBlockRepository) {
+    super()
     this.hasher = hasher
     this.state = state
     this.blockRepository = blockRepo
@@ -23,8 +26,13 @@ export class XyoBoundWitnessInserter {
     const rootBlockWithoutBridgedBlocks = this.removeBridgeBlocks(boundWitness)
     const hash = boundWitness.getHash(this.hasher)
     this.state.addOriginBlock(hash)
+
+    this.logInfo(`Inserted new origin block with hash: ${bs58.encode(hash.getAll().getContentsCopy())}`)
+
     await this.state.repo.commit()
     await this.blockRepository.addOriginBlock(hash.getAll().getContentsCopy(), rootBlockWithoutBridgedBlocks.getAll().getContentsCopy())
+
+    this.logInfo(`Origin state at new height: ${this.state.getIndexAsNumber()}`)
 
     if (bridgeBlocks && bridgeBlocksHashes) {
       await this.blockRepository.addOriginBlocks(bridgeBlocksHashes.getAll().getContentsCopy(), bridgeBlocks.getAll().getContentsCopy())

@@ -1,7 +1,8 @@
 import { XyoServerTcpNetwork, XyoFileOriginStateRepository, XyoMemoryBlockRepository, XyoZigZagBoundWitnessHander, XyoOriginPayloadConstructor, XyoBoundWitnessInserter, XyoOriginState, XyoSha256, IXyoProcedureCatalogue, XyoNetworkHandler, XyoSecp2556k1, XyoGenesisBlockCreator, XyoCatalogueFlags } from '../../dist'
 import  { archivistProcedureCatalogue } from './archivist-catalogue'
+import { XyoBase } from '@xyo-network/sdk-base-nodejs'
 
-const main = async () => {
+const main = async() => {
   const tcpNetwork = new XyoServerTcpNetwork(4141)
   const stateRepo = new XyoFileOriginStateRepository('./test-state.json')
   const blockRepo = new XyoMemoryBlockRepository()
@@ -19,14 +20,13 @@ const main = async () => {
     originChainInserter.insert(genesisBlock)
   }
 
-  tcpNetwork.onPipeCreated = async (pipe) => {
+  tcpNetwork.onPipeCreated = async(pipe) => {
     console.log('New request!')
     try {
       const networkHandle = new XyoNetworkHandler(pipe)
       const boundWitness = await handler.boundWitness(networkHandle, archivistProcedureCatalogue, state.getSigners())
 
       if (boundWitness) {
-        console.log(`Created bound witness with hash: ${boundWitness.getHash(hasher).getAll().getContentsCopy().toString('hex')}`)
         originChainInserter.insert(boundWitness)
       }
     } catch (error) {

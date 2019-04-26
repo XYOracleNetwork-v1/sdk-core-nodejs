@@ -8,7 +8,7 @@ export class XyoBoundWitnessValidator {
     this.signatureValidators = signatureValidators
   }
 
-  public validate (boundWitness: XyoBoundWitness, allowUnknownSignatures: boolean): boolean {
+  public validate(boundWitness: XyoBoundWitness, allowUnknownSignatures: boolean): boolean {
     const signingData = boundWitness.getSigningData()
     const publicKeysParty = boundWitness.getPublicKeys()
     const signaturesParty = boundWitness.getSignatures()
