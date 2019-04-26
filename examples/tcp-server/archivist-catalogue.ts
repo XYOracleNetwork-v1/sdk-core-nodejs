@@ -1,28 +1,28 @@
-import { IXyoProcedureCatalogue, XyoCatalogueFlags } from '../../dist'
+import { IXyoProcedureCatalog, XyoCatalogFlags } from '../../dist'
 
-export const archivistProcedureCatalogue: IXyoProcedureCatalogue = {
+export const archivistProcedureCatalog: IXyoProcedureCatalog = {
   getEncodedCanDo: () => {
-    return Buffer.from([XyoCatalogueFlags.TAKE_ORIGIN_CHAIN | XyoCatalogueFlags.BOUND_WITNESS])
+    return Buffer.from([XyoCatalogFlags.TAKE_ORIGIN_CHAIN | XyoCatalogFlags.BOUND_WITNESS])
   },
-  choose: (catalogue: Buffer): Buffer => {
-    if (catalogue.length < 1) {
-      throw new Error('Catalogue must have at least a byte')
+  choose: (catalog: Buffer): Buffer => {
+    if (catalog.length < 1) {
+      throw new Error('Catalog must have at least a byte')
     }
 
-    const catalogueInt = catalogue.readUInt8(0)
+    const catalogInt = catalog.readUInt8(0)
 
-    if ((catalogueInt & XyoCatalogueFlags.GIVE_ORIGIN_CHAIN) !== 0) {
-      return new Buffer([XyoCatalogueFlags.TAKE_ORIGIN_CHAIN])
+    if ((catalogInt & XyoCatalogFlags.GIVE_ORIGIN_CHAIN) !== 0) {
+      return new Buffer([XyoCatalogFlags.TAKE_ORIGIN_CHAIN])
     }
 
-    return new Buffer([XyoCatalogueFlags.BOUND_WITNESS])
+    return new Buffer([XyoCatalogFlags.BOUND_WITNESS])
   },
   canDo: (buffer: Buffer): boolean => {
     if (buffer.length < 1) {
       return false
     }
 
-    const catalogueInt = buffer.readUInt8(0)
-    return (catalogueInt & (XyoCatalogueFlags.GIVE_ORIGIN_CHAIN | XyoCatalogueFlags.BOUND_WITNESS)) !== 0
+    const catalogInt = buffer.readUInt8(0)
+    return (catalogInt & (XyoCatalogFlags.GIVE_ORIGIN_CHAIN | XyoCatalogFlags.BOUND_WITNESS)) !== 0
   }
 }

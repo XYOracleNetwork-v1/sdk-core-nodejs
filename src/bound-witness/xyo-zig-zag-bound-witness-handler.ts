@@ -1,11 +1,11 @@
 import { XyoBoundWitness } from '../bound-witness'
 import { XyoZigZagBoundWitnessSession } from '../bound-witness/xyo-zig-zag-bound-witness-session'
 import { XyoNetworkHandler } from '../network/xyo-network-handler'
-import { IXyoProcedureCatalogue } from '../network/xyo-procedure-catalogue'
+import { IXyoProcedureCatalog } from '../network/xyo-procedure-catalog'
 import { XyoChoicePacket } from '../network/xyo-choice-packet'
 import { XyoIterableStructure, XyoBuffer } from '@xyo-network/object-model'
 import { IXyoBoundWitnessHander } from './xyo-bound-witness-handler'
-import { XyoCatalogueFlags } from '../network/xyo-catalogue-flags'
+import { XyoCatalogFlags } from '../network/xyo-catalog-flags'
 import { IXyoSigner } from '../signing/xyo-signer'
 import { IXyoPayloadConstructor } from '../origin/xyo-payload-constructor'
 
@@ -17,7 +17,7 @@ export class XyoZigZagBoundWitnessHander implements IXyoBoundWitnessHander {
     this.payloadProvider = payloadProvider
   }
 
-  public async boundWitness(handler: XyoNetworkHandler, catalogue: IXyoProcedureCatalogue, signers: IXyoSigner[]): Promise<XyoBoundWitness | undefined> {
+  public async boundWitness(handler: XyoNetworkHandler, catalog: IXyoProcedureCatalog, signers: IXyoSigner[]): Promise<XyoBoundWitness | undefined> {
     if (this.currentBoundWitnessSession !== undefined) {
       throw new Error('Bound witness is already in session')
     }
@@ -25,11 +25,11 @@ export class XyoZigZagBoundWitnessHander implements IXyoBoundWitnessHander {
     const initData = handler.pipe.getInitiationData()
 
     if (initData) {
-      const serverChoice = catalogue.choose(initData.getChoice())
-      return this.handleBoundWitness(undefined, handler, XyoCatalogueFlags.flip(serverChoice), signers)
+      const serverChoice = catalog.choose(initData.getChoice())
+      return this.handleBoundWitness(undefined, handler, XyoCatalogFlags.flip(serverChoice), signers)
     }
 
-    const response = await handler.sendCataloguePacket(catalogue.getEncodedCanDo())
+    const response = await handler.sendCatalogPacket(catalog.getEncodedCanDo())
 
     if (!response) {
       throw new Error('Response is undefined')
@@ -44,7 +44,7 @@ export class XyoZigZagBoundWitnessHander implements IXyoBoundWitnessHander {
   private async handleBoundWitness(startingData: XyoIterableStructure | undefined, handler: XyoNetworkHandler, choice: Buffer, signers: IXyoSigner[])
   : Promise<XyoBoundWitness | undefined> {
     const payloads = await this.payloadProvider.getPayloads(choice)
-    const boundWitness = new XyoZigZagBoundWitnessSession(handler, payloads.signed, payloads.unsigned, signers, XyoCatalogueFlags.flip(choice))
+    const boundWitness = new XyoZigZagBoundWitnessSession(handler, payloads.signed, payloads.unsigned, signers, XyoCatalogFlags.flip(choice))
     this.currentBoundWitnessSession = boundWitness
 
     await boundWitness.doBoundWitness(startingData)

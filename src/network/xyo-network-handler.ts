@@ -2,9 +2,9 @@ import { IXyoNetworkPipe } from './xyo-network-pipe'
 
 export class XyoNetworkHandler {
 
-  private static getSizeEncodedCatalogue(catalogue: Buffer): Buffer {
+  private static getSizeEncodedCatalog(catalog: Buffer): Buffer {
     const sizeBuffer = Buffer.alloc(1)
-    sizeBuffer.writeUInt8(catalogue.length, 0)
+    sizeBuffer.writeUInt8(catalog.length, 0)
     return Buffer.concat([sizeBuffer, sizeBuffer])
   }
 
@@ -14,14 +14,14 @@ export class XyoNetworkHandler {
     this.pipe = pipe
   }
 
-  public sendCataloguePacket(catalogue: Buffer): Promise<Buffer | undefined> {
-    const buffer = XyoNetworkHandler.getSizeEncodedCatalogue(catalogue)
+  public sendCatalogPacket(catalog: Buffer): Promise<Buffer | undefined> {
+    const buffer = XyoNetworkHandler.getSizeEncodedCatalog(catalog)
     return this.pipe.send(buffer, true)
   }
 
   public sendChoicePacket(choice: Buffer, response: Buffer): Promise<Buffer | undefined> {
     const bufferToSend = Buffer.concat([
-      XyoNetworkHandler.getSizeEncodedCatalogue(choice),
+      XyoNetworkHandler.getSizeEncodedCatalog(choice),
       response
     ])
 
