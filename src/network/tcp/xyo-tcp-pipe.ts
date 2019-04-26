@@ -18,10 +18,13 @@ export class XyoTcpPipe extends XyoBase implements IXyoNetworkPipe {
   }
 
   public async send(data: Buffer, waitForResponse: boolean): Promise<Buffer | undefined> {
+    this.logVerbose(`Sending data through socket: ${data.toString('hex')}`)
     await this.sendData(data)
 
     if (waitForResponse) {
-      return this.waitForMessage()
+      const response = await this.waitForMessage()
+      this.logVerbose(`Got data through socket: ${response.toString('hex')}`)
+      return response
     }
 
     return undefined
