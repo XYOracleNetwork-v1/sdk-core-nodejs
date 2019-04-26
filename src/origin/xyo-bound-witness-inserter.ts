@@ -30,12 +30,15 @@ export class XyoBoundWitnessInserter extends XyoBase {
     this.logInfo(`Inserted new origin block with hash: ${bs58.encode(hash.getAll().getContentsCopy())}`)
 
     await this.state.repo.commit()
-    await this.blockRepository.addOriginBlock(hash.getAll().getContentsCopy(), rootBlockWithoutBridgedBlocks.getAll().getContentsCopy())
+
+    // no need to await the add block, this can be async
+    this.blockRepository.addOriginBlock(hash.getAll().getContentsCopy(), rootBlockWithoutBridgedBlocks.getAll().getContentsCopy())
 
     this.logInfo(`Origin state at new height: ${this.state.getIndexAsNumber()}`)
 
     if (bridgeBlocks && bridgeBlocksHashes) {
-      await this.blockRepository.addOriginBlocks(bridgeBlocksHashes.getAll().getContentsCopy(), bridgeBlocks.getAll().getContentsCopy())
+        // no need to await the add block, this can be async
+      this.blockRepository.addOriginBlocks(bridgeBlocksHashes.getAll().getContentsCopy(), bridgeBlocks.getAll().getContentsCopy())
     }
   }
 
