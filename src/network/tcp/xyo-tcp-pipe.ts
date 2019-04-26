@@ -1,12 +1,14 @@
 import net from 'net'
 import { IXyoNetworkPipe } from '../xyo-network-pipe'
 import { XyoAdvertisePacket } from '../xyo-advertise-packet'
+import { XyoBase } from '@xyo-network/sdk-base-nodejs'
 
-export class XyoTcpPipe implements IXyoNetworkPipe {
+export class XyoTcpPipe extends XyoBase implements IXyoNetworkPipe {
   private socket: net.Socket
   private initData: XyoAdvertisePacket | undefined
 
   constructor(socket: net.Socket, initData: XyoAdvertisePacket | undefined) {
+    super()
     this.socket = socket
     this.initData = initData
   }
@@ -16,16 +18,20 @@ export class XyoTcpPipe implements IXyoNetworkPipe {
   }
 
   public async send(data: Buffer, waitForResponse: boolean): Promise<Buffer | undefined> {
+    this.logVerbose(`Sending data through socket: ${data.toString('hex')}`)
     await this.sendData(data)
 
     if (waitForResponse) {
-      return this.waitForMessage()
+      const response = await this.waitForMessage()
+      this.logVerbose(`Got data through socket: ${response.toString('hex')}`)
+      return response
     }
 
     return undefined
   }
 
   public async close() {
+    this.logInfo(`Closing connection with ${this.socket.remoteAddress}:${this.socket.remotePort}`)
     this.socket.end()
   }
 

@@ -16,12 +16,10 @@ const main = async() => {
 
   if (state.getIndexAsNumber() === 0) {
     const genesisBlock =  await XyoGenesisBlockCreator.create(state.getSigners(), payloadProvider)
-    console.log(`Created genesis block with hash: ${genesisBlock.getHash(hasher).getAll().getContentsCopy().toString('hex')}`)
     originChainInserter.insert(genesisBlock)
   }
 
   tcpNetwork.onPipeCreated = async(pipe) => {
-    console.log('New request!')
     try {
       const networkHandle = new XyoNetworkHandler(pipe)
       const boundWitness = await handler.boundWitness(networkHandle, archivistProcedureCatalog, state.getSigners())
@@ -29,6 +27,8 @@ const main = async() => {
       if (boundWitness) {
         originChainInserter.insert(boundWitness)
       }
+
+      pipe.close()
     } catch (error) {
       console.log(`Error creating bound witness: ${error}`)
     }

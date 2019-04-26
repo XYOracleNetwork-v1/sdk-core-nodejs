@@ -5,7 +5,7 @@ export class XyoNetworkHandler {
   private static getSizeEncodedCatalog(catalog: Buffer): Buffer {
     const sizeBuffer = Buffer.alloc(1)
     sizeBuffer.writeUInt8(catalog.length, 0)
-    return Buffer.concat([sizeBuffer, sizeBuffer])
+    return Buffer.concat([sizeBuffer, catalog])
   }
 
   public pipe: IXyoNetworkPipe

@@ -65,7 +65,7 @@ export class XyoSecp2556k1 implements IXyoSigner {
       sBuffer
     ])
 
-    return XyoStructure.newInstance(XyoObjectSchema.SIGNATURE_SET, new XyoBuffer(value))
+    return XyoStructure.newInstance(XyoObjectSchema.EC_SIGNATURE, new XyoBuffer(value))
   }
 
   public getPublicKey(): XyoStructure {

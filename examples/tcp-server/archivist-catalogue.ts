@@ -9,7 +9,7 @@ export const archivistProcedureCatalog: IXyoProcedureCatalog = {
       throw new Error('Catalog must have at least a byte')
     }
 
-    const catalogInt = catalog.readUInt8(0)
+    const catalogueInt = catalogue.readUInt8(catalogue.length - 1)
 
     if ((catalogInt & XyoCatalogFlags.GIVE_ORIGIN_CHAIN) !== 0) {
       return new Buffer([XyoCatalogFlags.TAKE_ORIGIN_CHAIN])
