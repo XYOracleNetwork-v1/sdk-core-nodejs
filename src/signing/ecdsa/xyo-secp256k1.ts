@@ -43,9 +43,11 @@ export class XyoSecp2556k1 implements IXyoSigner {
 
   private key: elliptic.ec.KeyPair
 
-  constructor(key?: elliptic.ec.KeyPair) {
+  constructor(key?: Buffer) {
     if (key) {
-      this.key = key
+      const structure = new XyoStructure(key)
+      const privateKey = structure.getValue().getContentsCopy()
+      this.key = ec.keyFromPrivate(privateKey)
       return
     }
 

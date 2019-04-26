@@ -6,6 +6,7 @@ import fs from 'fs'
 interface IXyoFileOriginState {
   index: string | undefined
   previousHash: string | undefined
+  signers: string[]
 }
 
 export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
@@ -66,7 +67,7 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
     })
   }
 
-  public async restore(): Promise<void> {
+  public async restore(signerFromPrivateKey: (buffer: Buffer) => IXyoSigner): Promise<void> {
     const currentState = await this.readCurrentFileState()
 
     if (currentState) {
@@ -77,6 +78,10 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
       if (currentState.previousHash) {
         this.previousHashCache = new XyoStructure(new XyoBuffer(Buffer.from(currentState.previousHash, 'base64')))
       }
+
+      currentState.signers.forEach((privateKey) => {
+        this.signersCache.push(signerFromPrivateKey(Buffer.from(privateKey, 'base64')))
+      })
     }
   }
 
@@ -95,6 +100,7 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
   }
 
   private getCurrentFileState(): IXyoFileOriginState {
+    const signersString: string[] = []
     let previousHashString: string | undefined
     let indexString: string | undefined
 
@@ -106,9 +112,14 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
       indexString = this.indexCache.getAll().getContentsCopy().toString('base64')
     }
 
+    this.signersCache.forEach((signer) => {
+      signersString.push(signer.getPrivateKey().getAll().getContentsCopy().toString('base64'))
+    })
+
     const state: IXyoFileOriginState = {
       index: indexString,
-      previousHash: previousHashString
+      previousHash: previousHashString,
+      signers: signersString
     }
 
     return state
