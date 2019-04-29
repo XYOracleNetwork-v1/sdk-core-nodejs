@@ -1,45 +1,52 @@
 {
-  "name": "xyo-core",
-  "version": "0.2.1",
+  "name": "@xyo-network/sdk-core-nodejs",
+  "version": "0.61.0-alpha.18",
   "description": "A workspace to aggregated nodejs XYO projects",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "MIT",
-  "private": true,
   "scripts": {
-    "build": "tsc -b packages",
-    "release": "lerna publish",
+    "build": "tsc -b",
     "test": "yarn build && export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose false --detectOpenHandles",
-    "lint": "tslint -c tslint.json -p packages/tsconfig.json",
-    "clean": "node scripts/clean.js",
+    "lint": "tslint -c tslint.json -p ./tsconfig.json",
     "license": "yarn license-checker --onlyAllow 'MIT;BSD-2-Clause;BSD-3-Clause;Apache-2.0;ISC;Unlicense;UNKNOWN;BSD*;CC0-1.0' --excludePackages 'colors@0.6.2'",
-    "start:bridge": "yarn --cwd ./packages/bridge-server start",
-    "stop:bridge": "yarn --cwd ./packages/bridge-server stop",
-    "package:bridge": "rm -rf ./bridge-server.zip && zip -r -X bridge-server.zip .",
-    "deploy:bridge": "scp ./bridge-server.zip pi@$IP:~/Documents && ssh pi@$IP \"rm -rf Documents/bridge-server && unzip Documents/bridge-server.zip -d Documents/bridge-server\"",
-    "create:package": "node scripts/create-package.js",
-    "web3": "node --experimental-repl-await scripts/web3-repl.js",
-    "manage:db": "node scripts/manage-xyo-db.js",
-    "manage:db:logs": "docker logs -f --tail 100 XyoDb",
-    "manage:ganache": "node scripts/manage-ganache.js",
-    "manage:ganache:balances": "node scripts/manage-ganache.js balances",
-    "manage:ganache:logs": "docker logs -f --tail 100 ganache",
-    "manage:ipfs": "node scripts/manage-ipfs.js",
-    "manage:ipfs:cmd": "docker exec ipfs_host ipfs",
-    "manage:ipfs:add": "node scripts/manage-ipfs.js add",
-    "manage:ipfs:logs": "docker logs -f --tail 100 ipfs_host"
+    "start:tcp": "yarn build && node --nolazy -r ts-node/register examples/tcp-server/index.ts"
   },
   "devDependencies": {
-    "@xyo-network/config-tslint": "^0.1.12",
+    "@types/bs58": "4.0.0",
+    "@types/elliptic": "^6.4.6",
+    "@types/jest": "^24.0.11",
+    "@types/node": "11.13.7",
+    "@xyo-network/config-tslint": "^0.1.13",
     "enquirer": "^2.3.0",
-    "lerna": "^3.13.1",
+    "jest": "^24.7.1",
     "license-checker": "^25.0.1",
     "shelljs": "^0.8.3",
+    "ts-jest": "^24.0.0",
+    "ts-node": "8.1.0",
     "tslint": "^5.12.1",
-    "typescript": "^3.4.4"
+    "typescript": "^3.4.5"
   },
-  "workspaces": [
-    "packages/*"
+  "dependencies": {
+    "@xyo-network/object-model": "^0.5.10",
+    "@xyo-network/sdk-base-nodejs": "0.2.0",
+    "bs58": "4.0.1",
+    "elliptic": "6.4.1"
+  },
+  "files": [
+    "dist",
+    "bin"
   ],
-  "dependencies": {}
+  "engineStrict": true,
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/_/",
+      "/src/"
+    ],
+    "testEnvironment": "node"
+  }
 }
