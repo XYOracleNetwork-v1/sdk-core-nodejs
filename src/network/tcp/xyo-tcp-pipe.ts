@@ -51,6 +51,14 @@ export class XyoTcpPipe extends XyoBase implements IXyoNetworkPipe {
         }
       }
 
+      const onClose = () => {
+        if (!hasResumed) {
+          hasResumed = true
+          this.socket.removeAllListeners()
+          reject('Socket closed while waiting for write')
+        }
+      }
+
       this.socket.on('data', (data: Buffer) => {
         currentSize += data.length
         currentBuffer = Buffer.concat([currentBuffer, data])
@@ -66,13 +74,8 @@ export class XyoTcpPipe extends XyoBase implements IXyoNetworkPipe {
         }
       })
 
-      this.socket.on('close', () => {
-        if (!hasResumed) {
-          hasResumed = true
-          this.socket.removeAllListeners()
-          reject('Socket closed while waiting for write')
-        }
-      })
+      this.socket.on('close', onClose)
+      this.socket.on('error', onClose)
 
       setTimeout(onTimeout, 7_500)
     })

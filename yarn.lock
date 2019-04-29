@@ -404,10 +404,10 @@
     tslint-react "^3.6.0"
     tsutils "^3.5.0"
 
-"@xyo-network/object-model@^0.5.9":
-  version "0.5.9"
-  resolved "https://registry.yarnpkg.com/@xyo-network/object-model/-/object-model-0.5.9.tgz#4ba01dbbc89f336639a6a8ba778aabe47c7ca08e"
-  integrity sha512-gERg9YmUd5LY/GgVSGhiCMd/uw551kr7nxNwOtwIQo7vO23o5y1Jmth5cB1g89cWfl/cML9tfPh6CcY4BLj6Zw==
+"@xyo-network/object-model@^0.5.11":
+  version "0.5.11"
+  resolved "https://registry.yarnpkg.com/@xyo-network/object-model/-/object-model-0.5.11.tgz#83fa7a7596ffdb5bac622d42b418e19b7ea1a119"
+  integrity sha512-3DiKSOquRYInJKggO1nsESkbIgqcGWzoqF0bfZaiJVEF4JwQEICIk9Qcvsd0KJCyDfuYsMNNoUeEIxz4EtP5gw==
 
 "@xyo-network/sdk-base-nodejs@0.2.0":
   version "0.2.0"
