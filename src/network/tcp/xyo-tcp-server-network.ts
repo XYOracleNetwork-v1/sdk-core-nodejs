@@ -25,6 +25,11 @@ export class XyoServerTcpNetwork extends XyoBase {
 
   private connectionListener(socket: net.Socket) {
     this.logInfo(`New connection made with ${socket.remoteAddress}:${socket.remotePort}`)
+
+    socket.on('error', (e) => {
+      this.logWarning(`Unknown socket error: ${e}`)
+    })
+
     let waitSize: number
     let currentSize = 0
     let currentBuffer = Buffer.alloc(0)

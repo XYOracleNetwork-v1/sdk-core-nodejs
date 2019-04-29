@@ -1,5 +1,5 @@
 import { XyoServerTcpNetwork, XyoFileOriginStateRepository, XyoMemoryBlockRepository, XyoZigZagBoundWitnessHander, XyoOriginPayloadConstructor, XyoBoundWitnessInserter, XyoOriginState, XyoSha256, IXyoProcedureCatalog, XyoNetworkHandler, XyoSecp2556k1, XyoGenesisBlockCreator, XyoCatalogFlags } from '../../dist'
-import  { archivistProcedureCatalog } from './archivist-catalog'
+import  { archivistProcedureCatalog } from './archivist-catalogue'
 import { XyoBase } from '@xyo-network/sdk-base-nodejs'
 
 const main = async() => {
@@ -24,6 +24,7 @@ const main = async() => {
       const networkHandle = new XyoNetworkHandler(pipe)
       const boundWitness = await handler.boundWitness(networkHandle, archivistProcedureCatalog, state.getSigners())
 
+      console.log('hello')
       if (boundWitness) {
         originChainInserter.insert(boundWitness)
       }
