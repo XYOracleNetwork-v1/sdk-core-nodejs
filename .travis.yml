@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- 10
+- "10"
 cache:
   yarn: true
   directories:
@@ -10,6 +10,11 @@ addons:
     organization: xyo-network
 install:
 - yarn install
-script:
 - yarn build
 - sonar-scanner
+deploy:
+  provider: npm
+  email: support@xy.company
+  api_key: $NPM_TOKEN
+  on:
+    branch: master

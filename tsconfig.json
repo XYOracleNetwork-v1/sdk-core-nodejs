@@ -3,16 +3,18 @@
     "target": "es6",
     "module": "commonjs",
     "lib": [
-      "esnext",
-      "dom"
+      "esnext"
     ],
-    "declaration": false,
-    "declarationMap": false,
-    "sourceMap": false,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
     "strict": true,
     "esModuleInterop": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
     "outDir": "dist"
-  }
+  },
+  "include": [
+    "src/**/*"
+  ],
 }
