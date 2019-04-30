@@ -11,6 +11,7 @@ addons:
 install:
 - yarn install
 - yarn build
+script:
 - sonar-scanner
 deploy:
   provider: npm
