@@ -13,11 +13,11 @@ install:
 script:
 - yarn build
 - sonar-scanner
+before_deploy:
+  - echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
 deploy:
   provider: script
   skip_cleanup: true
-  script:
-    echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-    yarn publish
+  script: npm publish
   on:
     branch: master
