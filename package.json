@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/sdk-core-nodejs",
-  "version": "0.61.11",
+  "version": "0.61.13",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -35,8 +35,8 @@
     "elliptic": "6.4.1"
   },
   "files": [
-    "./dist/**/*",
-    "./bin/**/*"
+    "dist/**/*",
+    "bin/**/*"
   ],
   "engineStrict": true,
   "engines": {
