@@ -10,8 +10,8 @@ addons:
     organization: xyo-network
 install:
 - yarn install
-- yarn build
 script:
+- yarn build
 - sonar-scanner
 deploy:
   provider: npm
