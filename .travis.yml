@@ -14,7 +14,7 @@ script:
 - yarn build
 - sonar-scanner
 deploy:
-  provider: yarn
+  provider: npm
   skip_cleanup: true
   email: support@xy.company
   api_key: $NPM_TOKEN
