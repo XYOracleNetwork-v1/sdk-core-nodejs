@@ -395,10 +395,10 @@
   resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-12.0.12.tgz#45dd1d0638e8c8f153e87d296907659296873916"
   integrity sha512-SOhuU4wNBxhhTHxYaiG5NY4HBhDIDnJF60GU+2LqHAdKKer86//e4yg69aENCtQ04n0ovz+tq2YPME5t5yp4pw==
 
-"@xyo-network/config-tslint@^0.1.15":
-  version "0.1.15"
-  resolved "https://registry.yarnpkg.com/@xyo-network/config-tslint/-/config-tslint-0.1.15.tgz#cb4af30d61fed2b8a134fd1c8ff099cb1ba60766"
-  integrity sha512-1Wn0fRucKMgXFshajeSLw2JkCfKg3WMMxG7LlyZ0LeDVrWZFUrFrQh5EYrsNhdnSpWQfDW5CDwa0+GttEj57/g==
+"@xyo-network/config-tslint@^0.1.31":
+  version "0.1.31"
+  resolved "https://registry.yarnpkg.com/@xyo-network/config-tslint/-/config-tslint-0.1.31.tgz#c250d898536b6e5d68cfb5acb13e9ab3254ca306"
+  integrity sha512-baeebNzlZNNvi+em9fwmipNt6VdDT/b67hE1nRz02T94hPUGH7yaAkWM35BVgWsrMXQla5yhesE3fCqPl0vwvA==
   dependencies:
     tslint-config-airbnb "^5.11.0"
     tslint-react "^4.0.0"
@@ -409,10 +409,10 @@
   resolved "https://registry.yarnpkg.com/@xyo-network/object-model/-/object-model-0.5.11.tgz#83fa7a7596ffdb5bac622d42b418e19b7ea1a119"
   integrity sha512-3DiKSOquRYInJKggO1nsESkbIgqcGWzoqF0bfZaiJVEF4JwQEICIk9Qcvsd0KJCyDfuYsMNNoUeEIxz4EtP5gw==
 
-"@xyo-network/sdk-base-nodejs@0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@xyo-network/sdk-base-nodejs/-/sdk-base-nodejs-0.2.2.tgz#4fe47ee8e79e755c093ce07d0886c34b7f1e4abe"
-  integrity sha512-PBMEA4tTG5bBR7rXRLT70pxWgPL7vJetwT/srDyUkWGvs97iDesMK+2Li8ZvRMZym8ccW3OUM57ig1qJRgyZYA==
+"@xyo-network/sdk-base-nodejs@0.2.20":
+  version "0.2.20"
+  resolved "https://registry.yarnpkg.com/@xyo-network/sdk-base-nodejs/-/sdk-base-nodejs-0.2.20.tgz#12f573015f294db7b32afa01a4782a6d00af8509"
+  integrity sha512-Hn3F8uitlRz7r78WuMyP1Hatx/vkNEkLoT6nHUxNsKg3IOiT0n+2VylUZxXrKmlO388IZfCWDz6e7eUCl6yNNw==
   dependencies:
     winston "3.2.1"
 
