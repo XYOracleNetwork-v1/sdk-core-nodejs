@@ -206,7 +206,7 @@ export const timeResolver: IXyoHeuristicResolver = {
     const value = new XyoStructure(heuristic).getValue().getContentsCopy()
     return {
       name: 'date',
-      value: new Date(value.readUIntBE(2, 6)).toString()
+      value: value.readUIntBE(2, 6)
     }
   }
 }
