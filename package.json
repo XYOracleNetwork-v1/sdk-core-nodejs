@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/sdk-core-nodejs",
-  "version": "0.61.17",
+  "version": "0.61.18",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@xyo-network/object-model": "^0.5.11",
-    "@xyo-network/sdk-base-nodejs": "0.2.20",
+    "@xyo-network/sdk-base-nodejs": "0.2.22",
     "bs58": "4.0.1",
     "elliptic": "6.4.1"
   },

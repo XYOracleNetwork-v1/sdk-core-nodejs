@@ -409,10 +409,10 @@
   resolved "https://registry.yarnpkg.com/@xyo-network/object-model/-/object-model-0.5.11.tgz#83fa7a7596ffdb5bac622d42b418e19b7ea1a119"
   integrity sha512-3DiKSOquRYInJKggO1nsESkbIgqcGWzoqF0bfZaiJVEF4JwQEICIk9Qcvsd0KJCyDfuYsMNNoUeEIxz4EtP5gw==
 
-"@xyo-network/sdk-base-nodejs@0.2.20":
-  version "0.2.20"
-  resolved "https://registry.yarnpkg.com/@xyo-network/sdk-base-nodejs/-/sdk-base-nodejs-0.2.20.tgz#12f573015f294db7b32afa01a4782a6d00af8509"
-  integrity sha512-Hn3F8uitlRz7r78WuMyP1Hatx/vkNEkLoT6nHUxNsKg3IOiT0n+2VylUZxXrKmlO388IZfCWDz6e7eUCl6yNNw==
+"@xyo-network/sdk-base-nodejs@0.2.22":
+  version "0.2.22"
+  resolved "https://registry.yarnpkg.com/@xyo-network/sdk-base-nodejs/-/sdk-base-nodejs-0.2.22.tgz#5d11628e2d036c8a1f06cec5e0b58ac58f0e2950"
+  integrity sha512-reOETTCDgkkkq4G+XpUjr528ztq3/0r6lJIDlEOooQZ0dtAU8n5q3XosaukZCjQ7tQ84E7iqUlL9DiAd61aZwA==
   dependencies:
     winston "3.2.1"
 
