@@ -27,7 +27,8 @@ export class XyoZigZagBoundWitnessHander implements IXyoBoundWitnessHander {
 
       if (initData) {
         const serverChoice = catalogue.choose(initData.getChoice())
-        return this.handleBoundWitness(undefined, handler, XyoCatalogFlags.flip(serverChoice), signers)
+        const cBw = await this.handleBoundWitness(undefined, handler, XyoCatalogFlags.flip(serverChoice), signers)
+        return cBw
       }
 
       const response = await handler.sendCatalogPacket(catalogue.getEncodedCanDo())
@@ -39,10 +40,11 @@ export class XyoZigZagBoundWitnessHander implements IXyoBoundWitnessHander {
       const adv = new XyoChoicePacket(response)
       const startingData = new XyoIterableStructure(new XyoBuffer(adv.getResponse()))
       const choice = adv.getChoice()
-      return this.handleBoundWitness(startingData, handler, choice, signers)
+      const bw = await this.handleBoundWitness(startingData, handler, choice, signers)
+      return bw
     } catch (error) {
       this.currentBoundWitnessSession = undefined
-      throw error
+      return undefined
     }
   }
 

@@ -21,16 +21,17 @@ const main = async() => {
 
   tcpNetwork.onPipeCreated = async(pipe) => {
     try {
+      tcpNetwork.stopListening()
       const networkHandle = new XyoNetworkHandler(pipe)
       const boundWitness = await handler.boundWitness(networkHandle, archivistProcedureCatalog, state.getSigners())
 
-      console.log('hello')
       if (boundWitness) {
         originChainInserter.insert(boundWitness)
       }
 
       pipe.close()
     } catch (error) {
+      console.log(error.stack)
       console.log(`Error creating bound witness: ${error}`)
     }
   }
