@@ -13,6 +13,10 @@ export class XyoServerTcpNetwork extends XyoBase {
     super()
     this.port = port
     this.server = net.createServer(this.connectionListener.bind(this))
+
+    this.server.on('error', (e) => {
+      this.logWarning(`Unknown server socket error: ${e}`)
+    })
   }
 
   public startListening() {

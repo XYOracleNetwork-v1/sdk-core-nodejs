@@ -2,26 +2,7 @@ import { IXyoHeuristicResolver, IXyoHumanHeuristic, XyoHumanHeuristicResolver } 
 import bs58 from 'bs58'
 import { XyoStructure, XyoIterableStructure } from '@xyo-network/object-model'
 import { XyoObjectSchema } from '../../schema'
-
-const readSignedNumber  = (buffer: Buffer): number => {
-  switch (buffer.length) {
-    case 1: return buffer.readInt8(0)
-    case 2: return buffer.readInt16BE(0)
-    case 4: return buffer.readInt32BE(0)
-  }
-
-  return -1
-}
-
-const readUnsignedNumber  = (buffer: Buffer): number => {
-  switch (buffer.length) {
-    case 1: return buffer.readUInt8(0)
-    case 2: return buffer.readUInt16BE(0)
-    case 4: return buffer.readUInt32BE(0)
-  }
-
-  return -1
-}
+import { readUnsignedNumber, readSignedNumber, uniqueIterableToObject, iterableObjectToArray } from './xyo-heuristics-common-util'
 
 export const nextPublicKeyResolver: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
@@ -178,10 +159,95 @@ export const lngResolver: IXyoHeuristicResolver = {
 export const timeResolver: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
     const value = new XyoStructure(heuristic).getValue().getContentsCopy()
+    return {
+      name: 'date',
+      value: value.readUIntBE(2, 6)
+    }
+  }
+}
+
+export const gpsResolver: IXyoHeuristicResolver = {
+  resolve(heuristic: Buffer): IXyoHumanHeuristic {
+    return {
+      name: 'gps',
+      value: uniqueIterableToObject(new XyoIterableStructure(heuristic))
+    }
+  }
+}
+
+export const fetterResolver: IXyoHeuristicResolver = {
+  resolve(heuristic: Buffer): IXyoHumanHeuristic {
+    return {
+      name: 'fetter',
+      value: uniqueIterableToObject(new XyoIterableStructure(heuristic))
+    }
+  }
+}
+
+export const witnessResolver: IXyoHeuristicResolver = {
+  resolve(heuristic: Buffer): IXyoHumanHeuristic {
+    return {
+      name: 'witness',
+      value: uniqueIterableToObject(new XyoIterableStructure(heuristic))
+    }
+  }
+}
+
+export const keySetResolver: IXyoHeuristicResolver = {
+  resolve(heuristic: Buffer): IXyoHumanHeuristic {
+    return {
+      name: 'keySet',
+      value: iterableObjectToArray(new XyoIterableStructure(heuristic))
+    }
+  }
+}
+
+export const signatureSetResolver: IXyoHeuristicResolver = {
+  resolve(heuristic: Buffer): IXyoHumanHeuristic {
+    return {
+      name: 'signatureSet',
+      value: iterableObjectToArray(new XyoIterableStructure(heuristic))
+    }
+  }
+}
+
+export const previousHashResolver: IXyoHeuristicResolver = {
+  resolve(heuristic: Buffer): IXyoHumanHeuristic {
+    const children = iterableObjectToArray(new XyoIterableStructure(heuristic))
+
+    if (children.length !== 1) {
+      // we expect the previous hash to be a length of 1
+      return {
+        name: 'previousHash',
+        value: 'invalid'
+      }
+    }
 
     return {
-      name: 'lng',
-      value: new Date(value.readUIntBE(0, 6) / 1000).toString()
+      name: 'previousHash',
+      value: children[0].value
+    }
+  }
+}
+
+export const boundWitnessResolver: IXyoHeuristicResolver = {
+  resolve(heuristic: Buffer): IXyoHumanHeuristic {
+    return {
+      name: 'boundWitness',
+      value: iterableObjectToArray(new XyoIterableStructure(heuristic)).map((h) => {
+        return h.value
+      })
+    }
+  }
+}
+
+export const bridgeHashSetResolver: IXyoHeuristicResolver = {
+  resolve(heuristic: Buffer): IXyoHumanHeuristic {
+    return {
+      name: 'bridgeHashSet',
+      value: iterableObjectToArray(new XyoIterableStructure(heuristic)).map((h) => {
+        return h.value
+      })
     }
   }
 }
@@ -203,4 +269,12 @@ export const addAllDefaults = () => {
   XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.STUB_PUBLIC_KEY.id, stubPublicKey)
   XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.STUB_SIGNATURE.id, stubSignatureResolver)
   XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.UNIX_TIME.id, timeResolver)
+  XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.GPS.id, gpsResolver)
+  XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.BW.id, boundWitnessResolver)
+  XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.KEY_SET.id, keySetResolver)
+  XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.SIGNATURE_SET.id, signatureSetResolver)
+  XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.FETTER.id, fetterResolver)
+  XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.WITNESS.id, witnessResolver)
+  XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.PREVIOUS_HASH.id, previousHashResolver)
+  XyoHumanHeuristicResolver.addResolver(XyoObjectSchema.BRIDGE_HASH_SET.id, bridgeHashSetResolver)
 }

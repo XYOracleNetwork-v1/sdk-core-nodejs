@@ -21,20 +21,8 @@ export class XyoHumanHeuristicResolver {
     XyoHumanHeuristicResolver.resolvers.delete(forId)
   }
 
-  public static resolve(any: Buffer): any {
+  public static resolve(any: Buffer): IXyoHumanHeuristic {
     const item = new XyoStructure(new XyoBuffer(any))
-
-    if (item.getSchema().getIsIterable()) {
-      const children: any[] = []
-      const iterableItem = new XyoIterableStructure(new XyoBuffer(any)).newIterator()
-
-      while (iterableItem.hasNext()) {
-        const subItem = iterableItem.next().value
-        children.push(XyoHumanHeuristicResolver.resolve(subItem.getAll().getContentsCopy()))
-      }
-
-      return children
-    }
 
     const resolver = XyoHumanHeuristicResolver.resolvers.get(item.getSchema().id)
 
@@ -43,7 +31,7 @@ export class XyoHumanHeuristicResolver {
     }
 
     return {
-      name: 'unknown',
+      name: item.getSchema().id.toString(),
       value: any.toString('base64')
     }
   }
