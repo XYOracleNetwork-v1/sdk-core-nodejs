@@ -30,12 +30,11 @@ import { IXyoSerializableObject } from '@xyo-network/serialization'
 export type XyoIpfsClientCtorOptions = IIpfsInitializationOptions
 
 export interface IXyoIpfsClient extends IXyoContentAddressableService {
-  readFile(address: string): Promise<Buffer>
+  readFile(address: string): Promise<Buffer | undefined>
 }
 
 export class XyoIpfsClient extends XyoBase implements IXyoIpfsClient {
-  private readonly ipfs: IIpfsClient
-
+  private ipfs: IIpfsClient
   constructor(
     private readonly ipfsInitializationOptions: XyoIpfsClientCtorOptions,
   ) {
@@ -43,24 +42,54 @@ export class XyoIpfsClient extends XyoBase implements IXyoIpfsClient {
     this.ipfs = ipfsClient(this.ipfsInitializationOptions)
   }
 
-  public async readFile(address: string): Promise<Buffer> {
-    return new Promise((resolve, reject) => {
-      this.ipfs.get(address, (err, files) => {
+  public async readFile(address: string): Promise<Buffer | undefined> {
+    let cancel = () => {}
+    let request: any
+    const getRequest = (r: any) => {
+      request = r
+    }
+    let isTimedOut = false
+    const timeout = new Promise((resolve, reject) => {
+      cancel = XyoBase.timeout(() => {
+        isTimedOut = true
+        request.abort() // this will hang up socket and cause reject
+      }, 30000)
+    })
+    const fetcher = new Promise(async (resolve, reject) => {
+      const cb = (err: any, files: any) => {
         if (err) {
-          this.logError(
-            `There was an error getting ipfs address ${address}`,
-            err,
-          )
-          return reject(err)
+          reject(err)
+        } else {
+          if (!files || files.length !== 1) {
+            this.logError(`Bad ipfs hash ${address}`)
+            reject('Bad Ipfs hash')
+          } else {
+            resolve(files[0].content)
+          }
         }
-        if (!files || files.length !== 1) {
-          this.logError(`Bad ipfs hash ${address}`)
-          return reject(new Error('Bad Ipfs hash'))
+      }
+      this.ipfs.get(address, undefined, cb, getRequest)
+    })
+    return new Promise(async (resolve, reject) => {
+      await Promise.race([timeout, fetcher]).then((value) => {
+        if (!isTimedOut) {
+          cancel()
+          cancel = () => { }
         }
-
-        return resolve(files[0].content)
+        resolve(value as Buffer)
+      }).catch((err) => {
+        if (!isTimedOut) {
+          cancel()
+          cancel = () => { }
+        }
+        this.logError(
+          `There was an error getting ipfs address ${address}`,
+          err
+        )
+        reject(err)
       })
     })
+
   }
 
   public async get(key: IContentAddress): Promise<Buffer | undefined> {

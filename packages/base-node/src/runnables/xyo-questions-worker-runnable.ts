@@ -22,7 +22,7 @@ export class XyoQuestionsWorkerRunnable extends XyoBase implements IXyoRunnable 
   }
 
   public getSleepTime(): number {
-    return 3000
+    return 500
   }
 
   public async initialize(): Promise<void> {

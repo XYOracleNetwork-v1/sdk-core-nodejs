@@ -81,11 +81,14 @@ export interface IConsensusProvider {
 
   /**
    * Gets a page of recent requests in the system that do not have a response
-   *
+   * @param {number} page which page to start at
    * @returns {Promise<{[id: string]: IRequest}>} A dict where keys are the id of requests, and values are the request
    * @memberof IConsensusProvider
    */
-  getNextUnhandledRequests(blockHeight?: BN): Promise<{[id: string]: IRequest}>
+  getNextUnhandledRequests(page: number, blockHeight?: BN): Promise<{ [id: string]: IRequest }>
+
+
+  getQueryPageCount(): Promise<number>
 
   /**
    * Given a particular requestId, returns the current gas estimate

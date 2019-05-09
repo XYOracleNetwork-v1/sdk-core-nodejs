@@ -11,6 +11,7 @@
  {
   "version": "0.2.0",
   "configurations": [
+
     
     {
       "type": "node",
@@ -71,7 +72,7 @@
       "name": "Launch Default",
       "type": "node",
       "request": "launch",
-      "args": ["src/index.ts"],
+      "args": ["src/index.ts", "start", "alphanode"],
       "cwd": "${workspaceFolder}/packages/app",
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
       "console": "integratedTerminal"

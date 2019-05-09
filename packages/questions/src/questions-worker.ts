@@ -37,7 +37,8 @@ export class QuestionsWorker extends XyoBase {
 
   public async run() {
     const question = await this.questionsProvider.nextQuestion()
-    return this.handleNewQuestion(question)
+    this.handleNewQuestion(question)
+    return
   }
 
   private async handleNewQuestion<Q, A>(
@@ -62,7 +63,7 @@ export class QuestionsWorker extends XyoBase {
         this.logInfo('Found intersection!', q.getId!())
         await this.handleQuestionAnswered(q.getId!(), q, proof.answer)
       } else {
-        this.logInfo(`No intersection found, retrying question: ${q.getId!()}`)
+        this.logInfo(`No intersection found for question with parties: , ${q.getId!()}, ${q.data.partyOne}, ${q.data.partyTwo}`)
       }
 
       return

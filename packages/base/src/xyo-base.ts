@@ -45,15 +45,15 @@ export abstract class XyoBase {
   }
 
   public static timeout(fn: (...args: any[]) => void, timeMs: number, description?: string) {
-    return this.schedule(setTimeout, clearTimeout, fn, timeMs, this.timeoutIds, description)
+    return XyoBase.schedule<NodeJS.Timeout>(setTimeout, clearTimeout, fn, timeMs, this.timeoutIds, description)
   }
 
   public static interval(fn: (...args: any[]) => void, timeMs: number, description?: string) {
-    return this.schedule(setInterval, clearInterval, fn, timeMs, this.intervalIds, description)
+    return XyoBase.schedule<NodeJS.Timeout>(setInterval, clearInterval, fn, timeMs, this.intervalIds, description)
   }
 
   public static immediate(fn: (...args: any[]) => void, description?: string) {
-    return this.schedule(setImmediate, clearImmediate, fn, 0, this.immediateIds, description)
+    return XyoBase.schedule<NodeJS.Immediate>(setImmediate, clearImmediate, fn, 0, this.immediateIds, description)
   }
 
   private static timeoutIds: {[s: string]: NodeJS.Timeout} = {}

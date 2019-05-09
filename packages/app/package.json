@@ -9,7 +9,7 @@
   },
   "scripts": {
     "forever": "forever --max-old-space-size=4096 ./bin/start-forever.js",
-    "start": "node --max-old-space-size=4096 ./bin/start-node.js",
+    "start": "node --debug-brk --max-old-space-size=4096 ./bin/start-node.js",
     "stop": "./bin/stop-node.js"
   },
   "types": "dist/index.d.ts",

@@ -37,7 +37,7 @@ declare module 'ipfs-http-client' {
   }
 
   export interface IIpfsClient {
-    get(ipfsPath: string | Buffer, cb: (err: Error | undefined, files: IIpfsFileDescriptor[]) => void ): void
+    get(ipfsPath: string | Buffer, opts?: any, cb?: (err: Error | undefined, files: IIpfsFileDescriptor[]) => void, requestCaller?: (request: any) => void): Promise<IIpfsFileDescriptor[]>
     add(data: Buffer, options: IIpfsAddOptions, cb: (err: Error | null, res: IIpfsAddResultItem[]) => void): void
     add(data: Buffer, cb: (err: Error | null, res: IIpfsAddResultItem[]) => void): void
   }

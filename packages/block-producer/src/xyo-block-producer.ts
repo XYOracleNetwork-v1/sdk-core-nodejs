@@ -34,6 +34,8 @@ const MAX_BLOCK_PRODUCER_TRIES = 100
 
 export class XyoBlockProducer extends XyoDaemon {
   private myTurnToSubmitBlock = false
+  private currentPage = 0
+  private readonly ignoreQuestions: { [questionId: string]: boolean } = {}
 
   constructor(
     private readonly consensusProvider: IConsensusProvider,
@@ -69,17 +71,19 @@ export class XyoBlockProducer extends XyoDaemon {
   }
 
   private async tryBuildBlock(): Promise<void> {
-    const list = await this.consensusProvider.getNextUnhandledRequests()
+    // This needs to be a lot more sophisticated than it currently is
+    const nextPageQuestions = await this.consensusProvider.getNextUnhandledRequests(this.currentPage)
 
-    if (Object.keys(list).length < MIN_TRANSACTIONS) {
-      this.logInfo(
-        'There are ' +
-          Object.keys(list).length +
-          ' transactions in the transaction pool, ' +
-          'which is not enough transactions to process',
-      )
-      return
+    const newQuestions = Object.keys(nextPageQuestions).filter(
+      k => !this.ignoreQuestions[k],
+    )
+    if (newQuestions.length === 0 && Object.keys(nextPageQuestions).length > 0) {
+      const pages = await this.consensusProvider.getQueryPageCount()
+      // keep rotating over unanswered queries
+      this.currentPage = (this.currentPage + 1) % pages
     }
+    if (newQuestions.length === 0) return
+
 
     const latestBlockHash = await this.consensusProvider.getLatestBlockHash()
     // console.log('XyoBlockProducer: latestBlockHash', latestBlockHash)
@@ -94,12 +98,14 @@ export class XyoBlockProducer extends XyoDaemon {
       stakeConsensusBlockHeight = new BN(15)
     }
 
-    const candidate = await Object.keys(list).reduce(
+    const candidate = await Object.keys(nextPageQuestions).reduce(
       async (m, transactionKey) => {
         const memo = await m
         const transaction = await this.transactionRepository.find(
           transactionKey,
         )
+        this.ignoreQuestions[transactionKey] = true
+
         if (
           !transaction ||
           transaction.transactionType !== 'request-response'
