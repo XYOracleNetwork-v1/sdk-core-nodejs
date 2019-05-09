@@ -2488,7 +2488,7 @@ ci-info@^2.0.0:
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-2.0.0.tgz#67a9e964be31a51e15e5010d58e6f12834002f46"
   integrity sha512-5tK7EtrZ0N+OLFMthtqOj4fI2Jeb88C4CAZPu25LDVUgXJ0A3Js4PMGqrn0JU1W0Mh1/Z8wZzYPxqUrXeBboCQ==
 
-cids@~0.5.4, cids@~0.5.5, cids@~0.5.6:
+cids@~0.5.4, cids@~0.5.5, cids@~0.5.6, cids@~0.5.8:
   version "0.5.8"
   resolved "https://registry.yarnpkg.com/cids/-/cids-0.5.8.tgz#3d5000c3856a2d3c00967b21265aa57142611aa0"
   integrity sha512-Ye8TZP3YQfy0j+i5k+LPHdTY3JOvTwN1pxds44p6BRUv8PTMOAF/Vt4Bc+oiIQ0Sktn0iftkUHgqKNHIMwhshA==
@@ -4936,17 +4936,16 @@ ipfs-block@~0.8.0:
     cids "~0.5.5"
     class-is "^1.1.0"
 
-ipfs-http-client@^30.1.4:
+"ipfs-http-client@git+https://github.com/klivin/js-ipfs-http-client.git":
   version "30.1.4"
-  resolved "https://registry.yarnpkg.com/ipfs-http-client/-/ipfs-http-client-30.1.4.tgz#d1b25178c9de7fee7752831893fb075dbfff8b82"
-  integrity sha512-ordvoPT3lAFL5qsvdYBeDGRP03gtbL6Jl+qJ9dztyhE7NJf2yhtnU3ZNqN1JMCcUK0qpGsDzX89t8dKQvI80Pw==
+  resolved "git+https://github.com/klivin/js-ipfs-http-client.git#dc3a7d74ebc3f00e6a483b83e7871805b61b58c8"
   dependencies:
     async "^2.6.1"
     bignumber.js "^8.0.2"
     bl "^3.0.0"
     bs58 "^4.0.1"
     buffer "^5.2.1"
-    cids "~0.5.5"
+    cids "~0.5.8"
     concat-stream "github:hugomrdias/concat-stream#feat/smaller"
     debug "^4.1.0"
     detect-node "^2.0.4"
@@ -4959,7 +4958,7 @@ ipfs-http-client@^30.1.4:
     ipld-dag-pb "~0.15.3"
     is-ipfs "~0.6.0"
     is-pull-stream "0.0.0"
-    is-stream "^1.1.0"
+    is-stream "^2.0.0"
     iso-stream-http "~0.1.2"
     iso-url "~0.4.6"
     just-kebab-case "^1.1.0"
@@ -5317,6 +5316,11 @@ is-stream@^1.0.0, is-stream@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/is-stream/-/is-stream-1.1.0.tgz#12d4a3dd4e68e0b79ceb8dbc84173ae80d91ca44"
   integrity sha1-EtSj3U5o4Lec6428hBc66A2RykQ=
+
+is-stream@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/is-stream/-/is-stream-2.0.0.tgz#bde9c32680d6fae04129d6ac9d921ce7815f78e3"
+  integrity sha512-XCoy+WlUr7d1+Z8GgSuXmpuUFC9fOhRXglJMx+dwLKTkL44Cjd4W1Z5P+BQZpr+cR93aGP4S/s7Ftw6Nd/kiEw==
 
 is-subset@^0.1.1:
   version "0.1.1"

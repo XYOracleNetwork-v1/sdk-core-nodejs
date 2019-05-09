@@ -48,7 +48,7 @@ export class Web3QuestionService extends XyoBase implements IQuestionsProvider {
     }) as Promise<IQuestion<IIntersectionRequest, IProofOfIntersection>>
   }
 
-  private async tryGetQuestion() {
+  private async tryGetQuestion(): Promise<any> {
     // This needs to be a lot more sophisticated than it currently is
     const nextPageQuestions = await this.consensusProvider.getNextUnhandledRequests(this.currentPage)
 
