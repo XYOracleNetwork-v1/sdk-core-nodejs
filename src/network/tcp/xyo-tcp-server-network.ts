@@ -16,6 +16,11 @@ export class XyoServerTcpNetwork extends XyoBase {
 
     this.server.on('error', (e) => {
       this.logWarning(`Unknown server socket error: ${e}`)
+
+      if (!this.server.listening) {
+        this.logInfo(`Starting listing again on port ${this.port}`)
+        this.server.listen(this.port)
+      }
     })
   }
 
@@ -32,6 +37,7 @@ export class XyoServerTcpNetwork extends XyoBase {
 
     socket.on('error', (e) => {
       this.logWarning(`Unknown socket error: ${e}`)
+      socket.destroy()
     })
 
     let waitSize: number
@@ -42,6 +48,7 @@ export class XyoServerTcpNetwork extends XyoBase {
       socket.removeAllListeners('data')
       socket.removeAllListeners('close')
       socket.removeAllListeners('end')
+      socket.destroy()
     }
 
     socket.on('data', (data: Buffer) => {
