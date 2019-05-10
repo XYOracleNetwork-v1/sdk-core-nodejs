@@ -135,7 +135,8 @@ export class XyoAppLauncher extends XyoBase {
               this.config.graphqlPort && this.config.apis.length > 0,
             ),
             enableQuestionsWorker: this.isDiviner,
-            enableBlockProducer: this.isDiviner,
+            enableBlockProducer: false,
+            // enableBlockProducer: this.isDiviner, // TODO enable
             enableBlockWitness: this.isDiviner,
           },
           blockProducer: this.isDiviner

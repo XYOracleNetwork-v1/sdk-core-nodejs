@@ -30,8 +30,8 @@ export class QuestionsWorker extends XyoBase {
     private readonly questionsService: IXyoQuestionService,
     private readonly transactionsRepository: IXyoTransactionRepository,
     private readonly nodeNetwork: IXyoNodeNetwork,
-    private readonly hashProvider: IXyoHashProvider,
-  ) {
+    private readonly hashProvider: IXyoHashProvider
+    ) {
     super()
   }
 

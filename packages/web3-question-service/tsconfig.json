@@ -22,7 +22,8 @@
   ],
   "include": ["src/**/*"],
   "references": [
-    { "path": "../consensus"},
+    { "path": "../consensus" },
+    { "path": "../storage"},
     { "path": "../questions"},
     { "path": "../utils"},
     { "path": "../base"},

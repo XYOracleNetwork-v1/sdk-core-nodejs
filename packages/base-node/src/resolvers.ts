@@ -22,7 +22,7 @@ import { IXyoOriginBlockRepository, XyoOriginBlockRepository } from '@xyo-networ
 import { IXyoBoundWitnessPayloadProvider, IXyoBoundWitnessSuccessListener, XyoBoundWitnessPayloadProvider, XyoBoundWitnessSuccessListener, XyoBoundWitnessHandlerProvider, IXyoBoundWitnessInteractionFactory } from '@xyo-network/peer-interaction'
 import { serializer } from '@xyo-network/serializer'
 import { IXyoSigner } from '@xyo-network/signing'
-import { XyoInMemoryStorageProvider, IXyoStorageProvider } from '@xyo-network/storage'
+import { XyoInMemoryStorageProvider, IXyoStorageProvider, XyoLocalFileStorageProvider } from '@xyo-network/storage'
 import { XyoBoundWitnessValidator, IXyoBoundWitnessValidationOptions } from '@xyo-network/bound-witness'
 import { IXyoNetworkProvider, IXyoNetworkProcedureCatalogue, CatalogueItem, XyoNetworkProcedureCatalogue } from '@xyo-network/network'
 import { XyoServerTcpNetwork } from '@xyo-network/network.tcp'
@@ -508,7 +508,8 @@ const questionsProvider: IXyoProvider<IQuestionsProvider, undefined> = {
     const contentService = await container.get<IXyoContentAddressableService>(
       IResolvers.CONTENT_ADDRESSABLE_SERVICE
     )
-    return new Web3QuestionService(consensus, contentService)
+    const storageProvider = new XyoLocalFileStorageProvider("./config/query_metadata")
+    return new Web3QuestionService(consensus, contentService, storageProvider)
   }
 }
 

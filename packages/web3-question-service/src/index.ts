@@ -20,18 +20,30 @@ import {
 } from '@xyo-network/questions'
 import { IConsensusProvider } from '@xyo-network/consensus'
 import { IXyoContentAddressableService } from '@xyo-network/content-addressable-service'
+import { IXyoStorageProvider } from '@xyo-network/storage';
 
 export class Web3QuestionService extends XyoBase implements IQuestionsProvider {
-  private currentPage = 0
+  private static REQUEST_INDEX_KEY = "NUM_QUERIES_FROM_HEAD"
+  private distFromHead = 0
+  private onlyQueryRecent = false
   private cachedQuestions = [] // TODO don't fetch page each time
   private readonly ignoreQuestions: { [questionId: string]: boolean } = {}
   
   constructor(
     private readonly consensusProvider: IConsensusProvider,
     private readonly contentService: IXyoContentAddressableService,
+    private readonly storageProvider: IXyoStorageProvider
   ) {
     super()
+    storageProvider.read(Buffer.from(Web3QuestionService.REQUEST_INDEX_KEY)).then((buff) => {
+      try {
+        this.distFromHead = buff ? buff.readUInt32LE(0) : 0
+      } catch (e) {
+        this.logError(`Garbage for key, ${Web3QuestionService.REQUEST_INDEX_KEY}`)
+      }
+    })
   }
+  
 
   public async nextQuestion(): Promise<IQuestion<any, any>> {
     return new Promise(async (resolve) => {
@@ -50,22 +62,27 @@ export class Web3QuestionService extends XyoBase implements IQuestionsProvider {
 
   private async tryGetQuestion(): Promise<any> {
     // This needs to be a lot more sophisticated than it currently is
-    const nextPageQuestions = await this.consensusProvider.getNextUnhandledRequests(this.currentPage)
+    const requestCount = await this.consensusProvider.getNumRequests()
+    const reqIndex = requestCount  - 1
+    const curIndex = reqIndex - this.distFromHead >= 0 ?
+                    reqIndex - this.distFromHead : reqIndex
+    const nextQuestion =
+       await this.consensusProvider.getRequestByIndex(
+         this.onlyQueryRecent ? 0 : curIndex)
 
-    const newQuestions = Object.keys(nextPageQuestions).filter(
-      k => !this.ignoreQuestions[k],
-    )
-    if (newQuestions.length === 0 && Object.keys(nextPageQuestions).length > 0) {
-      const pages = await this.consensusProvider.getQueryPageCount()
-      this.currentPage = Math.min(this.currentPage + 1, pages)
-      if (pages !== this.currentPage) {
-        return this.tryGetQuestion()
-      }
+    if (!nextQuestion) {
+      return
     }
-    if (newQuestions.length === 0) return
+
+    if (!this.onlyQueryRecent) {
+      this.distFromHead = this.distFromHead >= requestCount ? 0 : this.distFromHead + 1
+      const buff = Buffer.alloc(32)
+      buff.writeUInt32LE(this.distFromHead, 0)
+      await this.storageProvider.write(Buffer.from(Web3QuestionService.REQUEST_INDEX_KEY), buff)
+    }
 
     // Order keys by most xyo bounty, not sure this is the right way to order
-    const questionId = newQuestions[0]
+    const questionId = nextQuestion.ipfsHash
 
     try {
       this.logInfo(`Fetching next question ${questionId}`)
@@ -76,7 +93,6 @@ export class Web3QuestionService extends XyoBase implements IQuestionsProvider {
         resolvedQuestionBuffer.toString(),
       ) as IRequestDocument<any>
 
-      this.ignoreQuestions[questionId] = true
 
       if (
         resolvedQuestion === undefined ||
@@ -97,7 +113,6 @@ export class Web3QuestionService extends XyoBase implements IQuestionsProvider {
 
       return result
     } catch (e) {
-      this.ignoreQuestions[questionId] = true
       this.logError('Bad request, ignoring request', questionId)
       return
     }

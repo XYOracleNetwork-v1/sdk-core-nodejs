@@ -11,6 +11,7 @@
     "@xyo-network/consensus": "^0.55.0",
     "@xyo-network/content-addressable-service": "^0.55.0",
     "@xyo-network/questions": "^0.55.0",
+    "@xyo-network/storage": "^0.55.0",
     "@xyo-network/utils": "^0.55.0"
   },
   "devDependencies": {

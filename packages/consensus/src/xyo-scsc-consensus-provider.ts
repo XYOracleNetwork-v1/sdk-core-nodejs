@@ -29,7 +29,6 @@ export class XyoScscConsensusProvider extends XyoBase
   implements IConsensusProvider {
   private static CONFIRMATION_THRESHOLD = 24
   private static NEXT_REQUESTS_PAGE_SIZE = 30 // num requests in search scope from end of request list
-  private static NEXT_REQUESTS_MAX_BATCH = 20 // max number of transactions to return in full batch
   private web3Service: XyoWeb3Service
 
   constructor(private readonly web3: XyoWeb3Service) {
@@ -55,10 +54,11 @@ export class XyoScscConsensusProvider extends XyoBase
       'XyStakingConsensus',
     )
     const req = await consensus.methods.requestsById(id).call({}, blockHeight)
-    // console.log('Got Request', req)
     if (!req.createdAt || req.createdAt === '0') {
       return undefined
     }
+    req.request = id
+    req.ipfsHash = this.getIpfsHashFromBytes32(id)
     return req
   }
 
@@ -85,6 +85,8 @@ export class XyoScscConsensusProvider extends XyoBase
       .call({}, blockHeight)
     const requestDepth = XyoScscConsensusProvider.NEXT_REQUESTS_PAGE_SIZE * page
     const start = Math.max(1, this.coerceNumber(numRequests) - requestDepth)
+    this.logInfo(`getNextUnhandledRequests batch page: ${page} from index ${start} of ${numRequests}`)
+
     return this.getUnhandledRequestsBatch(
       resultMapping,
       start,
@@ -434,6 +436,22 @@ export class XyoScscConsensusProvider extends XyoBase
     }
     return result
   }
+  public async getRequestByIndex(
+    index: number,
+    blockHeight?: BN,
+  ): Promise<IRequest | undefined> {
+    const consensus = await this.web3Service.getOrInitializeSC(
+      'XyStakingConsensus',
+    )
+    console.log('Query Request at Index', index)
+
+    const requestId = await consensus.methods.requestChain(index).call({}, blockHeight)
+    const req: Promise<IRequest | undefined> = this.getRequestById(
+      requestId,
+      blockHeight,
+    )
+    return req
+  }
 
   private async decodeLogs(
     tx: any,
@@ -522,7 +540,6 @@ export class XyoScscConsensusProvider extends XyoBase
       .slice(sliceIndex)
       .toString('hex')}`
   }
-
   private async getUnhandledRequestsBatch(
     unanswered: { [id: string]: IRequest },
     start: number,
@@ -533,11 +550,10 @@ export class XyoScscConsensusProvider extends XyoBase
     )
 
     const numUnAnswered = Object.keys(unanswered).length
-    if (start === 0 || numUnAnswered >= XyoScscConsensusProvider.NEXT_REQUESTS_MAX_BATCH) {
+    if (start === 0 || numUnAnswered >= XyoScscConsensusProvider.NEXT_REQUESTS_PAGE_SIZE) {
       return unanswered
     }
     const promises = []
-    this.logInfo(`Starting request batch from index ${start}`)
 
     for (let i = start - 1; i >= 0 && promises.length < XyoScscConsensusProvider.NEXT_REQUESTS_PAGE_SIZE; i--) {
       promises.push(consensus.methods.requestChain(i).call({}, blockHeight))
@@ -562,6 +578,8 @@ export class XyoScscConsensusProvider extends XyoBase
       const req = {
         requestSender,
         requestType,
+        ipfsHash: this.getIpfsHashFromBytes32(requestIds[index]),
+        request: requestIds[index],
         xyoBounty: this.coerceBN(xyoBounty),
         weiMining: this.coerceBN(weiMining),
         createdAt: this.coerceBN(createdAt),
@@ -570,10 +588,9 @@ export class XyoScscConsensusProvider extends XyoBase
 
       if (
         this.coerceNumber(responseBlockNumber) === 0 &&
-        Object.keys(unanswered).length < XyoScscConsensusProvider.NEXT_REQUESTS_MAX_BATCH
+        Object.keys(unanswered).length < XyoScscConsensusProvider.NEXT_REQUESTS_PAGE_SIZE
       ) {
-        const ipfsHash = this.getIpfsHashFromBytes32(requestIds[index])
-        unanswered[ipfsHash] = req
+        unanswered[req.ipfsHash] = req
       }
     })
     return this.getUnhandledRequestsBatch(

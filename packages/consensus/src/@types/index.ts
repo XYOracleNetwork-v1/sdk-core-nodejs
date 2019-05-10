@@ -78,6 +78,7 @@ export interface IConsensusProvider {
    * @memberof IConsensusProvider
    */
   getRequestById(id: string, blockHeight?: BN): Promise<IRequest | undefined>
+  getRequestByIndex(index: number, blockHeight?: BN): Promise<IRequest | undefined>
 
   /**
    * Gets a page of recent requests in the system that do not have a response
@@ -318,7 +319,8 @@ export interface IConsensusBlock {
  * @interface IRequest
  */
 export interface IRequest {
-  request?: string
+  ipfsHash: string
+  request: string
   xyoBounty: BN
   weiMining: BN
   createdAt: BN // Block Height in ethereum blocks
