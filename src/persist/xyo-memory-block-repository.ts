@@ -1,8 +1,12 @@
-import { IXyoOriginBlockRepository } from './xyo-origin-block-repository'
+import { IXyoOriginBlockRepository, IXyoOriginBlockGetter } from './xyo-origin-block-repository'
 import { XyoIterableStructure } from '@xyo-network/object-model'
 
-export class XyoMemoryBlockRepository implements IXyoOriginBlockRepository {
+export class XyoMemoryBlockRepository implements IXyoOriginBlockRepository, IXyoOriginBlockGetter {
   private blockMapping: Map<string, Buffer> = new Map()
+
+  public async initialize(): Promise<boolean> {
+    return true
+  }
 
   public async removeOriginBlock(hash: Buffer): Promise<void> {
     this.blockMapping.delete(hash.toString('base64'))
@@ -30,6 +34,6 @@ export class XyoMemoryBlockRepository implements IXyoOriginBlockRepository {
   }
 
   public async getOriginBlocks(limit?: number, offset?: Buffer): Promise<{items: Buffer[], total: number}> {
-    throw new Error('Not implemented')
+    throw new Error('getOriginBlocks not implemented in XyoMemoryBlockRepository')
   }
 }
