@@ -7,6 +7,7 @@
 [![NPM](https://nodei.co/npm/@xyo-network/sdk-core-node.png)](https://nodei.co/npm/@xyo-network/sdk-core-node/)
 
 [![Build Status](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs.svg?branch=develop)](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs) [![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability) [![BCH compliance](https://bettercodehub.com/edge/badge/XYOracleNetwork/sdk-core-nodejs?branch=develop)](https://bettercodehub.com/results/XYOracleNetwork/sdk-core-nodejs) [![DepShield Badge](https://depshield.sonatype.org/badges/XYOracleNetwork/sdk-core-nodejs/depshield.svg)](https://depshield.github.io) [![David Badge](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs/status.svg)](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs) [![David Badge](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs/dev-status.svg)](https://david-dm.org/xyoraclenetwork/sdk-core-nodejs)
+[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=XYOracleNetwork_sdk-core-nodejs&metric=alert_status)](https://sonarcloud.io/dashboard?id=XYOracleNetwork_sdk-core-nodejs) 
 
 ## Project Overview
 
@@ -64,18 +65,6 @@ Once the dependencies are installed run
   yarn build
 ```
 
-### Running the project
-
-This will transpile the TypeScript into javascript and link the local packages together.
-
-To start a reference implementation of a base-node that can perform bound-witnesses as a server run:
-
-```sh
-  node packages/base-node
-```
-
-This will start a node on port 11000 and accept incoming bound-witness requests
-
 ### Testing
 
 #### Run all tests
@@ -83,60 +72,6 @@ This will start a node on port 11000 and accept incoming bound-witness requests
 ```sh
   yarn test
 ```
-
-#### Run a set of tests in a particular file:
-
-i.e. Where the test file is `test/integration/lib.spec.ts`
-
-```sh
-  yarn test lib.spec.ts
-```
-
-## Additional Documentation
-
-All packages have their own README files as well. These are the README files that will be found on their respective npm package pages as well.
-
-- [about-me](packages/about-me/README.md)
-- [attribution-request](packages/attribution-request/README.md)
-- [attribution-request.node-network](packages/attribution-request.node-network/README.md)
-- [base](packages/base/README.md)
-- [block-witness](packages/block-witness/README.md)
-- [bound-witness](packages/bound-witness/README.md)
-- [buffer-utils](packages/buffer-utils/README.md)
-- [consensus](packages/consensus/README.md)
-- [diviner-archivist-client](packages/diviner-archivist-client/README.md)
-- [diviner-archivist-client.graphql](packages/diviner-archivist-client.graphql/README.md)
-- [errors](packages/errors/README.md)
-- [graphql-apis](packages/graphql-apis/README.md)
-- [graphql-server](packages/graphql-server/README.md)
-- [hashing](packages/hashing/README.md)
-- [heuristics](packages/heuristics/README.md)
-- [heuristics-common](packages/heuristics-common/README.md)
-- [ipfs-client](packages/ipfs-client/README.md)
-- [logger](packages/logger/README.md)
-- [meta-list](packages/meta-list/README.md)
-- [network](packages/network/README.md)
-- [network.tcp](packages/network.tcp/README.md)
-- [node-network](packages/node-network/README.md)
-- [origin-block-repository](packages/origin-block-repository/README.md)
-- [origin-chain](packages/origin-chain/README.md)
-- [p2p](packages/p2p/README.md)
-- [peer-connections](packages/peer-connections/README.md)
-- [peer-discovery](packages/peer-discovery/README.md)
-- [peer-interaction](packages/peer-interaction/README.md)
-- [peer-interaction-handlers](packages/peer-interaction-handlers/README.md)
-- [peer-interaction-router](packages/peer-interaction-router/README.md)
-- [serialization](packages/serialization/README.md)
-- [serialization-schema](packages/serialization-schema/README.md)
-- [serializer](packages/serializer/README.md)
-- [signing](packages/signing/README.md)
-- [signing.ecdsa](packages/signing.ecdsa/README.md)
-- [signing.rsa](packages/signing.rsa/README.md)
-- [storage](packages/storage/README.md)
-- [storage.leveldb](packages/storage.leveldb/README.md)
-- [transaction-pool](packages/transaction-pool/README.md)
-- [utils](packages/utils/README.md)
-- [web3-service](packages/web3-service/README.md)
 
 ## Developer Guide
 
@@ -181,47 +116,6 @@ So a typical workflow might look like this:
 - On occasion, running `yarn clean` may prove useful for resetting the project to clean state
 - When a change-set is complete and has gone through the proper code-review etc, a release can be made running `yarn release`. Release versions should follow [SemVer](https://semver.org/) standards.
 
-#### Useful Scripts
-
-There are a number of scripts for managing the different services that this project depends.
-
-In particular you can manage you ganache, ipfs, and MySQL docker services using the commands found in the `scripts` section of the [package.json file](package.json).
-
-##### Bootstrap or manage your MySQL service
-
-```sh
-  yarn manage:db
-```
-
-##### Bootstrap or manage your local development ganache instance
-
-```sh
-  yarn manage:ganache
-```
-
-##### View balances of Eth accounts on ganache instance
-
-```sh
-  yarn:manage:ganache:balances
-```
-
-##### Bootstrap or manage your local development ipfs instance
-
-```sh
-  yarn manage:ipfs
-```
-
-##### Add a file/folder to your IPFS node using a relative or absolute path
-
-```sh
-  yarn manage:ipfs:add {/path/to/file}
-```
-
-##### Create a new TypeScript package in packages directory
-
-```sh
-  yarn manage:create-package
-```
 
 ##### Set the first account in ganache as environment variable for config
 
@@ -231,8 +125,8 @@ In particular you can manage you ganache, ipfs, and MySQL docker services using 
 
 ## License
 
-Only for internal XY Company use at this time
+LGPL-3.0
 
 ## Credits
 
-<br><br><p align="center">Made with  ❤️  by [**XY - The Persistent Company**] (https://xy.company)</p>
+<br><p align="center">Made with  ❤️  by [**XY - The Persistent Company**] (https://xy.company)</p>

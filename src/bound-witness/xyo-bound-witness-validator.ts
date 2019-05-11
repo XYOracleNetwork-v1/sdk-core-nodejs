@@ -13,7 +13,7 @@ export class XyoBoundWitnessValidator {
     const publicKeysParty = boundWitness.getPublicKeys()
     const signaturesParty = boundWitness.getSignatures()
 
-    if (publicKeysParty.length !== publicKeysParty.length) {
+    if (publicKeysParty.length !== signaturesParty.length) {
       return false
     }
 
