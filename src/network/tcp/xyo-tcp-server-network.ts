@@ -61,7 +61,10 @@ export class XyoServerTcpNetwork extends XyoBase {
 
       if (currentSize >= waitSize) {
         this.onInternalPipeCreated(socket, currentBuffer.slice(4))
-        cleanup()
+
+        socket.removeAllListeners('data')
+        socket.removeAllListeners('close')
+        socket.removeAllListeners('end')
       }
     })
 
