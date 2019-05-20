@@ -1,13 +1,13 @@
 {
   "name": "@xyo-network/sdk-core-nodejs",
-  "version": "0.64.2",
+  "version": "0.64.4",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "author": "XY Development Team",
   "license": "LGPL-3.0",
   "scripts": {
-    "build": "tsc",
+    "build": "yarn xybuild",
     "test": "yarn build && yarn lint && yarn licensecheck && export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose false --detectOpenHandles",
     "lint": "tslint -c tslint.json -p ./tsconfig.json",
     "start:tcp": "yarn build && node --nolazy -r ts-node/register examples/tcp-server/index.ts"
@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@xyo-network/object-model": "^0.5.11",
-    "@xyo-network/sdk-base-nodejs": "0.2.23",
+    "@xyo-network/sdk-base-nodejs": "^0.3.10",
     "bs58": "4.0.1",
     "elliptic": "6.4.1"
   },

@@ -3,7 +3,7 @@
     "target": "es6",
     "module": "commonjs",
     "lib": [
-      "esnext"
+      "esnext", "dom"
     ],
     "declaration": true,
     "declarationMap": true,
@@ -13,8 +13,5 @@
     "noImplicitAny": true,
     "moduleResolution": "node",
     "outDir": "dist"
-  },
-  "include": [
-    "src/**/*"
-  ],
+  }
 }
