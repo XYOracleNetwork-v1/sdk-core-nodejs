@@ -49,8 +49,13 @@ export class XyoServerTcpNetwork extends XyoBase {
       socket.removeAllListeners('data')
       socket.removeAllListeners('close')
       socket.removeAllListeners('end')
+      socket.removeAllListeners('timeout')
       socket.destroy()
     }
+
+    socket.on('timeout', () => {
+      cleanup()
+    })
 
     socket.on('data', (data: Buffer) => {
       currentSize += data.length
@@ -77,6 +82,7 @@ export class XyoServerTcpNetwork extends XyoBase {
     socket.on('end', cleanup)
 
     timeout = setTimeout(cleanup, 5_000)
+    socket.setTimeout(1000 * 60 * 1) // 1 min
   }
 
   private onInternalPipeCreated(socket: net.Socket, data: Buffer): boolean {
