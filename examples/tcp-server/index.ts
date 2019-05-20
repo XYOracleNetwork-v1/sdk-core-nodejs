@@ -1,5 +1,4 @@
 import { XyoServerTcpNetwork, XyoFileOriginStateRepository, XyoMemoryBlockRepository, XyoZigZagBoundWitnessHander, XyoOriginPayloadConstructor, XyoBoundWitnessInserter, XyoOriginState, XyoSha256, IXyoProcedureCatalog, XyoNetworkHandler, XyoSecp2556k1, XyoGenesisBlockCreator, XyoCatalogFlags } from '../../dist'
-import  { archivistProcedureCatalog } from './archivist-catalogue'
 import { XyoBase } from '@xyo-network/sdk-base-nodejs'
 
 const main = async() => {
@@ -19,22 +18,22 @@ const main = async() => {
     originChainInserter.insert(genesisBlock)
   }
 
-  tcpNetwork.onPipeCreated = async(pipe) => {
-    try {
-      tcpNetwork.stopListening()
-      const networkHandle = new XyoNetworkHandler(pipe)
-      const boundWitness = await handler.boundWitness(networkHandle, archivistProcedureCatalog, state.getSigners())
+  // tcpNetwork.onPipeCreated = (pipe) => {
+  //   try {
+  //     tcpNetwork.stopListening()
+  //     const networkHandle = new XyoNetworkHandler(pipe)
+  //     const boundWitness = await handler.boundWitness(networkHandle, archivistProcedureCatalog, state.getSigners())
 
-      if (boundWitness) {
-        originChainInserter.insert(boundWitness)
-      }
+  //     if (boundWitness) {
+  //       originChainInserter.insert(boundWitness)
+  //     }
 
-      pipe.close()
-    } catch (error) {
-      console.log(error.stack)
-      console.log(`Error creating bound witness: ${error}`)
-    }
-  }
+  //     pipe.close()
+  //   } catch (error) {
+  //     console.log(error.stack)
+  //     console.log(`Error creating bound witness: ${error}`)
+  //   }
+  // }
 
   tcpNetwork.startListening()
 }

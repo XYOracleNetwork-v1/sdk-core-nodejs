@@ -13,5 +13,9 @@ export interface IXyoOriginBlockGetter {
 }
 
 export interface IXyoBlockByPublicKeyRepository {
-  getOriginBlocksByPublicKey(publicKey: Buffer, cursor: Buffer | undefined, limit: number | undefined): Promise<{items: Buffer[], total: number}>
+  getOriginBlocksByPublicKey(publicKey: Buffer, index: number | undefined, limit: number | undefined, up: boolean): Promise<{items: Buffer[], total: number}>
+}
+
+export interface IXyoBlocksByGeohashRepository {
+  getOriginBlocksByGeohash(geohash: string, limit: number): Promise<Buffer[]>
 }
