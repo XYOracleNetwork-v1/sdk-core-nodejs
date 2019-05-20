@@ -38,7 +38,7 @@ export class XyoTcpPipe extends XyoBase implements IXyoNetworkPipe {
       if (!this.socket.destroyed) {
         this.socket.destroy()
       }
-    },         500)
+    },         2_000)
   }
 
   private waitForMessage(): Promise<Buffer> {
