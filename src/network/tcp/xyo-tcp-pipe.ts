@@ -33,6 +33,12 @@ export class XyoTcpPipe extends XyoBase implements IXyoNetworkPipe {
   public async close() {
     this.logInfo(`Closing connection with ${this.socket.remoteAddress}:${this.socket.remotePort}`)
     this.socket.end()
+
+    setTimeout(() => {
+      if (!this.socket.destroyed) {
+        this.socket.destroy()
+      }
+    },         500)
   }
 
   private waitForMessage(): Promise<Buffer> {
@@ -51,7 +57,7 @@ export class XyoTcpPipe extends XyoBase implements IXyoNetworkPipe {
       const onTimeout = () => {
         if (!hasResumed) {
           hasResumed = true
-          this.socket.end()
+          this.socket.destroy()
           cleanup()
           reject(new Error('timeout'))
         }
