@@ -17,5 +17,5 @@ export interface IXyoBlockByPublicKeyRepository {
 }
 
 export interface IXyoBlocksByGeohashRepository {
-  getOriginBlocksByPublicKey(geohash: string, limit: number): Promise<Buffer[]>
+  getOriginBlocksByGeohash(geohash: string, limit: number): Promise<Buffer[]>
 }

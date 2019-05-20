@@ -5,7 +5,7 @@ import { XyoAdvertisePacket } from '../xyo-advertise-packet'
 import { XyoBase } from '@xyo-network/sdk-base-nodejs'
 
 export class XyoServerTcpNetwork extends XyoBase {
-  public onPipeCreated: ((pipe: XyoTcpPipe) => void) | undefined
+  public onPipeCreated: ((pipe: XyoTcpPipe) => boolean) | undefined
   public server: net.Server
   public port: number
 
@@ -43,6 +43,7 @@ export class XyoServerTcpNetwork extends XyoBase {
     let waitSize: number
     let currentSize = 0
     let currentBuffer = Buffer.alloc(0)
+    let timeout: NodeJS.Timeout
 
     const cleanup = () => {
       socket.removeAllListeners('data')
@@ -60,7 +61,11 @@ export class XyoServerTcpNetwork extends XyoBase {
       }
 
       if (currentSize >= waitSize) {
-        this.onInternalPipeCreated(socket, currentBuffer.slice(4))
+        clearTimeout(timeout)
+
+        if (!this.onInternalPipeCreated(socket, currentBuffer.slice(4))) {
+          cleanup()
+        }
 
         socket.removeAllListeners('data')
         socket.removeAllListeners('close')
@@ -70,14 +75,18 @@ export class XyoServerTcpNetwork extends XyoBase {
 
     socket.on('close', cleanup)
     socket.on('end', cleanup)
+
+    timeout = setTimeout(cleanup, 5_000)
   }
 
-  private onInternalPipeCreated(socket: net.Socket, data: Buffer) {
+  private onInternalPipeCreated(socket: net.Socket, data: Buffer): boolean {
     const socketPipe = new XyoTcpPipe(socket, new XyoAdvertisePacket(data))
     const callback = this.onPipeCreated
 
     if (callback) {
-      callback(socketPipe)
+      return callback(socketPipe)
     }
+
+    return false
   }
 }
