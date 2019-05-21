@@ -12,12 +12,21 @@ export class XyoBoundWitnessInserter extends XyoBase {
   private hasher: IXyoHasher
   private state: XyoOriginState
   private blockRepository: IXyoOriginBlockRepository
+  private blockListeners: {[key: string]: (boundWitness: Buffer) => void} = {}
 
   constructor(hasher: IXyoHasher, state: XyoOriginState, blockRepo: IXyoOriginBlockRepository) {
     super()
     this.hasher = hasher
     this.state = state
     this.blockRepository = blockRepo
+  }
+
+  public addBlockListener(key: string, listener: (boundWitness: Buffer) => void) {
+    this.blockListeners[key] = listener
+  }
+
+  public removeBlockListener(key: string) {
+    delete this.blockListeners[key]
   }
 
   public async insert(boundWitness: XyoBoundWitness) {
@@ -39,6 +48,10 @@ export class XyoBoundWitnessInserter extends XyoBase {
     if (bridgeBlocks && bridgeBlocksHashes) {
         // no need to await the add block, this can be async
       this.blockRepository.addOriginBlocks(bridgeBlocksHashes.getAll().getContentsCopy(), bridgeBlocks.getAll().getContentsCopy())
+    }
+
+    for (const [key, value] of Object.entries(this.blockListeners)) {
+      value(boundWitness.getAll().getContentsCopy())
     }
   }
 
