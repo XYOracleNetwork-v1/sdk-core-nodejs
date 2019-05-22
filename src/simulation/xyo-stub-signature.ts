@@ -1,5 +1,5 @@
 import { IXyoSigner, XyoSignatureVerify } from '../signing/xyo-signer'
-import { XyoStructure, XyoBuffer } from '@xyo-network/object-model'
+import { XyoStructure, XyoBuffer } from '../object-model'
 import { XyoObjectSchema } from '../schema'
 import { resolve } from 'path'
 

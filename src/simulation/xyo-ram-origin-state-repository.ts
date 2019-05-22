@@ -1,5 +1,5 @@
 import { IXyoOriginStateRepository } from '../persist/xyo-origin-state-repository'
-import { XyoStructure, XyoBuffer } from '@xyo-network/object-model'
+import { XyoStructure, XyoBuffer } from '../object-model'
 import { IXyoSigner } from '../signing/xyo-signer'
 import fs from 'fs'
 // import { IXyoFileOriginState } from '../persist/xyo-file-origin-state-repository'

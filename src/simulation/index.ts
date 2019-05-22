@@ -3,7 +3,7 @@ import { XyoStubSigner } from './xyo-stub-signature'
 import { XyoRamOriginStateRepository } from './xyo-ram-origin-state-repository'
 import { XyoOriginState } from '../origin/xyo-origin-state'
 import { IXyoOriginStateRepository } from '../persist'
-import { XyoStructure, XyoIterableStructure, XyoBuffer } from '@xyo-network/object-model'
+import { XyoStructure, XyoBuffer } from '../object-model'
 import { XyoObjectSchema } from '../schema'
 import { XyoBoundWitness } from '../bound-witness'
 
