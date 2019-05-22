@@ -1,6 +1,6 @@
 import { IXyoHeuristicResolver, IXyoHumanHeuristic, XyoHumanHeuristicResolver } from '../xyo-heuristic-resolver'
 import bs58 from 'bs58'
-import { XyoStructure, XyoIterableStructure } from '@xyo-network/object-model'
+import { XyoStructure, XyoIterableStructure } from '../../object-model'
 import { XyoObjectSchema } from '../../schema'
 import { readUnsignedNumber, readSignedNumber, uniqueIterableToObject, iterableObjectToArray } from './xyo-heuristics-common-util'
 

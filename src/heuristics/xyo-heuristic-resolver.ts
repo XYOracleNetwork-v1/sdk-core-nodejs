@@ -1,5 +1,5 @@
 import { XyoBoundWitness } from '../bound-witness'
-import { XyoIterableStructure, XyoStructure, XyoBuffer } from '@xyo-network/object-model'
+import { XyoIterableStructure, XyoStructure, XyoBuffer } from '../object-model'
 import { XyoObjectSchema } from '../schema'
 
 export interface IXyoHeuristicResolver {

@@ -1,5 +1,5 @@
 import { IXyoOriginBlockRepository, IXyoOriginBlockGetter } from './xyo-origin-block-repository'
-import { XyoIterableStructure } from '@xyo-network/object-model'
+import { XyoIterableStructure } from '../object-model'
 
 export class XyoMemoryBlockRepository implements IXyoOriginBlockRepository, IXyoOriginBlockGetter {
   private blockMapping: Map<string, Buffer> = new Map()

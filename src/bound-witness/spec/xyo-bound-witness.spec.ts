@@ -1,5 +1,5 @@
 import { XyoBoundWitness } from '../xyo-bound-witness'
-import { XyoStructure, XyoBuffer, XyoIterableStructure } from '@xyo-network/object-model'
+import { XyoBuffer } from '../../object-model'
 
 describe('XyoBoundWitness', () => {
 

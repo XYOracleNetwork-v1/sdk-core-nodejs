@@ -3,7 +3,7 @@ import { XyoZigZagBoundWitnessSession } from '../bound-witness/xyo-zig-zag-bound
 import { XyoNetworkHandler } from '../network/xyo-network-handler'
 import { IXyoProcedureCatalog } from '../network/xyo-procedure-catalog'
 import { XyoChoicePacket } from '../network/xyo-choice-packet'
-import { XyoIterableStructure, XyoBuffer } from '@xyo-network/object-model'
+import { XyoIterableStructure, XyoBuffer } from '../object-model'
 import { IXyoBoundWitnessHander } from './xyo-bound-witness-handler'
 import { XyoCatalogFlags } from '../network/xyo-catalog-flags'
 import { IXyoSigner } from '../signing/xyo-signer'

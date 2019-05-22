@@ -1,7 +1,7 @@
 import { IXyoOriginStateRepository } from './xyo-origin-state-repository'
-import { XyoStructure, XyoBuffer } from '@xyo-network/object-model'
 import { IXyoSigner } from '../signing/xyo-signer'
 import fs from 'fs'
+import { XyoStructure, XyoBuffer } from '../object-model'
 
 interface IXyoFileOriginState {
   index: string | undefined

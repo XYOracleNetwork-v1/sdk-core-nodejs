@@ -1,6 +1,6 @@
 import { XyoBoundWitness } from './xyo-bound-witness'
 import { IXyoSigner } from '../signing/xyo-signer'
-import { XyoStructure, XyoIterableStructure } from '@xyo-network/object-model'
+import { XyoStructure, XyoIterableStructure } from '../object-model'
 import { XyoObjectSchema } from '../schema'
 
 export class XyoZigZagBoundWitness extends XyoBoundWitness {
