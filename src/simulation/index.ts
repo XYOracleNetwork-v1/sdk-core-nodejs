@@ -26,27 +26,8 @@ export class XyoJsonBoundWitnessCreator implements IXyoJsonBoundWitnessCreator {
       const aliceState = this.getPartyState(alice)
       const bobState = this.getPartyState(bob)
 
-      let aliceHeuristics: XyoStructure[] = []
-      let desiredHeuristics = Object.keys(boundWitness[alice])
-      desiredHeuristics.forEach((heuristic) => {
-        const newHeuristic = this.createHeuristic(heuristic, boundWitness[alice][heuristic])
-
-        if (newHeuristic) {
-          aliceHeuristics.push(newHeuristic)
-        }
-      })
-      aliceHeuristics = this.appendNeededHeuristics(aliceHeuristics, alice)
-
-      let bobHeuristics: XyoStructure[] = []
-      desiredHeuristics = Object.keys(boundWitness[bob])
-      desiredHeuristics.forEach((heuristic) => {
-        const newHeuristic = this.createHeuristic(heuristic, boundWitness[bob][heuristic])
-
-        if (newHeuristic) {
-          bobHeuristics.push(newHeuristic)
-        }
-      })
-      bobHeuristics = this.appendNeededHeuristics(bobHeuristics, bob)
+      const aliceHeuristics = this.createCustomHeuristicArrayWithDefaults([], alice)
+      const bobHeuristics = this.createCustomHeuristicArrayWithDefaults([], bob)
 
       const boundWitnessAlice = new XyoZigZagBoundWitness(aliceState.getSigners(), aliceHeuristics, [])
       const boundWitnessBob = new XyoZigZagBoundWitness(bobState.getSigners(), bobHeuristics, [])
@@ -87,6 +68,20 @@ export class XyoJsonBoundWitnessCreator implements IXyoJsonBoundWitnessCreator {
     this.partyToState = new Map()
     return bwArray
   }
+
+  private createCustomHeuristicArrayWithDefaults(heuristics: {[key: string]: any}, party: string): XyoStructure[] {
+    const desiredHeuristics = Object.keys(heuristics)
+    const returnedHeuristics: XyoStructure[] = []
+    desiredHeuristics.forEach((heuristic) => {
+      const newHeuristic = this.createHeuristic(heuristic, heuristics[heuristic])
+
+      if (newHeuristic) {
+        returnedHeuristics.push(newHeuristic)
+      }
+    })
+    return this.appendNeededHeuristics(returnedHeuristics, party)
+  }
+
   private createHeuristic(heuristic: string, value: number | string): XyoStructure | undefined {
     switch (heuristic) {
       case 'rssi': {
