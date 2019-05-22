@@ -1,4 +1,4 @@
-import { XyoSchema } from '@xyo-network/object-model'
+import { XyoSchema } from '../object-model'
 
 export class XyoObjectSchema {
   public static ARRAY_TYPED = new XyoSchema(1, 0xb0)

@@ -1,5 +1,5 @@
 import { IXyoHasher } from './xyo-hasher'
-import { XyoStructure, XyoBuffer } from '@xyo-network/object-model'
+import { XyoStructure, XyoBuffer } from '../object-model'
 import crypto from 'crypto'
 import { XyoObjectSchema } from '../schema'
 

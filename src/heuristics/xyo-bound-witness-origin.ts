@@ -1,7 +1,7 @@
 import { XyoBoundWitness } from '../bound-witness'
 import { indexResolver } from './common'
 import { XyoObjectSchema } from '../schema'
-import { XyoIterableStructure, XyoStructure } from '@xyo-network/object-model'
+import { XyoIterableStructure, XyoStructure } from '../object-model'
 
 export interface IXyoBoundWitnessOrigin {
   previousHash: Buffer | undefined,
