@@ -9,7 +9,6 @@ export interface IXyoOriginStateRepository {
   getIndex(): XyoStructure | undefined
   getPreviousHash(): XyoStructure | undefined
   getSigners(): IXyoSigner[]
-
   removeOldestSigner(): void
 
   commit(): Promise<void>
