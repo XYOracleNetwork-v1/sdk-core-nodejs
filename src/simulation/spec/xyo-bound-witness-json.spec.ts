@@ -25,11 +25,20 @@ describe('Json to BoundWitness', () => {
 
     const jsonCreator = new XyoJsonBoundWitnessCreator()
     const createdBoundWitness = jsonCreator.createBlocksFromJson(boundWitnessBytes)
-    const bw1: XyoZigZagBoundWitness = createdBoundWitness[0]
-    const bw2: XyoZigZagBoundWitness = createdBoundWitness[1]
-    expect(bw1.getIsCompleted())
-    expect(bw2.getIsCompleted())
-
+    expect(createdBoundWitness[0].getIsCompleted())
+    expect(createdBoundWitness[1].getIsCompleted())
   })
 
+  it('1 Party Block', () => {
+    const boundWitnessBytes = '[\
+      {\
+      "partyD":{\
+        "rssi": 30\
+      }}\
+    ]'
+    const jsonCreator = new XyoJsonBoundWitnessCreator()
+    const createdBoundWitness = jsonCreator.createBlocksFromJson(boundWitnessBytes)
+    expect(createdBoundWitness[0].getIsCompleted())
+
+  })
 })

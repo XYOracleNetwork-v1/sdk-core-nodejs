@@ -17,8 +17,8 @@ export class XyoJsonBoundWitnessCreator implements IXyoJsonBoundWitnessCreator {
   // tslint:disable-next-line:prefer-array-literal
   public createBlockfromJson(boundWitness: {[key: string]: any}): XyoZigZagBoundWitness | undefined {
     const allKeys = Object.keys(boundWitness)
-    if (allKeys.length > 2) {
-      throw new Error('Can only support a max of 2 parties per BoundWitness')
+    if (allKeys.length > 2 || allKeys.length === 0) {
+      throw new Error('Can only support two parties per BoundWitness')
     }
     if (allKeys.length === 2) {
       const alice = allKeys[0] as string
@@ -41,16 +41,8 @@ export class XyoJsonBoundWitnessCreator implements IXyoJsonBoundWitnessCreator {
       bobState.addOriginBlock(boundWitnessBob)
       return boundWitnessAlice
     }
-    if (allKeys.length === 1) {
-      const alice = allKeys[0]
-      let aliceHeuristics: XyoStructure[] = []
-      aliceHeuristics = this.appendNeededHeuristics(aliceHeuristics, alice)
-      const aliceState = this.getPartyState(alice)
-      const boundWitnessAlice = new XyoZigZagBoundWitness(aliceState.getSigners(), aliceHeuristics, [])
-      boundWitnessAlice.incomingData(undefined, true)
-      return boundWitnessAlice
-    }
-    return
+
+    return this.createSelfSignedBoundWitness(allKeys[0])
   }
 
   public createBlocksFromJson(json: string): XyoZigZagBoundWitness[] {
@@ -67,6 +59,14 @@ export class XyoJsonBoundWitnessCreator implements IXyoJsonBoundWitnessCreator {
     })
     this.partyToState = new Map()
     return bwArray
+  }
+
+  private createSelfSignedBoundWitness(party: string): XyoZigZagBoundWitness {
+    const charlieHeuristics = this.createCustomHeuristicArrayWithDefaults([], party)
+    const charlieState = this.getPartyState(party)
+    const boundWitnessCharlie = new XyoZigZagBoundWitness(charlieState.getSigners(), charlieHeuristics, [])
+    boundWitnessCharlie.incomingData(undefined, true)
+    return boundWitnessCharlie
   }
 
   private createCustomHeuristicArrayWithDefaults(heuristics: {[key: string]: any}, party: string): XyoStructure[] {
