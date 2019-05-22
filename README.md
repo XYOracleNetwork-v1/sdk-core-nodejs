@@ -9,6 +9,20 @@
 [![Build Status](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs.svg?branch=develop)](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs) [![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability) [![BCH compliance](https://bettercodehub.com/edge/badge/XYOracleNetwork/sdk-core-nodejs?branch=develop)](https://bettercodehub.com/results/XYOracleNetwork/sdk-core-nodejs) [![DepShield Badge](https://depshield.sonatype.org/badges/XYOracleNetwork/sdk-core-nodejs/depshield.svg)](https://depshield.github.io) 
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=XYOracleNetwork_sdk-core-nodejs&metric=alert_status)](https://sonarcloud.io/dashboard?id=XYOracleNetwork_sdk-core-nodejs) 
 
+## Table of Contents
+
+-   [Sections](#sections)
+-   [Title](#Simple-Consensus-Smart-Contract-Dapp-Library)
+-   [Project Overview](#project-overview)
+-   [Scope of Features](#scope-of-features)
+-   [Yellow Paper](#yellow-paper)
+-   [Architecture and Design](#architecture-and-design)
+-   [Getting Started](#getting-started)
+-   [Developer Guide](#developer-guide)
+-   [Maintainers](#maintainers)
+-   [License](#license)
+-   [Credits](#credits)
+
 ## Project Overview
 
 ### Scope of features
@@ -122,11 +136,17 @@ So a typical workflow might look like this:
 ```sh
   eval `./scripts/manage-ganache.js set-account`
 ```
+## Maintainers
+
+- Carter Harrison
+- Arie Trouw
+- Kevin Weiler 
+- Phillip Lorenzo
 
 ## License
 
-LGPL-3.0
+See the [LICENSE.md](LICENSE) file for license details.
 
 ## Credits
 
-<br><p align="center">Made with  ❤️  by [**XY - The Persistent Company**] (https://xy.company)</p>
+Made with 🔥and ❄️ by [XY - The Persistent Company](https://www.xy.company)
