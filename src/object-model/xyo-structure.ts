@@ -5,7 +5,7 @@ import { XyoSizeUtil } from './size-util'
 
 export class XyoStructure {
 
-  public static encode (schema: XyoSchema, value: XyoBuffer): XyoBuffer {
+  public static encode(schema: XyoSchema, value: XyoBuffer): XyoBuffer {
     const bestSize = XyoSizeUtil.getBestSize(value.getSize())
     const header = Buffer.alloc(2 + bestSize.valueOf())
     const size = value.getSize() + bestSize.valueOf()
@@ -33,21 +33,21 @@ export class XyoStructure {
     return new XyoBuffer(encoded)
   }
 
-  public static newInstance (schema: XyoSchema, value: XyoBuffer) {
+  public static newInstance(schema: XyoSchema, value: XyoBuffer) {
     return new XyoStructure(XyoStructure.encode(schema, value))
   }
 
   protected contents: XyoBuffer
   private overrideSchema: XyoSchema | undefined
 
-  constructor (contents: XyoBuffer | Buffer, overrideSchema?: XyoSchema) {
+  constructor(contents: XyoBuffer | Buffer, overrideSchema?: XyoSchema) {
     this.contents = (contents instanceof Buffer) ?
       this.contents = new XyoBuffer(contents) : contents
 
     this.overrideSchema = overrideSchema
   }
 
-  public getSchema (): XyoSchema {
+  public getSchema(): XyoSchema {
     if (this.overrideSchema) {
       return this.overrideSchema
     }
@@ -55,7 +55,7 @@ export class XyoStructure {
     return this.readSchema(0)
   }
 
-  public getValue (): XyoBuffer {
+  public getValue(): XyoBuffer {
     if (this.overrideSchema) {
       return this.contents
     }
@@ -83,7 +83,7 @@ export class XyoStructure {
     return this.contents
   }
 
-  protected readSchema (offset: number): XyoSchema {
+  protected readSchema(offset: number): XyoSchema {
     this.checkIndex(offset + 2)
 
     const id = this.contents.getUInt8(1 + offset)
@@ -92,13 +92,13 @@ export class XyoStructure {
     return new XyoSchema(id, encodingCatalogue)
   }
 
-  protected checkIndex (index: number) {
+  protected checkIndex(index: number) {
     if (index > this.contents.getSize()) {
       throw new Error(`Out of count ${index}`)
     }
   }
 
-  protected readSize (size: XyoSize, offset: number): number {
+  protected readSize(size: XyoSize, offset: number): number {
     switch (size) {
       case XyoSize.ONE: return this.contents.getUInt8(offset)
       case XyoSize.TWO: return this.contents.getUInt16BE(offset)

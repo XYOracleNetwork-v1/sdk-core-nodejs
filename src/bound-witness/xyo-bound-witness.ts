@@ -1,8 +1,7 @@
-import { XyoIterableStructure, XyoStructure, XyoSchema } from '@xyo-network/object-model'
+import { XyoIterableStructure, XyoStructure, XyoSchema } from '../object-model'
 import { XyoObjectSchema } from '../schema'
 import { IXyoHasher } from '../hashing/xyo-hasher'
 import { IXyoSigner } from '../signing/xyo-signer'
-import { XyoHumanHeuristicResolver } from '../heuristics'
 
 export class XyoBoundWitness extends XyoIterableStructure {
 

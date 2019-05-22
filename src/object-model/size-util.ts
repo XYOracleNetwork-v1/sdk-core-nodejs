@@ -1,7 +1,7 @@
 import { XyoSize } from './xyo-size'
 
 export class XyoSizeUtil {
-  public static getBestSize (size: number): XyoSize {
+  public static getBestSize(size: number): XyoSize {
     if (size + 1 < (2 ** 8)) {
       return XyoSize.ONE
     }

@@ -2,7 +2,7 @@ import { XyoSize } from './xyo-size'
 
 export class XyoSchema {
 
-  public static create (id: number, isIterable: boolean, isTyped: boolean, sizeIdentifier: XyoSize): XyoSchema {
+  public static create(id: number, isIterable: boolean, isTyped: boolean, sizeIdentifier: XyoSize): XyoSchema {
     const iterableByte = XyoSchema.getIterableByte(isIterable)
     const getTypedByte = XyoSchema.getTypedByte(isTyped)
     const getSizeByte = XyoSchema.getSizeByte(sizeIdentifier)
@@ -11,7 +11,7 @@ export class XyoSchema {
     return new XyoSchema(id, encodingCatalogue)
   }
 
-  private static getIterableByte (isIterable: boolean): number {
+  private static getIterableByte(isIterable: boolean): number {
     if (isIterable) {
       return 0x20
     }
@@ -19,7 +19,7 @@ export class XyoSchema {
     return 0x00
   }
 
-  private static getTypedByte (isTyped: boolean): number {
+  private static getTypedByte(isTyped: boolean): number {
     if (isTyped) {
       return 0x10
     }
@@ -27,7 +27,7 @@ export class XyoSchema {
     return 0x00
   }
 
-  private static getSizeByte (size: XyoSize): number {
+  private static getSizeByte(size: XyoSize): number {
     switch (size) {
       case XyoSize.ONE: return 0x00
       case XyoSize.TWO: return 0x40
@@ -44,7 +44,7 @@ export class XyoSchema {
     this.encodingCatalogue = encodingCatalogue
   }
 
-  public getSizeIdentifier (): XyoSize {
+  public getSizeIdentifier(): XyoSize {
     if ((this.encodingCatalogue & 0xc0) === 0x00) {
       return XyoSize.ONE
     }
@@ -60,11 +60,11 @@ export class XyoSchema {
     return XyoSize.EIGHT
   }
 
-  public getIsIterable (): boolean {
+  public getIsIterable(): boolean {
     return (this.encodingCatalogue & 0x20) !== 0
   }
 
-  public getIsTypedIterable (): boolean {
+  public getIsTypedIterable(): boolean {
     return (this.encodingCatalogue & 0x10) !== 0
   }
 }

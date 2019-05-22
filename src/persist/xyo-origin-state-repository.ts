@@ -1,5 +1,5 @@
-import { XyoStructure } from '@xyo-network/object-model'
 import { IXyoSigner } from '../signing/xyo-signer'
+import { XyoStructure } from '../object-model'
 
 export interface IXyoOriginStateRepository {
   putIndex(index: XyoStructure): void

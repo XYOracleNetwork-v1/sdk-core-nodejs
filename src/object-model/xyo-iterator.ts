@@ -12,7 +12,7 @@ export class XyoIterator implements Iterator<XyoStructure> {
     this.isTyped = isTyped
   }
 
-  public next (): IteratorResult<XyoStructure> {
+  public next(): IteratorResult<XyoStructure> {
     const nextItem = this.structure.readItemAtOffset(this.offset)
 
     if (this.isTyped) {
@@ -29,7 +29,7 @@ export class XyoIterator implements Iterator<XyoStructure> {
     return result
   }
 
-  public hasNext (): boolean {
+  public hasNext(): boolean {
     return this.structure.getAll().getSize() > this.offset
   }
 }

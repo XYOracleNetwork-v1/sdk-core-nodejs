@@ -5,7 +5,7 @@ import { XyoIterator } from './xyo-iterator'
 
 export class XyoIterableStructure extends XyoStructure {
 
-  public static validate (structure: XyoIterableStructure) {
+  public static validate(structure: XyoIterableStructure) {
     const it = structure.newIterator()
 
     try {
@@ -24,7 +24,7 @@ export class XyoIterableStructure extends XyoStructure {
     }
   }
 
-  public static toJson (structure: XyoStructure): any[] {
+  public static toJson(structure: XyoStructure): any[] {
     const toReturn: any[] = []
 
     if (structure instanceof XyoIterableStructure) {
@@ -43,7 +43,7 @@ export class XyoIterableStructure extends XyoStructure {
     return toReturn
   }
 
-  public static newIterable (schema: XyoSchema, items: XyoStructure[]): XyoIterableStructure {
+  public static newIterable(schema: XyoSchema, items: XyoStructure[]): XyoIterableStructure {
     if (!schema.getIsIterable()) {
       throw new Error('Can not make iterable object from not iterable schema')
     }
@@ -57,7 +57,7 @@ export class XyoIterableStructure extends XyoStructure {
     return new XyoIterableStructure(XyoStructure.encode(schema, new XyoBuffer(untypedBuffer)))
   }
 
-  private static encodeUntyped (schema: XyoSchema, items: XyoStructure[]): Buffer {
+  private static encodeUntyped(schema: XyoSchema, items: XyoStructure[]): Buffer {
     const buffersToMerge: Buffer[] = []
 
     for (const item of items) {
@@ -67,7 +67,7 @@ export class XyoIterableStructure extends XyoStructure {
     return Buffer.concat(buffersToMerge)
   }
 
-  private static encodeTyped (schema: XyoSchema, items: XyoStructure[]): Buffer {
+  private static encodeTyped(schema: XyoSchema, items: XyoStructure[]): Buffer {
     const buffersToMerge: Buffer[] = []
 
     if (items.length < 1) {
@@ -88,11 +88,11 @@ export class XyoIterableStructure extends XyoStructure {
 
   private typedSchema: XyoSchema | undefined
 
-  public newIterator (): XyoIterator {
+  public newIterator(): XyoIterator {
     return new XyoIterator(this.readOwnHeader(), this, this.typedSchema !== undefined)
   }
 
-  public getCount (): number {
+  public getCount(): number {
     const it = this.newIterator()
     let i = 0
 
@@ -104,7 +104,7 @@ export class XyoIterableStructure extends XyoStructure {
     return i
   }
 
-  public get (index: number): XyoStructure {
+  public get(index: number): XyoStructure {
     const it = this.newIterator()
     let i = 0
 
@@ -121,7 +121,7 @@ export class XyoIterableStructure extends XyoStructure {
     throw new Error(`Out of index ${index}`)
   }
 
-  public getId (id: number): XyoStructure[] {
+  public getId(id: number): XyoStructure[] {
     const itemsOfThatId: XyoStructure[] = []
     const it = this.newIterator()
 
@@ -144,7 +144,7 @@ export class XyoIterableStructure extends XyoStructure {
     return this.readItemUntyped(offset)
   }
 
-  protected addElement (element: XyoStructure) {
+  protected addElement(element: XyoStructure) {
     this.readOwnHeader()
 
     if (element.getSchema().getIsTypedIterable() && this.typedSchema) {

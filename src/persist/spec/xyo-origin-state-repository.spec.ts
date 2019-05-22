@@ -1,7 +1,7 @@
 import { IXyoOriginStateRepository } from '../xyo-origin-state-repository'
-import { XyoStructure, XyoSchema, XyoBuffer } from '@xyo-network/object-model'
 import { XyoObjectSchema } from '../../schema'
 import { XyoFileOriginStateRepository } from '../xyo-file-origin-state-repository'
+import { XyoStructure, XyoBuffer } from '../../object-model'
 
 function testOriginStateRepository(repo: IXyoOriginStateRepository) {
   describe('IXyoOriginStateRepository interface', () => {

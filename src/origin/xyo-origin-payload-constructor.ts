@@ -1,7 +1,7 @@
 import { IXyoPayloadConstructor } from './xyo-payload-constructor'
 import { IXyoBoundWitnessPayload } from '../heuristics'
 import { XyoOriginState } from './xyo-origin-state'
-import { XyoStructure } from '@xyo-network/object-model'
+import { XyoStructure } from '../object-model'
 import { IXyoHeuristicGetter } from '../heuristics/xyo-heuristic-getter'
 
 export class XyoOriginPayloadConstructor implements IXyoPayloadConstructor {

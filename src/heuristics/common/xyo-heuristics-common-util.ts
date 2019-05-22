@@ -1,5 +1,5 @@
 import { XyoHumanHeuristicResolver, IXyoHumanHeuristic } from '../xyo-heuristic-resolver'
-import { XyoIterableStructure } from '@xyo-network/object-model'
+import { XyoIterableStructure } from '../../object-model'
 
 export const readSignedNumber  = (buffer: Buffer): number => {
   switch (buffer.length) {
