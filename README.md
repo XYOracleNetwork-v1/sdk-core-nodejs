@@ -9,6 +9,20 @@
 [![Build Status](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs.svg?branch=develop)](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs) [![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability) [![BCH compliance](https://bettercodehub.com/edge/badge/XYOracleNetwork/sdk-core-nodejs?branch=develop)](https://bettercodehub.com/results/XYOracleNetwork/sdk-core-nodejs) [![DepShield Badge](https://depshield.sonatype.org/badges/XYOracleNetwork/sdk-core-nodejs/depshield.svg)](https://depshield.github.io) 
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=XYOracleNetwork_sdk-core-nodejs&metric=alert_status)](https://sonarcloud.io/dashboard?id=XYOracleNetwork_sdk-core-nodejs) 
 
+## Table of Contents
+
+-   [Sections](#sections)
+-   [Title](#Simple-Consensus-Smart-Contract-Dapp-Library)
+-   [Project Overview](#project-overview)
+-   [Scope of Features](#scope-of-features)
+-   [Yellow Paper](#yellow-paper)
+-   [Architecture and Design](#architecture-and-design)
+-   [Getting Started](#getting-started)
+-   [Developer Guide](#developer-guide)
+-   [Maintainers](#maintainers)
+-   [License](#license)
+-   [Credits](#credits)
+
 ## Project Overview
 
 ### Scope of features
@@ -100,22 +114,21 @@ This is all to say that [nvm](https://github.com/creationix/nvm) is strongly rec
 
 The project structure was designed to support and encourage a modular architecture. This project uses a typical [Lerna](https://lernajs.io/) layout. That is, all modules are located in the [packages folder](packages). This allows for a couple of things that are conducive to an efficient development and release process:
 
-- Local linking of modules during development
-- Ability to release patches, minor, and major version upgrades to npm with ease
-- TypeScript linking using [project references](https://www.typescriptlang.org/docs/handbook/project-references.html)
+-   Local linking of modules during development
+-   Ability to release patches, minor, and major version upgrades to npm with ease
+-   TypeScript linking using [project references](https://www.typescriptlang.org/docs/handbook/project-references.html)
 
 That said, since this is a TypeScript project, the source must be transpiled to JavaScript before execution. So, if a change is made to one or more modules in the package directory `yarn build` must be run from the project root for the changes to reflect.
 
 So a typical workflow might look like this:
 
-- Developer pulls down repository and changes directory in project root
-- Developer runs `yarn install` to install all dependencies of all the packages in accordance with [yarn workspace feature](https://yarnpkg.com/lang/en/docs/workspaces/)
-- Developer runs `yarn build` to transpile TypeScript source to JavaScript
-- Developer makes changes in one or more packages
-- Developer runs `yarn build` to see those changes reflected and linked accordingly
-- On occasion, running `yarn clean` may prove useful for resetting the project to clean state
-- When a change-set is complete and has gone through the proper code-review etc, a release can be made running `yarn release`. Release versions should follow [SemVer](https://semver.org/) standards.
-
+-   Developer pulls down repository and changes directory in project root
+-   Developer runs `yarn install` to install all dependencies of all the packages in accordance with [yarn workspace feature](https://yarnpkg.com/lang/en/docs/workspaces/)
+-   Developer runs `yarn build` to transpile TypeScript source to JavaScript
+-   Developer makes changes in one or more packages
+-   Developer runs `yarn build` to see those changes reflected and linked accordingly
+-   On occasion, running `yarn clean` may prove useful for resetting the project to clean state
+-   When a change-set is complete and has gone through the proper code-review etc, a release can be made running `yarn release`. Release versions should follow [SemVer](https://semver.org/) standards.
 
 ##### Set the first account in ganache as environment variable for config
 
@@ -123,10 +136,17 @@ So a typical workflow might look like this:
   eval `./scripts/manage-ganache.js set-account`
 ```
 
+## Maintainers
+
+-   Carter Harrison
+-   Arie Trouw
+-   Kevin Weiler 
+-   Phillip Lorenzo
+
 ## License
 
-LGPL-3.0
+See the [LICENSE.md](LICENSE) file for license details.
 
 ## Credits
 
-<br><p align="center">Made with  ❤️  by [**XY - The Persistent Company**] (https://xy.company)</p>
+Made with 🔥and ❄️ by [XY - The Persistent Company](https://www.xy.company)
