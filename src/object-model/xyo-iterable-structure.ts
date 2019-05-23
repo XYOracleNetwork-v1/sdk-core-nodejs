@@ -167,7 +167,7 @@ export class XyoIterableStructure extends XyoStructure {
       element.getAll().getContentsCopy()
     ])
 
-    this.contents = XyoStructure.encode(element.getSchema(), new XyoBuffer(newBufferUntyped))
+    this.contents = XyoStructure.encode(this.getSchema(), new XyoBuffer(newBufferUntyped))
   }
 
   private readItemUntyped(offset: number): XyoStructure {
