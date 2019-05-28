@@ -1,7 +1,7 @@
 import { IXyoSigner, XyoSignatureVerify } from '../xyo-signer'
-import { XyoStructure, XyoBuffer } from '@xyo-network/object-model'
 import elliptic from 'elliptic'
 import { XyoObjectSchema } from '../../schema'
+import { XyoBuffer, XyoStructure } from '../../object-model'
 
 const ec = new elliptic.ec('secp256k1')
 
