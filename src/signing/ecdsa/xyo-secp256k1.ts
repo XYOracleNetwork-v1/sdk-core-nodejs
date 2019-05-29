@@ -72,8 +72,8 @@ export class XyoSecp2556k1 implements IXyoSigner {
 
   public getPublicKey(): XyoStructure {
     const key = this.key.getPublic()
-    const x = key.x.toBuffer()
-    const y = key.y.toBuffer()
+    const x = key.getX().toBuffer()
+    const y = key.getY().toBuffer()
 
     const buffer = Buffer.concat([
       this.writePointTo32ByteBuffer(x),
