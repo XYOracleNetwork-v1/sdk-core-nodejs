@@ -1,7 +1,7 @@
 import { IXyoSigner, XyoSignatureVerify } from '../xyo-signer'
-import { XyoStructure, XyoBuffer } from '@xyo-network/object-model'
 import elliptic from 'elliptic'
 import { XyoObjectSchema } from '../../schema'
+import { XyoBuffer, XyoStructure } from '../../object-model'
 
 const ec = new elliptic.ec('secp256k1')
 
@@ -72,8 +72,8 @@ export class XyoSecp2556k1 implements IXyoSigner {
 
   public getPublicKey(): XyoStructure {
     const key = this.key.getPublic()
-    const x = key.x.toBuffer()
-    const y = key.y.toBuffer()
+    const x = key.getX().toBuffer()
+    const y = key.getY().toBuffer()
 
     const buffer = Buffer.concat([
       this.writePointTo32ByteBuffer(x),

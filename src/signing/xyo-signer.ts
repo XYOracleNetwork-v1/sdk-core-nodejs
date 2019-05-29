@@ -1,4 +1,4 @@
-import { XyoStructure } from '@xyo-network/object-model'
+import { XyoStructure } from '../object-model'
 
 export interface IXyoSigner {
   sign(data: Buffer): XyoStructure

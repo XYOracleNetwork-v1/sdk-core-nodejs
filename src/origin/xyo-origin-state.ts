@@ -1,6 +1,6 @@
 import { IXyoOriginStateRepository } from '../persist/xyo-origin-state-repository'
 import { IXyoSigner } from '../signing/xyo-signer'
-import { XyoStructure, XyoIterableStructure, XyoBuffer } from '@xyo-network/object-model'
+import { XyoStructure, XyoIterableStructure, XyoBuffer } from '../object-model'
 import { XyoObjectSchema } from '../schema'
 
 export class XyoOriginState {
