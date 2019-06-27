@@ -1,12 +1,6 @@
 {
-  "extends": ["tslint:latest", "@xyo-network/config-tslint"],
+  "$schema": "http://json.schemastore.org/tslint",
+  "extends": ["@xyo-network/sdk-base-nodejs/tslint.json"],
   "rules": {
-    "import-name": [
-      true, {
-        "lodash": "_",
-        "web3": "Web3",
-        "graphqlTag": "gql"
-      }
-    ]
   }
 }

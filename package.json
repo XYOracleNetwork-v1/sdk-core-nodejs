@@ -7,25 +7,23 @@
   "author": "XY Development Team",
   "license": "LGPL-3.0",
   "scripts": {
-    "build": "yarn xybuild",
     "test": "yarn build && yarn lint && yarn licensecheck && export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose false --detectOpenHandles",
-    "lint": "tslint -c tslint.json -p ./tsconfig.json",
     "start:tcp": "yarn build && node --nolazy -r ts-node/register examples/tcp-server/index.ts"
   },
   "devDependencies": {
     "@types/bs58": "4.0.0",
-    "@types/elliptic": "^6.4.6",
-    "@types/jest": "^24.0.12",
-    "@types/node": "11.13.8",
+    "@types/elliptic": "^6.4.8",
+    "@types/jest": "^24.0.13",
+    "@types/node": "12.0.3",
     "@xyo-network/config-tslint": "^0.1.31",
     "enquirer": "^2.3.0",
-    "jest": "^24.7.1",
+    "jest": "^24.8.0",
     "license-checker": "^25.0.1",
     "shelljs": "^0.8.3",
     "ts-jest": "^24.0.0",
-    "ts-node": "8.1.0",
+    "ts-node": "8.2.0",
     "tslint": "^5.12.1",
-    "typescript": "^3.4.5"
+    "typescript": "^3.5.1"
   },
   "dependencies": {
     "@xyo-network/sdk-base-nodejs": "^0.6.1",
