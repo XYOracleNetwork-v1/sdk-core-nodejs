@@ -57,7 +57,10 @@ export class XyoStructure {
 
   public getValue(): XyoBuffer {
     if (this.overrideSchema) {
-      return this.contents
+      const schema = this.getSchema()
+      const startOffset = schema.getSizeIdentifier().valueOf()
+      const endOffset = this.readSize(schema.getSizeIdentifier(), 0)
+      return this.contents.copyRangeOf(startOffset, endOffset)
     }
 
     const schema = this.getSchema()
