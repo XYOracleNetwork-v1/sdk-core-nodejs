@@ -40,6 +40,6 @@ export class XyoBuffer {
   }
 
   public copyRangeOf(from: number, to: number): XyoBuffer {
-    return XyoBuffer.wrap(this, this.startOffset + from, this.startOffset + to)
+    return XyoBuffer.wrap(this, from, to)
   }
 }
