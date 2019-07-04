@@ -8,7 +8,9 @@
   "license": "LGPL-3.0",
   "scripts": {
     "test": "yarn build && yarn lint && yarn licensecheck && export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose false --detectOpenHandles",
-    "start:tcp": "yarn build && node --nolazy -r ts-node/register examples/tcp-server/index.ts"
+    "start:tcp": "yarn build && node --nolazy -r ts-node/register examples/tcp-server/index.ts",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "devDependencies": {
     "@types/bs58": "4.0.0",
@@ -28,7 +30,8 @@
   "dependencies": {
     "@xyo-network/sdk-base-nodejs": "^0.6.1",
     "bs58": "4.0.1",
-    "elliptic": "6.4.1"
+    "elliptic": "6.4.1",
+    "snyk": "^1.189.0"
   },
   "files": [
     "dist",
@@ -43,5 +46,6 @@
       "/src/"
     ],
     "testEnvironment": "node"
-  }
+  },
+  "snyk": true
 }
