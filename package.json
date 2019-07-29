@@ -1,6 +1,6 @@
 {
   "name": "@xyo-network/sdk-core-nodejs",
-  "version": "0.70.7",
+  "version": "0.70.8",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,7 +12,6 @@
     "start:tcp": "yarn build && node --nolazy -r ts-node/register examples/tcp-server/index.ts"
   },
   "devDependencies": {
-    "@types/bs58": "4.0.0",
     "@types/elliptic": "^6.4.8",
     "@types/jest": "^24.0.13",
     "@types/node": "12.0.3",
