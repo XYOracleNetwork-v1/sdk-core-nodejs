@@ -20,10 +20,9 @@ export class XyoOriginPayloadConstructor implements IXyoPayloadConstructor {
     this.heuristicGetters.delete(key)
   }
 
-  // todo add bound witness options
   public async getPayloads(choice: Buffer): Promise<IXyoBoundWitnessPayload> {
     const originItems = this.getOriginItems()
-    const getterItems = this.getAllHeuristics()
+    const getterItems = this.getAllHeuristics(choice)
 
     const payload: IXyoBoundWitnessPayload = {
       signed: originItems.concat(getterItems),
@@ -33,11 +32,11 @@ export class XyoOriginPayloadConstructor implements IXyoPayloadConstructor {
     return payload
   }
 
-  private getAllHeuristics(): XyoStructure[] {
+  private getAllHeuristics(choice: Buffer): XyoStructure[] {
     const toReturn: XyoStructure[] = []
 
     this.heuristicGetters.forEach((value, _) => {
-      const item = value.getHeuristic()
+      const item = value.getHeuristic(choice)
 
       if (item) {
         toReturn.push(item)
