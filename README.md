@@ -1,8 +1,8 @@
-[logo]: https://cdn.xy.company/img/brand/XY_Logo_GitHub.png
+[logo]: https://cdn.xy.company/img/brand/XYO_full_colored.png
 
-[![logo]](https://xy.company)
+[![logo]](https://xyo.network)
 
-# XYO CORE SDK (sdk-core-nodejs)
+# sdk-core-nodejs
 
 [![NPM](https://img.shields.io/npm/v/@xyo-network/sdk-core-nodejs.svg?style=plastic)](https://www.npmjs.com/package/@xyo-network/sdk-core-nodejs)
 
@@ -11,8 +11,7 @@
 
 ## Table of Contents
 
--   [Sections](#sections)
--   [Title](#Simple-Consensus-Smart-Contract-Dapp-Library)
+-   [Title](#sdk-core-nodejs)
 -   [Project Overview](#project-overview)
 -   [Scope of Features](#scope-of-features)
 -   [Yellow Paper](#yellow-paper)
@@ -145,8 +144,8 @@ So a typical workflow might look like this:
 
 ## License
 
-See the [LICENSE.md](LICENSE) file for license details.
+See the [LICENSE](LICENSE) file for license details.
 
 ## Credits
 
-Made with 🔥and ❄️ by [XY - The Persistent Company](https://www.xy.company)
+Made with 🔥and ❄️ by [XYO](https://www.xyo.network)
