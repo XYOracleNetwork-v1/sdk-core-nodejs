@@ -1,5 +1,5 @@
 {
-  "name": "sdk-core-nodejs",
+  "name": "@xyoraclenetwork/sdk-core-nodejs",
   "version": "0.70.11",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "dist/index.js",
@@ -12,7 +12,7 @@
     "start:tcp": "yarn build && node --nolazy -r ts-node/register examples/tcp-server/index.ts"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/@XYOracleNetwork"
+    "registry": "https://npm.pkg.github.com/@xyoraclenetwork"
   },
   "devDependencies": {
     "@types/elliptic": "^6.4.8",
