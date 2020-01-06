@@ -1,6 +1,6 @@
 {
   "name": "@xyoraclenetwork/sdk-core-nodejs",
-  "version": "0.70.12",
+  "version": "0.70.13",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,7 +12,11 @@
     "start:tcp": "yarn build && node --nolazy -r ts-node/register examples/tcp-server/index.ts"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/@xyoraclenetwork"
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/XYOracleNetwork/sdk-core-nodejs.git"
   },
   "devDependencies": {
     "@types/elliptic": "^6.4.8",
