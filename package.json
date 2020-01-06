@@ -1,6 +1,6 @@
 {
   "name": "@xyoraclenetwork/sdk-core-nodejs",
-  "version": "0.70.11",
+  "version": "0.70.12",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
