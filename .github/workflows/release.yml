@@ -13,8 +13,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 10.15.0
-      - run: npm ci
-      - run: npm test
+      - run: yarn ci
+      - run: yarn test
 
   publish-gpr:
     needs: build
@@ -26,7 +26,7 @@ jobs:
           node-version: 10.15.0
           registry-url: https://npm.pkg.github.com/
           scope: '@xyoraclenetwork'
-      - run: npm ci
-      - run: npm publish
+      - run: yarn ci
+      - run: yarn publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
