@@ -27,6 +27,7 @@ jobs:
           node-version: 10.15.0
           registry-url: https://npm.pkg.github.com/
           scope: '@xyoraclenetwork'
+      - run: yarn install
       - run: yarn build
       - run: yarn publish
         env:
