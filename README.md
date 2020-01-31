@@ -6,8 +6,9 @@
 
 [![NPM](https://img.shields.io/npm/v/@xyo-network/sdk-core-nodejs.svg?style=plastic)](https://www.npmjs.com/package/@xyo-network/sdk-core-nodejs)
 
-[![Build Status](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs.svg?branch=develop)](https://travis-ci.com/XYOracleNetwork/sdk-core-nodejs) [![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability) [![BCH compliance](https://bettercodehub.com/edge/badge/XYOracleNetwork/sdk-core-nodejs?branch=develop)](https://bettercodehub.com/results/XYOracleNetwork/sdk-core-nodejs) [![DepShield Badge](https://depshield.sonatype.org/badges/XYOracleNetwork/sdk-core-nodejs/depshield.svg)](https://depshield.github.io) 
+![](https://github.com/XYOracleNetwork/sdk-core-nodejs/workflows/CI/badge.svg?branch=develop)[![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability) [![BCH compliance](https://bettercodehub.com/edge/badge/XYOracleNetwork/sdk-core-nodejs?branch=master)](https://bettercodehub.com/) [![DepShield Badge](https://depshield.sonatype.org/badges/XYOracleNetwork/sdk-core-nodejs/depshield.svg)](https://depshield.github.io) 
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=XYOracleNetwork_sdk-core-nodejs&metric=alert_status)](https://sonarcloud.io/dashboard?id=XYOracleNetwork_sdk-core-nodejs) 
+[![Known Vulnerabilities](https://snyk.io/test/github/XYOracleNetwork/sdk-core-nodejs/badge.svg?targetFile=package.json)](https://snyk.io/test/github/XYOracleNetwork/sdk-core-nodejs?targetFile=package.json)
 
 ## Table of Contents
 
