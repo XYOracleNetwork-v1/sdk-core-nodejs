@@ -11,9 +11,6 @@
     "test": "yarn build && yarn lint && yarn licensecheck && export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose false --detectOpenHandles",
     "start:tcp": "yarn build && node --nolazy -r ts-node/register examples/tcp-server/index.ts"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/XYOracleNetwork/sdk-core-nodejs.git"
