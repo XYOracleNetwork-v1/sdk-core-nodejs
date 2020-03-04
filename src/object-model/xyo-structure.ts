@@ -1,15 +1,20 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { XyoSchema } from './xyo-schema'
 import { XyoBuffer } from './xyo-buffer'
 import { XyoSize } from './xyo-size'
 import { XyoSizeUtil } from './size-util'
 
 export class XyoStructure {
-
   public static encode(schema: XyoSchema, value: XyoBuffer): XyoBuffer {
     const bestSize = XyoSizeUtil.getBestSize(value.getSize())
     const header = Buffer.alloc(2 + bestSize.valueOf())
     const size = value.getSize() + bestSize.valueOf()
-    const optimizedSchema = XyoSchema.create(schema.id, schema.getIsIterable(), schema.getIsTypedIterable(), bestSize)
+    const optimizedSchema = XyoSchema.create(
+      schema.id,
+      schema.getIsIterable(),
+      schema.getIsTypedIterable(),
+      bestSize
+    )
 
     header.writeUInt8(optimizedSchema.encodingCatalogue, 0)
     header.writeUInt8(schema.id, 1)
@@ -41,8 +46,10 @@ export class XyoStructure {
   private overrideSchema: XyoSchema | undefined
 
   constructor(contents: XyoBuffer | Buffer, overrideSchema?: XyoSchema) {
-    this.contents = (contents instanceof Buffer) ?
-      this.contents = new XyoBuffer(contents) : contents
+    this.contents =
+      contents instanceof Buffer
+        ? (this.contents = new XyoBuffer(contents))
+        : contents
 
     this.overrideSchema = overrideSchema
   }
@@ -103,11 +110,14 @@ export class XyoStructure {
 
   protected readSize(size: XyoSize, offset: number): number {
     switch (size) {
-      case XyoSize.ONE: return this.contents.getUInt8(offset)
-      case XyoSize.TWO: return this.contents.getUInt16BE(offset)
-      case XyoSize.FOUR: return this.contents.getUInt32BE(offset)
-      case XyoSize.EIGHT: return this.contents.getUInt64BE(offset)
+      case XyoSize.ONE:
+        return this.contents.getUInt8(offset)
+      case XyoSize.TWO:
+        return this.contents.getUInt16BE(offset)
+      case XyoSize.FOUR:
+        return this.contents.getUInt32BE(offset)
+      case XyoSize.EIGHT:
+        return this.contents.getUInt64BE(offset)
     }
   }
-
 }

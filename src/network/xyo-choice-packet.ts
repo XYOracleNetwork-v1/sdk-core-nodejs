@@ -1,4 +1,3 @@
-
 export class XyoChoicePacket {
   private data: Buffer
 
@@ -33,5 +32,4 @@ export class XyoChoicePacket {
 
     return this.data.readUInt8(0)
   }
-
 }

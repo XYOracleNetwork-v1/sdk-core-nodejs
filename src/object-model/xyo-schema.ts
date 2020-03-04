@@ -1,8 +1,12 @@
 import { XyoSize } from './xyo-size'
 
 export class XyoSchema {
-
-  public static create(id: number, isIterable: boolean, isTyped: boolean, sizeIdentifier: XyoSize): XyoSchema {
+  public static create(
+    id: number,
+    isIterable: boolean,
+    isTyped: boolean,
+    sizeIdentifier: XyoSize
+  ): XyoSchema {
     const iterableByte = XyoSchema.getIterableByte(isIterable)
     const getTypedByte = XyoSchema.getTypedByte(isTyped)
     const getSizeByte = XyoSchema.getSizeByte(sizeIdentifier)
@@ -29,10 +33,14 @@ export class XyoSchema {
 
   private static getSizeByte(size: XyoSize): number {
     switch (size) {
-      case XyoSize.ONE: return 0x00
-      case XyoSize.TWO: return 0x40
-      case XyoSize.FOUR: return 0x80
-      case XyoSize.EIGHT: return 0xc0
+      case XyoSize.ONE:
+        return 0x00
+      case XyoSize.TWO:
+        return 0x40
+      case XyoSize.FOUR:
+        return 0x80
+      case XyoSize.EIGHT:
+        return 0xc0
     }
   }
 

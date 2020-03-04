@@ -1,7 +1,6 @@
 import { IXyoNetworkPipe } from './xyo-network-pipe'
 
 export class XyoNetworkHandler {
-
   private static getSizeEncodedCatalog(catalog: Buffer): Buffer {
     const sizeBuffer = Buffer.alloc(1)
     sizeBuffer.writeUInt8(catalog.length, 0)
@@ -19,7 +18,10 @@ export class XyoNetworkHandler {
     return this.pipe.send(buffer, true)
   }
 
-  public sendChoicePacket(choice: Buffer, response: Buffer): Promise<Buffer | undefined> {
+  public sendChoicePacket(
+    choice: Buffer,
+    response: Buffer
+  ): Promise<Buffer | undefined> {
     const bufferToSend = Buffer.concat([
       XyoNetworkHandler.getSizeEncodedCatalog(choice),
       response

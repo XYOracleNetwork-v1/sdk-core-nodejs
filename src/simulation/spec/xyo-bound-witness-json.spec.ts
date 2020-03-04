@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { XyoJsonBoundWitnessCreator } from '../index'
 // import { XyoZigZagBoundWitness } from '../../bound-witness/index'
 import { XyoZigZagBoundWitness } from '../../bound-witness/xyo-zig-zag-bound-witness'
 describe('Json to BoundWitness', () => {
-
   it('2 Party Block', () => {
-    const boundWitnessBytes = '[\
+    const boundWitnessBytes =
+      '[\
       {\
         "partyA":{\
           "time": 2\
@@ -24,21 +25,25 @@ describe('Json to BoundWitness', () => {
     ]'
 
     const jsonCreator = new XyoJsonBoundWitnessCreator()
-    const createdBoundWitness = jsonCreator.createBlocksFromJson(boundWitnessBytes)
+    const createdBoundWitness = jsonCreator.createBlocksFromJson(
+      boundWitnessBytes
+    )
     expect(createdBoundWitness[0].getIsCompleted())
     expect(createdBoundWitness[1].getIsCompleted())
   })
 
   it('1 Party Block', () => {
-    const boundWitnessBytes = '[\
+    const boundWitnessBytes =
+      '[\
       {\
       "partyD":{\
         "rssi": 30\
       }}\
     ]'
     const jsonCreator = new XyoJsonBoundWitnessCreator()
-    const createdBoundWitness = jsonCreator.createBlocksFromJson(boundWitnessBytes)
+    const createdBoundWitness = jsonCreator.createBlocksFromJson(
+      boundWitnessBytes
+    )
     expect(createdBoundWitness[0].getIsCompleted())
-
   })
 })

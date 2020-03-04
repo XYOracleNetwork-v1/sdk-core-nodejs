@@ -1,4 +1,3 @@
-
 export class XyoCatalogFlags {
   public static BOUND_WITNESS = 1
   public static TAKE_ORIGIN_CHAIN = 2

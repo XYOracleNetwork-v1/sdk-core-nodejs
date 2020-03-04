@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/interface-name-prefix */
+/* eslint-disable @typescript-eslint/member-delimiter-style */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { XyoZigZagBoundWitness } from '../bound-witness/xyo-zig-zag-bound-witness'
 import { XyoStubSigner } from './xyo-stub-signature'
 import { XyoRamOriginStateRepository } from './xyo-ram-origin-state-repository'
@@ -15,7 +19,9 @@ export class XyoJsonBoundWitnessCreator implements IXyoJsonBoundWitnessCreator {
   private partyToState: Map<string, XyoOriginState> = new Map()
 
   // tslint:disable-next-line:prefer-array-literal
-  public createBlockfromJson(boundWitness: {[key: string]: any}): XyoZigZagBoundWitness | undefined {
+  public createBlockfromJson(boundWitness: {
+    [key: string]: any
+  }): XyoZigZagBoundWitness | undefined {
     const allKeys = Object.keys(boundWitness)
     if (allKeys.length > 2 || allKeys.length === 0) {
       throw new Error('Can only support two parties per BoundWitness')
@@ -26,11 +32,22 @@ export class XyoJsonBoundWitnessCreator implements IXyoJsonBoundWitnessCreator {
       const aliceState = this.getPartyState(alice)
       const bobState = this.getPartyState(bob)
 
-      const aliceHeuristics = this.createCustomHeuristicArrayWithDefaults([], alice)
+      const aliceHeuristics = this.createCustomHeuristicArrayWithDefaults(
+        [],
+        alice
+      )
       const bobHeuristics = this.createCustomHeuristicArrayWithDefaults([], bob)
 
-      const boundWitnessAlice = new XyoZigZagBoundWitness(aliceState.getSigners(), aliceHeuristics, [])
-      const boundWitnessBob = new XyoZigZagBoundWitness(bobState.getSigners(), bobHeuristics, [])
+      const boundWitnessAlice = new XyoZigZagBoundWitness(
+        aliceState.getSigners(),
+        aliceHeuristics,
+        []
+      )
+      const boundWitnessBob = new XyoZigZagBoundWitness(
+        bobState.getSigners(),
+        bobHeuristics,
+        []
+      )
 
       const aliceToBobOne = boundWitnessAlice.incomingData(undefined, false)
       const bobToAliceOne = boundWitnessBob.incomingData(aliceToBobOne, true)
@@ -48,9 +65,9 @@ export class XyoJsonBoundWitnessCreator implements IXyoJsonBoundWitnessCreator {
   public createBlocksFromJson(json: string): XyoZigZagBoundWitness[] {
     const bwArray: XyoZigZagBoundWitness[] = []
     // tslint:disable-next-line:prefer-array-literal
-    const userData = JSON.parse(json) as Array<{[key: string]: any}>
+    const userData = JSON.parse(json) as Array<{ [key: string]: any }>
 
-    userData.forEach((boundWitness) => {
+    userData.forEach(boundWitness => {
       const cBw = this.createBlockfromJson(boundWitness)
 
       if (cBw) {
@@ -62,18 +79,31 @@ export class XyoJsonBoundWitnessCreator implements IXyoJsonBoundWitnessCreator {
   }
 
   private createSelfSignedBoundWitness(party: string): XyoZigZagBoundWitness {
-    const charlieHeuristics = this.createCustomHeuristicArrayWithDefaults([], party)
+    const charlieHeuristics = this.createCustomHeuristicArrayWithDefaults(
+      [],
+      party
+    )
     const charlieState = this.getPartyState(party)
-    const boundWitnessCharlie = new XyoZigZagBoundWitness(charlieState.getSigners(), charlieHeuristics, [])
+    const boundWitnessCharlie = new XyoZigZagBoundWitness(
+      charlieState.getSigners(),
+      charlieHeuristics,
+      []
+    )
     boundWitnessCharlie.incomingData(undefined, true)
     return boundWitnessCharlie
   }
 
-  private createCustomHeuristicArrayWithDefaults(heuristics: {[key: string]: any}, party: string): XyoStructure[] {
+  private createCustomHeuristicArrayWithDefaults(
+    heuristics: { [key: string]: any },
+    party: string
+  ): XyoStructure[] {
     const desiredHeuristics = Object.keys(heuristics)
     const returnedHeuristics: XyoStructure[] = []
-    desiredHeuristics.forEach((heuristic) => {
-      const newHeuristic = this.createHeuristic(heuristic, heuristics[heuristic])
+    desiredHeuristics.forEach(heuristic => {
+      const newHeuristic = this.createHeuristic(
+        heuristic,
+        heuristics[heuristic]
+      )
 
       if (newHeuristic) {
         returnedHeuristics.push(newHeuristic)
@@ -82,7 +112,10 @@ export class XyoJsonBoundWitnessCreator implements IXyoJsonBoundWitnessCreator {
     return this.appendNeededHeuristics(returnedHeuristics, party)
   }
 
-  private createHeuristic(heuristic: string, value: number | string): XyoStructure | undefined {
+  private createHeuristic(
+    heuristic: string,
+    value: number | string
+  ): XyoStructure | undefined {
     switch (heuristic) {
       case 'rssi': {
         const numBuff = Buffer.alloc(1)
@@ -99,7 +132,10 @@ export class XyoJsonBoundWitnessCreator implements IXyoJsonBoundWitnessCreator {
     }
   }
 
-  private appendNeededHeuristics(heuristcs: any[], party: string): XyoStructure[] {
+  private appendNeededHeuristics(
+    heuristcs: any[],
+    party: string
+  ): XyoStructure[] {
     const state = this.getPartyState(party)
     if (!state) {
       return []

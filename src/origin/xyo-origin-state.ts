@@ -1,22 +1,30 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { IXyoOriginStateRepository } from '../persist/xyo-origin-state-repository'
 import { IXyoSigner } from '../signing/xyo-signer'
 import { XyoStructure, XyoIterableStructure, XyoBuffer } from '../object-model'
 import { XyoObjectSchema } from '../schema'
 
 export class XyoOriginState {
-
   public static createNextPublicKey(publicKey: XyoStructure): XyoStructure {
-    return XyoStructure.newInstance(XyoObjectSchema.NEXT_PUBLIC_KEY, publicKey.getAll())
+    return XyoStructure.newInstance(
+      XyoObjectSchema.NEXT_PUBLIC_KEY,
+      publicKey.getAll()
+    )
   }
 
   public static createPreviousHash(hash: XyoStructure): XyoStructure {
-    return XyoIterableStructure.newIterable(XyoObjectSchema.PREVIOUS_HASH, [hash])
+    return XyoIterableStructure.newIterable(XyoObjectSchema.PREVIOUS_HASH, [
+      hash
+    ])
   }
 
   public static createIndex(index: number): XyoStructure {
     const numberBuffer = Buffer.alloc(4)
     numberBuffer.writeUInt32BE(index, 0)
-    return XyoStructure.newInstance(XyoObjectSchema.INDEX, new XyoBuffer(numberBuffer))
+    return XyoStructure.newInstance(
+      XyoObjectSchema.INDEX,
+      new XyoBuffer(numberBuffer)
+    )
   }
 
   public repo: IXyoOriginStateRepository
@@ -28,7 +36,10 @@ export class XyoOriginState {
   }
 
   public getIndexAsNumber(): number {
-    return this.getIndex().getValue().getContentsCopy().readUInt32BE(0)
+    return this.getIndex()
+      .getValue()
+      .getContentsCopy()
+      .readUInt32BE(0)
   }
 
   public getNextPublicKey(): XyoStructure | undefined {
@@ -58,7 +69,10 @@ export class XyoOriginState {
   }
 
   public addSigner(signer: IXyoSigner) {
-    const index = this.getIndex().getValue().getContentsCopy().readUInt32BE(0)
+    const index = this.getIndex()
+      .getValue()
+      .getContentsCopy()
+      .readUInt32BE(0)
 
     if (index === 0) {
       this.repo.addSigner(signer)
@@ -66,7 +80,9 @@ export class XyoOriginState {
     }
 
     this.waitingSigners.push(signer)
-    this.nextPublicKey = XyoOriginState.createNextPublicKey(signer.getPublicKey())
+    this.nextPublicKey = XyoOriginState.createNextPublicKey(
+      signer.getPublicKey()
+    )
   }
 
   public addOriginBlock(hash: XyoStructure) {
@@ -85,9 +101,11 @@ export class XyoOriginState {
   }
 
   private incrementIndex() {
-    const index = this.getIndex().getValue().getContentsCopy().readUInt32BE(0)
+    const index = this.getIndex()
+      .getValue()
+      .getContentsCopy()
+      .readUInt32BE(0)
     const newIndex = XyoOriginState.createIndex(index + 1)
     this.repo.putIndex(newIndex)
   }
-
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { XyoBoundWitness } from './xyo-bound-witness'
 import { IXyoSigner } from '../signing/xyo-signer'
 import { XyoStructure, XyoIterableStructure } from '../object-model'
@@ -9,7 +10,11 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
   private unsignedPayload: XyoStructure[]
   private hasSentFetter = false
 
-  constructor(signers: IXyoSigner[], signedPayload: XyoStructure[], unsignedPayload: XyoStructure[]) {
+  constructor(
+    signers: IXyoSigner[],
+    signedPayload: XyoStructure[],
+    unsignedPayload: XyoStructure[]
+  ) {
     super(XyoIterableStructure.newIterable(XyoObjectSchema.BW, []).getAll())
 
     this.signers = signers
@@ -17,26 +22,39 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
     this.unsignedPayload = unsignedPayload
   }
 
-  public incomingData(transfer: XyoIterableStructure | undefined, endpoint: boolean): XyoIterableStructure {
+  public incomingData(
+    transfer: XyoIterableStructure | undefined,
+    endpoint: boolean
+  ): XyoIterableStructure {
     if (transfer) {
       this.addTransfer(transfer)
     }
 
     if (!this.hasSentFetter) {
-      const fetter = XyoBoundWitness.createMasterArrayWithSubArray(XyoObjectSchema.FETTER, XyoObjectSchema.KEY_SET, this.signedPayload, this.getPublicKeysOfSigners())
+      const fetter = XyoBoundWitness.createMasterArrayWithSubArray(
+        XyoObjectSchema.FETTER,
+        XyoObjectSchema.KEY_SET,
+        this.signedPayload,
+        this.getPublicKeysOfSigners()
+      )
 
       this.addToLedger(fetter)
       this.hasSentFetter = true
     }
 
     if (this.getNumberOfFetters() !== this.getNumberOfWitnesses()) {
-      return this.getReturnFromIncoming(this.getNumberOfWitnessesFromTransfer(transfer), endpoint)
+      return this.getReturnFromIncoming(
+        this.getNumberOfWitnessesFromTransfer(transfer),
+        endpoint
+      )
     }
 
     return this.encodeTransfer([])
   }
 
-  private getNumberOfWitnessesFromTransfer(transfer: XyoIterableStructure | undefined) {
+  private getNumberOfWitnessesFromTransfer(
+    transfer: XyoIterableStructure | undefined
+  ) {
     if (transfer) {
       return transfer.getId(XyoObjectSchema.WITNESS.id).length
     }
@@ -71,7 +89,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
     const y = fetters.length - 1
 
     if (x <= y) {
-      for (let i = x; i <= y ; i++) {
+      for (let i = x; i <= y; i++) {
         toSendBack.push(fetters[i])
       }
     }
@@ -101,13 +119,23 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
     return this.encodeFettersAndWitnessesForTransfer(fetters, witness, items)
   }
 
-  private encodeFettersAndWitnessesForTransfer(fetters: XyoStructure[], witness: XyoStructure[], items: XyoStructure[]): XyoIterableStructure {
+  private encodeFettersAndWitnessesForTransfer(
+    fetters: XyoStructure[],
+    witness: XyoStructure[],
+    items: XyoStructure[]
+  ): XyoIterableStructure {
     if (fetters.length === 0 && witness.length !== 0) {
-      return XyoIterableStructure.newIterable(XyoObjectSchema.WITNESS_SET, witness)
+      return XyoIterableStructure.newIterable(
+        XyoObjectSchema.WITNESS_SET,
+        witness
+      )
     }
 
     if (fetters.length !== 0 && witness.length === 0) {
-      return XyoIterableStructure.newIterable(XyoObjectSchema.FETTER_SET, fetters)
+      return XyoIterableStructure.newIterable(
+        XyoObjectSchema.FETTER_SET,
+        fetters
+      )
     }
 
     return XyoIterableStructure.newIterable(XyoObjectSchema.BW_FRAGMENT, items)
@@ -133,6 +161,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
     return publicKeys
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private signBoundWitness(payload: XyoStructure[]) {
     const signatures: XyoStructure[] = []
 
@@ -140,7 +169,12 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
       signatures.push(this.sign(signer))
     }
 
-    const witness = XyoBoundWitness.createMasterArrayWithSubArray(XyoObjectSchema.WITNESS, XyoObjectSchema.SIGNATURE_SET, this.unsignedPayload, signatures)
+    const witness = XyoBoundWitness.createMasterArrayWithSubArray(
+      XyoObjectSchema.WITNESS,
+      XyoObjectSchema.SIGNATURE_SET,
+      this.unsignedPayload,
+      signatures
+    )
 
     this.addToLedger(witness)
   }

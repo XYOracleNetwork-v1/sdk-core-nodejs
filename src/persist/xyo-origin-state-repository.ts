@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/interface-name-prefix */
+/* eslint-disable @typescript-eslint/member-delimiter-style */
 import { IXyoSigner } from '../signing/xyo-signer'
 import { XyoStructure } from '../object-model'
 

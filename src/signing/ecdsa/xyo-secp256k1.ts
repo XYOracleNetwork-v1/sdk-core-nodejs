@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { IXyoSigner, XyoSignatureVerify } from '../xyo-signer'
 import elliptic from 'elliptic'
 import { XyoObjectSchema } from '../../schema'
@@ -6,11 +7,16 @@ import { XyoBuffer, XyoStructure } from '../../object-model'
 const ec = new elliptic.ec('secp256k1')
 
 export class XyoSecp2556k1 implements IXyoSigner {
-
-  public static verify: XyoSignatureVerify = async(publicKey: Buffer, signature: Buffer, data: Buffer): Promise<boolean> => {
+  public static verify: XyoSignatureVerify = async (
+    publicKey: Buffer,
+    signature: Buffer,
+    data: Buffer
+  ): Promise<boolean> => {
     const signatureStructure = new XyoStructure(new XyoBuffer(signature))
     const publicKeyStructure = new XyoStructure(new XyoBuffer(publicKey))
-    const derSignature = XyoSecp2556k1.buildDerSignature(signatureStructure.getValue().getContentsCopy())
+    const derSignature = XyoSecp2556k1.buildDerSignature(
+      signatureStructure.getValue().getContentsCopy()
+    )
 
     const x = publicKeyStructure.getValue().copyRangeOf(0, 31)
     const y = publicKeyStructure.getValue().copyRangeOf(32, 64)
@@ -28,7 +34,7 @@ export class XyoSecp2556k1 implements IXyoSigner {
       xyBuffer.slice(0, 1),
       rBuffer,
       Buffer.from([0x02]),
-      xyBuffer.slice(sizeOfR + 1),
+      xyBuffer.slice(sizeOfR + 1)
     ])
 
     const sourceBufferSizeBuffer = Buffer.alloc(1)
@@ -67,7 +73,10 @@ export class XyoSecp2556k1 implements IXyoSigner {
       sBuffer
     ])
 
-    return XyoStructure.newInstance(XyoObjectSchema.EC_SIGNATURE, new XyoBuffer(value))
+    return XyoStructure.newInstance(
+      XyoObjectSchema.EC_SIGNATURE,
+      new XyoBuffer(value)
+    )
   }
 
   public getPublicKey(): XyoStructure {
@@ -80,7 +89,10 @@ export class XyoSecp2556k1 implements IXyoSigner {
       this.writePointTo32ByteBuffer(y)
     ])
 
-    return XyoStructure.newInstance(XyoObjectSchema.EC_PUBLIC_KEY, new XyoBuffer(buffer))
+    return XyoStructure.newInstance(
+      XyoObjectSchema.EC_PUBLIC_KEY,
+      new XyoBuffer(buffer)
+    )
   }
 
   public getPrivateKey(): XyoStructure {
@@ -105,5 +117,4 @@ export class XyoSecp2556k1 implements IXyoSigner {
 
     return dest
   }
-
 }

@@ -1,7 +1,12 @@
-import { IXyoOriginBlockRepository, IXyoOriginBlockGetter } from './xyo-origin-block-repository'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  IXyoOriginBlockRepository,
+  IXyoOriginBlockGetter
+} from './xyo-origin-block-repository'
 import { XyoIterableStructure } from '../object-model'
 
-export class XyoMemoryBlockRepository implements IXyoOriginBlockRepository, IXyoOriginBlockGetter {
+export class XyoMemoryBlockRepository
+  implements IXyoOriginBlockRepository, IXyoOriginBlockGetter {
   private blockMapping: Map<string, Buffer> = new Map()
 
   public async initialize(): Promise<boolean> {
@@ -29,11 +34,19 @@ export class XyoMemoryBlockRepository implements IXyoOriginBlockRepository, IXyo
     while (blockIt.hasNext()) {
       const block = blockIt.next().value
       const hash = hashIt.next().value
-      this.addOriginBlock(hash.getAll().getContentsCopy(), block.getAll().getContentsCopy())
+      this.addOriginBlock(
+        hash.getAll().getContentsCopy(),
+        block.getAll().getContentsCopy()
+      )
     }
   }
 
-  public async getOriginBlocks(limit?: number, offset?: Buffer): Promise<{items: Buffer[], total: number}> {
-    throw new Error('getOriginBlocks not implemented in XyoMemoryBlockRepository')
+  public async getOriginBlocks(
+    limit?: number,
+    offset?: Buffer
+  ): Promise<{ items: Buffer[]; total: number }> {
+    throw new Error(
+      'getOriginBlocks not implemented in XyoMemoryBlockRepository'
+    )
   }
 }

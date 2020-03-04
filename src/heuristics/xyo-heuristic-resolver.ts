@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/member-delimiter-style */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/interface-name-prefix */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { XyoBoundWitness } from '../bound-witness'
 import { XyoIterableStructure, XyoStructure, XyoBuffer } from '../object-model'
 import { XyoObjectSchema } from '../schema'
@@ -7,12 +12,11 @@ export interface IXyoHeuristicResolver {
 }
 
 export interface IXyoHumanHeuristic {
-  name: string,
+  name: string
   value: any
 }
 
 export class XyoHumanHeuristicResolver {
-
   public static addResolver(forId: number, resolver: IXyoHeuristicResolver) {
     XyoHumanHeuristicResolver.resolvers.set(forId, resolver)
   }
@@ -24,7 +28,9 @@ export class XyoHumanHeuristicResolver {
   public static resolve(any: Buffer): IXyoHumanHeuristic {
     const item = new XyoStructure(new XyoBuffer(any))
 
-    const resolver = XyoHumanHeuristicResolver.resolvers.get(item.getSchema().id)
+    const resolver = XyoHumanHeuristicResolver.resolvers.get(
+      item.getSchema().id
+    )
 
     if (resolver) {
       return resolver.resolve(item.getAll().getContentsCopy())
@@ -37,5 +43,4 @@ export class XyoHumanHeuristicResolver {
   }
 
   private static resolvers: Map<number, IXyoHeuristicResolver> = new Map()
-
 }
