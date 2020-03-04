@@ -1,4 +1,3 @@
-
 export * from './bound-witness'
 export * from './hashing'
 export * from './heuristics'

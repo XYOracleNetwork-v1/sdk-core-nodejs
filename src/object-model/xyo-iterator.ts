@@ -6,7 +6,11 @@ export class XyoIterator implements Iterator<XyoStructure> {
   private structure: XyoIterableStructure
   private isTyped: boolean
 
-  constructor(offset: number, structure: XyoIterableStructure, isTyped: boolean) {
+  constructor(
+    offset: number,
+    structure: XyoIterableStructure,
+    isTyped: boolean
+  ) {
     this.offset = offset
     this.structure = structure
     this.isTyped = isTyped

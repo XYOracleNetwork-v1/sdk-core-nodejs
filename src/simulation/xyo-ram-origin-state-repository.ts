@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { IXyoOriginStateRepository } from '../persist/xyo-origin-state-repository'
 import { XyoStructure, XyoBuffer } from '../object-model'
 import { IXyoSigner } from '../signing/xyo-signer'

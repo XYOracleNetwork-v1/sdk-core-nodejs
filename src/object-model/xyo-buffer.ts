@@ -1,7 +1,15 @@
-
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 export class XyoBuffer {
-  public static wrap(buffer: XyoBuffer, startOffset: number, endOffset: number): XyoBuffer {
-    return new XyoBuffer(buffer.rootBuffer, startOffset + buffer.startOffset, endOffset + buffer.startOffset)
+  public static wrap(
+    buffer: XyoBuffer,
+    startOffset: number,
+    endOffset: number
+  ): XyoBuffer {
+    return new XyoBuffer(
+      buffer.rootBuffer,
+      startOffset + buffer.startOffset,
+      endOffset + buffer.startOffset
+    )
   }
 
   public startOffset: number

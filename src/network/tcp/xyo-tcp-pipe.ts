@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import net from 'net'
 import { IXyoNetworkPipe } from '../xyo-network-pipe'
 import { XyoAdvertisePacket } from '../xyo-advertise-packet'
@@ -17,7 +18,10 @@ export class XyoTcpPipe extends XyoBase implements IXyoNetworkPipe {
     return this.initData
   }
 
-  public async send(data: Buffer, waitForResponse: boolean): Promise<Buffer | undefined> {
+  public async send(
+    data: Buffer,
+    waitForResponse: boolean
+  ): Promise<Buffer | undefined> {
     this.logVerbose(`Sending data through socket: ${data.toString('hex')}`)
     await this.sendData(data)
 
@@ -31,14 +35,16 @@ export class XyoTcpPipe extends XyoBase implements IXyoNetworkPipe {
   }
 
   public async close() {
-    this.logInfo(`Closing connection with ${this.socket.remoteAddress}:${this.socket.remotePort}`)
+    this.logInfo(
+      `Closing connection with ${this.socket.remoteAddress}:${this.socket.remotePort}`
+    )
     this.socket.end()
 
     setTimeout(() => {
       if (!this.socket.destroyed) {
         this.socket.destroy()
       }
-    },         2_000)
+    }, 2_000)
   }
 
   private waitForMessage(): Promise<Buffer> {
@@ -97,12 +103,9 @@ export class XyoTcpPipe extends XyoBase implements IXyoNetworkPipe {
     return new Promise((resolve, reject) => {
       const sizeBuffer = Buffer.alloc(4)
       sizeBuffer.writeUInt32BE(data.length + 4, 0)
-      const dataWithSize = Buffer.concat([
-        sizeBuffer,
-        data
-      ])
+      const dataWithSize = Buffer.concat([sizeBuffer, data])
 
-      this.socket.write(dataWithSize, (error) => {
+      this.socket.write(dataWithSize, error => {
         if (error === undefined) {
           resolve()
         } else {

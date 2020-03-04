@@ -1,4 +1,4 @@
-
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 export class XyoAdvertisePacket {
   private data: Buffer
 
@@ -19,5 +19,4 @@ export class XyoAdvertisePacket {
 
     return this.data.slice(1, sizeOfChoice + 1)
   }
-
 }

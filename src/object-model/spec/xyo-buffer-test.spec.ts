@@ -42,5 +42,4 @@ describe('XyoBuffer', () => {
 
     expect(buffer.getUInt8(1)).toBe(0xff)
   })
-
 })

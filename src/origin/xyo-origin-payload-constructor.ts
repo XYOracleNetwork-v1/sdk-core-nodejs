@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { IXyoPayloadConstructor } from './xyo-payload-constructor'
 import { IXyoBoundWitnessPayload } from '../heuristics'
 import { XyoOriginState } from './xyo-origin-state'
@@ -44,7 +46,6 @@ export class XyoOriginPayloadConstructor implements IXyoPayloadConstructor {
     })
 
     return toReturn
-
   }
 
   private getOriginItems(): XyoStructure[] {

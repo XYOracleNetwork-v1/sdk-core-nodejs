@@ -2,6 +2,23 @@
   "$schema": "http://json.schemastore.org/tsconfig",
   "extends": "./node_modules/@xyo-network/sdk-base-nodejs/tsconfig.json",
   "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "lib": [
+      "esnext"
+    ],
+    "declaration": true,
+    "allowJs": false,
+    "declarationMap": true,
+    "jsx": "react",
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
     "outDir": "dist"
   }
 }

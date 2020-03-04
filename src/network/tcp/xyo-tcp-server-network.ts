@@ -1,4 +1,5 @@
-
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import net from 'net'
 import { XyoTcpPipe } from './xyo-tcp-pipe'
 import { XyoAdvertisePacket } from '../xyo-advertise-packet'
@@ -14,7 +15,7 @@ export class XyoServerTcpNetwork extends XyoBase {
     this.port = port
     this.server = net.createServer(this.connectionListener.bind(this))
 
-    this.server.on('error', (e) => {
+    this.server.on('error', e => {
       this.logWarning(`Unknown server socket error: ${e}`)
 
       if (!this.server.listening) {
@@ -33,9 +34,11 @@ export class XyoServerTcpNetwork extends XyoBase {
   }
 
   private connectionListener(socket: net.Socket) {
-    this.logInfo(`New connection made with ${socket.remoteAddress}:${socket.remotePort}`)
+    this.logInfo(
+      `New connection made with ${socket.remoteAddress}:${socket.remotePort}`
+    )
 
-    socket.on('error', (e) => {
+    socket.on('error', e => {
       this.logWarning(`Unknown socket error: ${e}`)
       socket.destroy()
     })

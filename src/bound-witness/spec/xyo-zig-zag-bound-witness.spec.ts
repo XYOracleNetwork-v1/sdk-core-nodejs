@@ -2,7 +2,6 @@ import { XyoSecp2556k1 } from '../../signing/ecdsa/xyo-secp256k1'
 import { XyoZigZagBoundWitness } from '../xyo-zig-zag-bound-witness'
 
 describe('XyoZigZagBoundWitness', () => {
-
   it('Self Sign Block', () => {
     const signers = [new XyoSecp2556k1()]
     const boundWitness = new XyoZigZagBoundWitness(signers, [], [])
@@ -36,10 +35,15 @@ describe('XyoZigZagBoundWitness', () => {
     expect(boundWitnessBob.getNumberOfWitnesses()).toBe(2)
     expect(boundWitnessBob.getNumberOfFetters()).toBe(2)
 
-    const aliceBytes = boundWitnessAlice.getAll().getContentsCopy().toString('hex')
-    const bobBytes = boundWitnessBob.getAll().getContentsCopy().toString('hex')
+    const aliceBytes = boundWitnessAlice
+      .getAll()
+      .getContentsCopy()
+      .toString('hex')
+    const bobBytes = boundWitnessBob
+      .getAll()
+      .getContentsCopy()
+      .toString('hex')
 
     expect(aliceBytes).toEqual(bobBytes)
   })
-
 })
