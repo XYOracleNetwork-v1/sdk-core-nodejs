@@ -923,10 +923,10 @@
     semver "^6.3.0"
     tsutils "^3.17.1"
 
-"@xyo-network/sdk-base-nodejs@^0.6.6":
-  version "0.6.7"
-  resolved "https://registry.yarnpkg.com/@xyo-network/sdk-base-nodejs/-/sdk-base-nodejs-0.6.7.tgz#9ce91380eeaf83dbbb8b2bfff7047f94f12f04a9"
-  integrity sha512-teAK/Ba4t+lcZzkAxq0PsDxsSsboluJCQH/MSzMNiqaH5mdcMgOqOcU7e5N6kmLilRA2bLG3OaFNijbfinaFwQ==
+"@xyo-network/sdk-base-nodejs@^0.6.10":
+  version "0.6.10"
+  resolved "https://registry.yarnpkg.com/@xyo-network/sdk-base-nodejs/-/sdk-base-nodejs-0.6.10.tgz#54b082ea9914be3ae408a581cb8323347a751bb2"
+  integrity sha512-tc7SCvS45xgaF4kKBR/PXqXGrWKw95Oes4JNeEkWM9yKNnR1Wjoks7IW9UvR3b1BZZ0vpR4j9gmmZi7BJaSrZQ==
   dependencies:
     "@types/node" "^13.7.1"
     chalk "^3.0.0"
