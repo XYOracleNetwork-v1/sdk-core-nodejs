@@ -35,8 +35,8 @@
     "prettier": "^1.19.1",
     "shelljs": "^0.8.3",
     "ts-jest": "^26.1.0",
-    "ts-node": "8.2.0",
-    "typescript": "^3.5.1"
+    "ts-node": "8.6.2",
+    "typescript": "^3.7.5"
   },
   "dependencies": {
     "@xyo-network/sdk-base-nodejs": "^0.6.6",
