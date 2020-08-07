@@ -1,12 +1,10 @@
-[logo]: https://cdn.xy.company/img/brand/XYO_full_colored.png
-
 [![logo]](https://xyo.network)
 
 # sdk-core-nodejs
 
 [![NPM](https://img.shields.io/npm/v/@xyo-network/sdk-core-nodejs.svg?style=plastic)](https://www.npmjs.com/package/@xyo-network/sdk-core-nodejs)
 
-![](https://github.com/XYOracleNetwork/sdk-core-nodejs/workflows/CI/badge.svg?branch=develop) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c0f40ecdba874362a2f212b032df8d86)](https://www.codacy.com/gh/XYOracleNetwork/sdk-core-nodejs?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=XYOracleNetwork/sdk-core-nodejs&amp;utm_campaign=Badge_Grade) [![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability) [![BCH compliance](https://bettercodehub.com/edge/badge/XYOracleNetwork/sdk-core-nodejs?branch=master)](https://bettercodehub.com/) [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=XYOracleNetwork_sdk-core-nodejs&metric=alert_status)](https://sonarcloud.io/dashboard?id=XYOracleNetwork_sdk-core-nodejs) 
+![](https://github.com/XYOracleNetwork/sdk-core-nodejs/workflows/Build/badge.svg?branch=develop) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c0f40ecdba874362a2f212b032df8d86)](https://www.codacy.com/gh/XYOracleNetwork/sdk-core-nodejs?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=XYOracleNetwork/sdk-core-nodejs&amp;utm_campaign=Badge_Grade) [![Maintainability](https://api.codeclimate.com/v1/badges/f3dd4f4d35e1bd9eeabc/maintainability)](https://codeclimate.com/github/XYOracleNetwork/sdk-core-nodejs/maintainability) [![BCH compliance](https://bettercodehub.com/edge/badge/XYOracleNetwork/sdk-core-nodejs?branch=master)](https://bettercodehub.com/) [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=XYOracleNetwork_sdk-core-nodejs&metric=alert_status)](https://sonarcloud.io/dashboard?id=XYOracleNetwork_sdk-core-nodejs) 
 [![Known Vulnerabilities](https://snyk.io/test/github/XYOracleNetwork/sdk-core-nodejs/badge.svg?targetFile=package.json)](https://snyk.io/test/github/XYOracleNetwork/sdk-core-nodejs?targetFile=package.json)
 
 > The XYO Foundation provides this source code available in our efforts to advance the understanding of the XYO Procotol and its possible uses. We continue to maintain this software in the interest of developer education. Usage of this source code is not intended for production.
@@ -44,7 +42,52 @@ Practically, this library uses TypeScript, which transpiles to JavaScript. Addit
 
 [Here](https://github.com/XYOracleNetwork/spec-coreobjectmodel-tex) is a link to the core object model that contains an index of major/minor values and their respective objects.
 
+> If you are looking to create an XYO Node using a CLI, this is not the library you should refer to, please go to our [app-xyo-nodejs repo here](https://github.com/XYOracleNetwork/app-xyo-nodejs). This library provides core nodejs components for XYO Protocol functions, but it itself does not generate nodes for the Archivist or Diviner. 
+
 ## Getting started
+
+If you intend yo bypass the node XYO app and integrate these core components into your app.
+
+### Install as a dependency
+
+We prefer `yarn`, but feel free to use either `npm` or `yarn`
+
+`yarn`
+
+```bash
+  yarn add @xyo-network/sdk-core-nodejs
+```
+
+`npm`
+
+```bash
+  npm install @xyo-network/sdk-core-nodejs
+```
+
+Then based on how you have set up your project, import the components you are looking for, an example:
+
+```javascript
+  import { XyoOriginState } from '@xyo-network/sdk-core-nodejs'
+```
+
+Or multiple components
+
+```javascript
+  import {
+  XyoOriginState,
+  XyoFileOriginStateRepository
+} from '@xyo-network/sdk-core-nodejs'
+
+```
+
+
+## Developer Guide
+
+Developers should conform to git flow workflow. Additionally, we should try to make sure
+every commit builds. Commit messages should be meaningful serve as a meta history for the
+repository. Please squash meaningless commits before submitting a pull-request.
+
+To contribute and test, the current workflow would be to use the XYO App SDK nodejs, see which methods may be failing, and then clone and test this core library. 
 
 ### Clone repository
 
@@ -63,13 +106,7 @@ After cloning the repository, change directory to the folder that houses the rep
 You will have to run Lerna to setup the links
 
 ```sh
-  lerna bootstrap
-```
-
-Once you've switched to the repository directory, install the dependencies. We prefer `yarn` but `npm` works just as well.
-
-```sh
-  yarn install
+  yarn install 
 ```
 
 ### Build
@@ -88,11 +125,6 @@ Once the dependencies are installed run
   yarn test
 ```
 
-## Developer Guide
-
-Developers should conform to git flow workflow. Additionally, we should try to make sure
-every commit builds. Commit messages should be meaningful serve as a meta history for the
-repository. Please squash meaningless commits before submitting a pull-request.
 
 There is git hook on commits to validate the project builds. If you'd like to commit your changes
 while developing locally and want to skip this step you can use the `--no-verify` commit option.
@@ -151,3 +183,5 @@ See the [LICENSE](LICENSE) file for license details.
 ## Credits
 
 Made with 🔥and ❄️ by [XYO](https://www.xyo.network)
+
+[logo]: https://cdn.xy.company/img/brand/XYO_full_colored.png
