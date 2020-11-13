@@ -1,7 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/package",
   "name": "@xyo-network/sdk-core-nodejs",
-  "version": "0.71.3",
+  "version": "0.71.4",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -9,12 +9,12 @@
   "license": "LGPL-3.0",
   "scripts": {
     "start": "ts-node src/index.ts",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json && yarn lint",
     "lint": "NODE_OPTIONS=--max_old_space_size=8192 eslint --ext .js,.ts ./src",
     "fix": "NODE_OPTIONS=--max_old_space_size=8192 eslint --ext .js,.ts ./src --fix",
     "clean": "rm -r -f ./node_modules && rm -r -f ./build",
     "reinstall": "rm -r -f ./node_modules && rm -f ./yarn.lock && rm -f ./yarn-error.log && yarn install && yarn outdated",
-    "test": "yarn build && yarn lint && yarn licensecheck && export NODE_ENV=test && jest --no-cache --forceExit --coverage --verbose false --detectOpenHandles",
+    "test": "yarn licensecheck && export NODE_ENV=test && yarn jest --no-cache --forceExit --coverage --verbose false --detectOpenHandles",
     "start:tcp": "yarn build && node --nolazy -r ts-node/register examples/tcp-server/index.ts",
     "snyk-protect": "snyk protect",
     "prepare": "yarn run snyk-protect"
@@ -69,12 +69,6 @@
   "engineStrict": true,
   "engines": {
     "node": ">=8.0.0"
-  },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/src/"
-    ],
-    "testEnvironment": "node"
   },
   "snyk": true
 }

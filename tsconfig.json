@@ -19,8 +19,6 @@
     "composite": true,
     "declarationMap": true,
     "declaration": true,
-    "outDir": "dist",
-    "rootDir": "."
-  },
-  "include": ["src"]
+    "outDir": "out/spec"
+  }
 }
