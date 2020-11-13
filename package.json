@@ -1,7 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/package",
   "name": "@xyo-network/sdk-core-nodejs",
-  "version": "0.71.4",
+  "version": "0.71.5",
   "description": "A workspace to aggregated nodejs XYO projects",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",

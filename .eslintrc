@@ -4,7 +4,7 @@
  * File Created: Friday, 13th November 2020 10:18:05 am
  * Author: XYO Development Team (support@xyo.network)
  * -----
- * Last Modified: Friday, 13th November 2020 11:22:27 am
+ * Last Modified: Friday, 13th November 2020 2:09:54 pm
  * Modified By: XYO Development Team (support@xyo.network>)
  * -----
  * Copyright 2017 - 2020 XY - The Persistent Company
@@ -79,7 +79,7 @@
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "quotes": [2, "single", "avoid-escape"],
-    "max-statements": ["error", 32],
+    "max-statements": ["error", 25],
     "max-depth": ["error", 6],
     "complexity": ["error", 20],
     "max-lines": ["error", { "max": 512, "skipBlankLines": true }],
