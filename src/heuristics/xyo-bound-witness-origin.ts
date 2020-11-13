@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/member-delimiter-style */
-/* eslint-disable @typescript-eslint/interface-name-prefix */
 import { XyoBoundWitness } from '../bound-witness'
-import { indexResolver } from './common'
-import { XyoObjectSchema } from '../schema'
 import { XyoIterableStructure, XyoStructure } from '../object-model'
+import { XyoObjectSchema } from '../schema'
+import { indexResolver } from './common'
 
 export interface IXyoBoundWitnessOrigin {
   previousHash: Buffer | undefined
@@ -44,10 +42,7 @@ export class XyoBoundWitnessOriginGetter {
           throw new Error('1 next public key expected')
         }
 
-        nextPublicKey = nextPublicKeyArray
-          .get(0)
-          .getAll()
-          .getContentsCopy()
+        nextPublicKey = nextPublicKeyArray.get(0).getAll().getContentsCopy()
       }
 
       if (heuristic.getSchema().id === XyoObjectSchema.PREVIOUS_HASH.id) {
@@ -57,10 +52,7 @@ export class XyoBoundWitnessOriginGetter {
           throw new Error('1 hash expected in previous hash')
         }
 
-        previousHash = previousHashArray
-          .get(0)
-          .getAll()
-          .getContentsCopy()
+        previousHash = previousHashArray.get(0).getAll().getContentsCopy()
       }
 
       if (heuristic.getSchema().id === XyoObjectSchema.INDEX.id) {
@@ -70,9 +62,9 @@ export class XyoBoundWitnessOriginGetter {
     }
 
     return {
-      previousHash,
       index,
-      nextPublicKey
+      nextPublicKey,
+      previousHash,
     }
   }
 }

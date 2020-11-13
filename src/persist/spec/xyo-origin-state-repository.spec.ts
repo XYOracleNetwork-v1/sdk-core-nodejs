@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { IXyoOriginStateRepository } from '../xyo-origin-state-repository'
+import { XyoBuffer, XyoStructure } from '../../object-model'
 import { XyoObjectSchema } from '../../schema'
 import { XyoFileOriginStateRepository } from '../xyo-file-origin-state-repository'
-import { XyoStructure, XyoBuffer } from '../../object-model'
+import XyoOriginStateRepository from '../xyo-origin-state-repository'
 
-function testOriginStateRepository(repo: IXyoOriginStateRepository) {
+function testOriginStateRepository(repo: XyoOriginStateRepository) {
   describe('IXyoOriginStateRepository interface', () => {
     it('Should validate', async () => {
       const testIndex0 = XyoStructure.newInstance(
@@ -30,28 +28,10 @@ function testOriginStateRepository(repo: IXyoOriginStateRepository) {
       repo.putPreviousHash(testPreviousHash0)
 
       expect(
-        repo
-          .getPreviousHash()!
-          .getAll()
-          .getContentsCopy()
-          .toString('hex')
-      ).toBe(
-        testPreviousHash0!
-          .getAll()
-          .getContentsCopy()
-          .toString('hex')
-      )
-      expect(
-        repo
-          .getIndex()!
-          .getAll()
-          .getContentsCopy()
-          .toString('hex')
-      ).toBe(
-        testIndex0!
-          .getAll()
-          .getContentsCopy()
-          .toString('hex')
+        repo.getPreviousHash()?.getAll().getContentsCopy().toString('hex')
+      ).toBe(testPreviousHash0?.getAll().getContentsCopy().toString('hex'))
+      expect(repo.getIndex()?.getAll().getContentsCopy().toString('hex')).toBe(
+        testIndex0?.getAll().getContentsCopy().toString('hex')
       )
 
       await repo.commit()
@@ -60,28 +40,10 @@ function testOriginStateRepository(repo: IXyoOriginStateRepository) {
       repo.putPreviousHash(testPreviousHash1)
 
       expect(
-        repo
-          .getPreviousHash()!
-          .getAll()
-          .getContentsCopy()
-          .toString('hex')
-      ).toBe(
-        testPreviousHash1!
-          .getAll()
-          .getContentsCopy()
-          .toString('hex')
-      )
-      expect(
-        repo
-          .getIndex()!
-          .getAll()
-          .getContentsCopy()
-          .toString('hex')
-      ).toBe(
-        testIndex1!
-          .getAll()
-          .getContentsCopy()
-          .toString('hex')
+        repo.getPreviousHash()?.getAll().getContentsCopy().toString('hex')
+      ).toBe(testPreviousHash1?.getAll().getContentsCopy().toString('hex'))
+      expect(repo.getIndex()?.getAll().getContentsCopy().toString('hex')).toBe(
+        testIndex1?.getAll().getContentsCopy().toString('hex')
       )
     })
   })

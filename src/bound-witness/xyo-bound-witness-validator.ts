@@ -45,7 +45,8 @@ export class XyoBoundWitnessValidator {
           ) {
             return false
           }
-        } else if (signatureValidator && !allowUnknownSignatures) {
+        }
+        if (signatureValidator && !allowUnknownSignatures) {
           return false
         }
       }

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 export class XyoBuffer {
   public static wrap(
     buffer: XyoBuffer,

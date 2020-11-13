@@ -1,14 +1,14 @@
-/* eslint-disable @typescript-eslint/interface-name-prefix */
-/* eslint-disable @typescript-eslint/member-delimiter-style */
-import { IXyoProcedureCatalog } from '../network/xyo-procedure-catalog'
-import { XyoBoundWitness } from './xyo-bound-witness'
 import { XyoNetworkHandler } from '../network/xyo-network-handler'
-import { IXyoSigner } from '../signing/xyo-signer'
+import XyoProcedureCatalog from '../network/xyo-procedure-catalog'
+import XyoSigner from '../signing/xyo-signer'
+import { XyoBoundWitness } from './xyo-bound-witness'
 
-export interface IXyoBoundWitnessHander {
-  boundWitness(
+abstract class XyoBoundWitnessHander {
+  abstract boundWitness(
     handler: XyoNetworkHandler,
-    catalog: IXyoProcedureCatalog,
-    signers: IXyoSigner[]
+    catalog: XyoProcedureCatalog,
+    signers: XyoSigner[]
   ): Promise<XyoBoundWitness | undefined>
 }
+
+export default XyoBoundWitnessHander

@@ -1,16 +1,17 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { IXyoSigner, XyoSignatureVerify } from '../xyo-signer'
 import elliptic from 'elliptic'
-import { XyoObjectSchema } from '../../schema'
+
 import { XyoBuffer, XyoStructure } from '../../object-model'
+import { XyoObjectSchema } from '../../schema'
+import XyoSigner, { XyoSignatureVerify } from '../xyo-signer'
 
 const ec = new elliptic.ec('secp256k1')
 
-export class XyoSecp2556k1 implements IXyoSigner {
+export class XyoSecp2556k1 implements XyoSigner {
   public static verify: XyoSignatureVerify = async (
     publicKey: Buffer,
     signature: Buffer,
     data: Buffer
+    // eslint-disable-next-line require-await
   ): Promise<boolean> => {
     const signatureStructure = new XyoStructure(new XyoBuffer(signature))
     const publicKeyStructure = new XyoStructure(new XyoBuffer(publicKey))
@@ -34,7 +35,7 @@ export class XyoSecp2556k1 implements IXyoSigner {
       xyBuffer.slice(0, 1),
       rBuffer,
       Buffer.from([0x02]),
-      xyBuffer.slice(sizeOfR + 1)
+      xyBuffer.slice(sizeOfR + 1),
     ])
 
     const sourceBufferSizeBuffer = Buffer.alloc(1)
@@ -43,7 +44,7 @@ export class XyoSecp2556k1 implements IXyoSigner {
     return Buffer.concat([
       Buffer.from([0x30]),
       sourceBufferSizeBuffer,
-      source
+      source,
     ]).toString('hex')
   }
 
@@ -70,7 +71,7 @@ export class XyoSecp2556k1 implements IXyoSigner {
       Buffer.from([rBuffer.length]),
       rBuffer,
       Buffer.from([sBuffer.length]),
-      sBuffer
+      sBuffer,
     ])
 
     return XyoStructure.newInstance(
@@ -86,7 +87,7 @@ export class XyoSecp2556k1 implements IXyoSigner {
 
     const buffer = Buffer.concat([
       this.writePointTo32ByteBuffer(x),
-      this.writePointTo32ByteBuffer(y)
+      this.writePointTo32ByteBuffer(y),
     ])
 
     return XyoStructure.newInstance(

@@ -39,10 +39,7 @@ describe('XyoZigZagBoundWitness', () => {
       .getAll()
       .getContentsCopy()
       .toString('hex')
-    const bobBytes = boundWitnessBob
-      .getAll()
-      .getContentsCopy()
-      .toString('hex')
+    const bobBytes = boundWitnessBob.getAll().getContentsCopy().toString('hex')
 
     expect(aliceBytes).toEqual(bobBytes)
   })

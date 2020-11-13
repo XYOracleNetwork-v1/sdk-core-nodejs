@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { XyoSchema } from './xyo-schema'
-import { XyoBuffer } from './xyo-buffer'
-import { XyoSize } from './xyo-size'
 import { XyoSizeUtil } from './size-util'
+import { XyoBuffer } from './xyo-buffer'
+import { XyoSchema } from './xyo-schema'
+import { XyoSize } from './xyo-size'
 
 export class XyoStructure {
   public static encode(schema: XyoSchema, value: XyoBuffer): XyoBuffer {
@@ -84,7 +83,7 @@ export class XyoStructure {
       headerBuffer.writeUInt8(this.overrideSchema.id, 1)
       const together = Buffer.concat([
         headerBuffer,
-        this.contents.getContentsCopy()
+        this.contents.getContentsCopy(),
       ])
 
       return new XyoBuffer(together)

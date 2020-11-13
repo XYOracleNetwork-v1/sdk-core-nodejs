@@ -1,30 +1,34 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  IXyoOriginBlockRepository,
-  IXyoOriginBlockGetter
-} from './xyo-origin-block-repository'
 import { XyoIterableStructure } from '../object-model'
+import {
+  XyoOriginBlockGetter,
+  XyoOriginBlockRepository,
+} from './xyo-origin-block-repository'
 
 export class XyoMemoryBlockRepository
-  implements IXyoOriginBlockRepository, IXyoOriginBlockGetter {
+  implements XyoOriginBlockRepository, XyoOriginBlockGetter {
   private blockMapping: Map<string, Buffer> = new Map()
 
+  // eslint-disable-next-line require-await
   public async initialize(): Promise<boolean> {
     return true
   }
 
+  // eslint-disable-next-line require-await
   public async removeOriginBlock(hash: Buffer): Promise<void> {
     this.blockMapping.delete(hash.toString('base64'))
   }
 
+  // eslint-disable-next-line require-await
   public async addOriginBlock(hash: Buffer, block: Buffer): Promise<void> {
     this.blockMapping.set(hash.toString('base64'), block)
   }
 
+  // eslint-disable-next-line require-await
   public async getOriginBlock(hash: Buffer): Promise<Buffer | undefined> {
     return this.blockMapping.get(hash.toString('base64'))
   }
 
+  // eslint-disable-next-line require-await
   public async addOriginBlocks(hashes: Buffer, blocks: Buffer): Promise<void> {
     const blockStructure = new XyoIterableStructure(blocks)
     const hashesStructure = new XyoIterableStructure(hashes)
@@ -41,9 +45,10 @@ export class XyoMemoryBlockRepository
     }
   }
 
+  // eslint-disable-next-line require-await
   public async getOriginBlocks(
-    limit?: number,
-    offset?: Buffer
+    _limit?: number,
+    _offset?: Buffer
   ): Promise<{ items: Buffer[]; total: number }> {
     throw new Error(
       'getOriginBlocks not implemented in XyoMemoryBlockRepository'

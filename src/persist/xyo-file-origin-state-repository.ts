@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/interface-name-prefix */
-/* eslint-disable @typescript-eslint/member-delimiter-style */
-import { IXyoOriginStateRepository } from './xyo-origin-state-repository'
-import { IXyoSigner } from '../signing/xyo-signer'
-import { XyoStructure, XyoBuffer } from '../object-model'
 import fs from 'fs'
+
+import { XyoBuffer, XyoStructure } from '../object-model'
+import XyoSigner from '../signing/xyo-signer'
+import XyoOriginStateRepository from './xyo-origin-state-repository'
 
 interface IXyoFileOriginState {
   index: string | undefined
@@ -13,17 +10,17 @@ interface IXyoFileOriginState {
   signers: string[]
 }
 
-export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
+export class XyoFileOriginStateRepository implements XyoOriginStateRepository {
   private indexCache: XyoStructure | undefined
   private previousHashCache: XyoStructure | undefined
-  private signersCache: IXyoSigner[] = []
+  private signersCache: XyoSigner[] = []
   private statePath: string
 
   constructor(statePath: string) {
     this.statePath = statePath
   }
 
-  public addSigner(signer: IXyoSigner) {
+  public addSigner(signer: XyoSigner) {
     this.signersCache.push(signer)
   }
 
@@ -49,7 +46,7 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
     return this.previousHashCache
   }
 
-  public getSigners(): IXyoSigner[] {
+  public getSigners(): XyoSigner[] {
     if (this.signersCache) {
       return this.signersCache
     }
@@ -61,7 +58,7 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
     const state = this.getCurrentFileState()
 
     return new Promise((resolve, reject) => {
-      fs.writeFile(this.statePath, JSON.stringify(state), 'utf8', error => {
+      fs.writeFile(this.statePath, JSON.stringify(state), 'utf8', (error) => {
         if (error) {
           reject(error)
         } else {
@@ -72,7 +69,7 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
   }
 
   public async restore(
-    signerFromPrivateKey: (buffer: Buffer) => IXyoSigner
+    signerFromPrivateKey: (buffer: Buffer) => XyoSigner
   ): Promise<void> {
     const currentState = await this.readCurrentFileState()
 
@@ -89,7 +86,7 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
         )
       }
 
-      currentState.signers.forEach(privateKey => {
+      currentState.signers.forEach((privateKey) => {
         this.signersCache.push(
           signerFromPrivateKey(Buffer.from(privateKey, 'base64'))
         )
@@ -98,7 +95,7 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
   }
 
   private readCurrentFileState(): Promise<IXyoFileOriginState | undefined> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       fs.readFile(this.statePath, (error, data) => {
         if (error) {
           resolve(undefined)
@@ -130,20 +127,16 @@ export class XyoFileOriginStateRepository implements IXyoOriginStateRepository {
         .toString('base64')
     }
 
-    this.signersCache.forEach(signer => {
+    this.signersCache.forEach((signer) => {
       signersString.push(
-        signer
-          .getPrivateKey()
-          .getAll()
-          .getContentsCopy()
-          .toString('base64')
+        signer.getPrivateKey().getAll().getContentsCopy().toString('base64')
       )
     })
 
     const state: IXyoFileOriginState = {
       index: indexString,
       previousHash: previousHashString,
-      signers: signersString
+      signers: signersString,
     }
 
     return state

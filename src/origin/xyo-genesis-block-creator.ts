@@ -1,11 +1,11 @@
-import { IXyoSigner } from '../signing'
 import { XyoBoundWitness, XyoZigZagBoundWitness } from '../bound-witness'
-import { IXyoPayloadConstructor } from './xyo-payload-constructor'
+import { XyoSigner } from '../signing'
+import XyoPayloadConstructor from './xyo-payload-constructor'
 
 export class XyoGenesisBlockCreator {
   public static async create(
-    signers: IXyoSigner[],
-    payloadProvider: IXyoPayloadConstructor
+    signers: XyoSigner[],
+    payloadProvider: XyoPayloadConstructor
   ): Promise<XyoBoundWitness> {
     const payload = await payloadProvider.getPayloads(Buffer.alloc(0))
     const boundWitness = new XyoZigZagBoundWitness(
