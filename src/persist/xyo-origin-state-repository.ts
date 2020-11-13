@@ -1,17 +1,17 @@
-/* eslint-disable @typescript-eslint/interface-name-prefix */
-/* eslint-disable @typescript-eslint/member-delimiter-style */
-import { IXyoSigner } from '../signing/xyo-signer'
 import { XyoStructure } from '../object-model'
+import XyoSigner from '../signing/xyo-signer'
 
-export interface IXyoOriginStateRepository {
-  putIndex(index: XyoStructure): void
-  putPreviousHash(previousHash: XyoStructure): void
-  addSigner(signer: IXyoSigner): void
+abstract class XyoOriginStateRepository {
+  abstract putIndex(index: XyoStructure): void
+  abstract putPreviousHash(previousHash: XyoStructure): void
+  abstract addSigner(signer: XyoSigner): void
 
-  getIndex(): XyoStructure | undefined
-  getPreviousHash(): XyoStructure | undefined
-  getSigners(): IXyoSigner[]
-  removeOldestSigner(): void
+  abstract getIndex(): XyoStructure | undefined
+  abstract getPreviousHash(): XyoStructure | undefined
+  abstract getSigners(): XyoSigner[]
+  abstract removeOldestSigner(): void
 
-  commit(): Promise<void>
+  abstract commit(): Promise<void>
 }
+
+export default XyoOriginStateRepository

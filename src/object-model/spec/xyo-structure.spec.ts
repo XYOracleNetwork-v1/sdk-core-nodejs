@@ -1,7 +1,7 @@
-import { XyoStructure } from '../xyo-structure'
 import { XyoBuffer } from '../xyo-buffer'
-import { XyoSize } from '../xyo-size'
 import { XyoSchema } from '../xyo-schema'
+import { XyoSize } from '../xyo-size'
+import { XyoStructure } from '../xyo-structure'
 
 describe('XyoBuffer', () => {
   it('1 byte size', () => {
@@ -9,12 +9,7 @@ describe('XyoBuffer', () => {
     const buffer = new XyoBuffer(inputBuffer)
     const struct = new XyoStructure(buffer)
 
-    expect(
-      struct
-        .getValue()
-        .getContentsCopy()
-        .toString('hex')
-    ).toBe('1337')
+    expect(struct.getValue().getContentsCopy().toString('hex')).toBe('1337')
   })
 
   it('2 byte size', () => {
@@ -22,12 +17,7 @@ describe('XyoBuffer', () => {
     const buffer = new XyoBuffer(inputBuffer)
     const struct = new XyoStructure(buffer)
 
-    expect(
-      struct
-        .getValue()
-        .getContentsCopy()
-        .toString('hex')
-    ).toBe('1337')
+    expect(struct.getValue().getContentsCopy().toString('hex')).toBe('1337')
   })
 
   it('4 byte size', () => {
@@ -35,12 +25,7 @@ describe('XyoBuffer', () => {
     const buffer = new XyoBuffer(inputBuffer)
     const struct = new XyoStructure(buffer)
 
-    expect(
-      struct
-        .getValue()
-        .getContentsCopy()
-        .toString('hex')
-    ).toBe('1337')
+    expect(struct.getValue().getContentsCopy().toString('hex')).toBe('1337')
   })
 
   it('8 byte size', () => {
@@ -48,12 +33,7 @@ describe('XyoBuffer', () => {
     const buffer = new XyoBuffer(inputBuffer)
     const struct = new XyoStructure(buffer)
 
-    expect(
-      struct
-        .getValue()
-        .getContentsCopy()
-        .toString('hex')
-    ).toBe('1337')
+    expect(struct.getValue().getContentsCopy().toString('hex')).toBe('1337')
   })
 
   it('Schema test 1', () => {
@@ -73,17 +53,7 @@ describe('XyoBuffer', () => {
     const buffer = new XyoBuffer(inputBuffer)
     const struct = XyoStructure.newInstance(schema, buffer)
 
-    expect(
-      struct
-        .getAll()
-        .getContentsCopy()
-        .toString('hex')
-    ).toBe('0000031337')
-    expect(
-      struct
-        .getValue()
-        .getContentsCopy()
-        .toString('hex')
-    ).toBe('1337')
+    expect(struct.getAll().getContentsCopy().toString('hex')).toBe('0000031337')
+    expect(struct.getValue().getContentsCopy().toString('hex')).toBe('1337')
   })
 })

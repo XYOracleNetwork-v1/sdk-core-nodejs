@@ -1,24 +1,26 @@
 {
   "$schema": "http://json.schemastore.org/tsconfig",
-  "extends": "./node_modules/@xyo-network/sdk-base-nodejs/tsconfig.json",
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "lib": [
-      "esnext"
-    ],
-    "declaration": true,
-    "allowJs": false,
-    "declarationMap": true,
-    "jsx": "react",
-    "sourceMap": true,
-    "strict": true,
-    "esModuleInterop": true,
-    "noImplicitAny": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "downlevelIteration": true,
+    "target": "es6",
+    "skipLibCheck": true,
+    "lib": ["esnext"],
+    "esModuleInterop": true,
+    "alwaysStrict": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "CommonJS",
     "moduleResolution": "node",
-    "outDir": "dist"
-  }
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "sourceMap": true,
+    "composite": true,
+    "declarationMap": true,
+    "declaration": true,
+    "outDir": "dist",
+    "rootDir": "."
+  },
+  "include": ["src"]
 }

@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { XyoZigZagBoundWitness } from './xyo-zig-zag-bound-witness'
 import { XyoNetworkHandler } from '../network/xyo-network-handler'
-import { XyoStructure, XyoIterableStructure, XyoBuffer } from '../object-model'
-import { IXyoSigner } from '../signing/xyo-signer'
+import { XyoBuffer, XyoIterableStructure, XyoStructure } from '../object-model'
+import { XyoSigner } from '../signing'
+import { XyoZigZagBoundWitness } from './xyo-zig-zag-bound-witness'
 
 export class XyoZigZagBoundWitnessSession extends XyoZigZagBoundWitness {
   private handler: XyoNetworkHandler
@@ -13,7 +12,7 @@ export class XyoZigZagBoundWitnessSession extends XyoZigZagBoundWitness {
     handler: XyoNetworkHandler,
     signedPayload: XyoStructure[],
     unsignedPayload: XyoStructure[],
-    signers: IXyoSigner[],
+    signers: XyoSigner[],
     choice: Buffer
   ) {
     super(signers, signedPayload, unsignedPayload)

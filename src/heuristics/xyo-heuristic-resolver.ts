@@ -1,11 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/member-delimiter-style */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/interface-name-prefix */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { XyoBoundWitness } from '../bound-witness'
-import { XyoIterableStructure, XyoStructure, XyoBuffer } from '../object-model'
-import { XyoObjectSchema } from '../schema'
+import { XyoBuffer, XyoStructure } from '../object-model'
 
 export interface IXyoHeuristicResolver {
   resolve(heuristic: Buffer): IXyoHumanHeuristic
@@ -38,7 +31,7 @@ export class XyoHumanHeuristicResolver {
 
     return {
       name: item.getSchema().id.toString(),
-      value: any.toString('base64')
+      value: any.toString('base64'),
     }
   }
 

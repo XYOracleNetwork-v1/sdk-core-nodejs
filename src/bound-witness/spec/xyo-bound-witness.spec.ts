@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { XyoBoundWitness } from '../xyo-bound-witness'
 import { XyoBuffer } from '../../object-model'
+import { XyoBoundWitness } from '../xyo-bound-witness'
 
 describe('XyoBoundWitness', () => {
   it('Not completed', () => {
@@ -61,13 +60,13 @@ describe('XyoBoundWitness', () => {
     const boundWitness = new XyoBoundWitness(buffer)
 
     const fetter0 = boundWitness
-      .getFetterOfParty(0)!
-      .getAll()
+      .getFetterOfParty(0)
+      ?.getAll()
       .getContentsCopy()
       .toString('hex')
     const fetter1 = boundWitness
-      .getFetterOfParty(1)!
-      .getAll()
+      .getFetterOfParty(1)
+      ?.getAll()
       .getContentsCopy()
       .toString('hex')
 

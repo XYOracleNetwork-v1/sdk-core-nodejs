@@ -1,18 +1,17 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import bs58 from 'bs58'
+
+import { XyoIterableStructure, XyoStructure } from '../../object-model'
+import { XyoObjectSchema } from '../../schema'
 import {
   IXyoHeuristicResolver,
   IXyoHumanHeuristic,
-  XyoHumanHeuristicResolver
+  XyoHumanHeuristicResolver,
 } from '../xyo-heuristic-resolver'
-import bs58 from 'bs58'
-import { XyoStructure, XyoIterableStructure } from '../../object-model'
-import { XyoObjectSchema } from '../../schema'
 import {
-  readUnsignedNumber,
+  iterableObjectToArray,
   readSignedNumber,
+  readUnsignedNumber,
   uniqueIterableToObject,
-  iterableObjectToArray
 } from './xyo-heuristics-common-util'
 
 export const nextPublicKeyResolver: IXyoHeuristicResolver = {
@@ -21,47 +20,47 @@ export const nextPublicKeyResolver: IXyoHeuristicResolver = {
 
     return {
       name: 'nextPublicKey',
-      value: XyoHumanHeuristicResolver.resolve(key.getAll().getContentsCopy())
+      value: XyoHumanHeuristicResolver.resolve(key.getAll().getContentsCopy()),
     }
-  }
+  },
 }
 
 export const paymentKeyResolver: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
-    const key = new XyoIterableStructure(heuristic).get(0)
+    //const key = new XyoIterableStructure(heuristic).get(0)
 
     return {
       name: 'paymentKey',
-      value: heuristic.toString('base64')
+      value: heuristic.toString('base64'),
     }
-  }
+  },
 }
 
 export const secp256K1SignatureResolver: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
     return {
       name: 'secp566k1Signature',
-      value: heuristic.toString('base64')
+      value: heuristic.toString('base64'),
     }
-  }
+  },
 }
 
 export const rsaSignatureResolver: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
     return {
       name: 'rsaSignature',
-      value: heuristic.toString('base64')
+      value: heuristic.toString('base64'),
     }
-  }
+  },
 }
 
 export const secp256K1PublicKeyResolver: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
     return {
       name: 'secp566k1PublicKey',
-      value: bs58.encode(heuristic)
+      value: bs58.encode(heuristic),
     }
-  }
+  },
 }
 
 export const indexResolver: IXyoHeuristicResolver = {
@@ -70,9 +69,9 @@ export const indexResolver: IXyoHeuristicResolver = {
       name: 'index',
       value: readUnsignedNumber(
         new XyoStructure(heuristic).getValue().getContentsCopy()
-      )
+      ),
     }
-  }
+  },
 }
 
 export const rssiResolver: IXyoHeuristicResolver = {
@@ -81,9 +80,9 @@ export const rssiResolver: IXyoHeuristicResolver = {
       name: 'rssi',
       value: readSignedNumber(
         new XyoStructure(heuristic).getValue().getContentsCopy()
-      )
+      ),
     }
-  }
+  },
 }
 
 export const rssiAt1MResolver: IXyoHeuristicResolver = {
@@ -92,63 +91,63 @@ export const rssiAt1MResolver: IXyoHeuristicResolver = {
       name: 'rssiAt1m',
       value: readSignedNumber(
         new XyoStructure(heuristic).getValue().getContentsCopy()
-      )
+      ),
     }
-  }
+  },
 }
 
 export const stubSignatureResolver: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
     return {
       name: 'stubSignature',
-      value: heuristic.toString('base64')
+      value: heuristic.toString('base64'),
     }
-  }
+  },
 }
 
 export const rsaPublicKeyResolver: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
     return {
       name: 'rsaPublicKey',
-      value: bs58.encode(heuristic)
+      value: bs58.encode(heuristic),
     }
-  }
+  },
 }
 
 export const stubPublicKey: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
     return {
       name: 'stubPublicKey',
-      value: bs58.encode(heuristic)
+      value: bs58.encode(heuristic),
     }
-  }
+  },
 }
 
 export const stubHashResolver: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
     return {
       name: 'stubHash',
-      value: bs58.encode(heuristic)
+      value: bs58.encode(heuristic),
     }
-  }
+  },
 }
 
 export const sha256Resolver: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
     return {
       name: 'sha256',
-      value: bs58.encode(heuristic)
+      value: bs58.encode(heuristic),
     }
-  }
+  },
 }
 
 export const sha3Resolver: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
     return {
       name: 'sha3',
-      value: bs58.encode(heuristic)
+      value: bs58.encode(heuristic),
     }
-  }
+  },
 }
 
 export const latResolver: IXyoHeuristicResolver = {
@@ -156,9 +155,9 @@ export const latResolver: IXyoHeuristicResolver = {
     const value = new XyoStructure(heuristic).getValue().getContentsCopy()
     return {
       name: 'lat',
-      value: value.readDoubleBE(0)
+      value: value.readDoubleBE(0),
     }
-  }
+  },
 }
 
 export const lngResolver: IXyoHeuristicResolver = {
@@ -166,9 +165,9 @@ export const lngResolver: IXyoHeuristicResolver = {
     const value = new XyoStructure(heuristic).getValue().getContentsCopy()
     return {
       name: 'lng',
-      value: value.readDoubleBE(0)
+      value: value.readDoubleBE(0),
     }
-  }
+  },
 }
 
 export const timeResolver: IXyoHeuristicResolver = {
@@ -176,54 +175,54 @@ export const timeResolver: IXyoHeuristicResolver = {
     const value = new XyoStructure(heuristic).getValue().getContentsCopy()
     return {
       name: 'date',
-      value: value.readUIntBE(2, 6)
+      value: value.readUIntBE(2, 6),
     }
-  }
+  },
 }
 
 export const gpsResolver: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
     return {
       name: 'gps',
-      value: uniqueIterableToObject(new XyoIterableStructure(heuristic))
+      value: uniqueIterableToObject(new XyoIterableStructure(heuristic)),
     }
-  }
+  },
 }
 
 export const fetterResolver: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
     return {
       name: 'fetter',
-      value: uniqueIterableToObject(new XyoIterableStructure(heuristic))
+      value: uniqueIterableToObject(new XyoIterableStructure(heuristic)),
     }
-  }
+  },
 }
 
 export const witnessResolver: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
     return {
       name: 'witness',
-      value: uniqueIterableToObject(new XyoIterableStructure(heuristic))
+      value: uniqueIterableToObject(new XyoIterableStructure(heuristic)),
     }
-  }
+  },
 }
 
 export const keySetResolver: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
     return {
       name: 'keySet',
-      value: iterableObjectToArray(new XyoIterableStructure(heuristic))
+      value: iterableObjectToArray(new XyoIterableStructure(heuristic)),
     }
-  }
+  },
 }
 
 export const signatureSetResolver: IXyoHeuristicResolver = {
   resolve(heuristic: Buffer): IXyoHumanHeuristic {
     return {
       name: 'signatureSet',
-      value: iterableObjectToArray(new XyoIterableStructure(heuristic))
+      value: iterableObjectToArray(new XyoIterableStructure(heuristic)),
     }
-  }
+  },
 }
 
 export const previousHashResolver: IXyoHeuristicResolver = {
@@ -234,15 +233,15 @@ export const previousHashResolver: IXyoHeuristicResolver = {
       // we expect the previous hash to be a length of 1
       return {
         name: 'previousHash',
-        value: 'invalid'
+        value: 'invalid',
       }
     }
 
     return {
       name: 'previousHash',
-      value: children[0].value
+      value: children[0].value,
     }
-  }
+  },
 }
 
 export const boundWitnessResolver: IXyoHeuristicResolver = {
@@ -250,12 +249,12 @@ export const boundWitnessResolver: IXyoHeuristicResolver = {
     return {
       name: 'boundWitness',
       value: iterableObjectToArray(new XyoIterableStructure(heuristic)).map(
-        h => {
+        (h) => {
           return h.value
         }
-      )
+      ),
     }
-  }
+  },
 }
 
 export const bridgeHashSetResolver: IXyoHeuristicResolver = {
@@ -263,12 +262,12 @@ export const bridgeHashSetResolver: IXyoHeuristicResolver = {
     return {
       name: 'bridgeHashSet',
       value: iterableObjectToArray(new XyoIterableStructure(heuristic)).map(
-        h => {
+        (h) => {
           return h.value
         }
-      )
+      ),
     }
-  }
+  },
 }
 
 export const addAllDefaults = () => {

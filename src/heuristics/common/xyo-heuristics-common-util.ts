@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  XyoHumanHeuristicResolver,
-  IXyoHumanHeuristic
-} from '../xyo-heuristic-resolver'
 import { XyoIterableStructure } from '../../object-model'
+import {
+  IXyoHumanHeuristic,
+  XyoHumanHeuristicResolver,
+} from '../xyo-heuristic-resolver'
 
 export const readSignedNumber = (buffer: Buffer): number => {
   switch (buffer.length) {

@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/member-delimiter-style */
-/* eslint-disable @typescript-eslint/interface-name-prefix */
 import { XyoStructure } from '../object-model'
 
-export interface IXyoSigner {
-  sign(data: Buffer): XyoStructure
-  getPublicKey(): XyoStructure
-  getPrivateKey(): XyoStructure
+abstract class XyoSigner {
+  abstract sign(data: Buffer): XyoStructure
+  abstract getPublicKey(): XyoStructure
+  abstract getPrivateKey(): XyoStructure
 }
 
 export type XyoSignatureVerify = (
@@ -13,3 +11,5 @@ export type XyoSignatureVerify = (
   signature: Buffer,
   data: Buffer
 ) => Promise<boolean>
+
+export default XyoSigner

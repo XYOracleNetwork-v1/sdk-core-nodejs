@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { XyoStructure } from './xyo-structure'
-import { XyoSchema } from './xyo-schema'
 import { XyoBuffer } from './xyo-buffer'
+// eslint-disable-next-line import/no-cycle
 import { XyoIterator } from './xyo-iterator'
+import { XyoSchema } from './xyo-schema'
+import { XyoStructure } from './xyo-structure'
 
 export class XyoIterableStructure extends XyoStructure {
   public static validate(structure: XyoIterableStructure) {
@@ -37,12 +36,7 @@ export class XyoIterableStructure extends XyoStructure {
         toReturn.push(childArray)
       }
     } else {
-      toReturn.push(
-        structure
-          .getAll()
-          .getContentsCopy()
-          .toString('hex')
-      )
+      toReturn.push(structure.getAll().getContentsCopy().toString('hex'))
     }
 
     return toReturn
@@ -95,12 +89,7 @@ export class XyoIterableStructure extends XyoStructure {
     buffersToMerge.push(headerBuffer)
 
     for (const item of items) {
-      buffersToMerge.push(
-        item
-          .getAll()
-          .getContentsCopy()
-          .slice(2)
-      )
+      buffersToMerge.push(item.getAll().getContentsCopy().slice(2))
     }
 
     return Buffer.concat(buffersToMerge)
@@ -175,10 +164,7 @@ export class XyoIterableStructure extends XyoStructure {
       if (element.getSchema().id === this.typedSchema.id) {
         const newBufferTyped = Buffer.concat([
           this.getValue().getContentsCopy(),
-          element
-            .getAll()
-            .getContentsCopy()
-            .slice(2)
+          element.getAll().getContentsCopy().slice(2),
         ])
 
         this.contents = XyoStructure.encode(
@@ -193,7 +179,7 @@ export class XyoIterableStructure extends XyoStructure {
 
     const newBufferUntyped = Buffer.concat([
       this.getValue().getContentsCopy(),
-      element.getAll().getContentsCopy()
+      element.getAll().getContentsCopy(),
     ])
 
     this.contents = XyoStructure.encode(

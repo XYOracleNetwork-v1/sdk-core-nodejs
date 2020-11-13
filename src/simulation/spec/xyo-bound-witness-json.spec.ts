@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { XyoJsonBoundWitnessCreator } from '../index'
-// import { XyoZigZagBoundWitness } from '../../bound-witness/index'
-import { XyoZigZagBoundWitness } from '../../bound-witness/xyo-zig-zag-bound-witness'
 describe('Json to BoundWitness', () => {
   it('2 Party Block', () => {
     const boundWitnessBytes =
