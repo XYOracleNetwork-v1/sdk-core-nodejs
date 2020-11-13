@@ -1,15 +1,9 @@
-/* eslint-disable @typescript-eslint/interface-name-prefix */
-/* eslint-disable @typescript-eslint/member-delimiter-style */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { XyoZigZagBoundWitness } from '../bound-witness/xyo-zig-zag-bound-witness'
-import { XyoStubSigner } from './xyo-stub-signature'
-import { XyoRamOriginStateRepository } from './xyo-ram-origin-state-repository'
+import { XyoBuffer, XyoStructure } from '../object-model'
 import { XyoOriginState } from '../origin/xyo-origin-state'
-import { IXyoOriginStateRepository } from '../persist'
-import { XyoStructure, XyoBuffer } from '../object-model'
 import { XyoObjectSchema } from '../schema'
-import { XyoBoundWitness } from '../bound-witness'
+import { XyoRamOriginStateRepository } from './xyo-ram-origin-state-repository'
+import { XyoStubSigner } from './xyo-stub-signature'
 
 interface IXyoJsonBoundWitnessCreator {
   createBlocksFromJson(json: string): XyoZigZagBoundWitness[] | Error
@@ -64,10 +58,9 @@ export class XyoJsonBoundWitnessCreator implements IXyoJsonBoundWitnessCreator {
 
   public createBlocksFromJson(json: string): XyoZigZagBoundWitness[] {
     const bwArray: XyoZigZagBoundWitness[] = []
-    // tslint:disable-next-line:prefer-array-literal
     const userData = JSON.parse(json) as Array<{ [key: string]: any }>
 
-    userData.forEach(boundWitness => {
+    userData.forEach((boundWitness) => {
       const cBw = this.createBlockfromJson(boundWitness)
 
       if (cBw) {
@@ -99,7 +92,7 @@ export class XyoJsonBoundWitnessCreator implements IXyoJsonBoundWitnessCreator {
   ): XyoStructure[] {
     const desiredHeuristics = Object.keys(heuristics)
     const returnedHeuristics: XyoStructure[] = []
-    desiredHeuristics.forEach(heuristic => {
+    desiredHeuristics.forEach((heuristic) => {
       const newHeuristic = this.createHeuristic(
         heuristic,
         heuristics[heuristic]

@@ -1,5 +1,6 @@
-import { XyoStructure } from './xyo-structure'
+// eslint-disable-next-line import/no-cycle
 import { XyoIterableStructure } from './xyo-iterable-structure'
+import { XyoStructure } from './xyo-structure'
 
 export class XyoIterator implements Iterator<XyoStructure> {
   private offset: number
@@ -27,7 +28,7 @@ export class XyoIterator implements Iterator<XyoStructure> {
 
     const result: IteratorResult<XyoStructure> = {
       done: this.hasNext(),
-      value: nextItem
+      value: nextItem,
     }
 
     return result

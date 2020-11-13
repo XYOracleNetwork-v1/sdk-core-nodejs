@@ -1,4 +1,4 @@
-import { IXyoNetworkPipe } from './xyo-network-pipe'
+import XyoNetworkPipe from './xyo-network-pipe'
 
 export class XyoNetworkHandler {
   private static getSizeEncodedCatalog(catalog: Buffer): Buffer {
@@ -7,9 +7,9 @@ export class XyoNetworkHandler {
     return Buffer.concat([sizeBuffer, catalog])
   }
 
-  public pipe: IXyoNetworkPipe
+  public pipe: XyoNetworkPipe
 
-  constructor(pipe: IXyoNetworkPipe) {
+  constructor(pipe: XyoNetworkPipe) {
     this.pipe = pipe
   }
 
@@ -24,7 +24,7 @@ export class XyoNetworkHandler {
   ): Promise<Buffer | undefined> {
     const bufferToSend = Buffer.concat([
       XyoNetworkHandler.getSizeEncodedCatalog(choice),
-      response
+      response,
     ])
 
     return this.pipe.send(bufferToSend, true)

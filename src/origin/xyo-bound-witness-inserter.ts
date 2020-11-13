@@ -1,24 +1,23 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { IXyoHasher } from '../hashing'
-import { XyoOriginState } from './xyo-origin-state'
-import { IXyoOriginBlockRepository } from '../persist/xyo-origin-block-repository'
-import { XyoBoundWitness } from '../bound-witness'
-import { XyoIterableStructure, XyoStructure, XyoSchema } from '../object-model'
-import { XyoObjectSchema } from '../schema'
 import { XyoBase } from '@xyo-network/sdk-base-nodejs'
 import bs58 from 'bs58'
 
+import { XyoBoundWitness } from '../bound-witness'
+import { XyoHasher } from '../hashing'
+import { XyoIterableStructure, XyoSchema, XyoStructure } from '../object-model'
+import { XyoOriginBlockRepository } from '../persist/xyo-origin-block-repository'
+import { XyoObjectSchema } from '../schema'
+import { XyoOriginState } from './xyo-origin-state'
+
 export class XyoBoundWitnessInserter extends XyoBase {
-  private hasher: IXyoHasher
+  private hasher: XyoHasher
   private state: XyoOriginState
-  private blockRepository: IXyoOriginBlockRepository
+  private blockRepository: XyoOriginBlockRepository
   private blockListeners: { [key: string]: (boundWitness: Buffer) => void } = {}
 
   constructor(
-    hasher: IXyoHasher,
+    hasher: XyoHasher,
     state: XyoOriginState,
-    blockRepo: IXyoOriginBlockRepository
+    blockRepo: XyoOriginBlockRepository
   ) {
     super()
     this.hasher = hasher
@@ -76,7 +75,7 @@ export class XyoBoundWitnessInserter extends XyoBase {
       )
     }
 
-    for (const [key, value] of Object.entries(this.blockListeners)) {
+    for (const [, value] of Object.entries(this.blockListeners)) {
       value(boundWitness.getAll().getContentsCopy())
     }
   }

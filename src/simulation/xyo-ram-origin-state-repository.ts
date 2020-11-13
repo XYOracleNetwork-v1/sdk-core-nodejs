@@ -1,24 +1,13 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { IXyoOriginStateRepository } from '../persist/xyo-origin-state-repository'
-import { XyoStructure, XyoBuffer } from '../object-model'
-import { IXyoSigner } from '../signing/xyo-signer'
-import fs from 'fs'
-// import { IXyoFileOriginState } from '../persist/xyo-file-origin-state-repository'
-/*
-interface IXyoFileOriginState {
-  index: string | undefined
-  previousHash: string | undefined
-  signers: string[]
-}
-*/
+import { XyoStructure } from '../object-model'
+import XyoOriginStateRepository from '../persist/xyo-origin-state-repository'
+import XyoSigner from '../signing/xyo-signer'
 
-export class XyoRamOriginStateRepository implements IXyoOriginStateRepository {
+export class XyoRamOriginStateRepository implements XyoOriginStateRepository {
   private indexCache: XyoStructure | undefined
   private previousHashCache: XyoStructure | undefined
-  private signersCache: IXyoSigner[] = []
+  private signersCache: XyoSigner[] = []
 
-  public addSigner(signer: IXyoSigner) {
+  public addSigner(signer: XyoSigner) {
     this.signersCache.push(signer)
   }
 
@@ -44,7 +33,7 @@ export class XyoRamOriginStateRepository implements IXyoOriginStateRepository {
     return this.previousHashCache
   }
 
-  public getSigners(): IXyoSigner[] {
+  public getSigners(): XyoSigner[] {
     if (this.signersCache) {
       return this.signersCache
     }
@@ -52,9 +41,8 @@ export class XyoRamOriginStateRepository implements IXyoOriginStateRepository {
     return []
   }
 
-  public commit(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      resolve()
-    })
+  // eslint-disable-next-line require-await
+  public async commit() {
+    return
   }
 }

@@ -1,9 +1,8 @@
-/* eslint-disable prefer-const */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import net from 'net'
-import { XyoTcpPipe } from './xyo-tcp-pipe'
-import { XyoAdvertisePacket } from '../xyo-advertise-packet'
 import { XyoBase } from '@xyo-network/sdk-base-nodejs'
+import net from 'net'
+
+import { XyoAdvertisePacket } from '../xyo-advertise-packet'
+import { XyoTcpPipe } from './xyo-tcp-pipe'
 
 export class XyoServerTcpNetwork extends XyoBase {
   public onPipeCreated: ((pipe: XyoTcpPipe) => boolean) | undefined
@@ -15,7 +14,7 @@ export class XyoServerTcpNetwork extends XyoBase {
     this.port = port
     this.server = net.createServer(this.connectionListener.bind(this))
 
-    this.server.on('error', e => {
+    this.server.on('error', (e) => {
       this.logWarning(`Unknown server socket error: ${e}`)
 
       if (!this.server.listening) {
@@ -38,7 +37,7 @@ export class XyoServerTcpNetwork extends XyoBase {
       `New connection made with ${socket.remoteAddress}:${socket.remotePort}`
     )
 
-    socket.on('error', e => {
+    socket.on('error', (e) => {
       this.logWarning(`Unknown socket error: ${e}`)
       socket.destroy()
     })
@@ -46,7 +45,6 @@ export class XyoServerTcpNetwork extends XyoBase {
     let waitSize: number
     let currentSize = 0
     let currentBuffer = Buffer.alloc(0)
-    let timeout: NodeJS.Timeout
 
     const cleanup = () => {
       socket.removeAllListeners('data')
@@ -55,6 +53,8 @@ export class XyoServerTcpNetwork extends XyoBase {
       socket.removeAllListeners('timeout')
       socket.destroy()
     }
+
+    const timeout = setTimeout(cleanup, 5_000)
 
     socket.on('timeout', () => {
       cleanup()
@@ -84,7 +84,6 @@ export class XyoServerTcpNetwork extends XyoBase {
     socket.on('close', cleanup)
     socket.on('end', cleanup)
 
-    timeout = setTimeout(cleanup, 5_000)
     socket.setTimeout(1000 * 60 * 1) // 1 min
   }
 

@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { IXyoPayloadConstructor } from './xyo-payload-constructor'
 import { IXyoBoundWitnessPayload } from '../heuristics'
-import { XyoOriginState } from './xyo-origin-state'
-import { XyoStructure } from '../object-model'
 import { IXyoHeuristicGetter } from '../heuristics/xyo-heuristic-getter'
+import { XyoStructure } from '../object-model'
+import { XyoOriginState } from './xyo-origin-state'
+import XyoPayloadConstructor from './xyo-payload-constructor'
 
-export class XyoOriginPayloadConstructor implements IXyoPayloadConstructor {
+export class XyoOriginPayloadConstructor implements XyoPayloadConstructor {
   private originState: XyoOriginState
   private heuristicGetters: Map<string, IXyoHeuristicGetter> = new Map()
 
@@ -22,13 +20,14 @@ export class XyoOriginPayloadConstructor implements IXyoPayloadConstructor {
     this.heuristicGetters.delete(key)
   }
 
+  // eslint-disable-next-line require-await
   public async getPayloads(choice: Buffer): Promise<IXyoBoundWitnessPayload> {
     const originItems = this.getOriginItems()
     const getterItems = this.getAllHeuristics(choice)
 
     const payload: IXyoBoundWitnessPayload = {
       signed: originItems.concat(getterItems),
-      unsigned: []
+      unsigned: [],
     }
 
     return payload

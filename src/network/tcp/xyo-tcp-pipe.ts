@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import net from 'net'
-import { IXyoNetworkPipe } from '../xyo-network-pipe'
-import { XyoAdvertisePacket } from '../xyo-advertise-packet'
 import { XyoBase } from '@xyo-network/sdk-base-nodejs'
+import net from 'net'
 
-export class XyoTcpPipe extends XyoBase implements IXyoNetworkPipe {
+import { XyoAdvertisePacket } from '../xyo-advertise-packet'
+import XyoNetworkPipe from '../xyo-network-pipe'
+
+export class XyoTcpPipe extends XyoBase implements XyoNetworkPipe {
   private socket: net.Socket
   private initData: XyoAdvertisePacket | undefined
 
@@ -34,6 +34,7 @@ export class XyoTcpPipe extends XyoBase implements IXyoNetworkPipe {
     return undefined
   }
 
+  // eslint-disable-next-line require-await
   public async close() {
     this.logInfo(
       `Closing connection with ${this.socket.remoteAddress}:${this.socket.remotePort}`
@@ -105,7 +106,7 @@ export class XyoTcpPipe extends XyoBase implements IXyoNetworkPipe {
       sizeBuffer.writeUInt32BE(data.length + 4, 0)
       const dataWithSize = Buffer.concat([sizeBuffer, data])
 
-      this.socket.write(dataWithSize, error => {
+      this.socket.write(dataWithSize, (error) => {
         if (error === undefined) {
           resolve()
         } else {

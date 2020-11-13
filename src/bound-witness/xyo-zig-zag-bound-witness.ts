@@ -1,17 +1,16 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { XyoBoundWitness } from './xyo-bound-witness'
-import { IXyoSigner } from '../signing/xyo-signer'
-import { XyoStructure, XyoIterableStructure } from '../object-model'
+import { XyoIterableStructure, XyoStructure } from '../object-model'
 import { XyoObjectSchema } from '../schema'
+import { XyoSigner } from '../signing'
+import { XyoBoundWitness } from './xyo-bound-witness'
 
 export class XyoZigZagBoundWitness extends XyoBoundWitness {
-  private signers: IXyoSigner[]
+  private signers: XyoSigner[]
   private signedPayload: XyoStructure[]
   private unsignedPayload: XyoStructure[]
   private hasSentFetter = false
 
   constructor(
-    signers: IXyoSigner[],
+    signers: XyoSigner[],
     signedPayload: XyoStructure[],
     unsignedPayload: XyoStructure[]
   ) {
@@ -161,8 +160,7 @@ export class XyoZigZagBoundWitness extends XyoBoundWitness {
     return publicKeys
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private signBoundWitness(payload: XyoStructure[]) {
+  private signBoundWitness(_payload: XyoStructure[]) {
     const signatures: XyoStructure[] = []
 
     for (const signer of this.signers) {

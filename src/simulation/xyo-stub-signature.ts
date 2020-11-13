@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { IXyoSigner, XyoSignatureVerify } from '../signing/xyo-signer'
-import { XyoStructure, XyoBuffer } from '../object-model'
+import { XyoBuffer, XyoStructure } from '../object-model'
 import { XyoObjectSchema } from '../schema'
-import { resolve } from 'path'
+import XyoSigner, { XyoSignatureVerify } from '../signing/xyo-signer'
 
-export class XyoStubSigner implements IXyoSigner {
+export class XyoStubSigner implements XyoSigner {
   public static verify: XyoSignatureVerify = async (
-    publicKey: Buffer,
-    signature: Buffer,
-    data: Buffer
+    _publicKey: Buffer,
+    _signature: Buffer,
+    _data: Buffer
+    // eslint-disable-next-line require-await
   ): Promise<boolean> => {
     return true
   }

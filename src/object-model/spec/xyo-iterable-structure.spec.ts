@@ -11,18 +11,10 @@ describe('XyoBuffer', () => {
 
     while (it.hasNext()) {
       if (i === 0) {
-        const bytes = it
-          .next()
-          .value.getAll()
-          .getContentsCopy()
-          .toString('hex')
+        const bytes = it.next().value.getAll().getContentsCopy().toString('hex')
         expect(bytes).toEqual('00440214')
       } else if (i === 1) {
-        const bytes = it
-          .next()
-          .value.getAll()
-          .getContentsCopy()
-          .toString('hex')
+        const bytes = it.next().value.getAll().getContentsCopy().toString('hex')
         expect(bytes).toEqual('00420237')
       } else {
         throw new Error('Index does not exist')
@@ -31,12 +23,9 @@ describe('XyoBuffer', () => {
       i += 1
     }
 
-    expect(
-      struct
-        .getValue()
-        .getContentsCopy()
-        .toString('hex')
-    ).toBe('0044021400420237')
+    expect(struct.getValue().getContentsCopy().toString('hex')).toBe(
+      '0044021400420237'
+    )
   })
 
   it('Typed 1', () => {
@@ -48,18 +37,10 @@ describe('XyoBuffer', () => {
 
     while (it.hasNext()) {
       if (i === 0) {
-        const bytes = it
-          .next()
-          .value.getAll()
-          .getContentsCopy()
-          .toString('hex')
+        const bytes = it.next().value.getAll().getContentsCopy().toString('hex')
         expect(bytes).toEqual('00440213')
       } else if (i === 1) {
-        const bytes = it
-          .next()
-          .value.getAll()
-          .getContentsCopy()
-          .toString('hex')
+        const bytes = it.next().value.getAll().getContentsCopy().toString('hex')
         expect(bytes).toEqual('00440237')
       } else {
         throw new Error('Index does not exist')
@@ -68,12 +49,9 @@ describe('XyoBuffer', () => {
       i += 1
     }
 
-    expect(
-      struct
-        .getValue()
-        .getContentsCopy()
-        .toString('hex')
-    ).toBe('004402130237')
+    expect(struct.getValue().getContentsCopy().toString('hex')).toBe(
+      '004402130237'
+    )
   })
 
   it('Validate true', () => {

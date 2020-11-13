@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { XyoIterableStructure, XyoStructure, XyoSchema } from '../object-model'
+import { XyoHasher } from '../hashing'
+import { XyoIterableStructure, XyoSchema, XyoStructure } from '../object-model'
 import { XyoObjectSchema } from '../schema'
-import { IXyoHasher } from '../hashing/xyo-hasher'
-import { IXyoSigner } from '../signing/xyo-signer'
+import { XyoSigner } from '../signing'
 
 export class XyoBoundWitness extends XyoIterableStructure {
   public static createMasterArrayWithSubArray(
@@ -108,19 +107,17 @@ export class XyoBoundWitness extends XyoIterableStructure {
     return this.getId(XyoObjectSchema.WITNESS.id).length
   }
 
-  public getHash(hasher: IXyoHasher): XyoStructure {
+  public getHash(hasher: XyoHasher): XyoStructure {
     return hasher.hash(this.getSigningData())
   }
 
-  public sign(signer: IXyoSigner): XyoStructure {
+  public sign(signer: XyoSigner): XyoStructure {
     return signer.sign(this.getSigningData())
   }
 
   public getSigningData(): Buffer {
     const bounds = this.getWitnessFetterBoundary()
-    return this.getValue()
-      .getContentsCopy()
-      .slice(0, bounds)
+    return this.getValue().getContentsCopy().slice(0, bounds)
   }
 
   public getNumberOfParties(): number | undefined {
