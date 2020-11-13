@@ -1,10 +1,10 @@
 {
   "$schema": "http://json.schemastore.org/package",
   "name": "@xyo-network/sdk-core-nodejs",
-  "version": "0.71.2",
+  "version": "0.71.3",
   "description": "A workspace to aggregated nodejs XYO projects",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "author": "XY Development Team",
   "license": "LGPL-3.0",
   "scripts": {
@@ -24,6 +24,7 @@
     "url": "git://github.com/XYOracleNetwork/sdk-core-nodejs.git"
   },
   "devDependencies": {
+    "@types/bs58": "^4.0.1",
     "@types/elliptic": "^6.4.8",
     "@types/jest": "^26.0.15",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
