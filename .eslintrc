@@ -1,38 +1,18 @@
-/*
- * File: .eslintrc
- * Project: @xyo-network/sdk-core-nodejs
- * File Created: Friday, 13th November 2020 10:18:05 am
- * Author: XYO Development Team (support@xyo.network)
- * -----
- * Last Modified: Friday, 13th November 2020 2:09:54 pm
- * Modified By: XYO Development Team (support@xyo.network>)
- * -----
- * Copyright 2017 - 2020 XY - The Persistent Company
- */
-
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "ignorePatterns": [
-    "node_modules/",
-    "build/",
-    "/*.ts",
-    "/*.js",
-    "src/contracts"
-  ],
+  "ignorePatterns": ["node_modules/", "build/"],
   "plugins": [
     "@typescript-eslint",
     "prettier",
     "sort-keys-fix",
-    "sort-export-all",
+    "typescript-sort-keys",
     "json",
+    "workspaces",
     "import",
     "simple-import-sort",
     "no-secrets"
   ],
-  "parserOptions": {
-    "project": "./tsconfig.json"
-  },
   "extends": [
     "eslint:recommended",
     "plugin:import/errors",
@@ -40,14 +20,20 @@
     "plugin:import/typescript",
     "plugin:@typescript-eslint/recommended",
     "plugin:json/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:workspaces/recommended"
   ],
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    }
+  },
   "rules": {
     "no-secrets/no-secrets": ["off"],
     "workspaces/require-dependency": ["off"],
-    "prettier/prettier": "error",
-    "semi": "off",
-    "@typescript-eslint/semi": ["error", "never"],
+    "prettier/prettier": "warn",
+    "semi": ["warn", "never"],
+    "@typescript-eslint/semi": ["warn", "never"],
 
     "no-tabs": ["error"],
     "@typescript-eslint/member-delimiter-style": [
@@ -63,33 +49,51 @@
         }
       }
     ],
-    "sort-export-all/sort-export-all": "warn",
     "require-await": "error",
-    "sort-keys": [
-      "warn",
-      "asc",
-      { "caseSensitive": true, "natural": false, "minKeys": 2 }
-    ],
+    "sort-keys": ["warn", "asc", { "caseSensitive": true, "natural": false, "minKeys": 2 }],
+    "typescript-sort-keys/interface": "warn",
+    "typescript-sort-keys/string-enum": "warn",
     "sort-keys-fix/sort-keys-fix": "warn",
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      { "argsIgnorePattern": "^_" }
-    ],
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "quotes": [2, "single", "avoid-escape"],
-    "max-statements": ["error", 25],
+    "max-statements": ["error", 32],
     "max-depth": ["error", 6],
     "complexity": ["error", 20],
     "max-lines": ["error", { "max": 512, "skipBlankLines": true }],
     "max-nested-callbacks": ["error", 6],
     "import/no-named-as-default": ["off"],
+    "import/no-self-import": ["warn"],
     "import/no-absolute-path": ["warn"],
+    "import/no-internal-modules": [ "off", {
+      "allow": [
+        "react-icons/*",
+        "*/img/**",
+        "source-map-support/*",
+        "lodash/*",
+        "@material-ui/**",
+        "aws-sdk/**",
+        "firebase/**",
+        "@ethersproject/**",
+        "aos/**",
+        "filepond*/**",
+        "pure-react-carousel/**",
+        "mapbox-gl/**",
+        "react-share/**",
+        "sdk-xyoworld-typechain/**",
+        "react-git-info/**",
+        "react-player/**"
+      ]
+    } ],
     "import/no-restricted-paths": ["warn"],
     "import/namespace": ["warn"],
     "import/no-cycle": ["warn"],
     "import/no-useless-path-segments": ["warn"],
-    "simple-import-sort/sort": ["error"]
+    "simple-import-sort/imports": ["warn"],
+    "simple-import-sort/exports": ["warn"],
+    "workspaces/no-relative-imports": ["off"],
+    "workspaces/no-absolute-imports": ["off"]
   }
 }

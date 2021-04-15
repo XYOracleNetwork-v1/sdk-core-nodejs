@@ -4,9 +4,9 @@ import { XyoObjectSchema } from '../schema'
 import { indexResolver } from './common'
 
 export interface IXyoBoundWitnessOrigin {
-  previousHash: Buffer | undefined
   index: number
   nextPublicKey: Buffer | undefined
+  previousHash: Buffer | undefined
 }
 
 export class XyoBoundWitnessOriginGetter {
