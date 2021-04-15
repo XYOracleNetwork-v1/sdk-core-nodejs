@@ -1,8 +1,6 @@
-export type { IXyoHeuristicGetter } from './xyo-heuristic-getter'
-export type { IXyoBoundWitnessPayload } from './xyo-payload'
-export { XyoBoundWitnessOriginGetter } from './xyo-bound-witness-origin'
-
-export type { IXyoBoundWitnessOrigin } from './xyo-bound-witness-origin'
-
 export * from './common'
+export type { IXyoBoundWitnessOrigin } from './xyo-bound-witness-origin'
+export { XyoBoundWitnessOriginGetter } from './xyo-bound-witness-origin'
+export type { IXyoHeuristicGetter } from './xyo-heuristic-getter'
 export * from './xyo-heuristic-resolver'
+export type { IXyoBoundWitnessPayload } from './xyo-payload'

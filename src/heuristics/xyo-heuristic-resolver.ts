@@ -10,6 +10,14 @@ export interface IXyoHumanHeuristic {
 }
 
 export class XyoHumanHeuristicResolver {
+  public static addResolvers(
+    resolvers: { id: number; resolver: IXyoHeuristicResolver }[]
+  ) {
+    for (const resolver of resolvers) {
+      this.addResolver(resolver.id, resolver.resolver)
+    }
+  }
+
   public static addResolver(forId: number, resolver: IXyoHeuristicResolver) {
     XyoHumanHeuristicResolver.resolvers.set(forId, resolver)
   }
